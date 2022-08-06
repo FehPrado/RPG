@@ -1,2 +1,2 @@
 # RPG
-# RPG utilizando Ruby como linguagem principal
+# Utilizando Ruby como linguagem principal
