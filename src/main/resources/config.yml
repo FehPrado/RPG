@@ -1,0 +1,239 @@
+# ==========================================================
+#  RPGAtributos - configuração
+#  Depois de editar, use /rpgadmin reload no jogo.
+#
+#  Os bônus são escritos como "quanto valem no NÍVEL MÁXIMO". O plugin divide pelos
+#  níveis sozinho, então mudar o nível máximo não deixa ninguém forte demais.
+# ==========================================================
+
+# Não mexa: o plugin usa para atualizar configs antigos.
+config-versao: 2
+
+nivel-maximo: 100
+
+# XP para subir do nível N para o N+1 = xp-base * (N+1) ^ xp-expoente
+# Com os valores padrão: nível 10 pede ~400 XP, nível 50 ~3.300 e nível 100 ~8.000.
+# Chegar no 50 leva ~20% do caminho; o 100 é para quem joga muito.
+xp-base: 20
+xp-expoente: 1.3
+
+# Multiplica todo XP ganho (2.0 = evento de XP em dobro).
+multiplicador-xp: 1.0
+
+# Mostra "+1 XP Mineração" na barra acima da hotbar.
+mostrar-xp-na-actionbar: true
+
+mineracao:
+  xp-pedra: 1               # qualquer bloco que se quebra com picareta
+  xp-minerio: 6             # blocos *_ORE
+  velocidade-maxima: 1.0    # +100% de velocidade de mineração no nível máximo
+  chance-dupla-maxima: 0.5  # 50% de chance de minério em dobro no nível máximo
+
+madeira:
+  xp-tronco: 2
+  velocidade-maxima: 1.0
+  chance-dupla-maxima: 0.5
+
+corrida:
+  xp-por-bloco: 0.1         # 10 blocos correndo = 1 XP
+  velocidade-maxima: 0.2    # +20% de velocidade no nível máximo
+
+pulo:
+  xp-por-pulo: 0.5
+  xp-por-dano-de-queda: 1.0     # cada meio coração de dano de queda vale 1 XP
+  pulo-maximo: 0.3              # +30% de altura do pulo
+  queda-segura-maxima: 5        # +5 blocos de queda sem dano
+  reducao-dano-queda-maxima: 0.5
+  distancia-minima-entre-pulos: 2.5   # anti-farm: pular parado no mesmo lugar não dá XP
+
+combate:
+  xp-monstro: 8
+  xp-animal: 2
+  xp-jogador: 15
+  multiplicador-mob-de-spawner: 0.25   # evita farm fácil de XP em spawner
+  dano-maximo: 3            # +3 de dano no nível máximo
+  vida-maxima: 10           # +10 de vida (5 corações) no nível máximo
+  cooldown-mesmo-jogador-segundos: 600  # matar o mesmo jogador de novo só dá XP depois desse tempo
+  sem-xp-mesmo-ip: true                 # matar uma conta do mesmo IP (conta fake) não dá XP
+
+natacao:
+  xp-por-bloco: 0.15                  # nadar/mergulhar (só conta com tecla de movimento apertada)
+  agilidade-maxima: 0.5               # +50% de agilidade na água no nível máximo
+  folego-maximo: 3                    # +3 de fôlego (cada ponto = mais tempo sem respirar)
+  mineracao-submersa-maxima: 0.6      # +60% de velocidade minerando debaixo d'água
+
+# ==========================================================
+#  Agricultura (plantações) e Culinária (Cozinha)
+# ==========================================================
+
+agricultura:
+  chance-dupla-maxima: 0.5            # 50% de chance de colheita dobrada no nível máximo
+  toque-verde-maximo: 0.3             # 30% de chance (a cada 4s) de fazer plantas perto de você crescerem
+  chance-gigante-maxima: 0.03         # 3% de colheita gigante (x8) — esse NÃO é dividido por nível
+  chance-mutacao: 0.03                # chance de duas plantas diferentes lado a lado criarem uma variedade rara
+
+culinaria:
+  duracao-extra-maxima: 0.5           # pratos duram +50% no nível máximo
+
+# ==========================================================
+#  Doma (companheiros e Altar do Domador)
+# ==========================================================
+
+doma:
+  xp-domar: 25                       # domar um animal (lobo, gato, cavalo...)
+  xp-cruzar: 2                        # cruzar dois animais
+  xp-vincular: 30                     # vincular ou invocar um companheiro no Altar do Domador
+  xp-componente: 15                   # colocar um componente num companheiro
+  xp-por-bloco-montado: 0.05          # andar/voar montado num companheiro
+  xp-abate-do-companheiro: 4          # o seu companheiro derrota um monstro
+  vida-extra-maxima: 1.0              # +100% de vida dos companheiros no nível máximo
+  dano-extra-maximo: 0.5              # +50% de dano dos companheiros
+  velocidade-montaria-maxima: 0.4     # +40% de velocidade montado
+  companheiros-no-maximo: 5           # 1 companheiro no nível 0, até 5 no máximo
+  componentes-no-maximo: 6            # 1 componente por criatura no nível 0, até 6 no máximo
+
+# ==========================================================
+#  Classes
+# ==========================================================
+
+classes:
+  nivel-total-classe-basica: 0.05     # nível total para as classes básicas (5% do máximo somado: 55)
+  atributo-classe-basica: 0.15        # atributo da classe pedido nas básicas (nível 15)
+  atributo-classe-avancada: 0.40      # e nas avançadas (nível 40)
+  xp-base: 12                         # XP de classe: base x nível^expoente para subir (o XP vem dos atributos da classe)
+  xp-expoente: 1.5
+  multiplicador-xp-avancada: 2.0      # classes avançadas pedem o dobro
+  esmeraldas-para-trocar: 10          # voltar para uma classe que já aprendeu
+  espera-depois-de-falhar-minutos: 5  # falhou na prova: espera para tentar de novo
+  dias-sem-entrar-para-perder-lendaria: 30  # dono de classe lendária sumido por esse tempo perde a classe (0 = nunca)
+
+# ==========================================================
+#  Pedras de Viagem e Locais Ocultos
+# ==========================================================
+
+viagem:
+  blocos-por-nivel-de-xp: 1000        # viajar custa 1 nível a cada 1000 blocos (mínimo 1)
+  niveis-para-outro-mundo: 3
+  segundos-parado: 3                  # mexer ou tomar dano cancela
+
+locais-ocultos:
+  quantos-de-cada-tipo: 2             # 7 tipos x 2 = 14 locais escolhidos pelo mundo (na primeira vez que o plugin liga)
+  distancia-minima-do-spawn: 600
+  distancia-maxima-do-spawn: 4500
+  minutos-para-o-selo-voltar: 30      # depois de vencido, o local volta ao começo para os próximos
+
+# ==========================================================
+#  Masmorras (mundo "rpg_masmorras", recriado vazio a cada reinício)
+# ==========================================================
+
+masmorra:
+  maximo-ao-mesmo-tempo: 6            # quantas masmorras podem estar abertas juntas
+  tempo-limite-minutos: 40            # depois disso a masmorra fecha (ninguém perde nada)
+  diamantes-cofre-das-almas: 2        # quanto custa recuperar os itens de uma morte lá dentro
+  chance-sala-personalizada: 0.6      # chance de usar uma sala construída por admin (se houver do tipo)
+
+# ==========================================================
+#  Party e Territórios
+# ==========================================================
+
+party:
+  tamanho-maximo: 6
+  raio-xp-compartilhado: 32           # membros a até 32 blocos dividem o XP de Combate
+  xp-compartilhado: 0.5               # cada membro perto ganha 50% do XP de quem matou o monstro
+  bonus-por-membro-perto: 0.1         # quem matou ganha +10% de XP por membro perto...
+  bonus-maximo: 0.3                   # ...até +30%
+  avisar-vida-baixa: true             # avisa a party quando alguém fica com pouca vida
+
+territorio:
+  chunks-iniciais: 9                  # o Marco já protege 3x3 chunks (48x48 blocos)
+  niveis-por-chunk-extra: 20          # +1 chunk a cada 20 níveis somados de todos os atributos
+  chunks-maximo: 60
+  membros-maximo: 10
+  chunks-precisam-ser-vizinhos: true  # chunk novo precisa encostar no território
+  mundos-bloqueados: []               # mundos onde não dá para criar território (ex.: [world_the_end])
+
+# ==========================================================
+#  Ferraria (atributo) e Forja (itens com raridade)
+# ==========================================================
+
+ferraria:
+  # XP por unidade de material gasta na receita.
+  # Ex.: peitoral de ferro = 8 lingotes x 5 = 40 XP.
+  xp-por-material:
+    madeira: 0.5
+    couro: 0.6
+    pedra: 0.7
+    cobre: 1.5
+    ouro: 2
+    malha: 3
+    ferro: 5
+    diamante: 15
+    especial: 4     # valor fixo para arco, besta, escudo, maça e casco de tartaruga
+  xp-netherite: 80              # melhorar um item para Netherite na mesa de ferraria
+  xp-por-lingote-fundido: 0.5   # tirar lingotes de ferro/ouro/cobre da fornalha (sucata de netherite vale 4x)
+
+forja:
+  ativada: true
+  # true = itens só saem forjados na Forja do Ferreiro (ritual: jogue 2 blocos de ferro e
+  # 1 balde de lava em cima de uma bigorna). Na bancada comum saem normais.
+  # false = qualquer bancada forja.
+  so-na-forja-do-ferreiro: true
+  # A partir de qual raridade o servidor inteiro fica sabendo: comum, raro, epico, unico, lendario, mitico
+  anunciar-no-chat-a-partir-de: lendario
+  raio-ao-forjar-mitico: true   # só o efeito visual do raio, não causa dano nem fogo
+
+  # Chance relativa de cada raridade no nível 0 de Ferraria (peso-inicial) e no nível máximo
+  # (peso-final). Entre os dois, a chance muda aos poucos a cada nível.
+  # multiplicador = o quanto os bônus do item são mais fortes que num item Comum.
+  raridades:
+    comum:    { peso-inicial: 70, peso-final: 25,  multiplicador: 1.0 }
+    raro:     { peso-inicial: 24, peso-final: 35,  multiplicador: 1.3 }
+    epico:    { peso-inicial: 5,  peso-final: 22,  multiplicador: 1.7 }
+    unico:    { peso-inicial: 1,  peso-final: 11,  multiplicador: 2.1 }
+    lendario: { peso-inicial: 0,  peso-final: 5,   multiplicador: 2.6 }
+    mitico:   { peso-inicial: 0,  peso-final: 1.5, multiplicador: 3.3 }
+
+  # Limites para a soma de todas as peças vestidas.
+  esquiva-maxima: 0.35    # 35% de chance de desviar de um ataque
+  espinhos-maximo: 0.6    # reflete no máximo 60% do dano
+
+  # Tempo mínimo (segundos) entre ativações de efeitos, para não virar spam.
+  intervalo-efeito-ao-acertar: 0.5
+  intervalo-efeito-ao-ser-atingido: 2
+
+# ==========================================================
+#  Arcano: Infusor Corpóreo e magias
+#  Ritual: jogue uma mesa de encantamento e uma bigorna num caldeirão com água.
+# ==========================================================
+
+arcano:
+  mana-base: 100
+  mana-extra-no-maximo: 150      # +150 de mana no nível máximo de Arcano
+  regeneracao-base: 2            # mana por segundo
+  regeneracao-extra-no-maximo: 3 # +3 de mana por segundo no nível máximo
+  custo-base-magia: 10           # custo = base x essências^1,4 x forma (1 essência = 10, 4 essências = 70)
+  dano-em-jogadores: 0.6         # magias causam 60% do dano em jogadores (PvP)
+
+  # Carga corporal: quanto o corpo aguenta de infusões sem rejeitar.
+  carga-base: 6
+  carga-extra-no-maximo: 10      # carga 16 no nível máximo
+  sobrecarga-maxima: 4           # dá para passar da capacidade até esse tanto, mas com rejeição
+
+  chance-infusao-base: 0.7       # 70% no nível 0 (itens raros têm -10% por grau de raridade)
+  chance-infusao-no-maximo: 1.0  # 100% no nível máximo
+  instabilidade-ao-morrer-segundos: 300   # depois de morrer: magias 35% mais fracas e 40% mais caras
+
+  xp-infusao: 15                 # multiplicado pela raridade do item (1 a 4)
+  xp-por-essencia-lancada: 2
+  xp-descoberta: 100
+  anunciar-descoberta: true      # avisa o servidor quando alguém descobre uma magia secreta
+
+guia:
+  # Dá o livro "Guia do Aventureiro" na primeira vez que o jogador entra (/guia pega outro).
+  dar-ao-entrar-pela-primeira-vez: true
+
+tag:
+  # Mostra "Nível total X" embaixo do nome de TODOS os jogadores.
+  mostrar-nivel: true
+  tamanho-maximo: 32
+  altura-extra: 0.3

@@ -1,0 +1,141 @@
+name: RPGAtributos
+version: '${project.version}'
+main: br.rpgatributos.RPGAtributos
+api-version: '26.3'
+description: Atributos RPG que evoluem com o uso, forja, arcano, chefes, plantações, cozinha, reciclagem, party, territórios, domador, masmorras e classes.
+
+commands:
+  atributos:
+    description: Mostra seus atributos (ou os de outro jogador).
+    usage: /atributos [jogador] [chat]
+    aliases: [atr, skills]
+    permission: rpg.atributos
+  rpgadmin:
+    description: Comandos de administração do RPGAtributos.
+    usage: /rpgadmin (use sem nada para ver a lista de subcomandos)
+    permission: rpg.admin
+  titulos:
+    description: Abre seus títulos (conquistas que dão bônus).
+    usage: /titulos
+    aliases: [titulo]
+    permission: rpg.titulos
+  missoes:
+    description: Mostra suas missões de aldeões.
+    usage: /missoes
+    aliases: [missao, pedidos]
+    permission: rpg.missoes
+  party:
+    description: Party (grupo) — menu, convidar, sair, líder, fogo amigo.
+    usage: /party [convidar|aceitar|recusar|sair|expulsar|lider|desfazer|chat|fogoamigo]
+    aliases: [grupo, pt]
+    permission: rpg.party
+  pc:
+    description: Manda uma mensagem só para a party (sem texto, liga/desliga o chat da party).
+    usage: /pc [mensagem]
+    aliases: [partychat]
+    permission: rpg.party
+  territorio:
+    description: Seu território — menu, mapa, bordas, reivindicar, membros.
+    usage: /territorio [mapa|bordas|info|reivindicar|liberar|adicionar|remover|abandonar]
+    aliases: [terreno, territorios, claim]
+    permission: rpg.territorio
+  pets:
+    description: Seus companheiros (domador) — onde estão, ordens e componentes.
+    usage: /pets
+    aliases: [companheiros, domador]
+    permission: rpg.pets
+  classe:
+    description: A árvore de classes — seu caminho, tarefas, níveis e habilidades.
+    usage: /classe
+    aliases: [classes, job]
+    permission: rpg.classe
+  lendas:
+    description: Livro das Lendas — itens Especiais únicos que nascem dos seus feitos.
+    usage: /lendas
+    aliases: [lenda, feitos]
+    permission: rpg.lendas
+  locais:
+    description: Os Locais Ocultos que você já achou.
+    usage: /locais
+    aliases: [ocultos, explorar]
+    permission: rpg.locais
+  masmorra:
+    description: Masmorras — informações e sair da masmorra em que você está.
+    usage: /masmorra [sair]
+    aliases: [masmorras, dungeon]
+    permission: rpg.masmorra
+  receitas:
+    description: Mostra o livro de receitas da Cozinha.
+    usage: /receitas
+    aliases: [cozinha, pratos]
+    permission: rpg.receitas
+  guia:
+    description: Dá o livro "Guia do Aventureiro", que explica como tudo funciona.
+    usage: /guia
+    aliases: [livroguia]
+    permission: rpg.guia
+  grimorio:
+    description: Abre o grimório (suas magias, criador de magias e magias secretas).
+    usage: /grimorio
+    aliases: [magias]
+    permission: rpg.arcano
+  forja:
+    description: Abre o guia da forja (raridades, chances e efeitos).
+    usage: /forja
+    aliases: [ferraria]
+    permission: rpg.forja
+  chapeu:
+    description: Coloca o item da sua mão na cabeça.
+    usage: /chapeu [tirar]
+    aliases: [hat]
+    permission: rpg.chapeu
+  cosmeticos:
+    description: Abre o menu de cosméticos (item na cabeça e tag).
+    usage: /cosmeticos
+    aliases: [cosmetico, visual]
+    permission: rpg.chapeu
+  tag:
+    description: Troca o texto que aparece em cima da sua cabeça.
+    usage: /tag <texto> | /tag remover
+    permission: rpg.tag
+
+permissions:
+  rpg.atributos:
+    default: true
+  rpg.atributos.outros:
+    default: true
+  rpg.chapeu:
+    default: true
+  rpg.tag:
+    default: true
+  rpg.tag.cores:
+    description: Permite usar cores (&a, &6...) na tag.
+    default: true
+  rpg.forja:
+    default: true
+  rpg.arcano:
+    default: true
+  rpg.guia:
+    default: true
+  rpg.titulos:
+    default: true
+  rpg.missoes:
+    default: true
+  rpg.receitas:
+    default: true
+  rpg.party:
+    default: true
+  rpg.territorio:
+    default: true
+  rpg.pets:
+    default: true
+  rpg.masmorra:
+    default: true
+  rpg.classe:
+    default: true
+  rpg.lendas:
+    default: true
+  rpg.locais:
+    default: true
+  rpg.admin:
+    default: op
