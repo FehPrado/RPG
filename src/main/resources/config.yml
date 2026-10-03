@@ -76,6 +76,97 @@ culinaria:
   duracao-extra-maxima: 0.5           # pratos duram +50% no nível máximo
 
 # ==========================================================
+#  Pesca e Alquimia
+# ==========================================================
+
+pesca:
+  xp-peixe: 8                         # pescar um peixe comum
+  xp-tesouro: 25                      # pescar um tesouro
+  xp-lixo: 3                          # pescar lixo (graveto, bota velha...)
+  isca-mais-rapida-maxima: 0.5        # os peixes mordem 50% mais rápido no nível máximo
+  chance-dupla-maxima: 0.3            # 30% de chance de vir 2 peixes no nível máximo
+  chance-peixe-raro-inicial: 0.03     # chance de um peixe virar um peixe raro (nível 0)
+  chance-peixe-raro-maxima: 0.15      # ... e no nível máximo
+  chance-tesouro-inicial: 0.01        # chance extra de fisgar um Tesouro do Mar
+  chance-tesouro-maxima: 0.06
+  chance-criatura-inicial: 0.01       # chance de uma criatura marinha morder a isca
+  chance-criatura-maxima: 0.05
+
+alquimia:
+  duracao-extra-maxima: 0.6           # elixires duram +60% no nível máximo
+  chance-rendimento-extra-maxima: 0.4 # 40% de chance de render o dobro de componentes no nível máximo
+  xp-por-pocao-no-suporte: 3          # XP por poção comum feita no suporte de poções
+
+# ==========================================================
+#  Reinos e guerras
+# ==========================================================
+
+reino:
+  esmeraldas-para-fundar: 32         # custo para fundar um reino (do inventário)
+  nivel-minimo-da-colonia: 2         # nível da colônia do fundador
+
+guerra:
+  dia-da-semana: SATURDAY             # MONDAY, TUESDAY, ... SUNDAY: o dia das guerras
+  hora: 20                            # hora em que as guerras começam (hora do servidor)
+  duracao-minutos: 60                 # quanto tempo dura cada guerra
+  aviso-minimo-horas: 24              # a guerra só começa no primeiro horário depois desse aviso
+  segundos-para-capturar-marco: 120   # tempo perto do Marco inimigo, sem defensores, para capturar
+  chunks-por-captura: 4               # chunks que o território capturado perde (e o reino vencedor ganha)
+  parte-do-tesouro-para-o-vencedor: 0.3
+  dias-de-tregua: 7                   # depois de uma guerra, os dois reinos ficam em paz por esse tempo
+
+# ==========================================================
+#  Mundo perigoso
+# ==========================================================
+
+perigo:
+  chance-elite: 0.025                 # chance de um monstro nascer Elite (com modificadores)
+  chance-elite-a-mais-por-semana: 0.004 # o mundo envelhece: Elites ficam mais comuns a cada semana
+  forca-a-mais-por-semana: 0.05       # monstros +5% de vida e dano por semana do servidor
+  forca-a-mais-maxima: 0.5            # ... até +50%
+  chance-ninho: 0.12                  # a cada 10 min, chance de surgir um Ninho de monstros perto de cada jogador
+  ninhos-no-maximo: 8
+  chance-horda-por-noite: 0.2         # chance de uma colônia ser atacada numa noite (com alguém dela por perto)
+  chefes-mundiais-por-semana: 2
+  chefe-mundial-minimo-de-jogadores: 2  # só aparece com pelo menos esse tanto de gente online
+
+# ==========================================================
+#  Mundo vivo (estações, clima, céu e maldições)
+# ==========================================================
+
+mundo-vivo:
+  temperatura: true                   # frio e calor nos extremos (nevasca, deserto no verão, Nether)
+  neve-e-gelo-no-inverno: true        # no inverno cai neve e a água congela perto dos jogadores (some na primavera)
+  blocos-de-neve-no-maximo: 4000
+  chance-evento-de-clima: 0.08        # a cada 2,5 min: nevasca, neblina, ventania, tempestade elétrica, onda de calor
+  chance-lua-de-sangue: 0.2           # em noite de lua cheia
+  chance-chuva-de-meteoros: 0.06      # por noite
+  chance-eclipse: 0.02                # por dia
+  chance-aurora-no-inverno: 0.25      # por noite de inverno
+  chance-mordida-amaldicoar: 0.2      # mordida de lobisomem ou vampiro passa a maldição
+
+# ==========================================================
+#  Portais, Soberano das Sombras e Torre Infinita
+# ==========================================================
+
+portais:
+  intervalo-minutos: 30               # a cada tanto tempo, chance de um Portal se abrir perto de alguém
+  chance: 0.6
+  no-maximo: 3                        # portais abertos ao mesmo tempo no servidor
+  distancia-minima: 48                # longe do jogador sorteado (em blocos)
+  distancia-maxima: 96
+  horas-ate-transbordar: 2.0          # Difícil = isso; Fácil x1,5, Normal x1,25, Pesadelo x0,75
+  chance-eco-do-soberano: 0.35        # Portal Pesadelo que traz o Soberano das Sombras (só se a classe estiver livre)
+  peso-facil: 45
+  peso-normal: 33
+  peso-dificil: 17
+  peso-pesadelo: 5
+
+torre:
+  vida-por-andar: 0.07                # monstros +7% de vida a cada andar
+  dano-por-andar: 0.035               # ... e +3,5% de dano
+
+# ==========================================================
 #  Doma (companheiros e Altar do Domador)
 # ==========================================================
 

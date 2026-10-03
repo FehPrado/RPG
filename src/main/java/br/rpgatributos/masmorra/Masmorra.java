@@ -37,6 +37,15 @@ public final class Masmorra {
     Location saida;
     int minX, minZ, maxX, maxZ;
 
+    /** Aberta por um Portal do mundo: qualquer um entra, e ela espera gente entrar. */
+    boolean publica;
+    /** Itens a mais no baú do chefe. */
+    int tesouroExtra;
+    /** Chamado quando o chefe morre (o Portal do mundo se fecha). */
+    java.util.function.Consumer<Masmorra> aoConcluir;
+    /** Quem deu o golpe final no chefe (ou null). */
+    UUID matadorChefe;
+
     Masmorra(int vaga, Dificuldade dificuldade, Tema tema, World mundo, UUID dono) {
         this.vaga = vaga;
         this.dificuldade = dificuldade;
@@ -71,4 +80,9 @@ public final class Masmorra {
     public Dificuldade dificuldade() { return dificuldade; }
     public Tema tema() { return tema; }
     public Estado estado() { return estado; }
+    public UUID id() { return id; }
+    public UUID dono() { return dono; }
+    public UUID matadorChefe() { return matadorChefe; }
+    /** Quem ainda está lá dentro. */
+    public Set<UUID> participantes() { return java.util.Collections.unmodifiableSet(participantes); }
 }

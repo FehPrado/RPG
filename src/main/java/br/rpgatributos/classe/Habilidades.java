@@ -117,6 +117,7 @@ public final class Habilidades {
     private boolean inimigo(Player p, Entity e) {
         if (!(e instanceof LivingEntity le) || e == p || !le.isValid() || e instanceof ArmorStand) return false;
         if (Companheiros.eh(e)) return false;
+        if (br.rpgatributos.sombra.Sombras.eh(e)) return plugin.sombras().inimigoDoJogador(p, e);
         if (e instanceof Player outro) return plugin.pvpPermitido(p, outro) && outro.getGameMode() != org.bukkit.GameMode.CREATIVE
                 && outro.getGameMode() != org.bukkit.GameMode.SPECTATOR;
         return e instanceof Enemy || Chefes.ehChefe(e) || Chefes.ehLacaio(e);
@@ -646,6 +647,12 @@ public final class Habilidades {
                     w.spawnParticle(Particle.TOTEM_OF_UNDYING, a.getLocation().add(0, 1, 0), 20, 0.4, 0.6, 0.4, 0.1);
                 }
                 w.playSound(l, Sound.BLOCK_BEACON_ACTIVATE, 1f, 1.6f);
+            }
+            case LEVANTE_SE -> {
+                return plugin.sombras().levantar(p);
+            }
+            case EXERCITO_DAS_SOMBRAS -> {
+                return plugin.sombras().exercito(p, alvo(p, 32));
             }
         }
         return true;

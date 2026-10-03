@@ -149,7 +149,8 @@ public final class Territorios implements Listener {
     /** Quantos chunks o jogador pode ter: base + 1 a cada N níveis somados, até o máximo. */
     public int limite(Player p) {
         int extra = plugin.stats().nivelTotal(p) / cfg().terNiveisPorChunk;
-        return Math.min(cfg().terChunksMax, cfg().terChunksIniciais + extra);
+        // Chunks conquistados em guerra (do Rei) passam do máximo normal.
+        return Math.min(cfg().terChunksMax, cfg().terChunksIniciais + extra) + plugin.reinos().chunksExtras(p.getUniqueId());
     }
 
     /** Pode gerenciar (reivindicar, membros, regras)? O dono, ou um admin ignorando as proteções. */

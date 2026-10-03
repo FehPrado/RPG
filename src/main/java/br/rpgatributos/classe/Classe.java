@@ -177,7 +177,13 @@ public enum Classe {
             Passivo.p().vida(10).armadura(6).mana(60).corpo(0.10).texto("+5 ❤, +6 de armadura, +60 de mana e +10% de dano"),
             List.of(Habilidade.JULGAMENTO_DIVINO, Habilidade.AURA_SAGRADA),
             List.of(), Prova.DUELO, null, List.of(),
-            "A luz que voltou a uma capela esquecida.");
+            "A luz que voltou a uma capela esquecida."),
+    SOBERANO_DAS_SOMBRAS("Soberano das Sombras", "☾", 0x5E35B1, Material.WITHER_SKELETON_SKULL, Tier.LENDARIA,
+            List.of(), Skill.COMBATE, EnumSet.of(Skill.COMBATE, Skill.ARCANO),
+            Passivo.p().vida(6).mana(60).regen(1).corpo(0.15).texto("+3 ❤, +60 de mana, +15% de dano; quem você derrota pode virar sombra"),
+            List.of(Habilidade.LEVANTE_SE, Habilidade.EXERCITO_DAS_SOMBRAS),
+            List.of(), Prova.DUELO, null, List.of(),
+            "Desperta do outro lado de um Portal Pesadelo. Os mortos se levantam para servi-lo.");
 
     public enum Tier {
         BASICA("Básica"), AVANCADA("Avançada"), OCULTA("Oculta"), LENDARIA("Lendária");

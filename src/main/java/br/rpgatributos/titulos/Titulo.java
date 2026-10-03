@@ -24,6 +24,8 @@ public enum Titulo {
     FAZENDEIRO("Fazendeiro", 0x7BC043, Requisito.nivel(Skill.AGRICULTURA, 0.5), Bonus.xpSkill(Skill.AGRICULTURA, 0.1)),
     CHEF("Chef", 0xE8A33D, Requisito.nivel(Skill.CULINARIA, 0.5), Bonus.xpSkill(Skill.CULINARIA, 0.1)),
     DOMADOR("Domador", 0xC9955C, Requisito.nivel(Skill.DOMA, 0.5), Bonus.xpSkill(Skill.DOMA, 0.1)),
+    PESCADOR("Pescador", 0x2FA4C9, Requisito.nivel(Skill.PESCA, 0.5), Bonus.xpSkill(Skill.PESCA, 0.1)),
+    ALQUIMISTA("Alquimista", 0x4FD1A5, Requisito.nivel(Skill.ALQUIMIA, 0.5), Bonus.xpSkill(Skill.ALQUIMIA, 0.1)),
     DESPERTO("Desperto", 0xFFD54F, Requisito.contador("classes", 1, "Passar numa Prova de Classe"), Bonus.xpTudo(0.03)),
     MESTRE_DE_ARMAS("Mestre de Armas", 0xFFB300, Requisito.contador("classes_dominadas", 3, "Dominar 3 classes"), new Bonus().comDano(1).comVida(2)),
     VETERANO("Veterano", 0xAAAAAA, Requisito.nivelTotal(0.35), Bonus.vida(2)),
@@ -45,6 +47,11 @@ public enum Titulo {
     // ---------- fazenda e cozinha ----------
     BOTANICO("Botânico", 0x5BD15B, Requisito.contador("mutacoes", 1, "Ver nascer uma semente mutante"), Bonus.xpSkill(Skill.AGRICULTURA, 0.15)),
     MESTRE_CUCA("Mestre-Cuca", 0xFFD23F, Requisito.contador("banquete", 1, "Cozinhar um Banquete Lendário"), Bonus.vida(2)),
+
+    // ---------- pesca e alquimia ----------
+    LENDA_DOS_MARES("Lenda dos Mares", 0x1E88E5, Requisito.contador("especies_peixe", 12, "Pescar os 12 peixes raros"), new Bonus().comVida(2).comVelocidade(0.03)),
+    CACADOR_DE_TESOUROS("Caçador de Tesouros", 0xFFC93C, Requisito.contador("tesouros", 25, "Pescar 25 tesouros"), Bonus.xpSkill(Skill.PESCA, 0.15)),
+    LAPIDARIO("Lapidário", 0xE0115F, Requisito.contador("gema_perfeita", 1, "Criar uma gema Perfeita"), Bonus.armadura(1)),
 
     // ---------- domador ----------
     SENHOR_DAS_FERAS("Senhor das Feras", 0x8B5A2B, Requisito.contador("voadores", 1, "Dar Asas a um companheiro"), Bonus.velocidade(0.03)),

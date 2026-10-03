@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel do Admin</title>
+<meta name="description" content="Instalação, configuração, arquivos, comandos de admin e roteiro de testes do plugin RPGAtributos.">
+<style>
+:root{
+  --bg:#f5efe3;--surface:#fffdf8;--surface-2:#f0e7d6;--text:#2a2118;--muted:#6b5d4d;--border:#e1d4bd;
+  --accent:#9a5b13;--accent-soft:#f3e2c4;--roxo:#5e35b1;--roxo-soft:#ece5fa;--verde:#2e7d32;--vermelho:#b3261e;
+  --code:#efe4cf;--sombra:0 1px 2px rgba(60,40,10,.06),0 4px 16px rgba(60,40,10,.06);
+  --raio:14px;--fonte:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"Cascadia Code",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13111a;--surface:#1c1925;--surface-2:#252131;--text:#ece6f5;--muted:#a69db6;--border:#352f45;
+  --accent:#f2b45a;--accent-soft:#3a2d18;--roxo:#b39ddb;--roxo-soft:#2c2540;--verde:#81c784;--vermelho:#ef9a9a;
+  --code:#2a2537;--sombra:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+}}
+:root[data-theme="dark"]{
+  --bg:#13111a;--surface:#1c1925;--surface-2:#252131;--text:#ece6f5;--muted:#a69db6;--border:#352f45;
+  --accent:#f2b45a;--accent-soft:#3a2d18;--roxo:#b39ddb;--roxo-soft:#2c2540;--verde:#81c784;--vermelho:#ef9a9a;
+  --code:#2a2537;--sombra:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--fonte);-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+a{color:var(--accent)}
+header.topo{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.topo-in{max-width:1240px;margin:0 auto;padding:12px 16px;display:flex;gap:12px;align-items:center}
+.marca{display:flex;align-items:center;gap:10px;min-width:0}
+.marca .selo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--roxo));display:grid;place-items:center;color:#fff;font-size:20px;flex:none}
+.marca b{display:block;font-size:16px;line-height:1.2}
+.marca small{color:var(--muted);font-size:12.5px}
+.busca{flex:1;display:flex;justify-content:flex-end;gap:8px}
+.busca input{width:100%;max-width:340px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-size:15px}
+.busca input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.botao{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:8px 11px;font:inherit;cursor:pointer;flex:none}
+.layout{max-width:1240px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px}
+nav.indice{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 92px);overflow:auto;padding:18px 0 24px}
+nav.indice a{display:flex;gap:8px;align-items:center;padding:5px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14.5px}
+nav.indice a:hover{background:var(--surface-2);color:var(--text)}
+nav.indice a.ativo{background:var(--accent-soft);color:var(--accent);font-weight:600}
+nav.indice a.apagado{opacity:.35}
+nav.indice .grupo{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 10px 4px;font-weight:700}
+main{padding:22px 0 60px;min-width:0}
+.hero{background:linear-gradient(135deg,var(--accent-soft),var(--roxo-soft));border:1px solid var(--border);border-radius:20px;padding:26px 24px;margin-bottom:26px}
+.hero h1{margin:0 0 6px;font-size:clamp(26px,4vw,36px);line-height:1.15}
+.hero p{margin:0;color:var(--muted);max-width:760px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 11px;font-size:13.5px}
+.secao{margin:0 0 34px}
+.secao>h2{display:flex;align-items:center;gap:10px;font-size:24px;margin:0 0 14px;padding-top:6px}
+.secao>h2 .ico{width:34px;height:34px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;font-size:18px;flex:none}
+.secao>p.intro{color:var(--muted);margin:-6px 0 14px}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--raio);padding:16px 18px;box-shadow:var(--sombra);min-width:0}
+.card.largo{grid-column:1/-1}
+.card h3{margin:0 0 8px;font-size:17px}
+.card p{margin:6px 0}
+.card ul,.card ol{margin:6px 0;padding-left:20px}
+.card li{margin:3px 0}
+.ritual{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 8px;font-size:14.5px}
+.ritual .b{background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:2px 9px;font-weight:600}
+.ritual .i{background:var(--surface-2);border-radius:8px;padding:2px 9px}
+.ritual .mais{color:var(--muted)}
+code,.cmd{font-family:var(--mono);font-size:.88em;background:var(--code);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.cmd{cursor:pointer;border:1px solid transparent}
+.cmd:hover{border-color:var(--accent)}
+kbd{font-family:var(--mono);font-size:.82em;background:var(--surface);border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:1px 6px}
+.tabela{overflow-x:auto;margin:8px 0;border:1px solid var(--border);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{padding:7px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border)}
+th{background:var(--surface-2);font-size:13px;letter-spacing:.02em;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+.nota{background:var(--roxo-soft);border-left:4px solid var(--roxo);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:14.5px}
+.aviso{background:color-mix(in srgb,var(--vermelho) 12%,transparent);border-left:4px solid var(--vermelho);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:14.5px}
+.muted{color:var(--muted)}
+#vazio{text-align:center;color:var(--muted);padding:40px 0}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:7px 14px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.on{opacity:1}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40px;border-top:1px solid var(--border)}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;gap:0}
+  nav.indice{position:sticky;top:61px;z-index:9;max-height:none;display:flex;overflow-x:auto;gap:4px;padding:8px 0;background:var(--bg);border-bottom:1px solid var(--border);margin:0 -16px;padding-left:16px;padding-right:16px}
+  nav.indice .grupo{display:none}
+  nav.indice a{white-space:nowrap;flex:none;border:1px solid var(--border);background:var(--surface)}
+  html{scroll-padding-top:120px}
+  .marca small{display:none}
+}
+@media (max-width:520px){.marca b{font-size:14px}.hero{padding:20px 16px}}
+</style>
+</head>
+<body>
+<header class="topo"><div class="topo-in">
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.14</small></div></div>
+  <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
+</div></header>
+
+<div class="layout">
+<nav class="indice" id="indice">
+  <div class="grupo">Servidor</div>
+  <a href="#instalar">📦 Instalar e atualizar</a>
+  <a href="#arquivos">🗂 Arquivos de dados</a>
+  <a href="#config">⚙ Configuração</a>
+  <a href="#permissoes">🔑 Permissões</a>
+  <div class="grupo">Comandos</div>
+  <a href="#cmd-geral">🧰 Atributos e geral</a>
+  <a href="#cmd-estacoes">✨ Criar estações</a>
+  <a href="#cmd-itens">🎁 Dar itens</a>
+  <a href="#cmd-sistemas">⚙ Sistemas</a>
+  <a href="#cmd-eventos">🌩 Eventos do mundo</a>
+  <a href="#cmd-faseC">⛩ Portais e Torre</a>
+  <div class="grupo">Ferramentas</div>
+  <a href="#testes">✅ Roteiro de testes</a>
+  <a href="#salas">🧱 Salas de masmorra</a>
+  <a href="#saber">💡 Bom saber</a>
+</nav>
+
+<main id="conteudo">
+<div class="hero">
+  <h1>Painel do Admin</h1>
+  <p>Como instalar, configurar e testar o RPGAtributos. Todos os comandos de admin começam com <code>/rpgadmin</code> e pedem a permissão <code>rpg.admin</code> (só OP por padrão). O guia completo dos sistemas está em <a href="jogadores.html">jogadores.html</a>.</p>
+  <div class="chips"><span class="chip">Paper 26.3</span><span class="chip">Java 25</span><span class="chip">Sem dependências</span><span class="chip">Sem resource pack</span></div>
+</div>
+
+<section class="secao" id="instalar">
+  <h2><span class="ico">📦</span>Instalar e atualizar</h2>
+  <div class="grade">
+    <div class="card"><h3>Instalar</h3>
+      <ol>
+        <li>Coloque <code>RPGAtributos-2.14.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
+        <li>Reinicie o servidor (evite <code>/reload</code>).</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Atualizar</h3>
+      <ul>
+        <li>Opções novas entram sozinhas no <code>config.yml</code>, sem mudar o que você já configurou.</li>
+        <li>Config muito antigo (v1) é guardado como <code>config-antigo-v1.yml</code> e um novo é criado. Os níveis dos jogadores continuam iguais.</li>
+        <li>Depois de editar o config: <span class="cmd">/rpgadmin reload</span>.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Compilar</h3>
+      <p>Com Java 25 e Maven: <code>mvn package</code>. O jar sai em <code>target/</code>. No GitHub, a aba Actions também compila.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="arquivos">
+  <h2><span class="ico">🗂</span>Arquivos de dados</h2>
+  <p class="intro">Tudo fica em <code>plugins/RPGAtributos/</code>. Faça backup da pasta inteira.</p>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Arquivo</th><th>O que guarda</th></tr></thead><tbody>
+      <tr><td><code>config.yml</code></td><td>Todas as opções</td></tr>
+      <tr><td><code>parties.yml</code>, <code>territorios.yml</code></td><td>Parties e territórios</td></tr>
+      <tr><td><code>companheiros.yml</code></td><td>Companheiros (os dados também ficam na criatura)</td></tr>
+      <tr><td><code>colonias.yml</code></td><td>Colônias (os moradores são aldeões salvos no mundo)</td></tr>
+      <tr><td><code>reinos.yml</code></td><td>Reinos, cargos, tesouro e guerras marcadas</td></tr>
+      <tr><td><code>lendas.yml</code>, <code>classes_lendarias.yml</code></td><td>Donos das lendas e das classes lendárias</td></tr>
+      <tr><td><code>pedras.yml</code>, <code>locais.yml</code></td><td>Pedras de Viagem e Locais Ocultos (apague <code>locais.yml</code> para sortear novos)</td></tr>
+      <tr><td><code>cofre.yml</code></td><td>Cofre das Almas (itens de quem morreu em masmorra)</td></tr>
+      <tr><td><code>mundo.yml</code></td><td>Idade do mundo e próximo Chefe Mundial</td></tr>
+      <tr><td><code>estacoes.yml</code></td><td>Estação atual e neve do inverno (para desfazer)</td></tr>
+      <tr><td><code>portais.yml</code></td><td>Portais abertos pelo mundo</td></tr>
+      <tr><td><code>torre.yml</code></td><td>Ranking da Torre (semanal e de todos os tempos)</td></tr>
+      <tr><td><code>salas/&lt;tipo&gt;/&lt;nome&gt;.nbt</code></td><td>Salas de masmorra construídas por admins</td></tr>
+      <tr><td>No jogador (PDC)</td><td>Atributos, classes, magias, acessórios, guarda-roupa, exército das sombras</td></tr>
+    </tbody></table></div>
+    <p class="aviso">O mundo <code>rpg_masmorras</code> é <b>apagado e recriado vazio</b> a cada reinício (masmorras, provas de classe e Torre). Não construa nada nele.</p></div>
+  </div>
+</section>
+
+<section class="secao" id="config">
+  <h2><span class="ico">⚙</span>Configuração</h2>
+  <p class="intro">Os bônus são escritos como "quanto valem no nível máximo": o plugin divide pelos níveis sozinho.</p>
+  <div class="grade">
+    <div class="card"><h3>Geral e XP</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>nivel-maximo</code></td><td>100</td><td>Nível máximo dos atributos</td></tr>
+        <tr><td><code>xp-base</code> / <code>xp-expoente</code></td><td>20 / 1.3</td><td>Curva de XP: base × (N+1)^expoente</td></tr>
+        <tr><td><code>multiplicador-xp</code></td><td>1.0</td><td>2.0 = evento de XP em dobro</td></tr>
+        <tr><td><code>mostrar-xp-na-actionbar</code></td><td>true</td><td>Mostra o "+XP" acima da hotbar</td></tr>
+        <tr><td><code>combate.cooldown-mesmo-jogador-segundos</code></td><td>600</td><td>Anti-farm de PvP</td></tr>
+        <tr><td><code>combate.multiplicador-mob-de-spawner</code></td><td>0.25</td><td>XP de mobs de spawner</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Forja e Arcano</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>forja.so-na-forja-do-ferreiro</code></td><td>true</td><td>false = qualquer bancada forja</td></tr>
+        <tr><td><code>forja.anunciar-no-chat-a-partir-de</code></td><td>lendario</td><td>Raridade anunciada no chat</td></tr>
+        <tr><td><code>forja.raridades.*</code></td><td>—</td><td>Pesos (nível 0 e máximo) e multiplicador de cada raridade</td></tr>
+        <tr><td><code>arcano.dano-em-jogadores</code></td><td>0.6</td><td>Magias fazem 60% do dano em PvP</td></tr>
+        <tr><td><code>arcano.anunciar-descoberta</code></td><td>true</td><td>Avisa quando alguém descobre magia secreta</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Classes, viagem e masmorras</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>classes.esmeraldas-para-trocar</code></td><td>10</td><td>Voltar a uma classe aprendida</td></tr>
+        <tr><td><code>classes.dias-sem-entrar-para-perder-lendaria</code></td><td>30</td><td>0 = nunca perde</td></tr>
+        <tr><td><code>viagem.blocos-por-nivel-de-xp</code></td><td>1000</td><td>Custo das Pedras de Viagem</td></tr>
+        <tr><td><code>locais-ocultos.quantos-de-cada-tipo</code></td><td>2</td><td>7 tipos × 2 = 14 locais</td></tr>
+        <tr><td><code>masmorra.maximo-ao-mesmo-tempo</code></td><td>6</td><td>Masmorras abertas juntas</td></tr>
+        <tr><td><code>masmorra.tempo-limite-minutos</code></td><td>40</td><td>Duração máxima</td></tr>
+        <tr><td><code>masmorra.diamantes-cofre-das-almas</code></td><td>2</td><td>Preço de recuperar os itens</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Party, território, reino e guerra</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>party.tamanho-maximo</code></td><td>6</td><td>Jogadores por party</td></tr>
+        <tr><td><code>territorio.chunks-maximo</code></td><td>60</td><td>Tamanho máximo do território</td></tr>
+        <tr><td><code>territorio.mundos-bloqueados</code></td><td>[]</td><td>Mundos sem territórios</td></tr>
+        <tr><td><code>reino.esmeraldas-para-fundar</code></td><td>32</td><td>Custo do reino</td></tr>
+        <tr><td><code>guerra.dia-da-semana</code> / <code>hora</code></td><td>SATURDAY / 20</td><td>Horário das guerras</td></tr>
+        <tr><td><code>guerra.duracao-minutos</code></td><td>60</td><td>Duração da guerra</td></tr>
+        <tr><td><code>guerra.chunks-por-captura</code></td><td>4</td><td>Chunks perdidos por Marco capturado</td></tr>
+        <tr><td><code>guerra.dias-de-tregua</code></td><td>7</td><td>Paz depois de uma guerra</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Mundo perigoso e mundo vivo</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>perigo.chance-elite</code></td><td>0.025</td><td>Chance de um monstro nascer Elite</td></tr>
+        <tr><td><code>perigo.forca-a-mais-por-semana</code> / <code>maxima</code></td><td>0.05 / 0.5</td><td>Envelhecimento do mundo</td></tr>
+        <tr><td><code>perigo.chance-horda-por-noite</code></td><td>0.2</td><td>Ataques à colônia</td></tr>
+        <tr><td><code>perigo.chefes-mundiais-por-semana</code></td><td>2</td><td>Chefes Mundiais</td></tr>
+        <tr><td><code>mundo-vivo.temperatura</code></td><td>true</td><td>Frio e calor</td></tr>
+        <tr><td><code>mundo-vivo.neve-e-gelo-no-inverno</code></td><td>true</td><td>Neve e gelo de verdade no inverno</td></tr>
+        <tr><td><code>mundo-vivo.chance-lua-de-sangue</code></td><td>0.2</td><td>Por noite de lua cheia</td></tr>
+        <tr><td><code>mundo-vivo.chance-mordida-amaldicoar</code></td><td>0.2</td><td>Lobisomem/vampiro passa a maldição</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Portais e Torre (2.14)</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>portais.intervalo-minutos</code> / <code>chance</code></td><td>30 / 0.6</td><td>Frequência dos portais</td></tr>
+        <tr><td><code>portais.no-maximo</code></td><td>3</td><td>Portais abertos ao mesmo tempo</td></tr>
+        <tr><td><code>portais.distancia-minima</code> / <code>maxima</code></td><td>48 / 96</td><td>Distância do jogador sorteado</td></tr>
+        <tr><td><code>portais.horas-ate-transbordar</code></td><td>2.0</td><td>Difícil; Fácil ×1,5, Normal ×1,25, Pesadelo ×0,75</td></tr>
+        <tr><td><code>portais.chance-eco-do-soberano</code></td><td>0.35</td><td>Pesadelo com o Eco (se a classe estiver livre)</td></tr>
+        <tr><td><code>portais.peso-*</code></td><td>45/33/17/5</td><td>Peso de cada dificuldade</td></tr>
+        <tr><td><code>torre.vida-por-andar</code> / <code>dano-por-andar</code></td><td>0.07 / 0.035</td><td>Quanto os monstros crescem por andar</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="permissoes">
+  <h2><span class="ico">🔑</span>Permissões</h2>
+  <div class="grade">
+    <div class="card largo"><p>Liberadas para todos por padrão: <code>rpg.atributos</code>, <code>rpg.atributos.outros</code>, <code>rpg.chapeu</code>, <code>rpg.tag</code>, <code>rpg.tag.cores</code>, <code>rpg.forja</code>, <code>rpg.arcano</code>, <code>rpg.guia</code>, <code>rpg.titulos</code>, <code>rpg.missoes</code>, <code>rpg.receitas</code>, <code>rpg.party</code>, <code>rpg.territorio</code>, <code>rpg.pets</code>, <code>rpg.masmorra</code>, <code>rpg.classe</code>, <code>rpg.lendas</code>, <code>rpg.locais</code>, <code>rpg.pesca</code>, <code>rpg.alquimia</code>, <code>rpg.colonia</code>, <code>rpg.reino</code>, <code>rpg.bestiario</code>, <code>rpg.calendario</code>, <code>rpg.portais</code>, <code>rpg.torre</code>.</p>
+    <p><code>rpg.admin</code>: só OP.</p></div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-geral">
+  <h2><span class="ico">🧰</span>Atributos e geral</h2>
+  <p class="intro">Clique num comando para copiar.</p>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin</span></td><td>Lista todos os comandos de admin no chat</td></tr>
+      <tr><td><span class="cmd">/rpgadmin set &lt;jogador&gt; &lt;atributo&gt; &lt;nível&gt;</span></td><td>Define o nível de um atributo</td></tr>
+      <tr><td><span class="cmd">/rpgadmin addxp &lt;jogador&gt; &lt;atributo&gt; &lt;xp&gt;</span></td><td>Dá XP num atributo</td></tr>
+      <tr><td><span class="cmd">/rpgadmin reset &lt;jogador&gt; [atributo]</span></td><td>Zera um ou todos os atributos</td></tr>
+      <tr><td><span class="cmd">/rpgadmin conquista &lt;contador&gt; &lt;qtd&gt; [jogador]</span></td><td>Soma progresso de conquista/feito</td></tr>
+      <tr><td><span class="cmd">/rpgadmin ignorar</span></td><td>Liga/desliga ignorar as proteções (e gerenciar qualquer território)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin apagarterritorio &lt;dono&gt;</span></td><td>Apaga o território de alguém</td></tr>
+      <tr><td><span class="cmd">/rpgadmin reload</span></td><td>Recarrega o config</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-estacoes">
+  <h2><span class="ico">✨</span>Criar estações (sem ritual)</h2>
+  <p class="intro">Olhe para o bloco (até 6 blocos) e use o comando.</p>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>Olhando para</th><th>Vira</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin forjaferreiro</span></td><td>Bigorna</td><td>Forja do Ferreiro</td></tr>
+      <tr><td><span class="cmd">/rpgadmin infusor</span></td><td>Caldeirão</td><td>Infusor Corpóreo</td></tr>
+      <tr><td><span class="cmd">/rpgadmin altar</span></td><td>Obsidiana chorona</td><td>Altar Ritualístico</td></tr>
+      <tr><td><span class="cmd">/rpgadmin cozinha</span></td><td>Defumador</td><td>Cozinha</td></tr>
+      <tr><td><span class="cmd">/rpgadmin reciclagem</span></td><td>Rebolo</td><td>Bancada de Reciclagem</td></tr>
+      <tr><td><span class="cmd">/rpgadmin marco</span></td><td>Magnetita</td><td>O seu Marco do Território</td></tr>
+      <tr><td><span class="cmd">/rpgadmin prefeitura</span></td><td>Sino</td><td>A Prefeitura da sua colônia</td></tr>
+      <tr><td><span class="cmd">/rpgadmin altardomador</span></td><td>Fardo de feno</td><td>Altar do Domador</td></tr>
+      <tr><td><span class="cmd">/rpgadmin portalmasmorra</span></td><td>Tijolos de pedra entalhados</td><td>Portal da Masmorra</td></tr>
+      <tr><td><span class="cmd">/rpgadmin santuario</span></td><td>Púlpito</td><td>Santuário das Classes</td></tr>
+      <tr><td><span class="cmd">/rpgadmin pedraviagem</span></td><td>Pedra entalhada de ardósia</td><td>Pedra de Viagem</td></tr>
+      <tr><td><span class="cmd">/rpgadmin bancadaalquimica</span></td><td>Suporte de poções</td><td>Bancada Alquímica</td></tr>
+      <tr><td><span class="cmd">/rpgadmin obelisco</span></td><td>Obsidiana chorona</td><td>Obelisco da Torre</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-itens">
+  <h2><span class="ico">🎁</span>Dar itens</h2>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin forjar [raridade]</span></td><td>Forja o item da mão (comum … mitico)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin refino &lt;0-10&gt;</span></td><td>Refino do item da mão</td></tr>
+      <tr><td><span class="cmd">/rpgadmin raro &lt;material&gt; [qtd] [jogador]</span></td><td>Material raro ou núcleo de chefe</td></tr>
+      <tr><td><span class="cmd">/rpgadmin infundir &lt;parte&gt;</span></td><td>Infunde o item da mão, sem custo</td></tr>
+      <tr><td><span class="cmd">/rpgadmin grimorio [jogador]</span></td><td>Dá um grimório</td></tr>
+      <tr><td><span class="cmd">/rpgadmin mana [jogador]</span></td><td>Enche a mana</td></tr>
+      <tr><td><span class="cmd">/rpgadmin descobrir [jogador]</span></td><td>Libera todas as magias secretas</td></tr>
+      <tr><td><span class="cmd">/rpgadmin cajado [raridade]</span></td><td>Cajado Arcano forjado</td></tr>
+      <tr><td><span class="cmd">/rpgadmin tomo &lt;magia&gt;</span></td><td>Tomo Proibido</td></tr>
+      <tr><td><span class="cmd">/rpgadmin maestria &lt;jogador&gt; &lt;elemento&gt; &lt;0-10&gt;</span></td><td>Maestria de um elemento</td></tr>
+      <tr><td><span class="cmd">/rpgadmin variedade &lt;id&gt; [qtd] [semente]</span></td><td>Variedade rara (ou as sementes)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin prato &lt;id&gt; [qualidade]</span></td><td>Prato pronto</td></tr>
+      <tr><td><span class="cmd">/rpgadmin adubo [qtd]</span></td><td>Adubo Rico</td></tr>
+      <tr><td><span class="cmd">/rpgadmin peixe &lt;peixe&gt; [qtd]</span></td><td>Peixe raro</td></tr>
+      <tr><td><span class="cmd">/rpgadmin componente &lt;componente&gt; [qtd]</span></td><td>Componentes alquímicos</td></tr>
+      <tr><td><span class="cmd">/rpgadmin gema &lt;gema&gt; [grau 1-3] [qtd]</span></td><td>Gemas</td></tr>
+      <tr><td><span class="cmd">/rpgadmin elixir &lt;elixir&gt; [qualidade]</span></td><td>Elixir pronto</td></tr>
+      <tr><td><span class="cmd">/rpgadmin acessorio &lt;acessório&gt;</span></td><td>Acessório</td></tr>
+      <tr><td><span class="cmd">/rpgadmin lenda &lt;lenda&gt;</span></td><td>Transforma o item da mão na lenda</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-sistemas">
+  <h2><span class="ico">⚙</span>Sistemas</h2>
+  <div class="grade">
+    <div class="card"><h3>Altar, domador e masmorras</h3>
+      <div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><span class="cmd">/rpgadmin chefe &lt;id&gt;</span></td><td>Chefe no altar que você olha (golem, rainha, chamas, lich, tempestade, arauto)</td></tr>
+        <tr><td><span class="cmd">/rpgadmin evento &lt;id&gt;</span></td><td>Evento do altar (lua_de_sangue, meteoros, ondas, mercador, cacador)</td></tr>
+        <tr><td><span class="cmd">/rpgadmin invocar &lt;criatura&gt;</span></td><td>Companheiro seu, sem custo</td></tr>
+        <tr><td><span class="cmd">/rpgadmin masmorra &lt;dificuldade&gt;</span></td><td>Masmorra só para você, sem custo</td></tr>
+        <tr><td><span class="cmd">/rpgadmin fecharmasmorras</span></td><td>Fecha todas (ninguém perde nada)</td></tr>
+        <tr><td><span class="cmd">/rpgadmin sala …</span></td><td>Ferramentas de salas (veja abaixo)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Classes, lendas e locais</h3>
+      <div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><span class="cmd">/rpgadmin classe &lt;jogador&gt; &lt;classe&gt; [nível]</span></td><td>Dá a classe direto (inclusive lendárias)</td></tr>
+        <tr><td><span class="cmd">/rpgadmin prova</span></td><td>Começa a prova do caminho atual</td></tr>
+        <tr><td><span class="cmd">/rpgadmin liberarclasse &lt;classe&gt;</span></td><td>Tira a classe lendária do dono</td></tr>
+        <tr><td><span class="cmd">/rpgadmin liberarlenda &lt;lenda&gt;</span></td><td>Tira a lenda do dono</td></tr>
+        <tr><td><span class="cmd">/rpgadmin revelar &lt;lenda|todas&gt;</span></td><td>Mostra os feitos escondidos</td></tr>
+        <tr><td><span class="cmd">/rpgadmin local &lt;tipo&gt;</span></td><td>Constrói um Local Oculto ao lado</td></tr>
+        <tr><td><span class="cmd">/rpgadmin locais</span></td><td>Onde ficam todos os Locais Ocultos</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Colônia e reinos</h3>
+      <div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><span class="cmd">/rpgadmin colono [qtd]</span></td><td>Moradores chegam agora</td></tr>
+        <tr><td><span class="cmd">/rpgadmin turnocolonia</span></td><td>Um turno de trabalho agora</td></tr>
+        <tr><td><span class="cmd">/rpgadmin nivelcolonia &lt;1-5&gt;</span></td><td>Nível da sua colônia</td></tr>
+        <tr><td><span class="cmd">/rpgadmin guerra iniciar &lt;A&gt; &lt;B&gt;</span></td><td>Guerra começando agora</td></tr>
+        <tr><td><span class="cmd">/rpgadmin guerra encerrar</span></td><td>Encerra as guerras</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-eventos">
+  <h2><span class="ico">🌩</span>Eventos do mundo</h2>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin elite [1-3]</span></td><td>O monstro que você olha vira Elite</td></tr>
+      <tr><td><span class="cmd">/rpgadmin ninho [zumbis|esqueletos|aranhas|illagers]</span></td><td>Ninho à sua frente</td></tr>
+      <tr><td><span class="cmd">/rpgadmin horda</span></td><td>Sua colônia é atacada em 1 minuto</td></tr>
+      <tr><td><span class="cmd">/rpgadmin chefemundial</span></td><td>Chefe Mundial em 30 segundos</td></tr>
+      <tr><td><span class="cmd">/rpgadmin idademundo &lt;semanas&gt;</span></td><td>Muda a idade do mundo</td></tr>
+      <tr><td><span class="cmd">/rpgadmin estacao &lt;primavera|verao|outono|inverno&gt;</span></td><td>Muda a estação</td></tr>
+      <tr><td><span class="cmd">/rpgadmin festival</span></td><td>Hoje vira dia de festival</td></tr>
+      <tr><td><span class="cmd">/rpgadmin clima &lt;nevasca|neblina|ventania|tempestade|calor&gt;</span></td><td>Evento de clima</td></tr>
+      <tr><td><span class="cmd">/rpgadmin ceu &lt;luadesangue|meteoros|eclipse|aurora&gt;</span></td><td>Evento do céu</td></tr>
+      <tr><td><span class="cmd">/rpgadmin maldicao &lt;jogador&gt; &lt;licantropia|vampirismo|nenhuma&gt;</span></td><td>Dá ou tira uma maldição</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-faseC">
+  <h2><span class="ico">⛩</span>Portais e Torre</h2>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin portal &lt;facil|normal|dificil|pesadelo&gt; [eco]</span></td><td>Abre um portal 4 blocos à sua frente (<code>eco</code> = com o Eco do Soberano)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin portalsortear</span></td><td>Sorteia um portal perto de alguém agora</td></tr>
+      <tr><td><span class="cmd">/rpgadmin portaltransbordar</span></td><td>O portal mais perto transborda agora</td></tr>
+      <tr><td><span class="cmd">/rpgadmin portalfechar</span></td><td>Apaga o portal mais perto (sem prêmio)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin torre &lt;andar&gt;</span></td><td>Sobe a Torre sozinho a partir do andar</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="testes">
+  <h2><span class="ico">✅</span>Roteiro de testes rápido</h2>
+  <div class="grade">
+    <div class="card"><h3>Portais</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin portal normal</span>: anel, placa e aviso no chat.</li>
+        <li>Entre (a 1ª vez desperta), entre de novo e vença o chefe: o portal some e o baú vem maior.</li>
+        <li>Outro portal + <span class="cmd">/rpgadmin portaltransbordar</span>: ondas, chefe e baú no lugar.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Soberano das Sombras</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin classe &lt;você&gt; soberano_das_sombras 20</span></li>
+        <li>Mate monstros e use agache + <kbd>F</kbd> (Levante-se).</li>
+        <li>Troque com agache + clique esquerdo no ar e use o Exército. Confira <span class="cmd">/sombras</span>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Torre Infinita</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin obelisco</span> numa obsidiana chorona e clique nele.</li>
+        <li><span class="cmd">/rpgadmin torre 9</span>: chefe e baú no andar 10, visual novo no 11.</li>
+        <li>Morra lá dentro: volta sem perder itens. <span class="cmd">/torre ranking</span>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Mundo vivo e perigoso</h3>
+      <ol>
+        <li><span class="cmd">/calendario</span>, <span class="cmd">/rpgadmin estacao inverno</span> e depois primavera.</li>
+        <li><span class="cmd">/rpgadmin ceu luadesangue</span>, <span class="cmd">/rpgadmin clima tempestade</span>.</li>
+        <li><span class="cmd">/rpgadmin elite 3</span>, <span class="cmd">/rpgadmin ninho</span>, <span class="cmd">/rpgadmin horda</span>, <span class="cmd">/rpgadmin chefemundial</span>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Reinos e guerra</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin nivelcolonia 2</span>, depois <span class="cmd">/reino fundar &lt;nome&gt;</span> com 32 esmeraldas.</li>
+        <li>Coloque um bloco de alvo perto da Prefeitura para ter soldados.</li>
+        <li><span class="cmd">/rpgadmin guerra iniciar &lt;A&gt; &lt;B&gt;</span> e tente capturar um Marco.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="salas">
+  <h2><span class="ico">🧱</span>Salas de masmorra feitas por você</h2>
+  <div class="grade">
+    <div class="card"><h3>Passo a passo</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin sala modelo combate</span> monta uma moldura de vidro no tamanho certo (as partes verdes são as portas).</li>
+        <li>Construa a sala dentro da moldura.</li>
+        <li>Coloque placas: <code>[monstro]</code> (2ª linha pode ter o tipo, ex.: <code>blaze</code>), <code>[bau]</code>, <code>[chefe]</code>, <code>[entrada]</code>.</li>
+        <li><span class="cmd">/rpgadmin sala salvar combate cripta_do_rei</span></li>
+      </ol>
+      <p class="muted">Outros: <code>pos1</code>, <code>pos2</code>, <code>lista</code>, <code>apagar</code>. Chance de usar uma sala sua: <code>masmorra.chance-sala-personalizada</code> (0.6).</p>
+    </div>
+    <div class="card"><h3>Tamanhos</h3>
+      <div class="tabela"><table><thead><tr><th>Tipo</th><th>Tamanho (com paredes)</th></tr></thead><tbody>
+        <tr><td><code>inicio</code>, <code>combate</code>, <code>tesouro</code></td><td>19 × 9 × 19</td></tr>
+        <tr><td><code>chefe</code></td><td>27 × 12 × 27</td></tr>
+      </tbody></table></div>
+      <p class="muted">Portas no meio de cada parede (3 de largura × 4 de altura). Para levar a outro servidor, copie os <code>.nbt</code>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="saber">
+  <h2><span class="ico">💡</span>Bom saber</h2>
+  <div class="grade">
+    <div class="card"><h3>Compatibilidade</h3>
+      <ul>
+        <li>Funciona junto com WorldGuard/GriefPrevention: basta um bloquear.</li>
+        <li>A tag usa um time de scoreboard: com TAB ou outro plugin de nametag, desative a parte de nametag de um deles.</li>
+        <li>Magias em jogadores seguem a regra de PvP do mundo.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Ao reiniciar</h3>
+      <ul>
+        <li>Masmorras, Torre, ninhos, hordas, chefes e eventos em andamento acabam (ninguém perde itens).</li>
+        <li>Portais do mundo continuam; um transbordo em andamento recomeça quando alguém chegar perto.</li>
+        <li>Quem estava em masmorra ou na Torre volta para onde entrou.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Únicos no servidor</h3>
+      <ul>
+        <li>Cada lenda e cada classe lendária tem <b>um dono</b>.</li>
+        <li>Dono de classe lendária 30 dias sem entrar perde a classe.</li>
+        <li>Use <span class="cmd">/rpgadmin liberarclasse</span> e <span class="cmd">/rpgadmin liberarlenda</span> para resolver disputas.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
+</main>
+</div>
+<footer>RPGAtributos 2.14 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var root=document.documentElement;
+  try{var t=localStorage.getItem('rpg-tema');if(t==='dark'||t==='light')root.dataset.theme=t;}catch(e){}
+  document.getElementById('tema').addEventListener('click',function(){
+    var escuro=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme=escuro?'light':'dark';
+    try{localStorage.setItem('rpg-tema',root.dataset.theme);}catch(e){}
+  });
+  var norm=function(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();};
+  var busca=document.getElementById('busca');
+  var secoes=[].slice.call(document.querySelectorAll('.secao'));
+  var links={};[].forEach.call(document.querySelectorAll('nav.indice a'),function(a){links[a.getAttribute('href').slice(1)]=a;});
+  busca.addEventListener('input',function(){
+    var q=norm(busca.value.trim()),algum=false;
+    secoes.forEach(function(sec){
+      var visiveis=0,secOk=q&&norm(sec.querySelector('h2').textContent).indexOf(q)>=0;
+      [].forEach.call(sec.querySelectorAll('.card'),function(card){
+        var linhas=[].slice.call(card.querySelectorAll('tbody tr'));
+        if(!q){card.hidden=false;linhas.forEach(function(r){r.hidden=false;});visiveis++;return;}
+        var h=card.querySelector('h3'),tituloOk=secOk||(h&&norm(h.textContent).indexOf(q)>=0);
+        var ok=tituloOk||norm(card.textContent).indexOf(q)>=0;
+        card.hidden=!ok;
+        if(!ok)return;
+        visiveis++;
+        var acertos=linhas.filter(function(r){return norm(r.textContent).indexOf(q)>=0;});
+        linhas.forEach(function(r){r.hidden=!tituloOk&&acertos.length>0&&acertos.indexOf(r)<0;});
+      });
+      var intro=sec.querySelector('.intro');if(intro)intro.hidden=!!q&&!secOk&&visiveis===0;
+      sec.hidden=visiveis===0;
+      if(links[sec.id])links[sec.id].classList.toggle('apagado',visiveis===0);
+      if(visiveis)algum=true;
+    });
+    document.getElementById('vazio').hidden=algum;
+  });
+  var toast=document.getElementById('toast'),timer;
+  document.addEventListener('click',function(e){
+    var c=e.target.closest('.cmd');if(!c)return;
+    var texto=c.textContent.replace(/<[^>]*>/g,'').trim();
+    var mostrar=function(m){toast.textContent=m;toast.classList.add('on');clearTimeout(timer);timer=setTimeout(function(){toast.classList.remove('on');},1400);};
+    try{navigator.clipboard.writeText(texto).then(function(){mostrar('Copiado: '+texto);},function(){mostrar(texto);});}catch(err){mostrar(texto);}
+  });
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(ents){ents.forEach(function(en){
+      if(en.isIntersecting&&links[en.target.id]){for(var k in links)links[k].classList.remove('ativo');links[en.target.id].classList.add('ativo');}
+    });},{rootMargin:'-30% 0px -60% 0px'});
+    secoes.forEach(function(s){obs.observe(s);});
+  }
+})();
+</script>
+</body>
+</html>

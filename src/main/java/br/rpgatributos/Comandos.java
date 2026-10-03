@@ -1,5 +1,9 @@
 package br.rpgatributos;
 
+import br.rpgatributos.alquimia.Acessorio;
+import br.rpgatributos.alquimia.Elixir;
+import br.rpgatributos.alquimia.Gema;
+import br.rpgatributos.alquimia.Reagente;
 import br.rpgatributos.arcano.Arcano;
 import br.rpgatributos.arcano.Catalogo;
 import br.rpgatributos.arcano.ParteCorpo;
@@ -20,6 +24,7 @@ import br.rpgatributos.fazenda.Variedade;
 import br.rpgatributos.forja.DadosForja;
 import br.rpgatributos.forja.Categoria;
 import br.rpgatributos.forja.Raridade;
+import br.rpgatributos.pesca.PeixeRaro;
 import br.rpgatributos.territorio.Territorio;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -85,6 +90,51 @@ public final class Comandos implements TabExecutor {
             }
             case "pets" -> {
                 if (sender instanceof Player p) plugin.menusDomador().abrirLista(p);
+                else erro(sender, "Só jogadores.");
+            }
+            case "peixes" -> {
+                if (sender instanceof Player p) plugin.pesca().abrirDiario(p);
+                else erro(sender, "Só jogadores.");
+            }
+            case "alquimia" -> {
+                if (sender instanceof Player p) plugin.alquimia().abrirLivro(p);
+                else erro(sender, "Só jogadores.");
+            }
+            case "acessorios" -> {
+                if (sender instanceof Player p) plugin.acessorios().abrir(p);
+                else erro(sender, "Só jogadores.");
+            }
+            case "guardaroupa" -> {
+                if (sender instanceof Player p) plugin.guardaRoupa().abrir(p);
+                else erro(sender, "Só jogadores.");
+            }
+            case "calendario" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return true; }
+                var est = plugin.estacoes();
+                var e = est.atual();
+                p.sendMessage(Component.text(e.icone() + " " + e.nome() + " — dia " + est.dia() + " de 7", e.cor(), TextDecoration.BOLD));
+                p.sendMessage(Component.text("   " + e.descricao(), NamedTextColor.GRAY));
+                if (est.festival()) p.sendMessage(Component.text("   ✦ Hoje é dia de festival!", NamedTextColor.GOLD));
+                else p.sendMessage(Component.text("   Festival no dia 4 da estação.", NamedTextColor.DARK_GRAY));
+                p.sendMessage(Component.text("☾ " + plugin.ceu().resumo(), NamedTextColor.LIGHT_PURPLE));
+                p.sendMessage(Component.text("☠ Mundo na semana " + plugin.perigo().semanas() + " (monstros +" + Math.round(plugin.perigo().forca() * 100)
+                        + "%)  ·  Chefe Mundial: " + plugin.chefeMundial().situacao(), NamedTextColor.RED));
+            }
+            case "maldicao" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return true; }
+                if (args.length >= 1 && args[0].equalsIgnoreCase("transformar")) {
+                    String erro = plugin.maldicoes().alternarTransformacao(p);
+                    if (erro != null) erro(sender, erro);
+                } else {
+                    plugin.maldicoes().info(p);
+                }
+            }
+            case "bestiario" -> {
+                if (sender instanceof Player p) plugin.bestiario().abrir(p);
+                else erro(sender, "Só jogadores.");
+            }
+            case "colonia" -> {
+                if (sender instanceof Player p) plugin.colonias().abrirMinha(p);
                 else erro(sender, "Só jogadores.");
             }
             case "masmorra" -> masmorra(sender, args);
@@ -208,6 +258,35 @@ public final class Comandos implements TabExecutor {
                     /rpgadmin local <tipo>  (constrói um Local Oculto aqui do lado)
                     /rpgadmin locais  (lista onde ficam todos os Locais Ocultos)
                     /rpgadmin liberarclasse <classe lendária>
+                    /rpgadmin bancadaalquimica  (o suporte de poções que você olha vira Bancada Alquímica)
+                    /rpgadmin peixe <peixe raro> [quantidade]
+                    /rpgadmin componente <componente> [quantidade]
+                    /rpgadmin gema <gema> [grau 1-3] [quantidade]
+                    /rpgadmin elixir <elixir> [normal|boa|otima|perfeita]
+                    /rpgadmin acessorio <acessório>
+                    /rpgadmin cajado [raridade]  (um Cajado Arcano forjado)
+                    /rpgadmin tomo <magia proibida>
+                    /rpgadmin maestria <jogador> <elemento> <nível 0-10>
+                    /rpgadmin prefeitura  (o sino que você olha vira a Prefeitura da sua colônia)
+                    /rpgadmin colono [quantidade]  (moradores chegam agora na sua colônia)
+                    /rpgadmin turnocolonia  (um turno de trabalho agora)
+                    /rpgadmin nivelcolonia <1-5>
+                    /rpgadmin guerra iniciar <reino A> <reino B>  (guerra começando agora, para testar)
+                    /rpgadmin guerra encerrar  (encerra as guerras em andamento)
+                    /rpgadmin elite [1-3]  (o monstro que você olha vira Elite)
+                    /rpgadmin ninho [zumbis|esqueletos|aranhas|illagers]  (um ninho à sua frente)
+                    /rpgadmin horda  (a sua colônia é atacada em 1 minuto)
+                    /rpgadmin chefemundial  (o Chefe Mundial aparece em 30 segundos)
+                    /rpgadmin idademundo <semanas>  (muda a idade do mundo)
+                    /rpgadmin estacao <primavera|verao|outono|inverno>
+                    /rpgadmin festival  (hoje vira dia de festival)
+                    /rpgadmin clima <nevasca|neblina|ventania|tempestade|calor>
+                    /rpgadmin ceu <luadesangue|meteoros|eclipse|aurora>
+                    /rpgadmin maldicao <jogador> <licantropia|vampirismo|nenhuma>
+                    /rpgadmin portal <facil|normal|dificil|pesadelo> [eco]  (abre um portal à sua frente)
+                    /rpgadmin portaltransbordar | portalfechar | portalsortear  (o portal mais perto)
+                    /rpgadmin obelisco  (olhando para obsidiana chorona)
+                    /rpgadmin torre <andar>  (sobe sozinho a partir do andar)
                     /rpgadmin reload""", NamedTextColor.YELLOW));
             return;
         }
@@ -231,6 +310,23 @@ public final class Comandos implements TabExecutor {
             case "santuario", "classe", "prova" -> { adminClasse(sender, sub, args); return; }
             case "lenda", "liberarlenda" -> { adminLenda(sender, sub, args); return; }
             case "revelar", "pedraviagem", "local", "locais", "liberarclasse" -> { adminOculto(sender, sub, args); return; }
+            case "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio" -> { adminAlquimia(sender, sub, args); return; }
+            case "cajado", "tomo", "maestria" -> { adminMagia(sender, sub, args); return; }
+            case "prefeitura", "colono", "turnocolonia", "nivelcolonia" -> { adminColonia(sender, sub, args); return; }
+            case "elite", "ninho", "horda", "chefemundial", "idademundo" -> { adminPerigo(sender, sub, args); return; }
+            case "estacao", "festival", "clima", "ceu", "maldicao" -> { adminMundo(sender, sub, args); return; }
+            case "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre" -> { adminFaseC(sender, sub, args); return; }
+            case "guerra" -> {
+                if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
+                    String erro = plugin.reinos().guerraAgora(args[2], args[3]);
+                    if (erro != null) erro(sender, erro); else ok(sender, "Guerra começa no próximo segundo.");
+                } else if (args.length >= 2 && args[1].equalsIgnoreCase("encerrar")) {
+                    ok(sender, plugin.reinos().encerrarTodas() + " guerra(s) encerrada(s).");
+                } else {
+                    erro(sender, "Use: /rpgadmin guerra iniciar <reino A> <reino B>  |  /rpgadmin guerra encerrar");
+                }
+                return;
+            }
             default -> { }
         }
         if (args.length < 2) { erro(sender, "Informe o jogador."); return; }
@@ -436,6 +532,249 @@ public final class Comandos implements TabExecutor {
             }
             default -> { }
         }
+    }
+
+    // ================= pesca e alquimia (admin) =================
+
+    private void adminAlquimia(CommandSender sender, String sub, String[] args) {
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        switch (sub) {
+            case "bancadaalquimica" -> {
+                Block b = p.getTargetBlockExact(6);
+                if (b == null || b.getType() != Material.BREWING_STAND) { erro(sender, "Olhe para um suporte de poções (até 6 blocos)."); return; }
+                if (plugin.alquimia().eh(b)) { erro(sender, "Esse suporte já é uma Bancada Alquímica."); return; }
+                plugin.alquimia().criar(b, p);
+                ok(sender, "Bancada Alquímica criada.");
+            }
+            case "peixe" -> {
+                PeixeRaro pr = args.length >= 2 ? PeixeRaro.porId(args[1]) : null;
+                if (pr == null) { erro(sender, "Use: /rpgadmin peixe <" + nomes(PeixeRaro.values()) + "> [quantidade]"); return; }
+                int qtd = quantidade(args, 2, 1);
+                if (qtd < 0) { erro(sender, "Quantidade inválida."); return; }
+                entregar(p, pr.criar(qtd, Qualidade.NORMAL));
+                ok(sender, qtd + "x " + pr.nome() + ".");
+            }
+            case "componente" -> {
+                Reagente r = args.length >= 2 ? Reagente.porId(args[1]) : null;
+                if (r == null) { erro(sender, "Use: /rpgadmin componente <" + nomes(Reagente.values()) + "> [quantidade]"); return; }
+                int qtd = quantidade(args, 2, 8);
+                if (qtd < 0) { erro(sender, "Quantidade inválida."); return; }
+                entregar(p, r.criar(qtd));
+                ok(sender, qtd + "x " + r.nome() + ".");
+            }
+            case "gema" -> {
+                Gema g = args.length >= 2 ? Gema.porId(args[1]) : null;
+                if (g == null) { erro(sender, "Use: /rpgadmin gema <" + nomes(Gema.values()) + "> [grau 1-3] [quantidade]"); return; }
+                int grau = quantidade(args, 2, 1);
+                int qtd = quantidade(args, 3, 1);
+                if (grau < 1 || grau > Gema.GRAU_MAXIMO || qtd < 0) { erro(sender, "Grau (1-3) ou quantidade inválidos."); return; }
+                entregar(p, g.criar(grau, qtd));
+                ok(sender, qtd + "x " + g.nome(grau) + ".");
+            }
+            case "elixir" -> {
+                Elixir x = args.length >= 2 ? Elixir.porId(args[1]) : null;
+                if (x == null) { erro(sender, "Use: /rpgadmin elixir <" + nomes(Elixir.values()) + "> [normal|boa|otima|perfeita]"); return; }
+                Qualidade q = Qualidade.NORMAL;
+                if (args.length >= 3) {
+                    try { q = Qualidade.valueOf(args[2].toUpperCase(Locale.ROOT)); }
+                    catch (IllegalArgumentException e) { erro(sender, "Qualidade inválida. Use: normal, boa, otima, perfeita"); return; }
+                }
+                entregar(p, x.criar(q, q.fator(), p.getName()));
+                ok(sender, x.nome() + " (" + q.nome() + ") entregue.");
+            }
+            case "acessorio" -> {
+                Acessorio a = args.length >= 2 ? Acessorio.porId(args[1]) : null;
+                if (a == null) { erro(sender, "Use: /rpgadmin acessorio <" + nomes(Acessorio.values()) + ">"); return; }
+                entregar(p, a.criar());
+                ok(sender, a.nome() + " entregue.");
+            }
+            default -> { }
+        }
+    }
+
+    private void adminMundo(CommandSender sender, String sub, String[] args) {
+        org.bukkit.World w = Bukkit.getWorlds().getFirst();
+        switch (sub) {
+            case "estacao" -> {
+                br.rpgatributos.mundo.Estacoes.Estacao e = null;
+                if (args.length >= 2) for (var x : br.rpgatributos.mundo.Estacoes.Estacao.values()) if (x.name().equalsIgnoreCase(args[1])) e = x;
+                if (e == null) { erro(sender, "Use: /rpgadmin estacao <primavera|verao|outono|inverno>"); return; }
+                plugin.estacoes().definir(e);
+                ok(sender, "Agora é " + e.nome() + ".");
+            }
+            case "festival" -> {
+                plugin.estacoes().definirFestival();
+                ok(sender, "Hoje é dia de festival.");
+            }
+            case "clima" -> {
+                br.rpgatributos.mundo.Ceu.Clima c = null;
+                if (args.length >= 2) for (var x : br.rpgatributos.mundo.Ceu.Clima.values()) if (x.name().equalsIgnoreCase(args[1])) c = x;
+                if (c == null) { erro(sender, "Use: /rpgadmin clima <nevasca|neblina|ventania|tempestade|calor>"); return; }
+                plugin.ceu().comecarClima(w, c);
+                ok(sender, c.nome() + " começou.");
+            }
+            case "ceu" -> {
+                String o = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "";
+                switch (o) {
+                    case "luadesangue" -> plugin.ceu().forcarLuaDeSangue();
+                    case "meteoros" -> plugin.ceu().comecarMeteoros();
+                    case "eclipse" -> plugin.ceu().comecarEclipse(w);
+                    case "aurora" -> plugin.ceu().forcarAurora();
+                    default -> { erro(sender, "Use: /rpgadmin ceu <luadesangue|meteoros|eclipse|aurora>"); return; }
+                }
+                ok(sender, "Feito.");
+            }
+            case "maldicao" -> {
+                Player alvo = args.length >= 2 ? Bukkit.getPlayerExact(args[1]) : null;
+                if (alvo == null || args.length < 3) { erro(sender, "Use: /rpgadmin maldicao <jogador> <licantropia|vampirismo|nenhuma>"); return; }
+                br.rpgatributos.mundo.Maldicoes.Maldicao m = null;
+                for (var x : br.rpgatributos.mundo.Maldicoes.Maldicao.values()) if (x.name().equalsIgnoreCase(args[2])) m = x;
+                plugin.maldicoes().amaldicoar(alvo, m);
+                ok(sender, "Feito.");
+            }
+            default -> { }
+        }
+    }
+
+    private void adminFaseC(CommandSender sender, String sub, String[] args) {
+        if (sub.equals("portalsortear")) {
+            if (plugin.portais().sortear() != null) ok(sender, "Um portal se abriu perto de alguém.");
+            else erro(sender, "Não deu (limite de portais, ninguém no mundo normal ou sem lugar).");
+            return;
+        }
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        switch (sub) {
+            case "portal" -> {
+                Dificuldade d = args.length >= 2 ? Dificuldade.porId(args[1]) : Dificuldade.NORMAL;
+                if (d == null) { erro(sender, "Use: /rpgadmin portal <facil|normal|dificil|pesadelo> [eco]"); return; }
+                Location l = p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(4));
+                l.setY(p.getWorld().getHighestBlockYAt(l) + 1);
+                l.setYaw(p.getLocation().getYaw() + 180);
+                plugin.portais().abrir(l, d, args.length >= 3 && args[2].equalsIgnoreCase("eco"));
+                ok(sender, "Portal aberto.");
+            }
+            case "portaltransbordar" -> {
+                String erro = plugin.portais().transbordarAgora(p);
+                if (erro != null) erro(sender, erro); else ok(sender, "O portal transborda no próximo segundo.");
+            }
+            case "portalfechar" -> {
+                String erro = plugin.portais().fecharAdmin(p);
+                if (erro != null) erro(sender, erro); else ok(sender, "Portal fechado.");
+            }
+            case "obelisco" -> {
+                Block b = p.getTargetBlockExact(6);
+                if (b == null || b.getType() != Material.CRYING_OBSIDIAN) { erro(sender, "Olhe para obsidiana chorona (até 6 blocos)."); return; }
+                if (plugin.obeliscos().eh(b)) { erro(sender, "Isso já é um Obelisco da Torre."); return; }
+                plugin.obeliscos().criar(b, p);
+                ok(sender, "Obelisco da Torre criado.");
+            }
+            case "torre" -> {
+                int andar = quantidade(args, 1, 1);
+                String erro = plugin.torre().iniciar(p, Math.max(1, andar), null, true);
+                if (erro != null) erro(sender, erro);
+            }
+            default -> { }
+        }
+    }
+
+    private void adminPerigo(CommandSender sender, String sub, String[] args) {
+        if (sub.equals("idademundo")) {
+            int s;
+            try { s = args.length >= 2 ? Integer.parseInt(args[1]) : 0; } catch (NumberFormatException e) { erro(sender, "Use: /rpgadmin idademundo <semanas>"); return; }
+            plugin.perigo().definirSemanas(Math.max(0, s));
+            ok(sender, "Mundo na semana " + plugin.perigo().semanas() + ": monstros +" + Math.round(plugin.perigo().forca() * 100) + "%.");
+            return;
+        }
+        if (sub.equals("chefemundial")) {
+            if (plugin.chefeMundial().comecar(30)) ok(sender, "Chefe Mundial em 30 segundos.");
+            else erro(sender, "Já há um em andamento (" + plugin.chefeMundial().situacao() + ") ou não achei lugar.");
+            return;
+        }
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        switch (sub) {
+            case "elite" -> {
+                var r = p.getWorld().rayTraceEntities(p.getEyeLocation(), p.getEyeLocation().getDirection(), 20, 0.5, x -> x != p && x instanceof org.bukkit.entity.LivingEntity);
+                if (r == null || !(r.getHitEntity() instanceof org.bukkit.entity.LivingEntity le)) { erro(sender, "Olhe para um monstro (até 20 blocos)."); return; }
+                plugin.perigo().tornarElite(le, quantidade(args, 1, 1));
+                ok(sender, "Elite criado.");
+            }
+            case "ninho" -> {
+                Location l = p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(4));
+                l.setY(p.getWorld().getHighestBlockYAt(l) + 1);
+                if (plugin.ninhos().criar(l, args.length >= 2 ? args[1] : null, p)) ok(sender, "Ninho criado.");
+                else erro(sender, "Não deu para criar ali (precisa de espaço livre, tipo válido).");
+            }
+            case "horda" -> {
+                var c = plugin.colonias().de(p.getUniqueId());
+                if (c == null) erro(sender, "Você não tem colônia.");
+                else if (plugin.hordas().avisar(c, true)) ok(sender, "A horda chega em 1 minuto.");
+                else erro(sender, "Já há um ataque em andamento.");
+            }
+            default -> { }
+        }
+    }
+
+    private void adminColonia(CommandSender sender, String sub, String[] args) {
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        switch (sub) {
+            case "prefeitura" -> {
+                Block b = p.getTargetBlockExact(6);
+                if (b == null || b.getType() != Material.BELL) { erro(sender, "Olhe para um sino (até 6 blocos)."); return; }
+                if (plugin.prefeituras().eh(b)) { erro(sender, "Esse sino já é uma Prefeitura."); return; }
+                if (plugin.colonias().de(p.getUniqueId()) != null) { erro(sender, "Você já tem uma colônia."); return; }
+                plugin.prefeituras().criar(b, p);
+                ok(sender, "Prefeitura criada.");
+            }
+            case "colono" -> {
+                int qtd = quantidade(args, 1, 1);
+                if (qtd < 0) { erro(sender, "Quantidade inválida."); return; }
+                if (plugin.colonias().chegarAgora(p, Math.min(qtd, 20)) < 0) erro(sender, "Você não tem colônia.");
+                else ok(sender, "Moradores chegando.");
+            }
+            case "turnocolonia" -> {
+                if (plugin.colonias().turnoAgora(p)) ok(sender, "Turno de trabalho em meio segundo.");
+                else erro(sender, "Você não tem colônia.");
+            }
+            case "nivelcolonia" -> {
+                int n = quantidade(args, 1, 1);
+                if (plugin.colonias().definirNivel(p, n)) ok(sender, "Nível da colônia definido.");
+                else erro(sender, "Você não tem colônia.");
+            }
+            default -> { }
+        }
+    }
+
+    private void adminMagia(CommandSender sender, String sub, String[] args) {
+        if (sub.equals("maestria")) {
+            if (args.length < 4) { erro(sender, "Use: /rpgadmin maestria <jogador> <elemento> <nível 0-10>"); return; }
+            Player alvo = Bukkit.getPlayerExact(args[1]);
+            br.rpgatributos.arcano.Essencia es = br.rpgatributos.arcano.Essencia.porNome(args[2].toUpperCase(Locale.ROOT));
+            if (alvo == null || es == null) { erro(sender, "Jogador ou elemento inválido."); return; }
+            int nivel;
+            try { nivel = Integer.parseInt(args[3]); } catch (NumberFormatException e) { erro(sender, "Nível inválido."); return; }
+            plugin.arcano().definirMaestria(alvo, es, nivel);
+            ok(sender, "Maestria de " + es.nome() + " de " + alvo.getName() + " no nível " + Math.max(0, Math.min(10, nivel)) + ".");
+            return;
+        }
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        if (sub.equals("cajado")) {
+            Raridade r = args.length >= 2 ? Raridade.porId(args[1]) : null;
+            ItemStack cajado = plugin.forja().forjar(p, new ItemStack(Material.BREEZE_ROD), r);
+            entregar(p, cajado);
+            ok(sender, "Cajado Arcano entregue.");
+            return;
+        }
+        Receita r = args.length >= 2 ? Receita.porNome(args[1].toUpperCase(Locale.ROOT)) : null;
+        if (r == null || r.forma() != br.rpgatributos.arcano.Forma.PROIBIDA) {
+            erro(sender, "Use: /rpgadmin tomo <chuva_de_meteoros|zero_absoluto|julgamento|ruptura_dimensional|renascer_da_floresta>");
+            return;
+        }
+        entregar(p, br.rpgatributos.arcano.ItensMagicos.criarTomo(r));
+        ok(sender, "Tomo Proibido: " + r.nome() + ".");
+    }
+
+    private static String nomes(Enum<?>[] valores) {
+        return String.join("|", Arrays.stream(valores).map(v -> v.name().toLowerCase(Locale.ROOT)).toList());
     }
 
     // ================= territórios (admin) =================
@@ -830,7 +1169,9 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "reload"));
+                } else if (args.length == 2 && sub.equals("portal")) {
+                    for (Dificuldade d : Dificuldade.values()) op.add(d.id());
                 } else if (args.length == 2 && sub.equals("forjar")) {
                     for (Raridade r : Raridade.values()) op.add(r.id());
                 } else if (args.length == 2 && sub.equals("infundir")) {
@@ -839,6 +1180,26 @@ public final class Comandos implements TabExecutor {
                     for (Chefe c : Chefe.values()) op.add(c.id());
                 } else if (args.length == 2 && sub.equals("evento")) {
                     for (Invocacao i : Invocacao.values()) if (i.chefe() == null) op.add(i.id());
+                } else if (args.length == 2 && sub.equals("cajado")) {
+                    for (Raridade r : Raridade.values()) op.add(r.id());
+                } else if (args.length == 2 && sub.equals("tomo")) {
+                    for (Receita r : Receita.values()) if (r.forma() == br.rpgatributos.arcano.Forma.PROIBIDA) op.add(r.name().toLowerCase(Locale.ROOT));
+                } else if (args.length == 3 && sub.equals("maestria")) {
+                    for (br.rpgatributos.arcano.Essencia es : br.rpgatributos.arcano.Essencia.values()) op.add(es.name().toLowerCase(Locale.ROOT));
+                } else if (args.length == 2 && sub.equals("peixe")) {
+                    for (PeixeRaro pr : PeixeRaro.values()) op.add(pr.id());
+                } else if (args.length == 2 && sub.equals("componente")) {
+                    for (Reagente r : Reagente.values()) op.add(r.id());
+                } else if (args.length == 2 && sub.equals("gema")) {
+                    for (Gema g : Gema.values()) op.add(g.id());
+                } else if (args.length == 3 && sub.equals("gema")) {
+                    op.addAll(List.of("1", "2", "3"));
+                } else if (args.length == 2 && sub.equals("elixir")) {
+                    for (Elixir x : Elixir.values()) op.add(x.id());
+                } else if (args.length == 3 && sub.equals("elixir")) {
+                    for (Qualidade q : Qualidade.values()) op.add(q.name().toLowerCase(Locale.ROOT));
+                } else if (args.length == 2 && sub.equals("acessorio")) {
+                    for (Acessorio a : Acessorio.values()) op.add(a.id());
                 } else if (args.length == 2 && sub.equals("raro")) {
                     for (Raro r : Raro.values()) op.add(r.id());
                 } else if (args.length == 2 && (sub.equals("lenda") || sub.equals("liberarlenda") || sub.equals("revelar"))) {
@@ -878,10 +1239,11 @@ public final class Comandos implements TabExecutor {
                             "secretas", "chefes", "ondas", "dragao", "missoes", "contratos", "reciclados", "mutacoes", "banquete",
                             "abates_party", "territorio", "chunks", "companheiros", "voadores", "abates_companheiro",
                             "masmorras", "masmorra_pesadelo", "abates_corpo", "abates_flecha", "magias", "classes",
-                            "mortos_vivos", "aranhas", "troncos", "minerios", "abates_jogadores", "illagers"));
+                            "mortos_vivos", "aranhas", "troncos", "minerios", "abates_jogadores", "illagers", "peixes", "peixes_raros",
+                            "tesouros", "especies_peixe", "criaturas_marinhas", "gema_perfeita", "alquimias", "elixires", "acessorios"));
                 } else if (args.length == 2 && !List.of("reload", "infusor", "forjaferreiro", "altar", "cozinha", "reciclagem", "adubo",
                         "marco", "ignorar", "altardomador", "portalmasmorra", "fecharmasmorras", "santuario", "prova",
-                        "pedraviagem", "locais").contains(sub)) {
+                        "pedraviagem", "locais", "bancadaalquimica", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre").contains(sub)) {
                     return null;
                 } else if (args.length == 3 && List.of("set", "addxp", "reset").contains(sub)) {
                     for (Skill s : Skill.values()) op.add(s.id());

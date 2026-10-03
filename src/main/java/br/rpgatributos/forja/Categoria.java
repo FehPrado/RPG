@@ -25,9 +25,10 @@ public enum Categoria {
     PEITORAL("Peitoral", Tipo.ARMADURA,      EquipmentSlotGroup.CHEST,    8),
     CALCA("Calça",       Tipo.ARMADURA,      EquipmentSlotGroup.LEGS,     7),
     BOTAS("Botas",       Tipo.ARMADURA,      EquipmentSlotGroup.FEET,     4),
-    ESCUDO("Escudo",     Tipo.ESCUDO,        EquipmentSlotGroup.HAND,     1);
+    ESCUDO("Escudo",     Tipo.ESCUDO,        EquipmentSlotGroup.HAND,     1),
+    CAJADO("Cajado",     Tipo.MAGICO,        EquipmentSlotGroup.HAND,     1);
 
-    public enum Tipo { CORPO_A_CORPO, DISTANCIA, FERRAMENTA, ARMADURA, ESCUDO }
+    public enum Tipo { CORPO_A_CORPO, DISTANCIA, FERRAMENTA, ARMADURA, ESCUDO, MAGICO }
 
     private final String nome;
     private final Tipo tipo;
@@ -67,6 +68,7 @@ public enum Categoria {
         if (m == Material.BOW) return ARCO;
         if (m == Material.CROSSBOW) return BESTA;
         if (m == Material.SHIELD) return ESCUDO;
+        if (m == Material.BREEZE_ROD) return CAJADO;
         String n = m.name();
         if (n.endsWith("_SWORD")) return ESPADA;
         if (n.endsWith("_PICKAXE")) return PICARETA;
@@ -101,5 +103,12 @@ public enum Categoria {
 
     static Set<Categoria> todas() {
         return EnumSet.allOf(Categoria.class);
+    }
+
+    /** Tudo que tem durabilidade (o cajado não tem). */
+    static Set<Categoria> comDurabilidade() {
+        Set<Categoria> s = EnumSet.allOf(Categoria.class);
+        s.remove(CAJADO);
+        return s;
     }
 }

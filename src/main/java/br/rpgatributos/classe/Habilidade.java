@@ -68,7 +68,10 @@ public enum Habilidade {
     FLECHA_ESTELAR("Flecha Estelar", 12, 0, "Um raio de luz atravessa todos os inimigos na linha."),
     CHUVA_DE_ESTRELAS("Chuva de Estrelas", 30, 0, "Uma chuva de flechas brilhantes e raios cai onde você olha."),
     JULGAMENTO_DIVINO("Julgamento Divino", 20, 30, "Uma coluna de luz fere os inimigos (muito mais os mortos-vivos) e cura aliados."),
-    AURA_SAGRADA("Aura Sagrada", 45, 40, "Você e a party ganham Regeneração II e Resistência e se livram de efeitos ruins.");
+    AURA_SAGRADA("Aura Sagrada", 45, 40, "Você e a party ganham Regeneração II e Resistência e se livram de efeitos ruins."),
+    // Soberano das Sombras
+    LEVANTE_SE("Levante-se", 8, 20, "Os inimigos que você derrotou há pouco se levantam como sombras do seu exército."),
+    EXERCITO_DAS_SOMBRAS("Exército das Sombras", 30, 40, "Chama as sombras guardadas; se já estão em campo, ficam furiosas e atacam o seu alvo.");
 
     private final String nome;
     private final int recarga;

@@ -72,7 +72,7 @@ public final class ForjaListener implements Listener {
         if (resultado == null || resultado.isEmpty() || Categoria.de(resultado.getType()) == null) return false;
         if (forja().forjado(resultado)) return false;
         if (receita == null || receita instanceof ComplexRecipe) return false;
-        return receita instanceof Keyed k && k.getKey().getNamespace().equals("minecraft");
+        return receita instanceof Keyed k && (k.getKey().getNamespace().equals("minecraft") || k.getKey().getKey().equals("cajado_arcano"));
     }
 
     // =====================================================================

@@ -29,7 +29,11 @@ public enum Skill {
     CULINARIA("culinaria", "Culinária", "♨", TextColor.color(0xE8A33D), Material.SMOKER,
             "Cozinhe pratos na Cozinha."),
     DOMA("doma", "Doma", "♞", TextColor.color(0xC9955C), Material.LEAD,
-            "Dome e cruze animais, monte e cuide dos seus companheiros.");
+            "Dome e cruze animais, monte e cuide dos seus companheiros."),
+    PESCA("pesca", "Pesca", "⚓", TextColor.color(0x2FA4C9), Material.FISHING_ROD,
+            "Pesque peixes, tesouros e criaturas marinhas."),
+    ALQUIMIA("alquimia", "Alquimia", "⚗", TextColor.color(0x4FD1A5), Material.BREWING_STAND,
+            "Faça poções, elixires, gemas e acessórios.");
 
     private final String id;
     private final String nome;

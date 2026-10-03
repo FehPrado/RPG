@@ -2,7 +2,7 @@ name: RPGAtributos
 version: '${project.version}'
 main: br.rpgatributos.RPGAtributos
 api-version: '26.3'
-description: Atributos RPG que evoluem com o uso, forja, arcano, chefes, plantações, cozinha, reciclagem, party, territórios, domador, masmorras e classes.
+description: Atributos RPG que evoluem com o uso, forja, arcano, chefes, plantações, cozinha, reciclagem, party, territórios, domador, masmorras, classes, lendas, pesca, alquimia, guarda-roupa, colônias, reinos, mundo vivo, portais e Torre Infinita.
 
 commands:
   atributos:
@@ -64,6 +64,66 @@ commands:
     usage: /masmorra [sair]
     aliases: [masmorras, dungeon]
     permission: rpg.masmorra
+  peixes:
+    description: Diário do Pescador — peixes raros, tesouros e criaturas marinhas.
+    usage: /peixes
+    aliases: [pesca, diariodepesca]
+    permission: rpg.pesca
+  alquimia:
+    description: Livro de Alquimia — elixires, componentes, gemas e acessórios.
+    usage: /alquimia
+    aliases: [elixires, gemas]
+    permission: rpg.alquimia
+  acessorios:
+    description: Seus acessórios — anéis, amuletos, cintos e itens de bolso.
+    usage: /acessorios
+    aliases: [acessorio, aneis, bijuterias]
+    permission: rpg.alquimia
+  guardaroupa:
+    description: Guarda-roupa — muda a aparência da armadura sem tirá-la.
+    usage: /guardaroupa
+    aliases: [roupas, wardrobe]
+    permission: rpg.chapeu
+  calendario:
+    description: Estação do ano, fase da lua, clima e eventos do céu.
+    usage: /calendario
+    aliases: [estacao, clima, lua]
+    permission: rpg.calendario
+  maldicao:
+    description: Sua maldição (lobisomem ou vampiro) — e transformar-se à noite.
+    usage: /maldicao [transformar]
+    aliases: [maldicoes, curse]
+    permission: rpg.calendario
+  portais:
+    description: Portais abertos no mundo — onde estão e quando transbordam.
+    usage: /portais
+    aliases: [gates, portal]
+    permission: rpg.portais
+  sombras:
+    description: O exército do Soberano das Sombras.
+    usage: /sombras
+    aliases: [exercito, shadows]
+    permission: rpg.portais
+  torre:
+    description: Torre Infinita — ranking e sair da subida.
+    usage: /torre [ranking|sair]
+    aliases: [tower]
+    permission: rpg.torre
+  bestiario:
+    description: Bestiário — monstros derrotados, marcos e a idade do mundo.
+    usage: /bestiario
+    aliases: [monstros, bestiary]
+    permission: rpg.bestiario
+  reino:
+    description: Seu reino — cargos, tesouro e guerras entre jogadores.
+    usage: /reino [fundar|convidar|aceitar|sair|cargo|coroa|tesouro|guerra|paz|lista]
+    aliases: [reinos, kingdom]
+    permission: rpg.reino
+  colonia:
+    description: Sua colônia — moradores, profissões, depósito e melhorias.
+    usage: /colonia
+    aliases: [colonias, vila, prefeitura]
+    permission: rpg.colonia
   receitas:
     description: Mostra o livro de receitas da Cozinha.
     usage: /receitas
@@ -136,6 +196,22 @@ permissions:
   rpg.lendas:
     default: true
   rpg.locais:
+    default: true
+  rpg.pesca:
+    default: true
+  rpg.alquimia:
+    default: true
+  rpg.colonia:
+    default: true
+  rpg.reino:
+    default: true
+  rpg.bestiario:
+    default: true
+  rpg.calendario:
+    default: true
+  rpg.portais:
+    default: true
+  rpg.torre:
     default: true
   rpg.admin:
     default: op

@@ -74,6 +74,7 @@ public final class Conjuracao {
             Essencia.TERRA, Essencia.GELO, Essencia.AGUA, Essencia.NATUREZA, Essencia.FOGO,
             Essencia.ENERGIA, Essencia.VENTO, Essencia.VAZIO, Essencia.SOMBRA, Essencia.VIDA);
 
+    static final org.bukkit.NamespacedKey CHAVE_INVOCACAO = new org.bukkit.NamespacedKey("rpgatributos", "invocacao_dono");
     private static final int MAX_FARDOS_POR_JOGADOR = 3;
     private static final long DURACAO_FARDO_MS = 20 * 60 * 1000;
 
@@ -83,19 +84,32 @@ public final class Conjuracao {
     private final RPGAtributos plugin;
     private final Map<Location, Fardo> fardos = new HashMap<>();
 
+    private final Feiticos feiticos;
+    private final Reacoes reacoes;
+
     public Conjuracao(RPGAtributos plugin) {
         this.plugin = plugin;
+        this.feiticos = new Feiticos(plugin, this);
+        this.reacoes = new Reacoes(plugin, this);
     }
 
-    private Arcano arcano() { return plugin.arcano(); }
+    Feiticos feiticos() { return feiticos; }
+
+    Arcano arcano() { return plugin.arcano(); }
     private Settings cfg() { return plugin.settings(); }
-    private static ThreadLocalRandom rnd() { return ThreadLocalRandom.current(); }
+    static ThreadLocalRandom rnd() { return ThreadLocalRandom.current(); }
 
     // =====================================================================
     //  Lançar
     // =====================================================================
 
     public void lancar(Player p) {
+        // Segurando o clique de um raio ou de uma canalização: só mantém.
+        if (feiticos.continuar(p)) return;
+        if (plugin.maldicoes().transformado(p)) {
+            falhar(p, "A fera não usa magia (você está transformado em lobisomem).");
+            return;
+        }
         Arcano arc = arcano();
         Perfil pf = arc.perfil(p);
         Magia m = pf.magiaSelecionada();
@@ -116,7 +130,7 @@ public final class Conjuracao {
             falhar(p, "Recarregando... " + StatsManager.fmt(Math.ceil((pronto - agora) / 2.0) / 10.0) + "s");
             return;
         }
-        double custo = arc.custoMana(m, pf) * plugin.classes().custoMagia(p) * plugin.lendas().custoMagia(p);
+        double custo = arc.custoMana(m, pf) * plugin.classes().custoMagia(p) * plugin.lendas().custoMagia(p) * arc.custoDoCajado(p);
         if (pf.mana < custo) {
             falhar(p, "Mana insuficiente (" + (int) pf.mana + "/" + (int) custo + ")");
             arc.mostrarMana(pf, 60);
@@ -125,27 +139,100 @@ public final class Conjuracao {
 
         double pot = arc.potencia(p, pf, m);
         Receita r = m.receita();
-        boolean ok = r != null ? receita(p, pf, r, pot) : switch (m.forma()) {
-            case TOQUE -> toque(p, m.essencias(), pot);
-            case PROJETIL -> projetil(p, m.essencias(), pot);
-            case AURA -> aura(p, m.essencias(), pot);
-            case CORPO -> corpo(p, m.essencias(), pot);
-            case CRIACAO -> criacao(p, m.essencias(), pot);
-        };
-        if (!ok) return;
+        int recarga = (int) Math.round(arc.recargaTicks(m) * arc.recargaDoCajado(p));
 
+        // Raio: feixe enquanto o clique estiver segurado; a recarga começa quando ele acaba.
+        if (m.forma() == Forma.RAIO) {
+            arc.gastarMana(p, pf, custo);
+            pf.recargas.put(m.chave(), agora + 20 * 60);
+            feiticos.raio(new Feiticos.Lance(p, pf, m.essencias(), pot, m.mods()), r, custo * 0.12, false,
+                    () -> pf.recargas.put(m.chave(), Bukkit.getCurrentTick() + recarga));
+            depoisDeLancar(p, pf, m, false);
+            return;
+        }
+        // Canalizar: carrega enquanto segura e lança ao soltar.
+        if (m.tem(Modificador.CANALIZAR) && Modificador.CANALIZAR.serveEm(m.forma())) {
+            arc.gastarMana(p, pf, custo);
+            pf.recargas.put(m.chave(), agora + 20 * 60);
+            feiticos.canalizar(p, pot, potFinal -> {
+                boolean ok = executar(p, pf, m, potFinal);
+                if (!ok) arc.darMana(p, custo); // não deu (sem alvo...): devolve a mana
+                pf.recargas.put(m.chave(), Bukkit.getCurrentTick() + (ok ? recarga : 0));
+                if (ok) depoisDeLancar(p, pf, m, true);
+            });
+            return;
+        }
+
+        if (!executar(p, pf, m, pot)) return;
         arc.gastarMana(p, pf, custo);
-        pf.recargas.put(m.chave(), agora + arc.recargaTicks(m));
-        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 0.6f, 1.4f);
-        if (ganhaXp(p)) plugin.stats().darXp(p, Skill.ARCANO, cfg().arcXpMagia * m.essencias().size());
+        pf.recargas.put(m.chave(), agora + recarga);
+        depoisDeLancar(p, pf, m, true);
+    }
+
+    /** Faz a magia acontecer (receita secreta ou forma comum) e agenda o Eco. */
+    private boolean executar(Player p, Perfil pf, Magia m, double pot) {
+        Feiticos.Lance lance = new Feiticos.Lance(p, pf, m.essencias(), pot, m.mods());
+        Receita r = m.receita();
+        boolean ok = r != null ? receita(p, pf, r, pot, lance) : feiticos.executar(lance, m.forma());
+        if (ok && r == null && m.tem(Modificador.ECO) && Modificador.ECO.serveEm(m.forma())) feiticos.eco(lance, m.forma());
+        return ok;
+    }
+
+    private void depoisDeLancar(Player p, Perfil pf, Magia m, boolean som) {
+        if (som) p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 0.6f, 1.4f);
+        if (ganhaXp(p)) {
+            plugin.stats().darXp(p, Skill.ARCANO, cfg().arcXpMagia * m.essencias().size());
+            for (Essencia e : m.essencias()) arcano().darMaestria(p, pf, e, 2);
+        }
         plugin.titulos().registrar(p, "magias", 1); // tarefas das classes
     }
 
-    private static boolean ganhaXp(Player p) {
+    /** Pergaminho: lança a magia gravada nele, sem mana, essências nem recarga. */
+    public boolean lancarPergaminho(Player p, Magia m, double pot) {
+        Perfil pf = arcano().perfil(p);
+        if (m.forma() == Forma.RAIO) {
+            feiticos.raio(new Feiticos.Lance(p, pf, m.essencias(), pot, m.mods()), m.receita(), 0, true, null);
+            return true;
+        }
+        // Canalizar num pergaminho já sai carregado pela metade.
+        double forca = m.tem(Modificador.CANALIZAR) ? pot * 1.5 : pot;
+        boolean ok = executar(p, pf, m, forca);
+        if (ok) p.getWorld().playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 0.6f);
+        return ok;
+    }
+
+    /** Reações e poderes que ficam no mundo (a cada 5 ticks). */
+    public void tick() {
+        feiticos.tick();
+        reacoes.tick();
+    }
+
+    public void desligar() {
+        feiticos.dispensarTodos();
+    }
+
+    public void aoSair(Player p) {
+        feiticos.aoSair(p);
+    }
+
+    /** Dono de uma invocação (null se não for uma). */
+    public UUID donoInvocacao(Entity e) {
+        return feiticos.donoInvocacao(e);
+    }
+
+    public void golpeDeInvocacao(org.bukkit.event.entity.EntityDamageByEntityEvent ev, LivingEntity alvo) {
+        feiticos.golpeDeInvocacao(ev, alvo);
+    }
+
+    public void golpeEncantado(Player p, LivingEntity alvo, org.bukkit.event.entity.EntityDamageByEntityEvent ev) {
+        feiticos.golpeEncantado(p, alvo, ev);
+    }
+
+    static boolean ganhaXp(Player p) {
         return p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE;
     }
 
-    private static void falhar(Player p, String msg) {
+    static void falhar(Player p, String msg) {
         p.sendActionBar(Component.text(msg, NamedTextColor.RED));
         p.playSound(p.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.4f, 1.6f);
     }
@@ -154,66 +241,7 @@ public final class Conjuracao {
     //  Formas genéricas
     // =====================================================================
 
-    private boolean toque(Player p, Set<Essencia> es, double pot) {
-        RayTraceResult r = mirar(p, 5);
-        if (r == null) {
-            falhar(p, "Nada ao alcance (5 blocos).");
-            return false;
-        }
-        Location alvoLoc = r.getHitPosition().toLocation(p.getWorld());
-        feixe(p.getEyeLocation(), alvoLoc, es);
-        if (r.getHitEntity() instanceof LivingEntity alvo) {
-            if (inimigo(p, alvo)) atingir(p, alvo, es, pot, p.getLocation());
-            else ajudar(alvo, es, pot);
-            brilho(meio(alvo), es, 10);
-        } else if (r.getHitBlock() != null) {
-            bloco(p, r.getHitBlock(), r.getHitBlockFace(), es, pot);
-            if (es.contains(Essencia.VAZIO)) teleportarPara(p, r.getHitBlock());
-            brilho(alvoLoc, es, 10);
-        }
-        return true;
-    }
-
-    private boolean projetil(Player p, Set<Essencia> es, double pot) {
-        lancarProjetil(p, es, 1.4, 30, imp -> {
-            if (imp.entidade() != null) atingir(p, imp.entidade(), es, pot, imp.local());
-            if (imp.bloco() != null) {
-                bloco(p, imp.bloco(), imp.face(), es, pot);
-                if (es.contains(Essencia.VAZIO)) teleportarPara(p, imp.bloco());
-            }
-            for (LivingEntity e : perto(imp.local(), 2)) {
-                if (e != imp.entidade() && inimigo(p, e)) atingir(p, e, es, pot * 0.5, imp.local());
-            }
-            brilho(imp.local(), es, 25);
-        });
-        return true;
-    }
-
-    private boolean aura(Player p, Set<Essencia> es, double pot) {
-        new BukkitRunnable() {
-            int t = 0;
-            @Override
-            public void run() {
-                if (!p.isOnline() || p.isDead() || t > 120) { cancel(); return; }
-                anel(p.getLocation().add(0, 0.2, 0), 5, es);
-                if (t % 20 == 0) {
-                    for (LivingEntity e : perto(p.getLocation(), 5)) {
-                        if (inimigo(p, e)) atingir(p, e, es, pot * 0.5, p.getLocation());
-                        else if (e != p) ajudar(e, es, pot * 0.5);
-                    }
-                    if (es.contains(Essencia.VIDA)) curar(p, pot * 0.75);
-                    for (int i = 0; i < 10; i++) {
-                        Block b = p.getLocation().getBlock().getRelative(rnd().nextInt(-4, 5), rnd().nextInt(-1, 2), rnd().nextInt(-4, 5));
-                        bloco(p, b, BlockFace.UP, es, pot * 0.5);
-                    }
-                }
-                t += 5;
-            }
-        }.runTaskTimer(plugin, 0L, 5L);
-        return true;
-    }
-
-    private boolean corpo(Player p, Set<Essencia> es, double pot) {
+    boolean corpo(Player p, Set<Essencia> es, double pot) {
         for (Essencia e : es) {
             switch (e) {
                 case FOGO -> {
@@ -262,7 +290,7 @@ public final class Conjuracao {
         return true;
     }
 
-    private boolean criacao(Player p, Set<Essencia> es, double pot) {
+    boolean criacao(Player p, Set<Essencia> es, double pot, double escala) {
         RayTraceResult r = p.getWorld().rayTraceBlocks(p.getEyeLocation(), p.getEyeLocation().getDirection(), 6,
                 FluidCollisionMode.SOURCE_ONLY, true);
         if (r == null || r.getHitBlock() == null || r.getHitBlockFace() == null) {
@@ -317,7 +345,7 @@ public final class Conjuracao {
                 yield algum;
             }
             case VIDA -> {
-                zona(p, base.getLocation().toCenterLocation(), 4, 200, EnumSet.of(Essencia.VIDA), pot);
+                zona(p, base.getLocation().toCenterLocation(), 4 * escala, 200, EnumSet.of(Essencia.VIDA), pot);
                 yield true;
             }
         };
@@ -326,7 +354,7 @@ public final class Conjuracao {
             return false;
         }
         // As outras essências viram uma zona mágica em volta da criação.
-        if (!outras.isEmpty()) zona(p, base.getLocation().toCenterLocation(), 3, 200, outras, pot * 0.4);
+        if (!outras.isEmpty()) zona(p, base.getLocation().toCenterLocation(), 3 * escala, 200, outras, pot * 0.4);
         brilho(base.getLocation().toCenterLocation(), es, 30);
         base.getWorld().playSound(base.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1f, 1f);
         return true;
@@ -362,68 +390,85 @@ public final class Conjuracao {
     // =====================================================================
 
     /** Efeito ofensivo de todas as essências num alvo. O dano é somado num golpe só. */
-    private void atingir(Player p, LivingEntity alvo, Set<Essencia> es, double pot, Location origem) {
+    void atingir(Player p, LivingEntity alvo, Set<Essencia> es, double pot, Location origem) {
+        Perfil pf = arcano().perfil(p);
         double dano = 0;
         for (Essencia e : es) {
+            // Maestria 5: a variante do elemento.
+            boolean v = arcano().nivelMaestria(pf, e) >= Arcano.MAESTRIA_VARIANTE;
             switch (e) {
                 case FOGO -> {
-                    alvo.setFireTicks(Math.max(alvo.getFireTicks(), (int) (60 * pot)));
-                    dano += 2 * pot;
+                    alvo.setFireTicks(Math.max(alvo.getFireTicks(), (int) (60 * pot * (v ? 1.5 : 1))));
+                    dano += (v ? 3 : 2) * pot;
+                    if (v) alvo.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, meio(alvo), 8, 0.3, 0.4, 0.3, 0.02);
                 }
                 case GELO -> {
-                    alvo.setFreezeTicks(Math.max(alvo.getFreezeTicks(), alvo.getMaxFreezeTicks() + (int) (40 * pot)));
-                    efeito(alvo, PotionEffectType.SLOWNESS, 60 * pot, 1);
+                    alvo.setFreezeTicks(Math.max(alvo.getFreezeTicks(), alvo.getMaxFreezeTicks() + (int) (40 * pot * (v ? 2 : 1))));
+                    efeito(alvo, PotionEffectType.SLOWNESS, 60 * pot, v ? 2 : 1);
                     dano += pot;
                 }
                 case VENTO -> {
-                    empurrar(alvo, origem, 0.8 + 0.3 * pot, 0.45);
+                    empurrar(alvo, origem, (0.8 + 0.3 * pot) * (v ? 1.4 : 1), v ? 0.6 : 0.45);
                     dano += pot;
                 }
                 case AGUA -> {
                     alvo.setFireTicks(0);
                     dano += pot + (sensivelAgua(alvo) ? 4 * pot : 0);
                     efeito(alvo, PotionEffectType.SLOWNESS, 30, 0);
+                    if (v) curar(p, 0.5 * pot);
                 }
                 case VIDA -> {
                     if (Tag.ENTITY_TYPES_UNDEAD.isTagged(alvo.getType())) dano += 3 * pot; // vida queima mortos-vivos
                     else curar(p, pot);
+                    if (v) efeito(p, PotionEffectType.ABSORPTION, 100, 0);
                 }
                 case TERRA -> {
                     dano += 2 * pot;
                     efeito(alvo, PotionEffectType.SLOWNESS, 25, 3);
+                    if (v) efeito(p, PotionEffectType.RESISTANCE, 60, 0);
                 }
                 case SOMBRA -> {
                     efeito(alvo, PotionEffectType.BLINDNESS, 40 * pot, 0);
                     efeito(alvo, PotionEffectType.WITHER, 60, 0);
-                    curar(p, 0.5 * pot);
+                    if (v) efeito(alvo, PotionEffectType.DARKNESS, 60, 0);
+                    curar(p, (v ? 1 : 0.5) * pot);
                 }
                 case VAZIO -> {
-                    puxar(alvo, p.getLocation(), 0.6 + 0.25 * pot);
-                    dano += pot;
+                    puxar(alvo, p.getLocation(), (0.6 + 0.25 * pot) * (v ? 1.4 : 1));
+                    dano += (v ? 2 : 1) * pot;
                 }
                 case ENERGIA -> {
                     dano += 3 * pot;
                     efeito(alvo, PotionEffectType.SLOWNESS, 20, 0);
                     alvo.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, meio(alvo), 15, 0.3, 0.4, 0.3, 0.2);
+                    if (v && rnd().nextDouble() < 0.3) {
+                        for (LivingEntity outro : perto(alvo.getLocation(), 4)) {
+                            if (outro == alvo || !inimigo(p, outro)) continue;
+                            feixeParticula(meio(alvo), meio(outro), Particle.ELECTRIC_SPARK);
+                            ferir(p, outro, 2 * pot);
+                            break;
+                        }
+                    }
                 }
                 case NATUREZA -> {
-                    efeito(alvo, PotionEffectType.POISON, 60 * pot, 0);
+                    efeito(alvo, PotionEffectType.POISON, 60 * pot, v ? 1 : 0);
                     efeito(alvo, PotionEffectType.SLOWNESS, 40, 0);
                 }
             }
         }
         ferir(p, alvo, dano);
         brilho(meio(alvo), es, 8);
+        if (alvo.isValid() && !alvo.isDead()) reacoes.aoAtingir(p, alvo, es, pot);
     }
 
     /** Em aliados: só as essências que ajudam. */
-    private void ajudar(LivingEntity alvo, Set<Essencia> es, double pot) {
+    void ajudar(LivingEntity alvo, Set<Essencia> es, double pot) {
         if (es.contains(Essencia.VIDA)) curar(alvo, 2 * pot);
         if (es.contains(Essencia.AGUA)) alvo.setFireTicks(0);
     }
 
     /** Efeito das essências num bloco. */
-    private void bloco(Player p, Block b, BlockFace face, Set<Essencia> es, double pot) {
+    void bloco(Player p, Block b, BlockFace face, Set<Essencia> es, double pot) {
         BlocosTemporarios temp = arcano().temporarios();
         for (Essencia e : es) {
             switch (e) {
@@ -479,7 +524,7 @@ public final class Conjuracao {
     //  Receitas secretas
     // =====================================================================
 
-    private boolean receita(Player p, Perfil pf, Receita r, double pot) {
+    boolean receita(Player p, Perfil pf, Receita r, double pot, Feiticos.Lance lance) {
         World w = p.getWorld();
         int agora = Bukkit.getCurrentTick();
         switch (r) {
@@ -977,11 +1022,83 @@ public final class Conjuracao {
                 w.playSound(centro, Sound.BLOCK_BEACON_ACTIVATE, 1.2f, 1.2f);
                 return true;
             }
+            // ---------- formas novas (o Raio vai por lancarRaio) ----------
+            case SOPRO_DO_DRAGAO -> {
+                return feiticos.sopro(lance, 1.5, e -> e.setFireTicks(Math.max(e.getFireTicks(), 160)), 9);
+            }
+            case SOPRO_GELIDO -> {
+                boolean ok = feiticos.sopro(lance, 1, e -> {
+                    efeito(e, PotionEffectType.SLOWNESS, 80, 4);
+                    e.setFreezeTicks(e.getMaxFreezeTicks() + 60);
+                }, 7);
+                passosGelidosEm(p, p.getEyeLocation(), p.getEyeLocation().getDirection(), 7);
+                return ok;
+            }
+            case NUVEM_TOXICA -> {
+                boolean ok = feiticos.sopro(lance, 1, e -> efeito(e, PotionEffectType.POISON, 100, 1), 6);
+                Feiticos.nuvemToxica(p, p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(3.5)));
+                return ok;
+            }
+            case CHUVA_ACIDA -> {
+                return feiticos.chuva(lance, 1.3, c -> {
+                    for (LivingEntity e : perto(c, 4)) if (inimigo(p, e)) efeito(e, PotionEffectType.POISON, 60, 0);
+                }, 100);
+            }
+            case TEMPESTADE_ELETRICA -> {
+                int[] raios = {0};
+                return feiticos.chuva(lance, 0.6, c -> {
+                    if (raios[0] >= 6) return;
+                    List<LivingEntity> alvos = new ArrayList<>();
+                    for (LivingEntity e : perto(c, 5)) if (inimigo(p, e)) alvos.add(e);
+                    if (alvos.isEmpty()) return;
+                    LivingEntity e = alvos.get(rnd().nextInt(alvos.size()));
+                    e.getWorld().strikeLightningEffect(e.getLocation());
+                    ferir(p, e, 4 * pot);
+                    raios[0]++;
+                }, 80);
+            }
+            case GRANIZO -> {
+                return feiticos.chuva(lance, 1.6, c -> {
+                    for (LivingEntity e : perto(c, 4)) if (inimigo(p, e)) efeito(e, PotionEffectType.SLOWNESS, 40, 1);
+                    c.getWorld().spawnParticle(Particle.BLOCK, c.clone().add(0, 3, 0), 30, 3, 2, 3, Material.PACKED_ICE.createBlockData());
+                }, 60);
+            }
+            case GOLEM_DE_PEDRA, SOMBRAS_GEMEAS, ESPIRITO_DA_FLORESTA -> {
+                return feiticos.invocar(lance, r);
+            }
+            case LAMINA_FLAMEJANTE, LAMINA_VAMPIRICA, LAMINA_DO_TROVAO -> {
+                return feiticos.encantarArma(lance, r);
+            }
+            // ---------- Tomos Proibidos ----------
+            case CHUVA_DE_METEOROS -> { return feiticos.chuvaDeMeteoros(p, pot); }
+            case ZERO_ABSOLUTO -> { return feiticos.zeroAbsoluto(p, pot); }
+            case JULGAMENTO -> { return feiticos.julgamento(p, pot); }
+            case RUPTURA_DIMENSIONAL -> { return feiticos.ruptura(p, pot); }
+            case RENASCER_DA_FLORESTA -> { return feiticos.renascer(p, pot); }
+            default -> { }
         }
         return false;
     }
 
-    private static void feixeParticula(Location de, Location ate, Particle particula) {
+    /** Congela a água numa linha à frente (Sopro Gélido). */
+    private void passosGelidosEm(Player p, Location de, Vector dir, double alcance) {
+        Vector d = dir.clone().setY(0);
+        if (d.lengthSquared() < 1e-4) return;
+        d.normalize();
+        for (double s = 1; s <= alcance; s += 0.8) {
+            Block centro = de.clone().add(d.clone().multiply(s)).getBlock();
+            for (int dy = -3; dy <= 0; dy++) {
+                Block b = centro.getRelative(0, dy, 0);
+                if (b.getType() == Material.WATER && b.getBlockData() instanceof Levelled lv && lv.getLevel() == 0
+                        && b.getRelative(BlockFace.UP).isEmpty()) {
+                    arcano().temporarios().colocar(p, b, Material.FROSTED_ICE, 200);
+                    break;
+                }
+            }
+        }
+    }
+
+    static void feixeParticula(Location de, Location ate, Particle particula) {
         Vector passo = ate.toVector().subtract(de.toVector());
         double dist = passo.length();
         if (dist < 0.1) return;
@@ -1054,7 +1171,7 @@ public final class Conjuracao {
     }
 
     /** Faz a planta avançar um estágio. */
-    private static boolean crescer(Block b) {
+    static boolean crescer(Block b) {
         if (!(b.getBlockData() instanceof Ageable a) || a.getAge() >= a.getMaximumAge()) return false;
         if (!Tag.CROPS.isTagged(b.getType()) && b.getType() != Material.SWEET_BERRY_BUSH
                 && b.getType() != Material.NETHER_WART && b.getType() != Material.COCOA) {
@@ -1069,7 +1186,7 @@ public final class Conjuracao {
     //  Peças reutilizadas
     // =====================================================================
 
-    private RayTraceResult mirar(Player p, double alcance) {
+    RayTraceResult mirar(Player p, double alcance) {
         return p.getWorld().rayTrace(p.getEyeLocation(), p.getEyeLocation().getDirection(), alcance,
                 FluidCollisionMode.NEVER, true, 0.3, e -> e instanceof LivingEntity && e != p && !(e instanceof ArmorStand));
     }
@@ -1106,7 +1223,7 @@ public final class Conjuracao {
     }
 
     /** Área que aplica as essências por um tempo (inimigos apanham, aliados recebem ajuda). */
-    private void zona(Player p, Location centro, double raio, int duracao, Set<Essencia> es, double pot) {
+    void zona(Player p, Location centro, double raio, int duracao, Set<Essencia> es, double pot) {
         new BukkitRunnable() {
             int t = 0;
             @Override
@@ -1159,7 +1276,7 @@ public final class Conjuracao {
     }
 
     /** Puxa as criaturas para o centro; no final roda {@code aoFim}. */
-    private void vortice(Player p, Location centro, double raio, int duracao, double forca, Runnable aoFim) {
+    void vortice(Player p, Location centro, double raio, int duracao, double forca, Runnable aoFim) {
         new BukkitRunnable() {
             int t = 0;
             @Override
@@ -1202,7 +1319,7 @@ public final class Conjuracao {
     }
 
     /** Teleporte curto para a frente, parando antes de paredes. */
-    private void piscar(Player p, double distancia) {
+    void piscar(Player p, double distancia) {
         World w = p.getWorld();
         Location origem = p.getLocation();
         Vector dir = origem.getDirection().normalize();
@@ -1223,7 +1340,7 @@ public final class Conjuracao {
     }
 
     /** Teleporta o jogador para cima do bloco, se houver espaço. */
-    private void teleportarPara(Player p, Block b) {
+    void teleportarPara(Player p, Block b) {
         Block pe = b.getRelative(BlockFace.UP);
         if (!pe.isPassable() || !pe.getRelative(BlockFace.UP).isPassable()) return;
         Location destino = pe.getLocation().add(0.5, 0, 0.5);
@@ -1237,7 +1354,7 @@ public final class Conjuracao {
 
     // ---------- alvos ----------
 
-    private static List<LivingEntity> perto(Location l, double raio) {
+    static List<LivingEntity> perto(Location l, double raio) {
         List<LivingEntity> lista = new ArrayList<>();
         for (Entity e : l.getWorld().getNearbyEntities(l, raio, raio, raio)) {
             if (e instanceof LivingEntity le && !(e instanceof ArmorStand) && le.isValid()
@@ -1249,9 +1366,18 @@ public final class Conjuracao {
     }
 
     /** Dá para atacar? (não ataca você, seus pets nem jogadores com PvP desligado) */
-    private static boolean inimigo(Player p, LivingEntity e) {
+    static boolean inimigo(Player p, LivingEntity e) {
         if (e == p || !e.isValid() || e instanceof ArmorStand) return false;
         if (e instanceof Tameable t && t.isTamed() && p.getUniqueId().equals(t.getOwnerUniqueId())) return false;
+        // Invocações: as suas e as de aliados não são alvo.
+        String dono = e.getPersistentDataContainer().get(CHAVE_INVOCACAO, org.bukkit.persistence.PersistentDataType.STRING);
+        if (dono != null) {
+            if (dono.equals(p.getUniqueId().toString())) return false;
+            try {
+                Player d = Bukkit.getPlayer(UUID.fromString(dono));
+                if (d != null && !inimigoPvp(p, d)) return false;
+            } catch (IllegalArgumentException ignored) { }
+        }
         if (e instanceof Player outro) return inimigoPvp(p, outro);
         return true;
     }
@@ -1267,30 +1393,30 @@ public final class Conjuracao {
         return t == EntityType.ENDERMAN || t == EntityType.BLAZE || t == EntityType.SNOW_GOLEM || t == EntityType.STRIDER;
     }
 
-    private void ferir(Player p, LivingEntity alvo, double dano) {
+    void ferir(Player p, LivingEntity alvo, double dano) {
         if (dano <= 0 || alvo.isDead()) return;
         if (alvo instanceof Player) dano *= cfg().arcDanoPvp;
         alvo.damage(dano, DamageSource.builder(DamageType.MAGIC).withCausingEntity(p).withDirectEntity(p).build());
     }
 
-    private static void curar(LivingEntity e, double quanto) {
+    static void curar(LivingEntity e, double quanto) {
         if (quanto <= 0 || e.isDead()) return;
         AttributeInstance max = e.getAttribute(Attribute.MAX_HEALTH);
         if (max == null) return;
         e.setHealth(Math.min(max.getValue(), e.getHealth() + quanto));
     }
 
-    private static void efeito(LivingEntity e, PotionEffectType tipo, double ticks, int nivel) {
+    static void efeito(LivingEntity e, PotionEffectType tipo, double ticks, int nivel) {
         e.addPotionEffect(new PotionEffect(tipo, (int) Math.round(ticks), nivel));
     }
 
-    private static void empurrar(LivingEntity e, Location de, double forca, double y) {
+    static void empurrar(LivingEntity e, Location de, double forca, double y) {
         Vector v = e.getLocation().toVector().subtract(de.toVector()).setY(0);
         if (v.lengthSquared() < 1e-4) v = new Vector(rnd().nextDouble(-1, 1), 0, rnd().nextDouble(-1, 1));
         e.setVelocity(v.normalize().multiply(forca).setY(y));
     }
 
-    private static void puxar(LivingEntity e, Location para, double forca) {
+    static void puxar(LivingEntity e, Location para, double forca) {
         Vector v = para.toVector().subtract(e.getLocation().toVector());
         if (v.lengthSquared() < 1) return;
         e.setVelocity(v.normalize().multiply(forca).setY(Math.max(0.1, v.getY() * 0.1)));
@@ -1298,11 +1424,11 @@ public final class Conjuracao {
 
     // ---------- visual ----------
 
-    private static Location meio(Entity e) {
+    static Location meio(Entity e) {
         return e.getLocation().add(0, e.getHeight() / 2, 0);
     }
 
-    private static void brilho(Location l, Set<Essencia> es, int qtd) {
+    static void brilho(Location l, Set<Essencia> es, int qtd) {
         World w = l.getWorld();
         for (Essencia e : es) {
             w.spawnParticle(Particle.DUST, l, qtd, 0.4, 0.4, 0.4, 0, e.poeira(1.4f));
@@ -1322,7 +1448,23 @@ public final class Conjuracao {
         }
     }
 
-    private static void feixe(Location de, Location ate, Set<Essencia> es) {
+    /** Brilho com a assinatura visual do jogador por cima. */
+    static void brilho(Location l, Set<Essencia> es, int qtd, Estilo estilo) {
+        brilho(l, es, qtd);
+        if (estilo != null && estilo.particula() != null) {
+            l.getWorld().spawnParticle(estilo.particula(), l, Math.max(3, qtd / 2), 0.4, 0.4, 0.4, 0.02);
+        }
+    }
+
+    static void anelParticula(Location centro, double raio, Particle particula) {
+        int pontos = (int) (raio * 8);
+        for (int i = 0; i < pontos; i++) {
+            double a = 2 * Math.PI * i / pontos;
+            centro.getWorld().spawnParticle(particula, centro.clone().add(Math.cos(a) * raio, 0, Math.sin(a) * raio), 1, 0, 0, 0, 0);
+        }
+    }
+
+    static void feixe(Location de, Location ate, Set<Essencia> es) {
         Vector passo = ate.toVector().subtract(de.toVector());
         double dist = passo.length();
         if (dist < 0.1) return;
@@ -1336,7 +1478,7 @@ public final class Conjuracao {
         }
     }
 
-    private static void anel(Location centro, double raio, Set<Essencia> es) {
+    static void anel(Location centro, double raio, Set<Essencia> es) {
         List<Essencia> lista = new ArrayList<>(es);
         int pontos = (int) (raio * 8);
         for (int i = 0; i < pontos; i++) {
@@ -1346,7 +1488,7 @@ public final class Conjuracao {
         }
     }
 
-    private static void espiral(Player p, Set<Essencia> es) {
+    static void espiral(Player p, Set<Essencia> es) {
         List<Essencia> lista = new ArrayList<>(es);
         Location base = p.getLocation();
         for (int i = 0; i < 40; i++) {

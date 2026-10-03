@@ -1,5 +1,7 @@
 package br.rpgatributos;
 
+import br.rpgatributos.alquimia.Acessorios;
+import br.rpgatributos.alquimia.Alquimia;
 import br.rpgatributos.arcano.Arcano;
 import br.rpgatributos.aventura.Altares;
 import br.rpgatributos.aventura.Chefes;
@@ -11,11 +13,30 @@ import br.rpgatributos.forja.Forja;
 import br.rpgatributos.forja.ForjaListener;
 import br.rpgatributos.forja.Forjas;
 import br.rpgatributos.classe.Classes;
+import br.rpgatributos.colonia.Colonias;
+import br.rpgatributos.colonia.Prefeituras;
+import br.rpgatributos.reino.ComandoReino;
+import br.rpgatributos.reino.Reinos;
+import br.rpgatributos.perigo.Bestiario;
+import br.rpgatributos.perigo.ChefeMundial;
+import br.rpgatributos.perigo.Hordas;
+import br.rpgatributos.perigo.Ninhos;
+import br.rpgatributos.perigo.Perigo;
+import br.rpgatributos.mundo.Ceu;
+import br.rpgatributos.mundo.Estacoes;
+import br.rpgatributos.mundo.Maldicoes;
+import br.rpgatributos.mundo.Temperatura;
+import br.rpgatributos.portal.Portais;
+import br.rpgatributos.sombra.Sombras;
+import br.rpgatributos.torre.ObeliscoTorre;
+import br.rpgatributos.torre.Torre;
 import br.rpgatributos.classe.Provas;
 import br.rpgatributos.classe.Santuarios;
 import br.rpgatributos.lenda.Lendas;
 import br.rpgatributos.lenda.MenuLendas;
 import br.rpgatributos.oculto.Locais;
+import br.rpgatributos.pesca.Pesca;
+import br.rpgatributos.visual.GuardaRoupa;
 import br.rpgatributos.viagem.PedrasDeViagem;
 import br.rpgatributos.domador.AltaresDomador;
 import br.rpgatributos.domador.Companheiros;
@@ -90,6 +111,26 @@ public final class RPGAtributos extends JavaPlugin {
     private MenuLendas menuLendas;
     private PedrasDeViagem pedras;
     private Locais locais;
+    private Pesca pesca;
+    private Alquimia alquimia;
+    private Acessorios acessorios;
+    private GuardaRoupa guardaRoupa;
+    private Colonias colonias;
+    private Prefeituras prefeituras;
+    private Reinos reinos;
+    private Perigo perigo;
+    private Bestiario bestiario;
+    private Ninhos ninhos;
+    private Hordas hordas;
+    private ChefeMundial chefeMundial;
+    private Estacoes estacoes;
+    private Ceu ceu;
+    private Maldicoes maldicoes;
+    private Temperatura temperatura;
+    private Portais portais;
+    private Sombras sombras;
+    private Torre torre;
+    private ObeliscoTorre obeliscos;
 
     private static RPGAtributos instancia;
 
@@ -146,12 +187,37 @@ public final class RPGAtributos extends JavaPlugin {
         pedras.carregar();
         locais = new Locais(this);
         classes.carregarLendarias();
+        pesca = new Pesca(this);
+        alquimia = new Alquimia(this);
+        acessorios = new Acessorios(this);
+        guardaRoupa = new GuardaRoupa(this);
+        colonias = new Colonias(this);
+        colonias.carregar();
+        prefeituras = new Prefeituras(this);
+        reinos = new Reinos(this);
+        reinos.carregar();
+        perigo = new Perigo(this);
+        bestiario = new Bestiario(this);
+        ninhos = new Ninhos(this);
+        hordas = new Hordas(this);
+        chefeMundial = new ChefeMundial(this);
+        estacoes = new Estacoes(this);
+        ceu = new Ceu(this);
+        maldicoes = new Maldicoes(this);
+        temperatura = new Temperatura(this);
+        portais = new Portais(this);
+        portais.carregar();
+        sombras = new Sombras(this);
+        torre = new Torre(this);
+        torre.carregar();
+        obeliscos = new ObeliscoTorre(this);
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
                 chefes, eventos, mercadores, altares, new MateriaisListener(), missoes, agricultura, cozinha, reciclagem,
                 parties, menuParty, territorios, marcos, menusTerritorio, new ProtecaoListener(this),
                 companheiros, comportamento, altaresDomador, menusDomador, masmorras, portaisMasmorra,
-                classes, provas, santuarios, lendas, menuLendas, pedras, locais);
+                classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
+                estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos);
         locais.iniciar();
         masmorras.iniciar();
         companheiros.carregar();
@@ -159,7 +225,8 @@ public final class RPGAtributos extends JavaPlugin {
 
         Comandos comandos = new Comandos(this);
         for (String nome : new String[]{"atributos", "rpgadmin", "chapeu", "tag", "cosmeticos", "forja", "grimorio",
-                "guia", "titulos", "missoes", "receitas", "pets", "masmorra", "classe", "lendas", "locais"}) {
+                "guia", "titulos", "missoes", "receitas", "pets", "masmorra", "classe", "lendas", "locais", "peixes", "alquimia",
+                "acessorios", "guardaroupa", "colonia", "bestiario", "calendario", "maldicao"}) {
             PluginCommand c = getCommand(nome);
             if (c != null) {
                 c.setExecutor(comandos);
@@ -168,6 +235,21 @@ public final class RPGAtributos extends JavaPlugin {
         }
         ComandoParty cmdParty = new ComandoParty(this);
         ComandoTerritorio cmdTerritorio = new ComandoTerritorio(this);
+        PluginCommand cpo = getCommand("portais");
+        if (cpo != null) cpo.setExecutor(portais);
+        PluginCommand cso = getCommand("sombras");
+        if (cso != null) cso.setExecutor(sombras);
+        PluginCommand cto = getCommand("torre");
+        if (cto != null) {
+            cto.setExecutor(torre);
+            cto.setTabCompleter(torre);
+        }
+        ComandoReino cmdReino = new ComandoReino(this);
+        PluginCommand cr = getCommand("reino");
+        if (cr != null) {
+            cr.setExecutor(cmdReino);
+            cr.setTabCompleter(cmdReino);
+        }
         for (String nome : new String[]{"party", "pc", "territorio"}) {
             PluginCommand c = getCommand(nome);
             if (c == null) continue;
@@ -184,6 +266,7 @@ public final class RPGAtributos extends JavaPlugin {
         // Efeitos passivos (itens forjados, conjuntos, títulos, núcleos): 1x por segundo.
         efeitos.registrarFonte(titulos::efeitos);
         efeitos.registrarFonte(lendas::efeitos);
+        efeitos.registrarFonte(acessorios::efeitos);
         agenda.runTaskTimer(this, efeitos::aplicarPassivos, 20L, 20L);
         // Estações de ritual: Forja do Ferreiro e Altar Ritualístico.
         forjas.iniciar();
@@ -215,6 +298,34 @@ public final class RPGAtributos extends JavaPlugin {
         pedras.iniciar();
         agenda.runTaskTimer(this, pedras::tick, 5L, 5L);
         agenda.runTaskTimer(this, locais::tick, 20L, 20L);
+        // Alquimia: bancada (5 ticks), acessórios de bolso (2 ticks) e guarda-roupa (2 segundos).
+        alquimia.iniciar();
+        agenda.runTaskTimer(this, alquimia::tick, 5L, 5L);
+        agenda.runTaskTimer(this, acessorios::tick, 2L, 2L);
+        agenda.runTaskTimer(this, guardaRoupa::tick, 40L, 40L);
+        // Colônias: Prefeituras (5 ticks) e turnos de trabalho (1 segundo).
+        prefeituras.iniciar();
+        agenda.runTaskTimer(this, prefeituras::tick, 5L, 5L);
+        agenda.runTaskTimer(this, colonias::tick, 20L, 20L);
+        agenda.runTaskTimer(this, colonias::tickSoldados, 10L, 10L);
+        // Reinos: guerras marcadas e captura de Marcos (1 segundo).
+        agenda.runTaskTimer(this, reinos::tick, 20L, 20L);
+        // Mundo perigoso: Elites (meio segundo), ninhos, hordas e Chefe Mundial (1 segundo).
+        agenda.runTaskTimer(this, perigo::tick, 10L, 10L);
+        agenda.runTaskTimer(this, ninhos::tick, 20L, 20L);
+        agenda.runTaskTimer(this, hordas::tick, 20L, 20L);
+        agenda.runTaskTimer(this, chefeMundial::tick, 20L, 20L);
+        // Mundo vivo: estações e céu (1 segundo), maldições e temperatura (2 segundos).
+        agenda.runTaskTimer(this, estacoes::tick, 20L, 20L);
+        agenda.runTaskTimer(this, ceu::tick, 20L, 20L);
+        agenda.runTaskTimer(this, maldicoes::tick, 40L, 40L);
+        agenda.runTaskTimer(this, temperatura::tick, 40L, 40L);
+        // Fase C: portais do mundo (5 ticks), sombras do Soberano e Torre Infinita (meio segundo).
+        agenda.runTaskTimer(this, portais::tick, 5L, 5L);
+        agenda.runTaskTimer(this, sombras::tick, 10L, 10L);
+        agenda.runTaskTimer(this, torre::tick, 10L, 10L);
+        obeliscos.iniciar();
+        agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
         agenda.runTaskTimer(this, altaresDomador::tick, 5L, 5L);
         agenda.runTaskTimer(this, comportamento::tick, 10L, 10L);
         agenda.runTaskTimer(this, comportamento::controlarMontarias, 1L, 1L);
@@ -233,6 +344,7 @@ public final class RPGAtributos extends JavaPlugin {
             tags.garantir(p);
             titulos.aplicarBonus(p);
             classes.aplicar(p);
+            acessorios.carregar(p);
         }
         getLogger().info("RPGAtributos ativado!");
     }
@@ -244,6 +356,8 @@ public final class RPGAtributos extends JavaPlugin {
     @Override
     public void onDisable() {
         if (menus != null) menus.fecharTodos();
+        if (guardaRoupa != null) guardaRoupa.desfazerTodos();
+        if (acessorios != null) acessorios.apagarTodas();
         if (tags != null) tags.removerTodos();
         if (efeitos != null) efeitos.removerTodos();
         if (chefes != null) chefes.removerTodos();
@@ -252,10 +366,22 @@ public final class RPGAtributos extends JavaPlugin {
         if (arcano != null) arcano.parar();
         if (comportamento != null) comportamento.parar();
         if (companheiros != null) companheiros.desligar();
+        if (sombras != null) sombras.recolherTodas();
+        if (torre != null) torre.encerrarTodas();
+        if (portais != null) portais.parar();
         if (provas != null) provas.encerrarTodas();
         if (locais != null) locais.parar();
         if (masmorras != null) masmorras.encerrarTodas();
         if (parties != null) parties.salvar();
+        if (colonias != null) colonias.salvar();
+        if (reinos != null) reinos.parar();
+        if (perigo != null) perigo.parar();
+        if (ninhos != null) ninhos.parar();
+        if (hordas != null) hordas.parar();
+        if (chefeMundial != null) chefeMundial.parar();
+        if (estacoes != null) estacoes.salvar();
+        if (ceu != null) ceu.parar();
+        if (maldicoes != null) maldicoes.parar();
         if (territorios != null) {
             territorios.pararBordas();
             territorios.salvar();
@@ -336,11 +462,30 @@ public final class RPGAtributos extends JavaPlugin {
     public MenuLendas menuLendas() { return menuLendas; }
     public PedrasDeViagem pedras() { return pedras; }
     public Locais locais() { return locais; }
+    public Pesca pesca() { return pesca; }
+    public Alquimia alquimia() { return alquimia; }
+    public Acessorios acessorios() { return acessorios; }
+    public GuardaRoupa guardaRoupa() { return guardaRoupa; }
+    public Colonias colonias() { return colonias; }
+    public Prefeituras prefeituras() { return prefeituras; }
+    public Reinos reinos() { return reinos; }
+    public Perigo perigo() { return perigo; }
+    public Bestiario bestiario() { return bestiario; }
+    public Ninhos ninhos() { return ninhos; }
+    public Hordas hordas() { return hordas; }
+    public ChefeMundial chefeMundial() { return chefeMundial; }
+    public Estacoes estacoes() { return estacoes; }
+    public Ceu ceu() { return ceu; }
+    public Maldicoes maldicoes() { return maldicoes; }
+    public Portais portais() { return portais; }
+    public Sombras sombras() { return sombras; }
+    public Torre torre() { return torre; }
+    public ObeliscoTorre obeliscos() { return obeliscos; }
 
     /** O bloco é alguma estação de ritual (Forja, Infusor, Altares, Cozinha, Reciclagem, Marco)? */
     public boolean ehEstacao(Block b) {
         return forjas.eh(b) || arcano.infusores().eh(b) || altares.eh(b) || cozinha.eh(b) || reciclagem.eh(b) || marcos.eh(b)
-                || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b);
+                || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b) || alquimia.eh(b) || prefeituras.eh(b) || obeliscos.eh(b);
     }
 
     /**
@@ -350,6 +495,9 @@ public final class RPGAtributos extends JavaPlugin {
     public boolean pvpPermitido(Player atacante, Player vitima) {
         if (atacante.equals(vitima)) return true;
         if (Boolean.FALSE.equals(vitima.getWorld().getGameRuleValue(GameRules.PVP))) return false;
+        // Reino: sem fogo amigo entre membros; na guerra, o PvP entre os dois reinos é livre em qualquer lugar.
+        if (reinos.aliados(atacante.getUniqueId(), vitima.getUniqueId())) return false;
+        if (reinos.inimigosEmGuerra(atacante.getUniqueId(), vitima.getUniqueId())) return true;
         Party pt = parties.party(atacante);
         if (pt != null && pt.tem(vitima.getUniqueId()) && !pt.fogoAmigo()) return false;
         return territorios.flagAqui(vitima.getLocation(), Flag.PVP) && territorios.flagAqui(atacante.getLocation(), Flag.PVP);

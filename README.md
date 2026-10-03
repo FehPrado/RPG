@@ -1,7 +1,7 @@
 # RPGAtributos
 
 Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor num RPG estilo Overgeared:
-- **11 atributos** que evoluem com o uso (até o nível 100);
+- **13 atributos** que evoluem com o uso (até o nível 100);
 - **forja de itens** com raridade, refino e conjuntos, e **reciclagem** de itens;
 - **infusão de itens no corpo** e **magias** criadas pelo jogador;
 - **Altar Ritualístico** com chefes e eventos;
@@ -12,9 +12,14 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **classes** numa árvore com pré-requisitos, provas de mudança de classe e habilidades ativas;
 - **lendas**: itens **Especiais**, únicos no servidor, que nascem dos feitos (escondidos) do jogador e despertam com o uso;
 - **Locais Ocultos** gerados pelo mundo, com enigmas, guardiões e **classes lendárias** (um dono por vez), e **Pedras de Viagem**;
+- **pesca** com peixes raros, tesouros e criaturas marinhas, e **alquimia** com elixires, **gemas** engastadas nos itens forjados e **acessórios** (anéis, amuletos, cintos, lanterna de bolso...);
+- **guarda-roupa**: muda a aparência da armadura sem tirá-la;
+- **portais** que se abrem pelo mundo e **transbordam** monstros se ninguém os fechar, a classe única **Soberano das Sombras** e a **Torre Infinita** com ranking semanal;
 - **títulos** e **missões de aldeões**.
 
 Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não precisa de mod nem resource pack.
+
+**Guias em HTML:** [docs/jogadores.html](docs/jogadores.html) (tudo para os jogadores) e [docs/admin.html](docs/admin.html) (instalação, configuração, comandos de admin e testes).
 
 ## Atributos
 
@@ -31,6 +36,8 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 | ☘ Agricultura | Colher plantações maduras, melancias e abóboras naturais, frutas | 50% de colheita dupla, colheitas de mais qualidade, toque verde, colheita gigante |
 | ♨ Culinária | Cozinhar pratos na Cozinha | Libera receitas, pratos de mais qualidade, buffs +50% mais longos |
 | ♞ Doma | Domar e cruzar animais, vincular/invocar companheiros, colocar componentes, andar montado, companheiro derrotar monstros | 5 companheiros, 6 componentes em cada, +100% vida e +50% dano deles, +40% velocidade montado |
+| ⚓ Pesca | Pescar (peixes raros, tesouros e criaturas marinhas valem mais) | Isca 50% mais rápida, 30% de peixe em dobro, 15% de peixe raro, mais tesouros |
+| ⚗ Alquimia | Criar na Bancada Alquímica, engastar gemas, fazer poções no suporte de poções | Elixires 60% mais longos e de mais qualidade, 40% de render o dobro de componentes |
 
 **Nível máximo 100, balanceado:** no config os bônus são escritos como "quanto valem no nível máximo", e o plugin divide pelos níveis sozinho. Mudar o nível máximo não deixa ninguém forte demais. Chegar no 50 leva cerca de 20% do caminho; o 100 é para quem joga muito.
 
@@ -45,7 +52,7 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 
 ## Guia do Aventureiro
 
-Na primeira vez que entra no servidor, o jogador recebe um livro de 35 páginas que explica tudo. `/guia` dá outro.
+Na primeira vez que entra no servidor, o jogador recebe um livro de 58 páginas que explica tudo. `/guia` dá outro.
 
 ## Forja do Ferreiro
 
@@ -126,17 +133,55 @@ Até +5, falhar só gasta o material. De +6 a +8, o item perde 1 nível. No +9 e
 - **Clique esquerdo:** troca de magia.
 - **Agachado + direito:** abre o grimório.
 
-A mana aparece numa barra no topo da tela. Para **criar magias**, escolha de 1 a 4 essências do corpo e uma forma (Toque, Projétil, Aura, Corpo, Criação): são 1.925 magias possíveis, e todas funcionam.
+A mana aparece numa barra no topo da tela. Para **criar magias**, escolha de 1 a 4 essências do corpo, uma forma e até 2 modificadores. Todas as combinações funcionam.
 
-**30 magias secretas** com efeito único. Alguns exemplos:
+**10 formas:**
+
+| Forma | Como age |
+|---|---|
+| Toque, Projétil, Aura, Corpo, Criação | As originais: perto, à distância, em volta de você, em você mesmo, criando blocos |
+| **Raio** | Feixe contínuo enquanto você **segura o clique** (gasta mana aos poucos) |
+| **Sopro** | Cone na sua frente, como um dragão |
+| **Chuva** | Cai do céu numa área até 30 blocos, por alguns segundos |
+| **Invocação** | Um elemental luta ao seu lado (Vida = espírito que cura, Terra = golem, os outros = espíritos voadores) |
+| **Encantar arma** | Os próximos golpes corpo a corpo carregam o elemento |
+
+**10 modificadores** (até 2 por magia, liberados pelo nível de Arcano): **Rápida** (recarga pela metade, mais fraca), **Ampliar** (área maior), **Dividir** (3 projéteis), **Teleguiado** (persegue o inimigo), **Canalizar** (segure para carregar até o dobro da força), **Ricochete** (salta para 3 inimigos), **Persistente** (deixa uma zona no chão), **Mina** (armadilha que explode quando alguém chega perto), **Eco** (repete 1s depois) e **Potente** (mais forte, recarga maior).
+
+**Reações elementais:** quem leva um elemento fica marcado por 6s; um segundo elemento causa uma reação. Funciona entre jogadores, então combos de party ficam muito fortes.
+
+| Reação | Elementos | Efeito |
+|---|---|---|
+| Eletrocutado | Água + Energia | O choque salta para até 4 inimigos |
+| Congelado | Água + Gelo | O alvo fica quase parado |
+| Derreter | Fogo + Gelo | Muito dano |
+| Incêndio | Fogo + Vento | O fogo se espalha |
+| Queimada | Fogo + Natureza | Chamas fortes que pulam para outros |
+| Lama | Terra + Água | Lentidão forte |
+| Corrupção | Sombra + Vida | Dano, definhamento e você se cura |
+| Tempestade | Vento + Energia | Um raio cai no alvo |
+| Colapso | Vazio + Sombra | Puxa os inimigos para o alvo |
+| Estilhaçar | Gelo + Terra | Quebra o gelo: muito dano |
+
+**Maestria:** cada elemento sobe de nível (1 a 10) conforme você o usa, com +3% de força por nível. No nível 5 o elemento ganha uma **variante** (Chama Azul, Gelo Eterno, Vendaval, Maré Curativa, Bênção, Pele de Rocha, Abismo, Gravidade, Sobrecarga, Toxina), e no 10 as reações com ele ficam 50% mais fortes. Grimório → Maestria e reações.
+
+**Estilo:** uma marca visual em todas as suas magias (Estelar, Almas, Cristal, Cerejeira, Brasas, Eco, Melodia). Grimório → Estilo.
+
+**Cajado Arcano:** na **Forja do Ferreiro**, 1 ametista na ponta + 2 varas de blaze na diagonal. Sai com raridade e bônus próprios (potência, mana economizada, recarga menor), aceita refino e **lança magias como o grimório**. Gemas engastadas nele fortalecem elementos: Rubi = Fogo, Safira = Água e Gelo, Esmeralda = Natureza e Vida, Topázio = Energia e Vento, Ametista = Vazio, Ônix = Sombra e Terra.
+
+**Pergaminhos:** na Bancada Alquímica (aba Pergaminhos), escreva uma magia do seu grimório num papel. Qualquer um pode lançá-la uma vez, sem mana nem essências.
+
+**50 magias secretas** com efeito único. Alguns exemplos:
 
 | Tipo | Magias |
 |---|---|
 | Pares | Bola de Fogo, Nevasca, Passo do Vazio, Drenar, Ponte de Gelo, Terremoto, Corrente Elétrica, Escudo de Gelo, Chama Sagrada, Retorno, Chamar a Chuva, Olho Vigilante |
 | Trios | Fardo Fértil, Chamado da Tempestade, Fantasma, Meteoro, Matilha, Prisão de Gelo |
 | Quartetos | Fênix, Buraco Negro, Gênese, Avatar Elemental, Santuário |
+| Formas novas | Raio Solar, Dreno de Alma, Raio Congelante, Sopro do Dragão, Sopro Gélido, Nuvem Tóxica, Chuva Ácida, Tempestade Elétrica, Granizo, Golem de Pedra, Sombras Gêmeas, Espírito da Floresta, Lâmina Flamejante, Lâmina Vampírica, Lâmina do Trovão |
+| **Proibidas** | Chuva de Meteoros, Zero Absoluto, Julgamento, Ruptura Dimensional, Renascer da Floresta |
 
-Ninguém conta a receita, mas o grimório dá uma dica de cada (quantas essências e uma delas).
+Ninguém conta a receita, mas o grimório dá uma dica de cada (quantas essências e uma delas). As **proibidas** não podem ser criadas: vêm de **Tomos Proibidos**, que caem dos chefes do Altar, dos selos dos Locais Ocultos e dos chefes de masmorra Difícil/Pesadelo. Clicar numa magia secreta já descoberta coloca ela de volta no grimório.
 
 ## Altar Ritualístico
 
@@ -187,21 +232,24 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 - **Agachado + clique:** o defumador normal (continua funcionando).
 - `/receitas` mostra o livro de receitas em qualquer lugar.
 
-**13 pratos**, liberados pelo nível de Culinária. Comer dá buffs (a duração fica gravada no prato):
+**16 pratos**, liberados pelo nível de Culinária. Comer dá buffs (a duração fica gravada no prato):
 
 | Prato | Nível | Efeito |
 |---|---|---|
 | Pão Caseiro | 0 | Pressa |
+| Sopa do Pescador | 10 | Respiração aquática e Sorte |
 | Ensopado de Legumes | 0 | Regeneração |
 | Torta de Abóbora da Vovó | 10 | Sorte e Velocidade |
 | Salmão com Ervas | 15 | Respiração aquática e Graça do golfinho |
 | Batata Recheada | 20 | Absorção e Resistência |
 | Biscoito de Mel | 25 | Pressa II |
+| Sushi Real | 45 | Graça do golfinho, Poder do conduíte e Pressa (pede Salmão-Rei) |
 | Ensopado do Caçador | 30 | Força |
 | Salada Arcana | 40 | Visão noturna e +60 de mana |
 | Banquete do Guerreiro | 50 | Força, Resistência e Regeneração (pede Trigo Dourado) |
 | Pão Dourado | 60 | Absorção II e saciedade cheia (Trigo Dourado) |
 | Sopa Cristalina | 70 | Resistência ao fogo e Velocidade II (Cenoura Cristalina, Batata Ancestral) |
+| Caldeirada Abissal | 75 | Resistência, Visão noturna e Força (Peixe Abissal, Batata Ancestral) |
 | Torta Rubi | 80 | Vida extra II e Regeneração II (Beterraba Rubi) |
 | Banquete Lendário | 90 | Força, Resistência, Regeneração e Velocidade **para todos a até 10 blocos** (as 4 variedades) |
 
@@ -233,6 +281,57 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 **O mundo respeita a borda:** líquidos e pistões não atravessam, fogo de fora não entra, explosões não quebram blocos (com a regra desligada), endermans não pegam blocos, mobs não pisoteiam a plantação, árvores (inclusive a magia Gênese) não crescem para dentro. As magias que colocam blocos também respeitam os territórios.
 
 Para remover o Marco: **Abandonar território** no menu (as esmeraldas não voltam; o estandarte cai no chão).
+
+## Colônias
+
+Um jeito simples de ter uma vila com moradores trabalhando, no estilo Minecolonies, usando o que o plugin já tem.
+
+**Ritual:** no **seu** território, jogue **1 bloco de esmeralda** e **1 cama** em cima de um **sino**: ele vira a **Prefeitura** e os 2 primeiros moradores chegam. Clique no sino abre a colônia (agachado toca o sino); `/colonia` abre de qualquer lugar.
+- **Moradores** são aldeões de verdade: andam até o posto de dia e dormem à noite. Clique num morador para dar um trabalho a ele.
+- **Depósito:** defina até 4 baús perto da Prefeitura. Os moradores guardam ali o que produzem e pegam ali comida e materiais. Sem depósito, ninguém trabalha.
+- **Comida e felicidade:** cada morador come um pouco por turno. Pratos da Cozinha alimentam mais e deixam todos felizes. Camas, comida e felicidade aumentam a produção (de ×0,5 a ×1,2) e trazem moradores novos a cada 4 minutos.
+- **Nível do morador:** de 1 a 10, cada nível dá +10% de produção.
+- Tudo fica num raio de 32 blocos da Prefeitura.
+
+| Profissão | Posto (perto da Prefeitura) | Produz | Colônia nível |
+|---|---|---|---|
+| Fazendeiro | Composteira | Trigo, cenoura, batata e beterraba das plantações em volta (com qualidade ★, às vezes uma variedade rara) | 1 |
+| Lenhador | Bancada de flechas | Troncos (do tipo de árvore que houver perto), mudas e maçãs | 1 |
+| Pescador | Barril (com água perto) | Peixes com qualidade, às vezes peixes raros | 1 |
+| Minerador | Cortador de pedras | Pedra, carvão, minérios brutos e, às vezes, diamante | 2 |
+| Cozinheiro | Cozinha | Pratos com os ingredientes do depósito | 2 |
+| Ferreiro | Forja do Ferreiro | Conserta equipamentos do depósito e funde minérios brutos | 3 |
+| Tratador | Altar do Domador | Couro, lã, ovos, penas e carne | 3 |
+| Alquimista | Bancada Alquímica | Pó Arcano e Óleo de Peixe | 4 |
+
+Cada morador precisa do **seu** posto: 2 fazendeiros precisam de 2 composteiras.
+
+**Níveis da colônia** (Prefeitura → Melhorar, pago com o depósito): cada nível libera +3 moradores (até 15) e novas profissões. O nível 5 dá +20% de produção. Os moradores ficam protegidos de outros jogadores e não fazem comércio. Se a Prefeitura for quebrada, eles viram aldeões comuns.
+
+### Exército
+
+Duas profissões a mais na colônia: **Soldado** (espada, liberado no nível 2) e **Arqueiro** (arco, nível 3). O posto delas é o **Quartel**, um **bloco de alvo** perto da Prefeitura, e cada um abriga 4 soldados.
+- O morador **veste a armadura**: vira um guerreiro com o uniforme na **cor do reino**. Não queima no sol e os aldeões não têm medo dele.
+- Os soldados atacam monstros sempre. Na **guerra**, também atacam os jogadores e os soldados do reino inimigo. Nunca atacam aldeões, aliados nem o dono.
+- **Ordens** (Prefeitura → Exército, clique): **guardar** a colônia, **seguir você** ou **atacar** o Marco inimigo mais perto (só na guerra).
+- **Shift + clique** no Exército equipa todos com as **melhores armas e armaduras do depósito**. Itens forjados contam, com os bônus deles.
+- Soldados sobem de nível ao vencer inimigos (mais vida e dano) e se curam quando descansam.
+
+## Reinos e guerras
+
+**Fundar:** `/reino fundar <nome>` (precisa de colônia nível 2 e 32 esmeraldas). O reino ganha uma cor própria e o nome aparece em cima da cabeça dos membros.
+- **Cargos:** **Rei** (guerra, paz, cargos e coroa), **Nobre** (tesouro, expulsar), **Cavaleiro** (pode convidar) e **Cidadão**.
+- **Tesouro** de esmeraldas: qualquer membro deposita; o Rei e os Nobres sacam.
+- Membros do mesmo reino **não se machucam**.
+- `/reino` abre o menu. Comandos: `convidar`, `aceitar`, `sair`, `expulsar`, `cargo <nick> <nobre|cavaleiro|cidadao>`, `coroa <nick>`, `tesouro <depositar|sacar> <qtd>`, `guerra <reino>`, `paz <reino>`, `lista`, `desfazer confirmar`.
+
+**Guerra com horário marcado:** o Rei declara (`/reino guerra <reino>`) e a batalha acontece no **horário de guerra do servidor** (padrão: sábado às 20h, por 60 minutos, com pelo menos 24h de aviso; muda no `config.yml`). Todo mundo é avisado 1h, 10 min e 1 min antes.
+- Durante a guerra, o **PvP entre os dois reinos é livre** em qualquer lugar.
+- **Capturar um Marco:** fique a até 6 blocos do Marco do Território de um inimigo por 2 minutos **sem nenhum defensor por perto** (jogadores ou soldados dele). Uma barra mostra o progresso.
+- **Pontos:** Marco capturado = 10, jogador abatido = 2, soldado abatido = 1.
+- **Resultado:** cada Marco capturado faz aquele território **perder 4 chunks** (os mais longe do Marco), que viram chunks a mais para o Rei vencedor. No fim, quem fizer mais pontos leva **30% do tesouro** do outro.
+- **Construções nunca são destruídas**: a proteção dos blocos continua valendo na guerra.
+- Depois de uma guerra, os dois reinos ficam **7 dias em trégua**. Os dois Reis podem fazer as pazes antes com `/reino paz <reino>`.
 
 ## Domador
 
@@ -318,6 +417,86 @@ Você constrói salas e o plugin as sorteia no meio das geradas (60% de chance q
 | `chefe` | 27 × 12 × 27 |
 
 As portas abrem no meio de cada parede (3 de largura, 4 de altura, a partir do chão). As salas ficam em `plugins/RPGAtributos/salas/<tipo>/<nome>.nbt`. Para levar salas para outro servidor, basta copiar os arquivos.
+
+## Mundo perigoso
+
+- **Monstros de Elite:** às vezes um monstro nasce Elite (1 modificador), **Campeão** (2) ou **Senhor** (3). Ele tem nome com estrelas, barra de vida, muito mais vida e dano, e loot melhor: esmeraldas, Pó Arcano, gemas, Fragmentos de Forja e, raramente, um Tomo Proibido. Matar um Senhor é anunciado no servidor.
+
+| Modificador | Efeito |
+|---|---|
+| Veloz | 40% mais rápido |
+| Blindado | Muita armadura e não é empurrado |
+| Vampiro | Se cura com o dano que causa |
+| Explosivo | Explode ao morrer (sem quebrar blocos) |
+| Invocador | Chama ajudantes durante a luta |
+| Gigante | Enorme: muita vida e dano, mais lento |
+| Fantasma | Fica invisível e teleporta para as suas costas |
+| Venenoso / Gélido / Incendiário | Golpes envenenam, congelam ou incendeiam |
+| Antimagia | Magias causam 70% menos dano nele |
+| Regenerante | Recupera vida sem parar |
+| Enfurecido | Com pouca vida fica muito mais forte |
+
+- **O mundo envelhece:** a cada semana do servidor, os monstros ficam +5% mais fortes (até +50%) e os Elites, mais comuns. Ajustável no config.
+- **Ninhos de monstros:** às vezes surge um ninho perto de quem está explorando (fora dos territórios), e você recebe um aviso da direção. O ninho solta ondas de guardiões enquanto há alguém perto. Derrote os guardiões e quebre o núcleo para pegar o saque. Somem sozinhos depois de 2 horas.
+- **Ataques à colônia:** em algumas noites, com alguém da colônia por perto, os moradores tocam o sino e **1 minuto depois uma horda ataca**. Ela é mais forte conforme o nível da colônia (no nível 5 vem até um Ravager), sempre com um capitão Elite. Os soldados ajudam. Vencer põe saque no depósito e deixa todos felizes; se a horda durar até o amanhecer, ela recua e a colônia fica triste.
+- **Chefe Mundial:** 2 vezes por semana (com pelo menos 2 jogadores online), um dos chefes do Altar aparece **muito mais forte** num lugar do mundo. O servidor é avisado com as coordenadas e 10 minutos de antecedência, e ele espera até alguém chegar. O saque inclui Essência Primordial, gemas Lapidadas e 50% de chance de Tomo Proibido, para todos que lutaram.
+- **Bestiário** (`/bestiario`): conta os monstros que você derrotou. Nos marcos de 10, 50, 200, 500 e 1000 abates você causa +3% de dano e recebe -2% de dano daquele tipo, por marco (Elites contam 5).
+
+## Mundo vivo
+
+**Estações do ano** (`/calendario`): cada estação dura **uma semana real** e o ano recomeça a cada 4 semanas.
+
+| Estação | O que muda |
+|---|---|
+| ✿ Primavera | Plantações crescem 40% mais rápido; Koi Celeste e Truta mais comuns; Elites Regenerantes |
+| ☀ Verão | Ondas de calor e tempestades; Baiacu-Rei e Carpa Dourada; Elites Incendiários |
+| ☘ Outono | Colheitas um pouco mais rápidas, ventanias e neblina; Salmão-Rei e Peixe-Fantasma; Elites Fantasmas |
+| ❄ Inverno | Neve caindo, **neve no chão e água congelando** perto dos jogadores (tudo some sozinho na primavera e nunca dentro dos territórios); plantações ao ar livre quase param, mas **estufas** (com teto) crescem normal; Peixe-Gelo; Elites Gélidos |
+
+**Festivais:** no 4º dia de cada estação (Festa das Flores, Festival do Sol, Festa da Colheita, Festival do Gelo) há +25% de XP nos atributos do tema, e cada jogador ganha uma **lembrança**, um enfeite de cabeça para o guarda-roupa.
+
+**Clima:** de vez em quando acontece um evento de 4 minutos, sorteado pela estação:
+- **Nevasca:** lentidão ao ar livre.
+- **Neblina:** não dá para ver longe.
+- **Ventania:** desvia flechas e projéteis.
+- **Tempestade elétrica:** raios caem em quem está **com metal na mão** ao ar livre.
+- **Onda de calor:** cansa e dá fome mais rápido.
+
+**Lua e céu:**
+- **Lua cheia:** monstros +20% de dano e **lobisomens**.
+- **Lua nova:** magias +15% e **vampiros**.
+- **Lua de Sangue** (às vezes, na lua cheia): monstros mais fortes e rápidos, 3× mais Elites e o dobro de XP.
+- **Chuva de meteoros:** meteoritos caem pelo mundo; quebre para pegar minério, diamante e Fragmentos.
+- **Eclipse** (raro, ao meio-dia): fica escuro por 2,5 minutos; magias +30% e mais Elites.
+- **Aurora** (noites de inverno): mana extra para quem está ao ar livre.
+
+**Temperatura** (leve, dá para desligar no config):
+- **Frio:** na nevasca, em biomas gelados à noite e nas noites de inverno, ao ar livre. Dá lentidão. Protegem 2 peças de couro, uma fogueira ou fornalha perto, ou resistência ao fogo.
+- **Calor:** no deserto, savana e terras áridas de dia no verão, e no Nether. Dá fome mais rápido. Protegem resistência ao fogo ou estar na água.
+
+**Maldições** (`/maldicao`): a mordida de um lobisomem ou vampiro pode passar a maldição. Quem não quiser cura com o **Elixir da Purificação** (Bancada Alquímica).
+- 🐺 **Licantropia:** na lua cheia (ou à noite com `/maldicao transformar`) vira lobisomem, com força II, velocidade II, pulo, regeneração e visão noturna. Transformado fica **sem armadura e sem magias**, e armas de ouro causam +50% de dano nele.
+- 🦇 **Vampirismo:** rouba 15% do dano corpo a corpo como vida e, à noite, tem visão noturna e velocidade. O **sol queima** se estiver ao ar livre sem capacete.
+
+## Portais, Soberano das Sombras e Torre Infinita
+
+**Portais** (`/portais`): de vez em quando (a cada 30 min, 60% de chance, até 3 ao mesmo tempo) um portal se abre **perto de alguém que está explorando**, fora dos territórios. O servidor é avisado com as coordenadas. Cada portal tem uma dificuldade (Fácil, Normal, Difícil ou Pesadelo, este bem raro) e uma placa flutuante com o tempo que falta.
+- **Entrar:** ande para dentro do anel. Na primeira vez ele "desperta" e forma uma masmorra; entre de novo em alguns segundos. **Qualquer um pode entrar** (precisa do nível total da dificuldade). Morrer lá dentro funciona como nas masmorras (Cofre das Almas).
+- **Fechar:** vença o chefe da masmorra. O baú do chefe vem com **tesouro a mais**, todos ganham XP de Combate e o portal some do mundo.
+- **Transbordar:** se ninguém fechar a tempo (Fácil 3h, Normal 2h30, Difícil 2h, Pesadelo 1h30), o portal **transborda**: quem estava dentro é jogado para fora e saem **ondas de monstros** (mais uma por dificuldade) e depois **um chefe**. Os monstros caçam quem estiver perto e marcham para a **colônia mais próxima** (até 160 blocos), que fica com medo. Vencer o chefe contém o transbordo e deixa um baú; se ninguém conseguir em 30 minutos, o portal se esgota e a região fica em ruínas.
+
+**☾ Soberano das Sombras** (classe lendária, só um no servidor): alguns Portais Pesadelo trazem o **Eco do Soberano** (só enquanto a classe estiver livre). Quem fechar esse portal e tiver **uma classe avançada dominada** desperta a classe (primeiro quem matou o chefe, depois o dono, depois os outros que estavam lá dentro). Se o portal transbordar, o Eco se perde.
+- **Passivo:** +3 ❤, +60 de mana, +15% de dano corpo a corpo.
+- **Levante-se** (agache + F): os inimigos que você (ou suas sombras) derrotou nos últimos 30 segundos, perto de você, **se levantam como sombras** e entram no seu exército para sempre. Chefes viram **Marechais**, muito mais fortes; Elites viram sombras de Elite.
+- **Exército das Sombras:** chama as sombras guardadas; se já estão lutando, ficam furiosas (Força II, Velocidade II, cura) e atacam o que você olha.
+- O exército guarda **5 + nível da classe** sombras e luta com até **2 + nível/3** ao mesmo tempo. Sombra que cai volta para a sua sombra (dá para chamar de novo). Elas seguem você, não atacam aliados nem jogadores (só em guerra entre reinos ou se alguém te atacar) e não queimam no sol. `/sombras` mostra o exército (shift + clique liberta uma).
+
+**Torre Infinita** (`/torre`): jogue **1 olho do ender** e **1 bloco de ouro** em cima de uma **obsidiana chorona** para criar um **Obelisco da Torre**. Clique nele para subir com a sua party (quem estiver a até 10 blocos).
+- Cada party sobe numa **arena só dela**. Cada andar tem ondas de monstros, +7% de vida e +3,5% de dano a cada andar; o visual muda a cada 10 andares.
+- **A cada 10 andares:** um chefe do Altar e um **baú** no centro (cada vez melhor).
+- Dá para recomeçar do andar 11, 21, 31... até onde você já chegou.
+- **Morrer na Torre não perde nada:** a subida só acaba. `/torre sair` sai a qualquer hora.
+- **Ranking** do andar mais alto: **da semana** (o campeão é anunciado quando a semana vira) e **de todos os tempos** (`/torre ranking`).
 
 ## Classes
 
@@ -419,9 +598,77 @@ Na primeira vez que liga, o plugin escolhe **14 lugares** pelo mundo (2 de cada 
 
 (Cada uma também pede o atributo da classe no nível 40 e a classe de requisito **dominada**.)
 
+A oitava classe lendária, **☾ Soberano das Sombras**, não tem Local Oculto: ela desperta num Portal Pesadelo (veja [Portais](#portais-soberano-das-sombras-e-torre-infinita)).
+
+## Pesca
+
+Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
+- **Peixes raros:** 12 espécies que só mordem em certos lugares, horários ou climas. `/peixes` abre o **Diário do Pescador**, com onde procurar cada um.
+- **Tesouros do Mar:** esmeraldas, ouro, diamantes, livros encantados, Pérolas Negras e, raramente, Mapa Rasgado ou Fragmento de Forja.
+- **Criaturas marinhas:** às vezes algo grande morde a isca e luta de volta (Afogado Faminto, Guardião das Ondas, Capitão Afogado e o gigante Senhor das Marés). Elas deixam Escamas do Abismo e Pérolas Negras.
+
+| Peixe | Onde/quando | Pesca |
+|---|---|---|
+| Carpa Dourada | Rios e lagos, longe do mar | 0 |
+| Truta Arco-Íris | Rios, de dia | 0 |
+| Peixe-Lua | Qualquer água, de noite | 5 |
+| Peixe-Pedra | Águas de caverna (abaixo da altura 45) | 10 |
+| Enguia Elétrica | Debaixo de chuva | 15 |
+| Peixe-Gelo | Biomas de neve | 20 |
+| Koi Celeste | Cerejeiras e campos de flores | 25 |
+| Baiacu-Rei | Oceanos mornos ou quentes | 30 |
+| Salmão-Rei | Rios e oceanos frios | 35 |
+| Peixe-Fantasma | Pântanos e manguezais, de noite | 45 |
+| Peixe Abissal | Oceanos profundos, de noite | 60 |
+| Peixe-Dragão | Oceano, durante tempestade (raríssimo e anunciado) | 85 |
+
+## Alquimia
+
+**Ritual:** jogue **2 garrafas de vidro** e **1 pó de blaze** em cima de um **suporte de poções**: ele vira a **Bancada Alquímica**.
+- **Clique direito:** a bancada, com 5 abas (Elixires, Componentes, Gemas, Acessórios e Engastar). **Shift + clique** cria até 8 de uma vez.
+- **Agachado + clique:** o suporte de poções normal. Poções comuns feitas nele também dão XP de Alquimia.
+- `/alquimia` mostra todas as receitas em qualquer lugar.
+
+**Componentes:** Pó Arcano, Óleo de Peixe, Tintura Vital, Sal Lunar, Mercúrio Vivo, Cristal de Mana e Solvente Alquímico são feitos na bancada (vários usam peixes raros). Pérola Negra e Escama do Abismo só vêm da pesca.
+
+**11 elixires:** Cura, Rapidez, Minerador, Mergulhador, Sorte, Pedra, Sombras, Mana, Gigante, Fênix e Titã. São mais fortes e mais longos que as poções comuns, e vários têm 2 a 4 efeitos. A qualidade (sorteada pelo nível, melhor com ingredientes ★★+) e o nível de Alquimia aumentam a duração.
+
+### Gemas
+
+Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **Lapidada** e **Perfeita** (3 de um grau + material = 1 do próximo). Elas são engastadas em **itens forjados** na aba Engastar.
+- **Engastes por raridade:** Comum 0, Raro e Épico 1, Único e Lendário 2, Mítico 3.
+- Tirar uma gema gasta 1 Solvente Alquímico e devolve a gema inteira. Reciclar o item também devolve as gemas.
+
+| Gema | Arma | Arco/besta | Armadura/escudo | Ferramenta |
+|---|---|---|---|---|
+| Rubi | Dano | Dano de flecha | Vida máxima | Vel. de mineração |
+| Safira | Crítico | Crítico | Armadura | Eficiência |
+| Esmeralda | Roubo de vida | Roubo de vida | Esquiva | Sorte |
+| Topázio | Vel. de ataque | Durabilidade | Velocidade | Durabilidade |
+| Ametista | Alcance | Dano de flecha | Resistência | Alcance de blocos |
+| Ônix | Repulsão | Durabilidade | Reflete dano | — |
+
+### Acessórios
+
+`/acessorios` (ou o botão no menu de atributos): **2 anéis, 1 amuleto, 1 cinto e 2 espaços de bolso**. Eles não ocupam a armadura e **não caem quando o jogador morre**. Não dá para usar dois acessórios iguais.
+
+| Tipo | Acessórios |
+|---|---|
+| Anéis | Vigor (+2 ❤), Força (+1 dano), Vento (+5% velocidade), Marés (respiração aquática), Brasas (resistência ao fogo), Minerador (Pressa), Fortuna (+sorte), Sábio (+5% XP em tudo) |
+| Amuletos | Mana (+40 mana, +1/s), Guardião (+2 armadura, +1 resistência), Vida (Regeneração), **Fênix** (escapa da morte a cada 10 minutos) |
+| Cintos | Atleta (pulo e queda segura), Andarilho (sobe blocos sem pular), Titã (+2 ❤ e resistência a repulsão) |
+| Bolso | **Lanterna de Bolso** (ilumina em volta, sem colocar blocos), Ímã (puxa itens do chão), Relógio (agachado: hora, coordenadas e bioma) |
+
+## Guarda-roupa
+
+`/guardaroupa` (ou Cosméticos → Guarda-roupa): escolha uma peça de armadura do inventário para ser a **aparência** de cada parte do corpo. Você continua com a proteção da armadura de verdade, só o visual muda, e todos veem igual (sem mod).
+- Na **cabeça** vale qualquer item (bloco, flor, cabeça...).
+- Dá para **esconder** uma peça (ela fica invisível).
+- A aparência só aparece por cima de uma peça vestida. Ao tirar a peça, ela volta ao normal sozinha.
+
 ## Títulos
 
-`/titulos`: 46 títulos com requisitos, por exemplo Minerador, Nadador, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 51 títulos com requisitos, por exemplo Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -449,6 +696,18 @@ Na primeira vez que liga, o plugin escolhe **14 lugares** pelo mundo (2 de cada 
 | `/classe` | todos | Árvore de classes, caminho, tarefas e habilidades |
 | `/lendas` | todos | Livro das Lendas: enigmas, donos e Forja Lendária |
 | `/locais` | todos | Os Locais Ocultos que você já achou |
+| `/peixes` | todos | Diário do Pescador (peixes raros, onde e quando aparecem) |
+| `/alquimia` | todos | Livro de Alquimia (elixires, componentes, gemas e acessórios) |
+| `/acessorios` | todos | Seus espaços de acessório |
+| `/guardaroupa` | todos | Guarda-roupa (aparência da armadura) |
+| `/colonia` | todos | Sua colônia: moradores, profissões, depósito e melhorias |
+| `/reino` | todos | Seu reino: menu, convites, cargos, tesouro, guerra e paz |
+| `/bestiario` | todos | Monstros derrotados, marcos e a idade do mundo |
+| `/calendario` | todos | Estação, dia, fase da lua, clima e eventos do céu |
+| `/maldicao [transformar]` | todos | Sua maldição; o lobisomem se transforma à noite |
+| `/portais` | todos | Portais abertos: onde estão e quanto falta para transbordarem |
+| `/sombras` | Soberano | O exército das sombras |
+| `/torre [ranking\|sair]` | todos | Torre Infinita: recordes, ranking e sair da subida |
 | `/territorio` | todos | Menu do território (`mapa`, `bordas`, `info`, `reivindicar`, `liberar`, `adicionar`, `remover`, `abandonar confirmar`) |
 | `/cosmeticos`, `/chapeu`, `/tag` | todos | Item na cabeça e tag personalizada |
 | `/guia` | todos | Livro Guia do Aventureiro |
@@ -494,15 +753,46 @@ Na primeira vez que liga, o plugin escolhe **14 lugares** pelo mundo (2 de cada 
 | `/rpgadmin local <tipo>` | Constrói um Local Oculto 8 blocos a leste de você (para testar) |
 | `/rpgadmin locais` | Lista onde ficam todos os Locais Ocultos |
 | `/rpgadmin liberarclasse <classe lendária>` | Tira a classe lendária do dono atual |
+| `/rpgadmin bancadaalquimica` | Cria a Bancada Alquímica olhando para um suporte de poções |
+| `/rpgadmin peixe <peixe> [qtd]` | Dá um peixe raro |
+| `/rpgadmin componente <componente> [qtd]` | Dá componentes alquímicos |
+| `/rpgadmin gema <gema> [grau] [qtd]` | Dá gemas (grau 1 a 3) |
+| `/rpgadmin elixir <elixir> [qualidade]` | Dá um elixir pronto |
+| `/rpgadmin acessorio <acessório>` | Dá um acessório |
+| `/rpgadmin cajado [raridade]` | Dá um Cajado Arcano forjado |
+| `/rpgadmin tomo <magia>` | Dá um Tomo Proibido |
+| `/rpgadmin maestria <jogador> <elemento> <nível>` | Define a maestria de um elemento (0 a 10) |
+| `/rpgadmin prefeitura` | Cria a Prefeitura da sua colônia olhando para um sino |
+| `/rpgadmin colono [qtd]` | Moradores chegam agora na sua colônia |
+| `/rpgadmin turnocolonia` | Faz um turno de trabalho agora |
+| `/rpgadmin nivelcolonia <1-5>` | Define o nível da sua colônia |
+| `/rpgadmin guerra iniciar <reino A> <reino B>` | Começa uma guerra agora (para testar) |
+| `/rpgadmin guerra encerrar` | Encerra as guerras em andamento |
+| `/rpgadmin elite [1-3]` | O monstro que você olha vira Elite |
+| `/rpgadmin ninho [tipo]` | Cria um ninho à sua frente |
+| `/rpgadmin horda` | Sua colônia é atacada em 1 minuto |
+| `/rpgadmin chefemundial` | O Chefe Mundial aparece em 30 segundos |
+| `/rpgadmin idademundo <semanas>` | Muda a idade do mundo |
+| `/rpgadmin estacao <estação>` | Muda a estação |
+| `/rpgadmin festival` | Hoje vira dia de festival |
+| `/rpgadmin clima <evento>` | Começa um evento de clima |
+| `/rpgadmin ceu <luadesangue|meteoros|eclipse|aurora>` | Começa um evento do céu |
+| `/rpgadmin maldicao <jogador> <tipo|nenhuma>` | Dá ou tira uma maldição |
+| `/rpgadmin portal <dificuldade> [eco]` | Abre um portal 4 blocos à sua frente (`eco` = com o Eco do Soberano) |
+| `/rpgadmin portalsortear` | Sorteia um portal perto de alguém agora |
+| `/rpgadmin portaltransbordar` | O portal mais perto transborda agora |
+| `/rpgadmin portalfechar` | Apaga o portal mais perto (sem prêmio) |
+| `/rpgadmin obelisco` | Cria o Obelisco da Torre olhando para uma obsidiana chorona |
+| `/rpgadmin torre <andar>` | Sobe a Torre sozinho a partir de um andar |
 | `/rpgadmin reload` | Recarrega o config |
 
-Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outros`, `rpg.chapeu`, `rpg.tag`, `rpg.tag.cores`, `rpg.forja`, `rpg.arcano`, `rpg.guia`, `rpg.titulos`, `rpg.missoes`, `rpg.receitas`, `rpg.party`, `rpg.territorio`, `rpg.pets`, `rpg.masmorra`, `rpg.classe`, `rpg.lendas`, `rpg.locais`. A permissão `rpg.admin` é só para OP.
+Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outros`, `rpg.chapeu`, `rpg.tag`, `rpg.tag.cores`, `rpg.forja`, `rpg.arcano`, `rpg.guia`, `rpg.titulos`, `rpg.missoes`, `rpg.receitas`, `rpg.party`, `rpg.territorio`, `rpg.pets`, `rpg.masmorra`, `rpg.classe`, `rpg.lendas`, `rpg.locais`, `rpg.pesca`, `rpg.alquimia`, `rpg.colonia`, `rpg.reino`, `rpg.bestiario`, `rpg.calendario`, `rpg.portais`, `rpg.torre`. A permissão `rpg.admin` é só para OP.
 
 ## Como gerar o .jar
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.7.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.14.1.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 
@@ -514,8 +804,14 @@ Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 ## Bom saber
 
 - **Atualizando de uma versão antiga:** o `config.yml` antigo é guardado como `config-antigo-v1.yml` e um novo (nível 100, valores rebalanceados) é criado sozinho. Os níveis que os jogadores já têm continuam iguais.
-- **Atualizando de versões anteriores:** as opções novas (`natacao`, `agricultura`, `culinaria`, `doma`, `classes`, `viagem`, `locais-ocultos`, `masmorra`, `party`, `territorio`) são acrescentadas sozinhas ao seu `config.yml`, sem mudar o que você já configurou.
+- **Atualizando de versões anteriores:** as opções novas (`natacao`, `agricultura`, `culinaria`, `pesca`, `alquimia`, `reino`, `guerra`, `perigo`, `mundo-vivo`, `doma`, `classes`, `viagem`, `locais-ocultos`, `masmorra`, `party`, `territorio`) são acrescentadas sozinhas ao seu `config.yml`, sem mudar o que você já configurou.
 - Parties, territórios e companheiros ficam salvos em `parties.yml`, `territorios.yml` e `companheiros.yml`, na pasta do plugin (os dados de cada companheiro também ficam na própria criatura).
+- **Nível total com 13 atributos:** requisitos medidos em fração do nível total máximo (dificuldades de masmorra, título Veterano, classes básicas) passam a pedir um pouco mais, porque agora há 13 atributos para somar.
+- Acessórios e o guarda-roupa ficam salvos no próprio jogador. Ao desligar o plugin, as armaduras voltam à aparência normal.
+- Os reinos e as guerras marcadas ficam em `reinos.yml`.
+- A idade do mundo e o próximo Chefe Mundial ficam em `mundo.yml`. Ninhos e hordas somem ao desligar o servidor.
+- As estações e a neve do inverno ficam em `estacoes.yml`. A estação conta a partir da data em que o plugin foi instalado.
+- As colônias ficam em `colonias.yml` (os moradores são aldeões salvos no próprio mundo).
 - Lendas, classes lendárias, Pedras de Viagem e Locais Ocultos ficam em `lendas.yml`, `classes_lendarias.yml`, `pedras.yml` e `locais.yml`. Para sortear novos Locais Ocultos, apague o `locais.yml` (os já construídos continuam no mundo como ruínas).
 - O mundo `rpg_masmorras` é **apagado e recriado vazio** sempre que o servidor liga (as masmorras são temporárias). Não construa nada nele. O Cofre das Almas fica em `cofre.yml` e não se perde.
 - Se você já usa outro plugin de proteção (WorldGuard, GriefPrevention...), os dois funcionam juntos: basta um deles bloquear para a ação ser bloqueada.

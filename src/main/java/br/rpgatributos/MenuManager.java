@@ -61,12 +61,13 @@ public final class MenuManager implements Listener {
      * Na ordem de Skill.values(). Linha de cima: Mineração, Madeira, Corrida, Pulo, Natação,
      * Combate, Agricultura. Embaixo, em destaque: Ferraria, Arcano, Culinária e Doma.
      */
-    private static final int[] P_SKILLS = {19, 20, 21, 22, 24, 28, 30, 23, 25, 32, 34};
+    private static final int[] P_SKILLS = {19, 20, 21, 22, 24, 28, 30, 23, 25, 32, 34, 29, 33};
     private static final int P_PARTY = 46;
     private static final int P_CLASSE = 47;
     private static final int P_COSMETICOS = 48;
     private static final int P_FORJA = 49;
     private static final int P_FECHAR = 50;
+    private static final int P_ACESSORIOS = 51;
     private static final int P_TERRITORIO = 52;
 
     // ----- posições no guia da forja (6 linhas) -----
@@ -82,6 +83,7 @@ public final class MenuManager implements Listener {
     private static final int C_CHAPEU_ATUAL = 11;
     private static final int C_TAG_ATUAL = 15;
     private static final int C_TAG_REMOVER = 16;
+    private static final int C_GUARDA_ROUPA = 13;
     private static final int C_VOLTAR = 31;
 
     private static final long TEMPO_PARA_DIGITAR_MS = 60_000;
@@ -160,6 +162,12 @@ public final class MenuManager implements Listener {
                     Component.text("⚑ Território", TextColor.color(0x4CAF50), TextDecoration.BOLD),
                     List.of(Component.text(terr == null ? "Proteja sua base com um" : terr.chunks().size() + " chunks protegidos.", NamedTextColor.GRAY),
                             Component.text(terr == null ? "Marco do Território." : "Mapa, membros e regras.", NamedTextColor.GRAY),
+                            Component.empty(),
+                            Component.text("» Clique para abrir", NamedTextColor.YELLOW))));
+            inv.setItem(P_ACESSORIOS, item(Material.GOLD_NUGGET,
+                    Component.text("❖ Acessórios", TextColor.color(0xE8C15A), TextDecoration.BOLD),
+                    List.of(Component.text("Anéis, amuletos, cintos e", NamedTextColor.GRAY),
+                            Component.text("itens de bolso (lanterna, ímã...).", NamedTextColor.GRAY),
                             Component.empty(),
                             Component.text("» Clique para abrir", NamedTextColor.YELLOW))));
             inv.setItem(P_FORJA, item(Material.SMITHING_TABLE,
@@ -314,6 +322,14 @@ public final class MenuManager implements Listener {
             inv.setItem(C_CHAPEU_ATUAL, mostra);
         }
 
+        // --- guarda-roupa ---
+        inv.setItem(C_GUARDA_ROUPA, item(Material.ARMOR_STAND,
+                Component.text("✦ Guarda-roupa", TextColor.color(0xFF8FD7), TextDecoration.BOLD),
+                List.of(Component.text("Mude a aparência da armadura", NamedTextColor.GRAY),
+                        Component.text("sem tirar a armadura de verdade.", NamedTextColor.GRAY),
+                        Component.empty(),
+                        Component.text("» Clique para abrir", NamedTextColor.YELLOW))));
+
         // --- tag ---
         String tag = plugin.tags().getTag(p);
         Component tagAtual = tag == null
@@ -372,6 +388,15 @@ public final class MenuManager implements Listener {
             } else if (proprio && slot == P_SKILLS[Skill.DOMA.ordinal()]) {
                 clique(p);
                 plugin.menusDomador().abrirLista(p);
+            } else if (proprio && slot == P_SKILLS[Skill.PESCA.ordinal()]) {
+                clique(p);
+                plugin.pesca().abrirDiario(p);
+            } else if (proprio && slot == P_SKILLS[Skill.ALQUIMIA.ordinal()]) {
+                clique(p);
+                plugin.alquimia().abrirLivro(p);
+            } else if (proprio && slot == P_ACESSORIOS) {
+                clique(p);
+                plugin.acessorios().abrir(p);
             } else if (proprio && slot == P_CLASSE) {
                 clique(p);
                 plugin.santuarios().abrirArvore(p, null);
@@ -422,6 +447,10 @@ public final class MenuManager implements Listener {
                 p.sendMessage(Component.text("  Use & para cores (ex: &6Rei &fdo Minério). Digite ", NamedTextColor.GRAY)
                         .append(Component.text("cancelar", NamedTextColor.RED))
                         .append(Component.text(" para desistir.", NamedTextColor.GRAY)));
+            }
+            case C_GUARDA_ROUPA -> {
+                clique(p);
+                plugin.guardaRoupa().abrir(p);
             }
             case C_TAG_REMOVER -> {
                 if (plugin.tags().getTag(p) != null) {

@@ -226,6 +226,12 @@ public final class Classes implements Listener {
         return nivel(p, c) >= NIVEL_MAXIMO;
     }
 
+    /** Dominou alguma classe avançada? (o Soberano das Sombras pede isso) */
+    public boolean dominouAvancada(Player p) {
+        for (Classe c : perfil(p).xp.keySet()) if (c.tier() == Classe.Tier.AVANCADA && dominou(p, c)) return true;
+        return false;
+    }
+
     public int dominadas(Player p) {
         int n = 0;
         for (Classe c : perfil(p).xp.keySet()) if (dominou(p, c)) n++;
@@ -300,6 +306,7 @@ public final class Classes implements Listener {
         int atr = atributoNecessario(c);
         if (plugin.stats().getNivel(p, c.atributo()) < atr) l.add(c.atributo().nome() + " nível " + atr);
         for (Classe r : c.requisitos()) if (!dominou(p, r)) l.add(r.nome() + " dominada");
+        if (c == Classe.SOBERANO_DAS_SOMBRAS && !dominouAvancada(p)) l.add("uma classe avançada dominada");
         return l;
     }
 
@@ -324,7 +331,8 @@ public final class Classes implements Listener {
     /** Começa a seguir o caminho dessa classe: as tarefas contam a partir de agora. */
     public String aceitarCaminho(Player p, Classe c) {
         PerfilClasse pf = perfil(p);
-        if (c.tier() == Classe.Tier.LENDARIA) return "Classes lendárias só vêm do selo do Local Oculto delas.";
+        if (c.tier() == Classe.Tier.LENDARIA) return c == Classe.SOBERANO_DAS_SOMBRAS ? "O Soberano das Sombras desperta do outro lado de um Portal Pesadelo."
+                : "Classes lendárias só vêm do selo do Local Oculto delas.";
         if (pf.aprendeu(c)) return "Você já aprendeu essa classe.";
         List<String> falta = faltando(p, c);
         if (!falta.isEmpty()) return "Ainda falta: " + String.join(", ", falta) + ".";

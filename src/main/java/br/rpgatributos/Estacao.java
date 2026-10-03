@@ -222,7 +222,7 @@ public abstract class Estacao implements Listener {
                 continue;
             }
             Block b = blocoDoRitual(item);
-            if (b != null && !eh(b)) {
+            if (b != null && !plugin.ehEstacao(b)) { // um bloco nunca vira duas estações
                 // Não deixa o item voltar para o inventário de quem está do lado antes do ritual completar.
                 if (item.getPickupDelay() < 40) item.setPickupDelay(40);
                 porBloco.computeIfAbsent(b, k -> new ArrayList<>()).add(item);

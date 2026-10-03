@@ -99,7 +99,8 @@ public final class StatsManager {
         int antes = getNivel(p, s);
         if (antes >= cfg().nivelMaximo) return;
 
-        double ganho = quantidade * cfg().multiplicadorXp * plugin.titulos().multiplicadorXp(p, s);
+        double ganho = quantidade * cfg().multiplicadorXp * plugin.titulos().multiplicadorXp(p, s) * plugin.acessorios().multiplicadorXp(p)
+                * plugin.estacoes().multiplicadorXp(s);
         setXp(p, s, getXp(p, s) + ganho);
         int depois = getNivel(p, s);
 

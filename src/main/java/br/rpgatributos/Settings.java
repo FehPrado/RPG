@@ -27,6 +27,32 @@ public final class Settings {
     public final double agrChanceDupla, agrToqueVerde, agrChanceGigante, agrChanceMutacao;
     public final double culDuracaoExtra;
 
+    // pesca e alquimia
+    public final double pesXpPeixe, pesXpTesouro, pesXpLixo, pesIscaRapida, pesChanceDupla;
+    public final double pesChanceRaroBase, pesChanceRaroMax, pesChanceTesouroBase, pesChanceTesouroMax;
+    public final double pesChanceCriaturaBase, pesChanceCriaturaMax;
+    public final double alqDuracaoExtra, alqChanceExtra, alqXpPocaoComum;
+
+    // reinos e guerra
+    public final int reiCustoFundar, reiNivelColonia, gueHora, gueDuracaoMin, gueAvisoHoras, gueCapturaSeg, gueChunksPorCaptura, gueTreguaDias;
+    public final java.time.DayOfWeek gueDia;
+
+    // mundo perigoso
+    public final double perEliteChance, perEliteChanceSemana, perAumentoSemana, perAumentoMax, perNinhoChance, perHordaChance;
+    public final int perNinhoMax, perChefePorSemana, perChefeMinJogadores;
+
+    // mundo vivo
+    public final boolean temperaturaAtiva, invernoMudaBlocos;
+    public final int invernoNeveMax;
+    public final double cliChanceEvento, ceuChanceSangue, ceuChanceMeteoros, ceuChanceEclipse, ceuChanceAurora, malChanceMordida;
+    public final double gueTesouroVencedor;
+
+    // portais, sombras e torre (Fase C)
+    public final int porIntervaloMin, porMaximo, porDistMin, porDistMax;
+    public final double porChance, porHorasTransbordar, porChanceEco;
+    public final int[] porPesos;
+    public final double torVidaPorAndar, torDanoPorAndar;
+
     // doma (companheiros)
     public final double domaXpDomar, domaXpCruzar, domaXpVincular, domaXpComponente, domaXpPorBloco, domaXpAbate;
     public final double domaVida, domaDano, domaVelocidade;
@@ -135,6 +161,68 @@ public final class Settings {
         agrChanceMutacao = c.getDouble("agricultura.chance-mutacao", 0.03);
 
         culDuracaoExtra = c.getDouble("culinaria.duracao-extra-maxima", 0.5) / n;
+
+        pesXpPeixe = c.getDouble("pesca.xp-peixe", 8);
+        pesXpTesouro = c.getDouble("pesca.xp-tesouro", 25);
+        pesXpLixo = c.getDouble("pesca.xp-lixo", 3);
+        pesIscaRapida = Math.min(0.9, c.getDouble("pesca.isca-mais-rapida-maxima", 0.5)) / n;
+        pesChanceDupla = c.getDouble("pesca.chance-dupla-maxima", 0.3) / n;
+        pesChanceRaroBase = c.getDouble("pesca.chance-peixe-raro-inicial", 0.03);
+        pesChanceRaroMax = c.getDouble("pesca.chance-peixe-raro-maxima", 0.15);
+        pesChanceTesouroBase = c.getDouble("pesca.chance-tesouro-inicial", 0.01);
+        pesChanceTesouroMax = c.getDouble("pesca.chance-tesouro-maxima", 0.06);
+        pesChanceCriaturaBase = c.getDouble("pesca.chance-criatura-inicial", 0.01);
+        pesChanceCriaturaMax = c.getDouble("pesca.chance-criatura-maxima", 0.05);
+
+        alqDuracaoExtra = c.getDouble("alquimia.duracao-extra-maxima", 0.6) / n;
+        alqChanceExtra = c.getDouble("alquimia.chance-rendimento-extra-maxima", 0.4) / n;
+        alqXpPocaoComum = c.getDouble("alquimia.xp-por-pocao-no-suporte", 3);
+
+        reiCustoFundar = Math.max(0, c.getInt("reino.esmeraldas-para-fundar", 32));
+        reiNivelColonia = Math.max(1, c.getInt("reino.nivel-minimo-da-colonia", 2));
+        java.time.DayOfWeek dia;
+        try { dia = java.time.DayOfWeek.valueOf(c.getString("guerra.dia-da-semana", "SATURDAY").toUpperCase(java.util.Locale.ROOT)); }
+        catch (IllegalArgumentException e) { dia = java.time.DayOfWeek.SATURDAY; }
+        gueDia = dia;
+        gueHora = Math.max(0, Math.min(23, c.getInt("guerra.hora", 20)));
+        gueDuracaoMin = Math.max(10, c.getInt("guerra.duracao-minutos", 60));
+        gueAvisoHoras = Math.max(0, c.getInt("guerra.aviso-minimo-horas", 24));
+        gueCapturaSeg = Math.max(10, c.getInt("guerra.segundos-para-capturar-marco", 120));
+        gueChunksPorCaptura = Math.max(0, c.getInt("guerra.chunks-por-captura", 4));
+        gueTesouroVencedor = Math.max(0, Math.min(1, c.getDouble("guerra.parte-do-tesouro-para-o-vencedor", 0.3)));
+        gueTreguaDias = Math.max(0, c.getInt("guerra.dias-de-tregua", 7));
+
+        perEliteChance = c.getDouble("perigo.chance-elite", 0.025);
+        perEliteChanceSemana = c.getDouble("perigo.chance-elite-a-mais-por-semana", 0.004);
+        perAumentoSemana = c.getDouble("perigo.forca-a-mais-por-semana", 0.05);
+        perAumentoMax = c.getDouble("perigo.forca-a-mais-maxima", 0.5);
+        perNinhoChance = c.getDouble("perigo.chance-ninho", 0.12);
+        perNinhoMax = Math.max(0, c.getInt("perigo.ninhos-no-maximo", 8));
+        perHordaChance = c.getDouble("perigo.chance-horda-por-noite", 0.2);
+        perChefePorSemana = Math.max(0, c.getInt("perigo.chefes-mundiais-por-semana", 2));
+        perChefeMinJogadores = Math.max(1, c.getInt("perigo.chefe-mundial-minimo-de-jogadores", 2));
+
+        temperaturaAtiva = c.getBoolean("mundo-vivo.temperatura", true);
+        invernoMudaBlocos = c.getBoolean("mundo-vivo.neve-e-gelo-no-inverno", true);
+        invernoNeveMax = Math.max(0, c.getInt("mundo-vivo.blocos-de-neve-no-maximo", 4000));
+        cliChanceEvento = c.getDouble("mundo-vivo.chance-evento-de-clima", 0.08);
+        ceuChanceSangue = c.getDouble("mundo-vivo.chance-lua-de-sangue", 0.2);
+        ceuChanceMeteoros = c.getDouble("mundo-vivo.chance-chuva-de-meteoros", 0.06);
+        ceuChanceEclipse = c.getDouble("mundo-vivo.chance-eclipse", 0.02);
+        ceuChanceAurora = c.getDouble("mundo-vivo.chance-aurora-no-inverno", 0.25);
+        malChanceMordida = c.getDouble("mundo-vivo.chance-mordida-amaldicoar", 0.2);
+
+        porIntervaloMin = Math.max(5, c.getInt("portais.intervalo-minutos", 30));
+        porChance = c.getDouble("portais.chance", 0.6);
+        porMaximo = Math.max(0, c.getInt("portais.no-maximo", 3));
+        porDistMin = Math.max(16, c.getInt("portais.distancia-minima", 48));
+        porDistMax = Math.max(porDistMin + 8, c.getInt("portais.distancia-maxima", 96));
+        porHorasTransbordar = Math.max(0.1, c.getDouble("portais.horas-ate-transbordar", 2.0));
+        porChanceEco = c.getDouble("portais.chance-eco-do-soberano", 0.35);
+        porPesos = new int[]{Math.max(0, c.getInt("portais.peso-facil", 45)), Math.max(0, c.getInt("portais.peso-normal", 33)),
+                Math.max(0, c.getInt("portais.peso-dificil", 17)), Math.max(0, c.getInt("portais.peso-pesadelo", 5))};
+        torVidaPorAndar = Math.max(0, c.getDouble("torre.vida-por-andar", 0.07));
+        torDanoPorAndar = Math.max(0, c.getDouble("torre.dano-por-andar", 0.035));
 
         domaXpDomar = c.getDouble("doma.xp-domar", 25);
         domaXpCruzar = c.getDouble("doma.xp-cruzar", 2);

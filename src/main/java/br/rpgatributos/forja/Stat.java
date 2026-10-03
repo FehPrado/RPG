@@ -77,9 +77,17 @@ public enum Stat {
     MINERACAO_AQUATICA("Mineração na água", "≋", Attribute.SUBMERGED_MINING_SPEED, Operation.ADD_SCALAR, 0.1, 0.3, false, true,
             de(CAPACETE)),
 
+    // ---------- cajado ----------
+    POTENCIA_MAGICA("Potência das magias", "✦", null, null, 0.05, 0.12, false, true,
+            de(CAJADO)),
+    ECONOMIA_MANA("Mana economizada", "◇", null, null, 0.04, 0.08, false, true,
+            de(CAJADO)),
+    RECARGA_MAGICA("Recarga das magias menor", "⌛", null, null, 0.04, 0.09, false, true,
+            de(CAJADO)),
+
     // ---------- todos ----------
     INQUEBRAVEL("Chance de não gastar durabilidade", "♦", null, null, 0.05, 0.12, false, true,
-            todas());
+            comDurabilidade());
 
     private final String nome;
     private final String icone;

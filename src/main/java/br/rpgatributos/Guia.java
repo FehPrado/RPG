@@ -39,6 +39,11 @@ public final class Guia implements Listener {
     private static final TextColor LENDA = TextColor.color(0xC2185B);
     private static final TextColor VIAGEM = TextColor.color(0x5E35B1);
     private static final TextColor OCULTO = TextColor.color(0x4E342E);
+    private static final TextColor PESCA = TextColor.color(0x1565C0);
+    private static final TextColor ALQUIMIA = TextColor.color(0x00796B);
+    private static final TextColor VISUAL = TextColor.color(0xAD1457);
+    private static final TextColor PORTAL = TextColor.color(0x0277BD);
+    private static final TextColor SOMBRA = TextColor.color(0x4527A0);
     private static final TextColor TEXTO = NamedTextColor.BLACK;
     private static final TextColor DESTAQUE = NamedTextColor.DARK_BLUE;
 
@@ -98,12 +103,12 @@ public final class Guia implements Listener {
         return List.of(
                 // 1
                 Component.text("   Guia do\n  Aventureiro\n", TITULO, TextDecoration.BOLD)
-                        .append(t("2  Atributos\n3  Forja\n7  Infusor/Magias\n13 Altar\n16 Fazenda/Cozinha\n"
-                                + "21 Reciclagem\n22 Party/Território\n25 Domador\n27 Masmorras\n29 Classes/Lendas\n32 Viagem/Ocultos\n34 Conquistas")),
+                        .append(t("3  Forja\n7  Infusor/Magias\n17 Altar\n20 Fazenda/Cozinha\n"
+                                + "26 Party/Reinos\n33 Domador\n35 Masmorras/Perigo\n39 Estações/Lua\n41 Portais/Torre\n45 Classes/Viagem\n50 Pesca/Alquimia\n57 Conquistas")),
                 // 2
                 titulo("Atributos", TITULO)
                         .append(t("Sobem fazendo as coisas (até o nível " + nivelMaximo + "):\n\n"))
-                        .append(t("⛏ minerar ♣ cortar\n» correr ⬆ pular\n⚔ lutar ⚒ forjar\n✦ magia ≈ nadar\n☘ colher ♨ cozinhar\n♞ domar\n"))
+                        .append(t("⛏ minerar ♣ cortar\n» correr ⬆ pular\n⚔ lutar ⚒ forjar\n✦ magia ≈ nadar\n☘ colher ♨ cozinhar\n♞ domar ⚓ pescar\n⚗ alquimia\n"))
                         .append(t("Veja: ")).append(d("/atributos")),
                 // 3
                 titulo("Forja: criar", FORJA)
@@ -174,19 +179,44 @@ public final class Guia implements Listener {
                         .append(t("O grimório dá uma dica de cada uma. Experimente!\n\n"))
                         .append(t("Quem descobre, o servidor inteiro fica sabendo.")),
                 // 13
+                titulo("Formas novas", ARCANO)
+                        .append(d("Raio")).append(t(": segure o clique.\n"))
+                        .append(d("Sopro")).append(t(": cone.\n"))
+                        .append(d("Chuva")).append(t(": cai do céu.\n"))
+                        .append(d("Invocação")).append(t(": um elemental luta por você.\n"))
+                        .append(d("Encantar arma")).append(t(": golpes com o elemento.")),
+                // 14
+                titulo("Modificadores", ARCANO)
+                        .append(t("Até 2 por magia:\n"))
+                        .append(d("Dividir, Teleguiado, Ricochete, Ampliar, Mina, Eco, Canalizar"))
+                        .append(t(" (segure para carregar), "))
+                        .append(d("Persistente, Rápida, Potente"))
+                        .append(t(".")),
+                // 15
+                titulo("Reações", ARCANO)
+                        .append(t("Um elemento marca o alvo; outro causa uma reação:\n"))
+                        .append(d("Água+Energia")).append(t(" choque\n"))
+                        .append(d("Água+Gelo")).append(t(" congela\n"))
+                        .append(d("Fogo+Gelo")).append(t(" derrete\n"))
+                        .append(t("...e mais 7. Combine com a party!")),
+                // 16
+                titulo("Maestria e cajado", ARCANO)
+                        .append(t("Usar um elemento sobe a maestria dele (nível 5: variante).\n\n"))
+                        .append(d("Cajado Arcano")).append(t(": 1 ametista + 2 varas de blaze na Forja. Lança magias e leva gemas.")),
+                // 17
                 titulo("Altar: criar", ALTAR)
                         .append(t("1. Coloque uma "))
                         .append(d("obsidiana chorosa"))
                         .append(t(".\n2. Jogue em cima (tecla Q):\n"))
                         .append(d(" • 1 olho do ender\n • 4 velas\n\n"))
                         .append(t("Clique nele para ver o que ele invoca.")),
-                // 14
+                // 18
                 titulo("Altar: invocar", ALTAR)
                         .append(t("Jogue a oferenda em cima do altar ou use o menu dele.\n\n"))
                         .append(d("Chefes, Lua de Sangue, Meteoros, Ondas de Monstros, Mercador Arcano"))
                         .append(t(" e "))
                         .append(d("Caçador de Recompensas")).append(t(".")),
-                // 15
+                // 19
                 titulo("Chefes", ALTAR)
                         .append(t("Golem, Rainha Aracnídea, Senhor das Chamas, Lich, Tempestade Viva e Arauto do Fim.\n\n"))
                         .append(t("Deixam "))
@@ -194,27 +224,27 @@ public final class Guia implements Listener {
                         .append(t(", Pedras de Proteção e "))
                         .append(d("núcleos"))
                         .append(t(": infunda para um poder lendário!")),
-                // 16
+                // 20
                 titulo("Plantações", FAZENDA)
                         .append(t("Colher plantação madura dá XP de Agricultura.\n\n"))
                         .append(t("Nível alto: colheita em dobro, qualidade "))
                         .append(d("★ a ★★★"))
                         .append(t(", plantas crescendo perto de você e às vezes uma colheita "))
                         .append(d("GIGANTE")).append(t("!")),
-                // 17
+                // 21
                 titulo("Adubo", FAZENDA)
                         .append(d("Adubo Rico"))
                         .append(t(": 3 farinhas de osso + carne podre + terra. Clique na plantação: colheita melhor.\n\n"))
                         .append(d("Espantalho"))
                         .append(t(": suporte com abóbora na cabeça. Ninguém pisoteia perto.")),
-                // 18
+                // 22
                 titulo("Sementes raras", FAZENDA)
                         .append(t("Plantas diferentes maduras lado a lado:\n"))
                         .append(d("Trigo+Cenoura\n")).append(t("→ Trigo Dourado\n"))
                         .append(d("Cenoura+Batata\n")).append(t("→Cenoura Cristalina\n"))
                         .append(d("Batata+Beterraba\n")).append(t("→ Batata Ancestral\n"))
                         .append(d("Beterraba+Trigo\n")).append(t("→ Beterraba Rubi")),
-                // 19
+                // 23
                 titulo("Cozinha: criar", COZINHA)
                         .append(t("1. Coloque um "))
                         .append(d("defumador"))
@@ -222,40 +252,66 @@ public final class Guia implements Listener {
                         .append(d(" • 1 caldeirão\n • 1 balde de água\n\n"))
                         .append(d("Clique")).append(t(": receitas\n"))
                         .append(d("Agachado")).append(t(": defumador")),
-                // 20
+                // 24
                 titulo("Pratos", COZINHA)
                         .append(t("Comer um prato dá buffs. Culinária alta libera receitas e buffs mais longos.\n\n"))
                         .append(t("Ingredientes "))
                         .append(d("★★"))
                         .append(t(" melhoram o prato. Sementes raras entram nos melhores!\n\n"))
                         .append(d("/receitas")),
-                // 21
+                // 25
                 titulo("Reciclagem", FORJA)
                         .append(t("1. Coloque um "))
                         .append(d("rebolo"))
                         .append(t(".\n2. Jogue em cima:\n"))
                         .append(d(" • 1 funil\n • 1 tesoura\n\n"))
                         .append(t("Desmonta itens e devolve parte do material. Encantos podem virar livro!")),
-                // 22
+                // 26
                 titulo("Party", PARTY)
                         .append(t("Jogue em grupo:\n"))
                         .append(d("/party convidar <nick>\n"))
                         .append(t("• sem fogo amigo\n• XP de Combate dividido com quem está perto\n• chat: "))
                         .append(d("/pc\n"))
                         .append(t("• aviso de vida baixa")),
-                // 23
+                // 27
                 titulo("Território", TERRITORIO)
                         .append(t("1. Coloque uma "))
                         .append(d("magnetita"))
                         .append(t(".\n2. Jogue em cima:\n"))
                         .append(d(" • 1 estandarte\n • 4 esmeraldas\n\n"))
                         .append(t("Vira o Marco: protege 3x3 chunks. Nível alto = mais chunks.")),
-                // 24
+                // 28
                 titulo("Proteção", TERRITORIO)
                         .append(t("Só você e seus membros constroem, abrem baús e mexem em animais.\n\n"))
                         .append(d("/territorio"))
                         .append(t(": mapa, membros e regras (PvP, portas, baús, explosões...).")),
-                // 25
+                // 29
+                titulo("Colônia", TERRITORIO)
+                        .append(t("No seu território, jogue em cima de um "))
+                        .append(d("sino"))
+                        .append(t(":\n"))
+                        .append(d(" • 1 bloco de esmeralda\n • 1 cama\n\n"))
+                        .append(t("Vira a Prefeitura. Moradores chegam se houver camas e comida.")),
+                // 30
+                titulo("Moradores", TERRITORIO)
+                        .append(t("Dê um trabalho a cada um. Precisam de posto perto: composteira, barril, Cozinha, Forja...\n"))
+                        .append(t("Produzem no "))
+                        .append(d("baú de depósito"))
+                        .append(t(".\n"))
+                        .append(d("/colonia")),
+                // 31
+                titulo("Reino", TERRITORIO)
+                        .append(t("Com colônia nível 2: "))
+                        .append(d("/reino fundar <nome>"))
+                        .append(t(".\nRei, Nobres, Cavaleiros e Cidadãos, tesouro de esmeraldas e sem fogo amigo.\n\n"))
+                        .append(t("Moradores viram "))
+                        .append(d("Soldados"))
+                        .append(t(" (Quartel = bloco de alvo).")),
+                // 32
+                titulo("Guerra", TERRITORIO)
+                        .append(d("/reino guerra <reino>"))
+                        .append(t(": marcada para o horário de guerra do servidor.\nPvP livre e captura de Marcos (fique perto sem defensores). Quem perde, perde chunks e tesouro. Nada é destruído.")),
+                // 33
                 titulo("Domador", DOMADOR)
                         .append(t("1. Coloque um "))
                         .append(d("fardo de feno"))
@@ -266,27 +322,81 @@ public final class Guia implements Listener {
                         .append(t(", ou "))
                         .append(d("invoque"))
                         .append(t(" um com os componentes dele.")),
-                // 26
+                // 34
                 titulo("Companheiros", DOMADOR)
                         .append(t("Mão vazia + clique: ordens (seguir, ficar, guardar, patrulhar). Nunca teleporta.\n"))
                         .append(t("No altar: componentes (sela, baú, asas...).\n"))
                         .append(d("Sela + élitro = voa!\n"))
                         .append(d("/pets")),
-                // 27
+                // 35
                 titulo("Masmorras", MASMORRA)
                         .append(t("1. Coloque "))
                         .append(d("tijolos de pedra entalhados"))
                         .append(t(".\n2. Jogue em cima:\n"))
                         .append(d(" • 1 olho do ender\n • 1 bússola\n\n"))
                         .append(t("Clique, escolha a dificuldade e suba no portal com a party.")),
-                // 28
+                // 36
                 titulo("Lá dentro", MASMORRA)
                         .append(t("Salas trancam e soltam ondas de monstros. Tesouros e um chefe no fim.\n\n"))
                         .append(t("Morreu? Itens no "))
                         .append(d("Cofre das Almas"))
                         .append(t(": 2 diamantes no Portal.\n"))
                         .append(d("/masmorra sair")),
-                // 29
+                // 37
+                titulo("Mundo perigoso", MASMORRA)
+                        .append(d("Elites"))
+                        .append(t(": monstros com poderes (Veloz, Vampiro, Gigante...) e loot melhor.\n"))
+                        .append(d("Ninhos"))
+                        .append(t(": derrote os guardiões e quebre o núcleo.\n"))
+                        .append(t("A cada semana o mundo fica mais forte.")),
+                // 38
+                titulo("Hordas e chefes", MASMORRA)
+                        .append(t("Em algumas noites a "))
+                        .append(d("colônia é atacada"))
+                        .append(t(": defenda!\n"))
+                        .append(d("Chefe Mundial"))
+                        .append(t(": aparece anunciado no mapa.\n"))
+                        .append(d("/bestiario"))
+                        .append(t(": +dano contra o que você caça.")),
+                // 39
+                titulo("Estações", FAZENDA)
+                        .append(t("Cada uma dura 1 semana real.\n"))
+                        .append(d("Primavera")).append(t(": plantas rápidas\n"))
+                        .append(d("Inverno")).append(t(": neve, gelo e plantas lentas fora de estufa.\n"))
+                        .append(t("Dia 4: "))
+                        .append(d("festival"))
+                        .append(t(" com XP extra e lembrança.\n"))
+                        .append(d("/calendario")),
+                // 40
+                titulo("Lua e céu", MASMORRA)
+                        .append(d("Lua cheia")).append(t(": monstros fortes e lobisomens.\n"))
+                        .append(d("Lua nova")).append(t(": magias fortes e vampiros.\n"))
+                        .append(t("Lua de Sangue, meteoros, eclipse e aurora!\nMordido? "))
+                        .append(d("/maldicao")),
+                // 41
+                titulo("Portais", PORTAL)
+                        .append(t("Portais se abrem sozinhos perto de quem explora.\n\n"))
+                        .append(d("Entre"))
+                        .append(t(": é uma masmorra aberta a todos. Vença o chefe e o portal se fecha.\n"))
+                        .append(d("/portais")),
+                // 42
+                titulo("Transbordar", PORTAL)
+                        .append(t("Ninguém fechou a tempo? O portal "))
+                        .append(d("transborda"))
+                        .append(t(": ondas de monstros e um chefe atacam a região e as colônias.\n"))
+                        .append(t("Vença o chefe para conter!")),
+                // 43
+                titulo("Soberano", SOMBRA)
+                        .append(t("Um Portal Pesadelo raro traz o "))
+                        .append(d("Eco do Soberano"))
+                        .append(t(". Quem o fechar com uma classe avançada dominada vira o Soberano das Sombras (só um!).\n"))
+                        .append(d("/sombras")),
+                // 44
+                titulo("Torre Infinita", PORTAL)
+                        .append(t("Obsidiana chorona + olho do ender + bloco de ouro (Q).\n"))
+                        .append(t("Chefe e baú a cada 10 andares. Morrer não perde itens!\n"))
+                        .append(d("/torre")),
+                // 45
                 titulo("Classes", CLASSE)
                         .append(t("Escolha um caminho no "))
                         .append(d("Santuário"))
@@ -295,7 +405,7 @@ public final class Guia implements Listener {
                         .append(t(".\nFaça as tarefas e passe na "))
                         .append(d("Prova"))
                         .append(t(".\n\nGuerreiro, Arqueiro, Mago, Ladino, Ferreiro e Domador.")),
-                // 30
+                // 46
                 titulo("Habilidades", CLASSE)
                         .append(d("Agache + F"))
                         .append(t(": usa\n"))
@@ -304,7 +414,7 @@ public final class Guia implements Listener {
                         .append(t("Classe no nível 20 = "))
                         .append(d("Dominada"))
                         .append(t(": libera as avançadas (algumas pedem duas!).")),
-                // 31
+                // 47
                 titulo("Lendas", LENDA)
                         .append(t("Itens "))
                         .append(d("Especiais"))
@@ -312,14 +422,14 @@ public final class Guia implements Listener {
                         .append(d("Páginas do Livro das Lendas"))
                         .append(t(".\n"))
                         .append(d("/lendas")),
-                // 32
+                // 48
                 titulo("Pedras de Viagem", VIAGEM)
                         .append(t("1. Coloque uma "))
                         .append(d("pedra entalhada de ardósia"))
                         .append(t(".\n2. Jogue em cima:\n"))
                         .append(d(" • 2 pérolas do ender\n • 4 ametistas\n\n"))
                         .append(t("Clique nas pedras que achar e viaje entre elas pagando XP.")),
-                // 33
+                // 49
                 titulo("Locais Ocultos", OCULTO)
                         .append(t("Ruínas escondidas. Siga "))
                         .append(d("Mapas Rasgados"))
@@ -328,16 +438,62 @@ public final class Guia implements Listener {
                         .append(t(": relíquias e uma "))
                         .append(d("classe lendária"))
                         .append(t("!")),
-                // 34
+                // 50
+                titulo("Pesca", PESCA)
+                        .append(t("Pescar dá XP. Nível alto: isca mais rápida, peixes "))
+                        .append(d("★ a ★★★"))
+                        .append(t(", em dobro, "))
+                        .append(d("Tesouros do Mar"))
+                        .append(t(" e "))
+                        .append(d("criaturas marinhas"))
+                        .append(t(" que lutam de volta!")),
+                // 51
+                titulo("Peixes raros", PESCA)
+                        .append(t("12 peixes que só mordem em certos biomas, horários ou climas (noite, chuva, tempestade...).\n\n"))
+                        .append(t("São ingredientes da Alquimia.\n"))
+                        .append(d("/peixes")).append(t(": o diário")),
+                // 52
+                titulo("Alquimia", ALQUIMIA)
+                        .append(t("1. Coloque um "))
+                        .append(d("suporte de poções"))
+                        .append(t(".\n2. Jogue em cima:\n"))
+                        .append(d(" • 2 garrafas de vidro\n • 1 pó de blaze\n\n"))
+                        .append(d("Clique")).append(t(": bancada\n"))
+                        .append(d("Agachado")).append(t(": suporte")),
+                // 53
+                titulo("Elixires", ALQUIMIA)
+                        .append(t("Poções mais fortes e longas, várias com 2 ou 3 efeitos.\n\n"))
+                        .append(d("Componentes"))
+                        .append(t(" (Pó Arcano, Sal Lunar...) são a base de tudo.\n"))
+                        .append(d("/alquimia")),
+                // 54
+                titulo("Gemas", ALQUIMIA)
+                        .append(t("Itens forjados têm "))
+                        .append(d("engastes"))
+                        .append(t(" (Raro 1, Único 2, Mítico 3). Cada gema dá um bônus diferente em armas, arcos, armaduras e ferramentas.\n"))
+                        .append(t("3 gemas = 1 melhor.")),
+                // 55
+                titulo("Acessórios", ALQUIMIA)
+                        .append(d("2 anéis, 1 amuleto,\n1 cinto e 2 bolsos"))
+                        .append(t(" que não ocupam a armadura nem caem ao morrer.\n\n"))
+                        .append(t("Lanterna de Bolso, Ímã, Amuleto da Fênix...\n"))
+                        .append(d("/acessorios")),
+                // 56
+                titulo("Guarda-roupa", VISUAL)
+                        .append(t("Mude a "))
+                        .append(d("aparência"))
+                        .append(t(" da armadura sem tirá-la, ou esconda uma peça.\n\nNa cabeça vale qualquer item!\n"))
+                        .append(d("/guardaroupa")),
+                // 57
                 titulo("Conquistas", TITULO)
                         .append(d("/titulos"))
                         .append(t(": títulos que dão bônus. Só o que está em uso conta.\n\n"))
                         .append(d("Agache + clique num aldeão"))
                         .append(t(": pedidos do dia. Cumprir dá esmeraldas e descontos.")),
-                // 35
+                // 58
                 titulo("Comandos", TITULO)
-                        .append(d("/atributos /classe\n/forja /grimorio\n/receitas /pets\n/titulos /missoes\n/party /territorio\n/masmorra /lendas\n/locais /cosmeticos\n/chapeu /tag\n/guia"))
-                        .append(t("\n\nBoa aventura!"))
+                        .append(d("/atributos /classe\n/forja /grimorio\n/receitas /pets\n/peixes /alquimia\n/colonia /reino\n/titulos /bestiario\n/party /territorio\n/masmorra /lendas\n/locais /cosmeticos\n/acessorios /tag\n/portais /torre"))
+                        .append(t("\nBoa aventura!"))
         );
     }
 }

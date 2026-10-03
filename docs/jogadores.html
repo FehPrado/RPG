@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia do Jogador</title>
+<meta name="description" content="Tudo o que existe no servidor RPGAtributos: atributos, forja, magias, classes, masmorras, portais, Torre Infinita e mais.">
+<style>
+:root{
+  --bg:#f5efe3;--surface:#fffdf8;--surface-2:#f0e7d6;--text:#2a2118;--muted:#6b5d4d;--border:#e1d4bd;
+  --accent:#9a5b13;--accent-soft:#f3e2c4;--roxo:#5e35b1;--roxo-soft:#ece5fa;--verde:#2e7d32;--vermelho:#b3261e;
+  --code:#efe4cf;--sombra:0 1px 2px rgba(60,40,10,.06),0 4px 16px rgba(60,40,10,.06);
+  --raio:14px;--fonte:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"Cascadia Code",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13111a;--surface:#1c1925;--surface-2:#252131;--text:#ece6f5;--muted:#a69db6;--border:#352f45;
+  --accent:#f2b45a;--accent-soft:#3a2d18;--roxo:#b39ddb;--roxo-soft:#2c2540;--verde:#81c784;--vermelho:#ef9a9a;
+  --code:#2a2537;--sombra:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+}}
+:root[data-theme="dark"]{
+  --bg:#13111a;--surface:#1c1925;--surface-2:#252131;--text:#ece6f5;--muted:#a69db6;--border:#352f45;
+  --accent:#f2b45a;--accent-soft:#3a2d18;--roxo:#b39ddb;--roxo-soft:#2c2540;--verde:#81c784;--vermelho:#ef9a9a;
+  --code:#2a2537;--sombra:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--fonte);-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+a{color:var(--accent)}
+header.topo{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.topo-in{max-width:1240px;margin:0 auto;padding:12px 16px;display:flex;gap:12px;align-items:center}
+.marca{display:flex;align-items:center;gap:10px;min-width:0}
+.marca .selo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--roxo));display:grid;place-items:center;color:#fff;font-size:20px;flex:none}
+.marca b{display:block;font-size:16px;line-height:1.2}
+.marca small{color:var(--muted);font-size:12.5px}
+.busca{flex:1;display:flex;justify-content:flex-end;gap:8px}
+.busca input{width:100%;max-width:340px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-size:15px}
+.busca input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.botao{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:8px 11px;font:inherit;cursor:pointer;flex:none}
+.layout{max-width:1240px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px}
+nav.indice{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 92px);overflow:auto;padding:18px 0 24px}
+nav.indice a{display:flex;gap:8px;align-items:center;padding:5px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14.5px}
+nav.indice a:hover{background:var(--surface-2);color:var(--text)}
+nav.indice a.ativo{background:var(--accent-soft);color:var(--accent);font-weight:600}
+nav.indice a.apagado{opacity:.35}
+nav.indice .grupo{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 10px 4px;font-weight:700}
+main{padding:22px 0 60px;min-width:0}
+.hero{background:linear-gradient(135deg,var(--accent-soft),var(--roxo-soft));border:1px solid var(--border);border-radius:20px;padding:26px 24px;margin-bottom:26px}
+.hero h1{margin:0 0 6px;font-size:clamp(26px,4vw,36px);line-height:1.15}
+.hero p{margin:0;color:var(--muted);max-width:760px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 11px;font-size:13.5px}
+.secao{margin:0 0 34px}
+.secao>h2{display:flex;align-items:center;gap:10px;font-size:24px;margin:0 0 14px;padding-top:6px}
+.secao>h2 .ico{width:34px;height:34px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;font-size:18px;flex:none}
+.secao>p.intro{color:var(--muted);margin:-6px 0 14px}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--raio);padding:16px 18px;box-shadow:var(--sombra);min-width:0}
+.card.largo{grid-column:1/-1}
+.card h3{margin:0 0 8px;font-size:17px}
+.card p{margin:6px 0}
+.card ul,.card ol{margin:6px 0;padding-left:20px}
+.card li{margin:3px 0}
+.ritual{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 8px;font-size:14.5px}
+.ritual .b{background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:2px 9px;font-weight:600}
+.ritual .i{background:var(--surface-2);border-radius:8px;padding:2px 9px}
+.ritual .mais{color:var(--muted)}
+code,.cmd{font-family:var(--mono);font-size:.88em;background:var(--code);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.cmd{cursor:pointer;border:1px solid transparent}
+.cmd:hover{border-color:var(--accent)}
+kbd{font-family:var(--mono);font-size:.82em;background:var(--surface);border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:1px 6px}
+.tabela{overflow-x:auto;margin:8px 0;border:1px solid var(--border);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{padding:7px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border)}
+th{background:var(--surface-2);font-size:13px;letter-spacing:.02em;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+.nota{background:var(--roxo-soft);border-left:4px solid var(--roxo);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:14.5px}
+.aviso{background:color-mix(in srgb,var(--vermelho) 12%,transparent);border-left:4px solid var(--vermelho);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:14.5px}
+.muted{color:var(--muted)}
+#vazio{text-align:center;color:var(--muted);padding:40px 0}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:7px 14px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.on{opacity:1}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40px;border-top:1px solid var(--border)}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;gap:0}
+  nav.indice{position:sticky;top:61px;z-index:9;max-height:none;display:flex;overflow-x:auto;gap:4px;padding:8px 0;background:var(--bg);border-bottom:1px solid var(--border);margin:0 -16px;padding-left:16px;padding-right:16px}
+  nav.indice .grupo{display:none}
+  nav.indice a{white-space:nowrap;flex:none;border:1px solid var(--border);background:var(--surface)}
+  html{scroll-padding-top:120px}
+  .marca small{display:none}
+}
+@media (max-width:520px){.marca b{font-size:14px}.hero{padding:20px 16px}}
+</style>
+</head>
+<body>
+<header class="topo"><div class="topo-in">
+  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.14</small></div></div>
+  <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
+</div></header>
+
+<div class="layout">
+<nav class="indice" id="indice">
+  <div class="grupo">Começo</div>
+  <a href="#inicio">🧭 Primeiros passos</a>
+  <a href="#rituais">✨ Estações (rituais)</a>
+  <a href="#atributos">📈 Atributos</a>
+  <div class="grupo">Equipamento e magia</div>
+  <a href="#forja">⚒ Forja e refino</a>
+  <a href="#arcano">✦ Arcano e magias</a>
+  <a href="#alquimia">⚗ Alquimia e gemas</a>
+  <a href="#visual">👕 Guarda-roupa e títulos</a>
+  <div class="grupo">Vida no mundo</div>
+  <a href="#fazenda">☘ Fazenda e cozinha</a>
+  <a href="#pesca">⚓ Pesca</a>
+  <a href="#domador">♞ Domador</a>
+  <a href="#party">👥 Party e territórios</a>
+  <a href="#colonia">🏘 Colônia e exército</a>
+  <a href="#reinos">👑 Reinos e guerra</a>
+  <div class="grupo">Aventura</div>
+  <a href="#altar">☠ Altar e chefes</a>
+  <a href="#masmorras">۞ Masmorras</a>
+  <a href="#portais">⛩ Portais</a>
+  <a href="#torre">🗼 Torre Infinita</a>
+  <a href="#perigo">⚠ Mundo perigoso</a>
+  <a href="#mundovivo">🌙 Estações e céu</a>
+  <div class="grupo">Progressão</div>
+  <a href="#classes">⚜ Classes</a>
+  <a href="#lendarias">✪ Classes lendárias</a>
+  <a href="#lendas">✦ Lendas</a>
+  <a href="#exploracao">🧭 Viagem e Locais Ocultos</a>
+  <div class="grupo">Ajuda</div>
+  <a href="#comandos">⌨ Comandos</a>
+</nav>
+
+<main id="conteudo">
+<div class="hero">
+  <h1>Bem-vindo ao RPG do servidor</h1>
+  <p>Aqui tudo evolui com o uso: minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. Não precisa de mod nem de resource pack.</p>
+  <div class="chips"><span class="chip">13 atributos até o nível 100</span><span class="chip">24 classes</span><span class="chip">50 magias secretas</span><span class="chip">12 lendas únicas</span><span class="chip">Livro <code>/guia</code> com 58 páginas</span></div>
+</div>
+
+<section class="secao" id="inicio">
+  <h2><span class="ico">🧭</span>Primeiros passos</h2>
+  <div class="grade">
+    <div class="card"><h3>Como as coisas funcionam</h3>
+      <ul>
+        <li>Os <b>atributos</b> sobem fazendo a atividade. Veja em <span class="cmd">/atributos</span>.</li>
+        <li>Quase tudo é criado por <b>ritual</b>: coloque um bloco e jogue os itens em cima dele com <kbd>Q</kbd>. O bloco vira uma "estação".</li>
+        <li>Na primeira entrada você ganha o <b>Guia do Aventureiro</b>. Perdeu? <span class="cmd">/guia</span>.</li>
+        <li>Clique com o botão direito numa estação para abrir o menu dela.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Controles úteis</h3>
+      <div class="tabela"><table><thead><tr><th>Ação</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><kbd>Q</kbd> em cima de um bloco</td><td>Faz rituais (criar estações)</td></tr>
+        <tr><td>Agachar + <kbd>F</kbd></td><td>Usa a habilidade da classe selecionada</td></tr>
+        <tr><td>Agachar + clique esquerdo no ar</td><td>Troca a habilidade da classe</td></tr>
+        <tr><td>Grimório: clique direito / esquerdo</td><td>Lança a magia / troca de magia</td></tr>
+        <tr><td>Grimório: agachar + direito</td><td>Abre o grimório</td></tr>
+        <tr><td>Agachar + clique numa estação</td><td>Abre o bloco original (ex.: bigorna, defumador)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Um bom caminho para começar</h3>
+      <ol>
+        <li>Faça a <b>Forja do Ferreiro</b> e forje suas armas e armaduras.</li>
+        <li>Junte uma <b>party</b> com os amigos (<span class="cmd">/party</span>).</li>
+        <li>Crie o seu <b>Marco do Território</b> para proteger a base.</li>
+        <li>Escolha uma <b>classe</b> no Santuário das Classes.</li>
+        <li>Faça masmorras Fáceis e vá subindo.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="rituais">
+  <h2><span class="ico">✨</span>Todas as estações (rituais)</h2>
+  <p class="intro">Coloque o bloco, jogue os itens em cima dele com <kbd>Q</kbd> (você tem 30 segundos) e pronto. Não dá para criar estação no território dos outros.</p>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Estação</th><th>Bloco</th><th>Itens jogados em cima</th><th>Para que serve</th></tr></thead><tbody>
+      <tr><td><b>Forja do Ferreiro</b></td><td>Bigorna</td><td>2 blocos de ferro + 1 balde de lava</td><td>Itens forjados com raridade, refino e Cajado Arcano</td></tr>
+      <tr><td><b>Infusor Corpóreo</b></td><td>Caldeirão com água</td><td>1 mesa de encantamento + 1 bigorna</td><td>Infundir itens no corpo e pegar o grimório</td></tr>
+      <tr><td><b>Altar Ritualístico</b></td><td>Obsidiana chorona</td><td>1 olho do ender + 4 velas</td><td>Invocar chefes e eventos</td></tr>
+      <tr><td><b>Cozinha</b></td><td>Defumador</td><td>1 caldeirão + 1 balde de água</td><td>Pratos com buffs</td></tr>
+      <tr><td><b>Bancada de Reciclagem</b></td><td>Rebolo</td><td>1 funil + 1 tesoura</td><td>Desmontar itens e recuperar material</td></tr>
+      <tr><td><b>Marco do Território</b></td><td>Magnetita</td><td>1 estandarte + 4 esmeraldas</td><td>Proteger a sua área</td></tr>
+      <tr><td><b>Prefeitura</b></td><td>Sino (no seu território)</td><td>1 bloco de esmeralda + 1 cama</td><td>Começar a sua colônia</td></tr>
+      <tr><td><b>Altar do Domador</b></td><td>Fardo de feno</td><td>1 laço + 1 sela</td><td>Companheiros e componentes</td></tr>
+      <tr><td><b>Portal da Masmorra</b></td><td>Tijolos de pedra entalhados</td><td>1 olho do ender + 1 bússola</td><td>Abrir masmorras e o Cofre das Almas</td></tr>
+      <tr><td><b>Santuário das Classes</b></td><td>Púlpito</td><td>1 livro e pena + 1 diamante</td><td>Classes, provas e troca de classe</td></tr>
+      <tr><td><b>Pedra de Viagem</b></td><td>Pedra entalhada de ardósia</td><td>2 pérolas do ender + 4 fragmentos de ametista</td><td>Teleporte entre pedras</td></tr>
+      <tr><td><b>Bancada Alquímica</b></td><td>Suporte de poções</td><td>2 garrafas de vidro + 1 pó de blaze</td><td>Elixires, componentes, gemas, acessórios</td></tr>
+      <tr><td><b>Obelisco da Torre</b></td><td>Obsidiana chorona</td><td>1 olho do ender + 1 bloco de ouro</td><td>Entrar na Torre Infinita</td></tr>
+    </tbody></table></div>
+    <p class="muted">O Altar e o Obelisco usam a mesma obsidiana chorona: o que você jogar decide qual dos dois ela vira (e um bloco nunca vira os dois).</p></div>
+  </div>
+</section>
+
+<section class="secao" id="atributos">
+  <h2><span class="ico">📈</span>Atributos</h2>
+  <p class="intro">13 atributos, do nível 0 ao 100. Chegar no 50 leva uns 20% do caminho; o 100 é para quem joga muito.</p>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Atributo</th><th>Como ganha XP</th><th>No nível 100</th></tr></thead><tbody>
+      <tr><td>⛏ Mineração</td><td>Quebrar blocos de picareta (minério vale mais)</td><td>+100% velocidade de mineração, 50% de minério em dobro</td></tr>
+      <tr><td>♣ Corte de Madeira</td><td>Quebrar troncos</td><td>+100% velocidade no tronco, 50% de tronco em dobro</td></tr>
+      <tr><td>» Corrida</td><td>Correr</td><td>+20% de velocidade</td></tr>
+      <tr><td>⬆ Pulo e Queda</td><td>Pular e levar dano de queda</td><td>+30% pulo, +5 blocos de queda segura, −50% dano de queda</td></tr>
+      <tr><td>⚔ Combate</td><td>Matar mobs, jogadores e chefes</td><td>+3 de dano, +5 corações</td></tr>
+      <tr><td>⚒ Ferraria</td><td>Forjar, refinar, subir para netherite, fundir lingotes</td><td>Itens forjados mais raros e mais fortes</td></tr>
+      <tr><td>✦ Arcano</td><td>Infundir, lançar magias, descobrir segredos</td><td>+150 de mana, mais carga, partes do corpo e magias</td></tr>
+      <tr><td>≈ Natação</td><td>Nadar e andar debaixo d'água</td><td>+50% agilidade na água, +3 de fôlego, +60% mineração submersa</td></tr>
+      <tr><td>☘ Agricultura</td><td>Colher plantações maduras e frutas</td><td>50% de colheita dupla, mais qualidade, toque verde, colheita gigante</td></tr>
+      <tr><td>♨ Culinária</td><td>Cozinhar na Cozinha</td><td>Libera receitas, pratos melhores, buffs +50% mais longos</td></tr>
+      <tr><td>♞ Doma</td><td>Domar, cruzar, vincular companheiros, andar montado</td><td>5 companheiros, 6 componentes, +100% vida e +50% dano deles</td></tr>
+      <tr><td>⚓ Pesca</td><td>Pescar (raros, tesouros e criaturas valem mais)</td><td>Isca 50% mais rápida, 30% de peixe em dobro, 15% de peixe raro</td></tr>
+      <tr><td>⚗ Alquimia</td><td>Criar na Bancada Alquímica, engastar, fazer poções</td><td>Elixires 60% mais longos, 40% de render o dobro</td></tr>
+    </tbody></table></div></div>
+    <div class="card"><h3>O que não dá XP (anti-farm)</h3>
+      <ul>
+        <li>Blocos colocados por jogadores e pedra de gerador.</li>
+        <li>Pular parado no mesmo lugar; ser levado pela correnteza.</li>
+        <li>Melancia e abóbora colocadas; plantação verde.</li>
+        <li>Mobs de spawner dão só 25% do XP.</li>
+        <li>Matar o mesmo jogador seguidas vezes, ou uma conta do mesmo IP.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Materiais raros</h3>
+      <p><b>Fragmento de Forja</b>, <b>Pedra de Proteção</b>, <b>Essência Primordial</b>, <b>Mapa Rasgado</b>, <b>Página do Livro das Lendas</b> e os <b>núcleos</b> dos chefes.</p>
+      <p class="muted">Eles não podem ser gastos em receitas comuns (bancada, bigorna, fornalha, poções), só nos sistemas do plugin.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="forja">
+  <h2><span class="ico">⚒</span>Forja, refino e reciclagem</h2>
+  <div class="grade">
+    <div class="card"><h3>Forja do Ferreiro</h3>
+      <div class="ritual"><span class="b">Bigorna</span><span class="mais">+</span><span class="i">2 blocos de ferro</span><span class="mais">+</span><span class="i">1 balde de lava</span></div>
+      <ul>
+        <li><b>Clique direito:</b> bancada do ferreiro. Armas, ferramentas, armaduras, arcos, bestas, maças, lanças e escudos saem <b>forjados</b>.</li>
+        <li><b>Agachado + clique:</b> tela de refino.</li>
+        <li>Na bancada comum os itens saem normais.</li>
+        <li><span class="cmd">/forja</span> mostra suas chances de raridade.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Raridades</h3>
+      <div class="tabela"><table><thead><tr><th>Raridade</th><th>Bônus</th><th>Efeitos</th><th>Força</th><th>Ferraria 0 → 100</th></tr></thead><tbody>
+        <tr><td>★ Comum</td><td>1</td><td>0</td><td>×1,0</td><td>70% → 25%</td></tr>
+        <tr><td>★★ Raro</td><td>2</td><td>0</td><td>×1,3</td><td>24% → 35%</td></tr>
+        <tr><td>★★★ Épico</td><td>3</td><td>1</td><td>×1,7</td><td>5% → 22%</td></tr>
+        <tr><td>★★★★ Único</td><td>3</td><td>1</td><td>×2,1</td><td>1% → 11%</td></tr>
+        <tr><td>★★★★★ Lendário</td><td>4</td><td>2</td><td>×2,6</td><td>0% → 5%</td></tr>
+        <tr><td>★★★★★★ Mítico</td><td>5</td><td>3</td><td>×3,3</td><td>0% → 1,5%</td></tr>
+      </tbody></table></div>
+      <p class="muted">Bônus: dano, velocidade de ataque, alcance, armadura, vida, velocidade, pulo, mineração, crítico, roubo de vida, esquiva, espinhos... Efeitos (Épico+): passivos, ao acertar, ao apanhar e ao minerar. Raio e Execução são só dos Míticos.</p>
+    </div>
+    <div class="card"><h3>Refino +1 a +10</h3>
+      <p>Cada nível: +6% nos bônus da forja e +4% no dano/armadura base.</p>
+      <div class="tabela"><table><thead><tr><th>Nível</th><th>Custo</th><th>Chance</th></tr></thead><tbody>
+        <tr><td>+1 a +3</td><td>lingotes de ferro e ouro</td><td>100% → 95%</td></tr>
+        <tr><td>+4 a +6</td><td>diamantes (+6 pede 1 Fragmento)</td><td>85% → 65%</td></tr>
+        <tr><td>+7 a +9</td><td>netherite e Fragmentos de Forja</td><td>50% → 30%</td></tr>
+        <tr><td>+10</td><td>4 netherite, 8 Fragmentos, 1 Essência Primordial</td><td>20%</td></tr>
+      </tbody></table></div>
+      <p class="aviso">Até +5, falhar só gasta material. De +6 a +8 o item perde 1 nível. No +9 e +10 pode perder nível ou <b>quebrar</b>. A <b>Pedra de Proteção</b> evita as duas coisas.</p>
+    </div>
+    <div class="card"><h3>Conjuntos e netherite</h3>
+      <ul>
+        <li>As 4 peças de armadura forjadas dão bônus de conjunto (pela raridade mais baixa): de +1 de armadura (Comum) até +5 de armadura, +4 corações, +10% de velocidade, Regeneração e Resistência (Mítico).</li>
+        <li>Subir um forjado para netherite mantém a raridade.</li>
+        <li>Item achado no mundo vira forjado se for melhorado numa mesa de ferraria a até 6 blocos de uma Forja.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Bancada de Reciclagem</h3>
+      <div class="ritual"><span class="b">Rebolo</span><span class="mais">+</span><span class="i">1 funil</span><span class="mais">+</span><span class="i">1 tesoura</span></div>
+      <ul>
+        <li>Devolve 50% do material (até 75% com Ferraria alta). Netherite volta como diamante + sucata.</li>
+        <li>Encantados: 25–50% de chance de livro com um dos encantos.</li>
+        <li>Lendário/Mítico de diamante ou netherite: chance de Fragmento de Forja. Refino +5 ou mais devolve 1 Fragmento garantido.</li>
+        <li>Gemas engastadas voltam inteiras.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="arcano">
+  <h2><span class="ico">✦</span>Arcano e magias</h2>
+  <div class="grade">
+    <div class="card"><h3>Infusor Corpóreo</h3>
+      <div class="ritual"><span class="b">Caldeirão com água</span><span class="mais">+</span><span class="i">1 mesa de encantamento</span><span class="mais">+</span><span class="i">1 bigorna</span></div>
+      <p>Escolha um item e uma parte do corpo: o item é consumido, gasta XP e pode falhar.</p>
+      <div class="tabela"><table><thead><tr><th>Parte</th><th>Bônus por ponto</th><th>Arcano</th></tr></thead><tbody>
+        <tr><td>Mente</td><td>+8 de mana máxima</td><td>0</td></tr>
+        <tr><td>Coração</td><td>+½ ❤</td><td>0</td></tr>
+        <tr><td>Braços</td><td>+0,25 de dano</td><td>20</td></tr>
+        <tr><td>Pernas</td><td>+1,5% de velocidade</td><td>40</td></tr>
+        <tr><td>Sangue</td><td>+0,4 de mana/s</td><td>70</td></tr>
+      </tbody></table></div>
+      <p class="aviso">Passar da carga do corpo causa <b>rejeição</b>. Ao morrer, as infusões ficam instáveis por 5 minutos.</p>
+    </div>
+    <div class="card"><h3>Infusões lendárias (núcleos dos chefes)</h3>
+      <div class="tabela"><table><thead><tr><th>Núcleo</th><th>Poder</th></tr></thead><tbody>
+        <tr><td>Núcleo de Ferro Ancestral</td><td>+4 armadura e resistência a empurrões</td></tr>
+        <tr><td>Presa da Rainha Aracnídea</td><td>Imune a veneno; envenena quem te ataca</td></tr>
+        <tr><td>Brasa Eterna</td><td>Imune a fogo; incendeia quem te ataca</td></tr>
+        <tr><td>Filactério do Lich</td><td>Imune a definhamento; rouba 8% do dano</td></tr>
+        <tr><td>Olho da Tempestade</td><td><b>Pulo duplo</b></td></tr>
+        <tr><td>Coroa do Arauto</td><td>+15% de dano e +4 corações</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Criar magias</h3>
+      <p>Pegue o <b>grimório</b> no infusor (1 livro). Uma magia = <b>1 a 4 essências</b> do seu corpo + <b>uma forma</b> + até <b>2 modificadores</b>. Toda combinação funciona.</p>
+      <p><b>10 essências:</b> Fogo, Gelo, Vento, Água, Vida, Terra, Sombra, Vazio, Energia, Natureza.</p>
+      <p><b>Formas:</b> Toque, Projétil, Aura, Corpo, Criação, <b>Raio</b> (segure o clique), <b>Sopro</b> (cone), <b>Chuva</b> (área do céu), <b>Invocação</b> (um elemental luta por você) e <b>Encantar arma</b>.</p>
+      <p><b>Modificadores:</b> Rápida, Ampliar, Dividir, Teleguiado, Canalizar, Ricochete, Persistente, Mina, Eco e Potente.</p>
+    </div>
+    <div class="card"><h3>Reações elementais</h3>
+      <p>Quem leva um elemento fica marcado por 6 s; um segundo elemento causa uma reação. Funciona entre jogadores: combos de party são muito fortes.</p>
+      <div class="tabela"><table><thead><tr><th>Reação</th><th>Elementos</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Eletrocutado</td><td>Água + Energia</td><td>Choque salta para até 4 inimigos</td></tr>
+        <tr><td>Congelado</td><td>Água + Gelo</td><td>Alvo quase parado</td></tr>
+        <tr><td>Derreter</td><td>Fogo + Gelo</td><td>Muito dano</td></tr>
+        <tr><td>Incêndio</td><td>Fogo + Vento</td><td>O fogo se espalha</td></tr>
+        <tr><td>Queimada</td><td>Fogo + Natureza</td><td>Chamas que pulam para outros</td></tr>
+        <tr><td>Lama</td><td>Terra + Água</td><td>Lentidão forte</td></tr>
+        <tr><td>Corrupção</td><td>Sombra + Vida</td><td>Dano, definhamento e você se cura</td></tr>
+        <tr><td>Tempestade</td><td>Vento + Energia</td><td>Um raio cai no alvo</td></tr>
+        <tr><td>Colapso</td><td>Vazio + Sombra</td><td>Puxa os inimigos para o alvo</td></tr>
+        <tr><td>Estilhaçar</td><td>Gelo + Terra</td><td>Quebra o gelo: muito dano</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Maestria, estilo e cajado</h3>
+      <ul>
+        <li><b>Maestria</b> de cada elemento (1–10): +3% de força por nível; no 5 ganha uma variante (Chama Azul, Gelo Eterno...), no 10 as reações ficam 50% mais fortes.</li>
+        <li><b>Estilo:</b> marca visual nas suas magias (Estelar, Almas, Cristal, Cerejeira, Brasas, Eco, Melodia).</li>
+        <li><b>Cajado Arcano:</b> na Forja, 1 ametista na ponta + 2 varas de blaze na diagonal. Tem raridade, aceita refino e lança magias como o grimório. Gemas engastadas fortalecem elementos.</li>
+        <li><b>Pergaminhos:</b> escreva uma magia num papel na Bancada Alquímica; qualquer um lança uma vez, sem mana.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>50 magias secretas</h3>
+      <p>Combinações específicas viram magias com efeito único (Bola de Fogo, Nevasca, Meteoro, Fênix, Buraco Negro, Sopro do Dragão...). O grimório dá uma dica de cada.</p>
+      <p>As 5 <b>proibidas</b> (Chuva de Meteoros, Zero Absoluto, Julgamento, Ruptura Dimensional, Renascer da Floresta) só vêm de <b>Tomos Proibidos</b>: chefes do Altar, selos dos Locais Ocultos e masmorras Difícil/Pesadelo.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="alquimia">
+  <h2><span class="ico">⚗</span>Alquimia, gemas e acessórios</h2>
+  <div class="grade">
+    <div class="card"><h3>Bancada Alquímica</h3>
+      <div class="ritual"><span class="b">Suporte de poções</span><span class="mais">+</span><span class="i">2 garrafas de vidro</span><span class="mais">+</span><span class="i">1 pó de blaze</span></div>
+      <ul>
+        <li>Abas: Elixires, Componentes, Gemas, Acessórios, Engastar e Pergaminhos. <b>Shift + clique</b> cria até 8.</li>
+        <li><b>Componentes:</b> Pó Arcano, Óleo de Peixe, Tintura Vital, Sal Lunar, Mercúrio Vivo, Cristal de Mana, Solvente Alquímico. Pérola Negra e Escama do Abismo vêm da pesca.</li>
+        <li><b>Elixires:</b> Cura, Rapidez, Minerador, Mergulhador, Sorte, Pedra, Sombras, Mana, Gigante, Fênix, Titã e Purificação (cura maldições).</li>
+        <li><span class="cmd">/alquimia</span> mostra todas as receitas.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Gemas</h3>
+      <p>6 gemas em 3 graus (<b>Bruta</b>, <b>Lapidada</b>, <b>Perfeita</b>; 3 de um grau + material = 1 do próximo). Engaste em itens forjados: Comum 0 espaços, Raro/Épico 1, Único/Lendário 2, Mítico 3.</p>
+      <div class="tabela"><table><thead><tr><th>Gema</th><th>Arma</th><th>Arco</th><th>Armadura</th><th>Ferramenta</th></tr></thead><tbody>
+        <tr><td>Rubi</td><td>Dano</td><td>Dano de flecha</td><td>Vida</td><td>Vel. mineração</td></tr>
+        <tr><td>Safira</td><td>Crítico</td><td>Crítico</td><td>Armadura</td><td>Eficiência</td></tr>
+        <tr><td>Esmeralda</td><td>Roubo de vida</td><td>Roubo de vida</td><td>Esquiva</td><td>Sorte</td></tr>
+        <tr><td>Topázio</td><td>Vel. de ataque</td><td>Durabilidade</td><td>Velocidade</td><td>Durabilidade</td></tr>
+        <tr><td>Ametista</td><td>Alcance</td><td>Dano de flecha</td><td>Resistência</td><td>Alcance</td></tr>
+        <tr><td>Ônix</td><td>Repulsão</td><td>Durabilidade</td><td>Reflete dano</td><td>—</td></tr>
+      </tbody></table></div>
+      <p class="muted">Tirar uma gema gasta 1 Solvente Alquímico e devolve a gema.</p>
+    </div>
+    <div class="card"><h3>Acessórios <span class="muted">(/acessorios)</span></h3>
+      <p>2 anéis, 1 amuleto, 1 cinto e 2 bolsos. Não ocupam a armadura e <b>não caem ao morrer</b>.</p>
+      <div class="tabela"><table><thead><tr><th>Tipo</th><th>Opções</th></tr></thead><tbody>
+        <tr><td>Anéis</td><td>Vigor, Força, Vento, Marés, Brasas, Minerador, Fortuna, Sábio</td></tr>
+        <tr><td>Amuletos</td><td>Mana, Guardião, Vida, <b>Fênix</b> (escapa da morte a cada 10 min)</td></tr>
+        <tr><td>Cintos</td><td>Atleta, Andarilho, Titã</td></tr>
+        <tr><td>Bolso</td><td><b>Lanterna de Bolso</b>, Ímã, Relógio</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="visual">
+  <h2><span class="ico">👕</span>Guarda-roupa, títulos e missões</h2>
+  <div class="grade">
+    <div class="card"><h3>Guarda-roupa</h3>
+      <p><span class="cmd">/guardaroupa</span>: escolha uma peça para ser a <b>aparência</b> de cada parte, sem perder a proteção da armadura de verdade. Na cabeça vale qualquer item, e dá para esconder peças.</p>
+      <p><span class="cmd">/cosmeticos</span>, <span class="cmd">/chapeu</span> e <span class="cmd">/tag</span>: item na cabeça e tag personalizada.</p>
+    </div>
+    <div class="card"><h3>Títulos</h3>
+      <p><span class="cmd">/titulos</span>: 51 títulos com requisitos. Só o título em uso dá bônus (vida, dano, mana, XP...). Ele aparece acima da sua cabeça e os mais difíceis são anunciados.</p>
+    </div>
+    <div class="card"><h3>Missões dos aldeões</h3>
+      <p><b>Agache + clique direito</b> num aldeão com profissão: 3 pedidos do dia. Cumprir dá esmeraldas, XP, às vezes Fragmentos, e <b>reputação</b> (desconto no comércio). Até 3 ao mesmo tempo; <span class="cmd">/missoes</span>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="fazenda">
+  <h2><span class="ico">☘</span>Fazenda e cozinha</h2>
+  <div class="grade">
+    <div class="card"><h3>Plantações</h3>
+      <ul>
+        <li>Colheita com <b>qualidade</b>: Normal, Boa ★, Ótima ★★, Perfeita ★★★.</li>
+        <li>Colheita dupla, <b>toque verde</b> (plantas perto crescem) e <b>colheita gigante</b> (×8).</li>
+        <li><b>Adubo Rico</b> (3 farinhas de osso + 1 carne podre + 1 terra = 4): a próxima colheita sai uma qualidade acima.</li>
+        <li><b>Espantalho:</b> suporte de armadura com abóbora na cabeça impede pisotear a terra a até 10 blocos.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Sementes raras</h3>
+      <p>Duas plantações diferentes maduras lado a lado: 3% de nascer uma semente mutante.</p>
+      <div class="tabela"><table><thead><tr><th>Cruzamento</th><th>Variedade</th></tr></thead><tbody>
+        <tr><td>Trigo + Cenoura</td><td>Trigo Dourado</td></tr>
+        <tr><td>Cenoura + Batata</td><td>Cenoura Cristalina</td></tr>
+        <tr><td>Batata + Beterraba</td><td>Batata Ancestral</td></tr>
+        <tr><td>Beterraba + Trigo</td><td>Beterraba Rubi</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card largo"><h3>Cozinha</h3>
+      <div class="ritual"><span class="b">Defumador</span><span class="mais">+</span><span class="i">1 caldeirão</span><span class="mais">+</span><span class="i">1 balde de água</span></div>
+      <p>Clique para o menu de receitas; agachado abre o defumador normal. <span class="cmd">/receitas</span> mostra o livro. Ingredientes de qualidade sobem a qualidade do prato (e a duração).</p>
+      <div class="tabela"><table><thead><tr><th>Prato</th><th>Culinária</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Pão Caseiro</td><td>0</td><td>Pressa</td></tr>
+        <tr><td>Ensopado de Legumes</td><td>0</td><td>Regeneração</td></tr>
+        <tr><td>Sopa do Pescador</td><td>10</td><td>Respiração aquática e Sorte</td></tr>
+        <tr><td>Torta de Abóbora da Vovó</td><td>10</td><td>Sorte e Velocidade</td></tr>
+        <tr><td>Salmão com Ervas</td><td>15</td><td>Respiração aquática e Graça do golfinho</td></tr>
+        <tr><td>Batata Recheada</td><td>20</td><td>Absorção e Resistência</td></tr>
+        <tr><td>Biscoito de Mel</td><td>25</td><td>Pressa II</td></tr>
+        <tr><td>Ensopado do Caçador</td><td>30</td><td>Força</td></tr>
+        <tr><td>Salada Arcana</td><td>40</td><td>Visão noturna e +60 de mana</td></tr>
+        <tr><td>Sushi Real</td><td>45</td><td>Golfinho, Conduíte e Pressa (Salmão-Rei)</td></tr>
+        <tr><td>Banquete do Guerreiro</td><td>50</td><td>Força, Resistência, Regeneração (Trigo Dourado)</td></tr>
+        <tr><td>Pão Dourado</td><td>60</td><td>Absorção II e saciedade cheia</td></tr>
+        <tr><td>Sopa Cristalina</td><td>70</td><td>Resistência ao fogo e Velocidade II</td></tr>
+        <tr><td>Caldeirada Abissal</td><td>75</td><td>Resistência, Visão noturna e Força</td></tr>
+        <tr><td>Torta Rubi</td><td>80</td><td>Vida extra II e Regeneração II</td></tr>
+        <tr><td>Banquete Lendário</td><td>90</td><td>Força, Resistência, Regeneração e Velocidade para todos a 10 blocos</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="pesca">
+  <h2><span class="ico">⚓</span>Pesca</h2>
+  <div class="grade">
+    <div class="card"><h3>O que dá para fisgar</h3>
+      <ul>
+        <li>Peixes com qualidade ★ a ★★★ (melhoram pratos e elixires).</li>
+        <li><b>Tesouros do Mar:</b> esmeraldas, ouro, diamantes, livros, Pérolas Negras, às vezes Mapa Rasgado ou Fragmento.</li>
+        <li><b>Criaturas marinhas</b> que lutam: Afogado Faminto, Guardião das Ondas, Capitão Afogado e o Senhor das Marés.</li>
+        <li><span class="cmd">/peixes</span>: Diário do Pescador com onde achar cada raro.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>12 peixes raros</h3>
+      <div class="tabela"><table><thead><tr><th>Peixe</th><th>Onde / quando</th><th>Pesca</th></tr></thead><tbody>
+        <tr><td>Carpa Dourada</td><td>Rios e lagos, longe do mar</td><td>0</td></tr>
+        <tr><td>Truta Arco-Íris</td><td>Rios, de dia</td><td>0</td></tr>
+        <tr><td>Peixe-Lua</td><td>Qualquer água, de noite</td><td>5</td></tr>
+        <tr><td>Peixe-Pedra</td><td>Cavernas (abaixo da altura 45)</td><td>10</td></tr>
+        <tr><td>Enguia Elétrica</td><td>Debaixo de chuva</td><td>15</td></tr>
+        <tr><td>Peixe-Gelo</td><td>Biomas de neve</td><td>20</td></tr>
+        <tr><td>Koi Celeste</td><td>Cerejeiras e campos de flores</td><td>25</td></tr>
+        <tr><td>Baiacu-Rei</td><td>Oceanos mornos ou quentes</td><td>30</td></tr>
+        <tr><td>Salmão-Rei</td><td>Rios e oceanos frios</td><td>35</td></tr>
+        <tr><td>Peixe-Fantasma</td><td>Pântanos e manguezais, de noite</td><td>45</td></tr>
+        <tr><td>Peixe Abissal</td><td>Oceanos profundos, de noite</td><td>60</td></tr>
+        <tr><td>Peixe-Dragão</td><td>Oceano em tempestade (anunciado)</td><td>85</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="domador">
+  <h2><span class="ico">♞</span>Domador e companheiros</h2>
+  <div class="grade">
+    <div class="card"><h3>Altar do Domador</h3>
+      <div class="ritual"><span class="b">Fardo de feno</span><span class="mais">+</span><span class="i">1 laço</span><span class="mais">+</span><span class="i">1 sela</span></div>
+      <ul>
+        <li><b>Vincular:</b> traga um animal no laço (ou um pet seu) e clique nele no menu.</li>
+        <li><b>Invocar:</b> entregue os itens da criatura e ela nasce sua (20 criaturas: lobo, cavalo, golem de ferro, vaca de cogumelo...).</li>
+        <li>1 companheiro no começo, até 5 com Doma alta. <span class="cmd">/pets</span> lista todos.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Ordens</h3>
+      <div class="tabela"><table><thead><tr><th>Ordem</th><th>O que faz</th><th>Doma</th></tr></thead><tbody>
+        <tr><td>Seguir</td><td>Anda atrás de você e defende</td><td>0</td></tr>
+        <tr><td>Ficar</td><td>Fica parado</td><td>0</td></tr>
+        <tr><td>Guardar</td><td>Ataca monstros que chegam perto</td><td>15</td></tr>
+        <tr><td>Patrulhar</td><td>Anda pela área atacando monstros</td><td>25</td></tr>
+        <tr><td>Solto</td><td>Animal comum</td><td>0</td></tr>
+      </tbody></table></div>
+      <p class="muted">Clique no companheiro com a mão vazia. Nenhuma ordem teleporta: ele sempre vai andando.</p>
+    </div>
+    <div class="card largo"><h3>Componentes (até 6 por companheiro)</h3>
+      <div class="tabela"><table><thead><tr><th>Componente</th><th>Item</th><th>Doma</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Sela do Domador</td><td>sela</td><td>0</td><td>Monta e guia com WASD</td></tr>
+        <tr><td>Agilidade</td><td>açúcar</td><td>5</td><td>+30% de velocidade</td></tr>
+        <tr><td>Alforje</td><td>baú</td><td>10</td><td>Carrega 27 itens</td></tr>
+        <tr><td>Farol</td><td>pedra luminosa</td><td>10</td><td>Brilha e dá Visão Noturna</td></tr>
+        <tr><td>Couraça</td><td>peitoral de ferro</td><td>15</td><td>+8 armadura e +25% vida</td></tr>
+        <tr><td>Garras</td><td>espada de ferro</td><td>20</td><td>Luta (até uma vaca!) e bate +50%</td></tr>
+        <tr><td>Coletor</td><td>funil</td><td>25</td><td>Pega itens do chão para o Alforje</td></tr>
+        <tr><td>Coração do Mar</td><td>coração do mar</td><td>30</td><td>Não se afoga; quem monta respira</td></tr>
+        <tr><td>Chamas</td><td>vara de blaze</td><td>35</td><td>Imune a fogo; ataques incendeiam</td></tr>
+        <tr><td>Segunda Vida</td><td>totem</td><td>40</td><td>Escapa da morte uma vez</td></tr>
+        <tr><td>Asas</td><td>élitro</td><td>50</td><td><b>Voa</b> montado (pede Sela)</td></tr>
+        <tr><td>Pele de Netherite</td><td>lingote de netherite</td><td>60</td><td>+6 armadura, imune a fogo</td></tr>
+      </tbody></table></div>
+      <p class="nota">Ideia: vaca de cogumelo + Sela + Asas = montaria voadora.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="party">
+  <h2><span class="ico">👥</span>Party e territórios</h2>
+  <div class="grade">
+    <div class="card"><h3>Party (até 6)</h3>
+      <ul>
+        <li><span class="cmd">/party convidar &lt;nick&gt;</span> — o convite chega com botões.</li>
+        <li>Sem fogo amigo (nem flecha, poção, pet ou magia).</li>
+        <li>Quem está a até 32 blocos ganha 50% do XP de Combate; quem matou ganha +10% por membro perto.</li>
+        <li><span class="cmd">/pc &lt;mensagem&gt;</span> — chat da party. Aviso quando alguém fica com pouca vida.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Território</h3>
+      <div class="ritual"><span class="b">Magnetita</span><span class="mais">+</span><span class="i">1 estandarte</span><span class="mais">+</span><span class="i">4 esmeraldas</span></div>
+      <ul>
+        <li>Protege 3×3 chunks; +1 chunk a cada 20 níveis somados (até 60).</li>
+        <li>Menu (<span class="cmd">/territorio</span>): mapa de chunks, membros, regras (PvP, portas, baús, monstros, explosões, fogo, party) e bordas.</li>
+        <li>Ninguém de fora quebra, coloca, abre baú, mexe em animais, estações etc.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="colonia">
+  <h2><span class="ico">🏘</span>Colônia e exército</h2>
+  <div class="grade">
+    <div class="card"><h3>Começar</h3>
+      <div class="ritual"><span class="b">Sino</span><span class="mais">+</span><span class="i">1 bloco de esmeralda</span><span class="mais">+</span><span class="i">1 cama</span></div>
+      <ul>
+        <li>Precisa ser no <b>seu</b> território. Vira a Prefeitura e chegam 2 moradores. <span class="cmd">/colonia</span> abre de qualquer lugar.</li>
+        <li>Defina até 4 <b>baús de depósito</b>: os moradores guardam ali o que produzem e pegam comida.</li>
+        <li>Comida e felicidade mudam a produção (×0,5 a ×1,2). Pratos da Cozinha deixam todos felizes.</li>
+        <li>Tudo num raio de 32 blocos da Prefeitura; cada morador precisa do seu próprio posto.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Profissões</h3>
+      <div class="tabela"><table><thead><tr><th>Profissão</th><th>Posto</th><th>Nível</th></tr></thead><tbody>
+        <tr><td>Fazendeiro</td><td>Composteira</td><td>1</td></tr>
+        <tr><td>Lenhador</td><td>Bancada de flechas</td><td>1</td></tr>
+        <tr><td>Pescador</td><td>Barril (com água perto)</td><td>1</td></tr>
+        <tr><td>Minerador</td><td>Cortador de pedras</td><td>2</td></tr>
+        <tr><td>Cozinheiro</td><td>Cozinha</td><td>2</td></tr>
+        <tr><td>Soldado</td><td>Quartel (bloco de alvo)</td><td>2</td></tr>
+        <tr><td>Ferreiro</td><td>Forja do Ferreiro</td><td>3</td></tr>
+        <tr><td>Tratador</td><td>Altar do Domador</td><td>3</td></tr>
+        <tr><td>Arqueiro</td><td>Quartel (bloco de alvo)</td><td>3</td></tr>
+        <tr><td>Alquimista</td><td>Bancada Alquímica</td><td>4</td></tr>
+      </tbody></table></div>
+      <p class="muted">Cada nível da colônia (pago com o depósito) libera +3 moradores, até 15. O nível 5 dá +20% de produção.</p>
+    </div>
+    <div class="card"><h3>Exército</h3>
+      <ul>
+        <li>Soldados e arqueiros vestem o uniforme na cor do reino, não queimam no sol e os aldeões não têm medo deles.</li>
+        <li>Cada Quartel (bloco de alvo) abriga 4 soldados.</li>
+        <li><b>Ordens:</b> guardar a colônia, seguir você ou atacar o Marco inimigo (na guerra).</li>
+        <li>Shift + clique no Exército equipa todos com o melhor do depósito.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="reinos">
+  <h2><span class="ico">👑</span>Reinos e guerra</h2>
+  <div class="grade">
+    <div class="card"><h3>Fundar e cargos</h3>
+      <p><span class="cmd">/reino fundar &lt;nome&gt;</span> — colônia nível 2 e 32 esmeraldas.</p>
+      <ul>
+        <li><b>Rei</b> (guerra, paz, cargos, coroa), <b>Nobre</b> (tesouro, expulsar), <b>Cavaleiro</b> (convida) e <b>Cidadão</b>.</li>
+        <li>Tesouro de esmeraldas: todos depositam, Rei e Nobres sacam.</li>
+        <li>Membros do mesmo reino não se machucam.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Guerra com horário marcado</h3>
+      <ul>
+        <li>O Rei declara (<span class="cmd">/reino guerra &lt;reino&gt;</span>); a batalha acontece no horário de guerra do servidor (padrão: sábado 20h, por 60 min, com 24h de aviso).</li>
+        <li>PvP livre entre os dois reinos.</li>
+        <li><b>Capturar Marco:</b> fique a até 6 blocos do Marco inimigo por 2 min sem defensores perto. O território perde 4 chunks.</li>
+        <li>Pontos: Marco 10, jogador 2, soldado 1. O vencedor leva 30% do tesouro do outro.</li>
+        <li>Construções nunca são destruídas. Depois: 7 dias de trégua.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="altar">
+  <h2><span class="ico">☠</span>Altar Ritualístico e chefes</h2>
+  <div class="grade">
+    <div class="card largo"><div class="ritual"><span class="b">Obsidiana chorona</span><span class="mais">+</span><span class="i">1 olho do ender</span><span class="mais">+</span><span class="i">4 velas</span></div>
+      <p>Clique para ver o que ele invoca; jogue a oferenda em cima ou entregue pelo menu.</p>
+      <div class="tabela"><table><thead><tr><th>Invocação</th><th>Oferenda</th><th>O que é</th></tr></thead><tbody>
+        <tr><td>Golem Ancestral ★</td><td>4 blocos de ferro + 1 abóbora esculpida</td><td>Tremor, arremesso, escudo de ferro</td></tr>
+        <tr><td>Rainha Aracnídea ★</td><td>8 olhos de aranha + 16 linhas</td><td>Filhotes, teias, veneno, saltos</td></tr>
+        <tr><td>Senhor das Chamas ★★</td><td>8 varas de blaze + 4 cremes de magma</td><td>Bolas de fogo, anel de fogo, meteoros</td></tr>
+        <tr><td>Lich ★★</td><td>1 crânio de esqueleto + 32 ossos</td><td>Invoca mortos, raio sombrio, teleporte</td></tr>
+        <tr><td>Tempestade Viva ★★★</td><td>4 varas de breeze + 8 cargas de vento</td><td>Rajadas, raios, ciclone</td></tr>
+        <tr><td>Arauto do Fim ★★★★</td><td>1 estrela do Nether + 4 fragmentos de eco + 1 bafo de dragão</td><td>Golpe do vazio, vexes, onda sônica</td></tr>
+        <tr><td>Lua de Sangue</td><td>1 rosa do wither + 16 carnes podres (à noite)</td><td>Monstros fortes, dobro de XP e drops</td></tr>
+        <tr><td>Chuva de Meteoros</td><td>8 cargas de fogo + 1 diamante</td><td>90 s de meteoros com minérios</td></tr>
+        <tr><td>Ondas de Monstros</td><td>8 carnes podres, 8 ossos, 8 linhas, 8 pólvoras</td><td>5 ondas + Campeão</td></tr>
+        <tr><td>Mercador Arcano</td><td>24 esmeraldas + 1 olho do ender</td><td>10 min de trocas raras</td></tr>
+        <tr><td>Caçador de Recompensas</td><td>16 esmeraldas + 1 espada de ferro</td><td>Contratos para matar chefes</td></tr>
+      </tbody></table></div>
+      <p class="muted">Chefes: vida maior com mais jogadores, fúria abaixo de 30%, presos perto do altar. Deixam o <b>núcleo</b>, Fragmentos, chance de Pedra de Proteção, Essência Primordial e Tomo Proibido.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="masmorras">
+  <h2><span class="ico">۞</span>Masmorras</h2>
+  <div class="grade">
+    <div class="card"><h3>Portal da Masmorra</h3>
+      <div class="ritual"><span class="b">Tijolos de pedra entalhados</span><span class="mais">+</span><span class="i">1 olho do ender</span><span class="mais">+</span><span class="i">1 bússola</span></div>
+      <p>Clique, escolha a dificuldade e pague. Ela se forma em segundos e o portal abre por 30 s: suba nele com a sua party.</p>
+      <ul>
+        <li>Salas de combate trancam e soltam ondas. Salas de tesouro têm baús e forjados.</li>
+        <li>O chefe fica na sala mais longe. Vencer dá o baú do chefe e um portal de saída.</li>
+        <li>40 min de limite. <span class="cmd">/masmorra sair</span> sai sem perder nada.</li>
+      </ul>
+      <p class="aviso">Morreu lá dentro? Os itens vão para o <b>Cofre das Almas</b>: clique num Portal da Masmorra e pague 2 diamantes por morte.</p>
+    </div>
+    <div class="card"><h3>Dificuldades</h3>
+      <div class="tabela"><table><thead><tr><th>Dificuldade</th><th>Chefe</th><th>Nível total</th><th>Custo</th><th>Tesouro</th></tr></thead><tbody>
+        <tr><td>Fácil</td><td>Golem ou Rainha</td><td>0</td><td>8 esmeraldas</td><td>Raro a Épico</td></tr>
+        <tr><td>Normal</td><td>Chamas ou Lich</td><td>110</td><td>2 diamantes</td><td>Épico a Único</td></tr>
+        <tr><td>Difícil</td><td>Tempestade Viva</td><td>330</td><td>6 diamantes</td><td>Único a Lendário</td></tr>
+        <tr><td>Pesadelo</td><td>Arauto do Fim</td><td>550</td><td>1 netherite</td><td>Lendário a Mítico</td></tr>
+      </tbody></table></div>
+      <p class="muted">Temas sorteados: Cripta, Caverna Profunda, Fornalha Infernal ou Palácio Gelado. Pérola do ender não funciona lá dentro.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="portais">
+  <h2><span class="ico">⛩</span>Portais pelo mundo</h2>
+  <div class="grade">
+    <div class="card"><h3>Como funcionam</h3>
+      <ul>
+        <li>De vez em quando um portal se abre <b>perto de alguém que está explorando</b>, e o servidor recebe as coordenadas. <span class="cmd">/portais</span> lista todos.</li>
+        <li>Cada um tem uma dificuldade (Fácil, Normal, Difícil ou o raro Pesadelo) e uma placa com o tempo que falta.</li>
+        <li><b>Entrar:</b> ande para dentro do anel. Na primeira vez ele desperta; entre de novo em alguns segundos. <b>Qualquer um pode entrar</b> (com o nível total da dificuldade).</li>
+        <li><b>Fechar:</b> vença o chefe da masmorra. O baú vem com tesouro a mais e todos ganham XP.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Transbordar</h3>
+      <p>Se ninguém fechar a tempo (Fácil 3h, Normal 2h30, Difícil 2h, Pesadelo 1h30), o portal <b>transborda</b>:</p>
+      <ul>
+        <li>Quem estava lá dentro é jogado para fora.</li>
+        <li>Saem ondas de monstros e depois um chefe do Altar.</li>
+        <li>Os monstros caçam quem estiver perto e marcham para a <b>colônia mais próxima</b>.</li>
+        <li>Vencer o chefe contém o transbordo e deixa um baú. Se ninguém conseguir em 30 min, a região fica em ruínas.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>☾ Soberano das Sombras</h3>
+      <p>Alguns Portais Pesadelo trazem o <b>Eco do Soberano</b>. Quem fechar esse portal tendo <b>uma classe avançada dominada</b> desperta a classe lendária <b>Soberano das Sombras</b> (só um no servidor). Se o portal transbordar, o Eco se perde.</p>
+      <ul>
+        <li><b>Levante-se:</b> quem você derrotou há pouco (30 s) vira sombra do seu exército para sempre. Chefes viram <b>Marechais</b>.</li>
+        <li><b>Exército das Sombras:</b> chama as sombras guardadas, ou deixa as que lutam furiosas.</li>
+        <li>Exército de 5 + nível da classe; luta com até 2 + nível/3 ao mesmo tempo. <span class="cmd">/sombras</span> gerencia.</li>
+        <li>Sombras não atacam aliados nem jogadores (só em guerra ou se alguém te atacar).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="torre">
+  <h2><span class="ico">🗼</span>Torre Infinita</h2>
+  <div class="grade">
+    <div class="card"><h3>Entrar</h3>
+      <div class="ritual"><span class="b">Obsidiana chorona</span><span class="mais">+</span><span class="i">1 olho do ender</span><span class="mais">+</span><span class="i">1 bloco de ouro</span></div>
+      <p>Clique no Obelisco da Torre e escolha o andar. A sua party sobe junto (quem estiver a até 10 blocos), numa arena só de vocês.</p>
+    </div>
+    <div class="card"><h3>Regras</h3>
+      <ul>
+        <li>Cada andar tem ondas de monstros, mais fortes a cada andar; o visual muda a cada 10.</li>
+        <li><b>A cada 10 andares:</b> um chefe e um baú no centro.</li>
+        <li>Dá para recomeçar do andar 11, 21, 31… até onde você já chegou.</li>
+        <li><b>Morrer na Torre não perde itens</b>: a subida só acaba. <span class="cmd">/torre sair</span> sai a qualquer hora.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Ranking</h3>
+      <p>Andar mais alto <b>da semana</b> (o campeão é anunciado quando a semana vira) e <b>de todos os tempos</b>. Veja em <span class="cmd">/torre ranking</span> ou no Obelisco.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="perigo">
+  <h2><span class="ico">⚠</span>Mundo perigoso</h2>
+  <div class="grade">
+    <div class="card"><h3>Monstros de Elite</h3>
+      <p>Às vezes um monstro nasce Elite (1 modificador), Campeão (2) ou Senhor (3): nome com estrelas, barra de vida, mais força e loot melhor.</p>
+      <p class="muted">Modificadores: Veloz, Blindado, Vampiro, Explosivo, Invocador, Gigante, Fantasma, Venenoso, Gélido, Incendiário, Antimagia, Regenerante, Enfurecido.</p>
+    </div>
+    <div class="card"><h3>Ninhos, hordas e Chefe Mundial</h3>
+      <ul>
+        <li><b>Ninhos:</b> surgem perto de quem explora. Derrote os guardiões e quebre o núcleo.</li>
+        <li><b>Hordas:</b> em algumas noites o sino da colônia toca e, 1 min depois, ela é atacada. Defenda!</li>
+        <li><b>Chefe Mundial:</b> 2× por semana, um chefe muito forte aparece anunciado com coordenadas.</li>
+        <li>O mundo <b>envelhece</b>: monstros +5% por semana (até +50%).</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Bestiário</h3>
+      <p><span class="cmd">/bestiario</span>: nos marcos de 10, 50, 200, 500 e 1000 abates de um tipo, você causa +3% de dano e recebe −2% de dano dele (por marco). Elites contam 5.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="mundovivo">
+  <h2><span class="ico">🌙</span>Estações, clima e céu</h2>
+  <div class="grade">
+    <div class="card"><h3>Estações (1 semana real cada)</h3>
+      <div class="tabela"><table><thead><tr><th>Estação</th><th>O que muda</th></tr></thead><tbody>
+        <tr><td>✿ Primavera</td><td>Plantas 40% mais rápidas</td></tr>
+        <tr><td>☀ Verão</td><td>Ondas de calor e tempestades</td></tr>
+        <tr><td>☘ Outono</td><td>Ventanias e neblina</td></tr>
+        <tr><td>❄ Inverno</td><td>Neve no chão, água congela, plantações ao ar livre quase param (estufas crescem normal)</td></tr>
+      </tbody></table></div>
+      <p>No 4º dia de cada estação tem <b>festival</b>: +25% de XP e uma lembrança para a cabeça. <span class="cmd">/calendario</span>.</p>
+    </div>
+    <div class="card"><h3>Clima e céu</h3>
+      <ul>
+        <li><b>Clima:</b> nevasca (lentidão), neblina, ventania (desvia flechas), tempestade elétrica (raio em quem segura metal) e onda de calor.</li>
+        <li><b>Lua cheia:</b> monstros mais fortes e lobisomens. <b>Lua nova:</b> magias +15% e vampiros.</li>
+        <li><b>Lua de Sangue</b>, <b>chuva de meteoros</b> (quebre para pegar minérios), <b>eclipse</b> e <b>aurora</b>.</li>
+        <li><b>Temperatura:</b> frio na neve e calor no deserto/Nether. Couro, fogueira ou resistência ao fogo protegem.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Maldições <span class="muted">(/maldicao)</span></h3>
+      <ul>
+        <li>🐺 <b>Licantropia:</b> na lua cheia (ou <span class="cmd">/maldicao transformar</span> à noite) vira lobisomem forte e rápido, mas sem armadura nem magia. Ouro machuca mais.</li>
+        <li>🦇 <b>Vampirismo:</b> rouba 15% do dano como vida; o sol queima sem capacete.</li>
+        <li>Cura: <b>Elixir da Purificação</b>, na Bancada Alquímica.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="classes">
+  <h2><span class="ico">⚜</span>Classes</h2>
+  <div class="grade">
+    <div class="card"><h3>Como funciona</h3>
+      <div class="ritual"><span class="b">Púlpito</span><span class="mais">+</span><span class="i">1 livro e pena</span><span class="mais">+</span><span class="i">1 diamante</span></div>
+      <ol>
+        <li>Escolha um caminho (<span class="cmd">/classe</span> ou no Santuário): as tarefas começam a contar.</li>
+        <li>Faça as tarefas (ex.: Guerreiro = 100 monstros corpo a corpo).</li>
+        <li>Passe na <b>Prova</b> num Santuário (ondas, alvos ou duelo). Morrer na prova não perde nada.</li>
+        <li>A classe sobe do 1 ao 20 com o XP dos atributos dela. No 20 fica <b>Dominada</b> para sempre.</li>
+      </ol>
+      <p class="muted">Uma classe ativa por vez. Voltar para uma já aprendida custa 10 esmeraldas. Básicas pedem nível total 55 e o atributo no 15; avançadas pedem o atributo no 40.</p>
+    </div>
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Classe</th><th>Pede</th><th>Passivo (nível 20)</th><th>Habilidades</th></tr></thead><tbody>
+      <tr><td>⚔ Guerreiro</td><td>Combate 15</td><td>+2 ❤, +10% dano corpo a corpo</td><td>Investida, Grito de Guerra</td></tr>
+      <tr><td>➹ Arqueiro</td><td>Combate 15</td><td>+15% dano de flecha, +5% velocidade</td><td>Chuva de Flechas, Salto Evasivo</td></tr>
+      <tr><td>✦ Mago</td><td>Arcano 15</td><td>+40 mana, +1 mana/s</td><td>Míssil Arcano, Barreira Arcana</td></tr>
+      <tr><td>✧ Ladino</td><td>Corrida 15</td><td>+12% velocidade, 8% esquiva</td><td>Bomba de Fumaça, Rolamento</td></tr>
+      <tr><td>⚒ Ferreiro</td><td>Ferraria 15</td><td>5% de forjar uma raridade acima, +3% refino</td><td>Reparo Rápido, Armadura Reforçada</td></tr>
+      <tr><td>♞ Domador</td><td>Doma 15</td><td>+1 companheiro, +15% dano deles</td><td>Chamado, Fúria da Matilha</td></tr>
+      <tr><td>☠ Berserker</td><td>Guerreiro</td><td>+15% dano, até +40% com pouca vida</td><td>Fúria, Redemoinho</td></tr>
+      <tr><td>♜ Cavaleiro</td><td>Guerreiro + Domador</td><td>+3 ❤, +4 armadura, +25% dano montado</td><td>Carga, Baluarte</td></tr>
+      <tr><td>✚ Paladino</td><td>Guerreiro + Mago</td><td>+3 ❤, +3 armadura, +30 mana</td><td>Luz Sagrada, Escudo Divino</td></tr>
+      <tr><td>➶ Atirador de Elite</td><td>Arqueiro</td><td>+30% dano de flecha, 15% de crítico ×2</td><td>Tiro Perfurante, Olho de Águia</td></tr>
+      <tr><td>☤ Caçador</td><td>Arqueiro + Domador</td><td>+20% dano de flecha e dos companheiros</td><td>Marca do Caçador, Armadilha</td></tr>
+      <tr><td>❄ Elementalista</td><td>Mago</td><td>+80 mana, +2 mana/s, magias 20% mais baratas</td><td>Tempestade Elemental, Escudo Elemental</td></tr>
+      <tr><td>✴ Feiticeiro de Batalha</td><td>Mago + Guerreiro</td><td>+40 mana, +10% dano; golpes devolvem mana</td><td>Lâmina Arcana, Passo Arcano</td></tr>
+      <tr><td>✝ Assassino</td><td>Ladino</td><td>+15% velocidade, 12% esquiva, +50% dano pelas costas</td><td>Passos das Sombras, Golpe Letal</td></tr>
+      <tr><td>⚒ Mestre Forjador</td><td>Ferreiro</td><td>12% de forjar uma raridade acima, +8% refino</td><td>Afiar, Martelo do Trovão</td></tr>
+      <tr><td>♞ Mestre das Feras</td><td>Domador</td><td>+2 companheiros, +1 componente, +40% dano</td><td>Rugido, Vínculo Vital</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="lendarias">
+  <h2><span class="ico">✪</span>Classes lendárias</h2>
+  <p class="intro">Só pode haver <b>um dono</b> de cada no servidor. Quem fica 30 dias sem entrar perde a classe. O dono pode abrir mão dela no Santuário (shift + clique).</p>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Classe</th><th>Onde desperta</th><th>Pede (dominada)</th><th>Habilidades</th></tr></thead><tbody>
+      <tr><td>✪ Herdeiro do Ferreiro Lendário</td><td>Túmulo do Ferreiro Antigo</td><td>Mestre Forjador</td><td>Martelo Celestial, Bênção do Ferreiro</td></tr>
+      <tr><td>✺ Arquimago Primordial</td><td>Biblioteca Proibida</td><td>Elementalista</td><td>Meteoro Arcano, Tempo Suspenso</td></tr>
+      <tr><td>❂ Senhor das Feras Ancestrais</td><td>Covil das Feras Ancestrais</td><td>Mestre das Feras</td><td>Chamado Ancestral, Forma Bestial</td></tr>
+      <tr><td>♛ Senhor da Guerra</td><td>Cripta do Rei Caído</td><td>Berserker</td><td>Terremoto, Estandarte de Guerra</td></tr>
+      <tr><td>☽ Lâmina Fantasma</td><td>Santuário das Sombras</td><td>Assassino</td><td>Dança das Lâminas, Véu Sombrio</td></tr>
+      <tr><td>✵ Arqueiro Celestial</td><td>Observatório Celeste</td><td>Atirador de Elite</td><td>Flecha Estelar, Chuva de Estrelas</td></tr>
+      <tr><td>☀ Santo Paladino</td><td>Capela Profanada</td><td>Paladino</td><td>Julgamento Divino, Aura Sagrada</td></tr>
+      <tr><td>☾ Soberano das Sombras</td><td>Portal Pesadelo com o Eco do Soberano</td><td>Qualquer classe avançada</td><td>Levante-se, Exército das Sombras</td></tr>
+    </tbody></table></div>
+    <p class="muted">As 7 primeiras também pedem o atributo da classe no nível 40.</p></div>
+  </div>
+</section>
+
+<section class="secao" id="lendas">
+  <h2><span class="ico">✦</span>Lendas e feitos</h2>
+  <div class="grade">
+    <div class="card"><h3>Como forjar</h3>
+      <p><span class="cmd">/lendas</span> abre o Livro das Lendas. Cada lenda é um item <b>✦ Especial ✦</b> único no servidor, com a sua história escrita nele.</p>
+      <ul>
+        <li>Cumpra os <b>feitos</b> (escondidos: aparecem na metade ou com uma Página do Livro das Lendas).</li>
+        <li>Ferraria 50, perto de uma Forja, segurando o item certo.</li>
+        <li>Custo: 1 Essência Primordial, 6 Fragmentos de Forja e 30 níveis.</li>
+        <li><b>Despertar</b> com abates: I (0), II (100), III (300), IV (700), V (1.500).</li>
+      </ul>
+    </div>
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Lenda</th><th>Item</th><th>Enigma</th><th>Poder</th></tr></thead><tbody>
+      <tr><td>Lâmina do Exorcista</td><td>espada/machado</td><td>"Os mortos só descansam pelas mãos de quem já os fez descansar mil vezes."</td><td>+60% de dano em mortos-vivos</td></tr>
+      <tr><td>Presa da Tecelã</td><td>espada/lança</td><td>"Quem quebra a teia da rainha mais de uma vez herda o veneno dela."</td><td>Envenena; 20% de prender na teia</td></tr>
+      <tr><td>Machado do Lenhador Eterno</td><td>machado</td><td>"A floresta respeita quem já derrubou uma floresta inteira."</td><td>Derruba a árvore inteira</td></tr>
+      <tr><td>Picareta do Abismo</td><td>picareta</td><td>"O abismo se abre para quem já arrancou milhares de tesouros da pedra."</td><td>Agachado, minera o veio inteiro</td></tr>
+      <tr><td>Arco da Tempestade</td><td>arco/besta</td><td>"A tempestade empresta o raio a quem a venceu e nunca erra de longe."</td><td>25% das flechas chamam raio</td></tr>
+      <tr><td>Coroa do Fim</td><td>capacete</td><td>"Só quem derrota o fim várias vezes pode se coroar com ele."</td><td>+25% de dano em chefes</td></tr>
+      <tr><td>Égide do Guardião</td><td>peitoral/escudo</td><td>"O escudo nasce de quem sobrevive onde ninguém deveria sobreviver."</td><td>Devolve 15% do dano; Absorção</td></tr>
+      <tr><td>Botas do Andarilho</td><td>botas</td><td>"O caminho reconhece quem já correu o mundo inteiro."</td><td>Velocidade, sem dano de queda</td></tr>
+      <tr><td>Lâmina do Carrasco</td><td>espada/machado</td><td>"A lâmina pesa com o sangue dos que caíram em duelo."</td><td>Dano dobrado abaixo de 20% de vida</td></tr>
+      <tr><td>Martelo do Forjador Lendário</td><td>maça/machado</td><td>"O martelo escolhe quem já fez o metal cantar, e cantar os mitos."</td><td>Trovão; +10% de raridade na forja</td></tr>
+      <tr><td>Lâmina do Arquimago</td><td>espada</td><td>"O aço se curva para quem conhece todos os segredos da magia."</td><td>Magias 30% mais baratas</td></tr>
+      <tr><td>Elmo do Senhor das Feras</td><td>capacete</td><td>"As feras coroam quem lutou ao lado delas até o céu."</td><td>Companheiros ganham Força e Regeneração</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="exploracao">
+  <h2><span class="ico">🧭</span>Viagem e Locais Ocultos</h2>
+  <div class="grade">
+    <div class="card"><h3>Pedras de Viagem</h3>
+      <div class="ritual"><span class="b">Pedra entalhada de ardósia</span><span class="mais">+</span><span class="i">2 pérolas do ender</span><span class="mais">+</span><span class="i">4 fragmentos de ametista</span></div>
+      <ul>
+        <li>Clique para descobrir; o menu mostra as que você já conhece.</li>
+        <li>Custa 1 nível de XP a cada 1.000 blocos (outro mundo: 3) e 3 s parado.</li>
+        <li>O dono renomeia (etiqueta) e escolhe pública ou privada.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Locais Ocultos</h3>
+      <ul>
+        <li>14 ruínas espalhadas pelo mundo, com um poço que desce até um salão.</li>
+        <li><b>Mapas Rasgados</b> viram uma Bússola Antiga que aponta para perto do local. Chegando perto você ouve sussurros. <span class="cmd">/locais</span>.</li>
+        <li>Resolva o <b>enigma das alavancas</b>, vença o <b>guardião</b> e toque o <b>selo</b>: Página do Livro das Lendas, Fragmentos, diamantes e, se você cumprir o requisito, a <b>classe lendária</b> do local.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="comandos">
+  <h2><span class="ico">⌨</span>Comandos</h2>
+  <p class="intro">Clique num comando para copiar.</p>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/atributos</span></td><td>Seus atributos (e os acessórios)</td></tr>
+      <tr><td><span class="cmd">/guia</span></td><td>Livro Guia do Aventureiro</td></tr>
+      <tr><td><span class="cmd">/forja</span></td><td>Raridades e suas chances</td></tr>
+      <tr><td><span class="cmd">/grimorio</span></td><td>Grimório: magias, criador, secretas, maestria</td></tr>
+      <tr><td><span class="cmd">/classe</span></td><td>Árvore de classes, caminho e habilidades</td></tr>
+      <tr><td><span class="cmd">/lendas</span></td><td>Livro das Lendas</td></tr>
+      <tr><td><span class="cmd">/locais</span></td><td>Locais Ocultos que você achou</td></tr>
+      <tr><td><span class="cmd">/party</span>, <span class="cmd">/pc</span></td><td>Menu e chat da party</td></tr>
+      <tr><td><span class="cmd">/territorio</span></td><td>Menu do território (mapa, bordas, membros...)</td></tr>
+      <tr><td><span class="cmd">/colonia</span></td><td>Sua colônia</td></tr>
+      <tr><td><span class="cmd">/reino</span></td><td>Seu reino, cargos, tesouro, guerra e paz</td></tr>
+      <tr><td><span class="cmd">/pets</span></td><td>Seus companheiros</td></tr>
+      <tr><td><span class="cmd">/masmorra sair</span></td><td>Sai da masmorra sem perder nada</td></tr>
+      <tr><td><span class="cmd">/portais</span></td><td>Portais abertos e quando transbordam</td></tr>
+      <tr><td><span class="cmd">/sombras</span></td><td>Exército das sombras (Soberano)</td></tr>
+      <tr><td><span class="cmd">/torre</span>, <span class="cmd">/torre ranking</span>, <span class="cmd">/torre sair</span></td><td>Torre Infinita</td></tr>
+      <tr><td><span class="cmd">/peixes</span></td><td>Diário do Pescador</td></tr>
+      <tr><td><span class="cmd">/alquimia</span></td><td>Receitas de alquimia</td></tr>
+      <tr><td><span class="cmd">/acessorios</span></td><td>Seus espaços de acessório</td></tr>
+      <tr><td><span class="cmd">/guardaroupa</span></td><td>Aparência da armadura</td></tr>
+      <tr><td><span class="cmd">/receitas</span></td><td>Livro de receitas da Cozinha</td></tr>
+      <tr><td><span class="cmd">/bestiario</span></td><td>Monstros derrotados e marcos</td></tr>
+      <tr><td><span class="cmd">/calendario</span></td><td>Estação, lua, clima e eventos do céu</td></tr>
+      <tr><td><span class="cmd">/maldicao</span></td><td>Sua maldição (e transformar-se)</td></tr>
+      <tr><td><span class="cmd">/titulos</span>, <span class="cmd">/missoes</span></td><td>Títulos e missões de aldeões</td></tr>
+      <tr><td><span class="cmd">/cosmeticos</span>, <span class="cmd">/chapeu</span>, <span class="cmd">/tag</span></td><td>Cosméticos e tag</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
+</main>
+</div>
+<footer>RPGAtributos 2.14 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  try{var t=localStorage.getItem('rpg-tema');if(t==='dark'||t==='light')root.dataset.theme=t;}catch(e){}
+  document.getElementById('tema').addEventListener('click',function(){
+    var escuro=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme=escuro?'light':'dark';
+    try{localStorage.setItem('rpg-tema',root.dataset.theme);}catch(e){}
+  });
+  var norm=function(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();};
+  var busca=document.getElementById('busca');
+  var secoes=[].slice.call(document.querySelectorAll('.secao'));
+  var links={};[].forEach.call(document.querySelectorAll('nav.indice a'),function(a){links[a.getAttribute('href').slice(1)]=a;});
+  busca.addEventListener('input',function(){
+    var q=norm(busca.value.trim()),algum=false;
+    secoes.forEach(function(sec){
+      var visiveis=0,secOk=q&&norm(sec.querySelector('h2').textContent).indexOf(q)>=0;
+      [].forEach.call(sec.querySelectorAll('.card'),function(card){
+        var linhas=[].slice.call(card.querySelectorAll('tbody tr'));
+        if(!q){card.hidden=false;linhas.forEach(function(r){r.hidden=false;});visiveis++;return;}
+        var h=card.querySelector('h3'),tituloOk=secOk||(h&&norm(h.textContent).indexOf(q)>=0);
+        var ok=tituloOk||norm(card.textContent).indexOf(q)>=0;
+        card.hidden=!ok;
+        if(!ok)return;
+        visiveis++;
+        var acertos=linhas.filter(function(r){return norm(r.textContent).indexOf(q)>=0;});
+        linhas.forEach(function(r){r.hidden=!tituloOk&&acertos.length>0&&acertos.indexOf(r)<0;});
+      });
+      var intro=sec.querySelector('.intro');if(intro)intro.hidden=!!q&&!secOk&&visiveis===0;
+      sec.hidden=visiveis===0;
+      if(links[sec.id])links[sec.id].classList.toggle('apagado',visiveis===0);
+      if(visiveis)algum=true;
+    });
+    document.getElementById('vazio').hidden=algum;
+  });
+  var toast=document.getElementById('toast'),timer;
+  document.addEventListener('click',function(e){
+    var c=e.target.closest('.cmd');if(!c)return;
+    var texto=c.textContent.replace(/<[^>]*>/g,'').trim();
+    var mostrar=function(m){toast.textContent=m;toast.classList.add('on');clearTimeout(timer);timer=setTimeout(function(){toast.classList.remove('on');},1400);};
+    try{navigator.clipboard.writeText(texto).then(function(){mostrar('Copiado: '+texto);},function(){mostrar(texto);});}catch(err){mostrar(texto);}
+  });
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(ents){ents.forEach(function(en){
+      if(en.isIntersecting&&links[en.target.id]){for(var k in links)links[k].classList.remove('ativo');links[en.target.id].classList.add('ativo');}
+    });},{rootMargin:'-30% 0px -60% 0px'});
+    secoes.forEach(function(s){obs.observe(s);});
+  }
+})();
+</script>
+</body>
+</html>

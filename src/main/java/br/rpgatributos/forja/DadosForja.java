@@ -1,5 +1,7 @@
 package br.rpgatributos.forja;
 
+import br.rpgatributos.alquimia.Gema;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.StringJoiner;
  * quando o item vira Netherite na mesa de ferraria, os valores sobem sozinhos.
  */
 public record DadosForja(Raridade raridade, String ferreiro, Map<Stat, Double> status, List<EfeitoRolado> efeitos,
-                         int refino) {
+                         int refino, List<Engaste> gemas) {
 
     public static final int REFINO_MAXIMO = 10;
     /** Cada nível de refino deixa os bônus da forja 6% mais fortes. */
@@ -25,12 +27,46 @@ public record DadosForja(Raridade raridade, String ferreiro, Map<Stat, Double> s
     /** Um efeito sorteado: nível (0 = I) e chance de ativar (1 = sempre). */
     public record EfeitoRolado(Efeito efeito, int nivel, double chance) {}
 
+    /** Uma gema engastada no item (grau 1 a 3). */
+    public record Engaste(Gema gema, int grau) {}
+
+    /** Quantos engastes o item tem (pela raridade). */
+    public int engastes() {
+        return Gema.engastes(raridade);
+    }
+
+    public DadosForja comGemas(List<Engaste> novas) {
+        return new DadosForja(raridade, ferreiro, status, efeitos, refino, List.copyOf(novas));
+    }
+
+    /** "RUBI:2,SAFIRA:1" */
+    public String gemasTexto() {
+        StringJoiner j = new StringJoiner(",");
+        for (Engaste en : gemas) j.add(en.gema().name() + ":" + en.grau());
+        return j.toString();
+    }
+
+    public static List<Engaste> lerGemas(String texto) {
+        List<Engaste> l = new ArrayList<>();
+        if (texto == null || texto.isEmpty()) return l;
+        for (String parte : texto.split(",")) {
+            String[] p = parte.split(":");
+            if (p.length != 2) continue;
+            Gema g;
+            try { g = Gema.valueOf(p[0]); } catch (IllegalArgumentException e) { continue; }
+            try {
+                l.add(new Engaste(g, Math.max(1, Math.min(Gema.GRAU_MAXIMO, Integer.parseInt(p[1])))));
+            } catch (NumberFormatException ignored) { }
+        }
+        return l;
+    }
+
     public double fatorRefino() {
         return 1 + BONUS_POR_REFINO * refino;
     }
 
     public DadosForja comRefino(int novo) {
-        return new DadosForja(raridade, ferreiro, status, efeitos, Math.max(0, Math.min(REFINO_MAXIMO, novo)));
+        return new DadosForja(raridade, ferreiro, status, efeitos, Math.max(0, Math.min(REFINO_MAXIMO, novo)), gemas);
     }
 
     public EfeitoRolado efeito(Efeito e) {

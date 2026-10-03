@@ -102,6 +102,9 @@ public final class BonusManager {
             case CULINARIA -> "+" + pct(nivel * c.culDuracaoExtra) + " duração dos pratos, pratos de mais qualidade";
             case DOMA -> c.domaCompanheiros(nivel) + " companheiro(s), " + c.domaComponentes(nivel) + " componente(s) cada, +"
                     + pct(nivel * c.domaVida) + " vida e +" + pct(nivel * c.domaDano) + " dano deles";
+            case PESCA -> plugin.pesca().descricao(nivel);
+            case ALQUIMIA -> "+" + pct(nivel * c.alqDuracaoExtra) + " duração dos elixires, "
+                    + pct(nivel * c.alqChanceExtra) + " de render o dobro, elixires de mais qualidade";
         };
     }
 

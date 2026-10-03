@@ -4,7 +4,8 @@ import br.rpgatributos.Estacao;
 import br.rpgatributos.RPGAtributos;
 import br.rpgatributos.Skill;
 import br.rpgatributos.StatsManager;
-import br.rpgatributos.aventura.Raro;
+import br.rpgatributos.alquimia.Ingrediente;
+import br.rpgatributos.pesca.PeixeRaro;
 import br.rpgatributos.territorio.Flag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -56,8 +57,9 @@ public final class Cozinha extends Estacao {
     /** Ingredientes que podem ter qualidade (contam para melhorar o prato). */
     private static final Set<Material> COM_QUALIDADE = Set.of(
             Material.WHEAT, Material.CARROT, Material.POTATO, Material.BEETROOT, Material.PUMPKIN,
-            Material.SWEET_BERRIES, Material.GLOW_BERRIES, Material.COCOA_BEANS, Material.MELON_SLICE);
-    private static final int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25};
+            Material.SWEET_BERRIES, Material.GLOW_BERRIES, Material.COCOA_BEANS, Material.MELON_SLICE,
+            Material.COD, Material.SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH);
+    private static final int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
     private static final int S_INFO = 4;
     private static final int S_FECHAR = 49;
 
@@ -210,6 +212,7 @@ public final class Cozinha extends Estacao {
                 boolean ok = tem >= ing.qtd();
                 temTudo &= ok;
                 Component nome = ing.variedade() != null ? Component.text(ing.variedade().nome(), ing.variedade().cor())
+                        : ing.peixe() != null ? Component.text(ing.peixe().nome(), ing.peixe().cor())
                         : Component.translatable(ing.material().translationKey());
                 lore.add(Component.text((ok ? " ✔ " : " ✖ ") + ing.qtd() + "x ", ok ? NamedTextColor.GREEN : NamedTextColor.RED)
                         .append(nome.color(ok ? NamedTextColor.GREEN : NamedTextColor.RED)));
@@ -255,8 +258,8 @@ public final class Cozinha extends Estacao {
     private static boolean combina(ItemStack s, Prato.Ingrediente ing) {
         if (s == null || s.isEmpty()) return false;
         if (ing.variedade() != null) return Variedade.de(s) == ing.variedade() && !Variedade.ehSemente(s);
-        return s.getType() == ing.material() && Variedade.de(s) == null && Raro.de(s) == null
-                && !s.getPersistentDataContainer().has(CHAVE_PRATO);
+        if (ing.peixe() != null) return PeixeRaro.de(s) == ing.peixe();
+        return s.getType() == ing.material() && Ingrediente.simples(s);
     }
 
     private static int contar(PlayerInventory inv, Prato.Ingrediente ing) {
@@ -318,7 +321,7 @@ public final class Cozinha extends Estacao {
         int comQualidade = 0, otimos = 0, perfeitos = 0;
         for (Prato.Ingrediente ing : pr.ingredientes()) {
             List<Qualidade> qs = tirar(inv, ing);
-            boolean conta = ing.variedade() != null || COM_QUALIDADE.contains(ing.material());
+            boolean conta = ing.variedade() != null || ing.peixe() != null || COM_QUALIDADE.contains(ing.material());
             if (!conta) continue;
             for (Qualidade q : qs) {
                 comQualidade++;

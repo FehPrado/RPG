@@ -4,6 +4,7 @@ import br.rpgatributos.RPGAtributos;
 import br.rpgatributos.Settings;
 import br.rpgatributos.Skill;
 import br.rpgatributos.StatsManager;
+import br.rpgatributos.alquimia.Gema;
 import br.rpgatributos.forja.DadosForja.EfeitoRolado;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -58,7 +59,7 @@ public final class Forja {
             Attribute.ATTACK_SPEED, 4.0);
 
     private final RPGAtributos plugin;
-    private final NamespacedKey kRaridade, kFerreiro, kStatus, kEfeitos, kRefino;
+    private final NamespacedKey kRaridade, kFerreiro, kStatus, kEfeitos, kRefino, kGemas;
 
     public Forja(RPGAtributos plugin) {
         this.plugin = plugin;
@@ -67,6 +68,7 @@ public final class Forja {
         kStatus = new NamespacedKey(plugin, "forja_status");
         kEfeitos = new NamespacedKey(plugin, "forja_efeitos");
         kRefino = new NamespacedKey(plugin, "forja_refino");
+        kGemas = new NamespacedKey(plugin, "forja_gemas");
     }
 
     private Settings cfg() { return plugin.settings(); }
@@ -92,7 +94,8 @@ public final class Forja {
         return new DadosForja(r, ferreiro == null ? "?" : ferreiro,
                 DadosForja.lerStatus(pdc.get(kStatus, PersistentDataType.STRING)),
                 DadosForja.lerEfeitos(pdc.get(kEfeitos, PersistentDataType.STRING)),
-                refino == null ? 0 : refino);
+                refino == null ? 0 : refino,
+                DadosForja.lerGemas(pdc.get(kGemas, PersistentDataType.STRING)));
     }
 
     public double multiplicador(Raridade r) {
@@ -107,8 +110,19 @@ public final class Forja {
     /** Valor final de um bônus no item (0 se ele não tiver). */
     public double valor(DadosForja d, Material tipo, Stat s) {
         Double qualidade = d.status().get(s);
-        if (qualidade == null) return 0;
-        return s.valor(qualidade, multiplicador(d), Tier.de(tipo));
+        double v = qualidade == null ? 0 : s.valor(qualidade, multiplicador(d), Tier.de(tipo));
+        return v + valorGemas(d, Categoria.de(tipo), s);
+    }
+
+    /** Soma dos bônus das gemas engastadas para esse atributo. */
+    public static double valorGemas(DadosForja d, Categoria cat, Stat s) {
+        if (cat == null || d.gemas().isEmpty()) return 0;
+        double v = 0;
+        for (DadosForja.Engaste en : d.gemas()) {
+            Gema.Bonus b = en.gema().bonus(cat);
+            if (b != null && b.stat() == s) v += b.valor(en.grau());
+        }
+        return v;
     }
 
     public double valor(ItemStack item, Stat s) {
@@ -189,6 +203,7 @@ public final class Forja {
             case DISTANCIA -> Stat.DANO_FLECHA;
             case FERRAMENTA -> Stat.VEL_MINERACAO;
             case ARMADURA, ESCUDO -> Stat.ARMADURA;
+            case MAGICO -> Stat.POTENCIA_MAGICA;
         };
     }
 
@@ -221,7 +236,7 @@ public final class Forja {
             Efeito e = possiveis.get(i);
             efeitos.add(new EfeitoRolado(e, sortearNivel(e, r), sortearChance(e, r, nivel)));
         }
-        return new DadosForja(r, ferreiro, status, efeitos, 0);
+        return new DadosForja(r, ferreiro, status, efeitos, 0, List.of());
     }
 
     private int sortearNivel(Efeito e, Raridade r) {
@@ -289,8 +304,11 @@ public final class Forja {
             pdc.set(kStatus, PersistentDataType.STRING, d.statusTexto());
             pdc.set(kEfeitos, PersistentDataType.STRING, d.efeitosTexto());
             pdc.set(kRefino, PersistentDataType.INTEGER, d.refino());
+            if (d.gemas().isEmpty()) pdc.remove(kGemas);
+            else pdc.set(kGemas, PersistentDataType.STRING, d.gemasTexto());
 
-            Component nome = Component.translatable(tipo.translationKey(), r.cor());
+            Component nome = cat == Categoria.CAJADO ? Component.text("Cajado Arcano", r.cor())
+                    : Component.translatable(tipo.translationKey(), r.cor());
             if (d.refino() > 0) nome = nome.append(Component.text(" +" + d.refino(), r.cor()));
             meta.itemName(nome);
 
@@ -313,6 +331,14 @@ public final class Forja {
                 mods.put(s.atributo(), new AttributeModifier(chaveModificador(s, cat),
                         s.valor(qualidade, mult, tier), s.operacao(), cat.grupo()));
             });
+            // Gemas engastadas: um modificador por engaste (os bônus especiais são somados em combate).
+            for (int i = 0; i < d.gemas().size(); i++) {
+                DadosForja.Engaste en = d.gemas().get(i);
+                Gema.Bonus b = en.gema().bonus(cat);
+                if (b == null || b.stat().atributo() == null) continue;
+                mods.put(b.stat().atributo(), new AttributeModifier(new NamespacedKey(plugin, "forja_gema_" + i + "_" + cat.id()),
+                        b.valor(en.grau()), b.stat().operacao(), cat.grupo()));
+            }
             meta.setAttributeModifiers(mods);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES); // a descrição abaixo mostra tudo de forma mais clara
             meta.setEnchantmentGlintOverride(r.peloMenos(Raridade.LENDARIO) ? Boolean.TRUE : null);
@@ -379,6 +405,25 @@ public final class Forja {
             for (EfeitoRolado er : d.efeitos()) {
                 l.add(Component.text(" ✧ ", r.cor())
                         .append(Component.text(er.efeito().descrever(er.nivel(), er.chance(), cat), COR_EFEITO)));
+            }
+        }
+
+        int engastes = d.engastes();
+        if (engastes > 0) {
+            l.add(Component.empty());
+            l.add(Component.text("Engastes (" + d.gemas().size() + "/" + engastes + "):", NamedTextColor.GRAY));
+            for (int i = 0; i < engastes; i++) {
+                if (i >= d.gemas().size()) {
+                    l.add(Component.text(" ◇ Engaste vazio", NamedTextColor.DARK_GRAY));
+                    continue;
+                }
+                DadosForja.Engaste en = d.gemas().get(i);
+                Gema.Bonus b = en.gema().bonus(cat);
+                Component linha = Component.text(" ◆ ", en.gema().cor()).append(Component.text(en.gema().nome(en.grau()), en.gema().cor()));
+                if (b != null) linha = linha.append(Component.text(": " + b.stat().formatar(b.valor(en.grau())) + " " + b.stat().nome(), NamedTextColor.WHITE));
+                else if (cat == Categoria.CAJADO) linha = linha.append(Component.text(": +" + Math.round(en.gema().potenciaElemental(en.grau()) * 100)
+                        + "% magias de " + en.gema().nomesElementos(), NamedTextColor.LIGHT_PURPLE));
+                l.add(linha);
             }
         }
 

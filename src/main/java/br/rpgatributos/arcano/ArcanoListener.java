@@ -63,6 +63,7 @@ public final class ArcanoListener implements Listener {
 
     @EventHandler
     public void aoSair(PlayerQuitEvent e) {
+        arcano().conjuracao().aoSair(e.getPlayer());
         arcano().descarregar(e.getPlayer());
     }
 
@@ -95,10 +96,10 @@ public final class ArcanoListener implements Listener {
     public void aoUsarGrimorio(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (e.getHand() == EquipmentSlot.OFF_HAND) {
-            if (arcano().ehGrimorio(e.getItem())) e.setUseItemInHand(Event.Result.DENY);
+            if (arcano().ehFoco(e.getItem())) e.setUseItemInHand(Event.Result.DENY);
             return;
         }
-        if (!arcano().ehGrimorio(e.getItem()) || e.getAction() == Action.PHYSICAL) return;
+        if (!arcano().ehFoco(e.getItem()) || e.getAction() == Action.PHYSICAL) return;
         Block clicado = e.getClickedBlock();
         // O clique na estação (infusor, forja, altar, cozinha, reciclagem) é tratado por ela.
         if (arcano().infusores().eh(clicado) || plugin.forjas().eh(clicado) || plugin.altares().eh(clicado)
@@ -154,6 +155,19 @@ public final class ArcanoListener implements Listener {
         if (e.getDamager() instanceof Player p && e.getEntity() instanceof LivingEntity alvo
                 && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
             arcano().conjuracao().golpeDoAvatar(p, alvo);
+            arcano().conjuracao().golpeEncantado(p, alvo, e);
+        }
+        // Invocações: o golpe leva o elemento delas e nunca fere o dono nem aliados.
+        if (e.getEntity() instanceof LivingEntity alvo && arcano().conjuracao().donoInvocacao(e.getDamager()) != null) {
+            arcano().conjuracao().golpeDeInvocacao(e, alvo);
+        }
+        // O dono (e aliados) não machucam a própria invocação sem querer.
+        java.util.UUID dono = arcano().conjuracao().donoInvocacao(e.getEntity());
+        if (dono != null) {
+            Player atacante = e.getDamager() instanceof Player pa ? pa
+                    : e.getDamager() instanceof org.bukkit.entity.Projectile pr && pr.getShooter() instanceof Player ps ? ps : null;
+            Player donoP = Bukkit.getPlayer(dono);
+            if (atacante != null && donoP != null && (atacante.equals(donoP) || !plugin.pvpPermitido(atacante, donoP))) e.setCancelled(true);
         }
     }
 
@@ -207,6 +221,15 @@ public final class ArcanoListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void aoMirar(EntityTargetLivingEntityEvent e) {
+        // Invocações só miram inimigos do dono.
+        java.util.UUID dono = arcano().conjuracao().donoInvocacao(e.getEntity());
+        if (dono != null && e.getTarget() != null) {
+            Player donoP = Bukkit.getPlayer(dono);
+            if (donoP == null || e.getTarget().equals(donoP) || !Conjuracao.inimigo(donoP, e.getTarget())) {
+                e.setCancelled(true);
+                return;
+            }
+        }
         if (!(e.getTarget() instanceof Player p)) return;
         if (Bukkit.getCurrentTick() < arcano().perfil(p).fantasmaAte) e.setCancelled(true);
     }

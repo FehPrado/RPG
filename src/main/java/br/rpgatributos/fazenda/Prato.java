@@ -1,5 +1,6 @@
 package br.rpgatributos.fazenda;
 
+import br.rpgatributos.pesca.PeixeRaro;
 import org.bukkit.Material;
 import org.bukkit.potion.PotionEffectType;
 
@@ -49,14 +50,25 @@ public enum Prato {
     TORTA_RUBI("Torta Rubi", Material.PUMPKIN_PIE, 0.8, 60, 8,
             List.of(v(Variedade.BETERRABA_RUBI, 2), m(Material.SUGAR, 1), m(Material.EGG, 1)),
             List.of(e(PotionEffectType.HEALTH_BOOST, 300, 1), e(PotionEffectType.REGENERATION, 30, 1)), null),
+    SOPA_PESCADOR("Sopa do Pescador", Material.BEETROOT_SOUP, 0.1, 15, 6,
+            List.of(m(Material.COD, 2), m(Material.POTATO, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.WATER_BREATHING, 300, 0), e(PotionEffectType.LUCK, 300, 0)), null),
+    SUSHI_REAL("Sushi Real", Material.COOKED_SALMON, 0.45, 35, 8,
+            List.of(p(PeixeRaro.SALMAO_REI, 1), m(Material.KELP, 2), m(Material.WHEAT, 1)),
+            List.of(e(PotionEffectType.DOLPHINS_GRACE, 120, 0), e(PotionEffectType.CONDUIT_POWER, 300, 0),
+                    e(PotionEffectType.HASTE, 300, 0)), null),
+    CALDEIRADA_ABISSAL("Caldeirada Abissal", Material.RABBIT_STEW, 0.75, 60, 10,
+            List.of(p(PeixeRaro.PEIXE_ABISSAL, 1), m(Material.INK_SAC, 1), v(Variedade.BATATA_ANCESTRAL, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.RESISTANCE, 240, 0), e(PotionEffectType.NIGHT_VISION, 300, 0),
+                    e(PotionEffectType.STRENGTH, 180, 0)), null),
     BANQUETE_LENDARIO("Banquete Lendário", Material.SUSPICIOUS_STEW, 0.9, 100, 12,
             List.of(v(Variedade.TRIGO_DOURADO, 1), v(Variedade.CENOURA_CRISTALINA, 1), v(Variedade.BATATA_ANCESTRAL, 1),
                     v(Variedade.BETERRABA_RUBI, 1), m(Material.GOLDEN_APPLE, 1), m(Material.BOWL, 1)),
             List.of(e(PotionEffectType.STRENGTH, 300, 0), e(PotionEffectType.RESISTANCE, 300, 0),
                     e(PotionEffectType.REGENERATION, 300, 0), e(PotionEffectType.SPEED, 300, 0)), Especial.BANQUETE);
 
-    /** Ingrediente: um material comum OU uma variedade mutante. */
-    public record Ingrediente(Material material, Variedade variedade, int qtd) {}
+    /** Ingrediente: um material comum, uma variedade mutante OU um peixe raro. */
+    public record Ingrediente(Material material, Variedade variedade, PeixeRaro peixe, int qtd) {}
 
     /** Efeito do prato: tipo, duração base em segundos e nível (0 = I). */
     public record Efeito(PotionEffectType tipo, int segundos, int nivel) {}
@@ -90,8 +102,9 @@ public enum Prato {
         this.especial = especial;
     }
 
-    private static Ingrediente m(Material mat, int qtd) { return new Ingrediente(mat, null, qtd); }
-    private static Ingrediente v(Variedade var, int qtd) { return new Ingrediente(null, var, qtd); }
+    private static Ingrediente m(Material mat, int qtd) { return new Ingrediente(mat, null, null, qtd); }
+    private static Ingrediente v(Variedade var, int qtd) { return new Ingrediente(null, var, null, qtd); }
+    private static Ingrediente p(PeixeRaro peixe, int qtd) { return new Ingrediente(null, null, peixe, qtd); }
     private static Efeito e(PotionEffectType t, int seg, int nivel) { return new Efeito(t, seg, nivel); }
 
     public String nome() { return nome; }

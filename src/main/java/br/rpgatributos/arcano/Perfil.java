@@ -20,6 +20,9 @@ public final class Perfil {
     int selecionada;
     final Set<Receita> descobertas = EnumSet.noneOf(Receita.class);
     long instavelAte;
+    /** XP de maestria de cada elemento (o nível sai daqui). */
+    final Map<Essencia, Integer> maestria = new EnumMap<>(Essencia.class);
+    Estilo estilo = Estilo.PADRAO;
 
     // ---------- só em memória ----------
     /** chave da magia → tick em que pode lançar de novo */
@@ -30,6 +33,8 @@ public final class Perfil {
     int avatarAte;
     int mostrarManaAte;
     boolean avisouInstavel;
+    /** Arma encantada por uma magia de "Encantar arma" (null = nenhuma). */
+    Feiticos.ArmaEncantada arma;
 
     public Map<ParteCorpo, org.bukkit.Material> infusoes() { return infusoes; }
     public Map<ParteCorpo, br.rpgatributos.aventura.Raro> nucleos() { return nucleos; }
@@ -141,6 +146,28 @@ public final class Perfil {
         String[] partes = texto.split("\\|", -1);
         for (int i = 0; i < Math.min(partes.length, MAX_MAGIAS); i++) {
             if (!partes[i].isEmpty()) magias[i] = Magia.ler(partes[i]);
+        }
+    }
+
+    public int xpMaestria(Essencia e) { return maestria.getOrDefault(e, 0); }
+    public Estilo estilo() { return estilo; }
+
+    /** "FOGO=120,GELO=40" */
+    String maestriaTexto() {
+        StringJoiner j = new StringJoiner(",");
+        maestria.forEach((e, v) -> j.add(e.name() + "=" + v));
+        return j.toString();
+    }
+
+    void lerMaestria(String texto) {
+        maestria.clear();
+        if (texto == null || texto.isEmpty()) return;
+        for (String parte : texto.split(",")) {
+            String[] kv = parte.split("=");
+            if (kv.length != 2) continue;
+            Essencia e = Essencia.porNome(kv[0]);
+            if (e == null) continue;
+            try { maestria.put(e, Math.max(0, Integer.parseInt(kv[1]))); } catch (NumberFormatException ignored) { }
         }
     }
 

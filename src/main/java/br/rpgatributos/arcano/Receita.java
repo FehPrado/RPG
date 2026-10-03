@@ -80,7 +80,51 @@ public enum Receita {
             FOGO, GELO, TERRA, VENTO),
     SANTUARIO("Santuário", Forma.CRIACAO, Material.BEACON, 120,
             "Cria uma área sagrada por 30 segundos: aliados regeneram rápido e mortos-vivos queimam.",
-            VIDA, TERRA, AGUA, ENERGIA);
+            VIDA, TERRA, AGUA, ENERGIA),
+
+    // ---------- formas novas ----------
+    RAIO_SOLAR("Raio Solar", Forma.RAIO, Material.SHROOMLIGHT, 8,
+            "Feixe de luz ardente: queima e causa 80% mais dano.", FOGO, ENERGIA),
+    DRENO_DE_ALMA("Dreno de Alma", Forma.RAIO, Material.SCULK_CATALYST, 8,
+            "Feixe que rouba vida: você cura 60% do dano causado.", SOMBRA, VIDA),
+    RAIO_CONGELANTE("Raio Congelante", Forma.RAIO, Material.BLUE_ICE, 8,
+            "Feixe gélido: o alvo fica cada vez mais lento e acaba Congelado.", GELO, AGUA),
+    SOPRO_DO_DRAGAO("Sopro do Dragão", Forma.SOPRO, Material.DRAGON_HEAD, 10,
+            "Um cone de fogo longo que queima por muito tempo.", FOGO, VENTO),
+    SOPRO_GELIDO("Sopro Gélido", Forma.SOPRO, Material.POWDER_SNOW_BUCKET, 10,
+            "Um cone de frio que congela a água e quase para os inimigos.", GELO, VENTO),
+    NUVEM_TOXICA("Nuvem Tóxica", Forma.SOPRO, Material.SPORE_BLOSSOM, 15,
+            "Sopra veneno e deixa uma nuvem tóxica no chão.", NATUREZA, SOMBRA),
+    CHUVA_ACIDA("Chuva Ácida", Forma.CHUVA, Material.SLIME_BLOCK, 18,
+            "Uma chuva que envenena e corrói por mais tempo.", AGUA, NATUREZA),
+    TEMPESTADE_ELETRICA("Tempestade Elétrica", Forma.CHUVA, Material.LIGHTNING_ROD, 25,
+            "Raios caem nos inimigos da área várias vezes.", ENERGIA, AGUA, VENTO),
+    GRANIZO("Granizo", Forma.CHUVA, Material.PACKED_ICE, 18,
+            "Pedras de gelo pesadas: muito dano e lentidão.", GELO, TERRA),
+    GOLEM_DE_PEDRA("Golem de Pedra", Forma.INVOCACAO, Material.CARVED_PUMPKIN, 90,
+            "Invoca um golem de ferro enorme por 60 segundos.", TERRA, ENERGIA),
+    SOMBRAS_GEMEAS("Sombras Gêmeas", Forma.INVOCACAO, Material.WITHER_SKELETON_SKULL, 60,
+            "Invoca três espíritos sombrios que drenam os inimigos.", SOMBRA, VAZIO),
+    ESPIRITO_DA_FLORESTA("Espírito da Floresta", Forma.INVOCACAO, Material.FLOWERING_AZALEA, 60,
+            "Um espírito que cura você e os aliados e faz as plantas crescerem.", NATUREZA, VIDA),
+    LAMINA_FLAMEJANTE("Lâmina Flamejante", Forma.ARMA, Material.BLAZE_ROD, 30,
+            "10 golpes que explodem em chamas em volta do alvo.", FOGO, TERRA),
+    LAMINA_VAMPIRICA("Lâmina Vampírica", Forma.ARMA, Material.REDSTONE, 30,
+            "12 golpes que roubam 30% do dano como vida.", SOMBRA, NATUREZA),
+    LAMINA_DO_TROVAO("Lâmina do Trovão", Forma.ARMA, Material.TRIDENT, 30,
+            "10 golpes com 35% de chance de chamar um raio.", ENERGIA, VENTO),
+
+    // ---------- Tomos Proibidos (aprendidas lendo o tomo; não dá para criar) ----------
+    CHUVA_DE_METEOROS("Chuva de Meteoros", Forma.PROIBIDA, Material.MAGMA_BLOCK, 120,
+            "Oito meteoros caem em volta do ponto que você olha.", FOGO, TERRA),
+    ZERO_ABSOLUTO("Zero Absoluto", Forma.PROIBIDA, Material.BLUE_ICE, 90,
+            "Congela todos os inimigos a até 10 blocos.", GELO, AGUA),
+    JULGAMENTO("Julgamento", Forma.PROIBIDA, Material.LIGHTNING_ROD, 100,
+            "Raios caem em até 6 inimigos e curam os aliados.", ENERGIA, VIDA),
+    RUPTURA_DIMENSIONAL("Ruptura Dimensional", Forma.PROIBIDA, Material.CRYING_OBSIDIAN, 150,
+            "Abre uma fenda que puxa tudo por 3 segundos e implode.", VAZIO, SOMBRA),
+    RENASCER_DA_FLORESTA("Renascer da Floresta", Forma.PROIBIDA, Material.CHERRY_SAPLING, 300,
+            "Cura completamente os aliados por perto e faz a terra florescer.", NATUREZA, VIDA);
 
     private final String nome;
     private final Forma forma;

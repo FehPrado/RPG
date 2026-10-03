@@ -452,6 +452,7 @@ public final class Locais implements Listener {
             premio.add(Raro.MAPA_RASGADO.criar(1));
             premio.add(Raro.FRAGMENTO_DE_FORJA.criar(2 + rnd().nextInt(3)));
             if (rnd().nextDouble() < 0.4) premio.add(Raro.ESSENCIA_PRIMORDIAL.criar(1));
+            if (rnd().nextDouble() < 0.25) premio.add(br.rpgatributos.arcano.ItensMagicos.tomoAleatorio());
             premio.add(new ItemStack(Material.DIAMOND, 2 + rnd().nextInt(4)));
             premio.add(new ItemStack(Material.EMERALD, 8 + rnd().nextInt(9)));
             for (ItemStack i : premio) p.getInventory().addItem(i).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));

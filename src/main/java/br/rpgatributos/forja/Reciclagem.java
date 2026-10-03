@@ -333,6 +333,8 @@ public final class Reciclagem extends Estacao {
         int fragmentos = rnd().nextDouble() < chanceFragmento(alvo) ? 1 : 0;
         if (d != null && d.refino() >= 5) fragmentos++; // o refino investido volta um pouco
         if (fragmentos > 0) volta.add(Raro.FRAGMENTO_DE_FORJA.criar(fragmentos));
+        // As gemas engastadas voltam inteiras.
+        if (d != null) for (DadosForja.Engaste en : d.gemas()) volta.add(en.gema().criar(en.grau(), 1));
 
         p.getInventory().setItem(t.slot, null);
         t.slot = -1;

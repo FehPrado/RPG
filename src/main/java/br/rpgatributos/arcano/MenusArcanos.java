@@ -45,7 +45,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /** As telas do sistema arcano. Tudo é botão: nada pode ser tirado dos menus. */
 public final class MenusArcanos implements Listener {
 
-    private enum Tipo { INFUSOR, GRIMORIO, CRIADOR, SECRETAS }
+    private enum Tipo { INFUSOR, GRIMORIO, CRIADOR, SECRETAS, MAESTRIA }
 
     private static final class Tela implements InventoryHolder {
         final Tipo tipo;
@@ -57,6 +57,9 @@ public final class MenusArcanos implements Listener {
         Raro nucleo;
         final Set<Essencia> escolhidas = EnumSet.noneOf(Essencia.class);
         Forma forma;
+        final Set<Modificador> mods = EnumSet.noneOf(Modificador.class);
+        /** Criador: 0 = essências e forma, 1 = modificadores. Secretas: página. */
+        int pagina;
 
         Tela(Tipo tipo) { this.tipo = tipo; }
 
@@ -79,14 +82,18 @@ public final class MenusArcanos implements Listener {
     // ----- grimório -----
     private static final int G_RESUMO = 4;
     private static final int[] G_MAGIAS = {11, 12, 13, 14, 15, 21, 22, 23};
+    private static final int G_ESTILO = 38;
     private static final int G_CRIAR = 39;
     private static final int G_SECRETAS = 41;
+    private static final int G_MAESTRIA = 42;
     private static final int G_FECHAR = 49;
 
     // ----- criador -----
     private static final int C_PREVIA = 4;
     private static final int[] C_ESSENCIAS = {10, 11, 12, 13, 14, 15, 16, 21, 22, 23};
-    private static final int[] C_FORMAS = {38, 39, 40, 41, 42};
+    private static final int[] C_FORMAS = {28, 29, 30, 31, 32, 33, 34, 39, 40, 41};
+    private static final int[] C_MODS = {19, 20, 21, 22, 23, 24, 25, 30, 31, 32};
+    private static final int C_PAGINA = 47;
     private static final int C_VOLTAR = 45;
     private static final int C_CRIAR = 49;
     private static final int C_LIMPAR = 53;
@@ -97,6 +104,13 @@ public final class MenusArcanos implements Listener {
             9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
             27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
     private static final int S_VOLTAR = 49;
+    private static final int S_ANTERIOR = 45;
+    private static final int S_PROXIMA = 53;
+
+    // ----- maestria -----
+    private static final int[] M_ELEMENTOS = {10, 11, 12, 13, 14, 15, 16, 21, 22, 23};
+    private static final int M_REACOES = 40;
+    private static final int M_VOLTAR = 49;
 
     private static final long TEMPO_PARA_DIGITAR_MS = 60_000;
 
@@ -520,6 +534,20 @@ public final class MenusArcanos implements Listener {
                 Component.text("Descobertas: " + pf.descobertas().size() + " / " + Receita.values().length, NamedTextColor.WHITE),
                 Component.empty(),
                 Component.text("» Clique para ver", NamedTextColor.YELLOW))));
+        Estilo estilo = pf.estilo();
+        inv.setItem(G_ESTILO, item(estilo.icone(), Component.text("Estilo: " + estilo.nome(), NamedTextColor.LIGHT_PURPLE, TextDecoration.BOLD), List.of(
+                Component.text(estilo.descricao(), NamedTextColor.GRAY),
+                Component.text("Uma marca visual em todas as suas magias.", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("» Clique para trocar", NamedTextColor.YELLOW))));
+        int mestres = 0;
+        for (Essencia e : Essencia.values()) if (arc.nivelMaestria(pf, e) >= Arcano.MAESTRIA_VARIANTE) mestres++;
+        inv.setItem(G_MAESTRIA, item(Material.EXPERIENCE_BOTTLE, Component.text("Maestria e reações", NamedTextColor.AQUA, TextDecoration.BOLD), List.of(
+                Component.text("Cada elemento sobe de nível com o uso", NamedTextColor.GRAY),
+                Component.text("e libera uma variante no nível 5.", NamedTextColor.GRAY),
+                linha("Variantes liberadas: ", mestres + " / " + Essencia.values().length, NamedTextColor.WHITE),
+                Component.empty(),
+                Component.text("» Clique para ver", NamedTextColor.YELLOW))));
         inv.setItem(G_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of()));
         preencher(inv);
     }
@@ -530,6 +558,7 @@ public final class MenusArcanos implements Listener {
         List<Component> lore = new ArrayList<>();
         lore.add(rotuloEssencias(m.essencias()));
         lore.add(linha("Forma: ", m.forma().nome(), NamedTextColor.WHITE));
+        if (!m.mods().isEmpty()) lore.add(linha("Modificadores: ", nomesMods(m.mods()), NamedTextColor.LIGHT_PURPLE));
         lore.add(linha("Custo: ", (int) arc.custoMana(m, pf) + " mana", NamedTextColor.AQUA));
         lore.add(linha("Recarga: ", StatsManager.fmt(arc.recargaTicks(m) / 20.0) + "s", NamedTextColor.WHITE));
         lore.add(Component.empty());
@@ -564,7 +593,16 @@ public final class MenusArcanos implements Listener {
         int slot = e.getSlot();
         if (slot == G_FECHAR) { p.closeInventory(); return; }
         if (slot == G_CRIAR) { clique(p); abrirCriador(p); return; }
-        if (slot == G_SECRETAS) { clique(p); abrirSecretas(p); return; }
+        if (slot == G_SECRETAS) { clique(p); abrirSecretas(p, 0); return; }
+        if (slot == G_MAESTRIA) { clique(p); abrirMaestria(p); return; }
+        if (slot == G_ESTILO) {
+            pf.estilo = pf.estilo.proximo();
+            arc.salvar(p);
+            clique(p);
+            if (pf.estilo.particula() != null) p.getWorld().spawnParticle(pf.estilo.particula(), p.getLocation().add(0, 1.2, 0), 20, 0.4, 0.5, 0.4, 0.02);
+            desenharGrimorio(p, t);
+            return;
+        }
         for (int i = 0; i < G_MAGIAS.length; i++) {
             if (G_MAGIAS[i] != slot) continue;
             if (i >= arc.espacosGrimorio(p)) {
@@ -609,38 +647,49 @@ public final class MenusArcanos implements Listener {
         inv.clear();
         Arcano arc = arcano();
         Perfil pf = arc.perfil(p);
-        Map<Essencia, Integer> temNoCorpo = pf.essencias();
-
-        Essencia[] todas = Essencia.values();
-        for (int i = 0; i < todas.length; i++) {
-            Essencia e = todas[i];
-            Integer pontos = temNoCorpo.get(e);
-            if (pontos == null) {
-                inv.setItem(C_ESSENCIAS[i], item(Material.GRAY_DYE, Component.text("??? (" + e.nome() + ")", NamedTextColor.DARK_GRAY), List.of(
-                        Component.text("Infunda um item com essência", NamedTextColor.GRAY),
-                        Component.text("de " + e.nome() + " para usar.", NamedTextColor.GRAY))));
-                continue;
+        if (t.pagina == 1) {
+            desenharModificadores(p, t);
+        } else {
+            Map<Essencia, Integer> temNoCorpo = pf.essencias();
+            Essencia[] todas = Essencia.values();
+            for (int i = 0; i < todas.length; i++) {
+                Essencia e = todas[i];
+                Integer pontos = temNoCorpo.get(e);
+                if (pontos == null) {
+                    inv.setItem(C_ESSENCIAS[i], item(Material.GRAY_DYE, Component.text("??? (" + e.nome() + ")", NamedTextColor.DARK_GRAY), List.of(
+                            Component.text("Infunda um item com essência", NamedTextColor.GRAY),
+                            Component.text("de " + e.nome() + " para usar.", NamedTextColor.GRAY))));
+                    continue;
+                }
+                boolean escolhida = t.escolhidas.contains(e);
+                inv.setItem(C_ESSENCIAS[i], botao(new ItemStack(e.icone()), e.rotulo().decorate(TextDecoration.BOLD), List.of(
+                        Component.text(e.papel(), NamedTextColor.GRAY),
+                        linha("No corpo: ", pontos + " pontos", NamedTextColor.WHITE),
+                        linha("Maestria: ", "nível " + arc.nivelMaestria(pf, e), NamedTextColor.AQUA),
+                        Component.empty(),
+                        escolhida ? Component.text("✔ Escolhida (clique para tirar)", NamedTextColor.GREEN)
+                                : Component.text("» Clique para escolher", NamedTextColor.YELLOW)), escolhida));
             }
-            boolean escolhida = t.escolhidas.contains(e);
-            inv.setItem(C_ESSENCIAS[i], botao(new ItemStack(e.icone()), e.rotulo().decorate(TextDecoration.BOLD), List.of(
-                    Component.text(e.papel(), NamedTextColor.GRAY),
-                    linha("No corpo: ", pontos + " pontos", NamedTextColor.WHITE),
-                    Component.empty(),
-                    escolhida ? Component.text("✔ Escolhida (clique para tirar)", NamedTextColor.GREEN)
-                            : Component.text("» Clique para escolher", NamedTextColor.YELLOW)), escolhida));
+            List<Forma> formas = formasCriaveis();
+            for (int i = 0; i < formas.size() && i < C_FORMAS.length; i++) {
+                Forma f = formas.get(i);
+                boolean escolhida = f == t.forma;
+                inv.setItem(C_FORMAS[i], botao(new ItemStack(f.icone()), Component.text(f.nome(), NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+                        Component.text(f.descricao() + ".", NamedTextColor.GRAY),
+                        Component.empty(),
+                        escolhida ? Component.text("✔ Forma escolhida", NamedTextColor.GREEN)
+                                : Component.text("» Clique para escolher", NamedTextColor.YELLOW)), escolhida));
+            }
         }
-
-        Forma[] formas = Forma.values();
-        for (int i = 0; i < formas.length; i++) {
-            Forma f = formas[i];
-            boolean escolhida = f == t.forma;
-            inv.setItem(C_FORMAS[i], botao(new ItemStack(f.icone()), Component.text(f.nome(), NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
-                    Component.text(f.descricao() + ".", NamedTextColor.GRAY),
-                    Component.empty(),
-                    escolhida ? Component.text("✔ Forma escolhida", NamedTextColor.GREEN)
-                            : Component.text("» Clique para escolher", NamedTextColor.YELLOW)), escolhida));
-        }
-
+        inv.setItem(C_PAGINA, t.pagina == 1
+                ? item(Material.BLAZE_POWDER, Component.text("« Essências e forma", NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+                        Component.text("Voltar para escolher essências e forma.", NamedTextColor.GRAY)))
+                : item(Material.PRISMARINE_SHARD, Component.text("Modificadores (" + t.mods.size() + "/" + Modificador.MAXIMO + ") »",
+                        NamedTextColor.LIGHT_PURPLE, TextDecoration.BOLD), List.of(
+                        Component.text("Dividir, Ricochete, Teleguiado, Mina, Eco...", NamedTextColor.GRAY),
+                        Component.text("Até " + Modificador.MAXIMO + " por magia.", NamedTextColor.GRAY),
+                        Component.empty(),
+                        Component.text("» Clique para escolher", NamedTextColor.YELLOW))));
         inv.setItem(C_PREVIA, previa(p, pf, t));
         inv.setItem(C_VOLTAR, item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of()));
         inv.setItem(C_LIMPAR, item(Material.RED_DYE, Component.text("Limpar", NamedTextColor.RED), List.of()));
@@ -650,19 +699,61 @@ public final class MenusArcanos implements Listener {
         preencher(inv);
     }
 
+    private static List<Forma> formasCriaveis() {
+        List<Forma> l = new ArrayList<>();
+        for (Forma f : Forma.values()) if (f.criavel()) l.add(f);
+        return l;
+    }
+
+    private void desenharModificadores(Player p, Tela t) {
+        int nivel = arcano().nivel(p);
+        int max = cfg().nivelMaximo;
+        Modificador[] todos = Modificador.values();
+        for (int i = 0; i < todos.length && i < C_MODS.length; i++) {
+            Modificador m = todos[i];
+            boolean liberado = nivel >= m.nivelNecessario(max);
+            boolean escolhido = t.mods.contains(m);
+            boolean serve = t.forma == null || m.serveEm(t.forma);
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text(m.descricao() + ".", NamedTextColor.GRAY));
+            lore.add(linha("Custo de mana: ", "×" + StatsManager.fmt(m.multCusto()), NamedTextColor.AQUA));
+            lore.add(Component.text("Serve em: " + formasDe(m), NamedTextColor.DARK_GRAY));
+            lore.add(Component.empty());
+            if (!liberado) lore.add(Component.text("✖ Arcano nível " + m.nivelNecessario(max), NamedTextColor.RED));
+            else if (!serve) lore.add(Component.text("✖ Não serve na forma " + t.forma.nome(), NamedTextColor.RED));
+            else lore.add(escolhido ? Component.text("✔ Escolhido (clique para tirar)", NamedTextColor.GREEN)
+                        : Component.text("» Clique para escolher", NamedTextColor.YELLOW));
+            t.inventario.setItem(C_MODS[i], botao(new ItemStack(liberado ? m.icone() : Material.GRAY_DYE),
+                    Component.text(m.nome(), liberado ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.DARK_GRAY, TextDecoration.BOLD), lore, escolhido));
+        }
+    }
+
+    private static String formasDe(Modificador m) {
+        List<String> l = new ArrayList<>();
+        for (Forma f : Forma.values()) if (f.criavel() && m.serveEm(f)) l.add(f.nome());
+        return l.size() >= formasCriaveis().size() ? "todas" : String.join(", ", l);
+    }
+
+    private static String nomesMods(Set<Modificador> mods) {
+        List<String> l = new ArrayList<>();
+        for (Modificador m : mods) l.add(m.nome());
+        return String.join(", ", l);
+    }
+
     private ItemStack previa(Player p, Perfil pf, Tela t) {
         if (t.escolhidas.isEmpty() || t.forma == null) {
             return item(Material.PAPER, Component.text("Sua magia", NamedTextColor.WHITE, TextDecoration.BOLD), List.of(
                     Component.text("Escolha de 1 a 4 essências", NamedTextColor.GRAY),
-                    Component.text("e uma forma.", NamedTextColor.GRAY)));
+                    Component.text("e uma forma (e, se quiser, modificadores).", NamedTextColor.GRAY)));
         }
         Arcano arc = arcano();
-        Magia m = new Magia(t.escolhidas, t.forma, "");
+        Magia m = new Magia(t.escolhidas, t.forma, t.mods, "");
         Receita r = m.receita();
         boolean conhecida = r != null && pf.descobertas().contains(r);
         List<Component> lore = new ArrayList<>();
         lore.add(rotuloEssencias(m.essencias()));
         lore.add(linha("Forma: ", t.forma.nome(), NamedTextColor.WHITE));
+        if (!t.mods.isEmpty()) lore.add(linha("Modificadores: ", nomesMods(t.mods), NamedTextColor.LIGHT_PURPLE));
         lore.add(linha("Custo: ", (int) arc.custoMana(m, pf) + " mana", NamedTextColor.AQUA));
         double recarga = conhecida || r == null ? arc.recargaTicks(m) / 20.0 : arc.recargaGenerica(m) / 20.0;
         lore.add(linha("Recarga: ", StatsManager.fmt(recarga) + "s", NamedTextColor.WHITE));
@@ -673,6 +764,7 @@ public final class MenusArcanos implements Listener {
         } else {
             lore.addAll(descricaoGenerica(m.essencias(), m.forma()));
         }
+        for (Modificador mod : t.mods) lore.add(Component.text(" ✧ " + mod.nome() + ": " + mod.descricao(), NamedTextColor.LIGHT_PURPLE));
         String nome = conhecida ? r.nome() : Magia.nomeGenerico(m.essencias(), m.forma());
         return botao(new ItemStack(Material.PAPER), Component.text(nome, conhecida ? NamedTextColor.GOLD : NamedTextColor.WHITE,
                 TextDecoration.BOLD), lore, conhecida);
@@ -684,12 +776,44 @@ public final class MenusArcanos implements Listener {
         if (slot == C_VOLTAR) { clique(p); abrirGrimorio(p); return; }
         if (slot == C_LIMPAR) {
             t.escolhidas.clear();
+            t.mods.clear();
             t.forma = null;
             clique(p);
             desenharCriador(p, t);
             return;
         }
         if (slot == C_CRIAR) { criarMagia(p, pf, t); return; }
+        if (slot == C_PAGINA) {
+            t.pagina = t.pagina == 1 ? 0 : 1;
+            clique(p);
+            desenharCriador(p, t);
+            return;
+        }
+        if (t.pagina == 1) {
+            Modificador[] todos = Modificador.values();
+            for (int i = 0; i < todos.length && i < C_MODS.length; i++) {
+                if (C_MODS[i] != slot) continue;
+                Modificador m = todos[i];
+                if (t.mods.contains(m)) {
+                    t.mods.remove(m);
+                    clique(p);
+                } else if (arcano().nivel(p) < m.nivelNecessario(cfg().nivelMaximo)) {
+                    erro(p, m.nome() + " libera no Arcano nível " + m.nivelNecessario(cfg().nivelMaximo) + ".");
+                } else if (t.forma != null && !m.serveEm(t.forma)) {
+                    erro(p, m.nome() + " não serve na forma " + t.forma.nome() + ".");
+                } else if (t.mods.size() >= Modificador.MAXIMO) {
+                    erro(p, "No máximo " + Modificador.MAXIMO + " modificadores por magia.");
+                } else if (t.mods.stream().anyMatch(m::conflita)) {
+                    erro(p, "Rápida e Potente não combinam.");
+                } else {
+                    t.mods.add(m);
+                    clique(p);
+                }
+                desenharCriador(p, t);
+                return;
+            }
+            return;
+        }
         Essencia[] todas = Essencia.values();
         for (int i = 0; i < todas.length; i++) {
             if (C_ESSENCIAS[i] != slot) continue;
@@ -708,10 +832,12 @@ public final class MenusArcanos implements Listener {
             desenharCriador(p, t);
             return;
         }
-        Forma[] formas = Forma.values();
-        for (int i = 0; i < formas.length; i++) {
+        List<Forma> formas = formasCriaveis();
+        for (int i = 0; i < formas.size() && i < C_FORMAS.length; i++) {
             if (C_FORMAS[i] != slot) continue;
-            t.forma = formas[i];
+            t.forma = formas.get(i);
+            // Modificadores que não servem na forma nova saem.
+            t.mods.removeIf(m -> !m.serveEm(t.forma));
             clique(p);
             desenharCriador(p, t);
             return;
@@ -729,7 +855,7 @@ public final class MenusArcanos implements Listener {
             erro(p, "Grimório cheio. Apague uma magia antes.");
             return;
         }
-        Magia nova = new Magia(t.escolhidas, t.forma, Magia.nomePadrao(t.escolhidas, t.forma));
+        Magia nova = new Magia(t.escolhidas, t.forma, t.mods, Magia.nomePadrao(t.escolhidas, t.forma));
         double custo = arc.custoMana(nova, pf);
         if (pf.mana < custo) {
             erro(p, "Criar essa magia gasta " + (int) custo + " de mana (você tem " + (int) pf.mana + ").");
@@ -776,36 +902,159 @@ public final class MenusArcanos implements Listener {
     //  Magias secretas
     // =====================================================================
 
-    public void abrirSecretas(Player p) {
+    public void abrirSecretas(Player p, int pagina) {
         Tela t = new Tela(Tipo.SECRETAS);
-        t.inventario = Bukkit.createInventory(t, 54, Component.text("✦ Magias secretas"));
+        t.pagina = pagina;
+        t.inventario = Bukkit.createInventory(t, 54, Component.text("✦ Magias secretas (" + (pagina + 1) + "/" + paginasSecretas() + ")"));
+        desenharSecretas(p, t);
+        p.openInventory(t.inventario);
+    }
+
+    private static int paginasSecretas() {
+        return (Receita.values().length + S_RECEITAS.length - 1) / S_RECEITAS.length;
+    }
+
+    private void desenharSecretas(Player p, Tela t) {
         Inventory inv = t.inventario;
+        inv.clear();
         Perfil pf = arcano().perfil(p);
         Receita[] todas = Receita.values();
         inv.setItem(S_RESUMO, item(Material.NETHER_STAR, Component.text("Magias secretas", NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
                 Component.text("Descobertas: " + pf.descobertas().size() + " / " + todas.length, NamedTextColor.WHITE),
                 Component.empty(),
                 Component.text("Experimente combinações no", NamedTextColor.GRAY),
-                Component.text("criador de magias para achar mais.", NamedTextColor.GRAY))));
-        for (int i = 0; i < todas.length && i < S_RECEITAS.length; i++) {
-            Receita r = todas[i];
+                Component.text("criador de magias para achar mais.", NamedTextColor.GRAY),
+                Component.text("As proibidas vêm de Tomos Proibidos.", NamedTextColor.DARK_RED),
+                Component.empty(),
+                Component.text("Clique numa descoberta para", NamedTextColor.YELLOW),
+                Component.text("colocá-la no grimório.", NamedTextColor.YELLOW))));
+        int inicio = t.pagina * S_RECEITAS.length;
+        for (int k = 0; k < S_RECEITAS.length && inicio + k < todas.length; k++) {
+            Receita r = todas[inicio + k];
+            boolean proibida = r.forma() == Forma.PROIBIDA;
             if (!pf.descobertas().contains(r)) {
-                // Dica: quantas essências e uma delas (a forma continua segredo).
                 Essencia pista = r.essencias().iterator().next();
-                inv.setItem(S_RECEITAS[i], item(Material.GRAY_DYE, Component.text("???", NamedTextColor.DARK_GRAY), List.of(
-                        Component.text("Ainda não descoberta.", NamedTextColor.GRAY),
-                        Component.empty(),
-                        Component.text("Dica: " + r.essencias().size() + " essências, uma delas é ", NamedTextColor.DARK_GRAY)
-                                .append(pista.rotulo()))));
+                List<Component> lore = new ArrayList<>();
+                lore.add(Component.text("Ainda não descoberta.", NamedTextColor.GRAY));
+                lore.add(Component.empty());
+                if (proibida) {
+                    lore.add(Component.text("☠ Só num Tomo Proibido (chefes,", NamedTextColor.DARK_RED));
+                    lore.add(Component.text("Locais Ocultos e masmorras).", NamedTextColor.DARK_RED));
+                } else {
+                    lore.add(Component.text("Dica: " + r.essencias().size() + " essências, uma delas é ", NamedTextColor.DARK_GRAY)
+                            .append(pista.rotulo()));
+                }
+                inv.setItem(S_RECEITAS[k], item(proibida ? Material.BLACK_DYE : Material.GRAY_DYE,
+                        Component.text(proibida ? "☠ ???" : "???", proibida ? NamedTextColor.DARK_RED : NamedTextColor.DARK_GRAY), lore));
                 continue;
             }
-            inv.setItem(S_RECEITAS[i], botao(new ItemStack(r.icone()), Component.text(r.nome(), NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+            inv.setItem(S_RECEITAS[k], botao(new ItemStack(r.icone()), Component.text(r.nome(), proibida ? NamedTextColor.DARK_RED : NamedTextColor.GOLD,
+                    TextDecoration.BOLD), List.of(
                     rotuloEssencias(r.essencias()),
                     linha("Forma: ", r.forma().nome(), NamedTextColor.WHITE),
                     Component.empty(),
-                    Component.text(r.descricao(), NamedTextColor.GRAY)), false));
+                    Component.text(r.descricao(), NamedTextColor.GRAY),
+                    Component.empty(),
+                    Component.text("» Clique: colocar no grimório", NamedTextColor.YELLOW)), false));
         }
-        inv.setItem(S_VOLTAR, item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of()));
+        if (t.pagina > 0) inv.setItem(S_ANTERIOR, item(Material.ARROW, Component.text("« Página anterior", NamedTextColor.YELLOW), List.of()));
+        if (t.pagina < paginasSecretas() - 1) inv.setItem(S_PROXIMA, item(Material.ARROW, Component.text("Próxima página »", NamedTextColor.YELLOW), List.of()));
+        inv.setItem(S_VOLTAR, item(Material.BOOK, Component.text("« Grimório", NamedTextColor.YELLOW), List.of()));
+        preencher(inv);
+    }
+
+    private void cliqueSecretas(Player p, Tela t, int slot) {
+        if (slot == S_VOLTAR) { clique(p); abrirGrimorio(p); return; }
+        if (slot == S_ANTERIOR && t.pagina > 0) { clique(p); abrirSecretas(p, t.pagina - 1); return; }
+        if (slot == S_PROXIMA && t.pagina < paginasSecretas() - 1) { clique(p); abrirSecretas(p, t.pagina + 1); return; }
+        Receita[] todas = Receita.values();
+        for (int k = 0; k < S_RECEITAS.length; k++) {
+            if (S_RECEITAS[k] != slot) continue;
+            int i = t.pagina * S_RECEITAS.length + k;
+            if (i >= todas.length) return;
+            Receita r = todas[i];
+            Arcano arc = arcano();
+            Perfil pf = arc.perfil(p);
+            if (!pf.descobertas().contains(r)) return;
+            for (int j = 0; j < Perfil.MAX_MAGIAS; j++) {
+                Magia m = pf.magia(j);
+                if (m != null && m.receita() == r) {
+                    erro(p, r.nome() + " já está no grimório.");
+                    return;
+                }
+            }
+            int livre = pf.espacoLivre(arc.espacosGrimorio(p));
+            if (livre < 0) {
+                erro(p, "Grimório cheio. Apague uma magia antes.");
+                return;
+            }
+            pf.magias[livre] = new Magia(r.essencias(), r.forma(), r.nome());
+            arc.salvar(p);
+            p.playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1.2f);
+            p.sendMessage(Component.text("✦ " + r.nome() + " foi para o grimório.", Arcano.COR));
+            return;
+        }
+    }
+
+    // =====================================================================
+    //  Maestria e reações
+    // =====================================================================
+
+    public void abrirMaestria(Player p) {
+        Tela t = new Tela(Tipo.MAESTRIA);
+        t.inventario = Bukkit.createInventory(t, 54, Component.text("✦ Maestria dos elementos"));
+        Inventory inv = t.inventario;
+        Arcano arc = arcano();
+        Perfil pf = arc.perfil(p);
+        inv.setItem(4, item(Material.EXPERIENCE_BOTTLE, Component.text("Maestria", NamedTextColor.AQUA, TextDecoration.BOLD), List.of(
+                Component.text("Cada magia lançada dá maestria aos", NamedTextColor.GRAY),
+                Component.text("elementos dela (reações dão mais).", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("Cada nível: +3% de força nas magias", NamedTextColor.WHITE),
+                Component.text("com esse elemento.", NamedTextColor.WHITE),
+                Component.text("Nível " + Arcano.MAESTRIA_VARIANTE + ": a variante do elemento.", NamedTextColor.GOLD),
+                Component.text("Nível " + Arcano.MAESTRIA_MAXIMA + ": reações 50% mais fortes.", NamedTextColor.GOLD))));
+        Essencia[] todas = Essencia.values();
+        for (int i = 0; i < todas.length; i++) {
+            Essencia e = todas[i];
+            int xp = pf.xpMaestria(e);
+            int nivel = Arcano.nivelMaestria(xp);
+            List<Component> lore = new ArrayList<>();
+            lore.add(linha("Nível: ", nivel + " / " + Arcano.MAESTRIA_MAXIMA, NamedTextColor.WHITE));
+            if (nivel < Arcano.MAESTRIA_MAXIMA) {
+                int de = Arcano.xpParaMaestria(nivel), ate = Arcano.xpParaMaestria(nivel + 1);
+                double prog = (xp - de) / (double) (ate - de);
+                int cheios = (int) Math.round(prog * 20);
+                lore.add(Component.text("|".repeat(cheios), e.cor()).append(Component.text("|".repeat(20 - cheios), NamedTextColor.DARK_GRAY))
+                        .append(Component.text(" " + (xp - de) + "/" + (ate - de), NamedTextColor.GRAY)));
+            } else {
+                lore.add(Component.text("✦ Mestre!", NamedTextColor.GOLD));
+            }
+            lore.add(linha("Força: ", "+" + nivel * 3 + "%", NamedTextColor.GREEN));
+            lore.add(Component.empty());
+            boolean variante = nivel >= Arcano.MAESTRIA_VARIANTE;
+            lore.add(Component.text((variante ? "✔ " : "✖ ") + "Variante: " + Feiticos.variante(e), variante ? NamedTextColor.GOLD : NamedTextColor.DARK_GRAY));
+            lore.add(Component.text("  " + Feiticos.descricaoVariante(e), variante ? NamedTextColor.WHITE : NamedTextColor.DARK_GRAY));
+            lore.add(Component.empty());
+            lore.add(Component.text("Reações com " + e.nome() + ":", NamedTextColor.GRAY));
+            for (Reacoes.Reacao r : Reacoes.Reacao.values()) {
+                if (!r.usa(e)) continue;
+                Essencia outra = r.a() == e ? r.b() : r.a();
+                lore.add(Component.text(" + " + outra.nome() + " = ", NamedTextColor.DARK_GRAY).append(Component.text(r.nome(), r.cor())));
+            }
+            inv.setItem(M_ELEMENTOS[i], botao(new ItemStack(e.icone()), e.rotulo().decorate(TextDecoration.BOLD), lore, nivel >= Arcano.MAESTRIA_MAXIMA));
+        }
+        List<Component> reacoes = new ArrayList<>();
+        reacoes.add(Component.text("Um elemento marca o alvo por 6s.", NamedTextColor.GRAY));
+        reacoes.add(Component.text("Outro elemento nele causa a reação", NamedTextColor.GRAY));
+        reacoes.add(Component.text("(vale entre jogadores da party!):", NamedTextColor.GRAY));
+        reacoes.add(Component.empty());
+        for (Reacoes.Reacao r : Reacoes.Reacao.values()) {
+            reacoes.add(Component.text(r.nome(), r.cor()).append(Component.text(" (" + r.a().nome() + " + " + r.b().nome() + ")", NamedTextColor.DARK_GRAY)));
+            reacoes.add(Component.text("  " + r.descricao(), NamedTextColor.WHITE));
+        }
+        inv.setItem(M_REACOES, item(Material.NETHER_STAR, Component.text("Reações elementais", NamedTextColor.GOLD, TextDecoration.BOLD), reacoes));
+        inv.setItem(M_VOLTAR, item(Material.BOOK, Component.text("« Grimório", NamedTextColor.YELLOW), List.of()));
         preencher(inv);
         p.openInventory(inv);
     }
@@ -825,9 +1074,8 @@ public final class MenusArcanos implements Listener {
             case INFUSOR -> cliqueInfusor(p, t, e, noMenu);
             case GRIMORIO -> { if (noMenu) cliqueGrimorio(p, t, e); }
             case CRIADOR -> { if (noMenu) cliqueCriador(p, t, e); }
-            case SECRETAS -> {
-                if (noMenu && e.getSlot() == S_VOLTAR) { clique(p); abrirGrimorio(p); }
-            }
+            case SECRETAS -> { if (noMenu) cliqueSecretas(p, t, e.getSlot()); }
+            case MAESTRIA -> { if (noMenu && e.getSlot() == M_VOLTAR) { clique(p); abrirGrimorio(p); } }
         }
     }
 

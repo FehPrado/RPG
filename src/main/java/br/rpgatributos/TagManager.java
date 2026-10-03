@@ -82,7 +82,8 @@ public final class TagManager implements Listener {
     }
 
     private boolean usaTag(Player p) {
-        return getTag(p) != null || cfg().tagMostrarNivel || plugin.titulos().ativo(p) != null || plugin.classes().ativa(p) != null;
+        return getTag(p) != null || cfg().tagMostrarNivel || plugin.titulos().ativo(p) != null || plugin.classes().ativa(p) != null
+                || plugin.reinos().de(p) != null;
     }
 
     private Component montarTexto(Player p) {
@@ -90,6 +91,8 @@ public final class TagManager implements Listener {
         Component nome = tag != null ? CORES.deserialize(tag) : Component.text(p.getName());
         Component titulo = plugin.titulos().linhaDaTag(p);
         if (titulo != null) nome = titulo.append(Component.newline()).append(nome);
+        Component reino = plugin.reinos().linhaDaTag(p);
+        if (reino != null) nome = reino.append(Component.newline()).append(nome);
         Component classe = plugin.classes().linhaDaTag(p);
         if (!cfg().tagMostrarNivel) return classe == null ? nome : nome.append(Component.newline()).append(classe);
         Component nivel = Component.text("Nível total " + plugin.stats().nivelTotal(p), NamedTextColor.GRAY);

@@ -48,7 +48,8 @@ public final class Santuarios extends Estacao {
             // lendárias, nas duas colunas da direita
             Map.entry(Classe.HERDEIRO_DO_FERREIRO, 16), Map.entry(Classe.ARQUIMAGO_PRIMORDIAL, 17),
             Map.entry(Classe.SENHOR_DAS_FERAS_ANCESTRAIS, 25), Map.entry(Classe.SENHOR_DA_GUERRA, 26),
-            Map.entry(Classe.LAMINA_FANTASMA, 34), Map.entry(Classe.ARQUEIRO_CELESTIAL, 35), Map.entry(Classe.SANTO_PALADINO, 43));
+            Map.entry(Classe.LAMINA_FANTASMA, 34), Map.entry(Classe.ARQUEIRO_CELESTIAL, 35), Map.entry(Classe.SANTO_PALADINO, 43),
+            Map.entry(Classe.SOBERANO_DAS_SOMBRAS, 44));
     private static final int S_PERFIL = 4, S_ABANDONAR = 45, S_FECHAR = 49, S_COMO = 53;
     private static final TextColor COR = TextColor.color(0xFFD54F);
 
@@ -296,7 +297,8 @@ public final class Santuarios extends Estacao {
         var tipo = br.rpgatributos.oculto.TipoLocal.daClasse(c);
         java.util.UUID dono = cl.donoLendaria(c);
         boolean minha = p.getUniqueId().equals(dono);
-        boolean conhece = minha || dono != null || (tipo != null && plugin.locais().descobriuTipo(p, tipo));
+        boolean soberano = c == Classe.SOBERANO_DAS_SOMBRAS;
+        boolean conhece = soberano || minha || dono != null || (tipo != null && plugin.locais().descobriuTipo(p, tipo));
         if (!conhece) {
             return item(Material.BLACK_CANDLE, Component.text("??? Classe lendária esquecida", NamedTextColor.DARK_GRAY, TextDecoration.BOLD), List.of(
                     Component.text("Nenhum santuário ensina este caminho.", NamedTextColor.GRAY),
@@ -314,6 +316,10 @@ public final class Santuarios extends Estacao {
         }
         lore.add(Component.empty());
         if (tipo != null) lore.add(Component.text("Selo: " + tipo.nome(), NamedTextColor.GOLD));
+        if (soberano) {
+            lore.add(Component.text("Origem: um Portal Pesadelo raro (Eco do Soberano)", NamedTextColor.GOLD));
+            lore.add(req(cl.dominouAvancada(p), "Uma classe avançada dominada"));
+        }
         for (Classe r : c.requisitos()) lore.add(req(cl.dominou(p, r), r.nome() + " dominada"));
         lore.add(req(plugin.stats().getNivel(p, c.atributo()) >= cl.atributoNecessario(c), c.atributo().nome() + " nível " + cl.atributoNecessario(c)));
         lore.add(Component.empty());
@@ -326,7 +332,7 @@ public final class Santuarios extends Estacao {
         } else if (dono != null) {
             lore.add(Component.text("Pertence a " + cl.nomeDonoLendaria(c) + ".", NamedTextColor.RED));
         } else {
-            lore.add(Component.text("Livre! Vença o guardião e toque o selo.", NamedTextColor.GREEN));
+            lore.add(Component.text(soberano ? "Livre! Feche um Portal Pesadelo com o Eco do Soberano." : "Livre! Vença o guardião e toque o selo.", NamedTextColor.GREEN));
         }
         ItemStack i = item(dono == null || minha ? c.icone() : Material.GRAY_DYE,
                 Component.text(c.simbolo() + " " + c.nome(), dono == null || minha ? c.cor() : NamedTextColor.DARK_GRAY, TextDecoration.BOLD), lore);

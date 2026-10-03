@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 /** O que cai nos baús da masmorra: cresce com a dificuldade; o baú do chefe é o maior. */
-final class Tesouro {
+public final class Tesouro {
 
     private static final List<Enchantment> ENCANTOS = List.of(
             Enchantment.SHARPNESS, Enchantment.PROTECTION, Enchantment.EFFICIENCY, Enchantment.UNBREAKING,
@@ -27,7 +27,7 @@ final class Tesouro {
     private Tesouro() { }
 
     /** Enche o baú. {@code rolagens}: quantos sorteios; {@code chefe}: o baú final (com equipamento garantido). */
-    static void encher(RPGAtributos plugin, Inventory inv, Dificuldade d, int rolagens, boolean chefe, Random r) {
+    public static void encher(RPGAtributos plugin, Inventory inv, Dificuldade d, int rolagens, boolean chefe, Random r) {
         List<ItemStack> itens = sortear(plugin, d, rolagens, chefe, r);
         List<Integer> slots = new ArrayList<>();
         for (int i = 0; i < inv.getSize(); i++) slots.add(i);
@@ -67,6 +67,7 @@ final class Tesouro {
             // Pistas dos Locais Ocultos e das lendas.
             if (r.nextDouble() < 0.6) l.add(Raro.MAPA_RASGADO.criar(1));
             if (r.nextDouble() < 0.4) l.add(Raro.PAGINA_DE_LENDA.criar(1));
+            if (t >= 2 && r.nextDouble() < (t == 3 ? 0.2 : 0.08)) l.add(br.rpgatributos.arcano.ItensMagicos.tomoAleatorio());
         } else {
             if (r.nextDouble() < 0.08) l.add(Raro.MAPA_RASGADO.criar(1));
             if (r.nextDouble() < 0.05) l.add(Raro.PAGINA_DE_LENDA.criar(1));

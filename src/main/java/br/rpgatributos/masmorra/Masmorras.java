@@ -243,13 +243,59 @@ public final class Masmorras implements Listener {
         return null;
     }
 
-    private void criar(Player dono, Dificuldade d, Location estacao) {
+    private Masmorra criar(Player dono, Dificuldade d, Location estacao) {
         Masmorra m = new Masmorra(proximaVaga++, d, Tema.sortear(), mundo, dono.getUniqueId());
         Random r = new Random();
         gerador.planejar(m, r);
         ativas.put(m.id, m);
         obras.put(m.id, gerador.obras(m, r));
         origem.put(m.id, estacao);
+        return m;
+    }
+
+    // =====================================================================
+    //  Portais do mundo (Fase C): masmorra pública, sem custo
+    // =====================================================================
+
+    /** Motivo de o jogador não poder entrar numa masmorra dessa dificuldade, ou null. */
+    public String impedimentoPortal(Player p, Dificuldade d) {
+        if (mundo == null) return "O mundo das masmorras não está disponível.";
+        if (de(p) != null) return "Você já está numa masmorra.";
+        int precisa = d.nivelTotalNecessario(cfg().nivelMaximo * Skill.values().length);
+        if (p.getGameMode() != GameMode.CREATIVE && plugin.stats().nivelTotal(p) < precisa) {
+            return "O portal te repele: precisa de nível total " + precisa + ".";
+        }
+        return null;
+    }
+
+    /**
+     * Gera a masmorra de um Portal do mundo. Qualquer um pode entrar enquanto ela existir.
+     * @return a masmorra (ainda se formando), ou null se não há vaga agora.
+     */
+    public Masmorra criarParaPortal(Player quem, Dificuldade d, int tesouroExtra, java.util.function.Consumer<Masmorra> aoConcluir) {
+        if (mundo == null || ativas.size() >= cfg().masMaximo + 2) return null;
+        Masmorra m = criar(quem, d, null);
+        m.publica = true;
+        m.tesouroExtra = tesouroExtra;
+        m.aoConcluir = aoConcluir;
+        return m;
+    }
+
+    /** Entra na masmorra de um Portal do mundo. @return motivo de não ter entrado, ou null. */
+    public String entrarPortal(Player p, Masmorra m) {
+        if (!ativas.containsKey(m.id)) return "Esse portal perdeu a força.";
+        if (m.estado == Masmorra.Estado.GERANDO) return "O portal ainda está se formando...";
+        if (m.estado == Masmorra.Estado.CONCLUIDA) return "Esse portal já foi vencido.";
+        if (m.sairam.contains(p.getUniqueId())) return "O portal não deixa você voltar.";
+        String erro = impedimentoPortal(p, m.dificuldade);
+        if (erro != null) return erro;
+        entrar(p, m);
+        return null;
+    }
+
+    /** A masmorra ainda existe? */
+    public Masmorra ativa(UUID id) {
+        return id == null ? null : ativas.get(id);
     }
 
     private static String nomeMaterial(Material m) {
@@ -283,6 +329,7 @@ public final class Masmorras implements Listener {
         m.estado = Masmorra.Estado.PRONTA;
         m.limite = System.currentTimeMillis() + cfg().masTempoLimiteMin * 60_000L;
         Player dono = Bukkit.getPlayer(m.dono);
+        if (m.publica) return; // o Portal do mundo cuida de quem entra
         Location estacao = origem.get(m.id);
         if (estacao == null) {
             if (dono != null) entrar(dono, m);
@@ -380,7 +427,12 @@ public final class Masmorras implements Listener {
         limparRetorno(p);
         if (ehMundo(p.getWorld())) p.teleport(volta);
         if (motivo != null) p.sendMessage(Component.text("۞ " + motivo, COR));
-        if (m.participantes.isEmpty() && m.estado != Masmorra.Estado.GERANDO && !portalAbertoPara(m)) encerrar(m, null);
+        if (m.participantes.isEmpty() && m.estado != Masmorra.Estado.GERANDO && !portalAbertoPara(m) && fechaVazia(m)) encerrar(m, null);
+    }
+
+    /** Masmorra sem ninguém fecha na hora? (a de um Portal do mundo espera outros entrarem) */
+    private static boolean fechaVazia(Masmorra m) {
+        return !m.publica || m.estado == Masmorra.Estado.CONCLUIDA;
     }
 
     private boolean portalAbertoPara(Masmorra m) {
@@ -396,6 +448,11 @@ public final class Masmorras implements Listener {
             l = p.getRespawnLocation() != null ? p.getRespawnLocation() : Bukkit.getWorlds().getFirst().getSpawnLocation();
         }
         return l;
+    }
+
+    /** Esquece para onde o jogador voltaria (ele saiu de outro jeito, ex.: morreu na Torre). */
+    public void esquecerRetorno(Player p) {
+        limparRetorno(p);
     }
 
     private void limparRetorno(Player p) {
@@ -458,7 +515,7 @@ public final class Masmorras implements Listener {
             if (m.estado == Masmorra.Estado.GERANDO) continue;
             List<Player> presentes = presentes(m);
             if (!presentes.isEmpty()) m.ultimaPresenca = agora;
-            else if (agora - m.ultimaPresenca > 60_000 && !portalAbertoPara(m)) {
+            else if (agora - m.ultimaPresenca > (m.publica && m.estado != Masmorra.Estado.CONCLUIDA ? 600_000 : 60_000) && !portalAbertoPara(m)) {
                 encerrar(m, null);
                 continue;
             }
@@ -767,7 +824,7 @@ public final class Masmorras implements Listener {
         Block b = mundo.getBlockAt(s.centroX, s.minY + 1, s.centroZ);
         b.setType(Material.CHEST, false);
         if (b.getState() instanceof Chest bau) {
-            Tesouro.encher(plugin, bau.getBlockInventory(), m.dificuldade, 4 + m.dificuldade.nivel() + jogadores, true, new Random());
+            Tesouro.encher(plugin, bau.getBlockInventory(), m.dificuldade, 4 + m.dificuldade.nivel() + jogadores + m.tesouroExtra, true, new Random());
         }
         m.saida = new Location(mundo, s.centroX + 4.5, s.minY + 1, s.centroZ + 0.5);
         int xp = 80 * (m.dificuldade.nivel() + 1);
@@ -782,6 +839,14 @@ public final class Masmorras implements Listener {
                     Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(3500), Duration.ofMillis(800))));
             p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
             p.sendMessage(Component.text("۞ A masmorra some em 3 minutos: pegue o baú e entre no portal (ou /masmorra sair).", COR));
+        }
+        if (m.aoConcluir != null) {
+            try {
+                m.aoConcluir.accept(m);
+            } catch (RuntimeException ex) {
+                plugin.getLogger().warning("Erro ao fechar o portal da masmorra: " + ex);
+            }
+            return; // o Portal anuncia do jeito dele
         }
         if (m.dificuldade.nivel() >= 2) {
             Player dono = Bukkit.getPlayer(m.dono);
@@ -881,7 +946,10 @@ public final class Masmorras implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void aoMorrerChefe(EntityDeathEvent e) {
         Masmorra m = chefes.remove(e.getEntity().getUniqueId());
-        if (m != null && ativas.containsKey(m.id)) concluir(m);
+        if (m == null || !ativas.containsKey(m.id)) return;
+        Player matador = e.getEntity().getKiller();
+        if (matador != null) m.matadorChefe = matador.getUniqueId();
+        concluir(m);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -902,7 +970,7 @@ public final class Masmorras implements Listener {
         limparRetorno(p);
         m.participantes.remove(p.getUniqueId());
         m.sairam.add(p.getUniqueId());
-        if (m.participantes.isEmpty()) {
+        if (m.participantes.isEmpty() && fechaVazia(m)) {
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                 if (ativas.containsKey(m.id) && m.participantes.isEmpty()) encerrar(m, null);
             }, 100L);
@@ -952,7 +1020,7 @@ public final class Masmorras implements Listener {
         m.participantes.remove(p.getUniqueId());
         m.sairam.add(p.getUniqueId());
         limparRetorno(p);
-        if (m.participantes.isEmpty() && !portalAbertoPara(m)) encerrar(m, null);
+        if (m.participantes.isEmpty() && !portalAbertoPara(m) && fechaVazia(m)) encerrar(m, null);
     }
 
     @EventHandler(ignoreCancelled = true)

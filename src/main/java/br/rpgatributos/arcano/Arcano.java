@@ -40,7 +40,7 @@ public final class Arcano {
     public static final int INTERVALO = 10;
 
     private final RPGAtributos plugin;
-    private final NamespacedKey kInfusoes, kMana, kMagias, kSelecionada, kDescobertas, kInstavel, kGrimorio;
+    private final NamespacedKey kInfusoes, kMana, kMagias, kSelecionada, kDescobertas, kInstavel, kGrimorio, kMaestria, kEstilo;
     private final NamespacedKey kVida, kDano, kVelocidade;
     private final Map<UUID, Perfil> perfis = new HashMap<>();
     private final Map<UUID, BossBar> barras = new HashMap<>();
@@ -51,6 +51,7 @@ public final class Arcano {
     private final Infusores infusores;
     private final MenusArcanos menus;
     private final Lendarias lendarias;
+    private final ItensMagicos itensMagicos;
 
     public Arcano(RPGAtributos plugin) {
         this.plugin = plugin;
@@ -59,6 +60,7 @@ public final class Arcano {
         this.infusores = new Infusores(plugin);
         this.menus = new MenusArcanos(plugin);
         this.lendarias = new Lendarias(plugin);
+        this.itensMagicos = new ItensMagicos(plugin);
         kInfusoes = new NamespacedKey(plugin, "arcano_infusoes");
         kMana = new NamespacedKey(plugin, "arcano_mana");
         kMagias = new NamespacedKey(plugin, "arcano_magias");
@@ -66,6 +68,8 @@ public final class Arcano {
         kDescobertas = new NamespacedKey(plugin, "arcano_descobertas");
         kInstavel = new NamespacedKey(plugin, "arcano_instavel");
         kGrimorio = new NamespacedKey(plugin, "grimorio");
+        kMaestria = new NamespacedKey(plugin, "arcano_maestria");
+        kEstilo = new NamespacedKey(plugin, "arcano_estilo");
         kVida = new NamespacedKey(plugin, "arcano_coracao");
         kDano = new NamespacedKey(plugin, "arcano_bracos");
         kVelocidade = new NamespacedKey(plugin, "arcano_pernas");
@@ -78,6 +82,7 @@ public final class Arcano {
     public Infusores infusores() { return infusores; }
     public MenusArcanos menus() { return menus; }
     public Lendarias lendarias() { return lendarias; }
+    public ItensMagicos itensMagicos() { return itensMagicos; }
 
     /** Registra os eventos e as tarefas repetidas. Chamado no onEnable. */
     public void iniciar() {
@@ -94,6 +99,9 @@ public final class Arcano {
         agenda.runTaskTimer(plugin, lendarias::tick, 4L, 4L);
         agenda.runTaskTimer(plugin, infusores::tick, 5L, 5L);
         agenda.runTaskTimer(plugin, conjuracao::tickFardos, 40L, 40L);
+        agenda.runTaskTimer(plugin, conjuracao::tick, 5L, 5L);
+        pm.registerEvents(itensMagicos, plugin);
+        itensMagicos.registrarReceita();
 
         infusores.iniciar();
         for (Player p : plugin.getServer().getOnlinePlayers()) aplicarBonus(p);
@@ -102,6 +110,7 @@ public final class Arcano {
     /** Chamado no onDisable. */
     public void parar() {
         menus.fecharTodos();
+        conjuracao.desligar();
         temporarios.reverterTodos();
         descarregarTodos();
     }
@@ -127,6 +136,8 @@ public final class Arcano {
         pf.lerDescobertas(pdc.get(kDescobertas, PersistentDataType.STRING));
         pf.selecionada = pdc.getOrDefault(kSelecionada, PersistentDataType.INTEGER, 0);
         pf.instavelAte = pdc.getOrDefault(kInstavel, PersistentDataType.LONG, 0L);
+        pf.lerMaestria(pdc.get(kMaestria, PersistentDataType.STRING));
+        pf.estilo = Estilo.porNome(pdc.get(kEstilo, PersistentDataType.STRING));
         Double mana = pdc.get(kMana, PersistentDataType.DOUBLE);
         pf.mana = mana == null ? manaMax(p, pf) : mana;
         return pf;
@@ -142,6 +153,8 @@ public final class Arcano {
         pdc.set(kSelecionada, PersistentDataType.INTEGER, pf.selecionada);
         pdc.set(kInstavel, PersistentDataType.LONG, pf.instavelAte);
         pdc.set(kMana, PersistentDataType.DOUBLE, pf.mana);
+        pdc.set(kMaestria, PersistentDataType.STRING, pf.maestriaTexto());
+        pdc.set(kEstilo, PersistentDataType.STRING, pf.estilo.name());
     }
 
     public void descarregar(Player p) {
@@ -165,13 +178,13 @@ public final class Arcano {
 
     public double manaMax(Player p, Perfil pf) {
         return cfg().arcManaBase + nivel(p) * cfg().arcManaPorNivel + pf.poder(ParteCorpo.MENTE) * ParteCorpo.MANA_POR_PODER
-                + plugin.titulos().bonusMana(p) + plugin.classes().bonusMana(p);
+                + plugin.titulos().bonusMana(p) + plugin.classes().bonusMana(p) + plugin.acessorios().bonusMana(p);
     }
 
     public double regen(Player p, Perfil pf) {
         double r = cfg().arcRegenBase + nivel(p) * cfg().arcRegenPorNivel
                 + pf.poder(ParteCorpo.SANGUE) * ParteCorpo.REGEN_POR_PODER + plugin.titulos().bonusRegenMana(p)
-                + plugin.classes().bonusRegenMana(p);
+                + plugin.classes().bonusRegenMana(p) + plugin.acessorios().bonusRegenMana(p) + plugin.ceu().bonusRegen(p);
         return rejeitando(p, pf) ? r * 0.5 : r;
     }
 
@@ -227,19 +240,26 @@ public final class Arcano {
 
     public double custoMana(Magia m, Perfil pf) {
         double c = cfg().arcCustoBase * Math.pow(m.essencias().size(), 1.4) * m.forma().multCusto();
+        for (Modificador mod : m.mods()) c *= mod.multCusto();
         if (pf.instavel()) c *= 1.4;
         return Math.round(c);
     }
 
     public int recargaTicks(Magia m) {
         Receita r = m.receita();
-        return r != null ? r.recarga() * 20 : recargaGenerica(m);
+        return r != null ? (int) Math.round(r.recarga() * 20 * fatorRecarga(m)) : recargaGenerica(m);
     }
 
     /** Recarga sem contar receita secreta (o criador não pode entregar o segredo). */
     public int recargaGenerica(Magia m) {
-        double s = 1 + 1.2 * m.essencias().size() + (m.forma() == Forma.AURA ? 2 : 0);
-        return (int) Math.round(s * 20);
+        double s = 1 + 1.2 * m.essencias().size() + switch (m.forma()) {
+            case AURA, CHUVA -> 2;
+            case INVOCACAO -> 20;
+            case ARMA -> 8;
+            case RAIO -> 3;
+            default -> 0;
+        };
+        return (int) Math.round(s * 20 * fatorRecarga(m));
     }
 
     /** Força da magia: vem da intensidade das essências usadas e do nível de Arcano. */
@@ -250,7 +270,115 @@ public final class Arcano {
         double media = soma / m.essencias().size();
         // Até +50% de força no nível máximo de Arcano.
         double pot = (1 + 0.15 * Math.min(media, 10)) * (1 + 0.5 * nivel(p) / cfg().nivelMaximo);
+        // Maestria: +3% por nível (média dos elementos da magia).
+        double maestria = 0;
+        for (Essencia e : m.essencias()) maestria += nivelMaestria(pf, e);
+        pot *= 1 + 0.03 * maestria / m.essencias().size();
+        if (m.tem(Modificador.POTENTE)) pot *= 1.35;
+        if (m.tem(Modificador.RAPIDA)) pot *= 0.7;
+        pot *= 1 + potenciaDoCajado(p, m);
+        pot *= plugin.ceu().bonusMagia(p); // lua nova e eclipse
         return pf.instavel() ? pot * 0.65 : pot;
+    }
+
+    /** Rápida corta a recarga pela metade; Potente e Eco aumentam. */
+    public static double fatorRecarga(Magia m) {
+        double f = 1;
+        if (m.tem(Modificador.RAPIDA)) f *= 0.5;
+        if (m.tem(Modificador.POTENTE)) f *= 1.5;
+        if (m.tem(Modificador.ECO)) f *= 1.2;
+        return f;
+    }
+
+    // =====================================================================
+    //  Maestria por elemento
+    // =====================================================================
+
+    public static final int MAESTRIA_MAXIMA = 10;
+    /** Nível de maestria que libera a variante do elemento. */
+    public static final int MAESTRIA_VARIANTE = 5;
+
+    /** XP total para chegar no nível {@code n} de maestria (10·n²). */
+    public static int xpParaMaestria(int n) {
+        return 10 * n * n;
+    }
+
+    public static int nivelMaestria(int xp) {
+        int n = (int) Math.floor(Math.sqrt(xp / 10.0));
+        return Math.max(0, Math.min(MAESTRIA_MAXIMA, n));
+    }
+
+    public int nivelMaestria(Perfil pf, Essencia e) {
+        return nivelMaestria(pf.xpMaestria(e));
+    }
+
+    /** Soma XP de maestria e avisa quando sobe de nível. */
+    public void darMaestria(Player p, Perfil pf, Essencia e, int xp) {
+        if (xp <= 0) return;
+        int antes = nivelMaestria(pf, e);
+        if (antes >= MAESTRIA_MAXIMA) return;
+        pf.maestria.merge(e, xp, Integer::sum);
+        int depois = nivelMaestria(pf, e);
+        if (depois <= antes) return;
+        p.playSound(p.getLocation(), org.bukkit.Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 1.3f);
+        p.sendMessage(Component.text("✦ Maestria de ", COR).append(e.rotulo())
+                .append(Component.text(" subiu para o nível " + depois + "!", COR))
+                .append(Component.text(depois == MAESTRIA_VARIANTE ? " Variante liberada: " + Feiticos.variante(e) + "!"
+                        : depois == MAESTRIA_MAXIMA ? " Mestre: reações com esse elemento 50% mais fortes!" : "", NamedTextColor.GOLD)));
+    }
+
+    /** Para o /rpgadmin: define o nível de maestria de um elemento. */
+    public void definirMaestria(Player p, Essencia e, int nivel) {
+        Perfil pf = perfil(p);
+        pf.maestria.put(e, xpParaMaestria(Math.max(0, Math.min(MAESTRIA_MAXIMA, nivel))));
+        salvar(p);
+    }
+
+    // =====================================================================
+    //  Cajado (item forjado que lança magias e as fortalece)
+    // =====================================================================
+
+    /** O cajado forjado numa das mãos, ou null. */
+    public br.rpgatributos.forja.DadosForja cajado(Player p) {
+        for (ItemStack i : new ItemStack[]{p.getInventory().getItemInMainHand(), p.getInventory().getItemInOffHand()}) {
+            if (ehCajado(i)) return plugin.forja().ler(i);
+        }
+        return null;
+    }
+
+    public boolean ehCajado(ItemStack item) {
+        return item != null && br.rpgatributos.forja.Categoria.de(item.getType()) == br.rpgatributos.forja.Categoria.CAJADO
+                && plugin.forja().forjado(item);
+    }
+
+    /** Item que lança magias na mão: o grimório ou um cajado forjado. */
+    public boolean ehFoco(ItemStack item) {
+        return ehGrimorio(item) || ehCajado(item);
+    }
+
+    /** Força extra do cajado: o bônus de potência dele + as gemas do elemento da magia. */
+    public double potenciaDoCajado(Player p, Magia m) {
+        var d = cajado(p);
+        if (d == null) return 0;
+        double v = plugin.forja().valor(d, Material.BREEZE_ROD, br.rpgatributos.forja.Stat.POTENCIA_MAGICA);
+        for (var en : d.gemas()) {
+            for (Essencia e : en.gema().elementos()) {
+                if (m.essencias().contains(e)) { v += en.gema().potenciaElemental(en.grau()); break; }
+            }
+        }
+        return v;
+    }
+
+    /** Multiplica o custo de mana (1 = sem cajado). */
+    public double custoDoCajado(Player p) {
+        var d = cajado(p);
+        return d == null ? 1 : Math.max(0.4, 1 - plugin.forja().valor(d, Material.BREEZE_ROD, br.rpgatributos.forja.Stat.ECONOMIA_MANA));
+    }
+
+    /** Multiplica a recarga (1 = sem cajado). */
+    public double recargaDoCajado(Player p) {
+        var d = cajado(p);
+        return d == null ? 1 : Math.max(0.4, 1 - plugin.forja().valor(d, Material.BREEZE_ROD, br.rpgatributos.forja.Stat.RECARGA_MAGICA));
     }
 
     public String descricaoNivel(int nivel) {

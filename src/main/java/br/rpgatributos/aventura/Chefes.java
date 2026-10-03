@@ -710,6 +710,7 @@ public final class Chefes implements Listener {
         saque.add(Raro.FRAGMENTO_DE_FORJA.criar(frag));
         if (rnd().nextDouble() < pedra[n - 1]) saque.add(Raro.PEDRA_DE_PROTECAO.criar());
         if (rnd().nextDouble() < essencia[n - 1]) saque.add(Raro.ESSENCIA_PRIMORDIAL.criar());
+        if (rnd().nextDouble() < 0.05 + 0.03 * n) saque.add(br.rpgatributos.arcano.ItensMagicos.tomoAleatorio());
         for (Chefe.Saque s : c.saque()) saque.add(new ItemStack(s.material(), rnd().nextInt(s.min(), s.max() + 1)));
 
         Location l = e.getEntity().getLocation();
