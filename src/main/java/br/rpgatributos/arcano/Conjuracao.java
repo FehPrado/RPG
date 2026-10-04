@@ -130,7 +130,10 @@ public final class Conjuracao {
             falhar(p, "Recarregando... " + StatsManager.fmt(Math.ceil((pronto - agora) / 2.0) / 10.0) + "s");
             return;
         }
-        double custo = arc.custoMana(m, pf) * plugin.classes().custoMagia(p) * plugin.lendas().custoMagia(p) * arc.custoDoCajado(p);
+        // Sobrecarga e Eco de Mana (talentos) podem deixar a magia de graça; o Raio nunca.
+        boolean gratis = m.forma() != Forma.RAIO && plugin.talentos().magiaGratis(p);
+        double custo = gratis ? 0 : arc.custoMana(m, pf) * plugin.classes().custoMagia(p) * plugin.lendas().custoMagia(p) * arc.custoDoCajado(p)
+                * plugin.talentos().custoMagia(p);
         if (pf.mana < custo) {
             falhar(p, "Mana insuficiente (" + (int) pf.mana + "/" + (int) custo + ")");
             arc.mostrarMana(pf, 60);

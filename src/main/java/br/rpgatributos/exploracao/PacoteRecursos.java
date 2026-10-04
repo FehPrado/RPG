@@ -160,9 +160,15 @@ public final class PacoteRecursos implements Listener {
     public static ItemStack atualizar(ItemStack i) {
         String id = idVisual(i);
         if (id == null) return i;
+        Acessorio acessorio = Acessorio.de(i);
+        // Acessórios: o item do jogo por baixo pode ter mudado (escudo e relógio têm modelos especiais).
+        boolean modeloCerto = acessorio == null || acessorio.modelo().equals(i.getItemMeta().getItemModel());
         List<String> atual = i.getItemMeta().getCustomModelDataComponent().getStrings();
-        if (atual.size() == 1 && atual.getFirst().equals("rpgatributos:" + id)) return i;
-        i.editMeta(m -> marcar(m, id));
+        if (modeloCerto && atual.size() == 1 && atual.getFirst().equals("rpgatributos:" + id)) return i;
+        i.editMeta(m -> {
+            marcar(m, id);
+            if (acessorio != null) m.setItemModel(acessorio.modelo());
+        });
         return i;
     }
 
@@ -171,7 +177,54 @@ public final class PacoteRecursos implements Listener {
         if (Mobilidade.ehGancho(i)) return "gancho";
         if (i.getType() == Material.BREEZE_ROD && i.getPersistentDataContainer().has(K_FORJA)) return "cajado_arcano";
         Acessorio a = Acessorio.de(i);
-        return a == null ? null : a.id();
+        if (a != null) return a.id();
+        var peixe = br.rpgatributos.pesca.PeixeRaro.de(i);
+        if (peixe != null) return "peixe_" + peixe.name().toLowerCase(java.util.Locale.ROOT);
+        String prato = i.getPersistentDataContainer().get(br.rpgatributos.fazenda.Cozinha.CHAVE_PRATO, org.bukkit.persistence.PersistentDataType.STRING);
+        if (prato != null) return "prato_" + prato.toLowerCase(java.util.Locale.ROOT);
+        var v = br.rpgatributos.fazenda.Variedade.de(i);
+        if (v != null) return br.rpgatributos.fazenda.Variedade.ehSemente(i) ? v.idVisualSemente() : "variedade_" + v.id();
+        var gema = br.rpgatributos.alquimia.Gema.de(i);
+        if (gema != null) return "gema_" + gema.name().toLowerCase(java.util.Locale.ROOT) + "_" + br.rpgatributos.alquimia.Gema.grau(i);
+        var r = br.rpgatributos.alquimia.Reagente.de(i);
+        if (r != null) return "componente_" + r.id();
+        var e = br.rpgatributos.alquimia.Elixir.de(i);
+        if (e != null) return "elixir_" + e.id();
+        var raro = br.rpgatributos.aventura.Raro.de(i);
+        if (raro != null) return "raro_" + raro.id();
+        String lenda = i.getPersistentDataContainer().get(K_LENDA, org.bukkit.persistence.PersistentDataType.STRING);
+        if (lenda != null) return "lenda_" + lenda.toLowerCase(java.util.Locale.ROOT);
+        var erva = br.rpgatributos.vida.Erva.de(i);
+        if (erva != null) return "erva_" + erva.id();
+        var mel = br.rpgatributos.vida.Mel.de(i);
+        if (mel != null) return "mel_" + mel.id();
+        var bebida = br.rpgatributos.vida.Bebida.de(i);
+        if (bebida != null) return "bebida_" + bebida.id();
+        var carta = br.rpgatributos.vida.Album.de(i);
+        if (carta != null) return br.rpgatributos.vida.Album.brilhante(i) ? "carta_brilhante"
+                : "carta_" + new String[]{"comum", "rara", "epica"}[carta.raridade()];
+        var flecha = br.rpgatributos.vida.Flechas.tipo(i);
+        if (flecha != null) return "flecha_" + flecha.id();
+        var frasco = br.rpgatributos.vida.Frascos.tipo(i);
+        return frasco == null ? null : "frasco_" + frasco.id();
+    }
+
+    private static final NamespacedKey K_LENDA = new NamespacedKey("rpgatributos", "lenda");
+
+    /** Baús e outros inventários abertos: os itens antigos ganham o visual novo. */
+    @EventHandler(ignoreCancelled = true)
+    public void aoAbrir(org.bukkit.event.inventory.InventoryOpenEvent e) {
+        if (e.getInventory().getHolder() instanceof org.bukkit.block.Container || e.getInventory().getHolder() instanceof org.bukkit.block.DoubleChest) {
+            atualizar(e.getInventory());
+        }
+    }
+
+    /** Item pego do chão também. */
+    @EventHandler(ignoreCancelled = true)
+    public void aoPegar(org.bukkit.event.entity.EntityPickupItemEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+        ItemStack s = e.getItem().getItemStack();
+        if (idVisual(s) != null) e.getItem().setItemStack(atualizar(s));
     }
 
     private static void atualizar(Inventory inv) {
@@ -212,15 +265,27 @@ public final class PacoteRecursos implements Listener {
         f.put("assets/rpgatributos/models/block/minerio_mitrilo.json",
                 texto("{ \"parent\": \"minecraft:block/cube_all\", \"textures\": { \"all\": \"rpgatributos:block/minerio_mitrilo\" } }"));
         // Itens: só trocam o visual quando têm o custom_model_data do plugin (o resto fica igual ao jogo).
-        f.put("assets/minecraft/items/raw_iron.json", texto(selecao("rpgatributos:mitrilo_bruto", "rpgatributos:item/mitrilo_bruto", "minecraft:item/raw_iron")));
-        f.put("assets/minecraft/items/iron_ingot.json", texto(selecao("rpgatributos:lingote_mitrilo", "rpgatributos:item/lingote_mitrilo", "minecraft:item/iron_ingot")));
-        f.put("assets/minecraft/items/breeze_rod.json", texto(selecao("rpgatributos:cajado_arcano", "rpgatributos:item/cajado_arcano", "minecraft:item/breeze_rod")));
-        f.put("assets/minecraft/items/phantom_membrane.json", texto(selecao("rpgatributos:capa_planadora", "rpgatributos:item/capa_planadora", "minecraft:item/phantom_membrane")));
+        // Vários visuais podem entrar no mesmo item do jogo (ex.: vários peixes no bacalhau).
+        Map<String, List<String>> casos = new LinkedHashMap<>();
+        caso(casos, "raw_iron", "mitrilo_bruto");
+        caso(casos, "iron_ingot", "lingote_mitrilo");
+        caso(casos, "breeze_rod", "cajado_arcano");
+        caso(casos, "phantom_membrane", "capa_planadora");
+        caso(casos, "iron_nugget", "ferradura");
+        caso(casos, "bowl", "ninho_de_passaro");
+        java.util.Set<String> naMao = new java.util.HashSet<>(List.of("cajado_arcano"));
+        for (ArteItens.Arte a : ArteItens.todas()) {
+            caso(casos, a.vanilla(), a.id());
+            if (a.naMao()) naMao.add(a.id());
+        }
+        for (Map.Entry<String, List<String>> en : casos.entrySet()) {
+            f.put("assets/minecraft/items/" + en.getKey() + ".json", texto(selecao(en.getKey(), en.getValue())));
+            for (String id : en.getValue()) {
+                f.put("assets/rpgatributos/models/item/" + id + ".json", texto(naMao.contains(id)
+                        ? itemComPai("minecraft:item/handheld", "rpgatributos:item/" + id) : itemGerado("rpgatributos:item/" + id)));
+            }
+        }
         f.put("assets/minecraft/items/fishing_rod.json", texto(vara()));
-        f.put("assets/rpgatributos/models/item/mitrilo_bruto.json", texto(itemGerado("rpgatributos:item/mitrilo_bruto")));
-        f.put("assets/rpgatributos/models/item/lingote_mitrilo.json", texto(itemGerado("rpgatributos:item/lingote_mitrilo")));
-        f.put("assets/rpgatributos/models/item/capa_planadora.json", texto(itemGerado("rpgatributos:item/capa_planadora")));
-        f.put("assets/rpgatributos/models/item/cajado_arcano.json", texto(itemComPai("minecraft:item/handheld", "rpgatributos:item/cajado_arcano")));
         f.put("assets/rpgatributos/models/item/gancho.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/gancho")));
         f.put("assets/rpgatributos/models/item/gancho_lancado.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/gancho_lancado")));
 
@@ -233,6 +298,9 @@ public final class PacoteRecursos implements Listener {
         texturas.put("item/gancho", desenho(GANCHO, CORES_GANCHO));
         texturas.put("item/gancho_lancado", desenho(GANCHO_LANCADO, CORES_GANCHO));
         texturas.put("item/capa_planadora", desenho(CAPA, CORES_CAPA));
+        texturas.put("item/ferradura", desenho(FERRADURA, CORES_FERRADURA));
+        texturas.put("item/ninho_de_passaro", desenho(NINHO, CORES_NINHO));
+        for (ArteItens.Arte a : ArteItens.todas()) texturas.putIfAbsent("item/" + a.id(), desenho(a.desenho(), a.cores()));
         File padrao = new File(pasta, "texturas-padrao"), proprias = new File(pasta, "texturas");
         if (!padrao.exists() && !padrao.mkdirs()) throw new IOException("não criei a pasta " + padrao);
         if (!proprias.exists() && proprias.mkdirs()) {
@@ -283,10 +351,25 @@ public final class PacoteRecursos implements Listener {
         return sb.append(" } } ] }").toString();
     }
 
-    private static String selecao(String caso, String modelo, String padrao) {
-        return "{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ "
-                + "{ \"when\": \"" + caso + "\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + modelo + "\" } } ], "
-                + "\"fallback\": { \"type\": \"minecraft:model\", \"model\": \"" + padrao + "\" } } }";
+    /** Itens do jogo cujo modelo normal é o do bloco. */
+    private static final Map<String, String> BLOCOS = Map.of("lodestone", "minecraft:block/lodestone");
+
+    private static void caso(Map<String, List<String>> casos, String vanilla, String id) {
+        casos.computeIfAbsent(vanilla, k -> new java.util.ArrayList<>()).add(id);
+    }
+
+    /** Definição do item do jogo: um caso por visual do plugin e, sem marca, o modelo normal. */
+    private static String selecao(String vanilla, List<String> ids) {
+        StringBuilder sb = new StringBuilder("{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ ");
+        for (int i = 0; i < ids.size(); i++) {
+            sb.append(i == 0 ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(ids.get(i))
+                    .append("\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/").append(ids.get(i)).append("\" } }");
+        }
+        // A poção do jogo pinta o líquido com a cor da poção; o modelo normal precisa manter isso.
+        String padrao = vanilla.equals("potion")
+                ? "{ \"type\": \"minecraft:model\", \"model\": \"minecraft:item/potion\", \"tints\": [ { \"type\": \"minecraft:potion\", \"default\": -13083194 } ] }"
+                : "{ \"type\": \"minecraft:model\", \"model\": \"" + BLOCOS.getOrDefault(vanilla, "minecraft:item/" + vanilla) + "\" }";
+        return sb.append(" ], \"fallback\": ").append(padrao).append(" } }").toString();
     }
 
     private static String itemGerado(String textura) {
@@ -361,6 +444,57 @@ public final class PacoteRecursos implements Listener {
             'm', 0xFF7FA6E0,  // tecido
             'h', 0xFFCFE2FF,  // luz
             'g', 0xFFE0B040); // fecho de ouro
+
+    private static final Map<Character, Integer> CORES_FERRADURA = Map.of(
+            'o', 0xFF2E2E36,  // contorno
+            'd', 0xFF6E6E7A,  // ferro escuro
+            'm', 0xFFA8A8B4,  // ferro
+            'h', 0xFFE2E2EA,  // brilho
+            'n', 0xFF1A1A1F); // furo do cravo
+    private static final Map<Character, Integer> CORES_NINHO = Map.of(
+            'o', 0xFF3B2412,  // contorno
+            'd', 0xFF6B4423,  // galho escuro
+            'm', 0xFF9C6B3A,  // galho
+            'h', 0xFFC8955A,  // galho claro
+            'e', 0xFFE8F4F8,  // ovo
+            'b', 0xFF9CC9D8,  // sombra do ovo
+            's', 0xFF5A7F8C); // pinta do ovo
+
+    private static final String[] FERRADURA = {
+            "................",
+            "................",
+            "...oo......oo...",
+            "..ohdo....ohdo..",
+            "..onmo....omno..",
+            "..ohdo....ohdo..",
+            "..omdo....omdo..",
+            "..onmo....omno..",
+            "..ohdo....ohdo..",
+            "..omddo..oddmo..",
+            "..ohmddooddmho..",
+            "...ohmmddmmho...",
+            "....oohhhhoo....",
+            "......oooo......",
+            "................",
+            "................"};
+
+    private static final String[] NINHO = {
+            "................",
+            "................",
+            "................",
+            "................",
+            "........ee......",
+            ".....es.eeb.....",
+            "....eeebebb.....",
+            "..oheeebbbbmho..",
+            ".ohmdmhmdmhmdmo.",
+            ".omhdmmhdmmhdmo.",
+            "..odmhdmhdmhdo..",
+            "...oddmmmmddo...",
+            "....oooooooo....",
+            "................",
+            "................",
+            "................"};
 
     private static final String[] CAJADO = {
             "............oo..",

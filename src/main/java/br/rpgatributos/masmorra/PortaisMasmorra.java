@@ -143,7 +143,7 @@ public final class PortaisMasmorra extends Estacao {
     private void desenhar(Player p, Tela t) {
         Inventory inv = t.inventario;
         inv.clear();
-        int nivelTotal = plugin.stats().nivelTotal(p);
+        int nivelTotal = plugin.renascimento().nivelTotalEfetivo(p);
         int maxTotal = plugin.settings().nivelMaximo * Skill.values().length;
         String estado = masmorras().portalAberto(t.portal) ? "O portal está aberto: suba nele!"
                 : masmorras().formando(t.portal) ? "Uma masmorra está se formando..." : "Escolha a dificuldade abaixo.";

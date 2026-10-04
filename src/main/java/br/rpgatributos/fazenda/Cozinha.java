@@ -337,7 +337,7 @@ public final class Cozinha extends Estacao {
         if (comQualidade > 0 && perfeitos == comQualidade) q = Qualidade.PERFEITA;
         else if (comQualidade > 0 && otimos * 2 >= comQualidade) q = q.acima();
 
-        double fator = q.fator() * (1 + nivel * plugin.settings().culDuracaoExtra);
+        double fator = q.fator() * (1 + nivel * plugin.settings().culDuracaoExtra) * plugin.talentos().duracaoPratos(p);
         ItemStack prato = criar(pr, q, fator, p.getName());
         inv.addItem(prato).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
 
@@ -368,6 +368,7 @@ public final class Cozinha extends Estacao {
             m.lore(lore.stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             PersistentDataContainer pdc = m.getPersistentDataContainer();
             pdc.set(CHAVE_PRATO, PersistentDataType.STRING, pr.name());
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "prato_" + pr.name().toLowerCase(java.util.Locale.ROOT));
             pdc.set(CHAVE_FATOR, PersistentDataType.DOUBLE, Math.round(fator * 100) / 100.0);
             pdc.set(Qualidade.CHAVE, PersistentDataType.STRING, q.name());
             if (q == Qualidade.PERFEITA) m.setEnchantmentGlintOverride(true);

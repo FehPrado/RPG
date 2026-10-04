@@ -103,6 +103,7 @@ public enum Elixir {
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
             m.getPersistentDataContainer().set(Qualidade.CHAVE, PersistentDataType.STRING, q.name());
             if (q == Qualidade.PERFEITA) m.setEnchantmentGlintOverride(true);
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "elixir_" + name().toLowerCase(java.util.Locale.ROOT));
         });
         return i;
     }

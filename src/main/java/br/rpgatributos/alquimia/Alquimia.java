@@ -329,8 +329,8 @@ public final class Alquimia extends Estacao {
             mostra.setAmount(1);
             inv.setItem(S_ALVO, mostra);
         }
-        int engastes = d == null ? 0 : d.engastes();
         Categoria cat = alvo == null ? null : Categoria.de(alvo.getType());
+        int engastes = d == null || cat == null || !cat.aceitaGemas() ? 0 : d.engastes();
         for (int i = 0; i < S_ENGASTES.length; i++) {
             if (d == null) {
                 inv.setItem(S_ENGASTES[i], item(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Component.text("◇ Engaste", NamedTextColor.GRAY), List.of(
@@ -437,7 +437,7 @@ public final class Alquimia extends Estacao {
                 feitos.add(r.elixir().criar(q, fator, p.getName()));
             } else if (r.reagente() != null) {
                 int qtd = r.qtd();
-                if (ThreadLocalRandom.current().nextDouble() < nivel * plugin.settings().alqChanceExtra) qtd *= 2;
+                if (ThreadLocalRandom.current().nextDouble() < nivel * plugin.settings().alqChanceExtra + plugin.talentos().chanceDobroAlquimia(p)) qtd *= 2;
                 feitos.add(r.reagente().criar(qtd));
             } else if (r.gema() != null) {
                 feitos.add(r.gema().criar(r.grau(), 1));

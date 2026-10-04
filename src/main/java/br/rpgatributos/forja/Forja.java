@@ -204,6 +204,10 @@ public final class Forja {
             case FERRAMENTA -> Stat.VEL_MINERACAO;
             case ARMADURA, ESCUDO -> Stat.ARMADURA;
             case MAGICO -> Stat.POTENCIA_MAGICA;
+            case PESCA -> Stat.ISCA_RAPIDA;
+            case VOO -> Stat.IMPULSO;
+            case MONTARIA -> Stat.VELOCIDADE;
+            case VEICULO -> c == Categoria.CARRINHO ? Stat.VEL_TRILHOS : Stat.PESCA_EMBARCADA;
         };
     }
 
@@ -267,8 +271,13 @@ public final class Forja {
         Raridade r = forcada != null ? forcada : sortearRaridade(nivel);
         // Ferreiro e Mestre Forjador: chance de sair uma raridade acima.
         if (forcada == null && ferreiro != null && r != Raridade.MITICO
-                && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.classes().chanceRaridadeExtra(ferreiro) + plugin.lendas().chanceRaridadeExtra(ferreiro)) {
+                && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.classes().chanceRaridadeExtra(ferreiro) + plugin.lendas().chanceRaridadeExtra(ferreiro)
+                        + plugin.talentos().chanceRaridadeExtra(ferreiro)) {
             r = Raridade.values()[r.ordinal() + 1];
+            // Obra-Prima: chance de subir mais uma.
+            if (r != Raridade.MITICO && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.talentos().chanceSegundaRaridade(ferreiro)) {
+                r = Raridade.values()[r.ordinal() + 1];
+            }
         }
         DadosForja d = sortear(cat, r, nivel, ferreiro == null ? "Desconhecido" : ferreiro.getName());
         ItemStack item = base.clone();
@@ -411,7 +420,7 @@ public final class Forja {
             }
         }
 
-        int engastes = d.engastes();
+        int engastes = cat != null && cat.aceitaGemas() ? d.engastes() : 0;
         if (engastes > 0) {
             l.add(Component.empty());
             l.add(Component.text("Engastes (" + d.gemas().size() + "/" + engastes + "):", NamedTextColor.GRAY));

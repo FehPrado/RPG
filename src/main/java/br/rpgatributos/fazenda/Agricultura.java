@@ -198,14 +198,14 @@ public final class Agricultura implements Listener {
                     case NETHER_WART, COCOA -> 2;
                     default -> 1.5;
                 };
-                plugin.stats().darXp(p, Skill.AGRICULTURA, v != null ? xp * 3 : xp);
+                plugin.stats().darXp(p, Skill.AGRICULTURA, (v != null ? xp * 3 : xp) * plugin.natureza().orvalho(b));
             }
         } else if (t == Material.MELON || t == Material.PUMPKIN) {
             boolean natural = !colocados.desmarcar(b);
             if (!natural) return;
             colheitas.put(b, new Colheita(p, true, null, false));
             plugin.getServer().getScheduler().runTask(plugin, () -> colheitas.remove(b));
-            if (ganhaXp(p)) plugin.stats().darXp(p, Skill.AGRICULTURA, 3);
+            if (ganhaXp(p)) plugin.stats().darXp(p, Skill.AGRICULTURA, 3 * plugin.natureza().orvalho(b));
         } else if (t == Material.CARVED_PUMPKIN) {
             colocados.desmarcar(b); // abóbora colocada que foi esculpida com tesoura
         }
@@ -239,7 +239,7 @@ public final class Agricultura implements Listener {
 
         Qualidade q = qualidade(c);
         double fracao = fracao(c.jogador());
-        boolean dupla = rnd().nextDouble() < Math.min(1, plugin.stats().getNivel(c.jogador(), Skill.AGRICULTURA) * cfg().agrChanceDupla);
+        boolean dupla = rnd().nextDouble() < Math.min(1, plugin.stats().getNivel(c.jogador(), Skill.AGRICULTURA) * cfg().agrChanceDupla + plugin.talentos().chanceDupla(c.jogador()));
         boolean gigante = rnd().nextDouble() < 0.002 + cfg().agrChanceGigante * fracao;
         List<ItemStack> extras = new ArrayList<>();
         ItemStack exemplo = null;
@@ -262,7 +262,7 @@ public final class Agricultura implements Listener {
         Player p = e.getPlayer();
         if (ganhaXp(p)) plugin.stats().darXp(p, Skill.AGRICULTURA, 1);
         Qualidade q = Qualidade.sortear(fracao(p));
-        boolean dupla = rnd().nextDouble() < Math.min(1, plugin.stats().getNivel(p, Skill.AGRICULTURA) * cfg().agrChanceDupla);
+        boolean dupla = rnd().nextDouble() < Math.min(1, plugin.stats().getNivel(p, Skill.AGRICULTURA) * cfg().agrChanceDupla + plugin.talentos().chanceDupla(p));
         List<ItemStack> extras = new ArrayList<>();
         for (ItemStack s : e.getItemsHarvested()) {
             if (!PRODUTOS.contains(s.getType())) continue;

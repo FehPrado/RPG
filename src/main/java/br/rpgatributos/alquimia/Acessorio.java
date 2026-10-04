@@ -42,7 +42,7 @@ public enum Acessorio {
     // ---------- amuletos ----------
     AMULETO_MANA("Amuleto de Mana", Tipo.AMULETO, "heart_of_the_sea", 0x7F8CFF, "+40 de mana máxima e +1 de mana por segundo",
             List.of(), null, Especial.MANA),
-    AMULETO_GUARDIAO("Amuleto do Guardião", Tipo.AMULETO, "shield", 0x3D6BFF, "+2 de armadura e +1 de resistência",
+    AMULETO_GUARDIAO("Amuleto do Guardião", Tipo.AMULETO, "prismarine_shard", 0x3D6BFF, "+2 de armadura e +1 de resistência",
             List.of(m(Attribute.ARMOR, 2, Operation.ADD_NUMBER), m(Attribute.ARMOR_TOUGHNESS, 1, Operation.ADD_NUMBER)), null, Especial.NENHUM),
     AMULETO_VIDA("Amuleto da Vida", Tipo.AMULETO, "golden_apple", 0xFF4D6D, "Regeneração I",
             List.of(), pocao(PotionEffectType.REGENERATION, 0), Especial.NENHUM),
@@ -62,7 +62,7 @@ public enum Acessorio {
             List.of(), null, Especial.LANTERNA),
     IMA_BOLSO("Ímã de Bolso", Tipo.BOLSO, "lodestone", 0xD8D8E8, "Puxa os itens do chão a até 6 blocos",
             List.of(), null, Especial.IMA),
-    RELOGIO_BOLSO("Relógio de Bolso", Tipo.BOLSO, "clock", 0xFFC93C, "Agachado: mostra hora, coordenadas e bioma",
+    RELOGIO_BOLSO("Relógio de Bolso", Tipo.BOLSO, "gold_ingot", 0xFFC93C, "Agachado: mostra hora, coordenadas e bioma",
             List.of(), null, Especial.RELOGIO),
     CAPA_PLANADORA("Capa Planadora", Tipo.BOLSO, "phantom_membrane", 0xA0C4FF, "No ar, aperte pular para planar (agache para soltar)",
             List.of(), null, Especial.PLANADOR);

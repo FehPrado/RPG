@@ -101,7 +101,8 @@ public final class StatsManager {
         if (antes >= cfg().nivelMaximo) return;
 
         double ganho = quantidade * cfg().multiplicadorXp * plugin.titulos().multiplicadorXp(p, s) * plugin.acessorios().multiplicadorXp(p)
-                * plugin.estacoes().multiplicadorXp(s) * plugin.astronomia().multiplicadorXp(p, s) * plugin.enciclopedia().multiplicadorXp(p);
+                * plugin.estacoes().multiplicadorXp(s) * plugin.astronomia().multiplicadorXp(p, s) * plugin.enciclopedia().multiplicadorXp(p)
+                * plugin.talentos().multiplicadorXp(p) * plugin.fogueiras().multiplicadorXp(p) * plugin.trofeus().multiplicadorXp(p);
         setXp(p, s, getXp(p, s) + ganho);
         int depois = getNivel(p, s);
 
@@ -134,6 +135,11 @@ public final class StatsManager {
         plugin.bonus().aplicar(p);
         plugin.tags().atualizarTexto(p);
         plugin.titulos().verificar(p); // títulos por nível
+        plugin.talentos().aoSubirNivel(p);
+        int total = nivelTotal(p);
+        plugin.recordes().nivel(p, total + plugin.renascimento().vezes(p) * cfg().nivelMaximo * Skill.values().length);
+        if (total % 100 == 0) plugin.diario().marco(p, "nivel_" + total, "Chegou ao nível total " + total);
+        if (nivel >= cfg().nivelMaximo) plugin.diario().marco(p, s.id() + "_maximo", "Levou " + s.nome() + " ao nível máximo");
     }
 
     /** Número com até 2 casas e vírgula: 2 → "2", 2.5 → "2,5", 0.125 → "0,13". */

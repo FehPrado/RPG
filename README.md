@@ -18,9 +18,13 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **combos de arma**: 3 cliques com a arma na mão soltam golpes (42 no total), com Vigor e proficiência por tipo de arma;
 - **fé e mistério**: seis deuses com santuários, oferendas e milagres, constelações observadas pela luneta, transmutação alquímica e runas gravadas nos equipamentos;
 - **exploração**: Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
+- **progressão extra**: **talentos** em 4 árvores, **renascer** com bônus permanente (até ★★★★★) e **evolução dos companheiros** (Lobo → Lobo Alfa → Lobo das Sombras);
+- **detalhes do dia a dia**: barco, carrinho, vara, élitro e armadura de cavalo forjados, Boneco de Treino, Pedra de Amolar, Fogueira de Acampamento (sentar e descansar), Bebedouro, troféus de chefe, túmulo ao morrer, animais raros, ninhos, recordes e o Diário de Viagem;
+- **vida no mundo**: Barril de Envelhecimento, apicultura, Canteiro de Ervas, Álbum de Cartas, Mercador Itinerante, encontros na estrada, segredos, flechas especiais e frascos de arremesso;
+- **conforto**: menu central `/rpg` e placar lateral opcional;
 - **títulos** e **missões de aldeões**.
 
-Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não precisa de mod. O plugin gera um **pacote de recursos opcional** com algumas texturas próprias (mitrilo, Cajado Arcano, Gancho e Capa Planadora).
+Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não precisa de mod. O plugin gera um **pacote de recursos opcional** com texturas próprias: mitrilo, Cajado Arcano, Gancho, Capa Planadora, Ferradura, Ninho de Pássaro, os 12 peixes raros, os 16 pratos, as variedades raras, os componentes alquímicos, os elixires, as gemas, os materiais raros, os núcleos dos chefes, os acessórios, 7 lendas e os itens novos (bebidas, cartas, flechas, frascos, méis e ervas).
 
 **Guias em HTML:** [docs/jogadores.html](docs/jogadores.html) (tudo para os jogadores) e [docs/admin.html](docs/admin.html) (instalação, configuração, comandos de admin e testes).
 
@@ -55,7 +59,7 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 
 ## Guia do Aventureiro
 
-Na primeira vez que entra no servidor, o jogador recebe um livro de 64 páginas que explica tudo. `/guia` dá outro.
+Na primeira vez que entra no servidor, o jogador recebe um livro de 78 páginas que explica tudo. `/guia` dá outro.
 
 ## Forja do Ferreiro
 
@@ -755,9 +759,126 @@ O **Cronista** é um aldeão bibliotecário que o admin coloca no spawn (`/rpgad
 
 ### Pacote de recursos do servidor
 
-O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip`) com as texturas do minério e dos itens de mitrilo, do **Cajado Arcano**, do **Gancho de Escalada** (que muda quando é lançado) e da **Capa Planadora**. Ele é **opcional**: sem ele tudo funciona com a aparência do jogo (o minério parece um bloco de cogumelo, o lingote parece ferro, o cajado parece uma vara de breeze...).
+O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip`) com as texturas do minério e dos itens de mitrilo, do **Cajado Arcano**, do **Gancho de Escalada** (que muda quando é lançado), da **Capa Planadora**, da **Ferradura**, do **Ninho de Pássaro**, dos **12 peixes raros**, dos **16 pratos da Cozinha**, das **variedades raras** (e das sementes de trigo e beterraba), dos **componentes alquímicos**, dos **12 elixires** (cada um com o seu frasco) , das **18 gemas** (bruta, lapidada e perfeita), dos **materiais raros e núcleos dos chefes**, dos **acessórios**, de **7 lendas** (as armas e ferramentas; o arco, o escudo e as armaduras ficam com o visual do jogo, porque têm animação ou acabamentos que o pacote não pode copiar) e dos itens novos: bebidas, cartas, flechas, frascos, méis e ervas. A plantação no chão continua com o visual do jogo: só os itens mudam. Ele é **opcional**: sem ele tudo funciona com a aparência do jogo (o minério parece um bloco de cogumelo, o lingote parece ferro, o cajado parece uma vara de breeze...).
 
 **Editar as texturas à mão:** os desenhos originais ficam em `pacote/texturas-padrao/`. Copie um PNG para `pacote/texturas/`, edite (mesmo nome, imagem quadrada: 16×16, 32×32...) e reinicie: ele entra no lugar do original. Apagar o arquivo volta ao original. Itens feitos antes ganham o visual sozinhos quando o jogador entra. O pacote **se soma** ao pacote do servidor (não o troca). Para enviar, ponha um link em `pacote-de-recursos.url` ou ligue o servidor embutido (`porta` + `endereco`); veja `/rpgadmin pacote`.
+
+## Talentos, renascer e evolução dos companheiros
+
+### Talentos
+
+`/talentos` (ou o botão no `/atributos`): **1 ponto a cada 25 níveis somados** nos atributos (até 52 no nível máximo), mais **8 a cada renascimento**. Cada árvore tem 4 faixas: a 2ª abre com 5 pontos gastos nela, a 3ª com 10 e o talento final com 15. **Refazer** devolve todos os pontos por 16 esmeraldas.
+
+| Árvore | Faixa 1 | Faixa 2 | Faixa 3 | Final |
+|---|---|---|---|---|
+| ⚔ Guerreiro | Força Bruta (+2% dano corpo a corpo, 5 graus), Pele Grossa (+1 armadura, 5) | Vigor de Batalha (+15 vigor, 3), Sede de Sangue (derrotar cura ½ ❤, 3) | Golpe Crítico (4% de +50% de dano, 3), Inabalável (-4% dano recebido e +10% resistência a empurrões, 2) | **Fúria Imortal**: com menos de 25% de vida, +25% de dano e Regeneração II por 6 s (a cada 60 s) |
+| ✦ Arcano | Mente Ampla (+10 mana, 5), Fluxo (+0,2 mana/s, 5) | Economia Arcana (-4% custo, 3), Eco de Mana (6% de magia de graça, 3) | Escudo de Mana (10% do dano sai da mana, 2), Erudito (+2% XP em tudo, 3) | **Sobrecarga**: a cada 30 s, a próxima magia não gasta mana |
+| ⚒ Artesão | Mãos de Ferreiro (+1% raridade acima, 5), Colheita Farta (+4% minério/tronco/colheita em dobro, 5) | Refinador (+2% refino, 3), Alquimista Nato (+5% de render o dobro, 3) | Mestre-Cuca (pratos +15% de duração, 2), Engenhoso (10% de não gastar durabilidade, 3) | **Obra-Prima**: +5% raridade acima e, quando sobe, 25% de subir mais uma |
+| ➶ Explorador | Passos Leves (+2% velocidade, 5), Sorte do Viajante (+0,4 sorte, 5) | Queda Suave (+2 blocos sem dano de queda, 3), Esquiva Ágil (-15% recarga e -3 vigor na esquiva, 3) | Caçador de Tesouros (mapas +50%, 2), Garimpeiro (+15% de mitrilo em dobro, 3) | **Andarilho Eterno**: fora de combate, Velocidade I e Pressa I o tempo todo |
+
+Cada árvore tem 22 pontos. Com 52 pontos dá para fechar duas árvores e ainda sobra um pouco; quem renasceu 5 vezes completa as quatro.
+
+### Renascer
+
+`/renascer` (ou o botão nos talentos): com **todos os atributos no nível 100**, os atributos voltam a 0 e os talentos são devolvidos. Em troca, para sempre e a cada renascimento:
+- **+10% de XP** em tudo, **+1 ❤**, **+2% de dano corpo a corpo** e **+10 de mana**;
+- **+8 pontos de talento** e uma **★** antes do nome na tag (até ★★★★★).
+
+Itens, classes, lendas, companheiros, títulos, mochila, proficiência e todo o resto continuam. O que já foi conquistado não se perde: para quem renasceu, a mochila, o tamanho do território, as dificuldades de masmorra e os requisitos de classe contam como nível máximo. Pode renascer até 5 vezes, e cada renascimento é anunciado no servidor.
+
+### Evolução dos companheiros
+
+Os companheiros ganham XP lutando (5 por monstro, 20 por Elite, 60 por chefe), as montarias ganham sendo montadas, e todos ganham um pouco só por estar perto do dono. Eles sobem do nível 1 ao 30, com +2% de vida e dano por nível, e **evoluem**:
+
+| Estágio | Nível | O que ganha |
+|---|---|---|
+| ★ I | 1 | — |
+| ★★ II | 10 | +12% de tamanho, +10% de vida e dano, se regenera fora de luta e ganha o **Golpe Feroz** (15% de chance: +50% de dano e lentidão) |
+| ★★★ III | 25 | +25% de tamanho, mais +15%, Golpe Feroz com 25% e o **Vínculo Ancestral**: o dono a até 12 blocos recebe 8% menos dano |
+
+Quem não tem nome dado pelo jogador ganha o nome do estágio: Lobo Alfa → **Lobo das Sombras**, Cavalo → Corcel de Guerra → **Corcel Celeste**, Golem de Ferro → Golem de Guerra → **Colosso de Ferro**, Gato → Gato Selvagem → **Pantera Sombria**... (as outras criaturas viram "Veterano" e "Ancestral"). O nível e o estágio aparecem no `/pets`. Libertar o companheiro zera a evolução.
+## Detalhes do dia a dia
+
+### Mais coisas na Forja
+
+Na Forja do Ferreiro, estes itens também saem **forjados** (com raridade, bônus e refino):
+
+| Item | Bônus |
+|---|---|
+| **Barco** (todos, com baú também) | Isca mais rápida pescando dentro dele e menos dano para quem vai dentro. Ao quebrar, devolve o próprio barco forjado |
+| **Carrinho de mina** | Mais rápido nos trilhos e protege quem vai dentro |
+| **Vara de pescar** | Isca mais rápida, mais chance de peixe raro e sorte |
+| **Élitro** | Fogos de artifício dão mais impulso, além de armadura e vida |
+| **Armadura de cavalo** | Velocidade, pulo, vida, armadura e resistência **para a montaria** |
+
+**Reforjar:** élitro, armaduras de cavalo de ferro, ouro e diamante e qualquer equipamento achado no mundo não têm receita. Jogue o item e **1 Fragmento de Forja** em cima da Forja do Ferreiro: ele vira um item forjado.
+
+**Ferradura** (bancada: 5 lingotes de ferro em U): clique num companheiro seu (cavalo, burro, camelo...) para dar **+15% de velocidade e +10% de pulo**, sem gastar espaço de componente. Ela cai de volta se ele for libertado ou morrer.
+
+### Estações pequenas
+
+| Estação | Ritual (jogue com Q) | O que faz |
+|---|---|---|
+| 🎯 **Boneco de Treino** | Fardo de feno + 1 abóbora esculpida + 1 suporte de armadura | Um boneco que nunca quebra: mostra o dano de cada golpe, o dano por segundo e o seu maior golpe. Dá um pouco de XP de Combate (até 120 por hora) e proficiência até o nível 5 |
+| ⚔ **Pedra de Amolar** | Pedra lisa + 2 pederneiras + 1 lingote de ferro | Clique com a arma e 1 pederneira: **+10% de dano** pelos próximos 100 golpes |
+| ♨ **Fogueira de Acampamento** | Fogueira acesa + 1 lã + 1 tronco | Sentado perto: Regeneração e, depois de 30 s, **Descansado** (+5% de XP por 20 min). Comida crua jogada do lado do fogo assa sozinha |
+| ☘ **Bebedouro** | Caldeirão com água + 1 fardo de feno | Filhotes a até 8 blocos crescem 5x mais rápido, adultos esperam menos para cruzar e companheiros se curam |
+| 🏆 **Estante de Troféus** | Pilar de quartzo + o **núcleo de um chefe** | O núcleo fica girando com quem venceu e quando. Cada troféu diferente dentro do seu território dá +1% de XP para quem pode construir lá |
+| 🧭 **Mesa do Cartógrafo** | Mesa de cartografia + 1 bússola + 3 papéis | Com um Mapa do Tesouro na mão: diz a direção e a distância do X e desenha o caminho. Sem mapa: abre os seus Locais Ocultos |
+
+### O mundo
+
+- **Lápide:** ao morrer, os itens vão para um **túmulo** (a sua cabeça) onde você caiu, protegido por 15 minutos. Só você abre nesse tempo. Ao renascer, você ganha uma **Bússola do Túmulo** que aponta para ele. As masmorras e a Torre continuam com o Cofre das Almas.
+- **Sentar:** clique com a mão vazia em cima de uma escada ou laje, ou use `/sentar`. Agache para levantar.
+- **Ninhos de pássaro:** quebrar folhas naturais às vezes derruba um ninho. Clique com ele para abrir: ovos, penas, sementes e, raramente, pepitas ou uma esmeralda.
+- **Animais raros:** 1 em 500 animais nasce **de Ouro** ou **de Neve**, com nome, brilho e o dobro de drops (mais ouro ou uma gema). Domar um dá muito XP de Doma, e os filhotes deles têm chance de nascer raros também.
+- **Achados:** quebrar areia ou cascalho natural às vezes revela pepitas, pederneira, cacos de cerâmica, uma esmeralda ou uma gema bruta.
+- **Orvalho da manhã:** colher no amanhecer, a céu aberto e sem chuva, dá 50% mais XP de Agricultura.
+
+### Recordes e Diário
+
+- **Recordes** (`/recordes`): maior golpe, maior nível total e os maiores números de Elites, chefes, masmorras, portais, itens forjados, peixes raros, magias, tesouros, minérios e animais raros. Quem toma um recorde de outra pessoa é anunciado. Escreva **`[recordes]`** na primeira linha de uma placa e ela vira um painel que mostra um recorde de cada vez.
+- **Diário de Viagem** (`/diario`): um livro que se escreve sozinho com os marcos da sua jornada (primeiro diamante, primeiro chefe, Nether, End, títulos, níveis, renascimentos, companheiro lendário...), cada um com a data.
+## Vida no mundo
+
+### Ofícios
+
+| Estação | Ritual (jogue com Q) | O que faz |
+|---|---|---|
+| 🛢 **Barril de Envelhecimento** | Barril vazio + 2 lingotes de ferro + 1 favo de mel | Escolha uma bebida (Hidromel, Cidra, Vinho de Frutas, Cerveja de Trigo, Licor Arcano, Licor de Ervas). Ela envelhece em **dias reais**: Nova, Envelhecida (1 dia), Reserva (3 dias) e Lendária (7 dias), cada grau mais forte e mais longo. Engarrafe com 3 garrafas de vidro |
+| 🐝 **Colmeia do Apicultor** | Colmeia + 1 favo de mel + 1 flor | Com 4 flores perto, faz um mel a cada 5 min (até 6). **Mel Dourado** (girassóis por perto, Absorção II), **Gelado** (frio ou inverno, resistência ao fogo), **Floral** (5 flores diferentes, Regeneração), **Noturno** (à noite, visão noturna) ou **Silvestre**. Tire com garrafas de vidro |
+| ☘ **Canteiro de Ervas** | Bloco de musgo + 1 farinha de osso + 1 vaso de flor | Uma erva a cada 10 min (até 4), que depende do lugar: **Sálvia** (lugares amenos), **Erva-de-Sol** (quente), **Musgo Lunar** (pântano), **Folha Gélida** (frio ou inverno), **Raiz Abissal** (embaixo da terra), **Flor-de-Cristal** (cerejeiras e flores) |
+
+As ervas entram nos frascos de arremesso e no Licor de Ervas.
+
+### Álbum de Cartas (`/album`)
+
+Monstros, chefes e peixes raros às vezes deixam uma **carta** (5% delas são **brilhantes**). Clique com ela na mão para guardar. São **54 cartas em 8 páginas** (Mortos-vivos, Artrópodes, Nether, Illagers, Estranhos, Fim, Chefes e Peixes raros), e completar uma página dá um bônus para sempre: +5% de dano naquele grupo (ou +2% de peixe raro). **5 cartas repetidas** trocam por uma que falta.
+
+### No mundo
+
+- **Mercador Itinerante:** de tempos em tempos (cerca de 1h30) ele arma a tenda perto de alguém por 20 minutos, com 6 ofertas raras: Fragmento de Forja, Pedra de Proteção, gemas, elixires, mapas, cartas, bebidas e às vezes Essência Primordial. O servidor é avisado de onde ele está.
+- **Encontros na estrada:** quem explora sozinho a céu aberto às vezes encontra uma **carroça tombada** com carga, um **acampamento de bandidos** guardando um saque (só abre depois de vencer todos), um **viajante ferido** (dê comida ou cura e ele recompensa) ou uma **estrela cadente** que deixa cristais e gemas.
+- **Segredos** (`/segredos`): 12 conquistas escondidas (dormir no Nether e sobreviver, cair de 60 blocos, pescar num eclipse...). Cada uma dá esmeraldas e XP e entra no Diário.
+
+### Flechas e frascos
+
+| Item | Receita (bancada) | Efeito |
+|---|---|---|
+| Flecha de Fogo | 4 flechas + pó de blaze → 4 | Incendeia o alvo |
+| Flecha de Gelo | 4 flechas + gelo compactado → 4 | Congela e deixa bem lento |
+| Flecha Rastreadora | 4 flechas + pérola do ender → 4 | Persegue o monstro mais perto |
+| Flecha de Corda | 2 flechas + laço → 2 | Onde cravar, você é puxado até lá |
+| Flecha Explosiva | 4 flechas + TNT → 4 | Explosão pequena que não quebra blocos |
+| Frasco de Fumaça | garrafa + pólvora + Musgo Lunar → 2 | Os monstros perdem você de vista |
+| Frasco de Cola | garrafa + 2 slimes → 2 | Prende quem estiver perto |
+| Fogo-Grego | garrafa + pólvora + Erva-de-Sol → 2 | Incendeia em volta |
+| Frasco de Cura | garrafa + melancia reluzente + Sálvia → 2 | Cura você e quem estiver perto |
+
+### Conforto
+
+- **`/rpg`:** o menu central, com um botão para cada sistema (atributos, talentos, combos, mochila, álbum, fé, diário, recordes...).
+- **`/placar`:** liga ou desliga um placar do lado da tela com nível, vigor, mana, estação, lua, hora, Descansado e pontos de talento.
 ## Pesca
 
 Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
@@ -826,7 +947,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 70 títulos com requisitos (duas páginas), por exemplo Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 81 títulos com requisitos (duas páginas), por exemplo Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -872,6 +993,15 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/estrelas` | todos | Diário das Estrelas (constelações observadas e a desta noite) |
 | `/enciclopedia` | todos | Enciclopédia do Mundo (biomas, estruturas, itens e relíquias) |
 | `/cronista [entregar]` | todos | Sua campanha: lê o capítulo e entrega perto do Cronista |
+| `/talentos` | todos | Árvore de talentos (pontos, faixas, refazer) |
+| `/renascer [confirmar]` | todos | Renascer: o que falta e a confirmação |
+| `/diario` | todos | Diário de Viagem (os marcos da sua jornada) |
+| `/recordes` | todos | Recordes do servidor |
+| `/sentar` | todos | Senta no chão (ou levanta) |
+| `/rpg` | todos | Menu central com todos os sistemas |
+| `/placar` | todos | Liga ou desliga o placar lateral |
+| `/album` | todos | Álbum de Cartas |
+| `/segredos` | todos | Segredos descobertos e dicas dos outros |
 | `/territorio` | todos | Menu do território (`mapa`, `bordas`, `info`, `reivindicar`, `liberar`, `adicionar`, `remover`, `abandonar confirmar`) |
 | `/cosmeticos`, `/chapeu`, `/tag` | todos | Item na cabeça e tag personalizada |
 | `/guia` | todos | Livro Guia do Aventureiro |
@@ -964,15 +1094,27 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin cronista` | Coloca o Cronista onde você está |
 | `/rpgadmin capitulo <jogador> <0-8>` | Define o capítulo da campanha |
 | `/rpgadmin pacote` | Mostra onde está o pacote de recursos e se ele está sendo enviado |
+| `/rpgadmin talentopontos <jogador> <qtd>` | Pontos de talento a mais (negativo tira) |
+| `/rpgadmin renascer <jogador> <0-5>` | Define quantas vezes o jogador renasceu (não mexe nos atributos) |
+| `/rpgadmin companheironivel <1-30>` | Define o nível do companheiro que você olha |
+| `/rpgadmin boneco`, `pedraamolar`, `fogueira`, `bebedouro`, `cartografo` | Cria a estação olhando para o bloco dela |
+| `/rpgadmin ferradura [qtd]`, `/rpgadmin ninhopassaro [qtd]` | Dá ferraduras ou ninhos de pássaro |
+| `/rpgadmin animalraro [ouro\|neve]` | O animal que você olha vira raro |
+| `/rpgadmin barril`, `colmeia`, `canteiro` | Cria a estação olhando para o bloco dela |
+| `/rpgadmin carta <carta> [brilhante]` | Dá uma carta do álbum |
+| `/rpgadmin flecha\|frasco\|erva\|mel <tipo> [qtd]` | Dá flechas, frascos, ervas ou méis |
+| `/rpgadmin bebida <tipo> [grau 0-3]` | Dá uma bebida do barril |
+| `/rpgadmin mercador` | O Mercador Itinerante aparece perto de você |
+| `/rpgadmin encontro [carroca\|bandidos\|viajante\|estrela]` | Começa um encontro perto de você |
 | `/rpgadmin reload` | Recarrega o config |
 
-Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outros`, `rpg.chapeu`, `rpg.tag`, `rpg.tag.cores`, `rpg.forja`, `rpg.arcano`, `rpg.guia`, `rpg.titulos`, `rpg.missoes`, `rpg.receitas`, `rpg.party`, `rpg.territorio`, `rpg.pets`, `rpg.masmorra`, `rpg.classe`, `rpg.lendas`, `rpg.locais`, `rpg.pesca`, `rpg.alquimia`, `rpg.colonia`, `rpg.reino`, `rpg.bestiario`, `rpg.calendario`, `rpg.portais`, `rpg.torre`, `rpg.combos`, `rpg.mochila`, `rpg.fe`, `rpg.exploracao`. A permissão `rpg.admin` é só para OP.
+Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outros`, `rpg.chapeu`, `rpg.tag`, `rpg.tag.cores`, `rpg.forja`, `rpg.arcano`, `rpg.guia`, `rpg.titulos`, `rpg.missoes`, `rpg.receitas`, `rpg.party`, `rpg.territorio`, `rpg.pets`, `rpg.masmorra`, `rpg.classe`, `rpg.lendas`, `rpg.locais`, `rpg.pesca`, `rpg.alquimia`, `rpg.colonia`, `rpg.reino`, `rpg.bestiario`, `rpg.calendario`, `rpg.portais`, `rpg.torre`, `rpg.combos`, `rpg.mochila`, `rpg.fe`, `rpg.exploracao`, `rpg.progressao`, `rpg.detalhes`, `rpg.vida`. A permissão `rpg.admin` é só para OP.
 
 ## Como gerar o .jar
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.18.1.jar`.
+3. O plugin fica em `target/RPGAtributos-2.22.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 
@@ -989,6 +1131,7 @@ Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 - **Nível total com 13 atributos:** requisitos medidos em fração do nível total máximo (dificuldades de masmorra, título Veterano, classes básicas) passam a pedir um pouco mais, porque agora há 13 atributos para somar.
 - Acessórios e o guarda-roupa ficam salvos no próprio jogador. Ao desligar o plugin, as armaduras voltam à aparência normal.
 - Os reinos e as guerras marcadas ficam em `reinos.yml`.
+- Os túmulos ficam em `lapides.yml` e os recordes (e as placas de recordes) em `recordes.yml`.
 - A idade do mundo e o próximo Chefe Mundial ficam em `mundo.yml`. Ninhos e hordas somem ao desligar o servidor.
 - As estações e a neve do inverno ficam em `estacoes.yml`. A estação conta a partir da data em que o plugin foi instalado.
 - As colônias ficam em `colonias.yml` (os moradores são aldeões salvos no próprio mundo).

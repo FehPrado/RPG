@@ -68,6 +68,7 @@ public enum Variedade {
                     .stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             m.setEnchantmentGlintOverride(true);
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "variedade_" + id());
         });
         return i;
     }
@@ -82,8 +83,14 @@ public enum Variedade {
             m.setEnchantmentGlintOverride(true);
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
             m.getPersistentDataContainer().set(CHAVE_SEMENTE, PersistentDataType.BYTE, (byte) 1);
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, idVisualSemente());
         });
         return i;
+    }
+
+    /** Visual da semente: trigo e beterraba têm semente própria; cenoura e batata são o próprio produto. */
+    public String idVisualSemente() {
+        return semente == produto ? "variedade_" + id() : "semente_" + id();
     }
 
     /** Variedade do item (produto ou semente), ou null. */

@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.18</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.22</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -113,6 +113,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <a href="#cmd-sistemas">⚙ Sistemas</a>
   <a href="#cmd-eventos">🌩 Eventos do mundo</a>
   <a href="#cmd-faseC">⛩ Portais, Torre e Combos</a>
+  <a href="#cmd-progressao">★ Talentos e renascer</a>
+  <a href="#cmd-vida">🛢 Vida no mundo</a>
+  <a href="#cmd-detalhes">♨ Detalhes do dia a dia</a>
   <a href="#cmd-exploracao">🗺 Exploração e campanha</a>
   <div class="grupo">Ferramentas</div>
   <a href="#testes">✅ Roteiro de testes</a>
@@ -132,7 +135,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.18.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.22.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -168,11 +171,13 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>portais.yml</code></td><td>Portais abertos pelo mundo</td></tr>
       <tr><td><code>torre.yml</code></td><td>Ranking da Torre (semanal e de todos os tempos)</td></tr>
       <tr><td><code>deuses.yml</code></td><td>Deus oficial de cada reino (a fé de cada um fica no próprio jogador)</td></tr>
+      <tr><td><code>lapides.yml</code></td><td>Túmulos de quem morreu (com os itens), até alguém abrir</td></tr>
+      <tr><td><code>recordes.yml</code></td><td>Recordes do servidor e as placas de recordes</td></tr>
       <tr><td><code>pacote/RPGAtributos-recursos.zip</code></td><td>Pacote de recursos gerado a cada início (pode apagar: ele é refeito)</td></tr>
       <tr><td><code>pacote/texturas/</code>, <code>pacote/texturas-padrao/</code></td><td>Suas texturas (entram no lugar das originais) e os desenhos originais</td></tr>
       <tr><td>No chunk (PDC)</td><td>Posição dos minérios de mitrilo e marcas de "já gerado" (mitrilo e sítios de arqueologia)</td></tr>
       <tr><td><code>salas/&lt;tipo&gt;/&lt;nome&gt;.nbt</code></td><td>Salas de masmorra construídas por admins</td></tr>
-      <tr><td>No jogador (PDC)</td><td>Atributos, classes, magias, proficiência de armas e combos, mochila, acessórios, guarda-roupa, exército das sombras</td></tr>
+      <tr><td>No jogador (PDC)</td><td>Atributos, classes, magias, proficiência de armas e combos, mochila, acessórios, guarda-roupa, exército das sombras, talentos e renascimentos (os dados da evolução ficam no próprio companheiro)</td></tr>
     </tbody></table></div>
     <p class="aviso">O mundo <code>rpg_masmorras</code> é <b>apagado e recriado vazio</b> a cada reinício (masmorras, provas de classe e Torre). Não construa nada nele.</p></div>
   </div>
@@ -277,13 +282,45 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>pacote-de-recursos.obrigatorio</code></td><td>false</td><td>Quem recusar o pacote não entra</td></tr>
       </tbody></table></div>
     </div>
+    <div class="card"><h3>Talentos, renascer e companheiros (2.19)</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>talentos.niveis-por-ponto</code></td><td>25</td><td>Níveis somados para cada ponto de talento</td></tr>
+        <tr><td><code>talentos.esmeraldas-para-refazer</code></td><td>16</td><td>Custo para devolver os pontos (0 = de graça)</td></tr>
+        <tr><td><code>renascer.nivel-exigido</code></td><td>100</td><td>Nível em todos os atributos para renascer</td></tr>
+        <tr><td><code>renascer.maximo</code></td><td>5</td><td>Quantas vezes dá para renascer</td></tr>
+        <tr><td><code>renascer.pontos-de-talento</code></td><td>8</td><td>Pontos a mais por renascimento</td></tr>
+        <tr><td><code>renascer.xp-extra</code> / <code>vida-extra</code> / <code>dano-extra</code> / <code>mana-extra</code></td><td>0.10 / 2 / 0.02 / 10</td><td>Bônus permanente por renascimento</td></tr>
+        <tr><td><code>doma.evolucao-dos-companheiros</code></td><td>true</td><td>Companheiros sobem de nível e evoluem no 10 e no 25</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Detalhes (2.20)</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>detalhes.sentar</code></td><td>true</td><td>Sentar em escadas e lajes</td></tr>
+        <tr><td><code>detalhes.lapide.ativada</code> / <code>minutos-de-protecao</code></td><td>true / 15</td><td>Túmulo ao morrer e quanto tempo só o dono abre</td></tr>
+        <tr><td><code>detalhes.chance-de-ninho</code></td><td>0.01</td><td>Folhas naturais derrubarem um ninho</td></tr>
+        <tr><td><code>detalhes.chance-de-achado</code></td><td>0.015</td><td>Areia e cascalho naturais darem um achado</td></tr>
+        <tr><td><code>detalhes.chance-de-animal-raro</code></td><td>0.002</td><td>Animais de Ouro e de Neve (1 em 500)</td></tr>
+        <tr><td><code>detalhes.fogueira.xp-descansado</code> / <code>minutos-descansado</code></td><td>0.05 / 20</td><td>Bônus e duração do Descansado</td></tr>
+        <tr><td><code>detalhes.boneco.xp-por-hora</code></td><td>120</td><td>XP de Combate máximo por hora no Boneco</td></tr>
+        <tr><td><code>detalhes.amolar.golpes</code> / <code>dano-extra</code></td><td>100 / 0.10</td><td>Quanto dura e quanto dá a Pedra de Amolar</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Vida no mundo (2.22)</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>vida.canteiro-minutos</code> / <code>colmeia-minutos</code></td><td>10 / 5</td><td>Uma erva / um mel a cada tanto</td></tr>
+        <tr><td><code>vida.barril.dias-envelhecida</code> / <code>reserva</code> / <code>lendaria</code></td><td>1 / 3 / 7</td><td>Dias reais para cada grau da bebida</td></tr>
+        <tr><td><code>vida.chance-de-cartas</code></td><td>1.0</td><td>Multiplica a chance de cair carta</td></tr>
+        <tr><td><code>vida.mercador.intervalo-minutos</code> / <code>duracao-minutos</code></td><td>90 / 20</td><td>Visitas do Mercador Itinerante</td></tr>
+        <tr><td><code>vida.encontros.ativados</code> / <code>espera-minutos</code></td><td>true / 30</td><td>Encontros na estrada (1 por jogador nesse tempo)</td></tr>
+      </tbody></table></div>
+    </div>
   </div>
 </section>
 
 <section class="secao" id="permissoes">
   <h2><span class="ico">🔑</span>Permissões</h2>
   <div class="grade">
-    <div class="card largo"><p>Liberadas para todos por padrão: <code>rpg.atributos</code>, <code>rpg.atributos.outros</code>, <code>rpg.chapeu</code>, <code>rpg.tag</code>, <code>rpg.tag.cores</code>, <code>rpg.forja</code>, <code>rpg.arcano</code>, <code>rpg.guia</code>, <code>rpg.titulos</code>, <code>rpg.missoes</code>, <code>rpg.receitas</code>, <code>rpg.party</code>, <code>rpg.territorio</code>, <code>rpg.pets</code>, <code>rpg.masmorra</code>, <code>rpg.classe</code>, <code>rpg.lendas</code>, <code>rpg.locais</code>, <code>rpg.pesca</code>, <code>rpg.alquimia</code>, <code>rpg.colonia</code>, <code>rpg.reino</code>, <code>rpg.bestiario</code>, <code>rpg.calendario</code>, <code>rpg.portais</code>, <code>rpg.torre</code>, <code>rpg.combos</code>, <code>rpg.mochila</code>, <code>rpg.fe</code>, <code>rpg.exploracao</code>.</p>
+    <div class="card largo"><p>Liberadas para todos por padrão: <code>rpg.atributos</code>, <code>rpg.atributos.outros</code>, <code>rpg.chapeu</code>, <code>rpg.tag</code>, <code>rpg.tag.cores</code>, <code>rpg.forja</code>, <code>rpg.arcano</code>, <code>rpg.guia</code>, <code>rpg.titulos</code>, <code>rpg.missoes</code>, <code>rpg.receitas</code>, <code>rpg.party</code>, <code>rpg.territorio</code>, <code>rpg.pets</code>, <code>rpg.masmorra</code>, <code>rpg.classe</code>, <code>rpg.lendas</code>, <code>rpg.locais</code>, <code>rpg.pesca</code>, <code>rpg.alquimia</code>, <code>rpg.colonia</code>, <code>rpg.reino</code>, <code>rpg.bestiario</code>, <code>rpg.calendario</code>, <code>rpg.portais</code>, <code>rpg.torre</code>, <code>rpg.combos</code>, <code>rpg.mochila</code>, <code>rpg.fe</code>, <code>rpg.exploracao</code>, <code>rpg.progressao</code>, <code>rpg.detalhes</code>, <code>rpg.vida</code>.</p>
     <p><code>rpg.admin</code>: só OP.</p></div>
   </div>
 </section>
@@ -432,6 +469,45 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   </div>
 </section>
 
+<section class="secao" id="cmd-progressao">
+  <h2><span class="ico">★</span>Talentos, renascer e companheiros</h2>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin talentopontos &lt;jogador&gt; &lt;qtd&gt;</span></td><td>Pontos de talento a mais (negativo tira; se ficar devendo, os talentos voltam)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin renascer &lt;jogador&gt; &lt;0-5&gt;</span></td><td>Define quantas vezes ele renasceu (não mexe nos atributos)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin companheironivel &lt;1-30&gt;</span></td><td>Nível do companheiro que você olha (10 = estágio II, 25 = estágio III)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin set &lt;jogador&gt; &lt;atributo&gt; 100</span></td><td>Para testar o renascer, ponha os 13 atributos no 100</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-vida">
+  <h2><span class="ico">🛢</span>Vida no mundo</h2>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin barril</span>, <span class="cmd">colmeia</span>, <span class="cmd">canteiro</span></td><td>Cria a estação olhando para o bloco (barril vazio, colmeia, bloco de musgo)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin carta &lt;carta&gt; [brilhante]</span></td><td>Dá uma carta do álbum</td></tr>
+      <tr><td><span class="cmd">/rpgadmin flecha|frasco|erva|mel &lt;tipo&gt; [qtd]</span></td><td>Dá flechas especiais, frascos, ervas ou méis</td></tr>
+      <tr><td><span class="cmd">/rpgadmin bebida &lt;tipo&gt; [grau 0-3]</span></td><td>Dá uma bebida do barril (3 = Lendária)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin mercador</span></td><td>O Mercador Itinerante aparece perto de você</td></tr>
+      <tr><td><span class="cmd">/rpgadmin encontro [carroca|bandidos|viajante|estrela]</span></td><td>Começa um encontro perto de você</td></tr>
+    </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-detalhes">
+  <h2><span class="ico">♨</span>Detalhes do dia a dia</h2>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin boneco</span>, <span class="cmd">pedraamolar</span>, <span class="cmd">fogueira</span>, <span class="cmd">bebedouro</span>, <span class="cmd">cartografo</span></td><td>Cria a estação olhando para o bloco dela (fardo de feno, pedra lisa, fogueira, caldeirão com água, mesa de cartografia)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin ferradura [qtd]</span></td><td>Dá ferraduras</td></tr>
+      <tr><td><span class="cmd">/rpgadmin ninhopassaro [qtd]</span></td><td>Dá ninhos de pássaro</td></tr>
+      <tr><td><span class="cmd">/rpgadmin animalraro [ouro|neve]</span></td><td>O animal que você olha vira raro</td></tr>
+    </tbody></table></div>
+    <p class="aviso">O troféu não tem comando: jogue o núcleo de um chefe (<span class="cmd">/rpgadmin raro nucleo_lich</span>) num pilar de quartzo.</p></div>
+  </div>
+</section>
+
 <section class="secao" id="cmd-exploracao">
   <h2><span class="ico">🗺</span>Exploração e campanha</h2>
   <div class="grade">
@@ -445,7 +521,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin pacote</span></td><td>Onde está o pacote de recursos, o SHA-1 e se ele está sendo enviado</td></tr>
     </tbody></table></div></div>
     <div class="card largo"><h3>Pacote de recursos (opcional)</h3>
-      <p>O plugin gera <code>plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip</code> com as texturas do mitrilo, do Cajado Arcano, do Gancho de Escalada e da Capa Planadora. Ele <b>se soma</b> ao pacote do servidor (não o troca). Sem ele tudo funciona com a aparência do jogo. Para enviar, escolha uma opção:</p>
+      <p>O plugin gera <code>plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip</code> com as texturas do mitrilo, do Cajado Arcano, do Gancho, da Capa Planadora, da Ferradura, do Ninho, dos peixes raros, dos pratos, das variedades, dos componentes e dos elixires. Ele <b>se soma</b> ao pacote do servidor (não o troca). Sem ele tudo funciona com a aparência do jogo. Para enviar, escolha uma opção:</p>
       <ol>
         <li><b>Link:</b> suba o zip (ex.: mc-packs.net ou Dropbox com <code>dl=1</code> no fim) e cole o link direto em <code>pacote-de-recursos.url</code>.</li>
         <li><b>Servidor embutido:</b> ponha uma porta liberada no host em <code>porta</code> e o IP ou domínio público em <code>endereco</code>.</li>
@@ -458,7 +534,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Copie um PNG para <code>pacote/texturas/</code> e edite (Paint, Aseprite, Photoshop...). Mesmo nome, imagem quadrada (16×16, 32×32...).</li>
         <li>Reinicie: o seu PNG entra no lugar do original. Apague o arquivo para voltar ao original.</li>
       </ol>
-      <p>Texturas: <code>minerio_mitrilo</code>, <code>mitrilo_bruto</code>, <code>lingote_mitrilo</code>, <code>cajado_arcano</code>, <code>gancho</code>, <code>gancho_lancado</code>, <code>capa_planadora</code>.</p>
+      <p>Texturas: <code>minerio_mitrilo</code>, <code>mitrilo_bruto</code>, <code>lingote_mitrilo</code>, <code>cajado_arcano</code>, <code>gancho</code>, <code>gancho_lancado</code>, <code>capa_planadora</code>, <code>ferradura</code>, <code>ninho_de_passaro</code>, e os grupos <code>peixe_*</code>, <code>prato_*</code>, <code>variedade_*</code>, <code>semente_*</code>, <code>componente_*</code>, <code>elixir_*</code>, <code>gema_*</code>, <code>raro_*</code>, <code>lenda_*</code>, <code>bebida_*</code>, <code>carta_*</code>, <code>flecha_*</code>, <code>frasco_*</code>, <code>mel_*</code>, <code>erva_*</code> e os acessórios (veja todos em <code>texturas-padrao/</code>).</p>
     </div>
   </div>
 </section>
@@ -508,6 +584,31 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>À noite, olhe para o céu pela luneta por 5 s. <span class="cmd">/estrelas</span></li>
         <li><span class="cmd">/rpgadmin circulo</span>, <span class="cmd">/rpgadmin componente mercurio_vivo 4</span> e tente "Ouro em Diamante".</li>
         <li><span class="cmd">/rpgadmin mesarunica</span>; grave Salto nas botas e teste o pulo duplo (e a Capa Planadora depois dele).</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Talentos, renascer e companheiros</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin talentopontos &lt;você&gt; 30</span> e <span class="cmd">/talentos</span>: aprenda até o talento final de uma árvore (Fúria Imortal: fique com pouca vida).</li>
+        <li>Ponha os 13 atributos no 100 com <span class="cmd">/rpgadmin set</span> e use <span class="cmd">/renascer</span>: atributos em 0, ★ na tag, +1 ❤ e 8 pontos.</li>
+        <li>Olhe para um companheiro e use <span class="cmd">/rpgadmin companheironivel 9</span>; derrote alguns monstros com ele para ver a evolução para o estágio II. Depois <span class="cmd">/rpgadmin companheironivel 25</span>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Vida no mundo</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin barril</span> num barril vazio, ponha uma bebida e beba uma Lendária com <span class="cmd">/rpgadmin bebida vinho 3</span>.</li>
+        <li><span class="cmd">/rpgadmin colmeia</span> com 4 flores perto e <span class="cmd">/rpgadmin canteiro</span> num bloco de musgo (o tempo conta mesmo longe).</li>
+        <li><span class="cmd">/rpgadmin carta zumbi</span>, clique com ela e abra <span class="cmd">/album</span>.</li>
+        <li><span class="cmd">/rpgadmin mercador</span> e <span class="cmd">/rpgadmin encontro bandidos</span>.</li>
+        <li>Faça flechas e frascos na bancada; abra <span class="cmd">/rpg</span> e ligue o <span class="cmd">/placar</span>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Detalhes do dia a dia</h3>
+      <ol>
+        <li>Forje um barco, uma vara e um carrinho na Forja do Ferreiro; jogue um élitro e um Fragmento de Forja em cima dela (Reforjar).</li>
+        <li><span class="cmd">/rpgadmin boneco</span> num fardo de feno e bata; <span class="cmd">/rpgadmin pedraamolar</span> numa pedra lisa e afie a espada.</li>
+        <li><span class="cmd">/rpgadmin fogueira</span> numa fogueira acesa, sente numa escada perto por 30 s e veja o Descansado.</li>
+        <li>Morra com itens: o túmulo aparece e a bússola aponta para ele.</li>
+        <li><span class="cmd">/rpgadmin animalraro</span> olhando para uma vaca; escreva <code>[recordes]</code> numa placa; abra <span class="cmd">/diario</span>.</li>
       </ol>
     </div>
     <div class="card"><h3>Exploração e campanha</h3>
@@ -588,7 +689,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.18 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<footer>RPGAtributos 2.22 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

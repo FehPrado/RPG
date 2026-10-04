@@ -238,12 +238,12 @@ public final class MapasDoTesouro implements Listener {
     public void aoMatarElite(EntityDeathEvent e) {
         Player p = e.getEntity().getKiller();
         if (p == null || !Perigo.ehElite(e.getEntity()) || e.getEntity().getPersistentDataContainer().has(K_GUARDIAO)) return;
-        if (rnd().nextDouble() < 0.04) dar(p, Perigo.afixos(e.getEntity()).size() >= 2 ? Tipo.RARO : Tipo.COMUM, "com o Elite");
+        if (rnd().nextDouble() < 0.04 * plugin.talentos().multiplicadorMapas(p)) dar(p, Perigo.afixos(e.getEntity()).size() >= 2 ? Tipo.RARO : Tipo.COMUM, "com o Elite");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void aoPescar(PlayerFishEvent e) {
-        if (e.getState() == PlayerFishEvent.State.CAUGHT_FISH && rnd().nextDouble() < 0.012) {
+        if (e.getState() == PlayerFishEvent.State.CAUGHT_FISH && rnd().nextDouble() < 0.012 * plugin.talentos().multiplicadorMapas(e.getPlayer())) {
             dar(e.getPlayer(), rnd().nextDouble() < 0.2 ? Tipo.RARO : Tipo.COMUM, "numa garrafa no anzol");
         }
     }

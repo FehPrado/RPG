@@ -97,17 +97,35 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 
 | Ideia | O que é | Impacto | Esforço | Depende de |
 |---|---|---|---|---|
-| Árvore de talentos | Pontos por nível total para uma árvore de talentos | ★★ | M | — |
-| Renascimento | Voltar ao nível 1 com bônus permanente e título | ★★ | P | — |
-| Evolução de companheiros | Lobo → lobo alfa → lobo das sombras | ★★ | M | Domador |
+| ✅ Árvore de talentos (2.19) | 4 árvores (Guerreiro, Arcano, Artesão, Explorador), 1 ponto a cada 25 níveis somados | ★★ | M | — |
+| ✅ Renascimento (2.19) | Atributos voltam a 0 com bônus permanente, pontos de talento, ★ na tag e títulos (até 5 vezes) | ★★ | P | — |
+| ✅ Evolução de companheiros (2.19) | Nível 1 a 30 e 3 estágios: Lobo → Lobo Alfa → Lobo das Sombras | ★★ | M | Domador |
 
+## Detalhes do dia a dia (2.20)
+
+| Ideia | O que é | Impacto | Esforço | Depende de |
+|---|---|---|---|---|
+| ✅ Mais forjados (2.20) | Barco, carrinho, vara, élitro e armadura de cavalo forjados; Reforjar itens achados; Ferradura | ★★ | M | Forja |
+| ✅ Estações pequenas (2.20) | Boneco de Treino, Pedra de Amolar, Fogueira de Acampamento, Bebedouro, Estante de Troféus, Mesa do Cartógrafo | ★★ | M | — |
+| ✅ Mundo (2.20) | Túmulo ao morrer, sentar, ninhos, animais raros, achados na areia, orvalho da manhã | ★★ | M | — |
+| ✅ Registros (2.20) | Recordes do servidor (com placa) e Diário de Viagem | ★★ | P | Títulos |
+## Vida no mundo (2.22)
+
+| Ideia | O que é | Impacto | Esforço | Depende de |
+|---|---|---|---|---|
+| ✅ Ofícios (2.22) | Barril de Envelhecimento (dias reais), Colmeia do Apicultor (méis especiais), Canteiro de Ervas | ★★★ | M | — |
+| ✅ Álbum de Cartas (2.22) | 54 cartas em 8 páginas, brilhantes, bônus por página, troca de repetidas | ★★★ | M | — |
+| ✅ Mundo vivo extra (2.22) | Mercador Itinerante, encontros na estrada, 12 segredos | ★★ | M | — |
+| ✅ Combate de aventura (2.22) | 5 flechas especiais e 4 frascos de arremesso | ★★ | P | Ervas |
+| ✅ Conforto (2.22) | Menu central /rpg e placar lateral opcional | ★★ | P | — |
+| Fora dos planos | Troca entre jogadores/correio, cortar árvore e veio inteiros, waypoints pessoais (o dono do servidor não quer) | — | — | — |
 ## Fase J — Visual (resource pack próprio)
 
 | Ideia | O que é | Impacto | Esforço | Depende de |
 |---|---|---|---|---|
 | ✅ Resource pack do servidor (2.18) | Gerado pelo plugin e enviado na entrada (link ou porta própria); texturas editáveis em pacote/texturas/ | ★★★ | M | — |
 | Montarias lendárias | Grifo, dragão menor, lobo gigante (no começo, versão sem pack: papagaio gigante) | ★★★ | G | Resource pack, Domador |
-| Itens com modelo próprio (começou na 2.18.1: cajado, gancho e capa) | Armas lendárias, cajados e ícones de menu com visual único | ★★ | M | Resource pack |
+| Itens com modelo próprio (2.18.1: cajado, gancho e capa; 2.20: ferradura e ninho; 2.21: peixes, pratos, variedades, componentes, elixires e gemas) | Armas lendárias, cajados e ícones de menu com visual único | ★★ | M | Resource pack |
 
 ## Fase K — Conforto e técnico
 
@@ -116,8 +134,8 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 | Troca segura e correio | Tela de troca com confirmação; itens e mensagens para quem está offline | ★★ | P | — |
 | Ordenar baús, placar lateral | Qualidade de vida do dia a dia | ★ | P | — |
 | ✅ Mochila (2.16) | Bolsa extra que cresce com o nível | ★★ | P | — |
-| Sentar, móveis, casa registrada | Sentar em escadas, móveis decorativos e bônus "Descansado" | ★ | M | — |
-| Waypoints e bússola de morte | Pontos marcados e seta até onde você morreu | ★ | P | — |
+| Sentar (feito na 2.20), móveis, casa registrada | Sentar em escadas, móveis decorativos e bônus "Descansado" | ★ | M | — |
+| Waypoints (a bússola do túmulo saiu na 2.20) | Pontos marcados e seta até onde você morreu | ★ | P | — |
 | Cortar árvore e veio inteiros | Liberado pelos níveis de Madeira e Mineração | ★★ | P | — |
 | Ferramentas de admin | Diagnóstico, backup automático, mensagens.yml, ligar e desligar sistemas | ★ | P | — |
 
@@ -134,6 +152,10 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 
 5. Feito na 2.15–2.16: combos de arma (com golpes de lenda e de classe), esquiva, gancho, planador e mochila.
 6. Feito na 2.17–2.18: Fase F (Fé e mistério) e Fase G (Exploração, com As Crônicas do Mundo).
-7. **Agora: Fase I (Progressão extra): talentos e renascer.**
+7. Feito na 2.19: Fase I (talentos, renascer e evolução dos companheiros).
+8. Feito na 2.20: Detalhes do dia a dia (forjados novos, estações pequenas, túmulo, animais raros, recordes e diário).
+9. Feito na 2.21: texturas dos peixes raros, pratos, variedades, componentes, elixires e gemas.
+10. Feito na 2.22: Vida no mundo (barril, colmeia, canteiro, álbum, mercador, encontros, segredos, flechas, frascos), menu /rpg, placar lateral e texturas de materiais raros, núcleos, acessórios e 7 lendas.
+11. **Próximo: a definir.**
 
 *Decisão (03/10/2026): o foco é conteúdo que dá profundidade e história ao mundo. O que é mais de "servidor para muita gente" fica no backlog: raides, Masmorra Hardcore, aparar, Fase E (Reinos 2.0), Fase H (Social), Fase J (Visual) e o resto da Fase K.*

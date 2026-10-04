@@ -302,7 +302,7 @@ public final class Classes implements Listener {
     public List<String> faltando(Player p, Classe c) {
         List<String> l = new ArrayList<>();
         int total = nivelTotalNecessario(c);
-        if (total > 0 && plugin.stats().nivelTotal(p) < total) l.add("Nível total " + total);
+        if (total > 0 && plugin.renascimento().nivelTotalEfetivo(p) < total) l.add("Nível total " + total);
         int atr = atributoNecessario(c);
         if (plugin.stats().getNivel(p, c.atributo()) < atr) l.add(c.atributo().nome() + " nível " + atr);
         for (Classe r : c.requisitos()) if (!dominou(p, r)) l.add(r.nome() + " dominada");

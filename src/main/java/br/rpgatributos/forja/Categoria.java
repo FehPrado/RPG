@@ -26,9 +26,14 @@ public enum Categoria {
     CALCA("Calça",       Tipo.ARMADURA,      EquipmentSlotGroup.LEGS,     7),
     BOTAS("Botas",       Tipo.ARMADURA,      EquipmentSlotGroup.FEET,     4),
     ESCUDO("Escudo",     Tipo.ESCUDO,        EquipmentSlotGroup.HAND,     1),
-    CAJADO("Cajado",     Tipo.MAGICO,        EquipmentSlotGroup.HAND,     1);
+    CAJADO("Cajado",     Tipo.MAGICO,        EquipmentSlotGroup.HAND,     1),
+    VARA("Vara de pescar", Tipo.PESCA,       EquipmentSlotGroup.HAND,     3),
+    ELITRO("Élitro",     Tipo.VOO,           EquipmentSlotGroup.CHEST,    8),
+    ARMADURA_CAVALO("Armadura de cavalo", Tipo.MONTARIA, EquipmentSlotGroup.BODY, 7),
+    BARCO("Barco",       Tipo.VEICULO,       EquipmentSlotGroup.HAND,     5),
+    CARRINHO("Carrinho de mina", Tipo.VEICULO, EquipmentSlotGroup.HAND,   5);
 
-    public enum Tipo { CORPO_A_CORPO, DISTANCIA, FERRAMENTA, ARMADURA, ESCUDO, MAGICO }
+    public enum Tipo { CORPO_A_CORPO, DISTANCIA, FERRAMENTA, ARMADURA, ESCUDO, MAGICO, PESCA, VOO, MONTARIA, VEICULO }
 
     private final String nome;
     private final Tipo tipo;
@@ -56,6 +61,13 @@ public enum Categoria {
     public boolean armadura() { return tipo == Tipo.ARMADURA; }
     /** Peças que contam na defesa: armadura e escudo. */
     public boolean defesa() { return tipo == Tipo.ARMADURA || tipo == Tipo.ESCUDO; }
+    /** Itens que aceitam gemas (barco, vara, élitro e armadura de cavalo não). */
+    public boolean aceitaGemas() {
+        return switch (tipo) {
+            case CORPO_A_CORPO, DISTANCIA, FERRAMENTA, ARMADURA, ESCUDO, MAGICO -> true;
+            case PESCA, VOO, MONTARIA, VEICULO -> false;
+        };
+    }
 
     /** O item funciona nesse slot? (ex.: espada na cabeça não dá bônus) */
     public boolean ativoEm(EquipmentSlot slot) {
@@ -69,6 +81,9 @@ public enum Categoria {
         if (m == Material.CROSSBOW) return BESTA;
         if (m == Material.SHIELD) return ESCUDO;
         if (m == Material.BREEZE_ROD) return CAJADO;
+        if (m == Material.FISHING_ROD) return VARA;
+        if (m == Material.ELYTRA) return ELITRO;
+        if (m == Material.MINECART) return CARRINHO;
         String n = m.name();
         if (n.endsWith("_SWORD")) return ESPADA;
         if (n.endsWith("_PICKAXE")) return PICARETA;
@@ -80,6 +95,8 @@ public enum Categoria {
         if (n.endsWith("_CHESTPLATE")) return PEITORAL;
         if (n.endsWith("_LEGGINGS")) return CALCA;
         if (n.endsWith("_BOOTS")) return BOTAS;
+        if (n.endsWith("_HORSE_ARMOR")) return ARMADURA_CAVALO;
+        if (n.endsWith("_BOAT") || n.endsWith("_RAFT")) return BARCO;
         return null;
     }
 
@@ -105,10 +122,10 @@ public enum Categoria {
         return EnumSet.allOf(Categoria.class);
     }
 
-    /** Tudo que tem durabilidade (o cajado não tem). */
+    /** Tudo que tem durabilidade (cajado, armadura de cavalo, barco e carrinho não têm). */
     static Set<Categoria> comDurabilidade() {
         Set<Categoria> s = EnumSet.allOf(Categoria.class);
-        s.remove(CAJADO);
+        s.removeAll(EnumSet.of(CAJADO, ARMADURA_CAVALO, BARCO, CARRINHO));
         return s;
     }
 }

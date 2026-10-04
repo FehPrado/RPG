@@ -106,7 +106,24 @@ public enum Titulo {
     ARQUEOLOGO("Arqueólogo", 0xBCAAA4, Requisito.contador("reliquias", 12, "Juntar as 12 relíquias"), Bonus.xpTudo(0.05)),
     CACADOR_DE_MAPAS("Caçador de Mapas", 0xD4A017, Requisito.contador("tesouros_enterrados", 10, "Desenterrar 10 tesouros de mapa"), Bonus.vida(2)),
     MINEIRO_DAS_PROFUNDEZAS("Mineiro das Profundezas", 0x7FCFE0, Requisito.contador("mitrilo", 50, "Minerar 50 Mitrilos"), Bonus.xpSkill(Skill.MINERACAO, 0.15)),
-    CRONISTA("Cronista", 0x6D4C41, Requisito.contador("campanha", 8, "Completar as Crônicas do Mundo"), new Bonus().comVida(2).comDano(1));
+    CRONISTA("Cronista", 0x6D4C41, Requisito.contador("campanha", 8, "Completar as Crônicas do Mundo"), new Bonus().comVida(2).comDano(1)),
+
+    // ---------------- progressão extra ----------------
+    MESTRE_DOS_TALENTOS("Mestre dos Talentos", 0xB39DDB, Requisito.contador("arvores_completas", 1, "Completar uma árvore de talentos"), Bonus.xpTudo(0.03)),
+    VINCULO_ETERNO("Vínculo Eterno", 0xC9955C, Requisito.contador("companheiro_lendario", 1, "Evoluir um companheiro ao estágio III"), Bonus.xpSkill(Skill.DOMA, 0.15)),
+    RENASCIDO("Renascido", 0xFFD54F, Requisito.contador("renascimentos", 1, "Renascer uma vez"), new Bonus().comVida(2).comDano(1)),
+    ETERNO("Eterno", 0xFFF59D, Requisito.contador("renascimentos", 5, "Renascer 5 vezes"), new Bonus().comDano(2).comVida(6).comVelocidade(0.05)),
+
+    // ---------------- detalhes ----------------
+    COLECIONADOR_DE_TROFEUS("Colecionador de Troféus", 0xFFC107, Requisito.contador("trofeus", 6, "Expor 6 troféus de chefe"), Bonus.vida(2)),
+    CACADOR_DE_RARIDADES("Caçador de Raridades", 0xFFD54F, Requisito.contador("animais_raros", 3, "Encontrar 3 animais raros"), Bonus.xpSkill(Skill.DOMA, 0.1)),
+
+    // ---------------- vida no mundo ----------------
+    COLECIONADOR_DE_CARTAS("Colecionador de Cartas", 0x4FC3F7, Requisito.contador("album_completo", 1, "Completar o Álbum de Cartas"), new Bonus().comVida(4).comDano(1)),
+    GUARDIAO_DE_SEGREDOS("Guardião de Segredos", 0xB388FF, Requisito.contador("segredos", 6, "Descobrir 6 segredos"), Bonus.xpTudo(0.05)),
+    MESTRE_CERVEJEIRO("Mestre Cervejeiro", 0xA1887F, Requisito.contador("bebidas", 30, "Engarrafar 30 bebidas"), Bonus.xpSkill(Skill.CULINARIA, 0.15)),
+    APICULTOR("Apicultor", 0xFFB300, Requisito.contador("meis", 50, "Tirar 50 méis da colmeia"), Bonus.xpSkill(Skill.AGRICULTURA, 0.1)),
+    BOM_SAMARITANO("Bom Samaritano", 0xBCAAA4, Requisito.contador("viajantes", 5, "Ajudar 5 viajantes feridos"), Bonus.vida(2));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(

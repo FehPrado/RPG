@@ -70,6 +70,22 @@ public final class Settings {
     public final String pacUrl, pacEndereco;
     public final int pacPorta;
 
+    // progressão extra: talentos, renascer e evolução dos companheiros
+    public final boolean talAtivado, renAtivado, evoAtivada;
+    public final int talNiveisPorPonto, talCustoRefazer, renNivel, renMaximo, renPontosTalento;
+    public final double renXp, renVida, renDano, renMana;
+
+    // detalhes: estações pequenas, natureza e túmulos
+    public final boolean detSentar, detLapide;
+    public final int detDescansadoMinutos, detAmolarGolpes, detLapideMinutos;
+    public final double detNinhoChance, detAchadoChance, detAnimalRaroChance, detDescansadoXp, detBonecoXpHora, detAmolarDano;
+
+    // vida no mundo: ofícios, cartas, mercador e encontros
+    public final boolean vidaEncontros;
+    public final int vidaCanteiroMinutos, vidaColmeiaMinutos, vidaMercadorMinutos, vidaMercadorDuracao, vidaEncontroMinutos;
+    public final int[] vidaBarrilDias;
+    public final double vidaCartaChance;
+
     // doma (companheiros)
     public final double domaXpDomar, domaXpCruzar, domaXpVincular, domaXpComponente, domaXpPorBloco, domaXpAbate;
     public final double domaVida, domaDano, domaVelocidade;
@@ -267,6 +283,41 @@ public final class Settings {
         pacPorta = Math.max(0, c.getInt("pacote-de-recursos.porta", 0));
         pacEndereco = c.getString("pacote-de-recursos.endereco", "");
         pacObrigatorio = c.getBoolean("pacote-de-recursos.obrigatorio", false);
+
+        talAtivado = c.getBoolean("talentos.ativado", true);
+        talNiveisPorPonto = Math.max(1, c.getInt("talentos.niveis-por-ponto", 25));
+        talCustoRefazer = Math.max(0, c.getInt("talentos.esmeraldas-para-refazer", 16));
+        renAtivado = c.getBoolean("renascer.ativado", true);
+        renNivel = Math.max(1, c.getInt("renascer.nivel-exigido", 100));
+        renMaximo = Math.max(0, c.getInt("renascer.maximo", 5));
+        renPontosTalento = Math.max(0, c.getInt("renascer.pontos-de-talento", 8));
+        renXp = Math.max(0, c.getDouble("renascer.xp-extra", 0.10));
+        renVida = Math.max(0, c.getDouble("renascer.vida-extra", 2));
+        renDano = Math.max(0, c.getDouble("renascer.dano-extra", 0.02));
+        renMana = Math.max(0, c.getDouble("renascer.mana-extra", 10));
+        evoAtivada = c.getBoolean("doma.evolucao-dos-companheiros", true);
+
+        detSentar = c.getBoolean("detalhes.sentar", true);
+        detLapide = c.getBoolean("detalhes.lapide.ativada", true);
+        detLapideMinutos = Math.max(0, c.getInt("detalhes.lapide.minutos-de-protecao", 15));
+        detNinhoChance = Math.max(0, c.getDouble("detalhes.chance-de-ninho", 0.01));
+        detAchadoChance = Math.max(0, c.getDouble("detalhes.chance-de-achado", 0.015));
+        detAnimalRaroChance = Math.max(0, c.getDouble("detalhes.chance-de-animal-raro", 0.002));
+        detDescansadoXp = Math.max(0, c.getDouble("detalhes.fogueira.xp-descansado", 0.05));
+        detDescansadoMinutos = Math.max(1, c.getInt("detalhes.fogueira.minutos-descansado", 20));
+        detBonecoXpHora = Math.max(0, c.getDouble("detalhes.boneco.xp-por-hora", 120));
+        detAmolarGolpes = Math.max(1, c.getInt("detalhes.amolar.golpes", 100));
+        detAmolarDano = Math.max(0, c.getDouble("detalhes.amolar.dano-extra", 0.10));
+
+        vidaCanteiroMinutos = Math.max(1, c.getInt("vida.canteiro-minutos", 10));
+        vidaColmeiaMinutos = Math.max(1, c.getInt("vida.colmeia-minutos", 5));
+        vidaBarrilDias = new int[]{Math.max(0, c.getInt("vida.barril.dias-envelhecida", 1)), Math.max(0, c.getInt("vida.barril.dias-reserva", 3)),
+                Math.max(0, c.getInt("vida.barril.dias-lendaria", 7))};
+        vidaCartaChance = Math.max(0, c.getDouble("vida.chance-de-cartas", 1.0));
+        vidaMercadorMinutos = Math.max(10, c.getInt("vida.mercador.intervalo-minutos", 90));
+        vidaMercadorDuracao = Math.max(5, c.getInt("vida.mercador.duracao-minutos", 20));
+        vidaEncontros = c.getBoolean("vida.encontros.ativados", true);
+        vidaEncontroMinutos = Math.max(5, c.getInt("vida.encontros.espera-minutos", 30));
 
         domaXpDomar = c.getDouble("doma.xp-domar", 25);
         domaXpCruzar = c.getDouble("doma.xp-cruzar", 2);

@@ -90,7 +90,8 @@ public final class Companheiros implements Listener {
     private static final NamespacedKey M_EMPURRAO = new NamespacedKey("rpgatributos", "domador_empurrao");
     private static final NamespacedKey M_VELOCIDADE = new NamespacedKey("rpgatributos", "domador_velocidade");
     private static final NamespacedKey M_DANO = new NamespacedKey("rpgatributos", "domador_dano");
-    private static final List<NamespacedKey> CHAVES_DADOS = List.of(CHAVE_DONO, K_COMPONENTES, K_MODO, K_CENTRO, K_ALFORJE, K_NIVEL);
+    private static final List<NamespacedKey> CHAVES_DADOS = List.of(CHAVE_DONO, K_COMPONENTES, K_MODO, K_CENTRO, K_ALFORJE, K_NIVEL, Evolucao.K_XP,
+            br.rpgatributos.detalhes.ItensDetalhes.K_TEM_FERRADURA);
 
     /** Onde o companheiro estava da última vez (para a lista /pets). */
     public static final class Registro {
@@ -245,16 +246,18 @@ public final class Companheiros implements Listener {
     public void aplicarAtributos(LivingEntity e) {
         int nivel = nivelDono(e);
         Set<Componente> c = componentes(e);
-        modificar(e, Attribute.MAX_HEALTH, M_VIDA, nivel * cfg().domaVida + (c.contains(Componente.COURACA) ? 0.25 : 0),
+        double evo = plugin.evolucao().bonus(e);
+        modificar(e, Attribute.MAX_HEALTH, M_VIDA, nivel * cfg().domaVida + evo + (c.contains(Componente.COURACA) ? 0.25 : 0),
                 AttributeModifier.Operation.ADD_SCALAR);
         modificar(e, Attribute.ARMOR, M_ARMADURA, (c.contains(Componente.COURACA) ? 8 : 0) + (c.contains(Componente.NETHERITE) ? 6 : 0),
                 AttributeModifier.Operation.ADD_NUMBER);
         modificar(e, Attribute.ARMOR_TOUGHNESS, M_RESISTENCIA, c.contains(Componente.NETHERITE) ? 4 : 0, AttributeModifier.Operation.ADD_NUMBER);
         modificar(e, Attribute.KNOCKBACK_RESISTANCE, M_EMPURRAO, c.contains(Componente.NETHERITE) ? 0.6 : 0, AttributeModifier.Operation.ADD_NUMBER);
         modificar(e, Attribute.MOVEMENT_SPEED, M_VELOCIDADE, c.contains(Componente.AGILIDADE) ? 0.3 : 0, AttributeModifier.Operation.ADD_SCALAR);
-        modificar(e, Attribute.ATTACK_DAMAGE, M_DANO, nivel * cfg().domaDano + (c.contains(Componente.GARRAS) ? 0.5 : 0),
+        modificar(e, Attribute.ATTACK_DAMAGE, M_DANO, nivel * cfg().domaDano + evo + (c.contains(Componente.GARRAS) ? 0.5 : 0),
                 AttributeModifier.Operation.ADD_SCALAR);
         e.setGlowing(c.contains(Componente.FAROL));
+        plugin.evolucao().aplicar(e);
     }
 
     private static void modificar(LivingEntity e, Attribute a, NamespacedKey chave, double valor, AttributeModifier.Operation op) {
@@ -268,7 +271,7 @@ public final class Companheiros implements Listener {
     /** Dano de um ataque do companheiro (os que não atacam sozinhos usam isso). */
     public double danoAtaque(LivingEntity e) {
         double base = tem(e, Componente.GARRAS) ? 7 : 3;
-        return base * (1 + nivelDono(e) * cfg().domaDano);
+        return base * (1 + nivelDono(e) * cfg().domaDano + plugin.evolucao().bonus(e));
     }
 
     // =====================================================================
@@ -358,6 +361,7 @@ public final class Companheiros implements Listener {
     /** Desfaz o vínculo: a criatura volta a ser comum e os componentes caem no chão. */
     public void libertar(LivingEntity e) {
         fecharAlforje(e.getUniqueId());
+        plugin.itensDetalhes().soltarFerradura(e);
         Location l = e.getLocation();
         for (Componente c : componentes(e)) l.getWorld().dropItemNaturally(l, new ItemStack(c.item()));
         for (ItemStack i : alforje(e).getContents()) if (i != null && !i.isEmpty()) l.getWorld().dropItemNaturally(l, i);
@@ -372,6 +376,7 @@ public final class Companheiros implements Listener {
             }
         }
         e.setGlowing(false);
+        plugin.evolucao().aplicar(e); // sem XP: volta ao tamanho normal
         e.setGravity(true);
         e.eject();
         registros.remove(e.getUniqueId());
@@ -674,6 +679,7 @@ public final class Companheiros implements Listener {
         // O companheiro morreu: componentes e alforje caem.
         fecharAlforje(morto.getUniqueId());
         for (Componente c : componentes(morto)) e.getDrops().add(new ItemStack(c.item()));
+        if (br.rpgatributos.detalhes.ItensDetalhes.temFerradura(morto)) e.getDrops().add(br.rpgatributos.detalhes.ItensDetalhes.ferradura(1));
         for (ItemStack i : alforje(morto).getContents()) if (i != null && !i.isEmpty()) e.getDrops().add(i);
         alforjes.remove(morto.getUniqueId());
         registros.remove(morto.getUniqueId());

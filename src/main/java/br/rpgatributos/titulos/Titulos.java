@@ -125,6 +125,7 @@ public final class Titulos implements Listener {
         Map<String, Integer> m = contadores(p);
         m.merge(id, quantidade, Integer::sum);
         salvarContadores(p, m);
+        contou(p, id, m.get(id));
         verificar(p);
     }
 
@@ -134,7 +135,14 @@ public final class Titulos implements Listener {
         if (m.getOrDefault(id, 0) >= valor) return;
         m.put(id, valor);
         salvarContadores(p, m);
+        contou(p, id, valor);
         verificar(p);
+    }
+
+    /** Recordes do servidor e Diário de Viagem acompanham os contadores. */
+    private void contou(Player p, String id, int valor) {
+        plugin.recordes().aoContar(p, id, valor);
+        plugin.diario().aoContar(p, id, valor);
     }
 
     // =====================================================================
@@ -193,7 +201,10 @@ public final class Titulos implements Listener {
         if (novos.isEmpty()) return;
         tem.addAll(novos);
         salvarDesbloqueados(p, tem);
-        for (Titulo t : novos) anunciar(p, t);
+        for (Titulo t : novos) {
+            anunciar(p, t);
+            plugin.diario().marco(p, "titulo_" + t.name().toLowerCase(java.util.Locale.ROOT), "Conquistou o título « " + t.nome() + " »");
+        }
     }
 
     private void anunciar(Player p, Titulo t) {

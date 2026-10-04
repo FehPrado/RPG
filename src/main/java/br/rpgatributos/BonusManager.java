@@ -52,6 +52,8 @@ public final class BonusManager {
         definir(p, Attribute.WATER_MOVEMENT_EFFICIENCY, kNado, natacao * cfg().natAgilidade, AttributeModifier.Operation.ADD_NUMBER);
         definir(p, Attribute.OXYGEN_BONUS, kFolego, natacao * cfg().natFolego, AttributeModifier.Operation.ADD_NUMBER);
         definir(p, Attribute.SUBMERGED_MINING_SPEED, kMinerarAgua, natacao * cfg().natMineracao, AttributeModifier.Operation.ADD_NUMBER);
+        plugin.talentos().conferir(p);
+        plugin.talentos().aplicar(p); // talentos e o bônus de vida do renascimento
     }
 
     /**

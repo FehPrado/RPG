@@ -69,6 +69,7 @@ public final class MenuManager implements Listener {
     private static final int P_FECHAR = 50;
     private static final int P_ACESSORIOS = 51;
     private static final int P_TERRITORIO = 52;
+    private static final int P_TALENTOS = 45;
 
     // ----- posições no guia da forja (6 linhas) -----
     private static final int F_FERRARIA = 13;
@@ -115,6 +116,8 @@ public final class MenuManager implements Listener {
         cabeca.editMeta(SkullMeta.class, m -> m.setOwningPlayer(alvo));
         List<Component> resumo = new ArrayList<>();
         resumo.add(linha("Nível total: ", NamedTextColor.GRAY, String.valueOf(st.nivelTotal(alvo)), NamedTextColor.YELLOW));
+        int renasceu = plugin.renascimento().vezes(alvo);
+        if (renasceu > 0) resumo.add(linha("Renascimentos: ", NamedTextColor.GRAY, "★".repeat(renasceu), NamedTextColor.GOLD));
         resumo.add(Component.empty());
         for (Skill s : Skill.values()) {
             resumo.add(Component.text(s.icone() + " " + s.nome() + ": ", s.cor())
@@ -168,6 +171,13 @@ public final class MenuManager implements Listener {
                     Component.text("❖ Acessórios", TextColor.color(0xE8C15A), TextDecoration.BOLD),
                     List.of(Component.text("Anéis, amuletos, cintos e", NamedTextColor.GRAY),
                             Component.text("itens de bolso (lanterna, ímã...).", NamedTextColor.GRAY),
+                            Component.empty(),
+                            Component.text("» Clique para abrir", NamedTextColor.YELLOW))));
+            int livres = plugin.talentos().livres(quemVe);
+            inv.setItem(P_TALENTOS, item(Material.EXPERIENCE_BOTTLE,
+                    Component.text("✦ Talentos", TextColor.color(0xB39DDB), TextDecoration.BOLD),
+                    List.of(Component.text(plugin.talentos().resumo(quemVe), livres > 0 ? NamedTextColor.GREEN : NamedTextColor.GRAY),
+                            Component.text("Guerreiro, Arcano, Artesão e Explorador.", NamedTextColor.GRAY),
                             Component.empty(),
                             Component.text("» Clique para abrir", NamedTextColor.YELLOW))));
             inv.setItem(P_FORJA, item(Material.SMITHING_TABLE,
@@ -394,6 +404,9 @@ public final class MenuManager implements Listener {
             } else if (proprio && slot == P_SKILLS[Skill.ALQUIMIA.ordinal()]) {
                 clique(p);
                 plugin.alquimia().abrirLivro(p);
+            } else if (proprio && slot == P_TALENTOS) {
+                clique(p);
+                plugin.talentos().abrir(p, br.rpgatributos.progressao.Arvore.GUERREIRO);
             } else if (proprio && slot == P_ACESSORIOS) {
                 clique(p);
                 plugin.acessorios().abrir(p);

@@ -354,6 +354,7 @@ public final class Lendas implements Listener {
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
         Lenda l = Lenda.porId(pdc.getOrDefault(K_LENDA, PersistentDataType.STRING, ""));
         if (l == null) return;
+        br.rpgatributos.exploracao.PacoteRecursos.marcar(meta, "lenda_" + l.name().toLowerCase(java.util.Locale.ROOT));
         Registro r = registro.get(l);
         boolean valida = r != null && r.versao() == pdc.getOrDefault(K_VERSAO, PersistentDataType.INTEGER, 0);
         Component nome = Component.text(l.nome(), valida ? COR : NamedTextColor.DARK_GRAY, TextDecoration.BOLD);

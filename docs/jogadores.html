@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.18</small></div></div>
+  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.22</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -116,6 +116,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <a href="#fazenda">☘ Fazenda e cozinha</a>
   <a href="#fe">✧ Fé e mistério</a>
   <a href="#descobertas">🗺 Exploração e campanha</a>
+  <a href="#progressao">★ Talentos e renascer</a>
+  <a href="#detalhes">♨ Detalhes do dia a dia</a>
+  <a href="#vida">🛢 Vida no mundo</a>
   <a href="#pesca">⚓ Pesca</a>
   <a href="#domador">♞ Domador</a>
   <a href="#party">👥 Party e territórios</a>
@@ -141,7 +144,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <div class="hero">
   <h1>Bem-vindo ao RPG do servidor</h1>
   <p>Aqui tudo evolui com o uso: minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. Não precisa de mod nem de resource pack.</p>
-  <div class="chips"><span class="chip">13 atributos até o nível 100</span><span class="chip">24 classes</span><span class="chip">50 magias secretas</span><span class="chip">42 golpes de combo</span><span class="chip">12 lendas únicas</span><span class="chip">Livro <code>/guia</code> com 69 páginas</span></div>
+  <div class="chips"><span class="chip">13 atributos até o nível 100</span><span class="chip">24 classes</span><span class="chip">50 magias secretas</span><span class="chip">42 golpes de combo</span><span class="chip">12 lendas únicas</span><span class="chip">Livro <code>/guia</code> com 78 páginas</span></div>
 </div>
 
 <section class="secao" id="inicio">
@@ -583,6 +586,103 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     </div>
   </div>
 </section>
+<section class="secao" id="progressao">
+  <h2><span class="ico">★</span>Talentos, renascer e companheiros</h2>
+  <div class="grade">
+    <div class="card largo"><h3>Talentos</h3>
+      <p><b>1 ponto a cada 25 níveis</b> somados nos atributos (até 52), mais 8 a cada renascimento. Cada árvore tem 4 faixas: a 2ª abre com 5 pontos gastos nela, a 3ª com 10 e o talento final com 15. Refazer custa 16 esmeraldas. <span class="cmd">/talentos</span></p>
+      <div class="tabela"><table><thead><tr><th>Árvore</th><th>Talentos</th><th>Final</th></tr></thead><tbody>
+        <tr><td>⚔ Guerreiro</td><td>Força Bruta, Pele Grossa, Vigor de Batalha, Sede de Sangue, Golpe Crítico, Inabalável</td><td><b>Fúria Imortal</b>: com pouca vida, +25% de dano e Regeneração II</td></tr>
+        <tr><td>✦ Arcano</td><td>Mente Ampla, Fluxo, Economia Arcana, Eco de Mana, Escudo de Mana, Erudito</td><td><b>Sobrecarga</b>: a cada 30 s, uma magia de graça</td></tr>
+        <tr><td>⚒ Artesão</td><td>Mãos de Ferreiro, Colheita Farta, Refinador, Alquimista Nato, Mestre-Cuca, Engenhoso</td><td><b>Obra-Prima</b>: forja com chance de subir duas raridades</td></tr>
+        <tr><td>➶ Explorador</td><td>Passos Leves, Sorte do Viajante, Queda Suave, Esquiva Ágil, Caçador de Tesouros, Garimpeiro</td><td><b>Andarilho Eterno</b>: fora de combate, Velocidade I e Pressa I</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Renascer</h3>
+      <p>Com <b>todos os atributos no nível 100</b>, os atributos voltam a 0 e os talentos são devolvidos. Para sempre, a cada vez:</p>
+      <ul>
+        <li>+10% de XP, +1 ❤, +2% de dano corpo a corpo e +10 de mana;</li>
+        <li>+8 pontos de talento e uma <b>★</b> antes do nome (até 5).</li>
+      </ul>
+      <p>Itens, classes, lendas, companheiros e títulos ficam. Mochila, território, masmorras e classes contam como nível máximo. <span class="cmd">/renascer</span></p>
+    </div>
+    <div class="card"><h3>Evolução dos companheiros</h3>
+      <ul>
+        <li>Ganham XP lutando (Elites e chefes valem mais), sendo montados e perto de você. Nível 1 a 30, +2% de vida e dano por nível.</li>
+        <li><b>Nível 10, estágio II:</b> maiores, se regeneram e ganham o <b>Golpe Feroz</b>.</li>
+        <li><b>Nível 25, estágio III:</b> ainda maiores e com o <b>Vínculo Ancestral</b> (perto dele você recebe 8% menos dano).</li>
+        <li>Lobo → Lobo Alfa → <b>Lobo das Sombras</b>; Cavalo → Corcel de Guerra → <b>Corcel Celeste</b>; Golem → <b>Colosso de Ferro</b>. Veja no <span class="cmd">/pets</span>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="secao" id="detalhes">
+  <h2><span class="ico">♨</span>Detalhes do dia a dia</h2>
+  <div class="grade">
+    <div class="card"><h3>Mais coisas na Forja</h3>
+      <ul>
+        <li><b>Barco:</b> isca mais rápida pescando nele e menos dano para quem vai dentro.</li>
+        <li><b>Carrinho de mina:</b> mais rápido nos trilhos.</li>
+        <li><b>Vara de pescar:</b> isca mais rápida e mais peixe raro.</li>
+        <li><b>Élitro:</b> mais impulso dos fogos.</li>
+        <li><b>Armadura de cavalo:</b> velocidade, pulo e vida para a montaria.</li>
+        <li><b>Reforjar:</b> item achado no mundo + 1 Fragmento de Forja jogados na Forja.</li>
+        <li><b>Ferradura</b> (5 ferros em U): +15% de velocidade num companheiro, sem gastar componente.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Mundo</h3>
+      <ul>
+        <li><b>Túmulo:</b> ao morrer, seus itens ficam na sua cabeça onde você caiu, protegidos por 15 min. Uma bússola aponta para ele.</li>
+        <li><b>Sentar:</b> clique com a mão vazia numa escada ou laje, ou <span class="cmd">/sentar</span>.</li>
+        <li><b>Ninhos:</b> caem das folhas; clique para abrir.</li>
+        <li><b>Animais raros:</b> "de Ouro" e "de Neve" (1 em 500), com drops em dobro.</li>
+        <li><b>Achados</b> na areia e no cascalho; <b>orvalho</b> no amanhecer dá +50% de XP de Agricultura.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>Estações pequenas</h3>
+      <div class="tabela"><table><thead><tr><th>Estação</th><th>Ritual (Q)</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td>🎯 Boneco de Treino</td><td>Fardo de feno + abóbora esculpida + suporte de armadura</td><td>Mostra o dano de cada golpe e por segundo; nunca quebra</td></tr>
+        <tr><td>⚔ Pedra de Amolar</td><td>Pedra lisa + 2 pederneiras + 1 ferro</td><td>Arma +10% de dano por 100 golpes (custa 1 pederneira)</td></tr>
+        <tr><td>♨ Fogueira de Acampamento</td><td>Fogueira acesa + 1 lã + 1 tronco</td><td>Sentado perto: Regeneração e Descansado (+5% de XP por 20 min); assa comida jogada do lado</td></tr>
+        <tr><td>☘ Bebedouro</td><td>Caldeirão com água + 1 fardo de feno</td><td>Filhotes crescem mais rápido; companheiros se curam</td></tr>
+        <tr><td>🏆 Estante de Troféus</td><td>Pilar de quartzo + núcleo de um chefe</td><td>Mostra o troféu; +1% de XP por troféu diferente no seu território</td></tr>
+        <tr><td>🧭 Mesa do Cartógrafo</td><td>Mesa de cartografia + bússola + 3 papéis</td><td>Com um mapa do tesouro: direção e distância do X</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card largo"><h3>Recordes e Diário</h3>
+      <p><span class="cmd">/recordes</span>: maior golpe, maior nível e os maiores números do servidor; quem bate um recorde é anunciado. Escreva <code>[recordes]</code> numa placa para ela virar um painel. <span class="cmd">/diario</span>: o Diário de Viagem com os marcos da sua jornada, cada um com a data.</p>
+    </div>
+  </div>
+</section>
+<section class="secao" id="vida">
+  <h2><span class="ico">🛢</span>Vida no mundo</h2>
+  <div class="grade">
+    <div class="card largo"><h3>Ofícios</h3>
+      <div class="tabela"><table><thead><tr><th>Estação</th><th>Ritual (Q)</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td>🛢 Barril de Envelhecimento</td><td>Barril vazio + 2 ferros + 1 favo</td><td>Bebidas que melhoram com os dias reais: Nova, Envelhecida (1 dia), Reserva (3) e Lendária (7)</td></tr>
+        <tr><td>🐝 Colmeia do Apicultor</td><td>Colmeia + 1 favo + 1 flor</td><td>Méis Dourado, Gelado, Floral, Noturno ou Silvestre, cada um com um efeito</td></tr>
+        <tr><td>☘ Canteiro de Ervas</td><td>Musgo + farinha de osso + vaso</td><td>Ervas que dependem do lugar (Sálvia, Erva-de-Sol, Musgo Lunar, Folha Gélida, Raiz Abissal, Flor-de-Cristal)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Álbum de Cartas</h3>
+      <p>Monstros, chefes e peixes raros às vezes deixam uma carta (algumas são <b>brilhantes</b>). Clique com ela na mão para guardar. 54 cartas em 8 páginas; cada página completa dá +5% de dano naquele grupo. 5 repetidas trocam por uma que falta. <span class="cmd">/album</span></p>
+    </div>
+    <div class="card"><h3>Pelo mundo</h3>
+      <ul>
+        <li><b>Mercador Itinerante:</b> aparece por 20 min com ofertas raras; o servidor avisa onde.</li>
+        <li><b>Encontros:</b> carroça tombada, bandidos com saque, viajante ferido (dê comida) e estrela cadente.</li>
+        <li><b>Segredos:</b> 12 conquistas escondidas. <span class="cmd">/segredos</span></li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>Flechas e frascos (bancada)</h3>
+      <p><b>Flechas:</b> 4 flechas + pó de blaze (fogo), gelo compactado (gelo), pérola do ender (rastreadora) ou TNT (explosiva); 2 flechas + laço (corda: puxa você até onde cravar).<br>
+      <b>Frascos:</b> garrafa + pólvora + Musgo Lunar (fumaça), 2 slimes (cola), pólvora + Erva-de-Sol (fogo-grego) ou melancia reluzente + Sálvia (cura em área). Clique para arremessar.</p>
+    </div>
+    <div class="card largo"><h3>Conforto</h3>
+      <p><span class="cmd">/rpg</span> abre o menu com todos os sistemas. <span class="cmd">/placar</span> liga o placar lateral (nível, vigor, mana, estação, lua, hora e talentos).</p>
+    </div>
+  </div>
+</section>
 <section class="secao" id="pesca">
   <h2><span class="ico">⚓</span>Pesca</h2>
   <div class="grade">
@@ -1007,6 +1107,15 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/estrelas</span></td><td>Diário das Estrelas</td></tr>
       <tr><td><span class="cmd">/enciclopedia</span></td><td>Enciclopédia do Mundo</td></tr>
       <tr><td><span class="cmd">/cronista</span></td><td>Sua campanha (capítulo atual e entregar)</td></tr>
+      <tr><td><span class="cmd">/talentos</span></td><td>Árvore de talentos</td></tr>
+      <tr><td><span class="cmd">/renascer</span></td><td>Renascer (o que falta e confirmar)</td></tr>
+      <tr><td><span class="cmd">/diario</span></td><td>Diário de Viagem</td></tr>
+      <tr><td><span class="cmd">/recordes</span></td><td>Recordes do servidor</td></tr>
+      <tr><td><span class="cmd">/sentar</span></td><td>Sentar no chão (ou levantar)</td></tr>
+      <tr><td><span class="cmd">/rpg</span></td><td>Menu central com tudo</td></tr>
+      <tr><td><span class="cmd">/placar</span></td><td>Placar lateral</td></tr>
+      <tr><td><span class="cmd">/album</span></td><td>Álbum de Cartas</td></tr>
+      <tr><td><span class="cmd">/segredos</span></td><td>Segredos</td></tr>
       <tr><td><span class="cmd">/lendas</span></td><td>Livro das Lendas</td></tr>
       <tr><td><span class="cmd">/locais</span></td><td>Locais Ocultos que você achou</td></tr>
       <tr><td><span class="cmd">/party</span>, <span class="cmd">/pc</span></td><td>Menu e chat da party</td></tr>
@@ -1035,7 +1144,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.18 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.22 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

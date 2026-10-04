@@ -51,7 +51,7 @@ public final class Mochila implements Listener, CommandExecutor {
     /** Fileiras liberadas pelo nível total. */
     public int fileiras(Player p) {
         int por = Math.max(1, plugin.settings().mochilaNiveisPorFileira);
-        return Math.max(1, Math.min(FILEIRAS_MAX, 1 + plugin.stats().nivelTotal(p) / por));
+        return Math.max(1, Math.min(FILEIRAS_MAX, 1 + plugin.renascimento().nivelTotalEfetivo(p) / por));
     }
 
     private ItemStack[] carregar(Player p) {
@@ -115,7 +115,7 @@ public final class Mochila implements Listener, CommandExecutor {
         int por = Math.max(1, plugin.settings().mochilaNiveisPorFileira);
         int f = fileiras(p);
         if (f < FILEIRAS_MAX) {
-            int falta = f * por - plugin.stats().nivelTotal(p);
+            int falta = f * por - plugin.renascimento().nivelTotalEfetivo(p);
             p.sendActionBar(Component.text("Próxima fileira com mais " + Math.max(1, falta) + " níveis somados", COR));
         }
         return true;

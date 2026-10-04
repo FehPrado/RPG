@@ -328,6 +328,7 @@ public final class Mitrilo implements Listener {
         int qtd = 1;
         int fortuna = ferramenta.getEnchantmentLevel(Enchantment.FORTUNE);
         if (fortuna > 0 && ThreadLocalRandom.current().nextInt(fortuna + 2) >= 2) qtd++;
+        if (ThreadLocalRandom.current().nextDouble() < plugin.talentos().chanceMitriloExtra(p)) qtd++; // Garimpeiro
         b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 0.5, 0.5), bruto(qtd));
         b.getWorld().spawnParticle(Particle.END_ROD, b.getLocation().add(0.5, 0.5, 0.5), 15, 0.3, 0.3, 0.3, 0.05);
         b.getWorld().playSound(b.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1f, 1.4f);

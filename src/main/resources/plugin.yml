@@ -124,6 +124,51 @@ commands:
     usage: /cronista [entregar]
     aliases: [campanha, cronicas]
     permission: rpg.exploracao
+  talentos:
+    description: Árvore de talentos — pontos ganhos pelo nível total.
+    usage: /talentos
+    aliases: [talento, arvore]
+    permission: rpg.progressao
+  renascer:
+    description: Renascer — atributos voltam a 0 com bônus permanente.
+    usage: /renascer [confirmar]
+    aliases: [renascimento, rebirth]
+    permission: rpg.progressao
+  rpg:
+    description: Menu central do RPGAtributos (todos os sistemas).
+    usage: /rpg
+    aliases: [menu, rpgmenu]
+    permission: rpg.atributos
+  placar:
+    description: Liga ou desliga o placar lateral.
+    usage: /placar
+    aliases: [scoreboard, sidebar]
+    permission: rpg.atributos
+  album:
+    description: Álbum de Cartas.
+    usage: /album
+    aliases: [cartas]
+    permission: rpg.vida
+  segredos:
+    description: Conquistas secretas.
+    usage: /segredos
+    aliases: [segredo, secretas]
+    permission: rpg.vida
+  sentar:
+    description: Senta no chão (ou levanta).
+    usage: /sentar
+    aliases: [sit]
+    permission: rpg.detalhes
+  diario:
+    description: Diário de Viagem — os marcos da sua jornada.
+    usage: /diario
+    aliases: [jornada, marcos]
+    permission: rpg.detalhes
+  recordes:
+    description: Recordes do servidor.
+    usage: /recordes
+    aliases: [recorde, records]
+    permission: rpg.detalhes
   portais:
     description: Portais abertos no mundo — onde estão e quando transbordam.
     usage: /portais
@@ -250,6 +295,12 @@ permissions:
   rpg.fe:
     default: true
   rpg.exploracao:
+    default: true
+  rpg.progressao:
+    default: true
+  rpg.detalhes:
+    default: true
+  rpg.vida:
     default: true
   rpg.admin:
     default: op

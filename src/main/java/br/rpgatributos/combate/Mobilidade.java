@@ -198,7 +198,8 @@ public final class Mobilidade implements Listener {
         Long espera = esperaEsquiva.get(p.getUniqueId());
         if (espera != null && espera > t) return;
         boolean criativo = p.getGameMode() == GameMode.CREATIVE;
-        if (!criativo && plugin.combos().vigor(p) < cfg().mobEsquivaVigor) {
+        double custoVigor = Math.max(0, cfg().mobEsquivaVigor - plugin.talentos().vigorEsquivaMenos(p));
+        if (!criativo && plugin.combos().vigor(p) < custoVigor) {
             p.sendActionBar(Component.text("✖ Vigor insuficiente para esquivar", NamedTextColor.RED));
             return;
         }
@@ -211,10 +212,10 @@ public final class Mobilidade implements Listener {
             default -> frente.multiply(-1);
         };
         p.setVelocity(dir.multiply(1.15).setY(p.isOnGround() ? 0.22 : 0.08));
-        esperaEsquiva.put(p.getUniqueId(), t + cfg().mobEsquivaRecargaMs);
+        esperaEsquiva.put(p.getUniqueId(), t + Math.round(cfg().mobEsquivaRecargaMs * plugin.talentos().recargaEsquiva(p)));
         invulneravel.put(p.getUniqueId(), t + 400);
         semQueda.put(p.getUniqueId(), t + 2000);
-        if (!criativo) plugin.combos().darVigor(p, -cfg().mobEsquivaVigor);
+        if (!criativo) plugin.combos().darVigor(p, -custoVigor);
         p.getWorld().spawnParticle(Particle.CLOUD, p.getLocation().add(0, 0.3, 0), 12, 0.3, 0.1, 0.3, 0.03);
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BREEZE_JUMP, 0.7f, 1.4f);
     }

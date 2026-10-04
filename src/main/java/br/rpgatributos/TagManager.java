@@ -83,12 +83,14 @@ public final class TagManager implements Listener {
 
     private boolean usaTag(Player p) {
         return getTag(p) != null || cfg().tagMostrarNivel || plugin.titulos().ativo(p) != null || plugin.classes().ativa(p) != null
-                || plugin.reinos().de(p) != null;
+                || plugin.reinos().de(p) != null || plugin.renascimento().vezes(p) > 0;
     }
 
     private Component montarTexto(Player p) {
         String tag = getTag(p);
         Component nome = tag != null ? CORES.deserialize(tag) : Component.text(p.getName());
+        Component estrelas = plugin.renascimento().estrelas(p);
+        if (estrelas != null) nome = estrelas.append(nome);
         Component titulo = plugin.titulos().linhaDaTag(p);
         if (titulo != null) nome = titulo.append(Component.newline()).append(nome);
         Component reino = plugin.reinos().linhaDaTag(p);

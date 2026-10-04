@@ -226,6 +226,10 @@ public final class MenusDomador implements Listener {
 
         List<Component> info = new ArrayList<>();
         info.add(Component.text(Companheiros.nomeTipo(e.getType()), NamedTextColor.GRAY));
+        if (plugin.settings().evoAtivada) info.add(plugin.evolucao().linha(e));
+        if (br.rpgatributos.detalhes.ItensDetalhes.temFerradura(e)) info.add(Component.text("Ferradura: +15% de velocidade e +10% de pulo", NamedTextColor.GRAY));
+        Component raro = br.rpgatributos.detalhes.Natureza.linha(e);
+        if (raro != null) info.add(raro);
         AttributeInstance vidaMax = e.getAttribute(Attribute.MAX_HEALTH);
         info.add(Component.text(String.format("❤ %.1f / %.0f", e.getHealth(), vidaMax == null ? 20 : vidaMax.getValue()), NamedTextColor.RED));
         info.add(Component.text("Ordem: " + modo.nome(), NamedTextColor.YELLOW));
@@ -476,6 +480,7 @@ public final class MenusDomador implements Listener {
             if (e != null) {
                 AttributeInstance max = e.getAttribute(Attribute.MAX_HEALTH);
                 lore.add(Component.text(String.format("❤ %.1f / %.0f", e.getHealth(), max == null ? 20 : max.getValue()), NamedTextColor.RED));
+                if (plugin.settings().evoAtivada) lore.add(plugin.evolucao().linha(e));
                 lore.add(Component.text("Ordem: " + comp().modo(e).nome(), NamedTextColor.YELLOW));
                 if (e.getWorld().equals(p.getWorld())) {
                     lore.add(Component.text("A " + Math.round(e.getLocation().distance(p.getLocation())) + " blocos de você", NamedTextColor.GRAY));

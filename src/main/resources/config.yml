@@ -217,6 +217,62 @@ pacote-de-recursos:
   obrigatorio: false                  # true = quem recusar o pacote não entra
 
 # ==========================================================
+#  Progressão extra: talentos e renascer
+# ==========================================================
+talentos:
+  ativado: true
+  niveis-por-ponto: 25                # 1 ponto de talento a cada 25 níveis somados nos atributos
+  esmeraldas-para-refazer: 16         # devolver todos os pontos (0 = de graça)
+
+renascer:
+  ativado: true
+  nivel-exigido: 100                  # todos os atributos neste nível para renascer
+  maximo: 5                           # quantas vezes dá para renascer
+  pontos-de-talento: 8                # pontos de talento a mais a cada renascimento
+  xp-extra: 0.10                      # +10% de XP em tudo a cada renascimento
+  vida-extra: 2                       # +1 coração a cada renascimento
+  dano-extra: 0.02                    # +2% de dano corpo a corpo a cada renascimento
+  mana-extra: 10                      # +10 de mana a cada renascimento
+
+# ==========================================================
+#  Detalhes: estações pequenas, natureza e túmulos
+# ==========================================================
+detalhes:
+  sentar: true                        # clique com a mão vazia numa escada ou laje para sentar
+  chance-de-ninho: 0.01               # quebrar folhas naturais: chance de cair um Ninho de Pássaro
+  chance-de-achado: 0.015             # quebrar areia ou cascalho natural: chance de um achado
+  chance-de-animal-raro: 0.002        # animais que nascem "de Ouro" ou "de Neve" (1 em 500)
+  lapide:
+    ativada: true                     # ao morrer, os itens vão para um túmulo em vez de ficarem no chão
+    minutos-de-protecao: 15           # só o dono abre o túmulo nesse tempo
+  fogueira:
+    xp-descansado: 0.05               # +5% de XP enquanto Descansado
+    minutos-descansado: 20
+  boneco:
+    xp-por-hora: 120                  # XP de Combate máximo por hora no Boneco de Treino
+  amolar:
+    golpes: 100                       # golpes que a arma fica afiada
+    dano-extra: 0.10                  # +10% de dano
+
+# ==========================================================
+#  Vida no mundo: ofícios, cartas, mercador e encontros
+# ==========================================================
+vida:
+  canteiro-minutos: 10                # Canteiro de Ervas: uma erva a cada tanto (até 4)
+  colmeia-minutos: 5                  # Colmeia do Apicultor: um mel a cada tanto (até 6)
+  barril:                             # dias reais no Barril de Envelhecimento para cada grau
+    dias-envelhecida: 1
+    dias-reserva: 3
+    dias-lendaria: 7
+  chance-de-cartas: 1.0               # multiplica a chance de cair carta (2.0 = o dobro)
+  mercador:
+    intervalo-minutos: 90             # tempo médio entre as visitas do Mercador Itinerante
+    duracao-minutos: 20               # quanto tempo ele fica
+  encontros:
+    ativados: true                    # carroça, bandidos, viajante ferido e estrela cadente
+    espera-minutos: 30                # cada jogador tem no máximo 1 encontro nesse tempo
+
+# ==========================================================
 #  Doma (companheiros e Altar do Domador)
 # ==========================================================
 
@@ -232,6 +288,7 @@ doma:
   velocidade-montaria-maxima: 0.4     # +40% de velocidade montado
   companheiros-no-maximo: 5           # 1 companheiro no nível 0, até 5 no máximo
   componentes-no-maximo: 6            # 1 componente por criatura no nível 0, até 6 no máximo
+  evolucao-dos-companheiros: true     # companheiros sobem de nível lutando e evoluem no 10 e no 25
 
 # ==========================================================
 #  Classes

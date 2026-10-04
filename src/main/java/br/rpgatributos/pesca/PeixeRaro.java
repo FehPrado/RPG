@@ -111,6 +111,7 @@ public enum PeixeRaro {
             m.lore(lore.stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             m.setEnchantmentGlintOverride(true);
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "peixe_" + name().toLowerCase(java.util.Locale.ROOT));
         });
         if (q != null) q.aplicar(i);
         return i;

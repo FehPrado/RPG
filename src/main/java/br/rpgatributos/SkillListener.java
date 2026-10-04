@@ -189,9 +189,9 @@ public final class SkillListener implements Listener {
 
         double chance;
         if (Tag.LOGS.isTagged(tipo)) {
-            chance = stats().getNivel(p, Skill.MADEIRA) * cfg().madChanceDupla;
+            chance = stats().getNivel(p, Skill.MADEIRA) * cfg().madChanceDupla + plugin.talentos().chanceDupla(p);
         } else if (ehMinerio(tipo)) {
-            chance = stats().getNivel(p, Skill.MINERACAO) * cfg().minChanceDupla;
+            chance = stats().getNivel(p, Skill.MINERACAO) * cfg().minChanceDupla + plugin.talentos().chanceDupla(p);
         } else {
             return;
         }

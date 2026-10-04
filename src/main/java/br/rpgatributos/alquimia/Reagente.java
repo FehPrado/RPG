@@ -57,6 +57,7 @@ public enum Reagente {
                     Component.text("⚗ Componente alquímico", cor))
                     .stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "componente_" + id());
         });
         return i;
     }

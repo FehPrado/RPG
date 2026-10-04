@@ -97,6 +97,7 @@ public enum Gema {
             case ARMADURA, ESCUDO -> armadura;
             case FERRAMENTA -> ferramenta;
             case MAGICO -> null; // no cajado a gema fortalece elementos (veja elementos())
+            case PESCA, VOO, MONTARIA, VEICULO -> null;
         };
     }
 
@@ -170,6 +171,7 @@ public enum Gema {
             if (g == GRAU_MAXIMO) m.setEnchantmentGlintOverride(true);
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
             m.getPersistentDataContainer().set(CHAVE_GRAU, PersistentDataType.INTEGER, g);
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "gema_" + name().toLowerCase(java.util.Locale.ROOT) + "_" + g);
         });
         return i;
     }

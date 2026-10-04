@@ -164,11 +164,18 @@ public final class Pesca implements Listener {
 
     /** A isca afunda: com Pesca alta, o peixe morde mais rápido. */
     private void isca(Player p, FishHook hook) {
-        double f = 1 - nivel(p) * cfg().pesIscaRapida;
+        double f = 1 - nivel(p) * cfg().pesIscaRapida
+                - plugin.forjadosEspeciais().iscaExtra(p, vara(p));
         if (f >= 0.999) return;
         int min = Math.max(20, (int) Math.round(hook.getMinWaitTime() * f));
         int max = Math.max(min + 20, (int) Math.round(hook.getMaxWaitTime() * f));
         hook.setWaitTime(min, max);
+    }
+
+    /** A vara de pescar na mão (principal ou secundária). */
+    private static ItemStack vara(Player p) {
+        ItemStack m = p.getInventory().getItemInMainHand();
+        return m.getType() == Material.FISHING_ROD ? m : p.getInventory().getItemInOffHand();
     }
 
     private PeixeRaro.Contexto contexto(Location l) {
@@ -186,7 +193,8 @@ public final class Pesca implements Listener {
         double sorteDoMar = 0;
         ItemStack vara = p.getInventory().getItem(e.getHand() == null ? org.bukkit.inventory.EquipmentSlot.HAND : e.getHand());
         if (vara != null && vara.getType() == Material.FISHING_ROD) {
-            sorteDoMar = vara.getEnchantmentLevel(Enchantment.LUCK_OF_THE_SEA) * 0.01;
+            sorteDoMar = vara.getEnchantmentLevel(Enchantment.LUCK_OF_THE_SEA) * 0.01
+                    + plugin.forjadosEspeciais().peixeRaroExtra(vara) + plugin.album().bonusPesca(p);
         }
         Location onde = hook.getLocation();
         boolean criativo = p.getGameMode() == GameMode.CREATIVE;

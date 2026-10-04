@@ -84,6 +84,7 @@ public enum Raro {
                     c.decoration(TextDecoration.ITALIC) == TextDecoration.State.TRUE)).toList());
             m.setEnchantmentGlintOverride(true);
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "raro_" + id());
         });
         return item;
     }

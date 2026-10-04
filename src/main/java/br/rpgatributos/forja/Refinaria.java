@@ -100,7 +100,7 @@ public final class Refinaria implements Listener {
 
     private double chance(Player p, int alvo) {
         double bonus = 0.1 * plugin.stats().getNivel(p, Skill.FERRARIA) / plugin.settings().nivelMaximo
-                + plugin.classes().chanceRefinoExtra(p);
+                + plugin.classes().chanceRefinoExtra(p) + plugin.talentos().chanceRefinoExtra(p);
         return Math.min(1, CHANCES[alvo - 1] + bonus);
     }
 

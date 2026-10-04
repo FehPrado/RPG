@@ -272,7 +272,7 @@ public final class Santuarios extends Estacao {
             List<String> falta = cl.faltando(p, c);
             lore.add(Component.text("Requisitos:", NamedTextColor.GRAY));
             int total = cl.nivelTotalNecessario(c);
-            if (total > 0) lore.add(req(plugin.stats().nivelTotal(p) >= total, "Nível total " + total));
+            if (total > 0) lore.add(req(plugin.renascimento().nivelTotalEfetivo(p) >= total, "Nível total " + total));
             lore.add(req(plugin.stats().getNivel(p, c.atributo()) >= cl.atributoNecessario(c), c.atributo().nome() + " nível " + cl.atributoNecessario(c)));
             for (Classe r : c.requisitos()) lore.add(req(cl.dominou(p, r), r.nome() + " dominada"));
             lore.add(Component.text("Tarefas: ", NamedTextColor.GRAY));

@@ -35,7 +35,7 @@ public final class Controle implements Listener {
 
     /** Marcas das criaturas que só existem durante um evento: se aparecerem num chunk carregado do disco, sobraram. */
     private static final Set<String> TEMPORARIAS = Set.of("horda", "ninho_guardiao", "criatura_maldita", "elite_lacaio",
-            "portal_monstro", "torre_mob", "onda", "lacaio", "tesouro_guardiao");
+            "portal_monstro", "torre_mob", "onda", "lacaio", "tesouro_guardiao", "encontro", "mercador_itinerante");
     /** Marcas de criaturas que nunca devem ser limpas. */
     private static final Set<String> PROTEGIDAS = Set.of("companheiro_dono", "sombra_dono", "invocacao_dono", "chefe", "uniforme");
 

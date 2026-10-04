@@ -222,7 +222,7 @@ public final class Masmorras implements Listener {
         if (ativas.size() >= cfg().masMaximo) return "Já há masmorras demais abertas agora. Tente daqui a pouco.";
         if (ocupado(p)) return "Você (ou alguém da sua party) já está numa masmorra.";
         int precisa = d.nivelTotalNecessario(cfg().nivelMaximo * Skill.values().length);
-        if (plugin.stats().nivelTotal(p) < precisa) return "Precisa de nível total " + precisa + " para a dificuldade " + d.nome() + ".";
+        if (plugin.renascimento().nivelTotalEfetivo(p) < precisa) return "Precisa de nível total " + precisa + " para a dificuldade " + d.nome() + ".";
         if (p.getGameMode() != GameMode.CREATIVE) {
             if (!p.getInventory().containsAtLeast(new ItemStack(d.custo()), d.qtdCusto())) {
                 return "O portal pede " + d.qtdCusto() + "x " + nomeMaterial(d.custo()) + ".";
@@ -262,7 +262,7 @@ public final class Masmorras implements Listener {
         if (mundo == null) return "O mundo das masmorras não está disponível.";
         if (de(p) != null) return "Você já está numa masmorra.";
         int precisa = d.nivelTotalNecessario(cfg().nivelMaximo * Skill.values().length);
-        if (p.getGameMode() != GameMode.CREATIVE && plugin.stats().nivelTotal(p) < precisa) {
+        if (p.getGameMode() != GameMode.CREATIVE && plugin.renascimento().nivelTotalEfetivo(p) < precisa) {
             return "O portal te repele: precisa de nível total " + precisa + ".";
         }
         return null;

@@ -30,10 +30,14 @@ public final class MateriaisListener implements Listener {
         return Raro.de(i) != null || Reagente.de(i) != null || Gema.de(i) != null || Acessorio.de(i) != null || Elixir.de(i) != null
                 || ItensMagicos.ehPergaminho(i) || ItensMagicos.ehTomo(i) || i.getPersistentDataContainer().has(LEMBRANCA)
                 || i.getPersistentDataContainer().has(br.rpgatributos.fe.Transmutacao.K_PEDRA)
+                || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.ItensDetalhes.K_FERRADURA)
+                || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.ItensDetalhes.K_NINHO)
+                || i.getPersistentDataContainer().has(RELIQUIA)
                 || (i.getType() == org.bukkit.Material.BREEZE_ROD && i.getPersistentDataContainer().has(FORJADO));
     }
 
     private static final org.bukkit.NamespacedKey LEMBRANCA = new org.bukkit.NamespacedKey("rpgatributos", "lembranca");
+    private static final org.bukkit.NamespacedKey RELIQUIA = new org.bukkit.NamespacedKey("rpgatributos", "reliquia");
     private static final org.bukkit.NamespacedKey FORJADO = new org.bukkit.NamespacedKey("rpgatributos", "forja_raridade");
 
     private static boolean algumRaro(ItemStack... itens) {
@@ -43,6 +47,7 @@ public final class MateriaisListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void aoPrepararReceita(PrepareItemCraftEvent e) {
+        if (e.getRecipe() instanceof org.bukkit.Keyed k && k.getKey().getNamespace().equals("rpgatributos")) return; // receitas do plugin
         if (algumRaro(e.getInventory().getMatrix())) e.getInventory().setResult(null);
     }
 
