@@ -265,10 +265,13 @@ public final class Perigo implements Listener {
                     }
                 } else if (afs.contains(Afixo.INVOCADOR) && agora - ultimo > 300) {
                     ultimoTruque.put(id, agora);
-                    for (int i = 0; i < 2; i++) {
+                    int vivos = 0;
+                    for (Entity x : e.getNearbyEntities(16, 8, 16)) if (x.getPersistentDataContainer().has(CHAVE_LACAIO)) vivos++;
+                    for (int i = 0; i < Math.min(2, 4 - vivos); i++) {
                         Location l = e.getLocation().add(rnd().nextDouble(-2, 2), 0, rnd().nextDouble(-2, 2));
                         Entity lacaio = e.getWorld().spawnEntity(l, e.getType(), CreatureSpawnEvent.SpawnReason.CUSTOM);
                         lacaio.getPersistentDataContainer().set(CHAVE_LACAIO, PersistentDataType.BYTE, (byte) 1);
+                        lacaio.setPersistent(false);
                         if (lacaio instanceof Mob m) m.setTarget(alvo);
                     }
                     e.getWorld().spawnParticle(Particle.WITCH, e.getLocation().add(0, 1, 0), 30, 1, 0.5, 1, 0.05);

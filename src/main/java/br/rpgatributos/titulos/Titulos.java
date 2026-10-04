@@ -54,18 +54,19 @@ import java.util.UUID;
  */
 public final class Titulos implements Listener {
 
-    /** Linha de cima (em volta do item de informação), as quatro do meio e a de baixo (em volta dos botões): 51 títulos. */
+    /** As cinco primeiras linhas (menos o item de informação): 44 títulos por página. */
     private static final int[] SLOTS = {
             0, 1, 2, 3, 5, 6, 7, 8,
             9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-            27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
-            45, 46, 47, 49, 51, 52, 53};
+            27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
+    private static final int S_ANTERIOR = 45, S_PROXIMA = 53;
     private static final int S_INFO = 4;
     private static final int S_REMOVER = 48;
     private static final int S_FECHAR = 50;
 
     private static final class Tela implements InventoryHolder {
         Inventory inventario;
+        int pagina;
 
         @Override
         public Inventory getInventory() { return inventario; }
@@ -293,12 +294,16 @@ public final class Titulos implements Listener {
         verificar(p);
         Tela tela = new Tela();
         tela.inventario = Bukkit.createInventory(tela, 54, Component.text("✦ Títulos"));
-        desenhar(p, tela.inventario);
+        desenhar(p, tela);
         p.openInventory(tela.inventario);
     }
 
-    private void desenhar(Player p, Inventory inv) {
+    private void desenhar(Player p, Tela tela) {
+        Inventory inv = tela.inventario;
         inv.clear();
+        int paginas = Math.max(1, (Titulo.values().length + SLOTS.length - 1) / SLOTS.length);
+        tela.pagina = Math.max(0, Math.min(paginas - 1, tela.pagina));
+        int inicio = tela.pagina * SLOTS.length;
         Set<Titulo> tem = desbloqueados(p);
         Titulo usando = ativo(p);
         Map<String, Integer> cont = contadores(p);
@@ -314,8 +319,8 @@ public final class Titulos implements Listener {
                 Component.text("Ele aparece acima da sua cabeça.", NamedTextColor.DARK_GRAY)), false));
 
         Titulo[] todos = Titulo.values();
-        for (int i = 0; i < todos.length && i < SLOTS.length; i++) {
-            Titulo t = todos[i];
+        for (int i = 0; i < SLOTS.length && inicio + i < todos.length; i++) {
+            Titulo t = todos[inicio + i];
             boolean desbloqueado = tem.contains(t);
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text((desbloqueado ? "✔ " : "✖ ") + t.requisito().descrever(max),
@@ -334,6 +339,8 @@ public final class Titulos implements Listener {
             inv.setItem(SLOTS[i], item(desbloqueado ? Material.NAME_TAG : Material.GRAY_DYE, nome, lore, t == usando));
         }
         inv.setItem(S_REMOVER, item(Material.RED_DYE, Component.text("Não usar título", NamedTextColor.RED), List.of(), false));
+        if (tela.pagina > 0) inv.setItem(S_ANTERIOR, item(Material.ARROW, Component.text("« Página " + tela.pagina, NamedTextColor.YELLOW), List.of(), false));
+        if (tela.pagina < paginas - 1) inv.setItem(S_PROXIMA, item(Material.ARROW, Component.text("Página " + (tela.pagina + 2) + " »", NamedTextColor.YELLOW), List.of(), false));
         inv.setItem(S_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of(), false));
 
         ItemStack vidro = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
@@ -344,7 +351,7 @@ public final class Titulos implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void aoClicar(InventoryClickEvent e) {
         Inventory topo = e.getView().getTopInventory();
-        if (!(topo.getHolder(false) instanceof Tela)) return;
+        if (!(topo.getHolder(false) instanceof Tela tela)) return;
         e.setCancelled(true);
         if (!(e.getWhoClicked() instanceof Player p) || e.getRawSlot() >= topo.getSize()) return;
         int slot = e.getSlot();
@@ -352,20 +359,28 @@ public final class Titulos implements Listener {
         if (slot == S_REMOVER) {
             usar(p, null);
             p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
-            desenhar(p, topo);
+            desenhar(p, tela);
+            return;
+        }
+        if (slot == S_ANTERIOR || slot == S_PROXIMA) {
+            tela.pagina += slot == S_PROXIMA ? 1 : -1;
+            p.playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 0.6f, 1f);
+            desenhar(p, tela);
             return;
         }
         Titulo[] todos = Titulo.values();
-        for (int i = 0; i < todos.length && i < SLOTS.length; i++) {
+        int inicio = tela.pagina * SLOTS.length;
+        for (int i = 0; i < SLOTS.length && inicio + i < todos.length; i++) {
             if (SLOTS[i] != slot) continue;
-            if (!desbloqueados(p).contains(todos[i])) {
+            Titulo t = todos[inicio + i];
+            if (!desbloqueados(p).contains(t)) {
                 p.sendMessage(Component.text("Você ainda não desbloqueou esse título.", NamedTextColor.RED));
                 p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.6f, 1f);
                 return;
             }
-            usar(p, todos[i]);
+            usar(p, t);
             p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_GOLD, 0.8f, 1.2f);
-            desenhar(p, topo);
+            desenhar(p, tela);
             return;
         }
     }

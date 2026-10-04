@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.14</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.18</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -112,7 +112,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <a href="#cmd-itens">🎁 Dar itens</a>
   <a href="#cmd-sistemas">⚙ Sistemas</a>
   <a href="#cmd-eventos">🌩 Eventos do mundo</a>
-  <a href="#cmd-faseC">⛩ Portais e Torre</a>
+  <a href="#cmd-faseC">⛩ Portais, Torre e Combos</a>
+  <a href="#cmd-exploracao">🗺 Exploração e campanha</a>
   <div class="grupo">Ferramentas</div>
   <a href="#testes">✅ Roteiro de testes</a>
   <a href="#salas">🧱 Salas de masmorra</a>
@@ -123,7 +124,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <div class="hero">
   <h1>Painel do Admin</h1>
   <p>Como instalar, configurar e testar o RPGAtributos. Todos os comandos de admin começam com <code>/rpgadmin</code> e pedem a permissão <code>rpg.admin</code> (só OP por padrão). O guia completo dos sistemas está em <a href="jogadores.html">jogadores.html</a>.</p>
-  <div class="chips"><span class="chip">Paper 26.3</span><span class="chip">Java 25</span><span class="chip">Sem dependências</span><span class="chip">Sem resource pack</span></div>
+  <div class="chips"><span class="chip">Paper 26.3</span><span class="chip">Java 25</span><span class="chip">Sem dependências</span><span class="chip">Resource pack opcional (gerado pelo plugin)</span></div>
 </div>
 
 <section class="secao" id="instalar">
@@ -131,7 +132,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.14.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.18.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -166,8 +167,11 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>estacoes.yml</code></td><td>Estação atual e neve do inverno (para desfazer)</td></tr>
       <tr><td><code>portais.yml</code></td><td>Portais abertos pelo mundo</td></tr>
       <tr><td><code>torre.yml</code></td><td>Ranking da Torre (semanal e de todos os tempos)</td></tr>
+      <tr><td><code>deuses.yml</code></td><td>Deus oficial de cada reino (a fé de cada um fica no próprio jogador)</td></tr>
+      <tr><td><code>pacote/RPGAtributos-recursos.zip</code></td><td>Pacote de recursos gerado a cada início (pode apagar: ele é refeito)</td></tr>
+      <tr><td>No chunk (PDC)</td><td>Posição dos minérios de mitrilo e marcas de "já gerado" (mitrilo e sítios de arqueologia)</td></tr>
       <tr><td><code>salas/&lt;tipo&gt;/&lt;nome&gt;.nbt</code></td><td>Salas de masmorra construídas por admins</td></tr>
-      <tr><td>No jogador (PDC)</td><td>Atributos, classes, magias, acessórios, guarda-roupa, exército das sombras</td></tr>
+      <tr><td>No jogador (PDC)</td><td>Atributos, classes, magias, proficiência de armas e combos, mochila, acessórios, guarda-roupa, exército das sombras</td></tr>
     </tbody></table></div>
     <p class="aviso">O mundo <code>rpg_masmorras</code> é <b>apagado e recriado vazio</b> a cada reinício (masmorras, provas de classe e Torre). Não construa nada nele.</p></div>
   </div>
@@ -242,13 +246,43 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>torre.vida-por-andar</code> / <code>dano-por-andar</code></td><td>0.07 / 0.035</td><td>Quanto os monstros crescem por andar</td></tr>
       </tbody></table></div>
     </div>
+    <div class="card"><h3>Combos de arma (2.15)</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>combos.ativado</code></td><td>true</td><td>Liga/desliga os combos</td></tr>
+        <tr><td><code>combos.vigor-maximo</code></td><td>100</td><td>Vigor base (+0,5 por nível de Combate)</td></tr>
+        <tr><td><code>combos.vigor-por-segundo-em-luta</code> / <code>fora-de-luta</code></td><td>6 / 15</td><td>Quanto o vigor volta</td></tr>
+        <tr><td><code>combos.milissegundos-entre-cliques</code></td><td>900</td><td>Tempo máximo entre os cliques</td></tr>
+        <tr><td><code>combos.xp-base</code> / <code>xp-expoente</code></td><td>30 / 1.5</td><td>Curva da proficiência (1 a 20)</td></tr>
+        <tr><td><code>combos.xp-por-acerto</code> / <code>abate</code> / <code>chefe</code></td><td>1 / 6 / 40</td><td>XP de proficiência</td></tr>
+        <tr><td><code>combos.dano-a-mais-por-nivel</code></td><td>0.02</td><td>+2% de dano por nível de proficiência</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Mobilidade, mochila e criaturas (2.16)</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>mobilidade.esquiva-ativada</code></td><td>true</td><td>Esquiva com dois toques em A, D ou S</td></tr>
+        <tr><td><code>mobilidade.vigor-da-esquiva</code> / <code>recarga-da-esquiva-ms</code></td><td>15 / 1200</td><td>Custo e recarga</td></tr>
+        <tr><td><code>mobilidade.tempo-entre-toques-ms</code></td><td>300</td><td>Tempo máximo entre os dois toques</td></tr>
+        <tr><td><code>mobilidade.alcance-do-gancho</code></td><td>40</td><td>Blocos</td></tr>
+        <tr><td><code>mochila.niveis-por-fileira</code></td><td>150</td><td>Nível total para cada fileira nova (até 6)</td></tr>
+        <tr><td><code>criaturas.limite-de-monstros</code></td><td>45</td><td>Monstros por jogador em cada mundo (vanilla: 70; −1 = não mexer)</td></tr>
+        <tr><td><code>criaturas.limite-de-animais</code></td><td>-1</td><td>Animais por jogador (−1 = não mexer)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Pacote de recursos (2.18)</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>pacote-de-recursos.ativado</code></td><td>true</td><td>Gera o zip com as texturas do mitrilo</td></tr>
+        <tr><td><code>pacote-de-recursos.url</code></td><td>""</td><td>Link direto do zip (opção 1)</td></tr>
+        <tr><td><code>pacote-de-recursos.porta</code> / <code>endereco</code></td><td>0 / ""</td><td>O plugin serve o zip nessa porta e endereço (opção 2)</td></tr>
+        <tr><td><code>pacote-de-recursos.obrigatorio</code></td><td>false</td><td>Quem recusar o pacote não entra</td></tr>
+      </tbody></table></div>
+    </div>
   </div>
 </section>
 
 <section class="secao" id="permissoes">
   <h2><span class="ico">🔑</span>Permissões</h2>
   <div class="grade">
-    <div class="card largo"><p>Liberadas para todos por padrão: <code>rpg.atributos</code>, <code>rpg.atributos.outros</code>, <code>rpg.chapeu</code>, <code>rpg.tag</code>, <code>rpg.tag.cores</code>, <code>rpg.forja</code>, <code>rpg.arcano</code>, <code>rpg.guia</code>, <code>rpg.titulos</code>, <code>rpg.missoes</code>, <code>rpg.receitas</code>, <code>rpg.party</code>, <code>rpg.territorio</code>, <code>rpg.pets</code>, <code>rpg.masmorra</code>, <code>rpg.classe</code>, <code>rpg.lendas</code>, <code>rpg.locais</code>, <code>rpg.pesca</code>, <code>rpg.alquimia</code>, <code>rpg.colonia</code>, <code>rpg.reino</code>, <code>rpg.bestiario</code>, <code>rpg.calendario</code>, <code>rpg.portais</code>, <code>rpg.torre</code>.</p>
+    <div class="card largo"><p>Liberadas para todos por padrão: <code>rpg.atributos</code>, <code>rpg.atributos.outros</code>, <code>rpg.chapeu</code>, <code>rpg.tag</code>, <code>rpg.tag.cores</code>, <code>rpg.forja</code>, <code>rpg.arcano</code>, <code>rpg.guia</code>, <code>rpg.titulos</code>, <code>rpg.missoes</code>, <code>rpg.receitas</code>, <code>rpg.party</code>, <code>rpg.territorio</code>, <code>rpg.pets</code>, <code>rpg.masmorra</code>, <code>rpg.classe</code>, <code>rpg.lendas</code>, <code>rpg.locais</code>, <code>rpg.pesca</code>, <code>rpg.alquimia</code>, <code>rpg.colonia</code>, <code>rpg.reino</code>, <code>rpg.bestiario</code>, <code>rpg.calendario</code>, <code>rpg.portais</code>, <code>rpg.torre</code>, <code>rpg.combos</code>, <code>rpg.mochila</code>, <code>rpg.fe</code>, <code>rpg.exploracao</code>.</p>
     <p><code>rpg.admin</code>: só OP.</p></div>
   </div>
 </section>
@@ -288,6 +322,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin pedraviagem</span></td><td>Pedra entalhada de ardósia</td><td>Pedra de Viagem</td></tr>
       <tr><td><span class="cmd">/rpgadmin bancadaalquimica</span></td><td>Suporte de poções</td><td>Bancada Alquímica</td></tr>
       <tr><td><span class="cmd">/rpgadmin obelisco</span></td><td>Obsidiana chorona</td><td>Obelisco da Torre</td></tr>
+      <tr><td><span class="cmd">/rpgadmin santuariodivino</span></td><td>Quartzo entalhado</td><td>Santuário dos Deuses</td></tr>
+      <tr><td><span class="cmd">/rpgadmin circulo</span></td><td>Bloco de ametista</td><td>Círculo de Transmutação</td></tr>
+      <tr><td><span class="cmd">/rpgadmin mesarunica</span></td><td>Tufo entalhado</td><td>Mesa Rúnica</td></tr>
     </tbody></table></div></div>
   </div>
 </section>
@@ -315,6 +352,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin elixir &lt;elixir&gt; [qualidade]</span></td><td>Elixir pronto</td></tr>
       <tr><td><span class="cmd">/rpgadmin acessorio &lt;acessório&gt;</span></td><td>Acessório</td></tr>
       <tr><td><span class="cmd">/rpgadmin lenda &lt;lenda&gt;</span></td><td>Transforma o item da mão na lenda</td></tr>
+      <tr><td><span class="cmd">/rpgadmin pedrafilosofal</span></td><td>Pedra Filosofal</td></tr>
+      <tr><td><span class="cmd">/rpgadmin runa &lt;runa&gt;</span></td><td>Grava a runa no item da mão, sem custo</td></tr>
+      <tr><td><span class="cmd">/rpgadmin devocao &lt;jogador&gt; &lt;qtd&gt;</span></td><td>Soma devoção ao deus que o jogador segue</td></tr>
     </tbody></table></div></div>
   </div>
 </section>
@@ -374,7 +414,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </section>
 
 <section class="secao" id="cmd-faseC">
-  <h2><span class="ico">⛩</span>Portais e Torre</h2>
+  <h2><span class="ico">⛩</span>Portais, Torre e Combos</h2>
   <div class="grade">
     <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
       <tr><td><span class="cmd">/rpgadmin portal &lt;facil|normal|dificil|pesadelo&gt; [eco]</span></td><td>Abre um portal 4 blocos à sua frente (<code>eco</code> = com o Eco do Soberano)</td></tr>
@@ -382,7 +422,34 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin portaltransbordar</span></td><td>O portal mais perto transborda agora</td></tr>
       <tr><td><span class="cmd">/rpgadmin portalfechar</span></td><td>Apaga o portal mais perto (sem prêmio)</td></tr>
       <tr><td><span class="cmd">/rpgadmin torre &lt;andar&gt;</span></td><td>Sobe a Torre sozinho a partir do andar</td></tr>
+      <tr><td><span class="cmd">/rpgadmin proficiencia &lt;jogador&gt; &lt;arma&gt; &lt;1-20&gt;</span></td><td>Proficiência de arma dos combos (espada, machado, lanca, tridente, maca, arco)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin vigor [jogador]</span></td><td>Enche o vigor</td></tr>
+      <tr><td><span class="cmd">/rpgadmin gancho [jogador]</span></td><td>Dá um Gancho de Escalada</td></tr>
+      <tr><td><span class="cmd">/rpgadmin criaturas</span></td><td>Quantas criaturas há em cada mundo, monstros presos e os chunks mais cheios</td></tr>
+      <tr><td><span class="cmd">/rpgadmin limparcriaturas</span></td><td>Remove sobras de eventos e monstros sem nome que nunca somem</td></tr>
     </tbody></table></div></div>
+  </div>
+</section>
+
+<section class="secao" id="cmd-exploracao">
+  <h2><span class="ico">🗺</span>Exploração e campanha</h2>
+  <div class="grade">
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td><span class="cmd">/rpgadmin cronista</span></td><td>Coloca o Cronista onde você está (faça isso no spawn: sem ele não há como entregar capítulos)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin capitulo &lt;jogador&gt; &lt;0-8&gt;</span></td><td>Define o capítulo da campanha</td></tr>
+      <tr><td><span class="cmd">/rpgadmin mitrilo [minerio|bruto|lingote] [qtd]</span></td><td>Põe minério de mitrilo no bloco que você olha, ou dá os itens</td></tr>
+      <tr><td><span class="cmd">/rpgadmin mapatesouro [comum|raro|lendario]</span></td><td>Dá um mapa do tesouro com destino perto de você</td></tr>
+      <tr><td><span class="cmd">/rpgadmin sitio</span></td><td>Cria um sítio de arqueologia à sua frente</td></tr>
+      <tr><td><span class="cmd">/rpgadmin reliquia [relíquia]</span></td><td>Dá uma relíquia (sem nome: uma aleatória)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin pacote</span></td><td>Onde está o pacote de recursos, o SHA-1 e se ele está sendo enviado</td></tr>
+    </tbody></table></div></div>
+    <div class="card largo"><h3>Pacote de recursos (opcional)</h3>
+      <p>O plugin gera <code>plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip</code> com as texturas do mitrilo. Ele <b>se soma</b> ao pacote do servidor (não o troca). Sem ele tudo funciona, só que o minério aparece como bloco de cogumelo e os itens como ferro. Para enviar, escolha uma opção:</p>
+      <ol>
+        <li><b>Link:</b> suba o zip (ex.: mc-packs.net) e cole o link direto em <code>pacote-de-recursos.url</code>.</li>
+        <li><b>Servidor embutido:</b> ponha uma porta liberada no host em <code>porta</code> e o IP ou domínio público em <code>endereco</code>.</li>
+      </ol>
+    </div>
   </div>
 </section>
 
@@ -408,6 +475,38 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li><span class="cmd">/rpgadmin obelisco</span> numa obsidiana chorona e clique nele.</li>
         <li><span class="cmd">/rpgadmin torre 9</span>: chefe e baú no andar 10, visual novo no 11.</li>
         <li>Morra lá dentro: volta sem perder itens. <span class="cmd">/torre ranking</span>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Combos de arma</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin proficiencia &lt;você&gt; espada 20</span> libera os 7 golpes.</li>
+        <li>Espada na mão: <kbd>D</kbd> <kbd>D</kbd> <kbd>D</kbd> (Estocada), <kbd>D</kbd> <kbd>E</kbd> <kbd>D</kbd>, <kbd>D</kbd> <kbd>D</kbd> <kbd>E</kbd>, <kbd>D</kbd> <kbd>E</kbd> <kbd>E</kbd>.</li>
+        <li><span class="cmd">/combos</span>: troque os golpes das sequências. Teste também arco (começa com E) e escudo na outra mão.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Mobilidade, mochila e criaturas</h3>
+      <ol>
+        <li>Toque duas vezes rápido em <kbd>A</kbd>, <kbd>D</kbd> ou <kbd>S</kbd> para esquivar.</li>
+        <li><span class="cmd">/rpgadmin gancho</span>, lance num bloco alto e recolha. <span class="cmd">/rpgadmin acessorio capa_planadora</span>, coloque no bolso, pule de um lugar alto e aperte pular no ar.</li>
+        <li><span class="cmd">/mochila</span> (teste guardar, fechar e abrir de novo).</li>
+        <li><span class="cmd">/rpgadmin criaturas</span> e, se houver monstros presos, <span class="cmd">/rpgadmin limparcriaturas</span>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Fé e mistério</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin santuariodivino</span> olhando para quartzo entalhado; escolha um deus e jogue oferendas (Q). <span class="cmd">/rpgadmin devocao &lt;você&gt; 300</span> e teste o milagre.</li>
+        <li>À noite, olhe para o céu pela luneta por 5 s. <span class="cmd">/estrelas</span></li>
+        <li><span class="cmd">/rpgadmin circulo</span>, <span class="cmd">/rpgadmin componente mercurio_vivo 4</span> e tente "Ouro em Diamante".</li>
+        <li><span class="cmd">/rpgadmin mesarunica</span>; grave Salto nas botas e teste o pulo duplo (e a Capa Planadora depois dele).</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Exploração e campanha</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin cronista</span> no spawn; clique nele e leia o livro. <span class="cmd">/rpgadmin capitulo &lt;você&gt; 7</span> e entregue o último capítulo.</li>
+        <li><span class="cmd">/rpgadmin mitrilo minerio</span> olhando para um bloco; quebre com picareta de diamante, funda o bruto e use o lingote na mesa de ferraria com uma peça de netherita.</li>
+        <li><span class="cmd">/rpgadmin mapatesouro raro</span>; siga o X e enfrente os guardiões.</li>
+        <li><span class="cmd">/rpgadmin sitio</span>; use o pincel na areia suspeita. Depois <span class="cmd">/enciclopedia</span>.</li>
+        <li><span class="cmd">/rpgadmin pacote</span> para ver se o pacote está sendo enviado.</li>
       </ol>
     </div>
     <div class="card"><h3>Mundo vivo e perigoso</h3>
@@ -479,7 +578,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.14 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<footer>RPGAtributos 2.18 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

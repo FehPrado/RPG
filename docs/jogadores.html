@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.14</small></div></div>
+  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.18</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -106,12 +106,16 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <a href="#rituais">✨ Estações (rituais)</a>
   <a href="#atributos">📈 Atributos</a>
   <div class="grupo">Equipamento e magia</div>
+  <a href="#combos">⚔ Combos de arma</a>
+  <a href="#mobilidade">≋ Mobilidade e mochila</a>
   <a href="#forja">⚒ Forja e refino</a>
   <a href="#arcano">✦ Arcano e magias</a>
   <a href="#alquimia">⚗ Alquimia e gemas</a>
   <a href="#visual">👕 Guarda-roupa e títulos</a>
   <div class="grupo">Vida no mundo</div>
   <a href="#fazenda">☘ Fazenda e cozinha</a>
+  <a href="#fe">✧ Fé e mistério</a>
+  <a href="#descobertas">🗺 Exploração e campanha</a>
   <a href="#pesca">⚓ Pesca</a>
   <a href="#domador">♞ Domador</a>
   <a href="#party">👥 Party e territórios</a>
@@ -137,7 +141,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <div class="hero">
   <h1>Bem-vindo ao RPG do servidor</h1>
   <p>Aqui tudo evolui com o uso: minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. Não precisa de mod nem de resource pack.</p>
-  <div class="chips"><span class="chip">13 atributos até o nível 100</span><span class="chip">24 classes</span><span class="chip">50 magias secretas</span><span class="chip">12 lendas únicas</span><span class="chip">Livro <code>/guia</code> com 58 páginas</span></div>
+  <div class="chips"><span class="chip">13 atributos até o nível 100</span><span class="chip">24 classes</span><span class="chip">50 magias secretas</span><span class="chip">42 golpes de combo</span><span class="chip">12 lendas únicas</span><span class="chip">Livro <code>/guia</code> com 69 páginas</span></div>
 </div>
 
 <section class="secao" id="inicio">
@@ -191,6 +195,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><b>Pedra de Viagem</b></td><td>Pedra entalhada de ardósia</td><td>2 pérolas do ender + 4 fragmentos de ametista</td><td>Teleporte entre pedras</td></tr>
       <tr><td><b>Bancada Alquímica</b></td><td>Suporte de poções</td><td>2 garrafas de vidro + 1 pó de blaze</td><td>Elixires, componentes, gemas, acessórios</td></tr>
       <tr><td><b>Obelisco da Torre</b></td><td>Obsidiana chorona</td><td>1 olho do ender + 1 bloco de ouro</td><td>Entrar na Torre Infinita</td></tr>
+      <tr><td><b>Santuário dos Deuses</b></td><td>Quartzo entalhado</td><td>1 maçã dourada + 1 vela</td><td>Seguir um deus, oferendas, milagres</td></tr>
+      <tr><td><b>Círculo de Transmutação</b></td><td>Bloco de ametista</td><td>1 Mercúrio Vivo + 1 lingote de ouro</td><td>Transformar materiais</td></tr>
+      <tr><td><b>Mesa Rúnica</b></td><td>Tufo entalhado</td><td>4 fragmentos de ametista + 1 bloco de lápis</td><td>Gravar runas</td></tr>
     </tbody></table></div>
     <p class="muted">O Altar e o Obelisco usam a mesma obsidiana chorona: o que você jogar decide qual dos dois ela vira (e um bloco nunca vira os dois).</p></div>
   </div>
@@ -227,6 +234,67 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <div class="card"><h3>Materiais raros</h3>
       <p><b>Fragmento de Forja</b>, <b>Pedra de Proteção</b>, <b>Essência Primordial</b>, <b>Mapa Rasgado</b>, <b>Página do Livro das Lendas</b> e os <b>núcleos</b> dos chefes.</p>
       <p class="muted">Eles não podem ser gastos em receitas comuns (bancada, bigorna, fornalha, poções), só nos sistemas do plugin.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="combos">
+  <h2><span class="ico">⚔</span>Combos de arma</h2>
+  <p class="intro">Com uma arma na mão, <b>3 cliques seguidos</b> soltam um golpe. <b>D</b> = clique direito, <b>E</b> = clique esquerdo. Você tem 0,9 s entre um clique e outro.</p>
+  <div class="grade">
+    <div class="card"><h3>Como fazer</h3>
+      <ul>
+        <li><b>Espada, machado, lança, tridente e maça</b> começam com o direito: <code>D D D</code>, <code>D E D</code>, <code>D D E</code>, <code>D E E</code>.</li>
+        <li><b>Arco e besta</b> começam com o esquerdo: <code>E E E</code>, <code>E D E</code>, <code>E E D</code>, <code>E D D</code>.</li>
+        <li>A barra de ação mostra o progresso (<code>D · E · ?</code>).</li>
+        <li>Agachado não solta combo. Clicar em baú ou porta não conta, e um clique só ainda levanta o escudo.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Vigor e proficiência</h3>
+      <ul>
+        <li>Cada golpe gasta <b>vigor</b> (barra amarela no topo) e tem uma recarga curta. O vigor volta sozinho, bem mais rápido fora de luta.</li>
+        <li>Cada arma tem <b>proficiência</b> de 1 a 20: sobe acertando e derrotando inimigos com ela. Cada nível dá +2% de dano e libera golpes.</li>
+        <li><span class="cmd">/combos</span>: escolha qual golpe fica em cada sequência (clique na sequência, depois no golpe).</li>
+        <li>Classe, forja, refino, gemas e reações elementais também valem nos golpes.</li>
+      </ul>
+    </div>
+    <div class="card largo"><div class="tabela"><table><thead><tr><th>Arma</th><th>Golpes (nível de proficiência)</th></tr></thead><tbody>
+      <tr><td>⚔ Espada</td><td>Estocada (1), Corte Giratório (3), Lâmina Cruzada (5, sangra), Execução (8, x4 em quem está fraco), Tempestade de Lâminas (12), Passo Fantasma (16), Julgamento da Lâmina (20)</td></tr>
+      <tr><td>✠ Machado</td><td>Salto Esmagador (1), Arremesso do Machado (3, volta), Rachar Escudo (5), Fúria do Lenhador (8), Redemoinho de Aço (12), Decapitar (16), Cisão da Terra (20)</td></tr>
+      <tr><td>↟ Lança</td><td>Estocada Longa (1), Varredura (3), Arremesso da Lança (5), Salto do Dragão (8), Muralha de Lanças (12), Perfuração (16), Lança Celeste (20)</td></tr>
+      <tr><td>♆ Tridente</td><td>Onda (1), Puxão (3), Redemoinho (5), Tridente do Trovão (8), Maré Alta (12, ajuda a party), Mergulho (16), Fúria de Poseidon (20)</td></tr>
+      <tr><td>⚒ Maça</td><td>Abalo Sísmico (1), Martelo Ascendente (3), Atordoar (5), Quebra-Armadura (8), Salto Meteoro (12), Eco do Impacto (16), Martelo dos Deuses (20)</td></tr>
+      <tr><td>➹ Arco e besta</td><td>Tiro Triplo (1), Flecha Perfurante (3), Salto Tático (5), Flecha Explosiva (8), Saraivada (12), Flecha Sombria (16, persegue), Tiro Celestial (20)</td></tr>
+    </tbody></table></div></div>
+    <div class="card"><h3>Golpes de lenda</h3>
+      <p>Cada uma das 12 lendas tem um golpe só dela, que aparece no <span class="cmd">/combos</span> e vai em qualquer sequência. Lenda que é arma: na mão. Armadura ou picareta: basta estar com você.</p>
+      <p class="muted">Purificação Sagrada, Teia da Rainha, Queda da Floresta, Colapso do Abismo, Tempestade de Raios, Vazio do Fim, Égide, Passo do Andarilho, Sentença, Bigorna Celeste, Lâmina Arcana Suprema e Chamado da Alcateia.</p>
+    </div>
+    <div class="card"><h3>Golpes de classe</h3>
+      <p>Cada classe avançada tem um golpe para a arma dela (vale também na lendária que nasce dela).</p>
+      <p class="muted">Berserker: Fúria Sangrenta · Cavaleiro: Carga do Cavaleiro · Paladino: Martelo Sagrado · Atirador: Tiro na Cabeça · Caçador: Flechas da Matilha · Elementalista: Prisma Elemental · Feiticeiro: Lâmina Rúnica · Assassino: Mil Cortes · Mestre Forjador: Martelo Incandescente · Mestre das Feras: Investida da Fera.</p>
+    </div>
+    <div class="card"><h3>Finalizador em cadeia</h3>
+      <p>Acerte <b>3 golpes de combo diferentes em 10 s</b>: o próximo combo (até 8 s depois) sai com +50% de dano e uma explosão em volta.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="mobilidade">
+  <h2><span class="ico">≋</span>Mobilidade e mochila</h2>
+  <div class="grade">
+    <div class="card"><h3>Esquiva</h3>
+      <p>Dois toques rápidos em <kbd>A</kbd>, <kbd>D</kbd> ou <kbd>S</kbd>: salto rápido para o lado ou para trás, com um instante sem levar dano. Gasta 15 de vigor.</p>
+    </div>
+    <div class="card"><h3>Gancho de Escalada</h3>
+      <div class="ritual"><span class="b">Bancada</span><span class="i">1 vara de pescar</span><span class="mais">+</span><span class="i">1 gancho de armadilha</span><span class="mais">+</span><span class="i">3 lingotes de ferro</span></div>
+      <p>Lance num bloco e recolha: você é puxado até lá, sem dano de queda. Num monstro, ele vem até você; num chefe, você vai até ele.</p>
+    </div>
+    <div class="card"><h3>Capa Planadora</h3>
+      <p>Acessório de bolso (Bancada Alquímica: 4 membranas de phantom, 6 penas, 2 couros). No ar, aperte <kbd>pular</kbd> para planar. Pule de novo ou agache para soltar.</p>
+    </div>
+    <div class="card"><h3>Mochila</h3>
+      <p><span class="cmd">/mochila</span>: baú pessoal com 1 fileira no começo e +1 a cada 150 níveis somados, até 6. Não cai quando você morre.</p>
     </div>
   </div>
 </section>
@@ -374,7 +442,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td>Anéis</td><td>Vigor, Força, Vento, Marés, Brasas, Minerador, Fortuna, Sábio</td></tr>
         <tr><td>Amuletos</td><td>Mana, Guardião, Vida, <b>Fênix</b> (escapa da morte a cada 10 min)</td></tr>
         <tr><td>Cintos</td><td>Atleta, Andarilho, Titã</td></tr>
-        <tr><td>Bolso</td><td><b>Lanterna de Bolso</b>, Ímã, Relógio</td></tr>
+        <tr><td>Bolso</td><td><b>Lanterna de Bolso</b>, Ímã, Relógio, <b>Capa Planadora</b></td></tr>
       </tbody></table></div>
     </div>
   </div>
@@ -388,7 +456,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <p><span class="cmd">/cosmeticos</span>, <span class="cmd">/chapeu</span> e <span class="cmd">/tag</span>: item na cabeça e tag personalizada.</p>
     </div>
     <div class="card"><h3>Títulos</h3>
-      <p><span class="cmd">/titulos</span>: 51 títulos com requisitos. Só o título em uso dá bônus (vida, dano, mana, XP...). Ele aparece acima da sua cabeça e os mais difíceis são anunciados.</p>
+      <p><span class="cmd">/titulos</span>: 64 títulos com requisitos. Só o título em uso dá bônus (vida, dano, mana, XP...). Ele aparece acima da sua cabeça e os mais difíceis são anunciados.</p>
     </div>
     <div class="card"><h3>Missões dos aldeões</h3>
       <p><b>Agache + clique direito</b> num aldeão com profissão: 3 pedidos do dia. Cumprir dá esmeraldas, XP, às vezes Fragmentos, e <b>reputação</b> (desconto no comércio). Até 3 ao mesmo tempo; <span class="cmd">/missoes</span>.</p>
@@ -441,6 +509,80 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   </div>
 </section>
 
+<section class="secao" id="fe">
+  <h2><span class="ico">✧</span>Fé e mistério</h2>
+  <div class="grade">
+    <div class="card"><h3>Deuses</h3>
+      <div class="ritual"><span class="b">Quartzo entalhado</span><span class="mais">+</span><span class="i">1 maçã dourada</span><span class="mais">+</span><span class="i">1 vela</span></div>
+      <ul>
+        <li>No Santuário, escolha um dos 6 deuses (um por vez) e jogue <b>oferendas</b> com <kbd>Q</kbd> em cima dele.</li>
+        <li>Reze 1 vez por dia; o XP dos atributos do deus também dá devoção.</li>
+        <li><b>Fé 1 a 5</b> fortalece o passivo. Na fé 2 libera o <b>milagre</b> (a cada 20 min): <span class="cmd">/deus milagre</span>.</li>
+        <li>O Rei pode tornar o deus dele o deus oficial do reino (+25% de devoção para quem segue).</li>
+      </ul>
+      <div class="tabela"><table><thead><tr><th>Deus</th><th>Passivo</th><th>Milagre</th></tr></thead><tbody>
+        <tr><td>⚒ Ferrum (Forja)</td><td>Armadura e mineração</td><td>Conserta o equipamento</td></tr>
+        <tr><td>☘ Sylva (Natureza)</td><td>Vida e cura lenta</td><td>Plantações amadurecem, cura a party</td></tr>
+        <tr><td>≈ Maris (Mar)</td><td>Fôlego e nado</td><td>Chuva e Poder do conduíte</td></tr>
+        <tr><td>⚔ Bellum (Guerra)</td><td>Dano</td><td>Força II para a party</td></tr>
+        <tr><td>✦ Arcanus (Magia)</td><td>Mana</td><td>Mana cheia e +5/s</td></tr>
+        <tr><td>☠ Mortis (Morte)</td><td>Roubo de vida</td><td>Evita a próxima morte</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Astronomia</h3>
+      <p>À noite, com céu aberto, olhe para cima pela <b>luneta</b> por 5 s. Cada noite tem uma das <b>12 constelações</b>, que entra no seu diário e dá uma bênção até o amanhecer (XP extra, Sorte, Visão noturna, Força, Regeneração, devoção em dobro...). <span class="cmd">/estrelas</span></p>
+    </div>
+    <div class="card"><h3>Transmutação</h3>
+      <div class="ritual"><span class="b">Bloco de ametista</span><span class="mais">+</span><span class="i">1 Mercúrio Vivo</span><span class="mais">+</span><span class="i">1 lingote de ouro</span></div>
+      <p>Cobre em ferro, ferro em ouro, lápis em esmeralda, ouro em diamante, diamante em netherite... Pode falhar (e às vezes explode). A <b>Pedra Filosofal</b> no inventário dá +20% de chance.</p>
+    </div>
+    <div class="card"><h3>Runas</h3>
+      <div class="ritual"><span class="b">Tufo entalhado</span><span class="mais">+</span><span class="i">4 fragmentos de ametista</span><span class="mais">+</span><span class="i">1 bloco de lápis</span></div>
+      <p>Na Mesa Rúnica, grave uma runa por peça: <b>Salto</b> (pulo duplo), <b>Proteção</b>, <b>Visão</b>, <b>Ímpeto</b>, <b>Explosão</b>, <b>Gelo</b>, <b>Tempestade</b>, <b>Vampírica</b>, <b>Fusão</b> (minério já fundido) e <b>Eco</b> (flecha dupla).</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="descobertas">
+  <h2><span class="ico">🗺</span>Exploração e campanha</h2>
+  <div class="grade">
+    <div class="card"><h3>Enciclopédia do Mundo</h3>
+      <p>Cada <b>bioma</b> em que você pisa, cada <b>estrutura</b> em que entra e cada <b>item</b> que pega pela primeira vez entram sozinhos na enciclopédia, junto com as relíquias. Cada bioma novo dá <b>+0,2% de XP</b> em tudo (até +15%). <span class="cmd">/enciclopedia</span></p>
+    </div>
+    <div class="card"><h3>Mitrilo</h3>
+      <ul>
+        <li>Minério raro no <b>fundo do mundo</b> (Y -58 a -24), no lugar de ardósia profunda e tufo. Brilha de leve.</li>
+        <li>Só quebra com <b>picareta de diamante ou netherita</b>, devagar. Dá Mitrilo Bruto e muito XP de Mineração.</li>
+        <li>Bruto no forno vira <b>Lingote de Mitrilo</b>.</li>
+      </ul>
+      <div class="ritual"><span class="b">Mesa de ferraria</span><span class="mais">+</span><span class="i">molde de netherita</span><span class="mais">+</span><span class="i">peça de netherita</span><span class="mais">+</span><span class="i">lingote de mitrilo</span></div>
+      <p>A peça vira <b>✦ Mitrilo</b>: 50% mais durabilidade, e arma +1,5 de dano, armadura +1 de armadura e resistência, ferramenta +20% de velocidade.</p>
+    </div>
+    <div class="card"><h3>Mapas do Tesouro</h3>
+      <ul>
+        <li>Mapas de verdade com um <b>X vermelho</b>. Caem de elites, da pesca, de baús de chefes e masmorras, de sítios de arqueologia e do Cronista.</li>
+        <li>Três tipos: <b>comum</b>, <b>raro</b> e <b>lendário</b> (este traz mitrilo).</li>
+        <li>Chegue a 14 blocos do X com o mapa: o baú é desenterrado e <b>guardiões</b> saem da terra.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Arqueologia e relíquias</h3>
+      <p>Procure <b>pedras em pé</b> com areia e cascalho suspeitos em volta. Use o <b>pincel</b>: saem cacos e uma das <b>12 relíquias</b> (Moeda do Rei Caído, Máscara de Mortis, Coração de Sombra...). Cada uma tem sua história e entra na coleção.</p>
+    </div>
+    <div class="card largo"><h3>As Crônicas do Mundo</h3>
+      <p>O <b>Cronista</b> (um bibliotecário no spawn) conta a campanha em 8 capítulos. Clique nele ou use <span class="cmd">/cronista</span> para ler o pedido; ao cumprir, volte até ele e clique em <b>entregar</b>.</p>
+      <div class="tabela"><table><thead><tr><th>Capítulo</th><th>Pedido</th><th>Recompensa</th></tr></thead><tbody>
+        <tr><td>1. O Aventureiro</td><td>Nível total 50</td><td>16 esmeraldas e mapa comum</td></tr>
+        <tr><td>2. O Fogo da Forja</td><td>Forjar 5 itens</td><td>4 Fragmentos de Forja</td></tr>
+        <tr><td>3. Ecos Arcanos</td><td>Lançar 100 magias</td><td>Pó Arcano e Cristais de Mana</td></tr>
+        <tr><td>4. Os Deuses Esquecidos</td><td>Fé 2 com um deus</td><td>Relíquia e 10 esmeraldas</td></tr>
+        <tr><td>5. Sob a Terra</td><td>Vencer 3 masmorras</td><td>Pedra de Proteção</td></tr>
+        <tr><td>6. O Céu Fala</td><td>Observar 4 constelações</td><td>Mapa raro</td></tr>
+        <tr><td>7. As Ruínas Contam</td><td>6 relíquias diferentes</td><td>Essência Primordial</td></tr>
+        <tr><td>8. O Selo</td><td>Romper o selo de um Local Oculto</td><td>2 lingotes de mitrilo e mapa lendário</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
 <section class="secao" id="pesca">
   <h2><span class="ico">⚓</span>Pesca</h2>
   <div class="grade">
@@ -859,6 +1001,12 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/forja</span></td><td>Raridades e suas chances</td></tr>
       <tr><td><span class="cmd">/grimorio</span></td><td>Grimório: magias, criador, secretas, maestria</td></tr>
       <tr><td><span class="cmd">/classe</span></td><td>Árvore de classes, caminho e habilidades</td></tr>
+      <tr><td><span class="cmd">/combos</span></td><td>Combos de arma: proficiência e golpes</td></tr>
+      <tr><td><span class="cmd">/mochila</span></td><td>Sua mochila</td></tr>
+      <tr><td><span class="cmd">/deus</span>, <span class="cmd">/deus milagre</span></td><td>Sua fé e o milagre</td></tr>
+      <tr><td><span class="cmd">/estrelas</span></td><td>Diário das Estrelas</td></tr>
+      <tr><td><span class="cmd">/enciclopedia</span></td><td>Enciclopédia do Mundo</td></tr>
+      <tr><td><span class="cmd">/cronista</span></td><td>Sua campanha (capítulo atual e entregar)</td></tr>
       <tr><td><span class="cmd">/lendas</span></td><td>Livro das Lendas</td></tr>
       <tr><td><span class="cmd">/locais</span></td><td>Locais Ocultos que você achou</td></tr>
       <tr><td><span class="cmd">/party</span>, <span class="cmd">/pc</span></td><td>Menu e chat da party</td></tr>
@@ -887,7 +1035,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.14 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.18 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

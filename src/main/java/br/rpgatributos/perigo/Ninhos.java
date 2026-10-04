@@ -214,6 +214,7 @@ public final class Ninhos implements Listener {
             Entity e = w.spawnEntity(l, tipo, CreatureSpawnEvent.SpawnReason.CUSTOM);
             if (!(e instanceof LivingEntity le)) continue;
             le.getPersistentDataContainer().set(kGuardiao, PersistentDataType.STRING, n.id.toString());
+            le.setPersistent(false);
             plugin.perigo().envelhecer(le);
             if (rnd().nextDouble() < plugin.perigo().chanceElite() * 3) plugin.perigo().tornarElite(le, 1);
             if (le instanceof Zombie z) z.setShouldBurnInDay(false);

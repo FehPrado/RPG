@@ -178,13 +178,14 @@ public final class Arcano {
 
     public double manaMax(Player p, Perfil pf) {
         return cfg().arcManaBase + nivel(p) * cfg().arcManaPorNivel + pf.poder(ParteCorpo.MENTE) * ParteCorpo.MANA_POR_PODER
-                + plugin.titulos().bonusMana(p) + plugin.classes().bonusMana(p) + plugin.acessorios().bonusMana(p);
+                + plugin.titulos().bonusMana(p) + plugin.classes().bonusMana(p) + plugin.acessorios().bonusMana(p) + plugin.deuses().bonusMana(p);
     }
 
     public double regen(Player p, Perfil pf) {
         double r = cfg().arcRegenBase + nivel(p) * cfg().arcRegenPorNivel
                 + pf.poder(ParteCorpo.SANGUE) * ParteCorpo.REGEN_POR_PODER + plugin.titulos().bonusRegenMana(p)
-                + plugin.classes().bonusRegenMana(p) + plugin.acessorios().bonusRegenMana(p) + plugin.ceu().bonusRegen(p);
+                + plugin.classes().bonusRegenMana(p) + plugin.acessorios().bonusRegenMana(p) + plugin.ceu().bonusRegen(p)
+                + plugin.deuses().bonusRegen(p) + plugin.astronomia().bonusRegen(p);
         return rejeitando(p, pf) ? r * 0.5 : r;
     }
 

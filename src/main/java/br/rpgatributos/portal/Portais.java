@@ -550,7 +550,7 @@ public final class Portais implements Listener, CommandExecutor {
         if (p.chefe != null && chefe == null) p.chefe = null; // sumiu sem morrer (ficou sozinho): volta quando alguém chegar
         if (gente && p.chefe == null) {
             boolean ondaLimpa = p.monstros.size() <= Math.max(1, p.ultimaOnda * 3 / 10);
-            if (p.onda < p.ondas && (ondaLimpa || p.segundos >= p.proximaOnda)) {
+            if (p.onda < p.ondas && p.monstros.size() < 30 && (ondaLimpa || p.segundos >= p.proximaOnda)) {
                 p.onda++;
                 onda(p);
                 p.proximaOnda = p.segundos + 45;

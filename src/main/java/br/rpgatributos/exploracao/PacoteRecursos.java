@@ -1,0 +1,502 @@
+package br.rpgatributos.exploracao;
+
+import br.rpgatributos.RPGAtributos;
+import br.rpgatributos.alquimia.Acessorio;
+import br.rpgatributos.combate.Mobilidade;
+import net.kyori.adventure.resource.ResourcePackInfo;
+import net.kyori.adventure.resource.ResourcePackRequest;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.util.HexFormat;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+/**
+ * O pacote de recursos do próprio plugin: gerado ao ligar (texturas desenhadas pelo código),
+ * guardado em plugins/RPGAtributos/pacote/ e enviado aos jogadores junto com qualquer outro
+ * pacote do servidor. Ele pode ser servido pelo próprio plugin (numa porta) ou por um link.
+ * Sem o pacote, tudo continua funcionando com a aparência de itens e blocos do jogo.
+ */
+public final class PacoteRecursos implements Listener {
+
+    public static final UUID ID = UUID.nameUUIDFromBytes("rpgatributos-pacote".getBytes(StandardCharsets.UTF_8));
+    public static final String NOME = "RPGAtributos-recursos.zip";
+
+    private final RPGAtributos plugin;
+    private File arquivo;
+    private String sha1;
+    private Object servidor;
+
+    public PacoteRecursos(RPGAtributos plugin) {
+        this.plugin = plugin;
+    }
+
+    public File arquivo() { return arquivo; }
+    public String sha1() { return sha1; }
+
+    /** Link que os jogadores usam para baixar, ou null se não há como enviar. */
+    public String url() {
+        var c = plugin.settings();
+        if (!c.pacAtivado) return null;
+        if (!c.pacUrl.isBlank()) return c.pacUrl.trim();
+        if (servidor != null && c.pacPorta > 0 && !c.pacEndereco.isBlank()) return "http://" + c.pacEndereco.trim() + ":" + c.pacPorta + "/" + NOME;
+        return null;
+    }
+
+    // =====================================================================
+    //  Gerar
+    // =====================================================================
+
+    public void iniciar() {
+        if (!plugin.settings().pacAtivado) return;
+        try {
+            File pasta = new File(plugin.getDataFolder(), "pacote");
+            if (!pasta.exists() && !pasta.mkdirs()) throw new IOException("não criei a pasta " + pasta);
+            byte[] zip = montar(pasta);
+            arquivo = new File(pasta, NOME);
+            Files.write(arquivo.toPath(), zip);
+            sha1 = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(zip));
+        } catch (Exception ex) {
+            plugin.getLogger().warning("Não consegui gerar o pacote de recursos: " + ex.getMessage());
+            return;
+        }
+        int porta = plugin.settings().pacPorta;
+        if (porta > 0) servir(porta);
+        if (url() == null) {
+            plugin.getLogger().info("Pacote de recursos gerado em " + arquivo.getPath() + " (SHA-1 " + sha1 + "). "
+                    + "Para enviar aos jogadores: suba o arquivo e ponha o link em pacote-de-recursos.url, "
+                    + "ou use pacote-de-recursos.porta + endereco.");
+        }
+    }
+
+    private void servir(int porta) {
+        try {
+            com.sun.net.httpserver.HttpServer s = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(porta), 0);
+            s.createContext("/" + NOME, troca -> {
+                byte[] dados = Files.readAllBytes(arquivo.toPath());
+                troca.getResponseHeaders().add("Content-Type", "application/zip");
+                troca.sendResponseHeaders(200, dados.length);
+                try (var out = troca.getResponseBody()) {
+                    out.write(dados);
+                }
+            });
+            s.start();
+            servidor = s;
+            plugin.getLogger().info("Pacote de recursos servido na porta " + porta + ".");
+        } catch (Throwable t) {
+            plugin.getLogger().warning("Não consegui abrir a porta " + porta + " para o pacote de recursos: " + t.getMessage());
+        }
+    }
+
+    public void parar() {
+        if (servidor instanceof com.sun.net.httpserver.HttpServer s) s.stop(0);
+        servidor = null;
+    }
+
+    // =====================================================================
+    //  Enviar
+    // =====================================================================
+
+    public void enviar(Player p) {
+        String url = url();
+        if (url == null || sha1 == null) return;
+        try {
+            ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(ID, URI.create(url), sha1);
+            p.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).replace(false)
+                    .required(plugin.settings().pacObrigatorio)
+                    .prompt(Component.text("Texturas do RPGAtributos (minérios e itens novos)", NamedTextColor.GOLD)).build());
+        } catch (RuntimeException ex) {
+            plugin.getLogger().warning("Link do pacote de recursos inválido: " + ex.getMessage());
+        }
+    }
+
+    @EventHandler
+    public void aoEntrar(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        atualizar(p.getInventory());
+        atualizar(p.getEnderChest());
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> { if (p.isOnline()) enviar(p); }, 40L);
+    }
+
+    // =====================================================================
+    //  Itens com visual próprio
+    // =====================================================================
+
+    private static final NamespacedKey K_FORJA = new NamespacedKey("rpgatributos", "forja_raridade");
+
+    /** Marca o item para usar o visual do pacote (sem o pacote, ele continua com o visual do jogo). */
+    public static void marcar(ItemMeta m, String id) {
+        var cmd = m.getCustomModelDataComponent();
+        cmd.setStrings(List.of("rpgatributos:" + id)); // o pacote olha a primeira string
+        m.setCustomModelDataComponent(cmd);
+    }
+
+    /** Itens feitos antes das texturas (gancho, cajado forjado, acessórios) ganham a marca. */
+    public static ItemStack atualizar(ItemStack i) {
+        String id = idVisual(i);
+        if (id == null) return i;
+        List<String> atual = i.getItemMeta().getCustomModelDataComponent().getStrings();
+        if (atual.size() == 1 && atual.getFirst().equals("rpgatributos:" + id)) return i;
+        i.editMeta(m -> marcar(m, id));
+        return i;
+    }
+
+    private static String idVisual(ItemStack i) {
+        if (i == null || i.isEmpty() || !i.hasItemMeta()) return null;
+        if (Mobilidade.ehGancho(i)) return "gancho";
+        if (i.getType() == Material.BREEZE_ROD && i.getPersistentDataContainer().has(K_FORJA)) return "cajado_arcano";
+        Acessorio a = Acessorio.de(i);
+        return a == null ? null : a.id();
+    }
+
+    private static void atualizar(Inventory inv) {
+        for (int s = 0; s < inv.getSize(); s++) {
+            ItemStack i = inv.getItem(s);
+            if (idVisual(i) != null) inv.setItem(s, atualizar(i));
+        }
+    }
+
+    // =====================================================================
+    //  Conteúdo do pacote
+    // =====================================================================
+
+    private byte[] montar(File pasta) throws IOException {
+        Map<String, byte[]> f = new LinkedHashMap<>();
+        f.put("pack.mcmeta", texto("""
+                {
+                  "pack": {
+                    "description": "§6RPGAtributos §7— texturas do plugin",
+                    "pack_format": 97,
+                    "min_format": 88,
+                    "max_format": 999
+                  }
+                }
+                """));
+        // Minério de Mitrilo: um estado do bloco de cogumelo marrom que a natureza não gera.
+        StringBuilder estados = new StringBuilder("{\n  \"variants\": {\n");
+        String[] faces = {"down", "east", "north", "south", "up", "west"};
+        for (int bits = 0; bits < 64; bits++) {
+            StringBuilder chave = new StringBuilder();
+            for (int i = 0; i < 6; i++) chave.append(i == 0 ? "" : ",").append(faces[i]).append('=').append((bits >> i & 1) == 1);
+            String modelo = bits == Mitrilo.ESTADO_MINERIO ? "rpgatributos:block/minerio_mitrilo" : "rpgatributos:block/cogumelo/c" + bits;
+            estados.append("    \"").append(chave).append("\": { \"model\": \"").append(modelo).append("\" }").append(bits < 63 ? ",\n" : "\n");
+            if (bits != Mitrilo.ESTADO_MINERIO) f.put("assets/rpgatributos/models/block/cogumelo/c" + bits + ".json", texto(modeloCogumelo(bits, faces)));
+        }
+        estados.append("  }\n}\n");
+        f.put("assets/minecraft/blockstates/brown_mushroom_block.json", texto(estados.toString()));
+        f.put("assets/rpgatributos/models/block/minerio_mitrilo.json",
+                texto("{ \"parent\": \"minecraft:block/cube_all\", \"textures\": { \"all\": \"rpgatributos:block/minerio_mitrilo\" } }"));
+        // Itens: só trocam o visual quando têm o custom_model_data do plugin (o resto fica igual ao jogo).
+        f.put("assets/minecraft/items/raw_iron.json", texto(selecao("rpgatributos:mitrilo_bruto", "rpgatributos:item/mitrilo_bruto", "minecraft:item/raw_iron")));
+        f.put("assets/minecraft/items/iron_ingot.json", texto(selecao("rpgatributos:lingote_mitrilo", "rpgatributos:item/lingote_mitrilo", "minecraft:item/iron_ingot")));
+        f.put("assets/minecraft/items/breeze_rod.json", texto(selecao("rpgatributos:cajado_arcano", "rpgatributos:item/cajado_arcano", "minecraft:item/breeze_rod")));
+        f.put("assets/minecraft/items/phantom_membrane.json", texto(selecao("rpgatributos:capa_planadora", "rpgatributos:item/capa_planadora", "minecraft:item/phantom_membrane")));
+        f.put("assets/minecraft/items/fishing_rod.json", texto(vara()));
+        f.put("assets/rpgatributos/models/item/mitrilo_bruto.json", texto(itemGerado("rpgatributos:item/mitrilo_bruto")));
+        f.put("assets/rpgatributos/models/item/lingote_mitrilo.json", texto(itemGerado("rpgatributos:item/lingote_mitrilo")));
+        f.put("assets/rpgatributos/models/item/capa_planadora.json", texto(itemGerado("rpgatributos:item/capa_planadora")));
+        f.put("assets/rpgatributos/models/item/cajado_arcano.json", texto(itemComPai("minecraft:item/handheld", "rpgatributos:item/cajado_arcano")));
+        f.put("assets/rpgatributos/models/item/gancho.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/gancho")));
+        f.put("assets/rpgatributos/models/item/gancho_lancado.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/gancho_lancado")));
+
+        // Texturas: as desenhadas pelo código, ou um PNG seu com o mesmo nome em pacote/texturas/.
+        Map<String, BufferedImage> texturas = new LinkedHashMap<>();
+        texturas.put("block/minerio_mitrilo", minerio());
+        texturas.put("item/mitrilo_bruto", desenho(BRUTO, MITRILO));
+        texturas.put("item/lingote_mitrilo", desenho(LINGOTE, MITRILO));
+        texturas.put("item/cajado_arcano", desenho(CAJADO, CORES_CAJADO));
+        texturas.put("item/gancho", desenho(GANCHO, CORES_GANCHO));
+        texturas.put("item/gancho_lancado", desenho(GANCHO_LANCADO, CORES_GANCHO));
+        texturas.put("item/capa_planadora", desenho(CAPA, CORES_CAPA));
+        File padrao = new File(pasta, "texturas-padrao"), proprias = new File(pasta, "texturas");
+        if (!padrao.exists() && !padrao.mkdirs()) throw new IOException("não criei a pasta " + padrao);
+        if (!proprias.exists() && proprias.mkdirs()) {
+            Files.writeString(new File(proprias, "LEIA-ME.txt").toPath(), """
+                    Texturas suas para o pacote de recursos do RPGAtributos.
+
+                    Os desenhos originais ficam em ../texturas-padrao/ (refeitos a cada início).
+                    Copie um deles para esta pasta, edite (Paint, Aseprite, Photoshop...) e reinicie o servidor:
+                    o PNG daqui entra no lugar do original. Apague o arquivo para voltar ao original.
+
+                    - Mantenha o mesmo nome (ex.: cajado_arcano.png) e uma imagem quadrada (16x16, 32x32, 64x64...).
+                    - O pacote muda a cada edição: se ele estiver num link (Dropbox etc.), suba o zip novo de
+                      ../RPGAtributos-recursos.zip por cima do antigo.
+                    """, StandardCharsets.UTF_8);
+        }
+        for (Map.Entry<String, BufferedImage> t : texturas.entrySet()) {
+            String nome = t.getKey().substring(t.getKey().indexOf('/') + 1) + ".png";
+            byte[] original = png(t.getValue());
+            Files.write(new File(padrao, nome).toPath(), original);
+            f.put("assets/rpgatributos/textures/" + t.getKey() + ".png", textura(new File(proprias, nome), original));
+        }
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (ZipOutputStream zip = new ZipOutputStream(bytes)) {
+            for (Map.Entry<String, byte[]> en : f.entrySet()) {
+                ZipEntry z = new ZipEntry(en.getKey());
+                z.setTime(0); // o mesmo conteúdo gera sempre o mesmo arquivo (e o mesmo SHA-1)
+                zip.putNextEntry(z);
+                zip.write(en.getValue());
+                zip.closeEntry();
+            }
+        }
+        return bytes.toByteArray();
+    }
+
+    private static byte[] texto(String s) {
+        return s.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static String modeloCogumelo(int bits, String[] faces) {
+        StringBuilder sb = new StringBuilder("{ \"textures\": { \"fora\": \"minecraft:block/brown_mushroom_block\", ")
+                .append("\"dentro\": \"minecraft:block/mushroom_block_inside\", \"particle\": \"minecraft:block/brown_mushroom_block\" }, ")
+                .append("\"elements\": [ { \"from\": [0, 0, 0], \"to\": [16, 16, 16], \"faces\": { ");
+        for (int i = 0; i < 6; i++) {
+            sb.append(i == 0 ? "" : ", ").append('"').append(faces[i]).append("\": { \"uv\": [0, 0, 16, 16], \"texture\": \"#")
+                    .append((bits >> i & 1) == 1 ? "fora" : "dentro").append("\", \"cullface\": \"").append(faces[i]).append("\" }");
+        }
+        return sb.append(" } } ] }").toString();
+    }
+
+    private static String selecao(String caso, String modelo, String padrao) {
+        return "{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ "
+                + "{ \"when\": \"" + caso + "\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + modelo + "\" } } ], "
+                + "\"fallback\": { \"type\": \"minecraft:model\", \"model\": \"" + padrao + "\" } } }";
+    }
+
+    private static String itemGerado(String textura) {
+        return itemComPai("minecraft:item/generated", textura);
+    }
+
+    private static String itemComPai(String pai, String textura) {
+        return "{ \"parent\": \"" + pai + "\", \"textures\": { \"layer0\": \"" + textura + "\" } }";
+    }
+
+    /** A vara de pescar do jogo troca de modelo quando está lançada; o Gancho também. */
+    private static String vara() {
+        return "{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ "
+                + "{ \"when\": \"rpgatributos:gancho\", \"model\": " + lancada("rpgatributos:item/gancho", "rpgatributos:item/gancho_lancado") + " } ], "
+                + "\"fallback\": " + lancada("minecraft:item/fishing_rod", "minecraft:item/fishing_rod_cast") + " } }";
+    }
+
+    private static String lancada(String normal, String lancado) {
+        return "{ \"type\": \"minecraft:condition\", \"property\": \"minecraft:fishing_rod/cast\", "
+                + "\"on_false\": { \"type\": \"minecraft:model\", \"model\": \"" + normal + "\" }, "
+                + "\"on_true\": { \"type\": \"minecraft:model\", \"model\": \"" + lancado + "\" } }";
+    }
+
+    /** Um PNG do admin, se existir e for uma imagem quadrada; senão, o desenho original. */
+    private byte[] textura(File propria, byte[] original) {
+        if (!propria.isFile()) return original;
+        try {
+            byte[] dados = Files.readAllBytes(propria.toPath());
+            BufferedImage img = ImageIO.read(new java.io.ByteArrayInputStream(dados));
+            if (img == null || img.getWidth() != img.getHeight() || img.getWidth() < 16) {
+                plugin.getLogger().warning("Textura " + propria.getName() + " ignorada: precisa ser um PNG quadrado (16x16, 32x32...).");
+                return original;
+            }
+            plugin.getLogger().info("Pacote de recursos: usando a sua textura " + propria.getName() + ".");
+            return dados;
+        } catch (IOException ex) {
+            plugin.getLogger().warning("Não consegui ler a textura " + propria.getName() + ": " + ex.getMessage());
+            return original;
+        }
+    }
+
+    private static byte[] png(BufferedImage img) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write(img, "png", out);
+        return out.toByteArray();
+    }
+
+    // ---------- texturas (pixel art feita pelo código) ----------
+
+    // Cada letra do desenho é um pixel; '.' é transparente.
+    private static final int CONTORNO = 0xFF1E4A5C, ESCURO = 0xFF3A7F96, MEIO = 0xFF7FCFE0, BRILHO = 0xFFE6FFFF;
+    private static final Map<Character, Integer> MITRILO = Map.of('o', CONTORNO, 'd', ESCURO, 'm', MEIO, 'h', BRILHO);
+    private static final Map<Character, Integer> CORES_CAJADO = Map.of(
+            'o', 0xFF241634,  // contorno
+            'w', 0xFF5C3A1E,  // madeira escura
+            'W', 0xFF8B5A2B,  // madeira clara
+            'g', 0xFFE0B040,  // aro de ouro
+            'c', 0xFF6A3FA0,  // ametista escura
+            'C', 0xFFA070E0,  // ametista
+            'h', 0xFFEBD8FF); // brilho
+    private static final Map<Character, Integer> CORES_GANCHO = Map.of(
+            'w', 0xFF6B4423,  // vara
+            'W', 0xFF9C6B3A,  // vara (luz)
+            'g', 0xFF3A2414,  // cabo
+            'l', 0xFFDDDDDD,  // corda
+            'o', 0xFF2A2A30,  // contorno do gancho
+            'i', 0xFF7A7A86,  // ferro escuro
+            'I', 0xFFD0D0DA); // ferro claro
+    private static final Map<Character, Integer> CORES_CAPA = Map.of(
+            'o', 0xFF22304A,  // contorno
+            'd', 0xFF4A6FA5,  // dobras
+            'm', 0xFF7FA6E0,  // tecido
+            'h', 0xFFCFE2FF,  // luz
+            'g', 0xFFE0B040); // fecho de ouro
+
+    private static final String[] CAJADO = {
+            "............oo..",
+            "...........ohCo.",
+            "..........ohCCco",
+            ".........ohCCcco",
+            "..........oCcco.",
+            ".........gocoo..",
+            "........gWgo....",
+            ".......oWwo.....",
+            "......oWwo......",
+            ".....oWwo.......",
+            "....oWwo........",
+            "...oWwo.........",
+            "..oWwo..........",
+            ".oWwo...........",
+            ".owo............",
+            "..o............."};
+
+    private static final String[] GANCHO = {
+            "................",
+            "................",
+            "............w...",
+            "...........Wl...",
+            "..........w.l...",
+            ".........W..l...",
+            "........w...l...",
+            ".......W....l...",
+            "......w....oIo..",
+            ".....W.....oIo..",
+            "....g....I.oIo.I",
+            "...g.....Ii.I.iI",
+            "..g.......IiIiI.",
+            ".g.........III..",
+            "g...............",
+            "................"};
+
+    private static final String[] GANCHO_LANCADO = {
+            "................",
+            "................",
+            "............w...",
+            "...........W....",
+            "..........w.....",
+            ".........W......",
+            "........w.......",
+            ".......W........",
+            "......w.........",
+            ".....W..........",
+            "....g...........",
+            "...g............",
+            "..g.............",
+            ".g..............",
+            "g...............",
+            "................"};
+
+    private static final String[] CAPA = {
+            "................",
+            "................",
+            "......oooo......",
+            ".....ohggho.....",
+            "....ohmmmmdo....",
+            "...ohmmmmmmdo...",
+            "...ohmmmmmmdo...",
+            "..ohmmmmmmmmdo..",
+            "..ohmmmdmmmmdo..",
+            ".ohmmmmdmmmmmdo.",
+            ".ohmmmmdmmmmmdo.",
+            ".ohmmmdmmdmmmdo.",
+            "ohmmmmdmmdmmmmdo",
+            "odmmdmmdmmdmmdmo",
+            "oo.ooo.oo.ooo.oo",
+            "................"};
+
+    private static final String[] BRUTO = {
+            "................",
+            "................",
+            "......oooo......",
+            "....oohhmmoo....",
+            "...ohhmmmmmdo...",
+            "..ohmmhmmmmddo..",
+            "..ohmmmmmhmmdo..",
+            ".ohmmmmmmmmmddo.",
+            ".ommmhmmmmmmddo.",
+            ".ommmmmmmhmdddo.",
+            "..odmmmmmmdddo..",
+            "..oddmmmddddoo..",
+            "...ooddddddo....",
+            ".....oooooo.....",
+            "................",
+            "................"};
+
+    private static final String[] LINGOTE = {
+            "................",
+            "................",
+            "................",
+            "................",
+            "......oooooo....",
+            ".....ohhhhhmo...",
+            "....ohhmmmmmdo..",
+            "...ohmmmmmmmdo..",
+            "..ommmmmmmmddo..",
+            "..odmmmmmmddo...",
+            "..oddddddddo....",
+            "...oooooooo.....",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    private static BufferedImage desenho(String[] linhas, Map<Character, Integer> cores) {
+        BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) img.setRGB(x, y, cores.getOrDefault(linhas[y].charAt(x), 0));
+        }
+        return img;
+    }
+
+    /** Ardósia com veios de mitrilo azul-prateado. */
+    private static BufferedImage minerio() {
+        BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Random r = new Random(4242);
+        for (int y = 0; y < 16; y++) {
+            int faixa = (y % 4 == 0) ? -10 : 0; // camadas da ardósia
+            for (int x = 0; x < 16; x++) {
+                int v = 58 + r.nextInt(16) + faixa;
+                img.setRGB(x, y, 0xFF000000 | (v << 16) | (v << 8) | (v + 4));
+            }
+        }
+        int[][] pedras = {{3, 3}, {10, 2}, {6, 8}, {12, 10}, {2, 12}, {9, 13}};
+        for (int[] c : pedras) {
+            img.setRGB(c[0], c[1], CONTORNO);
+            img.setRGB(c[0] + 1, c[1], ESCURO);
+            img.setRGB(c[0], c[1] + 1, MEIO);
+            img.setRGB(c[0] + 1, c[1] + 1, BRILHO);
+            if (c[0] + 2 < 16) img.setRGB(c[0] + 2, c[1] + 1, ESCURO);
+        }
+        return img;
+    }
+}

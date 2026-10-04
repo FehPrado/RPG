@@ -167,6 +167,56 @@ torre:
   dano-por-andar: 0.035               # ... e +3,5% de dano
 
 # ==========================================================
+#  Combos de arma (3 cliques com a arma na mão)
+# ==========================================================
+
+combos:
+  ativado: true
+  vigor-maximo: 100                   # + 0,5 por nível de Combate
+  vigor-por-segundo-em-luta: 6
+  vigor-por-segundo-fora-de-luta: 15  # 5 s sem bater nem apanhar
+  milissegundos-entre-cliques: 900    # tempo máximo entre um clique e o próximo da sequência
+  xp-base: 30                         # proficiência: XP para subir do nível N = base x N ^ expoente (até o 20)
+  xp-expoente: 1.5
+  xp-por-acerto: 1
+  xp-por-abate: 6
+  xp-por-chefe: 40
+  dano-a-mais-por-nivel: 0.02         # golpes +2% de dano por nível de proficiência
+
+mobilidade:
+  esquiva-ativada: true               # dois toques rápidos em A, D ou S: esquiva para o lado/trás
+  vigor-da-esquiva: 15
+  recarga-da-esquiva-ms: 1200
+  tempo-entre-toques-ms: 300          # tempo máximo entre os dois toques
+  alcance-do-gancho: 40               # blocos
+
+mochila:
+  ativada: true
+  niveis-por-fileira: 150             # 1 fileira no começo e +1 a cada tanto de nível total (até 6)
+
+# ==========================================================
+#  Equilíbrio de criaturas
+# ==========================================================
+
+criaturas:
+  limite-de-monstros: 45              # monstros por jogador em cada mundo (o padrão do Minecraft é 70; -1 = não mexer)
+  limite-de-animais: -1               # animais por jogador (-1 = não mexer)
+
+# ==========================================================
+#  Pacote de recursos do plugin (texturas do Mitrilo)
+#  O plugin gera plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip ao ligar.
+#  Ele vai JUNTO com qualquer outro pacote do servidor (não substitui o do server.properties).
+#  Sem o pacote, o minério aparece como bloco de cogumelo e os itens como ferro.
+# ==========================================================
+
+pacote-de-recursos:
+  ativado: true
+  url: ""                             # opção 1: suba o zip gerado (ex.: mc-packs.net) e cole o link direto aqui
+  porta: 0                            # opção 2: o plugin serve o zip nesta porta (precisa estar liberada no host)
+  endereco: ""                        # IP ou domínio público do servidor (para a opção 2)
+  obrigatorio: false                  # true = quem recusar o pacote não entra
+
+# ==========================================================
 #  Doma (companheiros e Altar do Domador)
 # ==========================================================
 

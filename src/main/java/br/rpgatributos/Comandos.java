@@ -287,6 +287,22 @@ public final class Comandos implements TabExecutor {
                     /rpgadmin portaltransbordar | portalfechar | portalsortear  (o portal mais perto)
                     /rpgadmin obelisco  (olhando para obsidiana chorona)
                     /rpgadmin torre <andar>  (sobe sozinho a partir do andar)
+                    /rpgadmin proficiencia <jogador> <arma> <nível 1-20>  (proficiência de arma dos combos)
+                    /rpgadmin vigor [jogador]  (enche o vigor)
+                    /rpgadmin gancho [jogador]  (dá um Gancho de Escalada)
+                    /rpgadmin criaturas  (quantas criaturas há em cada mundo e onde)
+                    /rpgadmin limparcriaturas  (remove sobras de eventos e monstros presos)
+                    /rpgadmin santuariodivino | circulo | mesarunica  (olhando para quartzo entalhado, ametista ou tufo entalhado)
+                    /rpgadmin devocao <jogador> <quantidade>  (soma devoção ao deus que ele segue)
+                    /rpgadmin pedrafilosofal  (dá uma Pedra Filosofal)
+                    /rpgadmin runa <runa>  (grava a runa no item da sua mão, sem custo)
+                    /rpgadmin mitrilo [minerio|bruto|lingote] [qtd]  (minério no bloco que você olha, ou os itens)
+                    /rpgadmin mapatesouro [comum|raro|lendario]
+                    /rpgadmin sitio  (um sítio de arqueologia à sua frente)
+                    /rpgadmin reliquia <relíquia>
+                    /rpgadmin cronista  (coloca o Cronista onde você está)
+                    /rpgadmin capitulo <jogador> <0-8>  (capítulo da campanha)
+                    /rpgadmin pacote  (onde está o pacote de recursos e como enviar)
                     /rpgadmin reload""", NamedTextColor.YELLOW));
             return;
         }
@@ -316,6 +332,9 @@ public final class Comandos implements TabExecutor {
             case "elite", "ninho", "horda", "chefemundial", "idademundo" -> { adminPerigo(sender, sub, args); return; }
             case "estacao", "festival", "clima", "ceu", "maldicao" -> { adminMundo(sender, sub, args); return; }
             case "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre" -> { adminFaseC(sender, sub, args); return; }
+            case "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas" -> { adminCombos(sender, sub, args); return; }
+            case "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa" -> { adminFe(sender, sub, args); return; }
+            case "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote" -> { adminExploracao(sender, sub, args); return; }
             case "guerra" -> {
                 if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
                     String erro = plugin.reinos().guerraAgora(args[2], args[3]);
@@ -634,6 +653,139 @@ public final class Comandos implements TabExecutor {
             }
             default -> { }
         }
+    }
+
+    private void adminExploracao(CommandSender sender, String sub, String[] args) {
+        if (sub.equals("pacote")) {
+            var pac = plugin.pacote();
+            if (pac.arquivo() == null) { erro(sender, "O pacote de recursos está desligado (pacote-de-recursos.ativado)."); return; }
+            ok(sender, "Pacote: " + pac.arquivo().getPath());
+            ok(sender, "SHA-1: " + pac.sha1());
+            String url = pac.url();
+            if (url != null) ok(sender, "Enviado aos jogadores por: " + url);
+            else erro(sender, "Ainda não é enviado: ponha um link em pacote-de-recursos.url, ou use porta + endereco no config.");
+            return;
+        }
+        if (sub.equals("capitulo")) {
+            Player alvo = args.length >= 2 ? Bukkit.getPlayerExact(args[1]) : null;
+            if (alvo == null || args.length < 3) { erro(sender, "Use: /rpgadmin capitulo <jogador> <0-8>"); return; }
+            plugin.cronista().definir(alvo, quantidade(args, 2, 0));
+            ok(sender, "Capítulo de " + alvo.getName() + ": " + (plugin.cronista().capitulo(alvo) + 1) + ".");
+            return;
+        }
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        switch (sub) {
+            case "mitrilo" -> {
+                String o = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "minerio";
+                switch (o) {
+                    case "bruto" -> p.getInventory().addItem(br.rpgatributos.exploracao.Mitrilo.bruto(quantidade(args, 2, 4)));
+                    case "lingote" -> p.getInventory().addItem(br.rpgatributos.exploracao.Mitrilo.lingote(quantidade(args, 2, 4)));
+                    default -> {
+                        if (!plugin.mitrilo().colocar(p.getTargetBlockExact(6))) { erro(sender, "Olhe para um bloco sólido (até 6 blocos)."); return; }
+                    }
+                }
+                ok(sender, "Feito.");
+            }
+            case "mapatesouro" -> {
+                var t = br.rpgatributos.exploracao.MapasDoTesouro.Tipo.porId(args.length >= 2 ? args[1] : "comum");
+                if (t == null) { erro(sender, "Use: /rpgadmin mapatesouro [comum|raro|lendario]"); return; }
+                p.getInventory().addItem(plugin.mapas().criar(t, p.getLocation()));
+                ok(sender, "Mapa do Tesouro entregue.");
+            }
+            case "sitio" -> {
+                if (plugin.arqueologia().construirAdmin(p)) ok(sender, "Sítio de arqueologia criado à sua frente.");
+                else erro(sender, "O chão à frente precisa ser areia, cascalho ou terra.");
+            }
+            case "reliquia" -> {
+                var r = args.length >= 2 ? br.rpgatributos.exploracao.Reliquia.porId(args[1]) : null;
+                p.getInventory().addItem(r == null ? plugin.arqueologia().reliquiaAleatoria() : br.rpgatributos.exploracao.Arqueologia.criar(r));
+                ok(sender, "Relíquia entregue (pegue-a do chão para entrar na coleção, ou jogue e pegue de novo).");
+            }
+            case "cronista" -> {
+                plugin.cronista().colocar(p.getLocation());
+                ok(sender, "O Cronista chegou.");
+            }
+            default -> { }
+        }
+    }
+
+    private void adminFe(CommandSender sender, String sub, String[] args) {
+        if (sub.equals("devocao")) {
+            Player alvo = args.length >= 2 ? Bukkit.getPlayerExact(args[1]) : null;
+            if (alvo == null || args.length < 3) { erro(sender, "Use: /rpgadmin devocao <jogador> <quantidade>"); return; }
+            if (plugin.deuses().deus(alvo) == null) { erro(sender, alvo.getName() + " não segue nenhum deus."); return; }
+            plugin.deuses().darDevocao(alvo, quantidade(args, 2, 100));
+            ok(sender, "Devoção somada. Fé de " + alvo.getName() + ": " + plugin.deuses().nivel(alvo) + ".");
+            return;
+        }
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        switch (sub) {
+            case "pedrafilosofal" -> {
+                p.getInventory().addItem(br.rpgatributos.fe.Transmutacao.pedraFilosofal());
+                ok(sender, "Pedra Filosofal entregue.");
+            }
+            case "runa" -> {
+                br.rpgatributos.fe.Runa r = args.length >= 2 ? br.rpgatributos.fe.Runa.porId(args[1]) : null;
+                ItemStack mao = p.getInventory().getItemInMainHand();
+                if (r == null) { erro(sender, "Use: /rpgadmin runa <salto|protecao|visao|impeto|explosao|gelo|tempestade|vampirica|fusao|eco>"); return; }
+                if (mao.isEmpty() || !r.serve(mao.getType())) { erro(sender, "Segure uma peça onde a " + r.nome() + " vai."); return; }
+                mao.editMeta(m -> {
+                    m.getPersistentDataContainer().set(br.rpgatributos.fe.Runas.K_RUNA, org.bukkit.persistence.PersistentDataType.STRING, r.id());
+                    plugin.runas().decorar(m);
+                });
+                ok(sender, r.nome() + " gravada.");
+            }
+            default -> {
+                Block b = p.getTargetBlockExact(6);
+                Material precisa = switch (sub) {
+                    case "santuariodivino" -> Material.CHISELED_QUARTZ_BLOCK;
+                    case "circulo" -> Material.AMETHYST_BLOCK;
+                    default -> Material.CHISELED_TUFF;
+                };
+                if (b == null || b.getType() != precisa) { erro(sender, "Olhe para " + precisa.name().toLowerCase() + " (até 6 blocos)."); return; }
+                if (plugin.ehEstacao(b)) { erro(sender, "Esse bloco já é uma estação."); return; }
+                switch (sub) {
+                    case "santuariodivino" -> plugin.santuariosDivinos().criar(b, p);
+                    case "circulo" -> plugin.transmutacao().criar(b, p);
+                    default -> plugin.mesasRunicas().criar(b, p);
+                }
+                ok(sender, "Estação criada.");
+            }
+        }
+    }
+
+    private void adminCombos(CommandSender sender, String sub, String[] args) {
+        if (sub.equals("criaturas")) {
+            plugin.controle().relatorio(sender);
+            return;
+        }
+        if (sub.equals("limparcriaturas")) {
+            ok(sender, plugin.controle().limpar() + " criatura(s) removida(s) (sobras de eventos e monstros que nunca sumiam).");
+            return;
+        }
+        if (sub.equals("gancho")) {
+            Player alvo = args.length >= 2 ? Bukkit.getPlayerExact(args[1]) : sender instanceof Player p ? p : null;
+            if (alvo == null) { erro(sender, "Use: /rpgadmin gancho [jogador]"); return; }
+            alvo.getInventory().addItem(br.rpgatributos.combate.Mobilidade.gancho()).values()
+                    .forEach(s -> alvo.getWorld().dropItemNaturally(alvo.getLocation(), s));
+            ok(sender, "Gancho de Escalada entregue.");
+            return;
+        }
+        if (sub.equals("vigor")) {
+            Player alvo = args.length >= 2 ? Bukkit.getPlayerExact(args[1]) : sender instanceof Player p ? p : null;
+            if (alvo == null) { erro(sender, "Use: /rpgadmin vigor [jogador]"); return; }
+            plugin.combos().darVigor(alvo, 100000);
+            ok(sender, "Vigor cheio.");
+            return;
+        }
+        Player alvo = args.length >= 2 ? Bukkit.getPlayerExact(args[1]) : null;
+        br.rpgatributos.combo.TipoArma t = args.length >= 3 ? br.rpgatributos.combo.TipoArma.porId(args[2]) : null;
+        if (alvo == null || t == null || args.length < 4) {
+            erro(sender, "Use: /rpgadmin proficiencia <jogador> <espada|machado|lanca|tridente|maca|arco> <1-20>");
+            return;
+        }
+        plugin.combos().definirNivel(alvo, t, quantidade(args, 3, 1));
+        ok(sender, t.nome() + " de " + alvo.getName() + " no nível " + plugin.combos().nivel(alvo, t) + ".");
     }
 
     private void adminFaseC(CommandSender sender, String sub, String[] args) {
@@ -1169,7 +1321,17 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "reload"));
+                } else if (args.length == 2 && sub.equals("reliquia")) {
+                    for (br.rpgatributos.exploracao.Reliquia r : br.rpgatributos.exploracao.Reliquia.values()) op.add(r.id());
+                } else if (args.length == 2 && sub.equals("mapatesouro")) {
+                    op.addAll(List.of("comum", "raro", "lendario"));
+                } else if (args.length == 2 && sub.equals("mitrilo")) {
+                    op.addAll(List.of("minerio", "bruto", "lingote"));
+                } else if (args.length == 2 && sub.equals("runa")) {
+                    for (br.rpgatributos.fe.Runa r : br.rpgatributos.fe.Runa.values()) op.add(r.id());
+                } else if (args.length == 3 && sub.equals("proficiencia")) {
+                    for (br.rpgatributos.combo.TipoArma t : br.rpgatributos.combo.TipoArma.values()) op.add(t.id());
                 } else if (args.length == 2 && sub.equals("portal")) {
                     for (Dificuldade d : Dificuldade.values()) op.add(d.id());
                 } else if (args.length == 2 && sub.equals("forjar")) {
@@ -1243,7 +1405,7 @@ public final class Comandos implements TabExecutor {
                             "tesouros", "especies_peixe", "criaturas_marinhas", "gema_perfeita", "alquimias", "elixires", "acessorios"));
                 } else if (args.length == 2 && !List.of("reload", "infusor", "forjaferreiro", "altar", "cozinha", "reciclagem", "adubo",
                         "marco", "ignorar", "altardomador", "portalmasmorra", "fecharmasmorras", "santuario", "prova",
-                        "pedraviagem", "locais", "bancadaalquimica", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre").contains(sub)) {
+                        "pedraviagem", "locais", "bancadaalquimica", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote").contains(sub)) {
                     return null;
                 } else if (args.length == 3 && List.of("set", "addxp", "reset").contains(sub)) {
                     for (Skill s : Skill.values()) op.add(s.id());

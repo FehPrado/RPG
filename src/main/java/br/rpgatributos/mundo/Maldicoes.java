@@ -152,6 +152,7 @@ public final class Maldicoes implements Listener {
             x.customName(Component.text("🐺 Lobisomem", NamedTextColor.GOLD, TextDecoration.BOLD));
             x.setCustomNameVisible(true);
             x.getPersistentDataContainer().set(CHAVE_MOB, PersistentDataType.STRING, Maldicao.LICANTROPIA.name());
+            x.setPersistent(false); // lobo não some sozinho: sem isso ficaria no mundo para sempre
         });
         criaturas.add(w.getUniqueId());
         l.getWorld().playSound(l, Sound.ENTITY_WOLF_GROWL, 1.5f, 0.5f);

@@ -209,6 +209,7 @@ public final class Hordas {
         LivingEntity le = (LivingEntity) e;
         le.getPersistentDataContainer().set(kHorda, PersistentDataType.STRING, h.colonia.dono().toString());
         le.setRemoveWhenFarAway(false);
+        le.setPersistent(false); // não fica gravada no mundo se o chunk descarregar
         plugin.perigo().envelhecer(le);
         if (le instanceof Zombie z) {
             z.setCanBreakDoors(false);

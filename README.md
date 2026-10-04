@@ -15,9 +15,12 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **pesca** com peixes raros, tesouros e criaturas marinhas, e **alquimia** com elixires, **gemas** engastadas nos itens forjados e **acessórios** (anéis, amuletos, cintos, lanterna de bolso...);
 - **guarda-roupa**: muda a aparência da armadura sem tirá-la;
 - **portais** que se abrem pelo mundo e **transbordam** monstros se ninguém os fechar, a classe única **Soberano das Sombras** e a **Torre Infinita** com ranking semanal;
+- **combos de arma**: 3 cliques com a arma na mão soltam golpes (42 no total), com Vigor e proficiência por tipo de arma;
+- **fé e mistério**: seis deuses com santuários, oferendas e milagres, constelações observadas pela luneta, transmutação alquímica e runas gravadas nos equipamentos;
+- **exploração**: Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
 - **títulos** e **missões de aldeões**.
 
-Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não precisa de mod nem resource pack.
+Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não precisa de mod. O plugin gera um **pacote de recursos opcional** só para as texturas do mitrilo.
 
 **Guias em HTML:** [docs/jogadores.html](docs/jogadores.html) (tudo para os jogadores) e [docs/admin.html](docs/admin.html) (instalação, configuração, comandos de admin e testes).
 
@@ -52,7 +55,7 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 
 ## Guia do Aventureiro
 
-Na primeira vez que entra no servidor, o jogador recebe um livro de 58 páginas que explica tudo. `/guia` dá outro.
+Na primeira vez que entra no servidor, o jogador recebe um livro de 64 páginas que explica tudo. `/guia` dá outro.
 
 ## Forja do Ferreiro
 
@@ -498,6 +501,62 @@ As portas abrem no meio de cada parede (3 de largura, 4 de altura, a partir do c
 - **Morrer na Torre não perde nada:** a subida só acaba. `/torre sair` sai a qualquer hora.
 - **Ranking** do andar mais alto: **da semana** (o campeão é anunciado quando a semana vira) e **de todos os tempos** (`/torre ranking`).
 
+## Combos de arma
+
+Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direito, `E` = clique esquerdo). Cada clique tem até 0,9 s para o próximo; a barra de ação mostra o progresso (`D · E · ?`).
+- **Espada, machado, lança, tridente e maça** começam com o **direito** (o esquerdo continua sendo o ataque normal): `D D D`, `D E D`, `D D E` e `D E E`.
+- **Arco e besta** começam com o **esquerdo**, porque o direito puxa a flecha: `E E E`, `E D E`, `E E D` e `E D D`.
+- Agachado não solta combo (agachar continua sendo das habilidades de classe). Clicar com o direito em baú, porta ou estação não conta. Um clique só ainda levanta o escudo.
+- **Vigor:** cada golpe gasta vigor (barra amarela no topo). Ele volta sozinho, bem mais rápido fora de luta. O máximo é 100 + 0,5 por nível de Combate. Cada golpe também tem uma recarga curta.
+- **Proficiência:** cada tipo de arma tem um nível de 1 a 20, que sobe acertando e derrotando inimigos com ela (mobs de spawner dão menos). Cada nível dá +2% de dano nos golpes e libera golpes novos.
+- `/combos` abre o menu: escolha qual golpe fica em cada uma das 4 sequências (clique na sequência, depois no golpe).
+- O dano sai como golpe seu, então passivos de classe, efeitos da forja, raridade, refino e reações elementais também valem.
+
+| Arma | Golpes (nível de proficiência) |
+|---|---|
+| ⚔ Espada | Estocada (1), Corte Giratório (3), Lâmina Cruzada (5, sangra), Execução (8, x4 em quem está com pouca vida), Tempestade de Lâminas (12), Passo Fantasma (16), Julgamento da Lâmina (20) |
+| ✠ Machado | Salto Esmagador (1), Arremesso do Machado (3, volta), Rachar Escudo (5, +25% de dano no alvo), Fúria do Lenhador (8), Redemoinho de Aço (12), Decapitar (16), Cisão da Terra (20) |
+| ↟ Lança | Estocada Longa (1), Varredura (3), Arremesso da Lança (5), Salto do Dragão (8), Muralha de Lanças (12), Perfuração (16), Lança Celeste (20) |
+| ♆ Tridente | Onda (1), Puxão (3), Redemoinho (5), Tridente do Trovão (8), Maré Alta (12, ajuda a party), Mergulho (16), Fúria de Poseidon (20) |
+| ⚒ Maça | Abalo Sísmico (1), Martelo Ascendente (3), Atordoar (5), Quebra-Armadura (8), Salto Meteoro (12, mais dano quanto maior a queda), Eco do Impacto (16), Martelo dos Deuses (20) |
+| ➹ Arco e besta | Tiro Triplo (1), Flecha Perfurante (3), Salto Tático (5), Flecha Explosiva (8), Saraivada (12), Flecha Sombria (16, persegue o inimigo), Tiro Celestial (20) |
+
+**Golpes de lenda:** cada uma das 12 lendas tem um golpe só dela, que aparece no `/combos` e vai em qualquer sequência. Lenda que é arma precisa estar na mão; lenda de armadura ou a picareta só precisa estar com você.
+
+| Lenda | Golpe |
+|---|---|
+| Lâmina do Exorcista | Purificação Sagrada: explosão de luz, dano enorme em mortos-vivos e cura os aliados |
+| Presa da Tecelã | Teia da Rainha: cone de teias que prende e envenena |
+| Machado do Lenhador Eterno | Queda da Floresta: um tronco gigante cai numa linha de 9 blocos |
+| Picareta do Abismo | Colapso do Abismo: o chão afunda e prende os inimigos em volta |
+| Arco da Tempestade | Tempestade de Raios: 6 raios onde você olha |
+| Coroa do Fim | Vazio do Fim: puxa os inimigos para um ponto e explode |
+| Égide do Guardião | Égide: Absorção IV por 6 s e quem te bate leva metade do dano de volta |
+| Botas do Andarilho | Passo do Andarilho: avança 12 blocos atravessando inimigos e ganha Velocidade III |
+| Lâmina do Carrasco | Sentença: executa quem está com menos de 25% de vida (chefes levam dano x5) |
+| Martelo do Forjador Lendário | Bigorna Celeste: uma bigorna de luz cai no alvo e atordoa |
+| Lâmina do Arquimago | Lâmina Arcana Suprema: 5 projéteis que perseguem os inimigos e devolvem mana |
+| Elmo do Senhor das Feras | Chamado da Alcateia: 3 lobos espectrais lutam por 20 s |
+
+**Golpes de classe:** cada classe avançada tem um golpe para a arma dela, que vale enquanto ela (ou uma lendária que nasce dela) estiver ativa: Berserker — Fúria Sangrenta (machado), Cavaleiro — Carga do Cavaleiro (lança, o dobro montado), Paladino — Martelo Sagrado (maça), Atirador de Elite — Tiro na Cabeça (arco), Caçador — Flechas da Matilha (arco, os companheiros atacam o alvo), Elementalista — Prisma Elemental (tridente), Feiticeiro de Batalha — Lâmina Rúnica (espada), Assassino — Mil Cortes (espada), Mestre Forjador — Martelo Incandescente (maça), Mestre das Feras — Investida da Fera (lança).
+
+**Finalizador em cadeia:** acertar **3 golpes de combo diferentes em 10 s** carrega o finalizador. O próximo combo (até 8 s depois) sai com +50% de dano e uma explosão em volta.
+
+**Lança:** o clique esquerdo da lança é a estocada dela, que não é um balanço normal do braço; o plugin percebe a estocada pela força do ataque e conta como `E` normalmente.
+
+## Mobilidade e mochila
+
+- **Esquiva:** dois toques rápidos em **A**, **D** ou **S** fazem um salto rápido para o lado ou para trás, com um instante de invulnerabilidade. Gasta 15 de vigor e tem 1,2 s de recarga. Não funciona agachado, montado ou voando.
+- **Gancho de Escalada:** bancada com **1 vara de pescar + 1 gancho de armadilha + 3 lingotes de ferro**. Lance num bloco e recolha: você é puxado até lá (até 40 blocos), sem dano de queda. Num monstro, puxa ele até você; num chefe ou jogador, puxa você até ele.
+- **Capa Planadora:** acessório de bolso feito na Bancada Alquímica (4 membranas de phantom, 6 penas, 2 couros). No ar, aperte **pular** para planar: você desce devagar para onde olha e não leva dano de queda. Pule de novo ou agache para soltar.
+- **Mochila** (`/mochila`): um baú pessoal que começa com 1 fileira e ganha mais uma a cada 150 níveis somados, até 6 (54 espaços). Fica salva no jogador e não cai quando ele morre.
+
+## Equilíbrio de criaturas
+
+- O limite de monstros por jogador em cada mundo é 45 (o padrão do Minecraft é 70). Muda em `criaturas.limite-de-monstros` (−1 = não mexer).
+- As criaturas de evento do plugin (hordas, lobisomens, lacaios de Elites e de chefes, guardiões de ninho, monstros de portal) **não ficam mais gravadas no mundo**: se o chunk descarrega, elas somem. Sobras de versões antigas são removidas sozinhas quando o chunk carrega.
+- O modificador **Invocador** dos Elites chama no máximo 4 lacaios vivos por vez, e um portal transbordando não solta onda nova com 30 monstros dele ainda vivos.
+- `/rpgadmin criaturas` mostra quantas criaturas há em cada mundo e os chunks mais cheios; `/rpgadmin limparcriaturas` remove as sobras e os monstros sem nome que nunca somem (pets, moradores, sombras, chefes e companheiros ficam).
 ## Classes
 
 **Santuário das Classes:** jogue **1 livro e pena** e **1 diamante** em cima de um **púlpito**. Clique nele, ou use `/classe` em qualquer lugar (lá dá para ver tudo e aceitar caminhos).
@@ -600,6 +659,103 @@ Na primeira vez que liga, o plugin escolhe **14 lugares** pelo mundo (2 de cada 
 
 A oitava classe lendária, **☾ Soberano das Sombras**, não tem Local Oculto: ela desperta num Portal Pesadelo (veja [Portais](#portais-soberano-das-sombras-e-torre-infinita)).
 
+## Fé e mistério
+
+### Deuses
+
+**Ritual:** jogue **1 maçã dourada** e **1 vela** em cima de um **bloco de quartzo entalhado**: ele vira o **Santuário dos Deuses**. Clique para escolher o seu deus (um por vez), rezar e pedir o milagre; `/deus` mostra a sua fé de qualquer lugar.
+- **Devoção:** jogue **oferendas** com Q em cima do Santuário (cada deus aceita coisas diferentes, listadas no menu), **reze** uma vez por dia (+15) e use os atributos do deus (o XP deles também conta).
+- **Fé 1 a 5** (100, 300, 700 e 1.500 de devoção): fortalece o passivo. Da **fé 2** em diante dá para pedir o **milagre** a cada 20 minutos (`/deus milagre`).
+- **Trocar de deus** (shift + clique) corta pela metade a devoção no deus que você deixou.
+- **Deus do reino:** o Rei torna o deus que ele segue o deus oficial; quem segue o deus oficial ganha +25% de devoção.
+
+| Deus | Passivo (cresce com a fé) | Milagre | Devoção também por |
+|---|---|---|---|
+| ⚒ Ferrum, Deus da Forja | +armadura e mineração mais rápida | Bênção da Bigorna: conserta o equipamento e Resistência II | Ferraria, Mineração |
+| ☘ Sylva, Deusa da Natureza | +vida máxima e cura aos poucos | Florescer: plantações perto amadurecem e a party se cura | Agricultura, Madeira, Doma |
+| ≈ Maris, Deusa do Mar | +fôlego e agilidade na água; Graça do golfinho na fé 3 | Maré Divina: chuva, Poder do conduíte e Graça do golfinho por 5 min | Pesca, Natação |
+| ⚔ Bellum, Deus da Guerra | +dano; +1 ❤ na fé 5 | Fúria de Bellum: Força II e Resistência para a party | Combate, Corrida |
+| ✦ Arcanus, Deus da Magia | +mana máxima e mana por segundo | Maré Arcana: mana cheia e +5 de mana/s por 60 s | Arcano, Alquimia |
+| ☠ Mortis, Deusa da Morte | roubo de vida; mortos-vivos te ignoram na fé 5 | Segunda Chance: a próxima morte em 10 min é evitada | derrotar mortos-vivos e chefes |
+
+### Astronomia
+
+À noite, com o céu aberto em cima de você, olhe para cima pela **luneta** por 5 segundos. Cada noite mostra uma das **12 constelações** (O Ferreiro, O Pescador, A Coruja, O Lobo, O Viajante, A Fênix, O Sábio, A Âncora, O Mago, A Coroa, A Serpente e O Gigante). Ela entra no seu diário (`/estrelas`) e dá uma **bênção até o amanhecer** (XP extra, Sorte, Visão noturna, Força, Velocidade, Regeneração, mana, devoção em dobro...). Uma observação por noite.
+
+### Transmutação
+
+**Ritual:** jogue **1 Mercúrio Vivo** e **1 lingote de ouro** em cima de um **bloco de ametista**: ele vira o **Círculo de Transmutação**.
+
+| Receita | Ingredientes | Resultado | Chance base |
+|---|---|---|---|
+| Cobre em Ferro | 8 lingotes de cobre + 1 Pó Arcano | 3 lingotes de ferro | 85% |
+| Ferro em Ouro | 8 lingotes de ferro + 1 Pó Arcano | 3 lingotes de ouro | 80% |
+| Redstone em Luz | 9 redstone + 1 Pó Arcano | 3 pós de pedra luminosa | 90% |
+| Lápis em Esmeralda | 8 lápis-lazúli + 1 Pó Arcano | 1 esmeralda | 75% |
+| Ouro em Diamante | 16 lingotes de ouro + 2 Mercúrio Vivo | 1 diamante | 60% |
+| Diamante em Netherite | 4 diamantes + 2 Mercúrio Vivo + 1 Cristal de Mana | 1 sucata de netherite | 45% |
+| Pedra Filosofal | 1 bloco de diamante + 4 Mercúrio Vivo + 4 Cristais de Mana + 1 Essência Primordial | Pedra Filosofal | 50% |
+
+A chance sobe com o nível de Alquimia, e a **Pedra Filosofal** no inventário dá +20% (em todas, menos nela mesma). Falhou: os ingredientes se perdem e, às vezes, a mistura explode.
+
+### Runas
+
+**Ritual:** jogue **4 fragmentos de ametista** e **1 bloco de lápis-lazúli** em cima de um **tufo entalhado**: ele vira a **Mesa Rúnica**. Escolha a peça (a da mão, capacete, peitoral, calça ou botas) e grave uma runa, pagando materiais e níveis de XP. Cada peça tem uma runa; gravar outra troca.
+
+| Runa | Vai em | Efeito |
+|---|---|---|
+| ᛖ Salto | botas | Pulo duplo (aperte pular de novo no ar) |
+| ᛉ Proteção | peitoral | Com menos de 30% de vida: Absorção II por 8 s (a cada 60 s) |
+| ᛟ Visão | capacete | Visão noturna em lugares escuros |
+| ᚱ Ímpeto | calça | +8% de velocidade |
+| ᚦ Explosão | espada, machado, lança, maça | 8% de chance de explodir no alvo |
+| ᛁ Gelo | espada, machado, lança, maça | 15% de chance de congelar por 2 s |
+| ᛋ Tempestade | armas, arco e besta | 6% de chance de um raio no alvo |
+| ᚹ Vampírica | espada, machado, lança, maça | Rouba 8% do dano como vida |
+| ᚲ Fusão | picareta, machado, pá | Minérios, areia e pedra já saem fundidos |
+| ᛇ Eco | arco e besta | Cada flecha dispara uma segunda, com metade do dano |
+
+## Exploração
+
+### Enciclopédia do Mundo
+
+`/enciclopedia` registra sozinha cada **bioma** em que você pisa, cada **estrutura** em que entra (vila, templo, fortaleza, cidade antiga...) e cada **item** que pega pela primeira vez, além das relíquias. Cada bioma novo soma **+0,2% de XP** em todos os atributos, até **+15%**.
+
+### Mitrilo
+
+Um minério novo que só aparece **no fundo do mundo** (Y -58 a -24), trocando ardósia profunda e tufo. Sai em veios pequenos e brilha de leve.
+- Só quebra com **picareta de diamante ou netherita**, devagar, e dá **Mitrilo Bruto** e muito XP de Mineração.
+- **Mitrilo Bruto** no forno (ou alto-forno) vira **Lingote de Mitrilo**.
+- Na **mesa de ferraria**: **molde de melhoria de netherita + peça de netherita + lingote de mitrilo** = peça **✦ Mitrilo**: 50% mais durabilidade e um bônus extra (arma: +1,5 de dano; armadura: +1 de armadura e +1 de resistência; ferramenta: +20% de velocidade). Funciona em itens forjados também.
+
+### Mapas do Tesouro
+
+Mapas de verdade, com um **X vermelho** no lugar do tesouro. Caem de **elites** (4%), da **pesca** (raro), dos baús de **chefes e masmorras** (15%), dos **sítios de arqueologia** e do **Cronista**. Há três tipos: **comum**, **raro** e **lendário**.
+- Chegue a 14 blocos do X com o mapa no inventário: o tesouro é desenterrado, mas **guardiões** saem da terra.
+- O baú tem itens do nível do mapa, esmeraldas, às vezes uma relíquia, e o lendário traz mitrilo.
+
+### Arqueologia e relíquias
+
+Pelo mundo aparecem **sítios de arqueologia**: pedras em pé com **areia e cascalho suspeitos** em volta. Use o **pincel** neles: além dos cacos de cerâmica, saem **12 relíquias** (Moeda do Rei Caído, Lâmina Partida, Tábua de Ferrum, Estatueta de Sylva, Concha de Maris, Estandarte de Bellum, Pergaminho Arcano, Máscara de Mortis, Mapa das Estrelas, Chave da Torre, Olho do Arauto e Coração de Sombra). Cada uma tem a sua história e entra na coleção da Enciclopédia ao ser pega.
+
+### As Crônicas do Mundo (campanha)
+
+O **Cronista** é um aldeão bibliotecário que o admin coloca no spawn (`/rpgadmin cronista`). Clique nele (ou use `/cronista`) para ler o livro do seu capítulo; quando cumprir o pedido, volte até ele e clique em **entregar**.
+
+| Capítulo | Pedido | Recompensa |
+|---|---|---|
+| 1. O Aventureiro | Nível total 50 | 16 esmeraldas e um mapa do tesouro comum |
+| 2. O Fogo da Forja | Forjar 5 itens | 4 Fragmentos de Forja |
+| 3. Ecos Arcanos | Lançar 100 magias | Pó Arcano e Cristais de Mana |
+| 4. Os Deuses Esquecidos | Fé 2 com um deus | Uma relíquia e 10 esmeraldas |
+| 5. Sob a Terra | Vencer 3 masmorras | Pedra de Proteção |
+| 6. O Céu Fala | Observar 4 constelações | Mapa do tesouro raro |
+| 7. As Ruínas Contam | 6 relíquias diferentes | Essência Primordial |
+| 8. O Selo | Romper o selo de um Local Oculto | 2 lingotes de mitrilo e um mapa lendário |
+
+### Pacote de recursos do servidor
+
+O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip`) com a textura do minério de mitrilo e dos itens de mitrilo. Ele é **opcional**: sem ele tudo funciona, só que o minério parece um bloco de cogumelo e os itens parecem ferro. O pacote **se soma** ao pacote do servidor (não o troca). Para enviar, ponha um link em `pacote-de-recursos.url` ou ligue o servidor embutido (`porta` + `endereco`); veja `/rpgadmin pacote`.
 ## Pesca
 
 Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
@@ -657,7 +813,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | Anéis | Vigor (+2 ❤), Força (+1 dano), Vento (+5% velocidade), Marés (respiração aquática), Brasas (resistência ao fogo), Minerador (Pressa), Fortuna (+sorte), Sábio (+5% XP em tudo) |
 | Amuletos | Mana (+40 mana, +1/s), Guardião (+2 armadura, +1 resistência), Vida (Regeneração), **Fênix** (escapa da morte a cada 10 minutos) |
 | Cintos | Atleta (pulo e queda segura), Andarilho (sobe blocos sem pular), Titã (+2 ❤ e resistência a repulsão) |
-| Bolso | **Lanterna de Bolso** (ilumina em volta, sem colocar blocos), Ímã (puxa itens do chão), Relógio (agachado: hora, coordenadas e bioma) |
+| Bolso | **Lanterna de Bolso** (ilumina em volta, sem colocar blocos), Ímã (puxa itens do chão), Relógio (agachado: hora, coordenadas e bioma), **Capa Planadora** (no ar, pule para planar) |
 
 ## Guarda-roupa
 
@@ -668,7 +824,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 51 títulos com requisitos, por exemplo Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 70 títulos com requisitos (duas páginas), por exemplo Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -708,6 +864,12 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/portais` | todos | Portais abertos: onde estão e quanto falta para transbordarem |
 | `/sombras` | Soberano | O exército das sombras |
 | `/torre [ranking\|sair]` | todos | Torre Infinita: recordes, ranking e sair da subida |
+| `/combos [arma]` | todos | Combos de arma: proficiência e golpes de cada sequência |
+| `/mochila` | todos | Sua mochila (cresce com o nível total) |
+| `/deus [milagre]` | todos | Sua fé: deus, devoção, oração e milagre |
+| `/estrelas` | todos | Diário das Estrelas (constelações observadas e a desta noite) |
+| `/enciclopedia` | todos | Enciclopédia do Mundo (biomas, estruturas, itens e relíquias) |
+| `/cronista [entregar]` | todos | Sua campanha: lê o capítulo e entrega perto do Cronista |
 | `/territorio` | todos | Menu do território (`mapa`, `bordas`, `info`, `reivindicar`, `liberar`, `adicionar`, `remover`, `abandonar confirmar`) |
 | `/cosmeticos`, `/chapeu`, `/tag` | todos | Item na cabeça e tag personalizada |
 | `/guia` | todos | Livro Guia do Aventureiro |
@@ -784,15 +946,31 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin portalfechar` | Apaga o portal mais perto (sem prêmio) |
 | `/rpgadmin obelisco` | Cria o Obelisco da Torre olhando para uma obsidiana chorona |
 | `/rpgadmin torre <andar>` | Sobe a Torre sozinho a partir de um andar |
+| `/rpgadmin proficiencia <jogador> <arma> <1-20>` | Define a proficiência de uma arma (combos) |
+| `/rpgadmin vigor [jogador]` | Enche o vigor |
+| `/rpgadmin gancho [jogador]` | Dá um Gancho de Escalada |
+| `/rpgadmin criaturas` | Quantas criaturas há em cada mundo e os chunks mais cheios |
+| `/rpgadmin limparcriaturas` | Remove sobras de eventos e monstros que nunca somem |
+| `/rpgadmin santuariodivino`, `circulo`, `mesarunica` | Cria o Santuário dos Deuses, o Círculo de Transmutação ou a Mesa Rúnica olhando para o bloco |
+| `/rpgadmin devocao <jogador> <qtd>` | Soma devoção ao deus que o jogador segue |
+| `/rpgadmin pedrafilosofal` | Dá uma Pedra Filosofal |
+| `/rpgadmin runa <runa>` | Grava a runa no item da sua mão, sem custo |
+| `/rpgadmin mitrilo [minerio\|bruto\|lingote] [qtd]` | Põe um minério de mitrilo no bloco que você olha, ou dá os itens |
+| `/rpgadmin mapatesouro [comum\|raro\|lendario]` | Dá um mapa do tesouro |
+| `/rpgadmin sitio` | Cria um sítio de arqueologia à sua frente |
+| `/rpgadmin reliquia [relíquia]` | Dá uma relíquia |
+| `/rpgadmin cronista` | Coloca o Cronista onde você está |
+| `/rpgadmin capitulo <jogador> <0-8>` | Define o capítulo da campanha |
+| `/rpgadmin pacote` | Mostra onde está o pacote de recursos e se ele está sendo enviado |
 | `/rpgadmin reload` | Recarrega o config |
 
-Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outros`, `rpg.chapeu`, `rpg.tag`, `rpg.tag.cores`, `rpg.forja`, `rpg.arcano`, `rpg.guia`, `rpg.titulos`, `rpg.missoes`, `rpg.receitas`, `rpg.party`, `rpg.territorio`, `rpg.pets`, `rpg.masmorra`, `rpg.classe`, `rpg.lendas`, `rpg.locais`, `rpg.pesca`, `rpg.alquimia`, `rpg.colonia`, `rpg.reino`, `rpg.bestiario`, `rpg.calendario`, `rpg.portais`, `rpg.torre`. A permissão `rpg.admin` é só para OP.
+Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outros`, `rpg.chapeu`, `rpg.tag`, `rpg.tag.cores`, `rpg.forja`, `rpg.arcano`, `rpg.guia`, `rpg.titulos`, `rpg.missoes`, `rpg.receitas`, `rpg.party`, `rpg.territorio`, `rpg.pets`, `rpg.masmorra`, `rpg.classe`, `rpg.lendas`, `rpg.locais`, `rpg.pesca`, `rpg.alquimia`, `rpg.colonia`, `rpg.reino`, `rpg.bestiario`, `rpg.calendario`, `rpg.portais`, `rpg.torre`, `rpg.combos`, `rpg.mochila`, `rpg.fe`, `rpg.exploracao`. A permissão `rpg.admin` é só para OP.
 
 ## Como gerar o .jar
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.14.1.jar`.
+3. O plugin fica em `target/RPGAtributos-2.18.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

@@ -26,6 +26,22 @@ import br.rpgatributos.mundo.Ceu;
 import br.rpgatributos.mundo.Estacoes;
 import br.rpgatributos.mundo.Maldicoes;
 import br.rpgatributos.mundo.Temperatura;
+import br.rpgatributos.combo.Combos;
+import br.rpgatributos.exploracao.Arqueologia;
+import br.rpgatributos.exploracao.Cronista;
+import br.rpgatributos.exploracao.Enciclopedia;
+import br.rpgatributos.exploracao.MapasDoTesouro;
+import br.rpgatributos.exploracao.Mitrilo;
+import br.rpgatributos.exploracao.PacoteRecursos;
+import br.rpgatributos.fe.Astronomia;
+import br.rpgatributos.fe.Deuses;
+import br.rpgatributos.fe.MesasRunicas;
+import br.rpgatributos.fe.Runas;
+import br.rpgatributos.fe.SantuariosDivinos;
+import br.rpgatributos.fe.Transmutacao;
+import br.rpgatributos.combate.Mobilidade;
+import br.rpgatributos.mochila.Mochila;
+import br.rpgatributos.perigo.Controle;
 import br.rpgatributos.portal.Portais;
 import br.rpgatributos.sombra.Sombras;
 import br.rpgatributos.torre.ObeliscoTorre;
@@ -131,6 +147,22 @@ public final class RPGAtributos extends JavaPlugin {
     private Sombras sombras;
     private Torre torre;
     private ObeliscoTorre obeliscos;
+    private Combos combos;
+    private Mobilidade mobilidade;
+    private Mochila mochila;
+    private Controle controle;
+    private Deuses deuses;
+    private SantuariosDivinos santuariosDivinos;
+    private Astronomia astronomia;
+    private Transmutacao transmutacao;
+    private Runas runas;
+    private MesasRunicas mesasRunicas;
+    private PacoteRecursos pacote;
+    private Mitrilo mitrilo;
+    private MapasDoTesouro mapas;
+    private Arqueologia arqueologia;
+    private Enciclopedia enciclopedia;
+    private Cronista cronista;
 
     private static RPGAtributos instancia;
 
@@ -211,15 +243,36 @@ public final class RPGAtributos extends JavaPlugin {
         torre = new Torre(this);
         torre.carregar();
         obeliscos = new ObeliscoTorre(this);
+        combos = new Combos(this);
+        mobilidade = new Mobilidade(this);
+        mochila = new Mochila(this);
+        controle = new Controle(this);
+        deuses = new Deuses(this);
+        deuses.carregar();
+        santuariosDivinos = new SantuariosDivinos(this);
+        astronomia = new Astronomia(this);
+        transmutacao = new Transmutacao(this);
+        runas = new Runas(this);
+        mesasRunicas = new MesasRunicas(this);
+        pacote = new PacoteRecursos(this);
+        mitrilo = new Mitrilo(this);
+        mapas = new MapasDoTesouro(this);
+        arqueologia = new Arqueologia(this);
+        enciclopedia = new Enciclopedia(this);
+        cronista = new Cronista(this);
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
                 chefes, eventos, mercadores, altares, new MateriaisListener(), missoes, agricultura, cozinha, reciclagem,
                 parties, menuParty, territorios, marcos, menusTerritorio, new ProtecaoListener(this),
                 companheiros, comportamento, altaresDomador, menusDomador, masmorras, portaisMasmorra,
                 classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
-                estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos);
+                estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista);
         locais.iniciar();
         masmorras.iniciar();
+        controle.aplicarLimites();
+        mobilidade.registrarReceita();
+        mitrilo.registrarReceitas();
+        pacote.iniciar();
         companheiros.carregar();
         agricultura.registrarReceitas();
 
@@ -239,6 +292,18 @@ public final class RPGAtributos extends JavaPlugin {
         if (cpo != null) cpo.setExecutor(portais);
         PluginCommand cso = getCommand("sombras");
         if (cso != null) cso.setExecutor(sombras);
+        PluginCommand cco = getCommand("combos");
+        if (cco != null) cco.setExecutor(combos);
+        PluginCommand cmo = getCommand("mochila");
+        if (cmo != null) cmo.setExecutor(mochila);
+        PluginCommand cde = getCommand("deus");
+        if (cde != null) cde.setExecutor(deuses);
+        PluginCommand ces = getCommand("estrelas");
+        if (ces != null) ces.setExecutor(astronomia);
+        PluginCommand cen = getCommand("enciclopedia");
+        if (cen != null) cen.setExecutor(enciclopedia);
+        PluginCommand ccr = getCommand("cronista");
+        if (ccr != null) ccr.setExecutor(cronista);
         PluginCommand cto = getCommand("torre");
         if (cto != null) {
             cto.setExecutor(torre);
@@ -324,6 +389,24 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, portais::tick, 5L, 5L);
         agenda.runTaskTimer(this, sombras::tick, 10L, 10L);
         agenda.runTaskTimer(this, torre::tick, 10L, 10L);
+        agenda.runTaskTimer(this, combos::tick, 10L, 10L);
+        agenda.runTaskTimer(this, combos::tickRapido, 1L, 1L);
+        agenda.runTaskTimer(this, mobilidade::tick, 1L, 1L);
+        agenda.runTaskTimer(this, controle::relatarLimpeza, 6000L, 6000L);
+        // Fase F: fé, céu, transmutação e runas.
+        santuariosDivinos.iniciar();
+        transmutacao.iniciar();
+        mesasRunicas.iniciar();
+        agenda.runTaskTimer(this, santuariosDivinos::tick, 5L, 5L);
+        agenda.runTaskTimer(this, transmutacao::tick, 5L, 5L);
+        agenda.runTaskTimer(this, mesasRunicas::tick, 5L, 5L);
+        agenda.runTaskTimer(this, deuses::tick, 20L, 20L);
+        agenda.runTaskTimer(this, astronomia::tick, 10L, 10L);
+        agenda.runTaskTimer(this, runas::tick, 2L, 2L);
+        // Fase G: mitrilo (brilho), mapas do tesouro e enciclopédia.
+        agenda.runTaskTimer(this, mitrilo::tick, 40L, 40L);
+        agenda.runTaskTimer(this, mapas::tick, 20L, 20L);
+        agenda.runTaskTimer(this, enciclopedia::tick, 40L, 40L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
         agenda.runTaskTimer(this, altaresDomador::tick, 5L, 5L);
@@ -366,6 +449,8 @@ public final class RPGAtributos extends JavaPlugin {
         if (arcano != null) arcano.parar();
         if (comportamento != null) comportamento.parar();
         if (companheiros != null) companheiros.desligar();
+        if (combos != null) combos.parar();
+        if (pacote != null) pacote.parar();
         if (sombras != null) sombras.recolherTodas();
         if (torre != null) torre.encerrarTodas();
         if (portais != null) portais.parar();
@@ -418,6 +503,7 @@ public final class RPGAtributos extends JavaPlugin {
     public void recarregar() {
         reloadConfig();
         settings = new Settings(getConfig());
+        if (controle != null) controle.aplicarLimites();
         for (Player p : getServer().getOnlinePlayers()) {
             bonus.aplicar(p);
             tags.garantir(p);
@@ -481,11 +567,28 @@ public final class RPGAtributos extends JavaPlugin {
     public Sombras sombras() { return sombras; }
     public Torre torre() { return torre; }
     public ObeliscoTorre obeliscos() { return obeliscos; }
+    public Combos combos() { return combos; }
+    public Mobilidade mobilidade() { return mobilidade; }
+    public Mochila mochila() { return mochila; }
+    public Controle controle() { return controle; }
+    public Deuses deuses() { return deuses; }
+    public SantuariosDivinos santuariosDivinos() { return santuariosDivinos; }
+    public Astronomia astronomia() { return astronomia; }
+    public Transmutacao transmutacao() { return transmutacao; }
+    public Runas runas() { return runas; }
+    public MesasRunicas mesasRunicas() { return mesasRunicas; }
+    public PacoteRecursos pacote() { return pacote; }
+    public Mitrilo mitrilo() { return mitrilo; }
+    public MapasDoTesouro mapas() { return mapas; }
+    public Arqueologia arqueologia() { return arqueologia; }
+    public Enciclopedia enciclopedia() { return enciclopedia; }
+    public Cronista cronista() { return cronista; }
 
     /** O bloco é alguma estação de ritual (Forja, Infusor, Altares, Cozinha, Reciclagem, Marco)? */
     public boolean ehEstacao(Block b) {
         return forjas.eh(b) || arcano.infusores().eh(b) || altares.eh(b) || cozinha.eh(b) || reciclagem.eh(b) || marcos.eh(b)
-                || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b) || alquimia.eh(b) || prefeituras.eh(b) || obeliscos.eh(b);
+                || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b) || alquimia.eh(b) || prefeituras.eh(b) || obeliscos.eh(b)
+                || santuariosDivinos.eh(b) || transmutacao.eh(b) || mesasRunicas.eh(b);
     }
 
     /**

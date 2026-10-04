@@ -63,7 +63,9 @@ public enum Acessorio {
     IMA_BOLSO("Ímã de Bolso", Tipo.BOLSO, "lodestone", 0xD8D8E8, "Puxa os itens do chão a até 6 blocos",
             List.of(), null, Especial.IMA),
     RELOGIO_BOLSO("Relógio de Bolso", Tipo.BOLSO, "clock", 0xFFC93C, "Agachado: mostra hora, coordenadas e bioma",
-            List.of(), null, Especial.RELOGIO);
+            List.of(), null, Especial.RELOGIO),
+    CAPA_PLANADORA("Capa Planadora", Tipo.BOLSO, "phantom_membrane", 0xA0C4FF, "No ar, aperte pular para planar (agache para soltar)",
+            List.of(), null, Especial.PLANADOR);
 
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "acessorio");
 
@@ -84,7 +86,7 @@ public enum Acessorio {
     }
 
     /** Algo que o plugin faz além de atributos e efeitos de poção. */
-    public enum Especial { NENHUM, MANA, XP, FENIX, LANTERNA, IMA, RELOGIO }
+    public enum Especial { NENHUM, MANA, XP, FENIX, LANTERNA, IMA, RELOGIO, PLANADOR }
 
     public record Mod(Attribute atributo, double valor, Operation operacao) {}
 
@@ -140,6 +142,7 @@ public enum Acessorio {
             m.lore(lore.stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             m.setEnchantmentGlintOverride(true);
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, id()); // visual próprio, se o pacote tiver
         });
         return i;
     }

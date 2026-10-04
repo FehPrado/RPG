@@ -29,6 +29,7 @@ public final class MateriaisListener implements Listener {
         if (i == null || i.isEmpty()) return false;
         return Raro.de(i) != null || Reagente.de(i) != null || Gema.de(i) != null || Acessorio.de(i) != null || Elixir.de(i) != null
                 || ItensMagicos.ehPergaminho(i) || ItensMagicos.ehTomo(i) || i.getPersistentDataContainer().has(LEMBRANCA)
+                || i.getPersistentDataContainer().has(br.rpgatributos.fe.Transmutacao.K_PEDRA)
                 || (i.getType() == org.bukkit.Material.BREEZE_ROD && i.getPersistentDataContainer().has(FORJADO));
     }
 

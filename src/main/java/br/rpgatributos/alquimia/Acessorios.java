@@ -98,7 +98,7 @@ public final class Acessorios implements Listener {
         if (bytes != null) {
             ItemStack[] lidos = ItemStack.deserializeItemsFromBytes(bytes);
             for (int i = 0; i < lidos.length && i < r.length; i++) {
-                r[i] = lidos[i] == null || lidos[i].isEmpty() ? null : lidos[i];
+                r[i] = lidos[i] == null || lidos[i].isEmpty() ? null : br.rpgatributos.exploracao.PacoteRecursos.atualizar(lidos[i]);
             }
         }
         return r;
@@ -122,7 +122,7 @@ public final class Acessorios implements Listener {
         carregar(p, itens(p));
     }
 
-    private boolean tem(Player p, Acessorio.Especial e) {
+    public boolean tem(Player p, Acessorio.Especial e) {
         Acessorio[] a = equipados.get(p.getUniqueId());
         if (a == null) return false;
         for (Acessorio x : a) if (x != null && x.especial() == e) return true;

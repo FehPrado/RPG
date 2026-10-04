@@ -53,6 +53,23 @@ public final class Settings {
     public final int[] porPesos;
     public final double torVidaPorAndar, torDanoPorAndar;
 
+    // combos de arma
+    public final boolean comAtivo;
+    public final double comVigorMaximo, comVigorPorSegundo, comVigorForaDeCombate, comXpBase, comXpExpoente;
+    public final double comXpAcerto, comXpAbate, comXpChefe, comDanoPorNivel;
+    public final long comJanelaMs;
+
+    // mobilidade, mochila e criaturas
+    public final boolean mobEsquivaAtiva, mochilaAtiva;
+    public final double mobEsquivaVigor, mobGanchoAlcance;
+    public final long mobEsquivaRecargaMs, mobEsquivaJanelaMs;
+    public final int mochilaNiveisPorFileira, criLimiteMonstros, criLimiteAnimais;
+
+    // pacote de recursos do plugin
+    public final boolean pacAtivado, pacObrigatorio;
+    public final String pacUrl, pacEndereco;
+    public final int pacPorta;
+
     // doma (companheiros)
     public final double domaXpDomar, domaXpCruzar, domaXpVincular, domaXpComponente, domaXpPorBloco, domaXpAbate;
     public final double domaVida, domaDano, domaVelocidade;
@@ -223,6 +240,33 @@ public final class Settings {
                 Math.max(0, c.getInt("portais.peso-dificil", 17)), Math.max(0, c.getInt("portais.peso-pesadelo", 5))};
         torVidaPorAndar = Math.max(0, c.getDouble("torre.vida-por-andar", 0.07));
         torDanoPorAndar = Math.max(0, c.getDouble("torre.dano-por-andar", 0.035));
+
+        comAtivo = c.getBoolean("combos.ativado", true);
+        comVigorMaximo = Math.max(10, c.getDouble("combos.vigor-maximo", 100));
+        comVigorPorSegundo = Math.max(0, c.getDouble("combos.vigor-por-segundo-em-luta", 6));
+        comVigorForaDeCombate = Math.max(0, c.getDouble("combos.vigor-por-segundo-fora-de-luta", 15));
+        comJanelaMs = Math.max(300, c.getLong("combos.milissegundos-entre-cliques", 900));
+        comXpBase = Math.max(1, c.getDouble("combos.xp-base", 30));
+        comXpExpoente = Math.max(1, c.getDouble("combos.xp-expoente", 1.5));
+        comXpAcerto = Math.max(0, c.getDouble("combos.xp-por-acerto", 1));
+        comXpAbate = Math.max(0, c.getDouble("combos.xp-por-abate", 6));
+        comXpChefe = Math.max(0, c.getDouble("combos.xp-por-chefe", 40));
+        comDanoPorNivel = Math.max(0, c.getDouble("combos.dano-a-mais-por-nivel", 0.02));
+
+        mobEsquivaAtiva = c.getBoolean("mobilidade.esquiva-ativada", true);
+        mobEsquivaVigor = Math.max(0, c.getDouble("mobilidade.vigor-da-esquiva", 15));
+        mobEsquivaRecargaMs = Math.max(0, c.getLong("mobilidade.recarga-da-esquiva-ms", 1200));
+        mobEsquivaJanelaMs = Math.max(100, c.getLong("mobilidade.tempo-entre-toques-ms", 300));
+        mobGanchoAlcance = Math.max(5, c.getDouble("mobilidade.alcance-do-gancho", 40));
+        mochilaAtiva = c.getBoolean("mochila.ativada", true);
+        mochilaNiveisPorFileira = Math.max(1, c.getInt("mochila.niveis-por-fileira", 150));
+        criLimiteMonstros = c.getInt("criaturas.limite-de-monstros", 45);
+        criLimiteAnimais = c.getInt("criaturas.limite-de-animais", -1);
+        pacAtivado = c.getBoolean("pacote-de-recursos.ativado", true);
+        pacUrl = c.getString("pacote-de-recursos.url", "");
+        pacPorta = Math.max(0, c.getInt("pacote-de-recursos.porta", 0));
+        pacEndereco = c.getString("pacote-de-recursos.endereco", "");
+        pacObrigatorio = c.getBoolean("pacote-de-recursos.obrigatorio", false);
 
         domaXpDomar = c.getDouble("doma.xp-domar", 25);
         domaXpCruzar = c.getDouble("doma.xp-cruzar", 2);

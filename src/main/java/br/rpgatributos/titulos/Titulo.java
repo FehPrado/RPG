@@ -81,7 +81,32 @@ public enum Titulo {
     // ---------- party e territórios ----------
     COMPANHEIRO("Companheiro", 0x55CDFC, Requisito.contador("abates_party", 200, "Derrotar 200 monstros com a party por perto"), Bonus.xpSkill(Skill.COMBATE, 0.1)),
     FUNDADOR("Fundador", 0x4CAF50, Requisito.contador("territorio", 1, "Fundar um território"), Bonus.armadura(1)),
-    SENHOR_DAS_TERRAS("Senhor das Terras", 0x2E7D32, Requisito.contador("chunks", 40, "Ter um território com 40 chunks"), new Bonus().comVida(2).comArmadura(1));
+    SENHOR_DAS_TERRAS("Senhor das Terras", 0x2E7D32, Requisito.contador("chunks", 40, "Ter um território com 40 chunks"), new Bonus().comVida(2).comArmadura(1)),
+
+    // ---------------- combate (combos de arma) ----------------
+    MESTRE_DA_LAMINA("Mestre da Lâmina", 0xE0E0E0, Requisito.contador("proficiencia_espada", 20, "Proficiência 20 com espada"), Bonus.dano(1)),
+    MACHADO_IMPLACAVEL("Machado Implacável", 0xC0874A, Requisito.contador("proficiencia_machado", 20, "Proficiência 20 com machado"), Bonus.dano(1)),
+    LANCEIRO_SUPREMO("Lanceiro Supremo", 0x9FB8C8, Requisito.contador("proficiencia_lanca", 20, "Proficiência 20 com lança"), Bonus.armadura(2)),
+    SENHOR_DO_TRIDENTE("Senhor do Tridente", 0x4FC3F7, Requisito.contador("proficiencia_tridente", 20, "Proficiência 20 com tridente"), Bonus.folego(3)),
+    MARTELO_VIVO("Martelo Vivo", 0xB0A090, Requisito.contador("proficiencia_maca", 20, "Proficiência 20 com maça"), Bonus.vida(4)),
+    OLHO_DE_FALCAO("Olho de Falcão", 0x8BC34A, Requisito.contador("proficiencia_arco", 20, "Proficiência 20 com arco e besta"), Bonus.velocidade(0.05)),
+    ARSENAL_VIVO("Arsenal Vivo", 0xFFB74D, Requisito.contador("armas_mestradas", 6, "Proficiência 20 em todas as 6 armas"), new Bonus().comDano(2).comVida(4)),
+    MESTRE_DOS_COMBOS("Mestre dos Combos", 0xFF8A65, Requisito.contador("combos", 1000, "Usar 1.000 golpes de combo"), Bonus.xpSkill(Skill.COMBATE, 0.1)),
+    FINALIZADOR("Finalizador", 0xFFD54F, Requisito.contador("finalizadores", 100, "Soltar 100 finalizadores em cadeia"), Bonus.dano(1)),
+
+    // ---------------- fé e mistério ----------------
+    DEVOTO("Devoto", 0xFFE082, Requisito.contador("devocao_maxima", 5, "Chegar à fé 5 com um deus"), new Bonus().comVida(2)),
+    ASTRONOMO("Astrônomo", 0x9FA8DA, Requisito.contador("constelacoes", 12, "Observar as 12 constelações"), Bonus.xpTudo(0.03)),
+    TRANSMUTADOR("Transmutador", 0xFFAB40, Requisito.contador("transmutacoes", 50, "Fazer 50 transmutações que deram certo"), Bonus.xpSkill(Skill.ALQUIMIA, 0.1)),
+    MESTRE_RUNICO("Mestre Rúnico", 0x80CBC4, Requisito.contador("runas", 10, "Gravar 10 runas"), Bonus.armadura(1)),
+
+    // ---------------- exploração ----------------
+    CARTOGRAFO("Cartógrafo", 0x8D6E63, Requisito.contador("biomas", 40, "Visitar 40 biomas"), Bonus.velocidade(0.03)),
+    COLECIONADOR("Colecionador", 0xA1887F, Requisito.contador("itens_conhecidos", 500, "Conhecer 500 itens"), Bonus.xpTudo(0.03)),
+    ARQUEOLOGO("Arqueólogo", 0xBCAAA4, Requisito.contador("reliquias", 12, "Juntar as 12 relíquias"), Bonus.xpTudo(0.05)),
+    CACADOR_DE_MAPAS("Caçador de Mapas", 0xD4A017, Requisito.contador("tesouros_enterrados", 10, "Desenterrar 10 tesouros de mapa"), Bonus.vida(2)),
+    MINEIRO_DAS_PROFUNDEZAS("Mineiro das Profundezas", 0x7FCFE0, Requisito.contador("mitrilo", 50, "Minerar 50 Mitrilos"), Bonus.xpSkill(Skill.MINERACAO, 0.15)),
+    CRONISTA("Cronista", 0x6D4C41, Requisito.contador("campanha", 8, "Completar as Crônicas do Mundo"), new Bonus().comVida(2).comDano(1));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(

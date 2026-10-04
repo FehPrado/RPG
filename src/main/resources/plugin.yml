@@ -94,6 +94,36 @@ commands:
     usage: /maldicao [transformar]
     aliases: [maldicoes, curse]
     permission: rpg.calendario
+  combos:
+    description: Combos de arma — proficiência e golpes nas sequências de 3 cliques.
+    usage: /combos [arma]
+    aliases: [combo, golpes]
+    permission: rpg.combos
+  mochila:
+    description: Sua mochila — um baú pessoal que cresce com o nível total.
+    usage: /mochila
+    aliases: [bolsa, bp]
+    permission: rpg.mochila
+  deus:
+    description: Sua fé — deus, devoção, oração e milagre.
+    usage: /deus [milagre]
+    aliases: [fe, deuses, milagre]
+    permission: rpg.fe
+  estrelas:
+    description: Diário das Estrelas — as constelações que você já observou.
+    usage: /estrelas
+    aliases: [constelacoes, astronomia]
+    permission: rpg.fe
+  enciclopedia:
+    description: Enciclopédia do Mundo — biomas, estruturas, itens e relíquias descobertos.
+    usage: /enciclopedia
+    aliases: [enc, descobertas]
+    permission: rpg.exploracao
+  cronista:
+    description: As Crônicas do Mundo — a campanha do Cronista.
+    usage: /cronista [entregar]
+    aliases: [campanha, cronicas]
+    permission: rpg.exploracao
   portais:
     description: Portais abertos no mundo — onde estão e quando transbordam.
     usage: /portais
@@ -212,6 +242,14 @@ permissions:
   rpg.portais:
     default: true
   rpg.torre:
+    default: true
+  rpg.combos:
+    default: true
+  rpg.mochila:
+    default: true
+  rpg.fe:
+    default: true
+  rpg.exploracao:
     default: true
   rpg.admin:
     default: op

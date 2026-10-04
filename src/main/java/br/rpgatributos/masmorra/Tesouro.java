@@ -37,6 +37,8 @@ public final class Tesouro {
             if (i < slots.size()) inv.setItem(slots.get(i++), it);
             else inv.addItem(it);
         }
+        // Baú de chefe às vezes guarda um Mapa do Tesouro.
+        if (chefe && r.nextDouble() < 0.15) inv.addItem(plugin.mapas().criar(br.rpgatributos.exploracao.MapasDoTesouro.tipoPara(d), null));
     }
 
     static List<ItemStack> sortear(RPGAtributos plugin, Dificuldade d, int rolagens, boolean chefe, Random r) {

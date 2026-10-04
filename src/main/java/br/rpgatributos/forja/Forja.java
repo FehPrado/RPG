@@ -311,6 +311,7 @@ public final class Forja {
                     : Component.translatable(tipo.translationKey(), r.cor());
             if (d.refino() > 0) nome = nome.append(Component.text(" +" + d.refino(), r.cor()));
             meta.itemName(nome);
+            if (cat == Categoria.CAJADO) br.rpgatributos.exploracao.PacoteRecursos.marcar(meta, "cajado_arcano");
 
             // Ao definir atributos no item, os padrões somem; por isso eles são copiados junto
             // (sempre presos ao slot certo: peitoral na mão não pode dar armadura).
@@ -344,6 +345,8 @@ public final class Forja {
             meta.setEnchantmentGlintOverride(r.peloMenos(Raridade.LENDARIO) ? Boolean.TRUE : null);
             meta.lore(semItalico(montarDescricao(tipo, cat, tier, d)));
             plugin.lendas().decorar(meta, d.refino()); // se for uma lenda: nome, "Especial", poder e história
+            plugin.runas().decorar(meta); // se tiver runa gravada, a linha dela volta depois de refazer a descrição
+            plugin.mitrilo().decorar(meta, tipo); // aprimorado com Mitrilo: bônus e linha voltam também
         });
     }
 

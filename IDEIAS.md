@@ -45,9 +45,9 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 
 | Ideia | O que é | Impacto | Esforço | Depende de |
 |---|---|---|---|---|
-| Combos de arma | Sequências de golpes com efeitos (giratório, esmagar) | ★★★ | M | — |
-| Parry e dash | Aparar golpes no tempo certo e esquiva rápida | ★★ | M | — |
-| Gancho e planador | Gancho que puxa até o bloco e capa planadora | ★★ | P | — |
+| ✅ Combos de arma (2.15) | Sequências de golpes com efeitos (giratório, esmagar) | ★★★ | M | — |
+| ✅ Esquiva (2.16; aparar ficou para depois) | Aparar golpes no tempo certo e esquiva rápida | ★★ | M | — |
+| ✅ Gancho e planador (2.16) | Gancho que puxa até o bloco e capa planadora | ★★ | P | — |
 | Raides de reino | Masmorras gigantes para 5 a 10 jogadores, com chefes de várias fases | ★★★ | G | Masmorras |
 | Masmorra Hardcore | Morreu, perdeu tudo, mas a recompensa é muito maior | ★ | P | Masmorras |
 
@@ -67,20 +67,20 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 
 | Ideia | O que é | Impacto | Esforço | Depende de |
 |---|---|---|---|---|
-| Deuses e santuários | Oferendas, bênçãos, devoção e deus oficial do reino | ★★★ | M | — |
-| Astronomia | Luneta mágica e constelações que dão bênçãos | ★★ | P | Eventos no céu |
-| Transmutação | Alquimia avançada: ferro → ouro → diamante, com risco | ★★ | P | Alquimia |
-| Runas | Mesa Rúnica: runas com efeitos ativos nos equipamentos (dash, pulo duplo, explosão) | ★★ | M | Forja |
+| ✅ Deuses e santuários (2.17) | Oferendas, bênçãos, devoção e deus oficial do reino | ★★★ | M | — |
+| ✅ Astronomia (2.17) | Luneta mágica e constelações que dão bênçãos | ★★ | P | Eventos no céu |
+| ✅ Transmutação (2.17) | Alquimia avançada: ferro → ouro → diamante, com risco | ★★ | P | Alquimia |
+| ✅ Runas (2.17) | Mesa Rúnica: runas com efeitos ativos nos equipamentos (dash, pulo duplo, explosão) | ★★ | M | Forja |
 
 ## Fase G — Exploração
 
 | Ideia | O que é | Impacto | Esforço | Depende de |
 |---|---|---|---|---|
-| Mapas do Tesouro | Pistas que levam a um baú enterrado e guardado | ★★ | P | — |
-| Enciclopédia do Mundo | Biomas, estruturas, monstros e itens descobertos, com bônus | ★★ | M | Bestiário |
-| Mineração profunda | Veios, geodos e minérios novos para um tier acima do netherite | ★★★ | G | Forja |
-| Arqueologia | Pincel em ruínas do plugin: relíquias e histórias do mundo | ★ | M | — |
-| Campanha com NPCs | História em capítulos que passa por todos os sistemas | ★★★ | G | Quase tudo |
+| ✅ Mapas do Tesouro (2.18) | Pistas que levam a um baú enterrado e guardado | ★★ | P | — |
+| ✅ Enciclopédia do Mundo (2.18) | Biomas, estruturas, monstros e itens descobertos, com bônus | ★★ | M | Bestiário |
+| ✅ Mineração profunda (2.18) | Mitrilo no fundo do mundo, com textura própria (pacote de recursos do plugin), melhora a netherita | ★★★ | G | Forja |
+| ✅ Arqueologia (2.18) | Pincel em ruínas do plugin: relíquias e histórias do mundo | ★ | M | — |
+| ✅ Campanha com NPCs (2.18) | História em capítulos que passa por todos os sistemas | ★★★ | G | Quase tudo |
 
 ## Fase H — Social e diversão
 
@@ -115,7 +115,7 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 |---|---|---|---|---|
 | Troca segura e correio | Tela de troca com confirmação; itens e mensagens para quem está offline | ★★ | P | — |
 | Ordenar baús, placar lateral | Qualidade de vida do dia a dia | ★ | P | — |
-| Mochila | Bolsa extra que cresce com o nível | ★★ | P | — |
+| ✅ Mochila (2.16) | Bolsa extra que cresce com o nível | ★★ | P | — |
 | Sentar, móveis, casa registrada | Sentar em escadas, móveis decorativos e bônus "Descansado" | ★ | M | — |
 | Waypoints e bússola de morte | Pontos marcados e seta até onde você morreu | ★ | P | — |
 | Cortar árvore e veio inteiros | Liberado pelos níveis de Madeira e Mineração | ★★ | P | — |
@@ -131,4 +131,9 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 4. Depois: **Fase D (Combate 2.0)** e **Fase E (Reinos 2.0)**.
 
 *Decisão: o Rank E → S do jogador saiu, porque tirava a profundidade do resto da progressão.*
-6. Depois: F, G, H, I, J e K, conforme a vontade do grupo (a K pode entrar aos poucos entre as outras).
+
+5. Feito na 2.15–2.16: combos de arma (com golpes de lenda e de classe), esquiva, gancho, planador e mochila.
+6. Feito na 2.17–2.18: Fase F (Fé e mistério) e Fase G (Exploração, com As Crônicas do Mundo).
+7. **Agora: Fase I (Progressão extra): talentos e renascer.**
+
+*Decisão (03/10/2026): o foco é conteúdo que dá profundidade e história ao mundo. O que é mais de "servidor para muita gente" fica no backlog: raides, Masmorra Hardcore, aparar, Fase E (Reinos 2.0), Fase H (Social), Fase J (Visual) e o resto da Fase K.*

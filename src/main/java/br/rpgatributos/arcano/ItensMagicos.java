@@ -64,6 +64,7 @@ public final class ItensMagicos implements Listener {
             m.lore(List.of(Component.text("Faça numa Forja do Ferreiro para", NamedTextColor.DARK_GRAY),
                             Component.text("ele nascer com raridade e poder.", NamedTextColor.DARK_GRAY))
                     .stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
+            br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "cajado_arcano");
         });
         ShapedRecipe r = new ShapedRecipe(kReceita, resultado);
         r.shape("  A", " B ", "B  ");

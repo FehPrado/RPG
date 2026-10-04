@@ -44,6 +44,9 @@ public final class Guia implements Listener {
     private static final TextColor VISUAL = TextColor.color(0xAD1457);
     private static final TextColor PORTAL = TextColor.color(0x0277BD);
     private static final TextColor SOMBRA = TextColor.color(0x4527A0);
+    private static final TextColor COMBO = TextColor.color(0xB35900);
+    private static final TextColor FE = TextColor.color(0x8D6E00);
+    private static final TextColor EXPLORACAO = TextColor.color(0x5D4037);
     private static final TextColor TEXTO = NamedTextColor.BLACK;
     private static final TextColor DESTAQUE = NamedTextColor.DARK_BLUE;
 
@@ -103,8 +106,8 @@ public final class Guia implements Listener {
         return List.of(
                 // 1
                 Component.text("   Guia do\n  Aventureiro\n", TITULO, TextDecoration.BOLD)
-                        .append(t("3  Forja\n7  Infusor/Magias\n17 Altar\n20 Fazenda/Cozinha\n"
-                                + "26 Party/Reinos\n33 Domador\n35 Masmorras/Perigo\n39 Estações/Lua\n41 Portais/Torre\n45 Classes/Viagem\n50 Pesca/Alquimia\n57 Conquistas")),
+                        .append(t("3  Forja\n7  Infusor/Magias\n17 Altar/Fazenda\n"
+                                + "26 Party/Reinos\n33 Domador\n35 Masmorras/Perigo\n39 Céu/Portais/Torre\n45 Combos/Classes\n52 Fé e mistério\n56 Exploração\n61 Pesca/Alquimia\n68 Conquistas")),
                 // 2
                 titulo("Atributos", TITULO)
                         .append(t("Sobem fazendo as coisas (até o nível " + nivelMaximo + "):\n\n"))
@@ -397,6 +400,25 @@ public final class Guia implements Listener {
                         .append(t("Chefe e baú a cada 10 andares. Morrer não perde itens!\n"))
                         .append(d("/torre")),
                 // 45
+                titulo("Combos de arma", COMBO)
+                        .append(t("Arma na mão + 3 cliques seguidos:\n"))
+                        .append(d("D D D, D E D, D D E, D E E"))
+                        .append(t("\n(D = direito, E = esquerdo; arco começa com E)\n"))
+                        .append(t("Gasta "))
+                        .append(d("vigor"))
+                        .append(t(". Usar a arma sobe a proficiência e libera golpes. Lendas e classes têm golpes próprios.\n"))
+                        .append(d("/combos")),
+                // 46
+                titulo("Mobilidade", COMBO)
+                        .append(d("A A, D D ou S S"))
+                        .append(t(" rápido: esquiva (gasta vigor).\n"))
+                        .append(d("Gancho"))
+                        .append(t(": vara + gancho de armadilha + 3 ferros.\n"))
+                        .append(d("Capa Planadora"))
+                        .append(t(": no ar, pule para planar.\n"))
+                        .append(d("/mochila"))
+                        .append(t(": cresce com o nível.")),
+                // 47
                 titulo("Classes", CLASSE)
                         .append(t("Escolha um caminho no "))
                         .append(d("Santuário"))
@@ -405,7 +427,7 @@ public final class Guia implements Listener {
                         .append(t(".\nFaça as tarefas e passe na "))
                         .append(d("Prova"))
                         .append(t(".\n\nGuerreiro, Arqueiro, Mago, Ladino, Ferreiro e Domador.")),
-                // 46
+                // 48
                 titulo("Habilidades", CLASSE)
                         .append(d("Agache + F"))
                         .append(t(": usa\n"))
@@ -414,7 +436,7 @@ public final class Guia implements Listener {
                         .append(t("Classe no nível 20 = "))
                         .append(d("Dominada"))
                         .append(t(": libera as avançadas (algumas pedem duas!).")),
-                // 47
+                // 49
                 titulo("Lendas", LENDA)
                         .append(t("Itens "))
                         .append(d("Especiais"))
@@ -422,14 +444,14 @@ public final class Guia implements Listener {
                         .append(d("Páginas do Livro das Lendas"))
                         .append(t(".\n"))
                         .append(d("/lendas")),
-                // 48
+                // 50
                 titulo("Pedras de Viagem", VIAGEM)
                         .append(t("1. Coloque uma "))
                         .append(d("pedra entalhada de ardósia"))
                         .append(t(".\n2. Jogue em cima:\n"))
                         .append(d(" • 2 pérolas do ender\n • 4 ametistas\n\n"))
                         .append(t("Clique nas pedras que achar e viaje entre elas pagando XP.")),
-                // 49
+                // 51
                 titulo("Locais Ocultos", OCULTO)
                         .append(t("Ruínas escondidas. Siga "))
                         .append(d("Mapas Rasgados"))
@@ -438,7 +460,60 @@ public final class Guia implements Listener {
                         .append(t(": relíquias e uma "))
                         .append(d("classe lendária"))
                         .append(t("!")),
-                // 50
+                // 52
+                titulo("Deuses", FE)
+                        .append(t("Quartzo entalhado + maçã dourada + vela (Q): "))
+                        .append(d("Santuário"))
+                        .append(t(". Escolha um dos 6 deuses e jogue oferendas (Q) nele.\n"))
+                        .append(t("Fé 1 a 5 fortalece o passivo; na 2 libera o "))
+                        .append(d("milagre"))
+                        .append(t(".\n"))
+                        .append(d("/deus")),
+                // 53
+                titulo("Astronomia", FE)
+                        .append(t("À noite, olhe para o céu aberto pela "))
+                        .append(d("luneta"))
+                        .append(t(" por 5 s.\n\nCada noite tem uma das 12 constelações, com uma bênção até o amanhecer.\n"))
+                        .append(d("/estrelas")),
+                // 54
+                titulo("Transmutação", FE)
+                        .append(t("Bloco de ametista + Mercúrio Vivo + lingote de ouro (Q).\n\n"))
+                        .append(t("Ferro em ouro, ouro em diamante... pode falhar ou explodir!\n"))
+                        .append(d("Pedra Filosofal"))
+                        .append(t(": +20% de chance.")),
+                // 55
+                titulo("Runas", FE)
+                        .append(t("Tufo entalhado + 4 ametistas + bloco de lápis (Q): "))
+                        .append(d("Mesa Rúnica"))
+                        .append(t(".\n\nUma runa por peça: pulo duplo, explosão, gelo, raio, fusão...")),
+                // 56
+                titulo("Mitrilo", EXPLORACAO)
+                        .append(t("Minério raro no fundo da ardósia (abaixo de -24). Só com picareta de "))
+                        .append(d("diamante ou netherite"))
+                        .append(t(".\n\nFunda o bruto: o lingote aprimora netherite na mesa de ferraria (com o molde).")),
+                // 57
+                titulo("Mapas do Tesouro", EXPLORACAO)
+                        .append(t("Caem de Elites, pesca, masmorras e ruínas.\n\nSiga o "))
+                        .append(d("X"))
+                        .append(t(" no centro do mapa. Perto dele, o baú aparece enterrado... com guardiões!")),
+                // 58
+                titulo("Arqueologia", EXPLORACAO)
+                        .append(t("Pedras antigas em volta de areia ou cascalho: é um "))
+                        .append(d("sítio"))
+                        .append(t(".\n\nUse o pincel nos blocos suspeitos: relíquias, mapas e achados.")),
+                // 59
+                titulo("Enciclopédia", EXPLORACAO)
+                        .append(t("Biomas, estruturas, itens e relíquias que você descobriu.\n\nCada bioma novo: "))
+                        .append(d("+0,2% de XP"))
+                        .append(t(" em tudo.\n"))
+                        .append(d("/enciclopedia")),
+                // 60
+                titulo("O Cronista", EXPLORACAO)
+                        .append(t("Um velho bibliotecário guarda a história do mundo. Clique nele: "))
+                        .append(d("8 capítulos"))
+                        .append(t(", cada um com uma tarefa e uma recompensa.\n"))
+                        .append(d("/cronista")),
+                // 61
                 titulo("Pesca", PESCA)
                         .append(t("Pescar dá XP. Nível alto: isca mais rápida, peixes "))
                         .append(d("★ a ★★★"))
@@ -447,12 +522,12 @@ public final class Guia implements Listener {
                         .append(t(" e "))
                         .append(d("criaturas marinhas"))
                         .append(t(" que lutam de volta!")),
-                // 51
+                // 62
                 titulo("Peixes raros", PESCA)
                         .append(t("12 peixes que só mordem em certos biomas, horários ou climas (noite, chuva, tempestade...).\n\n"))
                         .append(t("São ingredientes da Alquimia.\n"))
                         .append(d("/peixes")).append(t(": o diário")),
-                // 52
+                // 63
                 titulo("Alquimia", ALQUIMIA)
                         .append(t("1. Coloque um "))
                         .append(d("suporte de poções"))
@@ -460,40 +535,39 @@ public final class Guia implements Listener {
                         .append(d(" • 2 garrafas de vidro\n • 1 pó de blaze\n\n"))
                         .append(d("Clique")).append(t(": bancada\n"))
                         .append(d("Agachado")).append(t(": suporte")),
-                // 53
+                // 64
                 titulo("Elixires", ALQUIMIA)
                         .append(t("Poções mais fortes e longas, várias com 2 ou 3 efeitos.\n\n"))
                         .append(d("Componentes"))
                         .append(t(" (Pó Arcano, Sal Lunar...) são a base de tudo.\n"))
                         .append(d("/alquimia")),
-                // 54
+                // 65
                 titulo("Gemas", ALQUIMIA)
                         .append(t("Itens forjados têm "))
                         .append(d("engastes"))
                         .append(t(" (Raro 1, Único 2, Mítico 3). Cada gema dá um bônus diferente em armas, arcos, armaduras e ferramentas.\n"))
                         .append(t("3 gemas = 1 melhor.")),
-                // 55
+                // 66
                 titulo("Acessórios", ALQUIMIA)
                         .append(d("2 anéis, 1 amuleto,\n1 cinto e 2 bolsos"))
                         .append(t(" que não ocupam a armadura nem caem ao morrer.\n\n"))
                         .append(t("Lanterna de Bolso, Ímã, Amuleto da Fênix...\n"))
                         .append(d("/acessorios")),
-                // 56
+                // 67
                 titulo("Guarda-roupa", VISUAL)
                         .append(t("Mude a "))
                         .append(d("aparência"))
                         .append(t(" da armadura sem tirá-la, ou esconda uma peça.\n\nNa cabeça vale qualquer item!\n"))
                         .append(d("/guardaroupa")),
-                // 57
+                // 68
                 titulo("Conquistas", TITULO)
                         .append(d("/titulos"))
                         .append(t(": títulos que dão bônus. Só o que está em uso conta.\n\n"))
                         .append(d("Agache + clique num aldeão"))
                         .append(t(": pedidos do dia. Cumprir dá esmeraldas e descontos.")),
-                // 58
+                // 69
                 titulo("Comandos", TITULO)
-                        .append(d("/atributos /classe\n/forja /grimorio\n/receitas /pets\n/peixes /alquimia\n/colonia /reino\n/titulos /bestiario\n/party /territorio\n/masmorra /lendas\n/locais /cosmeticos\n/acessorios /tag\n/portais /torre"))
-                        .append(t("\nBoa aventura!"))
+                        .append(d("/atributos /classe\n/forja /grimorio\n/receitas /pets\n/peixes /alquimia\n/colonia /reino\n/titulos /bestiario\n/party /territorio\n/masmorra /lendas\n/locais /combos\n/acessorios /tag\n/portais /torre\n/mochila /deus\n/cronista /enc"))
         );
     }
 }
