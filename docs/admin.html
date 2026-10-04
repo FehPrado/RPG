@@ -169,6 +169,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>torre.yml</code></td><td>Ranking da Torre (semanal e de todos os tempos)</td></tr>
       <tr><td><code>deuses.yml</code></td><td>Deus oficial de cada reino (a fé de cada um fica no próprio jogador)</td></tr>
       <tr><td><code>pacote/RPGAtributos-recursos.zip</code></td><td>Pacote de recursos gerado a cada início (pode apagar: ele é refeito)</td></tr>
+      <tr><td><code>pacote/texturas/</code>, <code>pacote/texturas-padrao/</code></td><td>Suas texturas (entram no lugar das originais) e os desenhos originais</td></tr>
       <tr><td>No chunk (PDC)</td><td>Posição dos minérios de mitrilo e marcas de "já gerado" (mitrilo e sítios de arqueologia)</td></tr>
       <tr><td><code>salas/&lt;tipo&gt;/&lt;nome&gt;.nbt</code></td><td>Salas de masmorra construídas por admins</td></tr>
       <tr><td>No jogador (PDC)</td><td>Atributos, classes, magias, proficiência de armas e combos, mochila, acessórios, guarda-roupa, exército das sombras</td></tr>
@@ -270,7 +271,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     </div>
     <div class="card"><h3>Pacote de recursos (2.18)</h3>
       <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
-        <tr><td><code>pacote-de-recursos.ativado</code></td><td>true</td><td>Gera o zip com as texturas do mitrilo</td></tr>
+        <tr><td><code>pacote-de-recursos.ativado</code></td><td>true</td><td>Gera o zip com as texturas do plugin</td></tr>
         <tr><td><code>pacote-de-recursos.url</code></td><td>""</td><td>Link direto do zip (opção 1)</td></tr>
         <tr><td><code>pacote-de-recursos.porta</code> / <code>endereco</code></td><td>0 / ""</td><td>O plugin serve o zip nessa porta e endereço (opção 2)</td></tr>
         <tr><td><code>pacote-de-recursos.obrigatorio</code></td><td>false</td><td>Quem recusar o pacote não entra</td></tr>
@@ -444,11 +445,20 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin pacote</span></td><td>Onde está o pacote de recursos, o SHA-1 e se ele está sendo enviado</td></tr>
     </tbody></table></div></div>
     <div class="card largo"><h3>Pacote de recursos (opcional)</h3>
-      <p>O plugin gera <code>plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip</code> com as texturas do mitrilo. Ele <b>se soma</b> ao pacote do servidor (não o troca). Sem ele tudo funciona, só que o minério aparece como bloco de cogumelo e os itens como ferro. Para enviar, escolha uma opção:</p>
+      <p>O plugin gera <code>plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip</code> com as texturas do mitrilo, do Cajado Arcano, do Gancho de Escalada e da Capa Planadora. Ele <b>se soma</b> ao pacote do servidor (não o troca). Sem ele tudo funciona com a aparência do jogo. Para enviar, escolha uma opção:</p>
       <ol>
-        <li><b>Link:</b> suba o zip (ex.: mc-packs.net) e cole o link direto em <code>pacote-de-recursos.url</code>.</li>
+        <li><b>Link:</b> suba o zip (ex.: mc-packs.net ou Dropbox com <code>dl=1</code> no fim) e cole o link direto em <code>pacote-de-recursos.url</code>.</li>
         <li><b>Servidor embutido:</b> ponha uma porta liberada no host em <code>porta</code> e o IP ou domínio público em <code>endereco</code>.</li>
       </ol>
+      <p class="aviso">O plugin manda o SHA-1 do zip que ele gerou. Se o arquivo do link for outro (versão antiga, editado, recompactado), o Minecraft recusa o pacote. Depois de atualizar o plugin ou editar uma textura, suba o zip novo por cima do antigo.</p>
+    </div>
+    <div class="card largo"><h3>Editar as texturas à mão</h3>
+      <ol>
+        <li>Os desenhos originais ficam em <code>pacote/texturas-padrao/</code> (refeitos a cada início).</li>
+        <li>Copie um PNG para <code>pacote/texturas/</code> e edite (Paint, Aseprite, Photoshop...). Mesmo nome, imagem quadrada (16×16, 32×32...).</li>
+        <li>Reinicie: o seu PNG entra no lugar do original. Apague o arquivo para voltar ao original.</li>
+      </ol>
+      <p>Texturas: <code>minerio_mitrilo</code>, <code>mitrilo_bruto</code>, <code>lingote_mitrilo</code>, <code>cajado_arcano</code>, <code>gancho</code>, <code>gancho_lancado</code>, <code>capa_planadora</code>.</p>
     </div>
   </div>
 </section>

@@ -20,7 +20,7 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **exploração**: Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
 - **títulos** e **missões de aldeões**.
 
-Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não precisa de mod. O plugin gera um **pacote de recursos opcional** só para as texturas do mitrilo.
+Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não precisa de mod. O plugin gera um **pacote de recursos opcional** com algumas texturas próprias (mitrilo, Cajado Arcano, Gancho e Capa Planadora).
 
 **Guias em HTML:** [docs/jogadores.html](docs/jogadores.html) (tudo para os jogadores) e [docs/admin.html](docs/admin.html) (instalação, configuração, comandos de admin e testes).
 
@@ -755,7 +755,9 @@ O **Cronista** é um aldeão bibliotecário que o admin coloca no spawn (`/rpgad
 
 ### Pacote de recursos do servidor
 
-O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip`) com a textura do minério de mitrilo e dos itens de mitrilo. Ele é **opcional**: sem ele tudo funciona, só que o minério parece um bloco de cogumelo e os itens parecem ferro. O pacote **se soma** ao pacote do servidor (não o troca). Para enviar, ponha um link em `pacote-de-recursos.url` ou ligue o servidor embutido (`porta` + `endereco`); veja `/rpgadmin pacote`.
+O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip`) com as texturas do minério e dos itens de mitrilo, do **Cajado Arcano**, do **Gancho de Escalada** (que muda quando é lançado) e da **Capa Planadora**. Ele é **opcional**: sem ele tudo funciona com a aparência do jogo (o minério parece um bloco de cogumelo, o lingote parece ferro, o cajado parece uma vara de breeze...).
+
+**Editar as texturas à mão:** os desenhos originais ficam em `pacote/texturas-padrao/`. Copie um PNG para `pacote/texturas/`, edite (mesmo nome, imagem quadrada: 16×16, 32×32...) e reinicie: ele entra no lugar do original. Apagar o arquivo volta ao original. Itens feitos antes ganham o visual sozinhos quando o jogador entra. O pacote **se soma** ao pacote do servidor (não o troca). Para enviar, ponha um link em `pacote-de-recursos.url` ou ligue o servidor embutido (`porta` + `endereco`); veja `/rpgadmin pacote`.
 ## Pesca
 
 Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
@@ -970,7 +972,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.18.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.18.1.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

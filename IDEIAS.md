@@ -13,24 +13,24 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 
 | Ideia | O que é | Impacto | Esforço | Depende de |
 |---|---|---|---|---|
-| Estações do ano | 4 estações de alguns dias reais; mudam plantações, peixes, monstros, neve e água congelando | ★★★ | M | Agricultura, Pesca |
-| Clima dinâmico | Nevasca, neblina, ventania que desvia projéteis, tempestade elétrica perigosa | ★★ | M | Estações |
-| Fases da lua | Lua cheia: monstros mais fortes e lobisomens; lua nova: magias mais fortes | ★★ | P | — |
-| Eventos no céu | Chuva de meteoros (meteorito com minério), eclipse, aurora (bônus de mana), Lua de Sangue | ★★★ | M | Fases da lua |
-| Festivais sazonais | Um festival por estação, com mini-jogos e itens exclusivos | ★★ | M | Estações |
-| Temperatura (opcional) | Frio e calor exigem roupa, fogueira ou elixir | ★ | M | Estações |
+| ✅ Estações do ano (2.13) | 4 estações de alguns dias reais; mudam plantações, peixes, monstros, neve e água congelando | ★★★ | M | Agricultura, Pesca |
+| ✅ Clima dinâmico (2.13) | Nevasca, neblina, ventania que desvia projéteis, tempestade elétrica perigosa | ★★ | M | Estações |
+| ✅ Fases da lua (2.13) | Lua cheia: monstros mais fortes e lobisomens; lua nova: magias mais fortes | ★★ | P | — |
+| ✅ Eventos no céu (2.13) | Chuva de meteoros (meteorito com minério), eclipse, aurora (bônus de mana), Lua de Sangue | ★★★ | M | Fases da lua |
+| ✅ Festivais sazonais (2.13) | Um festival por estação, com mini-jogos e itens exclusivos | ★★ | M | Estações |
+| ✅ Temperatura (opcional) (2.13) | Frio e calor exigem roupa, fogueira ou elixir | ★ | M | Estações |
 
 ## Fase B — Mundo perigoso
 
 | Ideia | O que é | Impacto | Esforço | Depende de |
 |---|---|---|---|---|
-| Monstros de Elite | Monstros raros com modificadores (Veloz, Blindado, Vampiro, Explosivo, Invocador), barra de vida e loot melhor | ★★★ | M | — |
-| Bestiário | Registro de cada tipo caçado com bônus permanente contra ele | ★★ | P | Monstros de Elite |
-| Ninhos de monstros | Ninhos no mundo que geram monstros até serem destruídos | ★★ | M | Monstros de Elite |
-| Ataques à colônia | Hordas atacam a colônia em certas noites; soldados e jogadores defendem | ★★★ | M | Colônias, Exército |
-| O mundo envelhece | A cada semana do servidor os monstros ficam mais fortes e surgem eventos novos | ★★ | P | Monstros de Elite |
-| Maldições jogáveis | Licantropia e vampirismo, com transformação, poderes e fraquezas; cura por elixir | ★★ | M | Fases da lua, Alquimia |
-| Chefe Mundial | Chefe gigante anunciado que precisa do servidor todo | ★★★ | M | Monstros de Elite |
+| ✅ Monstros de Elite (2.12) | Monstros raros com modificadores (Veloz, Blindado, Vampiro, Explosivo, Invocador), barra de vida e loot melhor | ★★★ | M | — |
+| ✅ Bestiário (2.12) | Registro de cada tipo caçado com bônus permanente contra ele | ★★ | P | Monstros de Elite |
+| ✅ Ninhos de monstros (2.12) | Ninhos no mundo que geram monstros até serem destruídos | ★★ | M | Monstros de Elite |
+| ✅ Ataques à colônia (2.12) | Hordas atacam a colônia em certas noites; soldados e jogadores defendem | ★★★ | M | Colônias, Exército |
+| ✅ O mundo envelhece (2.12) | A cada semana do servidor os monstros ficam mais fortes e surgem eventos novos | ★★ | P | Monstros de Elite |
+| ✅ Maldições jogáveis (2.13) | Licantropia e vampirismo, com transformação, poderes e fraquezas; cura por elixir | ★★ | M | Fases da lua, Alquimia |
+| ✅ Chefe Mundial (2.12) | Chefe gigante anunciado que precisa do servidor todo | ★★★ | M | Monstros de Elite |
 
 ## Fase C — Solo Leveling
 
@@ -105,9 +105,9 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 
 | Ideia | O que é | Impacto | Esforço | Depende de |
 |---|---|---|---|---|
-| Resource pack do servidor | Pacote enviado automaticamente na entrada; abre espaço para modelos novos | ★★★ | M | — |
+| ✅ Resource pack do servidor (2.18) | Gerado pelo plugin e enviado na entrada (link ou porta própria); texturas editáveis em pacote/texturas/ | ★★★ | M | — |
 | Montarias lendárias | Grifo, dragão menor, lobo gigante (no começo, versão sem pack: papagaio gigante) | ★★★ | G | Resource pack, Domador |
-| Itens com modelo próprio | Armas lendárias, cajados e ícones de menu com visual único | ★★ | M | Resource pack |
+| Itens com modelo próprio (começou na 2.18.1: cajado, gancho e capa) | Armas lendárias, cajados e ícones de menu com visual único | ★★ | M | Resource pack |
 
 ## Fase K — Conforto e técnico
 
