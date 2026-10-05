@@ -176,7 +176,7 @@ public final class ProtecaoListener implements Listener {
             e.setCancelled(true);
             Territorio t = ter().em(b);
             if (t != null && t.dono().equals(p.getUniqueId())) {
-                p.sendActionBar(Component.text("Para tirar o Marco, use \"Abandonar território\" no menu dele.", NamedTextColor.YELLOW));
+                p.sendActionBar(Component.text("Para tirar o Marco, use \"Abandonar território\" (ou \"Expansões\", se for de uma expansão) no menu.", NamedTextColor.YELLOW));
             } else {
                 negar(p, b.getLocation());
             }

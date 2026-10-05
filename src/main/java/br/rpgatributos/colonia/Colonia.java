@@ -7,6 +7,7 @@ import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,7 +16,20 @@ import java.util.UUID;
 public final class Colonia {
 
     public static final int NIVEL_MAXIMO = 5;
+    /** Sem território, a colônia enxerga só até esta distância da Prefeitura. */
     public static final int RAIO = 32;
+    /** Quanto abaixo e acima da Prefeitura a varredura olha (no território inteiro). */
+    public static final int ABAIXO = 40, ACIMA = 60;
+
+    /** O que foi achado num chunk na última vez que ele estava carregado. */
+    static final class Censo {
+        int camasPartes, agua;
+        final Map<Material, Integer> plantas = new EnumMap<>(Material.class);
+        final Map<Material, Integer> troncos = new EnumMap<>(Material.class);
+        final Map<Profissao, Integer> postos = new EnumMap<>(Profissao.class);
+        /** Blocos de posto ainda por conferir (x, y, z, material). */
+        final List<Object[]> blocosPosto = new ArrayList<>();
+    }
 
     /** Um morador da colônia (a entidade é um aldeão de verdade). */
     public static final class Cidadao {
@@ -65,6 +79,8 @@ public final class Colonia {
     final Map<Material, Integer> plantas = new EnumMap<>(Material.class);
     final Map<Material, Integer> troncos = new EnumMap<>(Material.class);
     final Map<Profissao, Integer> postos = new EnumMap<>(Profissao.class);
+    /** Chunk → contagem (fica guardada quando o chunk descarrega). */
+    final Map<Long, Censo> censo = new HashMap<>();
     boolean varrida;
     boolean varrendo;
     long ultimaVarredura;

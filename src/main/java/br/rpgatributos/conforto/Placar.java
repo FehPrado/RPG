@@ -124,7 +124,8 @@ public final class Placar implements Listener, CommandExecutor {
         l.add(Component.text("Mana ", NamedTextColor.GRAY).append(Component.text((int) Math.max(0, pf.mana()) + "/" + (int) plugin.arcano().manaMax(p, pf), TextColor.color(0x7F8CFF))));
         l.add(Component.empty());
         var est = plugin.estacoes().atual();
-        l.add(Component.text(est.icone() + " " + est.nome() + " · dia " + plugin.estacoes().dia(), TextColor.color(est.cor())));
+        l.add(Component.text(est.icone() + " " + est.nome() + " · dia " + plugin.estacoes().dia() + "/7", TextColor.color(est.cor())));
+        l.add(Component.text("  muda em " + br.rpgatributos.mundo.Estacoes.duracao(plugin.estacoes().restante()), NamedTextColor.DARK_GRAY));
         long t = (p.getWorld().getTime() + 6000) % 24000;
         l.add(Component.text("☾ " + Ceu.nomeFase(p.getWorld()) + " · " + String.format("%02d:%02d", t / 1000, t % 1000 * 60 / 1000), NamedTextColor.GRAY));
         long descanso = plugin.fogueiras().descansadoAte(p) - System.currentTimeMillis();

@@ -189,6 +189,7 @@ public final class Encontros implements Listener {
         l.add(new ItemStack(rnd().nextBoolean() ? Material.IRON_INGOT : Material.GOLD_INGOT, 2 + rnd().nextInt(4)));
         if (rnd().nextDouble() < (melhor ? 0.6 : 0.3)) l.add(Album.carta(Carta.values()[rnd().nextInt(Carta.values().length)], rnd().nextDouble() < 0.05));
         if (rnd().nextDouble() < 0.3) l.add(ItensDetalhes.ferradura(1));
+        if (rnd().nextDouble() < 0.25) l.add(Fruta.sortear(rnd()).muda(1));
         if (rnd().nextDouble() < 0.4) l.add(Bebida.values()[rnd().nextInt(Bebida.values().length)].criar(melhor ? 2 : 1));
         if (melhor && rnd().nextDouble() < 0.4) l.add(Raro.FRAGMENTO_DE_FORJA.criar(1));
         if (rnd().nextDouble() < (melhor ? 0.3 : 0.15)) l.add(Gema.values()[rnd().nextInt(Gema.values().length)].criar(1, 1));

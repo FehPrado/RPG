@@ -7,7 +7,7 @@ import org.bukkit.entity.Villager;
 import java.util.Locale;
 
 /**
- * Profissões dos cidadãos da colônia. Cada uma precisa de um posto perto da Prefeitura
+ * Profissões dos cidadãos da colônia. Cada uma precisa de um posto no território da colônia
  * (um bloco de profissão do jogo ou uma estação do plugin) e libera num nível da colônia.
  * A roupa do aldeão é a da profissão do jogo mais parecida.
  */

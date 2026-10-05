@@ -30,7 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Pedra de Amolar: 2 pederneiras e 1 lingote de ferro jogados numa pedra lisa. Clique nela com
+ * Pedra de Amolar: 2 pederneiras e 1 lingote de ferro jogados num rebolo, numa pedra lisa ou numa
+ * laje de pedra lisa. Clique nela com
  * uma arma corpo a corpo na mão e 1 pederneira no inventário: a arma fica "Afiada" (+10% de
  * dano) pelos próximos 100 golpes.
  */
@@ -48,7 +49,7 @@ public final class PedrasDeAmolar extends Estacao {
 
     @Override
     protected boolean blocoValido(Material m) {
-        return m == Material.SMOOTH_STONE;
+        return m == Material.SMOOTH_STONE || m == Material.SMOOTH_STONE_SLAB || m == Material.GRINDSTONE;
     }
 
     @Override
@@ -59,7 +60,9 @@ public final class PedrasDeAmolar extends Estacao {
     @Override
     protected Block blocoDoRitual(Item item) {
         Block abaixo = item.getLocation().clone().subtract(0, 0.25, 0).getBlock();
-        return abaixo.getType() == Material.SMOOTH_STONE ? abaixo : null;
+        if (blocoValido(abaixo.getType())) return abaixo;
+        Block noLugar = item.getLocation().getBlock(); // laje e rebolo: o item fica dentro do bloco
+        return blocoValido(noLugar.getType()) ? noLugar : null;
     }
 
     @Override

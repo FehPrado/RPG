@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.22</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.25</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -135,7 +135,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.22.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.25.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -173,9 +173,11 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>deuses.yml</code></td><td>Deus oficial de cada reino (a fé de cada um fica no próprio jogador)</td></tr>
       <tr><td><code>lapides.yml</code></td><td>Túmulos de quem morreu (com os itens), até alguém abrir</td></tr>
       <tr><td><code>recordes.yml</code></td><td>Recordes do servidor e as placas de recordes</td></tr>
+      <tr><td><code>pomares.yml</code></td><td>Árvores frutíferas e as frutas penduradas</td></tr>
+      <tr><td><code>estruturas.yml</code></td><td>Estruturas prontas já construídas (tipo, lugar, quem visitou, guardas, eremita)</td></tr>
       <tr><td><code>pacote/RPGAtributos-recursos.zip</code></td><td>Pacote de recursos gerado a cada início (pode apagar: ele é refeito)</td></tr>
       <tr><td><code>pacote/texturas/</code>, <code>pacote/texturas-padrao/</code></td><td>Suas texturas (entram no lugar das originais) e os desenhos originais</td></tr>
-      <tr><td>No chunk (PDC)</td><td>Posição dos minérios de mitrilo e marcas de "já gerado" (mitrilo e sítios de arqueologia)</td></tr>
+      <tr><td>No chunk (PDC)</td><td>Posição dos minérios de mitrilo e marcas de "já gerado" (mitrilo, sítios de arqueologia e estruturas)</td></tr>
       <tr><td><code>salas/&lt;tipo&gt;/&lt;nome&gt;.nbt</code></td><td>Salas de masmorra construídas por admins</td></tr>
       <tr><td>No jogador (PDC)</td><td>Atributos, classes, magias, proficiência de armas e combos, mochila, acessórios, guarda-roupa, exército das sombras, talentos e renascimentos (os dados da evolução ficam no próprio companheiro)</td></tr>
     </tbody></table></div>
@@ -221,6 +223,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
         <tr><td><code>party.tamanho-maximo</code></td><td>6</td><td>Jogadores por party</td></tr>
         <tr><td><code>territorio.chunks-maximo</code></td><td>60</td><td>Tamanho máximo do território</td></tr>
+        <tr><td><code>territorio.expansoes-maximo</code> / <code>niveis-por-expansao</code> / <code>chunks-por-expansao</code></td><td>2 / 300 / 9</td><td>Marcos de Expansão: quantos, a cada quantos níveis somados e quantos chunks cada um dá</td></tr>
         <tr><td><code>territorio.mundos-bloqueados</code></td><td>[]</td><td>Mundos sem territórios</td></tr>
         <tr><td><code>reino.esmeraldas-para-fundar</code></td><td>32</td><td>Custo do reino</td></tr>
         <tr><td><code>guerra.dia-da-semana</code> / <code>hora</code></td><td>SATURDAY / 20</td><td>Horário das guerras</td></tr>
@@ -296,6 +299,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <div class="card"><h3>Detalhes (2.20)</h3>
       <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
         <tr><td><code>detalhes.sentar</code></td><td>true</td><td>Sentar em escadas e lajes</td></tr>
+        <tr><td><code>combate.golpes-em-qualquer-criatura</code></td><td>true</td><td>Combos e habilidades acertam qualquer criatura (aldeões, pets e animais com nome ficam de fora)</td></tr>
         <tr><td><code>detalhes.lapide.ativada</code> / <code>minutos-de-protecao</code></td><td>true / 15</td><td>Túmulo ao morrer e quanto tempo só o dono abre</td></tr>
         <tr><td><code>detalhes.chance-de-ninho</code></td><td>0.01</td><td>Folhas naturais derrubarem um ninho</td></tr>
         <tr><td><code>detalhes.chance-de-achado</code></td><td>0.015</td><td>Areia e cascalho naturais darem um achado</td></tr>
@@ -305,14 +309,24 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>detalhes.amolar.golpes</code> / <code>dano-extra</code></td><td>100 / 0.10</td><td>Quanto dura e quanto dá a Pedra de Amolar</td></tr>
       </tbody></table></div>
     </div>
-    <div class="card"><h3>Vida no mundo (2.22)</h3>
+    <div class="card"><h3>Vida no mundo e pomar (2.22–2.23)</h3>
       <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
         <tr><td><code>vida.canteiro-minutos</code> / <code>colmeia-minutos</code></td><td>10 / 5</td><td>Uma erva / um mel a cada tanto</td></tr>
+        <tr><td><code>mundo-vivo.horas-por-estacao</code></td><td>168</td><td>Duração de cada estação (168 h = uma semana real)</td></tr>
         <tr><td><code>vida.barril.dias-envelhecida</code> / <code>reserva</code> / <code>lendaria</code></td><td>1 / 3 / 7</td><td>Dias reais para cada grau da bebida</td></tr>
         <tr><td><code>vida.chance-de-cartas</code></td><td>1.0</td><td>Multiplica a chance de cair carta</td></tr>
         <tr><td><code>vida.mercador.intervalo-minutos</code> / <code>duracao-minutos</code></td><td>90 / 20</td><td>Visitas do Mercador Itinerante</td></tr>
         <tr><td><code>vida.encontros.ativados</code> / <code>espera-minutos</code></td><td>true / 30</td><td>Encontros na estrada (1 por jogador nesse tempo)</td></tr>
       </tbody></table></div>
+    </div>
+    <div class="card"><h3>Estruturas (2.24)</h3>
+      <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td><code>estruturas.ativadas</code></td><td>true</td><td>Torre de vigia, acampamento de bandidos, cemitério, mina abandonada, poço dos desejos, cabana do eremita e santuário esquecido</td></tr>
+        <tr><td><code>estruturas.chance-por-chunk</code></td><td>0.02</td><td>Chance de cada chunk novo tentar receber uma (tenta até 3 tipos; só constrói se o chão servir). Dá mais ou menos 1 a cada 300×300 blocos de terra</td></tr>
+        <tr><td><code>estruturas.distancia-minima</code></td><td>160</td><td>Blocos entre duas estruturas</td></tr>
+        <tr><td><code>estruturas.so-chunks-novos</code></td><td>true</td><td>Só em terra nunca visitada; false também tenta em chunks antigos sem obra de jogador e fora de territórios</td></tr>
+      </tbody></table></div>
+      <p>Nunca nascem em território, em cima de estrutura do Minecraft, na água ou em chão muito irregular. Cada uma cabe num chunk só. <span class="cmd">/rpgadmin estruturas</span> mostra quantos lugares foram recusados e por quê.</p>
     </div>
   </div>
 </section>
@@ -489,6 +503,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin carta &lt;carta&gt; [brilhante]</span></td><td>Dá uma carta do álbum</td></tr>
       <tr><td><span class="cmd">/rpgadmin flecha|frasco|erva|mel &lt;tipo&gt; [qtd]</span></td><td>Dá flechas especiais, frascos, ervas ou méis</td></tr>
       <tr><td><span class="cmd">/rpgadmin bebida &lt;tipo&gt; [grau 0-3]</span></td><td>Dá uma bebida do barril (3 = Lendária)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin muda|fruta &lt;fruta&gt; [qtd]</span></td><td>Mudas e frutas do pomar</td></tr>
+      <tr><td><span class="cmd">/rpgadmin estrutura &lt;tipo&gt;</span></td><td>Constrói a estrutura à sua frente (console: &lt;tipo&gt; &lt;mundo&gt; &lt;x&gt; &lt;z&gt;)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td><td>Lista as mais perto · tira a mais perto do registro (os blocos ficam)</td></tr>
       <tr><td><span class="cmd">/rpgadmin mercador</span></td><td>O Mercador Itinerante aparece perto de você</td></tr>
       <tr><td><span class="cmd">/rpgadmin encontro [carroca|bandidos|viajante|estrela]</span></td><td>Começa um encontro perto de você</td></tr>
     </tbody></table></div></div>
@@ -499,7 +516,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <h2><span class="ico">♨</span>Detalhes do dia a dia</h2>
   <div class="grade">
     <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
-      <tr><td><span class="cmd">/rpgadmin boneco</span>, <span class="cmd">pedraamolar</span>, <span class="cmd">fogueira</span>, <span class="cmd">bebedouro</span>, <span class="cmd">cartografo</span></td><td>Cria a estação olhando para o bloco dela (fardo de feno, pedra lisa, fogueira, caldeirão com água, mesa de cartografia)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin boneco</span>, <span class="cmd">pedraamolar</span>, <span class="cmd">fogueira</span>, <span class="cmd">bebedouro</span>, <span class="cmd">cartografo</span></td><td>Cria a estação olhando para o bloco dela (fardo de feno, rebolo ou pedra lisa, fogueira, caldeirão com água, mesa de cartografia)</td></tr>
       <tr><td><span class="cmd">/rpgadmin ferradura [qtd]</span></td><td>Dá ferraduras</td></tr>
       <tr><td><span class="cmd">/rpgadmin ninhopassaro [qtd]</span></td><td>Dá ninhos de pássaro</td></tr>
       <tr><td><span class="cmd">/rpgadmin animalraro [ouro|neve]</span></td><td>O animal que você olha vira raro</td></tr>
@@ -600,12 +617,38 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li><span class="cmd">/rpgadmin carta zumbi</span>, clique com ela e abra <span class="cmd">/album</span>.</li>
         <li><span class="cmd">/rpgadmin mercador</span> e <span class="cmd">/rpgadmin encontro bandidos</span>.</li>
         <li>Faça flechas e frascos na bancada; abra <span class="cmd">/rpg</span> e ligue o <span class="cmd">/placar</span>.</li>
+        <li><span class="cmd">/rpgadmin muda cereja</span> (na primavera), plante, use farinha de osso e espere as frutas aparecerem nas folhas.</li>
+        <li>Solte um combo numa vaca ou num lobo selvagem: acerta. Num aldeão ou no seu próprio lobo, não.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Estruturas</h3>
+      <ol>
+        <li>Em modo sobrevivência, <span class="cmd">/rpgadmin estrutura torre_de_vigia</span> e chegue perto: o nome aparece e as Sentinelas acordam. Suba e abra o baú.</li>
+        <li><span class="cmd">/rpgadmin estrutura acampamento</span>: bandidos e o Chefe dos Bandidos.</li>
+        <li><span class="cmd">/rpgadmin estrutura cemiterio</span> à noite (<code>/time set night</code>): os mortos saem das covas. Desça a escada do mausoléu até a cripta.</li>
+        <li><span class="cmd">/rpgadmin estrutura mina</span>: desça o poço; mineiros e aranhas no fundo, carrinho de minério no ramal.</li>
+        <li><span class="cmd">/rpgadmin estrutura poco_dos_desejos</span> e jogue 1 esmeralda na água (Q).</li>
+        <li><span class="cmd">/rpgadmin estrutura cabana_do_eremita</span>: o eremita aparece dentro; clique para negociar e ouvir um boato.</li>
+        <li><span class="cmd">/rpgadmin estrutura santuario_esquecido</span>: leia o púlpito; seguindo o deus dele, clique no altar.</li>
+        <li><span class="cmd">/rpgadmin estrutura farol</span>: suba e clique na lanterna com um bloco de pedra luminosa.</li>
+        <li><span class="cmd">/rpgadmin estrutura cabana_da_bruxa</span>: negocie de dia; à noite ela não atende e as aprendizes aparecem.</li>
+        <li><span class="cmd">/rpgadmin estrutura circulo_de_pedras</span> numa lua cheia (<code>/time set 13000</code> no dia 0, 8, 16...) e entre no círculo.</li>
+        <li><span class="cmd">/rpgadmin estrutura torre_do_mago</span>: leia as anotações (revelam uma magia secreta) e suba até o Aprendiz.</li>
+        <li>Também: <code>oasis</code>, <code>expedicao</code>, <code>vila_saqueada</code>, <code>forja_dos_anoes</code>, <code>fortim</code>.</li>
+        <li>Vá longe, para terra nova, e use <span class="cmd">/rpgadmin estruturas</span> para ver as que surgiram sozinhas.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Território e reino</h3>
+      <ol>
+        <li>Com um território, faça o ritual do Marco em outra magnetita longe, com 1 bloco de esmeralda a mais: vira uma <b>expansão</b> (precisa de 300 níveis somados; use <span class="cmd">/rpgadmin set</span>).</li>
+        <li>Abra a Prefeitura: a lista de postos diz "Encontrados no território" e conta camas e plantações em qualquer chunk do território.</li>
+        <li>Com um reino, entre no território de outro membro: aparece o nome do reino. Como Rei, <span class="cmd">/reino lei paz</span> e veja a regra de PvP marcada como proibida.</li>
       </ol>
     </div>
     <div class="card"><h3>Detalhes do dia a dia</h3>
       <ol>
         <li>Forje um barco, uma vara e um carrinho na Forja do Ferreiro; jogue um élitro e um Fragmento de Forja em cima dela (Reforjar).</li>
-        <li><span class="cmd">/rpgadmin boneco</span> num fardo de feno e bata; <span class="cmd">/rpgadmin pedraamolar</span> numa pedra lisa e afie a espada.</li>
+        <li><span class="cmd">/rpgadmin boneco</span> num fardo de feno e bata; <span class="cmd">/rpgadmin pedraamolar</span> num rebolo (ou pedra lisa) e afie a espada.</li>
         <li><span class="cmd">/rpgadmin fogueira</span> numa fogueira acesa, sente numa escada perto por 30 s e veja o Descansado.</li>
         <li>Morra com itens: o túmulo aparece e a bússola aponta para ele.</li>
         <li><span class="cmd">/rpgadmin animalraro</span> olhando para uma vaca; escreva <code>[recordes]</code> numa placa; abra <span class="cmd">/diario</span>.</li>
@@ -689,7 +732,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.22 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<footer>RPGAtributos 2.25 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

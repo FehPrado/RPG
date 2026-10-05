@@ -55,6 +55,7 @@ combate:
   vida-maxima: 10           # +10 de vida (5 corações) no nível máximo
   cooldown-mesmo-jogador-segundos: 600  # matar o mesmo jogador de novo só dá XP depois desse tempo
   sem-xp-mesmo-ip: true                 # matar uma conta do mesmo IP (conta fake) não dá XP
+  golpes-em-qualquer-criatura: true     # combos e habilidades acertam qualquer criatura (aldeões, pets e animais com nome ficam de fora)
 
 natacao:
   xp-por-bloco: 0.15                  # nadar/mergulhar (só conta com tecla de movimento apertada)
@@ -135,7 +136,8 @@ perigo:
 # ==========================================================
 
 mundo-vivo:
-  temperatura: true                   # frio e calor nos extremos (nevasca, deserto no verão, Nether)
+  horas-por-estacao: 168              # quanto dura cada estação (168 = uma semana real; cada "dia" dela é 1/7 disso)
+  temperatura: true                  # frio e calor nos extremos (nevasca, deserto no verão, Nether)
   neve-e-gelo-no-inverno: true        # no inverno cai neve e a água congela perto dos jogadores (some na primavera)
   blocos-de-neve-no-maximo: 4000
   chance-evento-de-clima: 0.08        # a cada 2,5 min: nevasca, neblina, ventania, tempestade elétrica, onda de calor
@@ -273,6 +275,17 @@ vida:
     espera-minutos: 30                # cada jogador tem no máximo 1 encontro nesse tempo
 
 # ==========================================================
+#  Estruturas prontas (torres, acampamentos, cemitérios, minas,
+#  poços dos desejos, cabanas de eremita, santuários esquecidos)
+# ==========================================================
+
+estruturas:
+  ativadas: true
+  chance-por-chunk: 0.02              # chance de cada chunk novo tentar receber uma (se o chão servir)
+  distancia-minima: 160               # blocos entre duas estruturas
+  so-chunks-novos: true               # true = só em terra nunca visitada (nunca encosta em obra de jogador)
+
+# ==========================================================
 #  Doma (companheiros e Altar do Domador)
 # ==========================================================
 
@@ -348,6 +361,9 @@ territorio:
   chunks-maximo: 60
   membros-maximo: 10
   chunks-precisam-ser-vizinhos: true  # chunk novo precisa encostar no território
+  expansoes-maximo: 2                 # Marcos de Expansão: outra área ligada ao seu território, em outro lugar
+  niveis-por-expansao: 300            # 1 expansão a cada 300 níveis somados (até o máximo)
+  chunks-por-expansao: 9              # cada expansão protege 3x3 chunks a mais (além do limite normal)
   mundos-bloqueados: []               # mundos onde não dá para criar território (ex.: [world_the_end])
 
 # ==========================================================

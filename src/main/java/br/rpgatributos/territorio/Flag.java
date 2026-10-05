@@ -18,6 +18,8 @@ public enum Flag {
             "Creepers, TNT e outras explosões quebram blocos aqui."),
     FOGO("Fogo se espalha", Material.FLINT_AND_STEEL, false,
             "O fogo se espalha e queima blocos."),
+    REINO("Reino pode construir", Material.GOLDEN_HELMET, true,
+            "Membros do seu reino constroem e mexem em tudo aqui, como membros."),
     PARTY("Party pode construir", Material.CAKE, true,
             "Quem está na sua party constrói e mexe em tudo, como um membro.");
 

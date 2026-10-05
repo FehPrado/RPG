@@ -205,6 +205,8 @@ public final class PacoteRecursos implements Listener {
                 : "carta_" + new String[]{"comum", "rara", "epica"}[carta.raridade()];
         var flecha = br.rpgatributos.vida.Flechas.tipo(i);
         if (flecha != null) return "flecha_" + flecha.id();
+        var fruta = br.rpgatributos.vida.Fruta.de(i);
+        if (fruta != null) return "fruta_" + fruta.id();
         var frasco = br.rpgatributos.vida.Frascos.tipo(i);
         return frasco == null ? null : "frasco_" + frasco.id();
     }

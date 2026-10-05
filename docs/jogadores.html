@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.22</small></div></div>
+  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.25</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -144,7 +144,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <div class="hero">
   <h1>Bem-vindo ao RPG do servidor</h1>
   <p>Aqui tudo evolui com o uso: minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. Não precisa de mod nem de resource pack.</p>
-  <div class="chips"><span class="chip">13 atributos até o nível 100</span><span class="chip">24 classes</span><span class="chip">50 magias secretas</span><span class="chip">42 golpes de combo</span><span class="chip">12 lendas únicas</span><span class="chip">Livro <code>/guia</code> com 78 páginas</span></div>
+  <div class="chips"><span class="chip">13 atributos até o nível 100</span><span class="chip">24 classes</span><span class="chip">50 magias secretas</span><span class="chip">42 golpes de combo</span><span class="chip">16 estruturas pelo mundo</span><span class="chip">12 lendas únicas</span><span class="chip">Livro <code>/guia</code> com 80 páginas</span></div>
 </div>
 
 <section class="secao" id="inicio">
@@ -251,6 +251,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li><b>Arco e besta</b> começam com o esquerdo: <code>E E E</code>, <code>E D E</code>, <code>E E D</code>, <code>E D D</code>.</li>
         <li>A barra de ação mostra o progresso (<code>D · E · ?</code>).</li>
         <li>Agachado não solta combo. Clicar em baú ou porta não conta, e um clique só ainda levanta o escudo.</li>
+        <li>Golpes e habilidades de classe acertam <b>qualquer criatura</b> (menos aldeões, NPCs, animais com nome e os bichos seus e dos aliados). Em jogadores, só onde o PvP vale (guerra, território com PvP ligado).</li>
       </ul>
     </div>
     <div class="card"><h3>Vigor e proficiência</h3>
@@ -459,7 +460,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <p><span class="cmd">/cosmeticos</span>, <span class="cmd">/chapeu</span> e <span class="cmd">/tag</span>: item na cabeça e tag personalizada.</p>
     </div>
     <div class="card"><h3>Títulos</h3>
-      <p><span class="cmd">/titulos</span>: 64 títulos com requisitos. Só o título em uso dá bônus (vida, dano, mana, XP...). Ele aparece acima da sua cabeça e os mais difíceis são anunciados.</p>
+      <p><span class="cmd">/titulos</span>: 84 títulos com requisitos (duas páginas), como Andarilho das Ruínas, Desejoso e Pomicultor. Só o título em uso dá bônus (vida, dano, mana, XP...). Ele aparece acima da sua cabeça e os mais difíceis são anunciados.</p>
     </div>
     <div class="card"><h3>Missões dos aldeões</h3>
       <p><b>Agache + clique direito</b> num aldeão com profissão: 3 pedidos do dia. Cumprir dá esmeraldas, XP, às vezes Fragmentos, e <b>reputação</b> (desconto no comércio). Até 3 ao mesmo tempo; <span class="cmd">/missoes</span>.</p>
@@ -571,6 +572,27 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <div class="card"><h3>Arqueologia e relíquias</h3>
       <p>Procure <b>pedras em pé</b> com areia e cascalho suspeitos em volta. Use o <b>pincel</b>: saem cacos e uma das <b>12 relíquias</b> (Moeda do Rei Caído, Máscara de Mortis, Coração de Sombra...). Cada uma tem sua história e entra na coleção.</p>
     </div>
+    <div class="card largo"><h3>Estruturas pelo mundo</h3>
+      <p>Em <b>terra nunca visitada</b> surgem, de vez em quando, dezesseis tipos de estruturas prontas. Ao chegar perto, o nome aparece na tela e ela entra no Diário. Descubra 12 para o título <b>Andarilho das Ruínas</b>.</p>
+      <div class="tabela"><table><thead><tr><th>Estrutura</th><th>O que tem</th></tr></thead><tbody>
+        <tr><td>🗼 Torre de Vigia Abandonada</td><td>Três andares, sino e baú no alto. <b>Sentinelas Esquecidas</b> acordam quando você chega</td></tr>
+        <tr><td>⛺ Acampamento de Bandidos</td><td>Fogueira, tendas e saque. <b>Bandidos</b> e o <b>Chefe dos Bandidos</b> (esmeraldas e às vezes mapa)</td></tr>
+        <tr><td>⚰ Cemitério Antigo</td><td>Lápides e um mausoléu com <b>cripta</b> embaixo (página de lenda, relíquia). <b>À noite os mortos se levantam</b></td></tr>
+        <tr><td>⛏ Mina Abandonada</td><td>Poço com escada até túneis com trilhos, minérios e o <b>carrinho de minério</b> (às vezes Mitrilo). Mineiros Perdidos e aranhas</td></tr>
+        <tr><td>⛲ Poço dos Desejos</td><td>Jogue <b>1 esmeralda</b> na água: um desejo por dia (Sorte, Vigor, Ligeireza, Pressa, Herói da Vila, Fôlego ou Visão)</td></tr>
+        <tr><td>🛖 Cabana do Eremita</td><td>O <b>Eremita</b> troca ervas, mudas, elixires, mapas e cartas (ofertas novas todo dia) e <b>conta boatos</b> de estruturas que você ainda não viu</td></tr>
+        <tr><td>✧ Santuário Esquecido</td><td>Altar de um dos seis deuses. Se você segue esse deus, <b>clique no altar</b> uma vez por dia: +30 devoção e uma bênção</td></tr>
+        <tr><td>🌴 Oásis do Deserto</td><td>Lagoa com palmeiras, um camelo e o <b>Mercador Nômade</b> (gemas, bebidas, elixires, mudas de limoeiro, mapas)</td></tr>
+        <tr><td>🧙 Cabana da Bruxa</td><td>No pântano, sobre palafitas. A <b>Bruxa</b> vende elixires, componentes, frascos e ervas de dia; à noite não atende e as aprendizes dela saem</td></tr>
+        <tr><td>🗼 Farol Abandonado</td><td>Na praia. Suba e <b>clique na lanterna com um bloco de pedra luminosa</b>: por 7 dias quem navega perto tem Sorte (pesca e saque melhores)</td></tr>
+        <tr><td>❄ Expedição Perdida</td><td>Na neve: o <b>diário da expedição</b> e o trenó com o mapa que eles seguiam. Exploradores Congelados guardam o lugar</td></tr>
+        <tr><td>🏚 Vila Saqueada</td><td>Casas queimadas e o <b>diário de um sobrevivente</b> (conta de onde vieram os bandidos). Os Aldeões Perdidos podem ser curados</td></tr>
+        <tr><td>🔮 Torre do Mago em Ruínas</td><td>As <b>anotações do mago revelam uma magia secreta</b>. No alto, o Aprendiz Corrompido guarda o baú</td></tr>
+        <tr><td>◯ Círculo de Pedras Antigas</td><td>De noite as pedras brilham. <b>Na lua cheia</b>, entre no círculo: o Guardião Ancestral desperta e deixa uma relíquia</td></tr>
+        <tr><td>⚒ Forja dos Anões</td><td>Salão meio enterrado com lava e bigorna: Fragmentos de Forja e às vezes Mitrilo. Anões Espectrais lá dentro</td></tr>
+        <tr><td>🏰 Fortim em Ruínas</td><td>Muralha, torres e a torre de menagem. Soldados e o Capitão Esquecido. Bom para party</td></tr>
+      </tbody></table></div>
+    </div>
     <div class="card largo"><h3>As Crônicas do Mundo</h3>
       <p>O <b>Cronista</b> (um bibliotecário no spawn) conta a campanha em 8 capítulos. Clique nele ou use <span class="cmd">/cronista</span> para ler o pedido; ao cumprir, volte até ele e clique em <b>entregar</b>.</p>
       <div class="tabela"><table><thead><tr><th>Capítulo</th><th>Pedido</th><th>Recompensa</th></tr></thead><tbody>
@@ -642,7 +664,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <div class="card largo"><h3>Estações pequenas</h3>
       <div class="tabela"><table><thead><tr><th>Estação</th><th>Ritual (Q)</th><th>O que faz</th></tr></thead><tbody>
         <tr><td>🎯 Boneco de Treino</td><td>Fardo de feno + abóbora esculpida + suporte de armadura</td><td>Mostra o dano de cada golpe e por segundo; nunca quebra</td></tr>
-        <tr><td>⚔ Pedra de Amolar</td><td>Pedra lisa + 2 pederneiras + 1 ferro</td><td>Arma +10% de dano por 100 golpes (custa 1 pederneira)</td></tr>
+        <tr><td>⚔ Pedra de Amolar</td><td>Rebolo ou pedra lisa + 2 pederneiras + 1 ferro</td><td>Arma +10% de dano por 100 golpes (custa 1 pederneira)</td></tr>
         <tr><td>♨ Fogueira de Acampamento</td><td>Fogueira acesa + 1 lã + 1 tronco</td><td>Sentado perto: Regeneração e Descansado (+5% de XP por 20 min); assa comida jogada do lado</td></tr>
         <tr><td>☘ Bebedouro</td><td>Caldeirão com água + 1 fardo de feno</td><td>Filhotes crescem mais rápido; companheiros se curam</td></tr>
         <tr><td>🏆 Estante de Troféus</td><td>Pilar de quartzo + núcleo de um chefe</td><td>Mostra o troféu; +1% de XP por troféu diferente no seu território</td></tr>
@@ -659,9 +681,10 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card largo"><h3>Ofícios</h3>
       <div class="tabela"><table><thead><tr><th>Estação</th><th>Ritual (Q)</th><th>O que faz</th></tr></thead><tbody>
-        <tr><td>🛢 Barril de Envelhecimento</td><td>Barril vazio + 2 ferros + 1 favo</td><td>Bebidas que melhoram com os dias reais: Nova, Envelhecida (1 dia), Reserva (3) e Lendária (7)</td></tr>
+        <tr><td>🛢 Barril de Envelhecimento</td><td>Barril vazio + 2 ferros + 1 favo</td><td>Bebidas que melhoram com os dias reais: Nova, Envelhecida (1 dia), Reserva (3) e Lendária (7). <b>Licor de Frutas</b>: 6 frutas do pomar + 1 garrafa de mel</td></tr>
         <tr><td>🐝 Colmeia do Apicultor</td><td>Colmeia + 1 favo + 1 flor</td><td>Méis Dourado, Gelado, Floral, Noturno ou Silvestre, cada um com um efeito</td></tr>
         <tr><td>☘ Canteiro de Ervas</td><td>Musgo + farinha de osso + vaso</td><td>Ervas que dependem do lugar (Sálvia, Erva-de-Sol, Musgo Lunar, Folha Gélida, Raiz Abissal, Flor-de-Cristal)</td></tr>
+        <tr><td>🍊 Pomar</td><td>Plante uma muda especial</td><td>Laranja, pêssego, cereja, limão e maçã dourada penduram nas folhas na estação certa: clique para colher</td></tr>
       </tbody></table></div>
     </div>
     <div class="card"><h3>Álbum de Cartas</h3>
@@ -769,7 +792,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <div class="ritual"><span class="b">Magnetita</span><span class="mais">+</span><span class="i">1 estandarte</span><span class="mais">+</span><span class="i">4 esmeraldas</span></div>
       <ul>
         <li>Protege 3×3 chunks; +1 chunk a cada 20 níveis somados (até 60).</li>
-        <li>Menu (<span class="cmd">/territorio</span>): mapa de chunks, membros, regras (PvP, portas, baús, monstros, explosões, fogo, party) e bordas.</li>
+        <li><b>Expansão:</b> o mesmo ritual numa magnetita longe, com <b>+1 bloco de esmeralda</b>, cria outra área do seu território (+9 chunks). 1 a cada 300 níveis somados, até 2.</li>
+        <li>Menu (<span class="cmd">/territorio</span>): mapa de chunks, membros, regras (PvP, portas, baús, monstros, explosões, fogo, reino, party), expansões e bordas.</li>
         <li>Ninguém de fora quebra, coloca, abre baú, mexe em animais, estações etc.</li>
       </ul>
     </div>
@@ -783,9 +807,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <div class="ritual"><span class="b">Sino</span><span class="mais">+</span><span class="i">1 bloco de esmeralda</span><span class="mais">+</span><span class="i">1 cama</span></div>
       <ul>
         <li>Precisa ser no <b>seu</b> território. Vira a Prefeitura e chegam 2 moradores. <span class="cmd">/colonia</span> abre de qualquer lugar.</li>
-        <li>Defina até 4 <b>baús de depósito</b>: os moradores guardam ali o que produzem e pegam comida.</li>
+        <li>Defina até 4 <b>baús de depósito</b> perto da Prefeitura: os moradores guardam ali o que produzem e pegam comida.</li>
         <li>Comida e felicidade mudam a produção (×0,5 a ×1,2). Pratos da Cozinha deixam todos felizes.</li>
-        <li>Tudo num raio de 32 blocos da Prefeitura; cada morador precisa do seu próprio posto.</li>
+        <li><b>A colônia é o território inteiro</b> (com as expansões): camas, plantações, postos, água e pomar contam em qualquer chunk dele. Cada morador precisa do seu próprio posto.</li>
       </ul>
     </div>
     <div class="card"><h3>Profissões</h3>
@@ -823,6 +847,13 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li><b>Rei</b> (guerra, paz, cargos, coroa), <b>Nobre</b> (tesouro, expulsar), <b>Cavaleiro</b> (convida) e <b>Cidadão</b>.</li>
         <li>Tesouro de esmeraldas: todos depositam, Rei e Nobres sacam.</li>
         <li>Membros do mesmo reino não se machucam.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Províncias e leis</h3>
+      <ul>
+        <li>O território de cada membro é uma <b>província</b> do reino: o nome do reino aparece ao entrar e no mapa (<span class="cmd">/reino mapa</span>).</li>
+        <li>Com a regra "Reino pode construir" (ligada por padrão), membros do reino constroem nas províncias uns dos outros.</li>
+        <li><b>Leis</b> (só o Rei, no menu ou <span class="cmd">/reino lei</span>): Lei da Paz (sem PvP), contra Explosões, contra Incêndios e das Muralhas (sem monstros). Valem em todas as províncias.</li>
       </ul>
     </div>
     <div class="card"><h3>Guerra com horário marcado</h3>
@@ -962,13 +993,14 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <section class="secao" id="mundovivo">
   <h2><span class="ico">🌙</span>Estações, clima e céu</h2>
   <div class="grade">
-    <div class="card"><h3>Estações (1 semana real cada)</h3>
+    <div class="card"><h3>Estações (1 semana real cada, por padrão)</h3>
       <div class="tabela"><table><thead><tr><th>Estação</th><th>O que muda</th></tr></thead><tbody>
         <tr><td>✿ Primavera</td><td>Plantas 40% mais rápidas</td></tr>
         <tr><td>☀ Verão</td><td>Ondas de calor e tempestades</td></tr>
         <tr><td>☘ Outono</td><td>Ventanias e neblina</td></tr>
         <tr><td>❄ Inverno</td><td>Neve no chão, água congela, plantações ao ar livre quase param (estufas crescem normal)</td></tr>
       </tbody></table></div>
+      <p>Cada dia da estação é um dia real. O <span class="cmd">/calendario</span> e o <span class="cmd">/placar</span> mostram quanto falta para a estação mudar e quais frutas do pomar estão dando.</p>
       <p>No 4º dia de cada estação tem <b>festival</b>: +25% de XP e uma lembrança para a cabeça. <span class="cmd">/calendario</span>.</p>
     </div>
     <div class="card"><h3>Clima e céu</h3>
@@ -1121,7 +1153,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/party</span>, <span class="cmd">/pc</span></td><td>Menu e chat da party</td></tr>
       <tr><td><span class="cmd">/territorio</span></td><td>Menu do território (mapa, bordas, membros...)</td></tr>
       <tr><td><span class="cmd">/colonia</span></td><td>Sua colônia</td></tr>
-      <tr><td><span class="cmd">/reino</span></td><td>Seu reino, cargos, tesouro, guerra e paz</td></tr>
+      <tr><td><span class="cmd">/reino</span></td><td>Seu reino: cargos, tesouro, províncias, leis (<span class="cmd">/reino lei</span>), mapa, guerra e paz</td></tr>
       <tr><td><span class="cmd">/pets</span></td><td>Seus companheiros</td></tr>
       <tr><td><span class="cmd">/masmorra sair</span></td><td>Sai da masmorra sem perder nada</td></tr>
       <tr><td><span class="cmd">/portais</span></td><td>Portais abertos e quando transbordam</td></tr>
@@ -1144,7 +1176,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.22 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.25 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

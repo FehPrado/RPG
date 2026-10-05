@@ -54,13 +54,13 @@ public final class MenuTerritorio implements Listener {
 
     // principal
     private static final int S_INFO = 4, S_MAPA = 19, S_MEMBROS = 21, S_REGRAS = 23, S_BORDAS = 25;
-    private static final int S_REIVINDICAR = 30, S_LIBERAR = 32, S_FECHAR = 49, S_ABANDONAR = 53;
+    private static final int S_REIVINDICAR = 30, S_LIBERAR = 32, S_EXPANSOES = 34, S_FECHAR = 49, S_ABANDONAR = 53;
     private static final int S_COMO = 13, S_AQUI = 22;
     // mapa (5 linhas x 9 colunas de chunks)
     private static final int S_NORTE = 45, S_LEGENDA = 47, S_VOLTAR = 49, S_CONTA = 51;
     // membros e regras
     private static final int S_ADICIONAR = 48;
-    private static final int[] S_FLAGS = {10, 11, 12, 13, 14, 15, 16};
+    private static final int[] S_FLAGS = {9, 10, 11, 12, 13, 14, 15, 16, 17};
 
     private final RPGAtributos plugin;
 
@@ -118,6 +118,7 @@ public final class MenuTerritorio implements Listener {
                 inv.setItem(S_LIBERAR, item(Material.DEAD_BUSH, Component.text("- Liberar este chunk", NamedTextColor.RED, TextDecoration.BOLD), List.of(
                         Component.text("Tira o chunk onde você está do território.", NamedTextColor.GRAY),
                         Component.text("Shift + clique para confirmar.", NamedTextColor.GRAY))));
+                if (terr.dono().equals(p.getUniqueId())) inv.setItem(S_EXPANSOES, expansoes(p, terr));
                 inv.setItem(S_ABANDONAR, item(Material.TNT, Component.text("Abandonar território", NamedTextColor.DARK_RED, TextDecoration.BOLD), List.of(
                         Component.text("Apaga o território inteiro.", NamedTextColor.GRAY),
                         Component.text("O Marco vira magnetita e a bandeira cai.", NamedTextColor.GRAY),
@@ -140,6 +141,9 @@ public final class MenuTerritorio implements Listener {
             lore.add(Component.text("Chunks: " + terr.chunks().size(), NamedTextColor.WHITE));
         }
         lore.add(Component.text("Membros: " + terr.membros().size(), NamedTextColor.WHITE));
+        var reino = ter().reinoDe(terr);
+        if (reino != null) lore.add(Component.text("♛ Província do reino " + reino.nome(), reino.cor()));
+        if (!terr.expansoes().isEmpty()) lore.add(Component.text("Expansões: " + terr.expansoes().size(), NamedTextColor.WHITE));
         lore.add(Component.text("Marco: " + terr.marcoX() + " " + terr.marcoY() + " " + terr.marcoZ() + " (" + terr.mundo() + ")", NamedTextColor.GRAY));
         lore.add(Component.empty());
         lore.add(switch (ter().relacao(p, terr)) {
@@ -153,6 +157,30 @@ public final class MenuTerritorio implements Listener {
             lore.add(Component.text("aqui para trocar a bandeira.", NamedTextColor.YELLOW));
         }
         return enfeitar(terr.bandeira(), Component.text("⚑ Território de " + terr.nomeDono(), Territorios.COR, TextDecoration.BOLD), lore);
+    }
+
+    private ItemStack expansoes(Player p, Territorio terr) {
+        int tem = terr.expansoes().size(), pode = ter().expansoesPermitidas(p);
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text("Quer mais terra? Crie uma Expansão: outra", NamedTextColor.GRAY));
+        lore.add(Component.text("área do seu território, em outro lugar.", NamedTextColor.GRAY));
+        lore.add(Component.empty());
+        lore.add(Component.text("Magnetita + jogue em cima (Q):", NamedTextColor.GRAY));
+        lore.add(Component.text("  • 1 estandarte, 4 esmeraldas", NamedTextColor.WHITE));
+        lore.add(Component.text("  • 1 bloco de esmeralda", NamedTextColor.WHITE));
+        lore.add(Component.text("Cada uma protege +" + cfg().terChunksPorExpansao + " chunks (3x3) em volta.", NamedTextColor.GRAY));
+        lore.add(Component.empty());
+        lore.add(Component.text("Expansões: " + tem + " / " + pode + " (máximo " + cfg().terExpansoesMax + ")", NamedTextColor.WHITE));
+        if (pode < cfg().terExpansoesMax) {
+            lore.add(Component.text("(+1 a cada " + cfg().terNiveisPorExpansao + " níveis somados)", NamedTextColor.DARK_GRAY));
+        }
+        for (int[] e : terr.expansoes()) lore.add(Component.text("  ⚑ " + e[0] + " " + e[1] + " " + e[2], Territorios.COR));
+        if (tem > 0) {
+            lore.add(Component.empty());
+            lore.add(Component.text("Shift + clique dentro de uma expansão:", NamedTextColor.RED));
+            lore.add(Component.text("desfaz ela (chunks soltos são liberados).", NamedTextColor.RED));
+        }
+        return item(Material.LODESTONE, Component.text("⚑ Expansões", Territorios.COR, TextDecoration.BOLD), lore);
     }
 
     private void desenharSemTerritorio(Player p, Inventory inv) {
@@ -235,7 +263,7 @@ public final class MenuTerritorio implements Listener {
         switch (r) {
             case PROPRIO -> {
                 nome = Component.text("Seu território", NamedTextColor.GREEN, TextDecoration.BOLD);
-                if (Territorio.chave(cx, cz) == t.chunkDoMarco()) lore.add(Component.text("⚑ O Marco fica aqui.", NamedTextColor.GOLD));
+                if (t.chunkComMarco(Territorio.chave(cx, cz))) lore.add(Component.text("⚑ Um Marco fica aqui.", NamedTextColor.GOLD));
                 else lore.add(Component.text("Shift + clique: liberar", NamedTextColor.YELLOW));
             }
             case AMIGO -> nome = Component.text("Território de " + t.nomeDono(), NamedTextColor.AQUA, TextDecoration.BOLD);
@@ -249,13 +277,15 @@ public final class MenuTerritorio implements Listener {
                 }
             }
         }
+        var reino = ter().reinoDe(t);
+        if (reino != null) lore.addFirst(Component.text("♛ Província do reino " + reino.nome(), reino.cor()));
         lore.add(Component.text("Chunk " + cx + ", " + cz + " (blocos " + (cx << 4) + ", " + (cz << 4) + ")", NamedTextColor.DARK_GRAY));
         ItemStack base;
         if (centro) {
             base = new ItemStack(Material.PLAYER_HEAD);
             base.editMeta(SkullMeta.class, m -> m.setOwningPlayer(p));
             lore.addFirst(Component.text("● Você está aqui", NamedTextColor.YELLOW));
-        } else if (t != null && Territorio.chave(cx, cz) == t.chunkDoMarco()) {
+        } else if (t != null && t.chunkComMarco(Territorio.chave(cx, cz))) {
             base = t.bandeira();
         } else {
             base = new ItemStack(Territorios.vidro(r));
@@ -342,6 +372,10 @@ public final class MenuTerritorio implements Listener {
             lore.add(Component.text(f.descricao(), NamedTextColor.GRAY));
             lore.add(Component.empty());
             lore.add(Component.text(ligada ? "✔ Ligada" : "✖ Desligada", ligada ? NamedTextColor.GREEN : NamedTextColor.RED, TextDecoration.BOLD));
+            var reino = ter().reinoDe(terr);
+            if (reino != null && reino.proibe(f)) {
+                lore.add(Component.text("⚖ Proibida pela lei de " + reino.nome() + " (vale mesmo ligada)", NamedTextColor.GOLD));
+            }
             if (gerencia) lore.add(Component.text("» Clique para mudar", NamedTextColor.YELLOW));
             Component nome = Component.text(f.nome(), ligada ? NamedTextColor.GREEN : NamedTextColor.RED, TextDecoration.BOLD);
             inv.setItem(S_FLAGS[i], item(f.icone(), nome, lore));
@@ -439,6 +473,13 @@ public final class MenuTerritorio implements Listener {
                 if (resultado(p, ter().liberar(terr, aqui.getWorld().getName(), aqui.getBlockX() >> 4, aqui.getBlockZ() >> 4))) {
                     p.sendMessage(Component.text("Chunk liberado.", NamedTextColor.GRAY));
                 }
+            }
+            case S_EXPANSOES -> {
+                if (!shift) { resultado(p, "Para criar: Marco novo em outro lugar. Para desfazer: shift + clique dentro da expansão."); return; }
+                int i = ter().expansaoAqui(terr, aqui);
+                if (i < 0) { resultado(p, "Fique dentro da expansão que quer desfazer."); return; }
+                int liberados = ter().abandonarExpansao(terr, i);
+                p.sendMessage(Component.text("⚑ Expansão desfeita (" + liberados + " chunk(s) liberado(s)).", NamedTextColor.GRAY));
             }
             case S_ABANDONAR -> {
                 if (!shift) { resultado(p, "Use shift + clique para confirmar."); return; }

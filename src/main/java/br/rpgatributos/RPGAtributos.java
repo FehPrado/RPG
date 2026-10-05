@@ -70,6 +70,7 @@ import br.rpgatributos.detalhes.PedrasDeAmolar;
 import br.rpgatributos.detalhes.Recordes;
 import br.rpgatributos.detalhes.Trofeus;
 import br.rpgatributos.forja.ForjadosEspeciais;
+import br.rpgatributos.combate.Alvos;
 import br.rpgatributos.conforto.MenuRpg;
 import br.rpgatributos.conforto.Placar;
 import br.rpgatributos.vida.Album;
@@ -81,6 +82,8 @@ import br.rpgatributos.vida.Flechas;
 import br.rpgatributos.vida.Frascos;
 import br.rpgatributos.vida.MercadorItinerante;
 import br.rpgatributos.vida.Segredos;
+import br.rpgatributos.vida.Pomar;
+import br.rpgatributos.estruturas.Estruturas;
 import br.rpgatributos.progressao.Renascimento;
 import br.rpgatributos.progressao.Talentos;
 import br.rpgatributos.domador.Comportamento;
@@ -207,6 +210,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Lapides lapides;
     private Recordes recordes;
     private Diario diario;
+    private Alvos alvos;
     private Canteiros canteiros;
     private Colmeias colmeias;
     private Barris barris;
@@ -218,6 +222,8 @@ public final class RPGAtributos extends JavaPlugin {
     private Segredos segredos;
     private MenuRpg menuRpg;
     private Placar placar;
+    private Pomar pomar;
+    private Estruturas estruturas;
 
     private static RPGAtributos instancia;
 
@@ -236,6 +242,7 @@ public final class RPGAtributos extends JavaPlugin {
         talentos = new Talentos(this);
         renascimento = new Renascimento(this);
         diario = new Diario(this);
+        alvos = new Alvos(this);
         recordes = new Recordes(this);
         recordes.carregar();
         segredos = new Segredos(this);
@@ -344,6 +351,10 @@ public final class RPGAtributos extends JavaPlugin {
         frascos = new Frascos(this);
         menuRpg = new MenuRpg(this);
         placar = new Placar(this);
+        pomar = new Pomar(this);
+        pomar.carregar();
+        estruturas = new Estruturas(this);
+        estruturas.carregar();
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
                 chefes, eventos, mercadores, altares, new MateriaisListener(), missoes, agricultura, cozinha, reciclagem,
@@ -354,7 +365,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar);
+                canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, estruturas);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -534,6 +545,8 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, flechas::tick, 1L, 1L);
         agenda.runTaskTimer(this, segredos::tick, 40L, 40L);
         agenda.runTaskTimer(this, placar::tick, 20L, 20L);
+        agenda.runTaskTimer(this, pomar::tick, 100L, 100L);
+        agenda.runTaskTimer(this, estruturas::tick, 40L, 40L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
         agenda.runTaskTimer(this, altaresDomador::tick, 5L, 5L);
@@ -582,6 +595,8 @@ public final class RPGAtributos extends JavaPlugin {
         if (mercador != null) mercador.parar();
         if (encontros != null) encontros.parar();
         if (placar != null) placar.desligarTodos();
+        if (pomar != null) pomar.parar();
+        if (estruturas != null) estruturas.salvar();
         if (recordes != null) recordes.salvar();
         if (sombras != null) sombras.recolherTodas();
         if (torre != null) torre.encerrarTodas();
@@ -731,6 +746,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Lapides lapides() { return lapides; }
     public Recordes recordes() { return recordes; }
     public Diario diario() { return diario; }
+    public Alvos alvos() { return alvos; }
     public Canteiros canteiros() { return canteiros; }
     public Colmeias colmeias() { return colmeias; }
     public Barris barris() { return barris; }
@@ -742,6 +758,8 @@ public final class RPGAtributos extends JavaPlugin {
     public Segredos segredos() { return segredos; }
     public MenuRpg menuRpg() { return menuRpg; }
     public Placar placar() { return placar; }
+    public Pomar pomar() { return pomar; }
+    public Estruturas estruturas() { return estruturas; }
 
     /** O bloco é alguma estação de ritual (Forja, Infusor, Altares, Cozinha, Reciclagem, Marco)? */
     public boolean ehEstacao(Block b) {

@@ -187,6 +187,10 @@ public final class ItensDetalhes implements Listener {
         if (folhasColocadas.desmarcar(b)) return;
         Player p = e.getPlayer();
         if (p.getGameMode() != GameMode.SURVIVAL && p.getGameMode() != GameMode.ADVENTURE) return;
+        if (ThreadLocalRandom.current().nextDouble() < 0.004) {
+            b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 0.5, 0.5), br.rpgatributos.vida.Fruta.sortear(ThreadLocalRandom.current()).muda(1));
+            p.sendActionBar(Component.text("🍊 Uma muda de árvore frutífera caiu!", COR));
+        }
         if (ThreadLocalRandom.current().nextDouble() >= plugin.settings().detNinhoChance) return;
         b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 0.5, 0.5), ninho(1));
         b.getWorld().playSound(b.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 0.8f, 1.2f);
@@ -224,6 +228,7 @@ public final class ItensDetalhes implements Listener {
         if (r.nextDouble() < 0.05) l.add(new ItemStack(r.nextBoolean() ? Material.TORCHFLOWER_SEEDS : Material.PITCHER_POD));
         if (r.nextDouble() < 0.04) l.add(new ItemStack(Material.GOLD_NUGGET, 2 + r.nextInt(3)));
         if (r.nextDouble() < 0.015) l.add(new ItemStack(Material.EMERALD));
+        if (r.nextDouble() < 0.05) l.add(br.rpgatributos.vida.Fruta.sortear(r).muda(1));
         if (l.isEmpty()) l.add(new ItemStack(Material.STICK, 2));
         return l;
     }

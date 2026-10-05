@@ -1,14 +1,16 @@
 package br.rpgatributos.reino;
 
+import br.rpgatributos.territorio.Flag;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** Um reino: o Rei, os membros com cargos, o tesouro e as tréguas. */
+/** Um reino: o Rei, os membros com cargos, o tesouro, as tréguas e as leis. Os territórios dos membros são as províncias. */
 public final class Reino {
 
     final UUID id;
@@ -17,6 +19,8 @@ public final class Reino {
     UUID rei;
     final Map<UUID, Cargo> membros = new LinkedHashMap<>();
     final Map<UUID, String> nomes = new HashMap<>();
+    /** Leis do reino: regras de território que ficam proibidas em todas as províncias. */
+    final EnumSet<Flag> leis = EnumSet.noneOf(Flag.class);
     /** Esmeraldas guardadas no tesouro. */
     long tesouro;
     /** Chunks a mais que o território do Rei pode ter (ganhos em guerras). */
@@ -49,4 +53,7 @@ public final class Reino {
     public String nomeDe(UUID jogador) { return nomes.getOrDefault(jogador, "?"); }
 
     public String nomeRei() { return nomeDe(rei); }
+
+    /** A lei do reino proíbe essa regra nas províncias? */
+    public boolean proibe(Flag f) { return leis.contains(f); }
 }

@@ -3,6 +3,7 @@ package br.rpgatributos.reino;
 import br.rpgatributos.RPGAtributos;
 import br.rpgatributos.Settings;
 import br.rpgatributos.colonia.Colonia;
+import br.rpgatributos.territorio.Flag;
 import br.rpgatributos.territorio.Territorio;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -696,6 +697,42 @@ public final class Reinos implements Listener {
                 Component.text("Soldados: dê a profissão Soldado ou", NamedTextColor.GRAY),
                 Component.text("Arqueiro a moradores da sua colônia.", NamedTextColor.GRAY))));
 
+        // Leis do reino (valem em todas as províncias) e as províncias.
+        boolean rei = r.rei.equals(p.getUniqueId());
+        for (int k = 0; k < LEIS.length; k++) {
+            Flag f = LEIS[k];
+            boolean ativa = r.proibe(f);
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text(descricaoLei(f), NamedTextColor.GRAY));
+            lore.add(Component.empty());
+            lore.add(Component.text(ativa ? "✔ Em vigor em todas as províncias" : "✖ Não decretada (cada dono decide)",
+                    ativa ? NamedTextColor.GREEN : NamedTextColor.DARK_GRAY, TextDecoration.BOLD));
+            lore.add(Component.text(rei ? "» Clique para " + (ativa ? "revogar" : "decretar") : "Só o Rei faz leis.", rei ? NamedTextColor.YELLOW : NamedTextColor.DARK_GRAY));
+            inv.setItem(S_LEIS[k], item(f.icone(), Component.text("⚖ " + nomeLei(f), ativa ? NamedTextColor.GOLD : NamedTextColor.WHITE, TextDecoration.BOLD), lore));
+        }
+        List<Component> provs = new ArrayList<>();
+        int total = 0;
+        for (UUID m : r.membros.keySet()) {
+            Territorio terr = plugin.territorios().de(m);
+            if (terr == null) continue;
+            total += terr.chunks().size();
+            Location marco = terr.marco();
+            provs.add(Component.text(" ⚑ " + r.nomeDe(m), r.cor()).append(Component.text(" — " + terr.chunks().size() + " chunks"
+                    + (terr.expansoes().isEmpty() ? "" : ", " + terr.expansoes().size() + " expansão(ões)")
+                    + (marco == null ? "" : " (" + marco.getBlockX() + " " + marco.getBlockZ() + ")"), NamedTextColor.GRAY)));
+        }
+        if (provs.isEmpty()) provs.add(Component.text("Nenhum membro tem território ainda.", NamedTextColor.GRAY));
+        provs.addFirst(Component.empty());
+        provs.addFirst(Component.text("O território de cada membro é uma província.", NamedTextColor.GRAY));
+        provs.add(Component.empty());
+        provs.add(Component.text("Total: " + total + " chunks", NamedTextColor.WHITE));
+        provs.add(Component.text("Com a regra \"Reino pode construir\" ligada,", NamedTextColor.DARK_GRAY));
+        provs.add(Component.text("membros do reino constroem na província.", NamedTextColor.DARK_GRAY));
+        inv.setItem(S_PROVINCIAS, item(Material.LODESTONE, Component.text("⚑ Províncias", r.cor(), TextDecoration.BOLD), provs));
+        inv.setItem(S_MAPA, item(Material.FILLED_MAP, Component.text("◈ Mapa", NamedTextColor.AQUA, TextDecoration.BOLD), List.of(
+                Component.text("Os chunks em volta de você, com", NamedTextColor.GRAY),
+                Component.text("as províncias de cada reino.", NamedTextColor.GRAY))));
+
         int[] slots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
         int i = 0;
         List<Map.Entry<UUID, Cargo>> lista = new ArrayList<>(r.membros.entrySet());
@@ -713,6 +750,62 @@ public final class Reinos implements Listener {
         ItemStack vidro = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
         vidro.editMeta(m -> m.setHideTooltip(true));
         for (int k = 0; k < inv.getSize(); k++) if (inv.getItem(k) == null) inv.setItem(k, vidro);
+    }
+
+    // =====================================================================
+    //  Leis do reino
+    // =====================================================================
+
+    /** Regras de território que o Rei pode proibir em todas as províncias. */
+    public static final Flag[] LEIS = {Flag.PVP, Flag.EXPLOSOES, Flag.FOGO, Flag.MONSTROS};
+    private static final int[] S_LEIS = {19, 20, 21, 22};
+    private static final int S_PROVINCIAS = 24, S_MAPA = 25;
+
+    public static String nomeLei(Flag f) {
+        return switch (f) {
+            case PVP -> "Lei da Paz";
+            case EXPLOSOES -> "Lei contra Explosões";
+            case FOGO -> "Lei contra Incêndios";
+            case MONSTROS -> "Lei das Muralhas";
+            default -> f.nome();
+        };
+    }
+
+    private static String descricaoLei(Flag f) {
+        return switch (f) {
+            case PVP -> "Ninguém luta com ninguém nas províncias (a guerra continua valendo).";
+            case EXPLOSOES -> "Explosões não quebram blocos nas províncias.";
+            case FOGO -> "O fogo não se espalha nas províncias.";
+            case MONSTROS -> "Monstros não nascem nas províncias.";
+            default -> f.descricao();
+        };
+    }
+
+    /** O Rei decreta ou revoga uma lei. @return erro ou null. */
+    public String alternarLei(Player p, Flag f) {
+        Reino r = de(p);
+        if (r == null) return "Você não está num reino.";
+        if (!r.rei.equals(p.getUniqueId())) return "Só o Rei faz leis.";
+        boolean agora = !r.leis.remove(f);
+        if (agora) r.leis.add(f);
+        salvar();
+        Component aviso = Component.text("⚖ " + r.nomeRei() + (agora ? " decretou a " : " revogou a ") + nomeLei(f) + ".", r.cor());
+        for (UUID m : r.membros.keySet()) {
+            Player o = Bukkit.getPlayer(m);
+            if (o != null) o.sendMessage(aviso);
+        }
+        return null;
+    }
+
+    /** Lei pelo nome curto (paz, explosoes, incendios, muralhas). */
+    public static Flag leiPorNome(String s) {
+        return switch (s.toLowerCase(java.util.Locale.ROOT)) {
+            case "paz", "pvp" -> Flag.PVP;
+            case "explosoes", "explosões" -> Flag.EXPLOSOES;
+            case "incendios", "incêndios", "fogo" -> Flag.FOGO;
+            case "muralhas", "monstros" -> Flag.MONSTROS;
+            default -> null;
+        };
     }
 
     private static String diaPt(java.time.DayOfWeek d) {
@@ -738,7 +831,13 @@ public final class Reinos implements Listener {
             case 49 -> { p.closeInventory(); return; }
             case 10 -> erro = depositar(p, 16);
             case 11 -> erro = sacar(p, 16);
-            default -> { return; }
+            case S_MAPA -> { p.closeInventory(); plugin.menusTerritorio().abrirMapa(p, p.getUniqueId()); return; }
+            default -> {
+                int k = -1;
+                for (int i = 0; i < S_LEIS.length; i++) if (S_LEIS[i] == e.getSlot()) k = i;
+                if (k < 0) return;
+                erro = alternarLei(p, LEIS[k]);
+            }
         }
         if (erro != null) {
             p.sendMessage(Component.text(erro, NamedTextColor.RED));
@@ -788,6 +887,10 @@ public final class Reinos implements Listener {
                     r.tesouro = s.getLong("tesouro");
                     r.chunksConquistados = s.getInt("chunks-conquistados");
                     r.vitorias = s.getInt("vitorias");
+                    for (String lei : s.getStringList("leis")) {
+                        Flag fl = Flag.porId(lei);
+                        if (fl != null) r.leis.add(fl);
+                    }
                     ConfigurationSection ts = s.getConfigurationSection("treguas");
                     if (ts != null) for (String o : ts.getKeys(false)) r.treguas.put(UUID.fromString(o), ts.getLong(o));
                     reinos.put(id, r);
@@ -824,6 +927,7 @@ public final class Reinos implements Listener {
                 y.set(b + "membros." + u + ".nome", r.nomeDe(u));
             });
             r.treguas.forEach((o, ate) -> y.set(b + "treguas." + o, ate));
+            if (!r.leis.isEmpty()) y.set(b + "leis", r.leis.stream().map(Flag::id).toList());
         }
         List<String> gs = new ArrayList<>();
         for (Guerra g : guerras) gs.add(g.atacante + ";" + g.defensor + ";" + g.inicio + ";" + g.fim + ";" + g.pontosAtacante + ";" + g.pontosDefensor);

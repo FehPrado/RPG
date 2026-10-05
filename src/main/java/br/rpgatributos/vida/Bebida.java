@@ -36,7 +36,9 @@ public enum Bebida {
     LICOR_ARCANO("Licor Arcano", 0x9575CD, Map.of(Material.GLOW_BERRIES, 6), 2, "Visão noturna e mana",
             new Efeito(PotionEffectType.NIGHT_VISION, 180, 0)),
     LICOR_DE_ERVAS("Licor de Ervas", 0x7CB342, Map.of(Material.HONEY_BOTTLE, 1), 0, "Resistência ao fogo e cura lenta (pede 3 ervas)",
-            new Efeito(PotionEffectType.FIRE_RESISTANCE, 120, 0), new Efeito(PotionEffectType.REGENERATION, 20, 0));
+            new Efeito(PotionEffectType.FIRE_RESISTANCE, 120, 0), new Efeito(PotionEffectType.REGENERATION, 20, 0)),
+    LICOR_DE_FRUTAS("Licor de Frutas", 0xFF8A65, Map.of(Material.HONEY_BOTTLE, 1), 0, "Velocidade e cura lenta (pede 6 frutas do pomar)",
+            new Efeito(PotionEffectType.SPEED, 90, 0), new Efeito(PotionEffectType.REGENERATION, 15, 0));
 
     public record Efeito(PotionEffectType tipo, int segundos, int nivel) { }
 
@@ -66,6 +68,7 @@ public enum Bebida {
     public Map<Material, Integer> ingredientes() { return ingredientes; }
     public int poArcano() { return poArcano; }
     public boolean pedeErvas() { return this == LICOR_DE_ERVAS; }
+    public boolean pedeFrutas() { return this == LICOR_DE_FRUTAS; }
     public String id() { return name().toLowerCase(Locale.ROOT); }
 
     /** Grau (0 a 3) pela idade em dias. */

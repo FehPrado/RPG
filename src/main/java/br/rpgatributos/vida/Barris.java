@@ -217,6 +217,7 @@ public final class Barris extends Estacao {
                         .append(Component.translatable(mat.translationKey(), NamedTextColor.WHITE))));
                 if (beb.poArcano() > 0) lore.add(Component.text(" " + beb.poArcano() + "x Pó Arcano", NamedTextColor.WHITE));
                 if (beb.pedeErvas()) lore.add(Component.text(" 3x qualquer erva do Canteiro", NamedTextColor.WHITE));
+                if (beb.pedeFrutas()) lore.add(Component.text(" 6x qualquer fruta do pomar", NamedTextColor.WHITE));
                 lore.add(Component.empty());
                 lore.add(Component.text("» Clique para pôr no barril", NamedTextColor.GREEN));
                 m.lore(lore.stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
@@ -264,9 +265,14 @@ public final class Barris extends Estacao {
                 p.sendMessage(Component.text("Faltam 3 ervas do Canteiro.", NamedTextColor.RED));
                 return;
             }
+            if (b.pedeFrutas() && contarFrutas(p) < 6) {
+                p.sendMessage(Component.text("Faltam 6 frutas do pomar.", NamedTextColor.RED));
+                return;
+            }
             b.ingredientes().forEach((mat, q) -> tirarComuns(p, mat, q));
             if (b.poArcano() > 0) tirarEspeciais(p, b.poArcano(), true);
             if (b.pedeErvas()) tirarEspeciais(p, 3, false);
+            if (b.pedeFrutas()) tirarFrutas(p, 6);
         }
         DadosBloco.gravar(DADO, barril, b.name() + "|" + System.currentTimeMillis());
         atualizarDisplays(barril);
@@ -303,7 +309,7 @@ public final class Barris extends Estacao {
         ItemStack[] c = p.getInventory().getContents();
         for (int i = 0; i < c.length && qtd > 0; i++) {
             ItemStack s = c[i];
-            if (s == null || s.getType() != m || br.rpgatributos.fazenda.Variedade.de(s) != null) continue;
+            if (s == null || s.getType() != m || br.rpgatributos.fazenda.Variedade.de(s) != null || Fruta.de(s) != null) continue;
             int t = Math.min(qtd, s.getAmount());
             s.setAmount(s.getAmount() - t);
             qtd -= t;
@@ -314,7 +320,7 @@ public final class Barris extends Estacao {
     private static int contarComuns(Player p, Material m) {
         int n = 0;
         for (ItemStack s : p.getInventory().getContents()) {
-            if (s != null && s.getType() == m && br.rpgatributos.fazenda.Variedade.de(s) == null) n += s.getAmount();
+            if (s != null && s.getType() == m && br.rpgatributos.fazenda.Variedade.de(s) == null && Fruta.de(s) == null) n += s.getAmount();
         }
         return n;
     }
@@ -323,6 +329,22 @@ public final class Barris extends Estacao {
         int n = 0;
         for (ItemStack s : p.getInventory().getContents()) if (Reagente.de(s) == Reagente.PO_ARCANO) n += s.getAmount();
         return n;
+    }
+
+    private static int contarFrutas(Player p) {
+        int n = 0;
+        for (ItemStack s : p.getInventory().getContents()) if (Fruta.de(s) != null) n += s.getAmount();
+        return n;
+    }
+
+    private static void tirarFrutas(Player p, int qtd) {
+        for (ItemStack s : p.getInventory().getContents()) {
+            if (qtd <= 0) return;
+            if (Fruta.de(s) == null) continue;
+            int t = Math.min(qtd, s.getAmount());
+            s.setAmount(s.getAmount() - t);
+            qtd -= t;
+        }
     }
 
     private static int contarErvas(Player p) {

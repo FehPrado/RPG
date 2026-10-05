@@ -79,12 +79,19 @@ public final class Settings {
     public final boolean detSentar, detLapide;
     public final int detDescansadoMinutos, detAmolarGolpes, detLapideMinutos;
     public final double detNinhoChance, detAchadoChance, detAnimalRaroChance, detDescansadoXp, detBonecoXpHora, detAmolarDano;
+    public final int horasPorEstacao;
+    public final boolean golpesEmQualquerCriatura;
 
     // vida no mundo: ofícios, cartas, mercador e encontros
     public final boolean vidaEncontros;
     public final int vidaCanteiroMinutos, vidaColmeiaMinutos, vidaMercadorMinutos, vidaMercadorDuracao, vidaEncontroMinutos;
     public final int[] vidaBarrilDias;
     public final double vidaCartaChance;
+
+    // estruturas prontas pelo mundo
+    public final boolean estrAtivadas, estrSoChunksNovos;
+    public final double estrChance;
+    public final int estrDistancia;
 
     // doma (companheiros)
     public final double domaXpDomar, domaXpCruzar, domaXpVincular, domaXpComponente, domaXpPorBloco, domaXpAbate;
@@ -109,6 +116,7 @@ public final class Settings {
     public final double partyRaioXp, partyXpCompartilhado, partyBonusPorMembro, partyBonusMax;
     public final boolean partyAvisoVida;
     public final int terChunksIniciais, terNiveisPorChunk, terChunksMax, terMembrosMax;
+    public final int terExpansoesMax, terNiveisPorExpansao, terChunksPorExpansao;
     public final boolean terExigirVizinho;
     public final List<String> terMundosBloqueados;
 
@@ -235,6 +243,7 @@ public final class Settings {
         perChefePorSemana = Math.max(0, c.getInt("perigo.chefes-mundiais-por-semana", 2));
         perChefeMinJogadores = Math.max(1, c.getInt("perigo.chefe-mundial-minimo-de-jogadores", 2));
 
+        horasPorEstacao = Math.max(1, c.getInt("mundo-vivo.horas-por-estacao", 168));
         temperaturaAtiva = c.getBoolean("mundo-vivo.temperatura", true);
         invernoMudaBlocos = c.getBoolean("mundo-vivo.neve-e-gelo-no-inverno", true);
         invernoNeveMax = Math.max(0, c.getInt("mundo-vivo.blocos-de-neve-no-maximo", 4000));
@@ -298,6 +307,7 @@ public final class Settings {
         evoAtivada = c.getBoolean("doma.evolucao-dos-companheiros", true);
 
         detSentar = c.getBoolean("detalhes.sentar", true);
+        golpesEmQualquerCriatura = c.getBoolean("combate.golpes-em-qualquer-criatura", true);
         detLapide = c.getBoolean("detalhes.lapide.ativada", true);
         detLapideMinutos = Math.max(0, c.getInt("detalhes.lapide.minutos-de-protecao", 15));
         detNinhoChance = Math.max(0, c.getDouble("detalhes.chance-de-ninho", 0.01));
@@ -318,6 +328,10 @@ public final class Settings {
         vidaMercadorDuracao = Math.max(5, c.getInt("vida.mercador.duracao-minutos", 20));
         vidaEncontros = c.getBoolean("vida.encontros.ativados", true);
         vidaEncontroMinutos = Math.max(5, c.getInt("vida.encontros.espera-minutos", 30));
+        estrAtivadas = c.getBoolean("estruturas.ativadas", true);
+        estrSoChunksNovos = c.getBoolean("estruturas.so-chunks-novos", true);
+        estrChance = Math.max(0, Math.min(1, c.getDouble("estruturas.chance-por-chunk", 0.02)));
+        estrDistancia = Math.max(32, c.getInt("estruturas.distancia-minima", 160));
 
         domaXpDomar = c.getDouble("doma.xp-domar", 25);
         domaXpCruzar = c.getDouble("doma.xp-cruzar", 2);
@@ -364,6 +378,9 @@ public final class Settings {
         terChunksIniciais = Math.max(1, c.getInt("territorio.chunks-iniciais", 9));
         terNiveisPorChunk = Math.max(1, c.getInt("territorio.niveis-por-chunk-extra", 20));
         terChunksMax = Math.max(terChunksIniciais, c.getInt("territorio.chunks-maximo", 60));
+        terExpansoesMax = Math.max(0, c.getInt("territorio.expansoes-maximo", 2));
+        terNiveisPorExpansao = Math.max(1, c.getInt("territorio.niveis-por-expansao", 300));
+        terChunksPorExpansao = Math.max(1, c.getInt("territorio.chunks-por-expansao", 9));
         terMembrosMax = Math.max(0, c.getInt("territorio.membros-maximo", 10));
         terExigirVizinho = c.getBoolean("territorio.chunks-precisam-ser-vizinhos", true);
         terMundosBloqueados = List.copyOf(c.getStringList("territorio.mundos-bloqueados"));

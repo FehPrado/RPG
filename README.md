@@ -59,7 +59,7 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 
 ## Guia do Aventureiro
 
-Na primeira vez que entra no servidor, o jogador recebe um livro de 78 páginas que explica tudo. `/guia` dá outro.
+Na primeira vez que entra no servidor, o jogador recebe um livro de 79 páginas que explica tudo. `/guia` dá outro.
 
 ## Forja do Ferreiro
 
@@ -275,13 +275,14 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 
 **Ritual:** coloque uma **magnetita** e jogue em cima **1 estandarte** e **4 esmeraldas**. Ela vira o **Marco do Território**, com o seu estandarte girando em cima, e já protege **3×3 chunks** (48×48 blocos) em volta.
 - **Tamanho:** 9 chunks no começo, **+1 chunk a cada 20 níveis somados** de todos os atributos, até 60. Chunk novo precisa encostar no território.
-- **Um território por jogador.** Clique no Marco (ou `/territorio`) para o menu:
+- **Expansões:** quer mais terra em outro lugar? Faça o mesmo ritual numa magnetita longe do seu território, com **1 bloco de esmeralda a mais**: ela vira um **Marco de Expansão**, outra área do **mesmo** território (mesmos membros e regras), com **+9 chunks** (3×3) além do seu limite. 1 expansão a cada 300 níveis somados, até 2. Para desfazer: menu → Expansões → shift + clique dentro dela (os chunks que só se ligavam a ela são liberados).
+- **Um território por jogador** (com as expansões dele). Clique no Marco (ou `/territorio`) para o menu:
   - **Mapa:** os chunks em volta, coloridos (seu, de amigo, de outro, livre). Clique num livre para reivindicar; shift + clique num seu para liberar.
   - **Membros:** constroem e mexem em tudo. A **party** do dono também (regra "Party pode construir").
-  - **Regras:** PvP, portas para visitantes, baús para visitantes, monstros nascem, explosões, fogo e party.
+  - **Regras:** PvP, portas para visitantes, baús para visitantes, monstros nascem, explosões, fogo, reino e party ("Reino pode construir": membros do seu reino constroem aqui).
   - **Mostrar bordas:** partículas nas bordas por 20 segundos.
   - Segurando outro estandarte, clique na bandeira do menu para trocar.
-- Ao entrar num território aparece "Território de Fulano" na tela.
+- Ao entrar num território aparece "Território de Fulano" na tela (e o reino, se for uma província).
 
 **O que é protegido (para quem não é dono/membro):** quebrar e colocar blocos, baldes, placas, baús e qualquer bloco com inventário, portas/botões/alavancas, pisotear plantação, animais, aldeões (dá para comerciar), suportes de armadura, molduras, barcos e carrinhos, isqueiro, farinha de osso, enxada/machado/pá no bloco, estações (o defumador da Cozinha conta como baú; o Altar só invoca para quem mora lá).
 
@@ -295,12 +296,12 @@ Um jeito simples de ter uma vila com moradores trabalhando, no estilo Minecoloni
 
 **Ritual:** no **seu** território, jogue **1 bloco de esmeralda** e **1 cama** em cima de um **sino**: ele vira a **Prefeitura** e os 2 primeiros moradores chegam. Clique no sino abre a colônia (agachado toca o sino); `/colonia` abre de qualquer lugar.
 - **Moradores** são aldeões de verdade: andam até o posto de dia e dormem à noite. Clique num morador para dar um trabalho a ele.
-- **Depósito:** defina até 4 baús perto da Prefeitura. Os moradores guardam ali o que produzem e pegam ali comida e materiais. Sem depósito, ninguém trabalha.
+- **Depósito:** defina até 4 baús perto da Prefeitura (até 32 blocos). Os moradores guardam ali o que produzem e pegam ali comida e materiais. Sem depósito, ninguém trabalha.
 - **Comida e felicidade:** cada morador come um pouco por turno. Pratos da Cozinha alimentam mais e deixam todos felizes. Camas, comida e felicidade aumentam a produção (de ×0,5 a ×1,2) e trazem moradores novos a cada 4 minutos.
 - **Nível do morador:** de 1 a 10, cada nível dá +10% de produção.
-- Tudo fica num raio de 32 blocos da Prefeitura.
+- **A colônia é o seu território inteiro** (com as expansões): camas, plantações, postos de trabalho, água, troncos e o pomar contam em qualquer chunk dele, de 40 blocos abaixo a 60 acima da Prefeitura. Chunks longe (descarregados) guardam a última contagem.
 
-| Profissão | Posto (perto da Prefeitura) | Produz | Colônia nível |
+| Profissão | Posto (no território) | Produz | Colônia nível |
 |---|---|---|---|
 | Fazendeiro | Composteira | Trigo, cenoura, batata e beterraba das plantações em volta (com qualidade ★, às vezes uma variedade rara) | 1 |
 | Lenhador | Bancada de flechas | Troncos (do tipo de árvore que houver perto), mudas e maçãs | 1 |
@@ -330,7 +331,9 @@ Duas profissões a mais na colônia: **Soldado** (espada, liberado no nível 2) 
 - **Cargos:** **Rei** (guerra, paz, cargos e coroa), **Nobre** (tesouro, expulsar), **Cavaleiro** (pode convidar) e **Cidadão**.
 - **Tesouro** de esmeraldas: qualquer membro deposita; o Rei e os Nobres sacam.
 - Membros do mesmo reino **não se machucam**.
-- `/reino` abre o menu. Comandos: `convidar`, `aceitar`, `sair`, `expulsar`, `cargo <nick> <nobre|cavaleiro|cidadao>`, `coroa <nick>`, `tesouro <depositar|sacar> <qtd>`, `guerra <reino>`, `paz <reino>`, `lista`, `desfazer confirmar`.
+- **Províncias:** o território de cada membro é uma província do reino. Ao entrar aparece o nome do reino; no mapa (`/reino mapa`) cada chunk mostra de que reino é. Com a regra "Reino pode construir" (ligada por padrão), os membros do reino constroem nas províncias uns dos outros.
+- **Leis do reino** (só o Rei, pelo menu ou `/reino lei <lei>`): **Lei da Paz** (sem PvP nas províncias; a guerra continua valendo), **Lei contra Explosões**, **Lei contra Incêndios** e **Lei das Muralhas** (monstros não nascem). A lei vale em todas as províncias, mesmo que o dono tenha a regra ligada.
+- `/reino` abre o menu. Comandos: `convidar`, `aceitar`, `sair`, `expulsar`, `cargo <nick> <nobre|cavaleiro|cidadao>`, `coroa <nick>`, `tesouro <depositar|sacar> <qtd>`, `guerra <reino>`, `paz <reino>`, `lei <paz|explosoes|incendios|muralhas>`, `mapa`, `provincias`, `lista`, `desfazer confirmar`.
 
 **Guerra com horário marcado:** o Rei declara (`/reino guerra <reino>`) e a batalha acontece no **horário de guerra do servidor** (padrão: sábado às 20h, por 60 minutos, com pelo menos 24h de aviso; muda no `config.yml`). Todo mundo é avisado 1h, 10 min e 1 min antes.
 - Durante a guerra, o **PvP entre os dois reinos é livre** em qualquer lugar.
@@ -451,7 +454,7 @@ As portas abrem no meio de cada parede (3 de largura, 4 de altura, a partir do c
 
 ## Mundo vivo
 
-**Estações do ano** (`/calendario`): cada estação dura **uma semana real** e o ano recomeça a cada 4 semanas.
+**Estações do ano** (`/calendario`): cada estação dura **uma semana real** (muda em `mundo-vivo.horas-por-estacao`; o placar e o `/calendario` mostram quanto falta) e o ano recomeça a cada 4 semanas.
 
 | Estação | O que muda |
 |---|---|
@@ -515,6 +518,7 @@ Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direi
 - **Proficiência:** cada tipo de arma tem um nível de 1 a 20, que sobe acertando e derrotando inimigos com ela (mobs de spawner dão menos). Cada nível dá +2% de dano nos golpes e libera golpes novos.
 - `/combos` abre o menu: escolha qual golpe fica em cada uma das 4 sequências (clique na sequência, depois no golpe).
 - O dano sai como golpe seu, então passivos de classe, efeitos da forja, raridade, refino e reações elementais também valem.
+- **Alvos:** os golpes (e as habilidades de classe) acertam monstros, chefes, qualquer outra criatura e jogadores onde o PvP está liberado (gamerule, regras do território, fora da sua party e do seu reino; na guerra, os inimigos sempre). Ficam de fora aldeões e NPCs, os seus pets e companheiros, os de quem você não pode atacar e animais com etiqueta de nome. O admin pode limitar a monstros com `combate.golpes-em-qualquer-criatura: false`.
 
 | Arma | Golpes (nível de proficiência) |
 |---|---|
@@ -757,6 +761,31 @@ O **Cronista** é um aldeão bibliotecário que o admin coloca no spawn (`/rpgad
 | 7. As Ruínas Contam | 6 relíquias diferentes | Essência Primordial |
 | 8. O Selo | Romper o selo de um Local Oculto | 2 lingotes de mitrilo e um mapa lendário |
 
+### Estruturas pelo mundo
+
+Dezesseis estruturas prontas surgem sozinhas em **terra nunca visitada** (chunks novos), longe de territórios, longe umas das outras (160 blocos) e das estruturas do próprio Minecraft, e só onde o chão é firme e quase plano. Cada uma cabe dentro de um chunk e o terreno é nivelado com cuidado (árvores no caminho são derrubadas inteiras). Ao chegar perto aparece o nome dela, entra no Diário e conta para o título **Andarilho das Ruínas** (12 estruturas).
+
+| Estrutura | Onde | O que tem |
+|---|---|---|
+| 🗼 **Torre de Vigia Abandonada** | Qualquer terra firme | Três andares com escada, sino e baú no alto (saque de masmorra, esmeraldas, mapa rasgado, luneta). **Sentinelas Esquecidas** (esqueletos) acordam quando você chega |
+| ⛺ **Acampamento de Bandidos** | Planícies, florestas, taigas, savanas | Fogueira, três tendas, mantimentos e o baú do saque. **Bandidos** e o **Chefe dos Bandidos** (dá esmeraldas e às vezes um mapa) |
+| ⚰ **Cemitério Antigo** | Planícies, florestas, taigas, neve, pântano | Lápides, mausoléu com escada para a **cripta** (baú com página de lenda e relíquia). **À noite, os mortos se levantam** das covas |
+| ⛏ **Mina Abandonada** | Terra firme (não deserto nem selva) | Cavalete e poço com escada até túneis escorados, trilhos, minérios nas paredes, baú de ferramentas e **carrinho de minério** (às vezes Mitrilo bruto). **Mineiros Perdidos** e aranhas lá embaixo |
+| ⛲ **Poço dos Desejos** | Planícies, florestas, savanas, cerejeiras | Jogue **1 esmeralda** na água: um desejo por dia (Sorte, Vigor, Ligeireza, Pressa, Herói da Vila, Fôlego ou Visão), às vezes com presente. 10 desejos = título **Desejoso** |
+| 🛖 **Cabana do Eremita** | Florestas, taigas, pântanos, selvas | O **Eremita** mora lá: troca ervas, mudas, elixires, mapas e cartas (ofertas novas todo dia) e **conta boatos** de onde há outra estrutura que você ainda não viu |
+| ✧ **Santuário Esquecido** | Qualquer terra firme | Um altar antigo a um dos seis deuses, com a cara dele. Quem segue aquele deus **reza no altar** (clique) uma vez por dia: **+30 devoção** (o dobro da prece) e uma bênção do deus |
+| 🌴 **Oásis do Deserto** | Deserto | Lagoa com palmeiras, juncos e vitórias-régias, um camelo e a tenda do **Mercador Nômade** (gemas, bebidas, elixires, mudas de limoeiro, mapas) |
+| 🧙 **Cabana da Bruxa** | Pântano (sobre palafitas, na água) | A **Bruxa** vende elixires ótimos, componentes de alquimia, frascos e ervas **de dia**. À noite não atende, e as **Aprendizes da Bruxa** saem da cabana |
+| 🗼 **Farol Abandonado** | Praias e costas | Torre listrada com escada até a lanterna e o baú do faroleiro. **Clique na lanterna com um bloco de pedra luminosa** para acender: por 7 dias quem navega perto (96 blocos) tem **Sorte** (pesca e saque melhores) |
+| ❄ **Expedição Perdida** | Neve e gelo | Barracas soterradas, um explorador congelado, o **diário da expedição** e o **trenó** com o mapa que eles seguiam. **Exploradores Congelados** (esqueletos do gelo) guardam o lugar |
+| 🏚 **Vila Saqueada** | Planícies, savanas, taigas | Casas queimadas ainda soltando fumaça, poço quebrado e o **diário de um sobrevivente**, que conta de onde vieram os bandidos (o acampamento mais perto). Os **Aldeões Perdidos** são aldeões-zumbis: dá para curar (fraqueza + maçã dourada) |
+| 🔮 **Torre do Mago em Ruínas** | Florestas, taigas, planícies | Três andares com estantes e mesa de encantamento. As **anotações do mago revelam uma magia secreta de verdade**. No alto, o **Aprendiz Corrompido** (ilusionista) guarda o baú (às vezes um Tomo Proibido) |
+| ◯ **Círculo de Pedras Antigas** | Quase todo lugar | De noite as pedras brilham. **Na lua cheia**, quem entra no círculo acorda o **Guardião Ancestral** com dois Espíritos do Vento: ele deixa uma relíquia (e às vezes página de lenda ou Essência Primordial). Uma vez por lua cheia |
+| ⚒ **Forja dos Anões** | Montanhas, prados, taigas | Salão meio enterrado com lava, bigorna, altos-fornos e uma chaminé que ainda solta fumaça. Baú com Fragmentos de Forja, lingotes e às vezes Mitrilo. **Anões Espectrais** lá dentro |
+| 🏰 **Fortim em Ruínas** | Planícies, florestas, savanas | Muralha com torres, pátio e a torre de menagem. **Soldados Esquecidos** e o **Capitão Esquecido** (deixa Fragmento e às vezes Pedra de Proteção). Bom para party |
+
+Os guardas aparecem só uma vez. Configure em `estruturas:` no config (chance, distância e se vale só para chunks novos).
+
 ### Pacote de recursos do servidor
 
 O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip`) com as texturas do minério e dos itens de mitrilo, do **Cajado Arcano**, do **Gancho de Escalada** (que muda quando é lançado), da **Capa Planadora**, da **Ferradura**, do **Ninho de Pássaro**, dos **12 peixes raros**, dos **16 pratos da Cozinha**, das **variedades raras** (e das sementes de trigo e beterraba), dos **componentes alquímicos**, dos **12 elixires** (cada um com o seu frasco) , das **18 gemas** (bruta, lapidada e perfeita), dos **materiais raros e núcleos dos chefes**, dos **acessórios**, de **7 lendas** (as armas e ferramentas; o arco, o escudo e as armaduras ficam com o visual do jogo, porque têm animação ou acabamentos que o pacote não pode copiar) e dos itens novos: bebidas, cartas, flechas, frascos, méis e ervas. A plantação no chão continua com o visual do jogo: só os itens mudam. Ele é **opcional**: sem ele tudo funciona com a aparência do jogo (o minério parece um bloco de cogumelo, o lingote parece ferro, o cajado parece uma vara de breeze...).
@@ -820,7 +849,7 @@ Na Forja do Ferreiro, estes itens também saem **forjados** (com raridade, bônu
 | Estação | Ritual (jogue com Q) | O que faz |
 |---|---|---|
 | 🎯 **Boneco de Treino** | Fardo de feno + 1 abóbora esculpida + 1 suporte de armadura | Um boneco que nunca quebra: mostra o dano de cada golpe, o dano por segundo e o seu maior golpe. Dá um pouco de XP de Combate (até 120 por hora) e proficiência até o nível 5 |
-| ⚔ **Pedra de Amolar** | Pedra lisa + 2 pederneiras + 1 lingote de ferro | Clique com a arma e 1 pederneira: **+10% de dano** pelos próximos 100 golpes |
+| ⚔ **Pedra de Amolar** | Rebolo, pedra lisa ou laje de pedra lisa + 2 pederneiras + 1 lingote de ferro | Clique com a arma e 1 pederneira: **+10% de dano** pelos próximos 100 golpes |
 | ♨ **Fogueira de Acampamento** | Fogueira acesa + 1 lã + 1 tronco | Sentado perto: Regeneração e, depois de 30 s, **Descansado** (+5% de XP por 20 min). Comida crua jogada do lado do fogo assa sozinha |
 | ☘ **Bebedouro** | Caldeirão com água + 1 fardo de feno | Filhotes a até 8 blocos crescem 5x mais rápido, adultos esperam menos para cruzar e companheiros se curam |
 | 🏆 **Estante de Troféus** | Pilar de quartzo + o **núcleo de um chefe** | O núcleo fica girando com quem venceu e quando. Cada troféu diferente dentro do seu território dá +1% de XP para quem pode construir lá |
@@ -851,6 +880,22 @@ Na Forja do Ferreiro, estes itens também saem **forjados** (com raridade, bônu
 
 As ervas entram nos frascos de arremesso e no Licor de Ervas.
 
+### Pomar
+
+Mudas especiais crescem como árvores do jogo, mas na estação certa as **frutas aparecem penduradas embaixo das folhas**, e é assim que você sabe qual árvore colher. Clique na fruta para colher. Fora da estação, as frutas caem.
+
+| Árvore (muda) | Fruta | Estação | Ao comer |
+|---|---|---|---|
+| Laranjeira (muda de carvalho) | Laranja | Outono e inverno | Regeneração por 8 s |
+| Pessegueiro (muda de bétula) | Pêssego | Verão | Velocidade por 30 s |
+| Cerejeira (muda de cerejeira) | Cereja | Primavera | Sorte por 1 min |
+| Limoeiro (muda de acácia) | Limão | Primavera e verão | Pressa por 30 s |
+| Macieira Dourada (rara) | Maçã Dourada do Pomar | Outono | Absorção por 1 min |
+
+- **Mudas:** caem de folhas naturais (raro), vêm em ninhos de pássaro, com o Mercador Itinerante e nas carroças tombadas.
+- **Colônia:** o Lenhador não derruba árvores de verdade (a produção dele é do depósito), e o **Fazendeiro colhe as frutas maduras** perto da Prefeitura e guarda no depósito.
+- **Barril:** o **Licor de Frutas** leva 6 frutas do pomar e 1 garrafa de mel.
+- O `/calendario` mostra as frutas da estação. Árvores em território alheio só o dono (e membros) colhem.
 ### Álbum de Cartas (`/album`)
 
 Monstros, chefes e peixes raros às vezes deixam uma **carta** (5% delas são **brilhantes**). Clique com ela na mão para guardar. São **54 cartas em 8 páginas** (Mortos-vivos, Artrópodes, Nether, Illagers, Estranhos, Fim, Chefes e Peixes raros), e completar uma página dá um bônus para sempre: +5% de dano naquele grupo (ou +2% de peixe raro). **5 cartas repetidas** trocam por uma que falta.
@@ -947,7 +992,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 81 títulos com requisitos (duas páginas), por exemplo Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 84 títulos com requisitos (duas páginas), por exemplo Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1104,8 +1149,12 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin carta <carta> [brilhante]` | Dá uma carta do álbum |
 | `/rpgadmin flecha\|frasco\|erva\|mel <tipo> [qtd]` | Dá flechas, frascos, ervas ou méis |
 | `/rpgadmin bebida <tipo> [grau 0-3]` | Dá uma bebida do barril |
+| `/rpgadmin muda\|fruta <fruta> [qtd]` | Dá mudas ou frutas do pomar |
 | `/rpgadmin mercador` | O Mercador Itinerante aparece perto de você |
 | `/rpgadmin encontro [carroca\|bandidos\|viajante\|estrela]` | Começa um encontro perto de você |
+| `/rpgadmin estrutura <tipo>` | Constrói a estrutura à sua frente (pelo console: `<tipo> <mundo> <x> <z>`) |
+| `/rpgadmin estruturas` | Lista as estruturas mais perto de você |
+| `/rpgadmin esquecerestrutura` | Tira do registro a estrutura mais perto (os blocos ficam) |
 | `/rpgadmin reload` | Recarrega o config |
 
 Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outros`, `rpg.chapeu`, `rpg.tag`, `rpg.tag.cores`, `rpg.forja`, `rpg.arcano`, `rpg.guia`, `rpg.titulos`, `rpg.missoes`, `rpg.receitas`, `rpg.party`, `rpg.territorio`, `rpg.pets`, `rpg.masmorra`, `rpg.classe`, `rpg.lendas`, `rpg.locais`, `rpg.pesca`, `rpg.alquimia`, `rpg.colonia`, `rpg.reino`, `rpg.bestiario`, `rpg.calendario`, `rpg.portais`, `rpg.torre`, `rpg.combos`, `rpg.mochila`, `rpg.fe`, `rpg.exploracao`, `rpg.progressao`, `rpg.detalhes`, `rpg.vida`. A permissão `rpg.admin` é só para OP.
@@ -1114,7 +1163,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.22.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.25.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

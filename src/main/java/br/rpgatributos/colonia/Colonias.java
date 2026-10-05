@@ -347,7 +347,7 @@ public final class Colonias implements Listener {
     }
 
     // =====================================================================
-    //  Varredura (camas, água, plantações e postos em volta da Prefeitura)
+    //  Varredura (camas, água, plantações e postos no território da colônia)
     // =====================================================================
 
     private static final Set<Material> POSTOS_BLOCO = Set.of(Material.COMPOSTER, Material.FLETCHING_TABLE, Material.BARREL,
@@ -355,82 +355,112 @@ public final class Colonias implements Listener {
             Material.DAMAGED_ANVIL, Material.HAY_BLOCK, Material.TARGET);
     private static final Set<Material> PLANTAS = Set.of(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.BEETROOTS);
 
+    /** Os chunks que a colônia enxerga: o território inteiro do dono (ou, sem território, os perto da Prefeitura). */
+    private List<long[]> chunksDaColonia(Colonia c) {
+        List<long[]> l = new ArrayList<>();
+        Territorio t = territorio(c);
+        if (t != null && t.mundo().equals(c.mundo)) {
+            for (long k : t.chunks()) l.add(new long[]{Territorio.chunkX(k), Territorio.chunkZ(k)});
+            return l;
+        }
+        for (int cx = (c.x - Colonia.RAIO) >> 4; cx <= (c.x + Colonia.RAIO) >> 4; cx++) {
+            for (int cz = (c.z - Colonia.RAIO) >> 4; cz <= (c.z + Colonia.RAIO) >> 4; cz++) l.add(new long[]{cx, cz});
+        }
+        return l;
+    }
+
+    /** O lugar faz parte da colônia (território do dono)? */
+    public boolean naColonia(Colonia c, Location l) {
+        if (l.getWorld() == null || !l.getWorld().getName().equals(c.mundo)) return false;
+        Territorio t = territorio(c);
+        if (t == null) return c.dentro(l);
+        return plugin.territorios().em(l) == t && l.getBlockY() >= c.y - Colonia.ABAIXO && l.getBlockY() <= c.y + Colonia.ACIMA;
+    }
+
     private void varrer(Colonia c) {
         World w = c.world();
         if (w == null || c.varrendo || !w.isChunkLoaded(c.x >> 4, c.z >> 4)) return;
         c.varrendo = true;
         List<ChunkSnapshot> fotos = new ArrayList<>();
-        for (int cx = (c.x - Colonia.RAIO) >> 4; cx <= (c.x + Colonia.RAIO) >> 4; cx++) {
-            for (int cz = (c.z - Colonia.RAIO) >> 4; cz <= (c.z + Colonia.RAIO) >> 4; cz++) {
-                if (w.isChunkLoaded(cx, cz)) fotos.add(w.getChunkAt(cx, cz).getChunkSnapshot(false, false, false));
-            }
+        Set<Long> todos = new HashSet<>();
+        for (long[] ch : chunksDaColonia(c)) {
+            int cx = (int) ch[0], cz = (int) ch[1];
+            todos.add(Territorio.chave(cx, cz));
+            if (w.isChunkLoaded(cx, cz)) fotos.add(w.getChunkAt(cx, cz).getChunkSnapshot(false, false, false));
         }
-        int minY = Math.max(w.getMinHeight(), c.y - 16), maxY = Math.min(w.getMaxHeight() - 1, c.y + 24);
+        boolean semTerritorio = territorio(c) == null;
+        int minY = Math.max(w.getMinHeight(), c.y - Colonia.ABAIXO), maxY = Math.min(w.getMaxHeight() - 1, c.y + Colonia.ACIMA);
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            int camasPartes = 0, agua = 0;
-            Map<Material, Integer> plantas = new EnumMap<>(Material.class);
-            Map<Material, Integer> troncos = new EnumMap<>(Material.class);
-            List<int[]> postos = new ArrayList<>();
-            List<Material> tiposPostos = new ArrayList<>();
+            Map<Long, Colonia.Censo> novos = new HashMap<>();
             for (ChunkSnapshot f : fotos) {
+                Colonia.Censo s = new Colonia.Censo();
                 int bx = f.getX() << 4, bz = f.getZ() << 4;
                 for (int dx = 0; dx < 16; dx++) {
                     int x = bx + dx;
-                    if (Math.abs(x - c.x) > Colonia.RAIO) continue;
+                    if (semTerritorio && Math.abs(x - c.x) > Colonia.RAIO) continue;
                     for (int dz = 0; dz < 16; dz++) {
                         int z = bz + dz;
-                        if (Math.abs(z - c.z) > Colonia.RAIO) continue;
+                        if (semTerritorio && Math.abs(z - c.z) > Colonia.RAIO) continue;
                         for (int y = minY; y <= maxY; y++) {
                             Material m = f.getBlockType(dx, y, dz);
                             if (m.isAir()) continue;
-                            if (m == Material.WATER) agua++;
-                            else if (m.name().endsWith("_BED")) camasPartes++;
-                            else if (PLANTAS.contains(m)) plantas.merge(m, 1, Integer::sum);
-                            else if (m.name().endsWith("_LOG")) troncos.merge(m, 1, Integer::sum);
-                            else if (POSTOS_BLOCO.contains(m)) {
-                                postos.add(new int[]{x, y, z});
-                                tiposPostos.add(m);
-                            }
+                            if (m == Material.WATER) s.agua++;
+                            else if (m.name().endsWith("_BED")) s.camasPartes++;
+                            else if (PLANTAS.contains(m)) s.plantas.merge(m, 1, Integer::sum);
+                            else if (m.name().endsWith("_LOG")) s.troncos.merge(m, 1, Integer::sum);
+                            else if (POSTOS_BLOCO.contains(m)) s.blocosPosto.add(new Object[]{x, y, z, m});
                         }
                     }
                 }
+                novos.put(Territorio.chave(f.getX(), f.getZ()), s);
             }
-            int camas = camasPartes / 2, aguaFinal = agua;
-            Bukkit.getScheduler().runTask(plugin, () -> aplicarVarredura(c, camas, aguaFinal, plantas, troncos, postos, tiposPostos));
+            Bukkit.getScheduler().runTask(plugin, () -> aplicarVarredura(c, novos, todos));
         });
     }
 
-    private void aplicarVarredura(Colonia c, int camas, int agua, Map<Material, Integer> plantas, Map<Material, Integer> troncos,
-                                  List<int[]> postos, List<Material> tipos) {
+    /** Junta a contagem nova (chunks carregados) com a guardada dos outros chunks do território. */
+    private void aplicarVarredura(Colonia c, Map<Long, Colonia.Censo> novos, Set<Long> todos) {
         c.varrendo = false;
         World w = c.world();
         if (w == null || !porDono.containsKey(c.dono)) return;
         c.ultimaVarredura = System.currentTimeMillis();
-        c.camas = camas;
-        c.agua = agua;
-        c.plantas.clear();
-        c.plantas.putAll(plantas);
-        c.troncos.clear();
-        c.troncos.putAll(troncos);
-        c.postos.clear();
-        for (int i = 0; i < postos.size(); i++) {
-            int[] xyz = postos.get(i);
-            Material m = tipos.get(i);
-            Block b = w.getBlockAt(xyz[0], xyz[1], xyz[2]);
-            Profissao p = switch (m) {
-                case COMPOSTER -> Profissao.FAZENDEIRO;
-                case FLETCHING_TABLE -> Profissao.LENHADOR;
-                case BARREL -> Profissao.PESCADOR;
-                case STONECUTTER -> Profissao.MINERADOR;
-                case SMOKER -> plugin.cozinha().eh(b) ? Profissao.COZINHEIRO : null;
-                case BREWING_STAND -> plugin.alquimia().eh(b) ? Profissao.ALQUIMISTA : null;
-                case ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL -> plugin.forjas().eh(b) ? Profissao.FERREIRO : null;
-                case HAY_BLOCK -> plugin.altaresDomador().eh(b) ? Profissao.TRATADOR : null;
-                case TARGET -> Profissao.SOLDADO;
-                default -> null;
-            };
-            if (p != null) c.postos.merge(p, 1, Integer::sum);
+        for (Map.Entry<Long, Colonia.Censo> en : novos.entrySet()) {
+            Colonia.Censo s = en.getValue();
+            for (Object[] o : s.blocosPosto) {
+                int x = (Integer) o[0], y = (Integer) o[1], z = (Integer) o[2];
+                if (!w.isChunkLoaded(x >> 4, z >> 4)) continue;
+                Block b = w.getBlockAt(x, y, z);
+                Profissao p = switch ((Material) o[3]) {
+                    case COMPOSTER -> Profissao.FAZENDEIRO;
+                    case FLETCHING_TABLE -> Profissao.LENHADOR;
+                    case BARREL -> Profissao.PESCADOR;
+                    case STONECUTTER -> Profissao.MINERADOR;
+                    case SMOKER -> plugin.cozinha().eh(b) ? Profissao.COZINHEIRO : null;
+                    case BREWING_STAND -> plugin.alquimia().eh(b) ? Profissao.ALQUIMISTA : null;
+                    case ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL -> plugin.forjas().eh(b) ? Profissao.FERREIRO : null;
+                    case HAY_BLOCK -> plugin.altaresDomador().eh(b) ? Profissao.TRATADOR : null;
+                    case TARGET -> Profissao.SOLDADO;
+                    default -> null;
+                };
+                if (p != null) s.postos.merge(p, 1, Integer::sum);
+            }
+            s.blocosPosto.clear();
+            c.censo.put(en.getKey(), s);
         }
+        c.censo.keySet().retainAll(todos);
+        int camasPartes = 0, agua = 0;
+        c.plantas.clear();
+        c.troncos.clear();
+        c.postos.clear();
+        for (Colonia.Censo s : c.censo.values()) {
+            camasPartes += s.camasPartes;
+            agua += s.agua;
+            s.plantas.forEach((m, n) -> c.plantas.merge(m, n, Integer::sum));
+            s.troncos.forEach((m, n) -> c.troncos.merge(m, n, Integer::sum));
+            s.postos.forEach((p, n) -> c.postos.merge(p, n, Integer::sum));
+        }
+        c.camas = camasPartes / 2;
+        c.agua = agua;
         c.varrida = true;
         redesenharMenus(c);
     }
@@ -452,7 +482,7 @@ public final class Colonias implements Listener {
         Material m = b.getType();
         if (!POSTOS_BLOCO.contains(m) && !m.name().endsWith("_BED") && !PLANTAS.contains(m)) return;
         for (Colonia c : porDono.values()) {
-            if (!c.dentro(b.getLocation()) || !agendadas.add(c.dono)) continue;
+            if (!naColonia(c, b.getLocation()) || !agendadas.add(c.dono)) continue;
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 agendadas.remove(c.dono);
                 if (porDono.containsKey(c.dono)) varrer(c);
@@ -593,7 +623,9 @@ public final class Colonias implements Listener {
         List<ItemStack> l = new ArrayList<>();
         switch (ci.profissao) {
             case FAZENDEIRO -> {
-                if (c.plantas.isEmpty()) return null;
+                Location prefeitura = c.prefeitura();
+                if (prefeitura != null) l.addAll(plugin.pomar().colherEm(loc -> naColonia(c, loc), 2)); // frutas maduras do pomar
+                if (c.plantas.isEmpty()) return l.isEmpty() ? null : l;
                 Material planta = sortear(c.plantas);
                 Material produto = switch (planta) {
                     case CARROTS -> Material.CARROT;
@@ -818,7 +850,7 @@ public final class Colonias implements Listener {
         inv.setItem(P_DEPOSITO, item(Material.CHEST, Component.text("Depósito", NamedTextColor.GOLD, TextDecoration.BOLD), dep, false));
 
         List<Component> postos = new ArrayList<>();
-        postos.add(Component.text("Encontrados até " + Colonia.RAIO + " blocos da Prefeitura:", NamedTextColor.GRAY));
+        postos.add(Component.text(territorio(c) != null ? "Encontrados no território (" + c.censo.size() + " chunks):" : "Encontrados até " + Colonia.RAIO + " blocos da Prefeitura:", NamedTextColor.GRAY));
         for (Profissao p : Profissao.values()) {
             if (p == Profissao.DESEMPREGADO) continue;
             int n = c.postos.getOrDefault(p, 0);
@@ -855,7 +887,7 @@ public final class Colonias implements Listener {
 
         inv.setItem(P_AJUDA, item(Material.BOOK, Component.text("Como funciona", Prefeituras.COR, TextDecoration.BOLD), List.of(
                 Component.text("1. Coloque camas e defina um baú de depósito.", NamedTextColor.GRAY),
-                Component.text("2. Construa postos perto da Prefeitura:", NamedTextColor.GRAY),
+                Component.text("2. Construa postos no seu território:", NamedTextColor.GRAY),
                 Component.text("   composteira, barril, cortador de pedras,", NamedTextColor.WHITE),
                 Component.text("   bancada de flechas, Cozinha, Forja...", NamedTextColor.WHITE),
                 Component.text("3. Dê um trabalho a cada morador.", NamedTextColor.GRAY),
@@ -1011,13 +1043,13 @@ public final class Colonias implements Listener {
             if (c.nivel < nova.nivelColonia()) { erro(p, "Libera no nível " + nova.nivelColonia() + " da colônia."); return; }
             if (nova == ci.profissao) return;
             if (nova.soldado() && !ci.profissao.soldado() && quantosSoldados(c) >= vagasSoldados(c)) {
-                erro(p, "Faltam vagas no Quartel: cada bloco de alvo perto da Prefeitura abriga " + Profissao.SOLDADOS_POR_QUARTEL + " soldados.");
+                erro(p, "Faltam vagas no Quartel: cada bloco de alvo no território abriga " + Profissao.SOLDADOS_POR_QUARTEL + " soldados.");
                 return;
             }
             definirProfissao(c, ci, nova);
             p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
             if (nova != Profissao.DESEMPREGADO && c.quantos(nova) > c.postos.getOrDefault(nova, 0)) {
-                p.sendMessage(Component.text("⌂ Atenção: falta um posto (" + nova.nomePosto() + ") perto da Prefeitura para " + ci.nome + " trabalhar.",
+                p.sendMessage(Component.text("⌂ Atenção: falta um posto (" + nova.nomePosto() + ") no território para " + ci.nome + " trabalhar.",
                         NamedTextColor.GOLD));
             }
             salvar();

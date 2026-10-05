@@ -2,6 +2,7 @@ package br.rpgatributos.territorio;
 
 import br.rpgatributos.RPGAtributos;
 import br.rpgatributos.Settings;
+import br.rpgatributos.reino.Reino;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -30,9 +31,11 @@ import org.bukkit.scheduler.BukkitTask;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -100,6 +103,7 @@ public final class Territorios implements Listener {
     /** Dono, membro ou (com a regra ligada) alguém da party do dono. */
     public boolean amigo(Territorio t, UUID id) {
         if (t.dono().equals(id) || t.membro(id)) return true;
+        if (t.flag(Flag.REINO) && plugin.reinos().aliados(t.dono(), id)) return true;
         return t.flag(Flag.PARTY) && plugin.parties().mesmaParty(t.dono(), id);
     }
 
@@ -120,13 +124,25 @@ public final class Territorios implements Listener {
     /** Pode construir ali, ou a regra está liberada para visitantes. */
     public boolean permite(Player p, Location l, Flag f) {
         Territorio t = em(l);
-        return t == null || t.flag(f) || podeConstruir(p, l);
+        return t == null || regra(t, f) || podeConstruir(p, l);
     }
 
     /** A regra vale nesse lugar? Fora de território, tudo funciona como no jogo normal. */
     public boolean flagAqui(Location l, Flag f) {
         Territorio t = em(l);
-        return t == null || t.flag(f);
+        return t == null || regra(t, f);
+    }
+
+    /** A regra vale no território? A lei do reino do dono pode proibir (vale em todas as províncias). */
+    public boolean regra(Territorio t, Flag f) {
+        if (!t.flag(f)) return false;
+        Reino r = plugin.reinos().de(t.dono());
+        return r == null || !r.proibe(f);
+    }
+
+    /** O reino do dono do território (o território é uma província dele), ou null. */
+    public Reino reinoDe(Territorio t) {
+        return t == null ? null : plugin.reinos().de(t.dono());
     }
 
     public Relacao relacao(Player p, Territorio t) {
@@ -149,8 +165,15 @@ public final class Territorios implements Listener {
     /** Quantos chunks o jogador pode ter: base + 1 a cada N níveis somados, até o máximo. */
     public int limite(Player p) {
         int extra = plugin.renascimento().nivelTotalEfetivo(p) / cfg().terNiveisPorChunk;
-        // Chunks conquistados em guerra (do Rei) passam do máximo normal.
-        return Math.min(cfg().terChunksMax, cfg().terChunksIniciais + extra) + plugin.reinos().chunksExtras(p.getUniqueId());
+        // Chunks conquistados em guerra (do Rei) e as expansões passam do máximo normal.
+        Territorio t = de(p.getUniqueId());
+        int expansoes = t == null ? 0 : t.expansoes().size() * cfg().terChunksPorExpansao;
+        return Math.min(cfg().terChunksMax, cfg().terChunksIniciais + extra) + plugin.reinos().chunksExtras(p.getUniqueId()) + expansoes;
+    }
+
+    /** Quantos Marcos de Expansão o jogador pode ter (1 a cada N níveis somados, até o máximo). */
+    public int expansoesPermitidas(Player p) {
+        return Math.min(cfg().terExpansoesMax, plugin.renascimento().nivelTotalEfetivo(p) / cfg().terNiveisPorExpansao);
     }
 
     /** Pode gerenciar (reivindicar, membros, regras)? O dono, ou um admin ignorando as proteções. */
@@ -165,14 +188,96 @@ public final class Territorios implements Listener {
     /** Motivo para não poder fundar um território com o Marco nesse bloco, ou null. */
     public String podeFundar(Player p, Block marco) {
         if (cfg().terMundosBloqueados.contains(marco.getWorld().getName())) return "Não dá para criar território neste mundo.";
+        Territorio la = em(marco);
         Territorio meu = de(p.getUniqueId());
         if (meu != null) {
-            return "Você já tem um território (Marco em " + meu.marcoX() + " " + meu.marcoY() + " " + meu.marcoZ()
-                    + "). Para mudar de lugar, abandone o antigo pelo menu.";
+            // Já tem território: este Marco vira uma expansão (outra área ligada à sua).
+            if (la == meu) return "Esse chunk já é seu. Para crescer aqui, reivindique chunks pelo menu do Marco.";
+            if (!meu.mundo().equals(marco.getWorld().getName())) return "A expansão precisa ficar no mesmo mundo do seu território.";
+            int permitidas = expansoesPermitidas(p);
+            if (meu.expansoes().size() >= permitidas) {
+                return permitidas >= cfg().terExpansoesMax
+                        ? "Você já tem " + meu.expansoes().size() + " expansão(ões), o máximo."
+                        : "Próxima expansão com " + (meu.expansoes().size() + 1) * cfg().terNiveisPorExpansao + " níveis somados.";
+            }
         }
-        Territorio la = em(marco);
         if (la != null) return "Esse chunk já é do território de " + la.nomeDono() + ".";
         return null;
+    }
+
+    /** O ritual desse jogador vai criar uma expansão (já tem território)? */
+    public boolean viraExpansao(Player p) {
+        return de(p.getUniqueId()) != null;
+    }
+
+    /** Cria um Marco de Expansão: o chunk dele e os 8 em volta (os livres) entram no território. */
+    public void fundarExpansao(Player p, Block marco) {
+        Territorio t = de(p.getUniqueId());
+        if (t == null) return;
+        t.expansoesEditaveis().add(new int[]{marco.getX(), marco.getY(), marco.getZ()});
+        int cx = marco.getX() >> 4, cz = marco.getZ() >> 4;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if (em(t.mundo(), cx + dx, cz + dz) == null) indexar(t, cx + dx, cz + dz);
+            }
+        }
+        plugin.titulos().definirMinimo(p, "chunks", t.chunks().size());
+        salvar();
+        ondeEsta.remove(p.getUniqueId());
+    }
+
+    /**
+     * Desfaz uma expansão: o Marco dela vira magnetita e os chunks que só se ligavam a ela
+     * (sem caminho até o Marco principal) são liberados.
+     * @return quantos chunks foram liberados.
+     */
+    public int abandonarExpansao(Territorio t, int indice) {
+        if (indice < 0 || indice >= t.expansoes().size()) return 0;
+        int[] e = t.expansoesEditaveis().remove(indice);
+        World w = t.world();
+        if (w != null) {
+            Location l = new Location(w, e[0], e[1], e[2]);
+            if (plugin.marcos().eh(l.getBlock())) plugin.marcos().remover(l, false);
+            w.playSound(l, Sound.BLOCK_BEACON_DEACTIVATE, 1f, 0.8f);
+        }
+        // Chunks ligados a algum Marco que ficou (principal ou outra expansão) continuam.
+        Set<Long> ligados = new HashSet<>();
+        Deque<Long> fila = new ArrayDeque<>();
+        fila.add(t.chunkDoMarco());
+        for (int[] x : t.expansoes()) fila.add(Territorio.chave(x[0] >> 4, x[2] >> 4));
+        while (!fila.isEmpty()) {
+            long k = fila.poll();
+            if (!t.chunks().contains(k) || !ligados.add(k)) continue;
+            for (int[] v : VIZINHOS) fila.add(Territorio.chave(Territorio.chunkX(k) + v[0], Territorio.chunkZ(k) + v[1]));
+        }
+        int liberados = 0;
+        for (long k : new ArrayList<>(t.chunks())) {
+            if (!ligados.contains(k)) {
+                desindexar(t, k);
+                liberados++;
+            }
+        }
+        ondeEsta.clear();
+        salvar();
+        return liberados;
+    }
+
+    /** A expansão em que o jogador está (índice), ou -1. */
+    public int expansaoAqui(Territorio t, Location l) {
+        if (t == null || em(l) != t) return -1;
+        int cx = l.getBlockX() >> 4, cz = l.getBlockZ() >> 4;
+        int melhor = -1;
+        double menor = Double.MAX_VALUE;
+        for (int i = 0; i < t.expansoes().size(); i++) {
+            int[] e = t.expansoes().get(i);
+            double d = Math.pow((e[0] >> 4) - cx, 2) + Math.pow((e[2] >> 4) - cz, 2);
+            if (d < menor) {
+                menor = d;
+                melhor = i;
+            }
+        }
+        double principal = Math.pow((t.marcoX() >> 4) - cx, 2) + Math.pow((t.marcoZ() >> 4) - cz, 2);
+        return principal <= menor ? -1 : melhor;
     }
 
     /** Cria o território: o chunk do Marco e os 8 em volta (os que estiverem livres). */
@@ -247,7 +352,7 @@ public final class Territorios implements Listener {
         if (t == null) return "Você não tem território.";
         long k = Territorio.chave(cx, cz);
         if (!t.mundo().equals(mundo) || !t.chunks().contains(k)) return "Esse chunk não é do território.";
-        if (k == t.chunkDoMarco()) return "O chunk do Marco não pode ser liberado.";
+        if (t.chunkComMarco(k)) return "O chunk de um Marco não pode ser liberado.";
         desindexar(t, k);
         salvar();
         return null;
@@ -262,6 +367,13 @@ public final class Territorios implements Listener {
             if (plugin.marcos().eh(marco.getBlock())) plugin.marcos().remover(marco, false);
             marco.getWorld().dropItemNaturally(marco.clone().add(0.5, 1.2, 0.5), t.bandeira());
             marco.getWorld().playSound(marco, Sound.BLOCK_BEACON_DEACTIVATE, 1f, 0.8f);
+        }
+        World w = t.world();
+        if (w != null) {
+            for (int[] e : t.expansoes()) {
+                Location l = new Location(w, e[0], e[1], e[2]);
+                if (plugin.marcos().eh(l.getBlock())) plugin.marcos().remover(l, false);
+            }
         }
         ondeEsta.clear();
         salvar();
@@ -328,7 +440,9 @@ public final class Territorios implements Listener {
             case AMIGO -> Component.text("⚑ Território de " + t.nomeDono() + " (você constrói aqui)", NamedTextColor.AQUA);
             case OUTRO -> Component.text("⚑ Território de " + t.nomeDono(), NamedTextColor.GOLD);
         };
-        if (t != null && !t.flag(Flag.PVP)) texto = texto.append(Component.text("  ☮ sem PvP", NamedTextColor.GRAY));
+        Reino reino = reinoDe(t);
+        if (reino != null) texto = texto.append(Component.text("  ♛ " + reino.nome(), reino.cor()));
+        if (t != null && !regra(t, Flag.PVP)) texto = texto.append(Component.text("  ☮ sem PvP", NamedTextColor.GRAY));
         p.showTitle(Title.title(Component.empty(), texto,
                 Title.Times.times(Duration.ofMillis(150), Duration.ofMillis(1500), Duration.ofMillis(400))));
     }
@@ -432,12 +546,18 @@ public final class Territorios implements Listener {
                     String[] xz = c.split(",");
                     indexar(t, Integer.parseInt(xz[0]), Integer.parseInt(xz[1]));
                 }
+                for (String e : s.getStringList("expansoes")) {
+                    String[] p = e.split(",");
+                    t.expansoesEditaveis().add(new int[]{Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2])});
+                }
                 ConfigurationSection mem = s.getConfigurationSection("membros");
                 if (mem != null) for (String u : mem.getKeys(false)) t.membrosEditaveis().put(UUID.fromString(u), mem.getString(u, "?"));
                 for (String f : s.getStringList("regras")) {
                     Flag flag = Flag.porId(f);
                     if (flag != null) t.flag(flag, true);
                 }
+                // Territórios salvos antes da regra "Reino pode construir" (2.25) ganham ela ligada, como os novos.
+                if (!s.getBoolean("regra-reino-vista")) t.flag(Flag.REINO, true);
                 porDono.put(t.dono(), t);
             } catch (RuntimeException ex) {
                 plugin.getLogger().warning("Território inválido em territorios.yml (" + id + "): " + ex.getMessage());
@@ -457,10 +577,14 @@ public final class Territorios implements Listener {
             List<String> chunks = new ArrayList<>();
             for (long k : t.chunks()) chunks.add(Territorio.chunkX(k) + "," + Territorio.chunkZ(k));
             y.set(base + "chunks", chunks);
+            List<String> exp = new ArrayList<>();
+            for (int[] e : t.expansoes()) exp.add(e[0] + "," + e[1] + "," + e[2]);
+            if (!exp.isEmpty()) y.set(base + "expansoes", exp);
             for (Map.Entry<UUID, String> m : t.membros().entrySet()) y.set(base + "membros." + m.getKey(), m.getValue());
             List<String> regras = new ArrayList<>();
             for (Flag f : t.flagsLigadas()) regras.add(f.id());
             y.set(base + "regras", regras);
+            y.set(base + "regra-reino-vista", true);
         }
         try {
             y.save(arquivo);

@@ -96,29 +96,7 @@ public final class Golpes implements Listener {
 
     /** O golpe desse jogador pode acertar essa criatura? */
     private boolean inimigo(Player p, Entity e) {
-        if (!(e instanceof LivingEntity le) || e == p || !le.isValid() || le.isDead() || e instanceof ArmorStand) return false;
-        if (Sombras.eh(e)) return plugin.sombras().inimigoDoJogador(p, e);
-        if (Companheiros.eh(e)) {
-            UUID d = Companheiros.dono(e);
-            return d != null && !d.equals(p.getUniqueId()) && pvp(p, d);
-        }
-        if (e instanceof Tameable t && t.isTamed()) return false;
-        String inv = e.getPersistentDataContainer().get(K_INVOCACAO, PersistentDataType.STRING);
-        if (inv != null) {
-            try {
-                UUID u = UUID.fromString(inv);
-                return !u.equals(p.getUniqueId()) && pvp(p, u);
-            } catch (IllegalArgumentException ex) {
-                return false;
-            }
-        }
-        UUID colono = plugin.colonias().colonoDe(e);
-        if (colono != null) return plugin.reinos().inimigosEmGuerra(p.getUniqueId(), colono);
-        if (e instanceof Player o) {
-            return (o.getGameMode() == GameMode.SURVIVAL || o.getGameMode() == GameMode.ADVENTURE) && plugin.pvpPermitido(p, o);
-        }
-        if (e instanceof Enemy || Chefes.ehChefe(e) || Chefes.ehLacaio(e)) return true;
-        return e instanceof Mob m && m.getTarget() == p;
+        return plugin.alvos().inimigo(p, e);
     }
 
     private boolean pvp(Player p, UUID outro) {

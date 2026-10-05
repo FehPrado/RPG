@@ -115,12 +115,7 @@ public final class Habilidades {
 
     /** Pode ser atingido por uma habilidade desse jogador? (monstros, chefes e jogadores onde há PvP) */
     private boolean inimigo(Player p, Entity e) {
-        if (!(e instanceof LivingEntity le) || e == p || !le.isValid() || e instanceof ArmorStand) return false;
-        if (Companheiros.eh(e)) return false;
-        if (br.rpgatributos.sombra.Sombras.eh(e)) return plugin.sombras().inimigoDoJogador(p, e);
-        if (e instanceof Player outro) return plugin.pvpPermitido(p, outro) && outro.getGameMode() != org.bukkit.GameMode.CREATIVE
-                && outro.getGameMode() != org.bukkit.GameMode.SPECTATOR;
-        return e instanceof Enemy || Chefes.ehChefe(e) || Chefes.ehLacaio(e);
+        return plugin.alvos().inimigo(p, e);
     }
 
     private List<LivingEntity> inimigos(Player p, Location centro, double raio) {

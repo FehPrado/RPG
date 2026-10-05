@@ -6,15 +6,17 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/** Um território: um dono, um Marco, os chunks protegidos, membros e regras. */
+/** Um território: um dono, um Marco (e até alguns Marcos de Expansão), os chunks protegidos, membros e regras. */
 public final class Territorio {
 
     private final UUID dono;
@@ -25,6 +27,7 @@ public final class Territorio {
     private final Set<Long> chunks = new HashSet<>();
     private final Map<UUID, String> membros = new LinkedHashMap<>();
     private final EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
+    private final List<int[]> expansoes = new ArrayList<>();
 
     Territorio(UUID dono, String nomeDono, Location marco, ItemStack bandeira) {
         this.dono = dono;
@@ -76,6 +79,32 @@ public final class Territorio {
     }
 
     public long chunkDoMarco() { return chave(marcoX >> 4, marcoZ >> 4); }
+
+    /** Marcos de Expansão (x, y, z): outras áreas do mesmo território, em outro lugar. */
+    public List<int[]> expansoes() { return Collections.unmodifiableList(expansoes); }
+    List<int[]> expansoesEditaveis() { return expansoes; }
+
+    /** É o Marco principal ou o de uma expansão? */
+    public boolean ehMarco(int x, int y, int z) {
+        if (x == marcoX && y == marcoY && z == marcoZ) return true;
+        return expansao(x, y, z) >= 0;
+    }
+
+    /** Índice da expansão com o Marco nesse bloco, ou -1. */
+    public int expansao(int x, int y, int z) {
+        for (int i = 0; i < expansoes.size(); i++) {
+            int[] e = expansoes.get(i);
+            if (e[0] == x && e[1] == y && e[2] == z) return i;
+        }
+        return -1;
+    }
+
+    /** O chunk tem um Marco (principal ou de expansão)? */
+    public boolean chunkComMarco(long k) {
+        if (k == chunkDoMarco()) return true;
+        for (int[] e : expansoes) if (chave(e[0] >> 4, e[2] >> 4) == k) return true;
+        return false;
+    }
 
     public ItemStack bandeira() {
         return bandeira == null ? new ItemStack(Material.WHITE_BANNER) : bandeira.clone();

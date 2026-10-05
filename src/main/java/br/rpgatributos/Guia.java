@@ -109,7 +109,7 @@ public final class Guia implements Listener {
                 // 1
                 Component.text("   Guia do\n  Aventureiro\n", TITULO, TextDecoration.BOLD)
                         .append(t("3  Forja\n7  Infusor/Magias\n17 Altar/Fazenda\n"
-                                + "26 Party/Reinos\n33 Domador\n35 Masmorras/Perigo\n39 Céu/Portais/Torre\n45 Combos/Classes\n52 Fé/Exploração\n61 Talentos e mais\n70 Pesca/Alquimia\n77 Conquistas")),
+                                + "26 Party/Reinos\n33 Domador\n35 Masmorras/Perigo\n39 Céu/Portais/Torre\n45 Combos/Classes\n52 Fé/Exploração\n61 Talentos e mais\n71 Pesca/Alquimia\n78 Conquistas")),
                 // 2
                 titulo("Atributos", TITULO)
                         .append(t("Sobem fazendo as coisas (até o nível " + nivelMaximo + "):\n\n"))
@@ -283,8 +283,10 @@ public final class Guia implements Listener {
                         .append(t("1. Coloque uma "))
                         .append(d("magnetita"))
                         .append(t(".\n2. Jogue em cima:\n"))
-                        .append(d(" • 1 estandarte\n • 4 esmeraldas\n\n"))
-                        .append(t("Vira o Marco: protege 3x3 chunks. Nível alto = mais chunks.")),
+                        .append(d(" • 1 estandarte\n • 4 esmeraldas\n"))
+                        .append(t("Vira o Marco: protege 3x3 chunks. Nível alto = mais chunks.\n"))
+                        .append(d("Expansão"))
+                        .append(t(": outro Marco longe, +1 bloco de esmeralda.")),
                 // 28
                 titulo("Proteção", TERRITORIO)
                         .append(t("Só você e seus membros constroem, abrem baús e mexem em animais.\n\n"))
@@ -308,7 +310,9 @@ public final class Guia implements Listener {
                 titulo("Reino", TERRITORIO)
                         .append(t("Com colônia nível 2: "))
                         .append(d("/reino fundar <nome>"))
-                        .append(t(".\nRei, Nobres, Cavaleiros e Cidadãos, tesouro de esmeraldas e sem fogo amigo.\n\n"))
+                        .append(t(".\nCada território de membro é uma "))
+                        .append(d("província"))
+                        .append(t(". O Rei decreta leis (paz, incêndios...).\n"))
                         .append(t("Moradores viram "))
                         .append(d("Soldados"))
                         .append(t(" (Quartel = bloco de alvo).")),
@@ -543,7 +547,7 @@ public final class Guia implements Listener {
                         .append(d("Boneco"))
                         .append(t(": feno + abóbora + suporte.\n"))
                         .append(d("Amolar"))
-                        .append(t(": pedra lisa + 2 pederneiras + ferro.\n"))
+                        .append(t(": rebolo ou pedra lisa + 2 pederneiras + ferro.\n"))
                         .append(d("Fogueira"))
                         .append(t(": lã + tronco.\n"))
                         .append(d("Bebedouro"))
@@ -563,17 +567,33 @@ public final class Guia implements Listener {
                         .append(d("Canteiro"))
                         .append(t(": musgo + farinha de osso + vaso.")),
                 // 68
+                titulo("Pomar", DETALHES)
+                        .append(t("Mudas de Laranjeira, Pessegueiro, Cerejeira, Limoeiro e Macieira Dourada. Na estação certa, as frutas "))
+                        .append(d("penduram nas folhas"))
+                        .append(t(": clique para colher.")),
+                // 68b
+                titulo("Estruturas", EXPLORACAO)
+                        .append(t("16 tipos surgem em terras novas: torres, minas, fortins, oásis, faróis, vilas saqueadas...\n"))
+                        .append(d("Poço"))
+                        .append(t(": 1 esmeralda.\n"))
+                        .append(d("Farol"))
+                        .append(t(": acenda com pedra luminosa.\n"))
+                        .append(d("Círculo"))
+                        .append(t(": lua cheia!\n"))
+                        .append(d("Moradores"))
+                        .append(t(": trocas e boatos.")),
+                // 69
                 titulo("Aventura", DETALHES)
                         .append(d("/album"))
                         .append(t(": cartas de monstros e peixes.\nMercador Itinerante, encontros na estrada e "))
                         .append(d("/segredos"))
                         .append(t(" escondidos.")),
-                // 69
+                // 70
                 titulo("Flechas", DETALHES)
                         .append(t("Bancada: 4 flechas + pó de blaze, gelo, pérola, laço ou TNT.\n\n"))
                         .append(d("Frascos"))
                         .append(t(": garrafa + ervas, pólvora ou slime. Arremesse!")),
-                // 70
+                // 71
                 titulo("Pesca", PESCA)
                         .append(t("Pescar dá XP. Nível alto: isca mais rápida, peixes "))
                         .append(d("★ a ★★★"))
@@ -582,12 +602,12 @@ public final class Guia implements Listener {
                         .append(t(" e "))
                         .append(d("criaturas marinhas"))
                         .append(t(" que lutam de volta!")),
-                // 71
+                // 72
                 titulo("Peixes raros", PESCA)
                         .append(t("12 peixes que só mordem em certos biomas, horários ou climas (noite, chuva, tempestade...).\n\n"))
                         .append(t("São ingredientes da Alquimia.\n"))
                         .append(d("/peixes")).append(t(": o diário")),
-                // 72
+                // 73
                 titulo("Alquimia", ALQUIMIA)
                         .append(t("1. Coloque um "))
                         .append(d("suporte de poções"))
@@ -595,37 +615,37 @@ public final class Guia implements Listener {
                         .append(d(" • 2 garrafas de vidro\n • 1 pó de blaze\n\n"))
                         .append(d("Clique")).append(t(": bancada\n"))
                         .append(d("Agachado")).append(t(": suporte")),
-                // 73
+                // 74
                 titulo("Elixires", ALQUIMIA)
                         .append(t("Poções mais fortes e longas, várias com 2 ou 3 efeitos.\n\n"))
                         .append(d("Componentes"))
                         .append(t(" (Pó Arcano, Sal Lunar...) são a base de tudo.\n"))
                         .append(d("/alquimia")),
-                // 74
+                // 75
                 titulo("Gemas", ALQUIMIA)
                         .append(t("Itens forjados têm "))
                         .append(d("engastes"))
                         .append(t(" (Raro 1, Único 2, Mítico 3). Cada gema dá um bônus diferente em armas, arcos, armaduras e ferramentas.\n"))
                         .append(t("3 gemas = 1 melhor.")),
-                // 75
+                // 76
                 titulo("Acessórios", ALQUIMIA)
                         .append(d("2 anéis, 1 amuleto,\n1 cinto e 2 bolsos"))
                         .append(t(" que não ocupam a armadura nem caem ao morrer.\n\n"))
                         .append(t("Lanterna de Bolso, Ímã, Amuleto da Fênix...\n"))
                         .append(d("/acessorios")),
-                // 76
+                // 77
                 titulo("Guarda-roupa", VISUAL)
                         .append(t("Mude a "))
                         .append(d("aparência"))
                         .append(t(" da armadura sem tirá-la, ou esconda uma peça.\n\nNa cabeça vale qualquer item!\n"))
                         .append(d("/guardaroupa")),
-                // 77
+                // 78
                 titulo("Conquistas", TITULO)
                         .append(d("/titulos"))
                         .append(t(": títulos que dão bônus. Só o que está em uso conta.\n\n"))
                         .append(d("Agache + clique num aldeão"))
                         .append(t(": pedidos do dia. Cumprir dá esmeraldas e descontos.")),
-                // 78
+                // 79
                 titulo("Comandos", TITULO)
                         .append(d("/atributos /classe\n/forja /grimorio\n/receitas /pets\n/peixes /alquimia\n/colonia /reino\n/titulos /bestiario\n/party /territorio\n/masmorra /lendas\n/locais /combos\n/portais /torre\n/mochila /deus /enc\n/cronista /talentos\n/rpg /album /placar"))
         );

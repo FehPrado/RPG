@@ -24,6 +24,8 @@ import java.util.UUID;
 
 /**
  * Marco do Território: uma magnetita com 1 estandarte e 4 esmeraldas jogados em cima.
+ * Quem já tem território e faz o ritual em outro lugar (com 1 bloco de esmeralda a mais)
+ * cria um Marco de Expansão: outra área ligada ao mesmo território.
  * Funda o território do jogador; o estandarte vira a bandeira que gira em cima do Marco.
  */
 public final class Marcos extends Estacao {
@@ -32,6 +34,8 @@ public final class Marcos extends Estacao {
 
     /** O estandarte do ritual que acabou de ser consumido (vira a bandeira do território). */
     private ItemStack bandeiraDoRitual;
+    /** O ritual em andamento é de um Marco de Expansão (quem fez já tem território). */
+    private boolean ritualExpansao;
 
     public Marcos(RPGAtributos plugin) {
         super(plugin, "marcos", "marco_display");
@@ -48,7 +52,7 @@ public final class Marcos extends Estacao {
 
     @Override
     protected boolean itemDoRitual(Material m) {
-        return m == Material.EMERALD || Tag.ITEMS_BANNERS.isTagged(m);
+        return m == Material.EMERALD || m == Material.EMERALD_BLOCK || Tag.ITEMS_BANNERS.isTagged(m);
     }
 
     @Override
@@ -63,12 +67,15 @@ public final class Marcos extends Estacao {
         if (base != null) return base;
         Player p = quem == null ? null : Bukkit.getPlayer(quem);
         if (p == null) return "Quem faz o ritual precisa estar online.";
+        ritualExpansao = plugin.territorios().viraExpansao(p);
         return plugin.territorios().podeFundar(p, b);
     }
 
     @Override
     protected boolean consumirRitual(Block bloco, List<Item> itens) {
         if (contar(itens, Material.EMERALD) < ESMERALDAS) return false;
+        // A expansão custa também 1 bloco de esmeralda.
+        if (ritualExpansao && contar(itens, Material.EMERALD_BLOCK) < 1) return false;
         Item estandarte = null;
         for (Item i : itens) {
             if (i.isValid() && Tag.ITEMS_BANNERS.isTagged(i.getItemStack().getType())) { estandarte = i; break; }
@@ -79,6 +86,7 @@ public final class Marcos extends Estacao {
         bandeiraDoRitual = bandeira;
         tirar(estandarte, 1);
         tirar(itens, Material.EMERALD, ESMERALDAS);
+        if (ritualExpansao) tirar(itens, Material.EMERALD_BLOCK, 1);
         return true;
     }
 
@@ -89,6 +97,7 @@ public final class Marcos extends Estacao {
         ItemStack bandeira = bandeiraDoRitual != null ? bandeiraDoRitual : new ItemStack(Material.WHITE_BANNER);
         bandeiraDoRitual = null;
         if (plugin.territorios().de(quem.getUniqueId()) == null) plugin.territorios().fundar(quem, b, bandeira);
+        else plugin.territorios().fundarExpansao(quem, b);
         super.criar(b, quem);
     }
 
@@ -99,9 +108,7 @@ public final class Marcos extends Estacao {
     private Territorio territorio(Location bloco) {
         Territorio t = plugin.territorios().em(bloco);
         if (t == null) return null;
-        Location marco = t.marco();
-        return marco != null && marco.getBlockX() == bloco.getBlockX() && marco.getBlockY() == bloco.getBlockY()
-                && marco.getBlockZ() == bloco.getBlockZ() ? t : null;
+        return t.ehMarco(bloco.getBlockX(), bloco.getBlockY(), bloco.getBlockZ()) ? t : null;
     }
 
     @Override
@@ -134,7 +141,8 @@ public final class Marcos extends Estacao {
     protected Component nome(Location bloco) {
         Territorio t = territorio(bloco);
         if (t == null) return nome();
-        return Component.text("⚑ Território de " + t.nomeDono() + " ⚑", Territorios.COR)
+        boolean expansao = t.expansao(bloco.getBlockX(), bloco.getBlockY(), bloco.getBlockZ()) >= 0;
+        return Component.text((expansao ? "⚑ Expansão de " : "⚑ Território de ") + t.nomeDono() + " ⚑", Territorios.COR)
                 .append(Component.newline())
                 .append(Component.text("clique com o botão direito", NamedTextColor.GRAY));
     }
@@ -149,7 +157,8 @@ public final class Marcos extends Estacao {
         if (quem == null) return;
         Territorio t = plugin.territorios().de(quem.getUniqueId());
         int chunks = t == null ? 0 : t.chunks().size();
-        quem.showTitle(Title.title(Component.text("⚑ Território fundado! ⚑", Territorios.COR, TextDecoration.BOLD),
+        boolean expansao = t != null && t.expansao(b.getX(), b.getY(), b.getZ()) >= 0;
+        quem.showTitle(Title.title(Component.text(expansao ? "⚑ Expansão fundada! ⚑" : "⚑ Território fundado! ⚑", Territorios.COR, TextDecoration.BOLD),
                 Component.text(chunks + " chunks protegidos. Clique no Marco para gerenciar.", NamedTextColor.GRAY),
                 Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(3000), Duration.ofMillis(700))));
         plugin.territorios().mostrarBordas(quem, 15);

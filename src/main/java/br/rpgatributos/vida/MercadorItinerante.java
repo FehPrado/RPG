@@ -79,6 +79,7 @@ public final class MercadorItinerante implements Listener {
         l.add(new Oferta(() -> Mitrilo.lingote(1), 20, 1, 2));
         l.add(new Oferta(() -> Bebida.values()[rnd().nextInt(Bebida.values().length)].criar(2), 16, 0, 2));
         l.add(new Oferta(() -> Erva.values()[rnd().nextInt(Erva.values().length)].criar(3), 5, 0, 5));
+        l.add(new Oferta(() -> Fruta.sortear(rnd()).muda(1), 8, 0, 3));
         if (rnd().nextDouble() < 0.25) l.add(new Oferta(() -> Raro.ESSENCIA_PRIMORDIAL.criar(1), 48, 2, 1));
         Collections.shuffle(l, rnd());
         return l.subList(0, Math.min(6, l.size()));

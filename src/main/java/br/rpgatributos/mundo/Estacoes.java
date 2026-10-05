@@ -71,8 +71,6 @@ public final class Estacoes implements Listener {
         public String descricao() { return descricao; }
     }
 
-    private static final long SEMANA = 7L * 24 * 3_600_000;
-    private static final long DIA = 24L * 3_600_000;
     private static final Set<Material> PLANTAS = Set.of(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.BEETROOTS,
             Material.MELON_STEM, Material.PUMPKIN_STEM, Material.SWEET_BERRY_BUSH, Material.COCOA, Material.TORCHFLOWER_CROP,
             Material.PITCHER_CROP);
@@ -94,17 +92,40 @@ public final class Estacoes implements Listener {
 
     private static ThreadLocalRandom rnd() { return ThreadLocalRandom.current(); }
 
+    /** Duração de uma estação (padrão: uma semana real). */
+    private long semana() {
+        return plugin.settings().horasPorEstacao * 3_600_000L;
+    }
+
+    /** Um "dia" da estação: 1/7 dela. */
+    private long dia7() {
+        return semana() / 7;
+    }
+
+    /** Quanto falta para a próxima estação (ms). */
+    public long restante() {
+        return semana() - tempo() % semana();
+    }
+
+    /** "5d 3h", "4h 20min" ou "12 min". */
+    public static String duracao(long ms) {
+        long min = Math.max(1, ms / 60_000), h = min / 60, d = h / 24;
+        if (d > 0) return d + "d " + h % 24 + "h";
+        if (h > 0) return h + "h " + min % 60 + "min";
+        return min + " min";
+    }
+
     private long tempo() {
         return System.currentTimeMillis() - plugin.perigo().inicio() + desvio;
     }
 
     public Estacao atual() {
-        return Estacao.values()[(int) ((tempo() / SEMANA) % 4)];
+        return Estacao.values()[(int) ((tempo() / semana()) % 4)];
     }
 
     /** Dia da estação (1 a 7). */
     public int dia() {
-        return (int) ((tempo() % SEMANA) / DIA) + 1;
+        return (int) ((tempo() % semana()) / dia7()) + 1;
     }
 
     public boolean festival() {
@@ -114,15 +135,15 @@ public final class Estacoes implements Listener {
     /** Para o /rpgadmin: pula para o começo da estação. */
     public void definir(Estacao e) {
         long t = tempo();
-        long ano = t / (SEMANA * 4);
-        long alvo = ano * SEMANA * 4 + e.ordinal() * SEMANA;
+        long ano = t / (semana() * 4);
+        long alvo = ano * semana() * 4 + e.ordinal() * semana();
         desvio += alvo - t;
         salvar();
     }
 
     public void definirFestival() {
         long t = tempo();
-        desvio += (t / SEMANA) * SEMANA + 3 * DIA - t;
+        desvio += (t / semana()) * semana() + 3 * dia7() - t;
         salvar();
     }
 
@@ -247,7 +268,7 @@ public final class Estacoes implements Listener {
 
     /** A lembrança do festival (um enfeite de cabeça), uma vez por festival. */
     private void lembranca(Player p, Estacao e) {
-        long ano = tempo() / (SEMANA * 4);
+        long ano = tempo() / (semana() * 4);
         NamespacedKey k = new NamespacedKey(plugin, "festival_" + e.name().toLowerCase(java.util.Locale.ROOT) + "_" + ano);
         if (p.getPersistentDataContainer().has(k)) return;
         p.getPersistentDataContainer().set(k, PersistentDataType.BYTE, (byte) 1);

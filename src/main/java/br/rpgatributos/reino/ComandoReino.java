@@ -76,7 +76,19 @@ public final class ComandoReino implements TabExecutor {
                 if (r.todos().isEmpty()) p.sendMessage(Component.text(" Nenhum ainda.", NamedTextColor.GRAY));
                 yield null;
             }
-            default -> "Subcomandos: fundar, convidar, aceitar, recusar, sair, expulsar, cargo, coroa, desfazer, tesouro, guerra, paz, lista";
+            case "lei" -> {
+                var lei = args.length < 2 ? null : Reinos.leiPorNome(args[1]);
+                yield lei == null ? "Use: /reino lei <paz|explosoes|incendios|muralhas> (decreta ou revoga)" : r.alternarLei(p, lei);
+            }
+            case "mapa" -> {
+                plugin.menusTerritorio().abrirMapa(p, p.getUniqueId());
+                yield null;
+            }
+            case "provincias", "leis" -> {
+                r.abrir(p);
+                yield null;
+            }
+            default -> "Subcomandos: fundar, convidar, aceitar, recusar, sair, expulsar, cargo, coroa, desfazer, tesouro, guerra, paz, lei, mapa, provincias, lista";
         };
         if (erro != null) p.sendMessage(Component.text(erro, NamedTextColor.RED));
         return true;
@@ -87,13 +99,14 @@ public final class ComandoReino implements TabExecutor {
         List<String> op = new ArrayList<>();
         if (args.length == 1) {
             op.addAll(List.of("fundar", "convidar", "aceitar", "recusar", "sair", "expulsar", "cargo", "coroa", "desfazer",
-                    "tesouro", "guerra", "paz", "lista"));
+                    "tesouro", "guerra", "paz", "lei", "mapa", "provincias", "lista"));
         } else if (args.length == 2) {
             switch (args[0].toLowerCase(Locale.ROOT)) {
                 case "convidar", "expulsar", "cargo", "coroa" -> { return null; }
                 case "tesouro" -> op.addAll(List.of("depositar", "sacar"));
                 case "guerra", "paz" -> { for (Reino x : plugin.reinos().todos()) op.add(x.nome()); }
                 case "desfazer" -> op.add("confirmar");
+                case "lei" -> op.addAll(List.of("paz", "explosoes", "incendios", "muralhas"));
                 default -> { }
             }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("cargo")) {

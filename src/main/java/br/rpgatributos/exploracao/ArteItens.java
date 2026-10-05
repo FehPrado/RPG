@@ -1573,6 +1573,52 @@ final class ArteItens {
             "................",
             "................"};
 
+    private static final String[] FRUTA_REDONDA = {
+            "................",
+            "................",
+            "................",
+            ".........g......",
+            ".......sgg......",
+            ".....oooooo.....",
+            "....ohhmmmmo....",
+            "...ohhmmmmmdo...",
+            "...ohmmmmmmdo...",
+            "...ommmmmmmdo...",
+            "...ommmmmmddo...",
+            "...odmmmmmddo...",
+            "....oddmmddo....",
+            ".....oooooo.....",
+            "................",
+            "................"};
+
+    private static final String[] CEREJAS = {
+            "................",
+            "................",
+            "..........gg....",
+            ".........sg.....",
+            "........s.s.....",
+            ".......s...s....",
+            "......s....s....",
+            ".....s.....s....",
+            "...ooo....ooo...",
+            "..ohmmo..ohmmo..",
+            "..ommmo..ommmo..",
+            "..odmdo..odmdo..",
+            "...ooo....ooo...",
+            "................",
+            "................",
+            "................"};
+
+    private static void frutas(List<Arte> l) {
+        Map<Character, Integer> galho = c('s', 0xFF5D4037, 'g', 0xFF4CAF50);
+        l.add(new Arte("apple", "fruta_laranja", FRUTA_REDONDA, com(galho, 'o', 0xFF8A3B00, 'd', 0xFFE65100, 'm', 0xFFFF9800, 'h', 0xFFFFCC80)));
+        l.add(new Arte("apple", "fruta_pessego", FRUTA_REDONDA, com(galho, 'o', 0xFF8A3B2E, 'd', 0xFFE57373, 'm', 0xFFFFAB91, 'h', 0xFFFFE0D0)));
+        l.add(new Arte("apple", "fruta_cereja", CEREJAS, com(galho, 'o', 0xFF4A0010, 'd', 0xFF880E4F, 'm', 0xFFD81B60, 'h', 0xFFF48FB1)));
+        l.add(new Arte("apple", "fruta_limao", FRUTA_REDONDA, com(galho, 'o', 0xFF5A6A00, 'd', 0xFFAFB42B, 'm', 0xFFCDDC39, 'h', 0xFFF0F4C3)));
+        l.add(new Arte("apple", "fruta_maca_dourada", FRUTA_REDONDA, com(galho, 'o', 0xFF7A5A00, 'd', 0xFFFFA000, 'm', 0xFFFFD54F, 'h', 0xFFFFF59D)));
+        l.add(new Arte("potion", "bebida_licor_de_frutas", GARRAFA_VINHO, com(VIDRO, 'l', 0xFFFF8A65, 'd', 0xFFBF360C, 'a', 0xFFFFF3E0)));
+    }
+
     private static void vida(List<Arte> l) {
         Map<Character, Integer> madeira = c('o', 0xFF3E2723, 'c', 0xFFC62828, 'g', 0xFFB0C8D0, 'w', BRANCO);
         l.add(new Arte("potion", "bebida_hidromel", JARRA, com(madeira, 'l', 0xFFE8A33D, 'd', 0xFFB06A00, 'a', 0xFFFFE082)));
@@ -1625,6 +1671,7 @@ final class ArteItens {
         acessorios(l);
         lendas(l);
         vida(l);
+        frutas(l);
         return l;
     }
 }

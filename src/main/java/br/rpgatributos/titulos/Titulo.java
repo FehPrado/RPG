@@ -123,7 +123,10 @@ public enum Titulo {
     GUARDIAO_DE_SEGREDOS("Guardião de Segredos", 0xB388FF, Requisito.contador("segredos", 6, "Descobrir 6 segredos"), Bonus.xpTudo(0.05)),
     MESTRE_CERVEJEIRO("Mestre Cervejeiro", 0xA1887F, Requisito.contador("bebidas", 30, "Engarrafar 30 bebidas"), Bonus.xpSkill(Skill.CULINARIA, 0.15)),
     APICULTOR("Apicultor", 0xFFB300, Requisito.contador("meis", 50, "Tirar 50 méis da colmeia"), Bonus.xpSkill(Skill.AGRICULTURA, 0.1)),
-    BOM_SAMARITANO("Bom Samaritano", 0xBCAAA4, Requisito.contador("viajantes", 5, "Ajudar 5 viajantes feridos"), Bonus.vida(2));
+    BOM_SAMARITANO("Bom Samaritano", 0xBCAAA4, Requisito.contador("viajantes", 5, "Ajudar 5 viajantes feridos"), Bonus.vida(2)),
+    POMICULTOR("Pomicultor", 0xFF9800, Requisito.contador("frutas", 50, "Colher 50 frutas do pomar"), Bonus.xpSkill(Skill.AGRICULTURA, 0.1)),
+    ANDARILHO("Andarilho das Ruínas", 0xA1887F, Requisito.contador("estruturas", 12, "Descobrir 12 estruturas antigas pelo mundo"), Bonus.xpTudo(0.04)),
+    DESEJOSO("Desejoso", 0x4FC3F7, Requisito.contador("desejos", 10, "Fazer 10 pedidos num Poço dos Desejos"), Bonus.velocidade(0.02));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(
