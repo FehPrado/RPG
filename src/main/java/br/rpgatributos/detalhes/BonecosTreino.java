@@ -8,6 +8,7 @@ import br.rpgatributos.combo.TipoArma;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -15,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -28,6 +30,7 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -56,6 +59,8 @@ public final class BonecosTreino extends Estacao {
     private final Map<UUID, Double> melhor = new HashMap<>();
     private final Map<UUID, double[]> xpHora = new HashMap<>(); // [início da hora, XP ganho]
     private final Map<UUID, Long> ultimoXp = new HashMap<>();
+    /** Bonecos que levaram golpe há pouco (combos e habilidades empurram): voltam para o lugar. */
+    private final Map<UUID, Long> ancorar = new HashMap<>();
     private int passos;
 
     public BonecosTreino(RPGAtributos plugin) {
@@ -176,7 +181,7 @@ public final class BonecosTreino extends Estacao {
         });
     }
 
-    private boolean ehBoneco(Entity e) {
+    public boolean ehBoneco(Entity e) {
         return e instanceof ArmorStand && e.getPersistentDataContainer().has(kBoneco);
     }
 
@@ -193,6 +198,19 @@ public final class BonecosTreino extends Estacao {
     // =====================================================================
     //  Golpes
     // =====================================================================
+
+    /** Fogo, gelo, explosão e afins nunca estragam o boneco (os golpes passam por aoBater). */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoSofrer(org.bukkit.event.entity.EntityDamageEvent e) {
+        if (e instanceof EntityDamageByEntityEvent || !ehBoneco(e.getEntity())) return;
+        e.setCancelled(true);
+        e.getEntity().setFireTicks(0);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoPegarFogo(org.bukkit.event.entity.EntityCombustEvent e) {
+        if (ehBoneco(e.getEntity())) e.setCancelled(true);
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void aoBater(EntityDamageByEntityEvent e) {
@@ -212,11 +230,27 @@ public final class BonecosTreino extends Estacao {
                 .append(Component.text("  ·  " + StatsManager.fmt(dps(g)) + "/s", NamedTextColor.YELLOW))
                 .append(Component.text("  ·  maior: " + StatsManager.fmt(recorde), NamedTextColor.GRAY)));
         Entity boneco = e.getEntity();
+        ancorar.put(boneco.getUniqueId(), agora + 4000);
+        plugin.getServer().getScheduler().runTask(plugin, () -> voltarAoLugar(boneco));
         boneco.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, boneco.getLocation().add(0, 1.4, 0),
                 (int) Math.min(10, Math.max(1, dano / 2)), 0.25, 0.3, 0.25, 0.1);
         boneco.getWorld().playSound(boneco.getLocation(), Sound.ENTITY_ARMOR_STAND_HIT, 0.8f, 1f);
         plugin.recordes().golpe(p, dano);
         darXp(p, agora);
+    }
+
+    /** Põe o boneco de volta em cima do fardo de feno (os golpes empurram e levantam). */
+    private void voltarAoLugar(Entity boneco) {
+        if (!boneco.isValid()) return;
+        String k = boneco.getPersistentDataContainer().get(kBoneco, PersistentDataType.STRING);
+        if (k == null) return;
+        String[] p = k.split(",");
+        World w = Bukkit.getWorld(p[0]);
+        if (w == null) return;
+        Location casa = new Location(w, Integer.parseInt(p[1]) + 0.5, Integer.parseInt(p[2]) + 1, Integer.parseInt(p[3]) + 0.5,
+                boneco.getLocation().getYaw(), 0);
+        boneco.setVelocity(new Vector());
+        if (boneco.getLocation().distanceSquared(casa) > 0.0025) boneco.teleport(casa);
     }
 
     private static double dps(Deque<Golpe> g) {
@@ -250,6 +284,14 @@ public final class BonecosTreino extends Estacao {
 
     @Override
     protected void aoTick() {
+        if (!ancorar.isEmpty()) {
+            long t = System.currentTimeMillis();
+            ancorar.entrySet().removeIf(en -> {
+                Entity b = Bukkit.getEntity(en.getKey());
+                if (b != null) voltarAoLugar(b);
+                return b == null || t > en.getValue();
+            });
+        }
         if (++passos % 1200 != 0) return; // a cada 5 min limpa quem não treina mais
         long agora = System.currentTimeMillis();
         golpes.values().removeIf(g -> g.isEmpty() || agora - g.peekLast().quando() > 300_000);

@@ -80,7 +80,7 @@ public final class Settings {
     public final int detDescansadoMinutos, detAmolarGolpes, detLapideMinutos;
     public final double detNinhoChance, detAchadoChance, detAnimalRaroChance, detDescansadoXp, detBonecoXpHora, detAmolarDano;
     public final int horasPorEstacao;
-    public final boolean golpesEmQualquerCriatura;
+    public final boolean golpesEmQualquerCriatura, pvpLivreForaDeTerritorio;
 
     // vida no mundo: ofícios, cartas, mercador e encontros
     public final boolean vidaEncontros;
@@ -308,6 +308,7 @@ public final class Settings {
 
         detSentar = c.getBoolean("detalhes.sentar", true);
         golpesEmQualquerCriatura = c.getBoolean("combate.golpes-em-qualquer-criatura", true);
+        pvpLivreForaDeTerritorio = c.getBoolean("combate.pvp-livre-fora-de-territorio", true);
         detLapide = c.getBoolean("detalhes.lapide.ativada", true);
         detLapideMinutos = Math.max(0, c.getInt("detalhes.lapide.minutos-de-protecao", 15));
         detNinhoChance = Math.max(0, c.getDouble("detalhes.chance-de-ninho", 0.01));

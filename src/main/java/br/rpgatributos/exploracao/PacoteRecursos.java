@@ -240,6 +240,21 @@ public final class PacoteRecursos implements Listener {
     //  Conteúdo do pacote
     // =====================================================================
 
+    /**
+     * Fonte dos menus: dois "espaços negativos" (voltam o cursor) e uma letra por fundo, do tamanho
+     * do baú de 6 linhas (176x222). O título do menu escreve: volta 8 px, desenha o fundo, volta 169 px.
+     */
+    private static String fonteMenus() {
+        StringBuilder sb = new StringBuilder("{\n  \"providers\": [\n");
+        sb.append(String.format("    { \"type\": \"space\", \"advances\": { \"\\u%04X\": -8, \"\\u%04X\": -169 } }",
+                (int) br.rpgatributos.ajuda.Fundo.VOLTA_ANTES, (int) br.rpgatributos.ajuda.Fundo.VOLTA_DEPOIS));
+        for (br.rpgatributos.ajuda.Fundo fu : br.rpgatributos.ajuda.Fundo.values()) {
+            sb.append(String.format(",\n    { \"type\": \"bitmap\", \"file\": \"rpgatributos:gui/menu_%s.png\", \"ascent\": 13, \"height\": %d, \"chars\": [\"\\u%04X\"] }",
+                    fu.id(), br.rpgatributos.ajuda.Fundo.ALTURA, (int) fu.letra()));
+        }
+        return sb.append("\n  ]\n}\n").toString();
+    }
+
     private byte[] montar(File pasta) throws IOException {
         Map<String, byte[]> f = new LinkedHashMap<>();
         f.put("pack.mcmeta", texto("""
@@ -293,6 +308,8 @@ public final class PacoteRecursos implements Listener {
 
         // Texturas: as desenhadas pelo código, ou um PNG seu com o mesmo nome em pacote/texturas/.
         Map<String, BufferedImage> texturas = new LinkedHashMap<>();
+        // Fundos desenhados dos menus (/rpg, Guia, Jornada): entram como letras da fonte rpgatributos:menus.
+        for (br.rpgatributos.ajuda.Fundo fu : br.rpgatributos.ajuda.Fundo.values()) texturas.put("gui/menu_" + fu.id(), fu.desenhar());
         texturas.put("block/minerio_mitrilo", minerio());
         texturas.put("item/mitrilo_bruto", desenho(BRUTO, MITRILO));
         texturas.put("item/lingote_mitrilo", desenho(LINGOTE, MITRILO));
@@ -324,6 +341,7 @@ public final class PacoteRecursos implements Listener {
             Files.write(new File(padrao, nome).toPath(), original);
             f.put("assets/rpgatributos/textures/" + t.getKey() + ".png", textura(new File(proprias, nome), original));
         }
+        f.put("assets/rpgatributos/font/menus.json", texto(fonteMenus()));
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try (ZipOutputStream zip = new ZipOutputStream(bytes)) {

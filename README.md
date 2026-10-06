@@ -57,9 +57,14 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 - Matar o mesmo jogador seguidas vezes, ou uma conta do mesmo IP, não dá XP.
 - Material raro não pode ser gasto em receitas comuns (bancada, bigorna, fornalha, poções).
 
-## Guia do Aventureiro
+## Interface: /rpg, Guia e Jornada
 
-Na primeira vez que entra no servidor, o jogador recebe um livro de 79 páginas que explica tudo. `/guia` dá outro.
+- **`/rpg`:** o menu central. No topo, **"Seu próximo passo"**: 3 sugestões que mudam conforme o progresso (o passo da Jornada, pontos de talento para gastar, colônia ou reino que já dá para fundar, deus para seguir...). Abaixo, **7 categorias** (Personagem, Combate, Magia e fé, Ofícios, Mundo e aventura, Comunidade, Coleções) e atalhos para os menus mais usados.
+- **Guia interativo:** cada assunto é uma tela curta com o **ritual desenhado em itens** (o bloco, os itens que você joga em cima e o que ele vira), uma dica, o botão para abrir o sistema e os assuntos ligados. Clique numa categoria do `/rpg` e depois num assunto.
+- **Busca:** `/guia <palavra>` (ex.: `/guia reciclar`, `/guia alquimia`) mostra os assuntos no chat, para clicar.
+- **Jornada do Aventureiro** (`/jornada`): 12 passos que ensinam o básico na ordem (subir um atributo, forjar, soltar combos, cozinhar, alquimia, classe, magias, território, fé, estrutura, masmorra e colônia). Cada passo se completa sozinho e dá uma recompensa.
+- **Visual:** com o pacote de recursos, os menus do `/rpg`, do Guia e da Jornada têm **fundo desenhado** (papel e madeira); sem o pacote, aparecem com vidros.
+- **Livro:** na primeira entrada o jogador ainda recebe o livro Guia do Aventureiro (80 páginas); `/guia livro` dá outro.
 
 ## Forja do Ferreiro
 
@@ -518,7 +523,7 @@ Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direi
 - **Proficiência:** cada tipo de arma tem um nível de 1 a 20, que sobe acertando e derrotando inimigos com ela (mobs de spawner dão menos). Cada nível dá +2% de dano nos golpes e libera golpes novos.
 - `/combos` abre o menu: escolha qual golpe fica em cada uma das 4 sequências (clique na sequência, depois no golpe).
 - O dano sai como golpe seu, então passivos de classe, efeitos da forja, raridade, refino e reações elementais também valem.
-- **Alvos:** os golpes (e as habilidades de classe) acertam monstros, chefes, qualquer outra criatura e jogadores onde o PvP está liberado (gamerule, regras do território, fora da sua party e do seu reino; na guerra, os inimigos sempre). Ficam de fora aldeões e NPCs, os seus pets e companheiros, os de quem você não pode atacar e animais com etiqueta de nome. O admin pode limitar a monstros com `combate.golpes-em-qualquer-criatura: false`.
+- **Alvos:** os golpes, as habilidades de classe e as magias acertam monstros, chefes, qualquer outra criatura, o **Boneco de Treino** (que mede o dano e volta para o lugar) e jogadores. **Jogadores:** fora de território vale tudo, mesmo com o PvP do servidor desligado (`combate.pvp-livre-fora-de-territorio`); dentro de território vale a regra de PvP dele e a Lei da Paz do reino. Party sem fogo amigo e membros do mesmo reino nunca se acertam; na guerra, os inimigos sempre. Ficam de fora aldeões e NPCs, os seus pets e companheiros, os de quem você não pode atacar e animais com etiqueta de nome. O admin pode limitar a monstros com `combate.golpes-em-qualquer-criatura: false`.
 
 | Arma | Golpes (nível de proficiência) |
 |---|---|
@@ -922,7 +927,7 @@ Monstros, chefes e peixes raros às vezes deixam uma **carta** (5% delas são **
 
 ### Conforto
 
-- **`/rpg`:** o menu central, com um botão para cada sistema (atributos, talentos, combos, mochila, álbum, fé, diário, recordes...).
+- **`/rpg`:** o menu central, com os próximos passos, as categorias e a Jornada (veja "Interface: /rpg, Guia e Jornada").
 - **`/placar`:** liga ou desliga um placar do lado da tela com nível, vigor, mana, estação, lua, hora, Descansado e pontos de talento.
 ## Pesca
 
@@ -1043,13 +1048,14 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/diario` | todos | Diário de Viagem (os marcos da sua jornada) |
 | `/recordes` | todos | Recordes do servidor |
 | `/sentar` | todos | Senta no chão (ou levanta) |
-| `/rpg` | todos | Menu central com todos os sistemas |
+| `/rpg` | todos | Menu central: próximos passos, categorias e atalhos |
+| `/guia [palavra\|livro]` | todos | Guia interativo e busca; `livro` dá o livro |
+| `/jornada` | todos | Jornada do Aventureiro (12 primeiros passos) |
 | `/placar` | todos | Liga ou desliga o placar lateral |
 | `/album` | todos | Álbum de Cartas |
 | `/segredos` | todos | Segredos descobertos e dicas dos outros |
 | `/territorio` | todos | Menu do território (`mapa`, `bordas`, `info`, `reivindicar`, `liberar`, `adicionar`, `remover`, `abandonar confirmar`) |
 | `/cosmeticos`, `/chapeu`, `/tag` | todos | Item na cabeça e tag personalizada |
-| `/guia` | todos | Livro Guia do Aventureiro |
 | `/rpgadmin` | OP | Mostra todos os comandos de admin |
 
 **Comandos de admin úteis para testar:**
@@ -1163,7 +1169,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.25.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.26.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

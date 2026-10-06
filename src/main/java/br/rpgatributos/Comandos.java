@@ -73,7 +73,11 @@ public final class Comandos implements TabExecutor {
                 else erro(sender, "Só jogadores.");
             }
             case "guia" -> {
-                if (sender instanceof Player p) plugin.guia().dar(p);
+                if (sender instanceof Player p) plugin.ajuda().comandoGuia(p, args);
+                else erro(sender, "Só jogadores.");
+            }
+            case "jornada" -> {
+                if (sender instanceof Player p) plugin.ajuda().abrirJornada(p);
                 else erro(sender, "Só jogadores.");
             }
             case "titulos" -> {
@@ -1498,6 +1502,7 @@ public final class Comandos implements TabExecutor {
                 if (args.length == 2) op.add("chat");
             }
             case "chapeu" -> { if (args.length == 1) op.add("tirar"); }
+            case "guia" -> { if (args.length == 1) return plugin.ajuda().completarGuia(args[0]); }
             case "tag" -> { if (args.length == 1) op.add("remover"); }
             case "rpgadmin" -> {
                 String sub = args.length >= 1 ? args[0].toLowerCase(Locale.ROOT) : "";

@@ -159,6 +159,7 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 11. Feito na 2.22.1–2.23: combos e habilidades em qualquer criatura, Pedra de Amolar no rebolo, estações configuráveis e pomar.
 12. Feito na 2.24: estruturas prontas pelo mundo (torre de vigia, acampamento de bandidos, cemitério, mina abandonada, poço dos desejos, cabana do eremita e santuário esquecido).
 13. Feito na 2.25: mais 9 estruturas (oásis, cabana da bruxa, farol, expedição perdida, vila saqueada, torre do mago, círculo de pedras, forja dos anões, fortim), colônia no território inteiro, expansões de território e reino com províncias e leis.
-14. **Próximo: a definir** (pragas e corvos, curtume e tecelagem, pesca no gelo, cosméticos; reino: postos avançados, diplomacia, decretos, monumentos).
+14. Feito na 2.25.1–2.26: PvP livre fora de território para golpes e habilidades, Boneco de Treino aceitando combos; interface nova: /rpg com próximo passo e categorias, Guia interativo com busca, Jornada do Aventureiro e fundos desenhados nos menus.
+15. **Próximo: a definir** (fundos desenhados nos outros menus, posturas de combate e polimento dos combos — adiados pelo usuário —, pragas e corvos, curtume e tecelagem, pesca no gelo, cosméticos; reino: postos avançados, diplomacia, decretos, monumentos).
 
 *Decisão (03/10/2026): o foco é conteúdo que dá profundidade e história ao mundo. O que é mais de "servidor para muita gente" fica no backlog: raides, Masmorra Hardcore, aparar, Fase E (Reinos 2.0), Fase H (Social), Fase J (Visual) e o resto da Fase K.*

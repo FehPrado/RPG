@@ -349,6 +349,7 @@ public final class Cozinha extends Estacao {
         p.sendMessage(Component.text("♨ Você cozinhou ", COR).append(prato.effectiveName())
                 .append(Component.text(q == Qualidade.NORMAL ? "" : " (Qualidade " + q.nome() + ")", q.cor())));
         if (p.getGameMode() != GameMode.CREATIVE) plugin.stats().darXp(p, Skill.CULINARIA, pr.xp());
+        plugin.titulos().registrar(p, "pratos", 1);
         if (pr == Prato.BANQUETE_LENDARIO) plugin.titulos().registrar(p, "banquete", 1);
         desenhar(p, t);
     }

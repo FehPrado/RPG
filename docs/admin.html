@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.25</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.26</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -135,7 +135,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.25.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.26.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -176,7 +176,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>pomares.yml</code></td><td>Árvores frutíferas e as frutas penduradas</td></tr>
       <tr><td><code>estruturas.yml</code></td><td>Estruturas prontas já construídas (tipo, lugar, quem visitou, guardas, eremita)</td></tr>
       <tr><td><code>pacote/RPGAtributos-recursos.zip</code></td><td>Pacote de recursos gerado a cada início (pode apagar: ele é refeito)</td></tr>
-      <tr><td><code>pacote/texturas/</code>, <code>pacote/texturas-padrao/</code></td><td>Suas texturas (entram no lugar das originais) e os desenhos originais</td></tr>
+      <tr><td><code>pacote/texturas/</code>, <code>pacote/texturas-padrao/</code></td><td>Suas texturas (entram no lugar das originais) e os desenhos originais. Os fundos dos menus são <code>menu_rpg.png</code>, <code>menu_categoria.png</code>, <code>menu_topico.png</code> e <code>menu_jornada.png</code> (176×222)</td></tr>
       <tr><td>No chunk (PDC)</td><td>Posição dos minérios de mitrilo e marcas de "já gerado" (mitrilo, sítios de arqueologia e estruturas)</td></tr>
       <tr><td><code>salas/&lt;tipo&gt;/&lt;nome&gt;.nbt</code></td><td>Salas de masmorra construídas por admins</td></tr>
       <tr><td>No jogador (PDC)</td><td>Atributos, classes, magias, proficiência de armas e combos, mochila, acessórios, guarda-roupa, exército das sombras, talentos e renascimentos (os dados da evolução ficam no próprio companheiro)</td></tr>
@@ -300,6 +300,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <div class="tabela"><table><thead><tr><th>Opção</th><th>Padrão</th><th>O que faz</th></tr></thead><tbody>
         <tr><td><code>detalhes.sentar</code></td><td>true</td><td>Sentar em escadas e lajes</td></tr>
         <tr><td><code>combate.golpes-em-qualquer-criatura</code></td><td>true</td><td>Combos e habilidades acertam qualquer criatura (aldeões, pets e animais com nome ficam de fora)</td></tr>
+        <tr><td><code>combate.pvp-livre-fora-de-territorio</code></td><td>true</td><td>Fora de território, combos, habilidades e magias acertam jogadores mesmo com o PvP do servidor desligado (o soco comum segue o servidor). Dentro do território vale a regra de PvP dele</td></tr>
         <tr><td><code>detalhes.lapide.ativada</code> / <code>minutos-de-protecao</code></td><td>true / 15</td><td>Túmulo ao morrer e quanto tempo só o dono abre</td></tr>
         <tr><td><code>detalhes.chance-de-ninho</code></td><td>0.01</td><td>Folhas naturais derrubarem um ninho</td></tr>
         <tr><td><code>detalhes.chance-de-achado</code></td><td>0.015</td><td>Areia e cascalho naturais darem um achado</td></tr>
@@ -610,6 +611,15 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Olhe para um companheiro e use <span class="cmd">/rpgadmin companheironivel 9</span>; derrote alguns monstros com ele para ver a evolução para o estágio II. Depois <span class="cmd">/rpgadmin companheironivel 25</span>.</li>
       </ol>
     </div>
+    <div class="card"><h3>Interface (2.26)</h3>
+      <ol>
+        <li>Suba o pacote de recursos novo (o zip mudou: ele tem os fundos dos menus) e entre de novo.</li>
+        <li><span class="cmd">/rpg</span>: veja o "próximo passo" no topo, abra uma categoria e clique num assunto (o ritual aparece desenhado em itens).</li>
+        <li><span class="cmd">/guia reciclar</span> e <span class="cmd">/guia forja</span>: a busca no chat. <span class="cmd">/guia livro</span> dá o livro.</li>
+        <li><span class="cmd">/jornada</span>: com uma conta nova, suba um atributo ao 5 e veja o passo completar sozinho com a recompensa.</li>
+        <li>Sem o pacote, os mesmos menus aparecem com vidros.</li>
+      </ol>
+    </div>
     <div class="card"><h3>Vida no mundo</h3>
       <ol>
         <li><span class="cmd">/rpgadmin barril</span> num barril vazio, ponha uma bebida e beba uma Lendária com <span class="cmd">/rpgadmin bebida vinho 3</span>.</li>
@@ -732,7 +742,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.25 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<footer>RPGAtributos 2.26 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

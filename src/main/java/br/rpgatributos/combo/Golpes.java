@@ -182,7 +182,7 @@ public final class Golpes implements Listener {
     private void ferir(Player p, LivingEntity e, double valor) {
         if (!e.isValid() || e.isDead()) return;
         e.setNoDamageTicks(0);
-        e.damage(valor, p);
+        plugin.alvos().ferir(p, e, valor);
     }
 
     private static void empurrar(LivingEntity e, Location de, double forca, double cima) {
@@ -1265,7 +1265,7 @@ public final class Golpes implements Listener {
             if (ate != null && ate > agora() && fonte instanceof LivingEntity atacante && atacante != v) {
                 refletindo = true;
                 try {
-                    atacante.damage(e.getDamage() * 0.5, v);
+                    plugin.alvos().ferir(v, atacante, e.getDamage() * 0.5);
                 } finally {
                     refletindo = false;
                 }

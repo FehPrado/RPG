@@ -212,7 +212,7 @@ public final class Habilidades {
             }
             case REDEMOINHO -> {
                 for (LivingEntity e : inimigos(p, l, 4)) {
-                    e.damage(7 * forca, p);
+                    plugin.alvos().ferir(p, e, 7 * forca);
                     empurrar(e, l, 0.9, 0.35);
                 }
                 for (int i = 0; i < 16; i++) {
@@ -245,7 +245,7 @@ public final class Habilidades {
                 }
                 for (LivingEntity e : inimigos(p, l, 8)) {
                     if (!mortoVivo(e)) continue;
-                    e.damage(10 * forca, p);
+                    plugin.alvos().ferir(p, e, 10 * forca);
                     e.setFireTicks(80);
                 }
                 w.spawnParticle(Particle.END_ROD, l.clone().add(0, 1, 0), 60, 3, 1, 3, 0.02);
@@ -307,7 +307,7 @@ public final class Habilidades {
                 LivingEntity alvo = alvo(p, 25);
                 Location fim = alvo != null ? alvo.getLocation().add(0, alvo.getHeight() / 2, 0) : mira(p, 25);
                 raio(p.getEyeLocation(), fim, Particle.WITCH);
-                if (alvo != null) alvo.damage(6 * forca, p);
+                if (alvo != null) plugin.alvos().ferir(p, alvo, 6 * forca);
                 w.playSound(l, Sound.ENTITY_EVOKER_CAST_SPELL, 0.8f, 1.6f);
             }
             case BARREIRA_ARCANA -> {
@@ -321,7 +321,7 @@ public final class Habilidades {
                 w.spawnParticle(Particle.FLAME, alvo, 60, 2, 1, 2, 0.05);
                 w.spawnParticle(Particle.SNOWFLAKE, alvo, 60, 2, 1, 2, 0.05);
                 for (LivingEntity e : inimigos(p, alvo, 4)) {
-                    e.damage(9 * forca, p);
+                    plugin.alvos().ferir(p, e, 9 * forca);
                     e.setFireTicks(80);
                     efeito(e, PotionEffectType.SLOWNESS, 3, 1);
                 }
@@ -415,7 +415,7 @@ public final class Habilidades {
                 Location alvo = mira(p, 20);
                 w.strikeLightningEffect(alvo);
                 for (LivingEntity e : inimigos(p, alvo, 3)) {
-                    e.damage(10 * forca, p);
+                    plugin.alvos().ferir(p, e, 10 * forca);
                     efeito(e, PotionEffectType.SLOWNESS, 2, 4);
                 }
             }
@@ -470,7 +470,7 @@ public final class Habilidades {
                 w.spawnParticle(Particle.FLASH, alvo, 2);
                 w.spawnParticle(Particle.END_ROD, alvo, 80, 2, 0.5, 2, 0.1);
                 for (LivingEntity e : inimigos(p, alvo, 5)) {
-                    e.damage(14 * forca, p);
+                    plugin.alvos().ferir(p, e, 14 * forca);
                     e.setVelocity(e.getVelocity().setY(0.9));
                 }
                 w.playSound(alvo, Sound.ITEM_MACE_SMASH_GROUND_HEAVY, 1.5f, 0.7f);
@@ -495,7 +495,7 @@ public final class Habilidades {
                     w.spawnParticle(Particle.LAVA, alvo, 40, 2, 0.5, 2);
                     w.playSound(alvo, Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 0.8f);
                     for (LivingEntity e : inimigos(p, alvo, 5)) {
-                        e.damage(18 * forca, p);
+                        plugin.alvos().ferir(p, e, 18 * forca);
                         e.setFireTicks(100);
                         empurrar(e, alvo, 1.2, 0.6);
                     }
@@ -544,7 +544,7 @@ public final class Habilidades {
             }
             case TERREMOTO -> {
                 for (LivingEntity e : inimigos(p, l, 6)) {
-                    e.damage(12 * forca, p);
+                    plugin.alvos().ferir(p, e, 12 * forca);
                     e.setVelocity(e.getVelocity().setY(1.0));
                     efeito(e, PotionEffectType.SLOWNESS, 4, 2);
                 }
@@ -574,7 +574,7 @@ public final class Habilidades {
                             atras.setDirection(alvo.getLocation().toVector().subtract(atras.toVector()));
                             p.teleport(atras);
                         }
-                        alvo.damage(8 * forca, p);
+                        plugin.alvos().ferir(p, alvo, 8 * forca);
                         w.spawnParticle(Particle.SWEEP_ATTACK, alvo.getLocation().add(0, 1, 0), 2);
                         w.playSound(alvo.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1.4f);
                     }, i * 4L);
@@ -597,7 +597,7 @@ public final class Habilidades {
                     Location ponto = olho.clone().add(dir.clone().multiply(d));
                     w.spawnParticle(Particle.END_ROD, ponto, 1, 0, 0, 0, 0);
                     for (LivingEntity e : inimigos(p, ponto, 1.2)) {
-                        if (atingidos.add(e.getUniqueId())) e.damage(16 * forca, p);
+                        if (atingidos.add(e.getUniqueId())) plugin.alvos().ferir(p, e, 16 * forca);
                     }
                 }
                 w.playSound(l, Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1f, 1.8f);
@@ -621,7 +621,7 @@ public final class Habilidades {
                 Location alvo = mira(p, 30);
                 for (double y = 0; y < 12; y += 0.5) w.spawnParticle(Particle.END_ROD, alvo.clone().add(0, y, 0), 3, 0.3, 0, 0.3, 0);
                 for (LivingEntity e : inimigos(p, alvo, 3.5)) {
-                    e.damage((mortoVivo(e) ? 20 : 12) * forca, p);
+                    plugin.alvos().ferir(p, e, (mortoVivo(e) ? 20 : 12) * forca);
                     if (mortoVivo(e)) e.setFireTicks(100);
                 }
                 for (Player a : aliados(p, 30)) {
@@ -672,7 +672,7 @@ public final class Habilidades {
                 p.getWorld().spawnParticle(Particle.CLOUD, c, 3, 0.2, 0.1, 0.2, 0.01);
                 for (LivingEntity e : inimigos(p, c, 2.2)) {
                     if (!acertados.add(e.getUniqueId())) continue;
-                    e.damage(dano, p);
+                    plugin.alvos().ferir(p, e, dano);
                     empurrar(e, c, 1.0, 0.45);
                 }
             }, t);
@@ -719,7 +719,7 @@ public final class Habilidades {
             }
             a.lugar().getWorld().spawnParticle(Particle.CRIT, a.lugar().clone().add(0, 0.1, 0), 2, 0.3, 0, 0.3, 0);
             for (LivingEntity e : inimigos(dono, a.lugar(), 1.5)) {
-                e.damage(8 * a.forca(), dono);
+                plugin.alvos().ferir(dono, e, 8 * a.forca());
                 efeito(e, PotionEffectType.SLOWNESS, 4, 4);
                 a.lugar().getWorld().playSound(a.lugar(), Sound.BLOCK_CHAIN_PLACE, 1f, 0.6f);
                 a.lugar().getWorld().spawnParticle(Particle.BLOCK, a.lugar(), 20, 0.3, 0.2, 0.3, org.bukkit.Material.COBWEB.createBlockData());

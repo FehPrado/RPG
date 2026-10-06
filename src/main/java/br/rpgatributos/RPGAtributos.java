@@ -83,6 +83,7 @@ import br.rpgatributos.vida.Frascos;
 import br.rpgatributos.vida.MercadorItinerante;
 import br.rpgatributos.vida.Segredos;
 import br.rpgatributos.vida.Pomar;
+import br.rpgatributos.ajuda.Ajuda;
 import br.rpgatributos.estruturas.Estruturas;
 import br.rpgatributos.progressao.Renascimento;
 import br.rpgatributos.progressao.Talentos;
@@ -224,6 +225,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Placar placar;
     private Pomar pomar;
     private Estruturas estruturas;
+    private Ajuda ajuda;
 
     private static RPGAtributos instancia;
 
@@ -354,6 +356,7 @@ public final class RPGAtributos extends JavaPlugin {
         pomar = new Pomar(this);
         pomar.carregar();
         estruturas = new Estruturas(this);
+        ajuda = new Ajuda(this);
         estruturas.carregar();
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
@@ -365,7 +368,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, estruturas);
+                canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, estruturas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -380,7 +383,7 @@ public final class RPGAtributos extends JavaPlugin {
 
         Comandos comandos = new Comandos(this);
         for (String nome : new String[]{"atributos", "rpgadmin", "chapeu", "tag", "cosmeticos", "forja", "grimorio",
-                "guia", "titulos", "missoes", "receitas", "pets", "masmorra", "classe", "lendas", "locais", "peixes", "alquimia",
+                "guia", "jornada", "titulos", "missoes", "receitas", "pets", "masmorra", "classe", "lendas", "locais", "peixes", "alquimia",
                 "acessorios", "guardaroupa", "colonia", "bestiario", "calendario", "maldicao"}) {
             PluginCommand c = getCommand(nome);
             if (c != null) {
@@ -547,6 +550,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, placar::tick, 20L, 20L);
         agenda.runTaskTimer(this, pomar::tick, 100L, 100L);
         agenda.runTaskTimer(this, estruturas::tick, 40L, 40L);
+        agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
         agenda.runTaskTimer(this, altaresDomador::tick, 5L, 5L);
@@ -760,6 +764,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Placar placar() { return placar; }
     public Pomar pomar() { return pomar; }
     public Estruturas estruturas() { return estruturas; }
+    public Ajuda ajuda() { return ajuda; }
 
     /** O bloco é alguma estação de ritual (Forja, Infusor, Altares, Cozinha, Reciclagem, Marco)? */
     public boolean ehEstacao(Block b) {
@@ -776,7 +781,9 @@ public final class RPGAtributos extends JavaPlugin {
      */
     public boolean pvpPermitido(Player atacante, Player vitima) {
         if (atacante.equals(vitima)) return true;
-        if (Boolean.FALSE.equals(vitima.getWorld().getGameRuleValue(GameRules.PVP))) return false;
+        // Com "combate.pvp-livre-fora-de-territorio", golpes, habilidades e magias valem mesmo com o
+        // PvP do servidor desligado (o soco comum o próprio jogo continua barrando). Território protege.
+        if (Boolean.FALSE.equals(vitima.getWorld().getGameRuleValue(GameRules.PVP)) && !settings.pvpLivreForaDeTerritorio) return false;
         // Reino: sem fogo amigo entre membros; na guerra, o PvP entre os dois reinos é livre em qualquer lugar.
         if (reinos.aliados(atacante.getUniqueId(), vitima.getUniqueId())) return false;
         if (reinos.inimigosEmGuerra(atacante.getUniqueId(), vitima.getUniqueId())) return true;

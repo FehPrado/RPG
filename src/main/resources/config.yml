@@ -56,6 +56,7 @@ combate:
   cooldown-mesmo-jogador-segundos: 600  # matar o mesmo jogador de novo só dá XP depois desse tempo
   sem-xp-mesmo-ip: true                 # matar uma conta do mesmo IP (conta fake) não dá XP
   golpes-em-qualquer-criatura: true     # combos e habilidades acertam qualquer criatura (aldeões, pets e animais com nome ficam de fora)
+  pvp-livre-fora-de-territorio: true    # fora de território, combos, habilidades e magias acertam jogadores mesmo com o PvP do servidor desligado (dentro, vale a regra do território)
 
 natacao:
   xp-por-bloco: 0.15                  # nadar/mergulhar (só conta com tecla de movimento apertada)

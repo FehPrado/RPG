@@ -5,7 +5,9 @@ import br.rpgatributos.aventura.Chefes;
 import br.rpgatributos.domador.Companheiros;
 import br.rpgatributos.sombra.Sombras;
 import org.bukkit.GameMode;
+import org.bukkit.GameRules;
 import org.bukkit.NamespacedKey;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.AbstractVillager;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
@@ -22,7 +24,7 @@ import java.util.UUID;
 /**
  * Quem os golpes de combo e as habilidades de classe podem acertar. Monstros e chefes sempre;
  * jogadores onde há PvP; e (com "combate.golpes-em-qualquer-criatura") qualquer outra criatura.
- * Ficam de fora: aldeões e NPCs do plugin, os seus pets e companheiros (e os de quem você não
+ * O Boneco de Treino também é alvo. Ficam de fora: aldeões e NPCs do plugin, os seus pets e companheiros (e os de quem você não
  * pode atacar), invocações aliadas, moradores de colônia (fora da guerra) e animais com nome.
  */
 public final class Alvos {
@@ -35,8 +37,29 @@ public final class Alvos {
         this.plugin = plugin;
     }
 
+    /**
+     * Aplica o dano de um golpe, habilidade ou magia. Com o PvP do servidor desligado, o próprio
+     * jogo barra o dano de jogador em jogador; como fora de território o PvP das habilidades é livre,
+     * nesse caso o dano entra sem fonte e o atacante fica marcado como quem matou.
+     */
+    public void ferir(Player atacante, LivingEntity alvo, double dano) {
+        ferir(atacante, alvo, dano, null);
+    }
+
+    public void ferir(Player atacante, LivingEntity alvo, double dano, DamageSource fonte) {
+        if (alvo instanceof Player && Boolean.FALSE.equals(alvo.getWorld().getGameRuleValue(GameRules.PVP))) {
+            alvo.setKiller(atacante);
+            alvo.damage(dano);
+            return;
+        }
+        if (fonte != null) alvo.damage(dano, fonte);
+        else alvo.damage(dano, atacante);
+    }
+
     public boolean inimigo(Player p, Entity e) {
-        if (!(e instanceof LivingEntity le) || e == p || !le.isValid() || le.isDead() || e instanceof ArmorStand) return false;
+        // O Boneco de Treino aceita golpes e habilidades (para medir o dano); outros suportes de armadura, não.
+        if (e instanceof ArmorStand) return plugin.bonecos().ehBoneco(e);
+        if (!(e instanceof LivingEntity le) || e == p || !le.isValid() || le.isDead()) return false;
         if (Sombras.eh(e)) return plugin.sombras().inimigoDoJogador(p, e);
         if (e instanceof Player o) {
             return (o.getGameMode() == GameMode.SURVIVAL || o.getGameMode() == GameMode.ADVENTURE) && plugin.pvpPermitido(p, o);

@@ -1399,7 +1399,7 @@ public final class Conjuracao {
     void ferir(Player p, LivingEntity alvo, double dano) {
         if (dano <= 0 || alvo.isDead()) return;
         if (alvo instanceof Player) dano *= cfg().arcDanoPvp;
-        alvo.damage(dano, DamageSource.builder(DamageType.MAGIC).withCausingEntity(p).withDirectEntity(p).build());
+        plugin.alvos().ferir(p, alvo, dano, DamageSource.builder(DamageType.MAGIC).withCausingEntity(p).withDirectEntity(p).build());
     }
 
     static void curar(LivingEntity e, double quanto) {

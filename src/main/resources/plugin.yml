@@ -205,9 +205,14 @@ commands:
     aliases: [cozinha, pratos]
     permission: rpg.receitas
   guia:
-    description: Dá o livro "Guia do Aventureiro", que explica como tudo funciona.
-    usage: /guia
-    aliases: [livroguia]
+    description: Guia do Aventureiro. /guia abre o menu, /guia <palavra> busca um assunto, /guia livro dá o livro.
+    usage: /guia [palavra|livro]
+    aliases: [livroguia, ajuda]
+    permission: rpg.guia
+  jornada:
+    description: Jornada do Aventureiro (os primeiros passos, com recompensas).
+    usage: /jornada
+    aliases: [primeirospassos]
     permission: rpg.guia
   grimorio:
     description: Abre o grimório (suas magias, criador de magias e magias secretas).

@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.25</small></div></div>
+  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.26</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -154,7 +154,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <ul>
         <li>Os <b>atributos</b> sobem fazendo a atividade. Veja em <span class="cmd">/atributos</span>.</li>
         <li>Quase tudo é criado por <b>ritual</b>: coloque um bloco e jogue os itens em cima dele com <kbd>Q</kbd>. O bloco vira uma "estação".</li>
-        <li>Na primeira entrada você ganha o <b>Guia do Aventureiro</b>. Perdeu? <span class="cmd">/guia</span>.</li>
+        <li>Abra o <span class="cmd">/rpg</span>: no topo ele mostra o <b>seu próximo passo</b>, e embaixo estão as 7 categorias com tudo do servidor.</li>
+        <li>Ficou com dúvida? <span class="cmd">/guia &lt;palavra&gt;</span> (ex.: <code>/guia reciclar</code>) mostra o assunto com o ritual desenhado em itens. O livro continua com <span class="cmd">/guia livro</span>.</li>
         <li>Clique com o botão direito numa estação para abrir o menu dela.</li>
       </ul>
     </div>
@@ -168,13 +169,12 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td>Agachar + clique numa estação</td><td>Abre o bloco original (ex.: bigorna, defumador)</td></tr>
       </tbody></table></div>
     </div>
-    <div class="card"><h3>Um bom caminho para começar</h3>
+    <div class="card"><h3>Jornada do Aventureiro</h3>
+      <p><span class="cmd">/jornada</span>: 12 passos que ensinam o básico na ordem, cada um com recompensa. Eles se completam sozinhos quando você faz a coisa:</p>
       <ol>
-        <li>Faça a <b>Forja do Ferreiro</b> e forje suas armas e armaduras.</li>
-        <li>Junte uma <b>party</b> com os amigos (<span class="cmd">/party</span>).</li>
-        <li>Crie o seu <b>Marco do Território</b> para proteger a base.</li>
-        <li>Escolha uma <b>classe</b> no Santuário das Classes.</li>
-        <li>Faça masmorras Fáceis e vá subindo.</li>
+        <li>Um atributo no nível 5</li><li>Forjar um item</li><li>Soltar 5 combos</li><li>Cozinhar um prato</li>
+        <li>Criar algo na Bancada Alquímica</li><li>Escolher uma classe</li><li>Lançar 10 magias</li><li>Criar o Marco do Território</li>
+        <li>Seguir um deus</li><li>Descobrir uma estrutura</li><li>Vencer uma masmorra</li><li>Fundar a colônia</li>
       </ol>
     </div>
   </div>
@@ -251,7 +251,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li><b>Arco e besta</b> começam com o esquerdo: <code>E E E</code>, <code>E D E</code>, <code>E E D</code>, <code>E D D</code>.</li>
         <li>A barra de ação mostra o progresso (<code>D · E · ?</code>).</li>
         <li>Agachado não solta combo. Clicar em baú ou porta não conta, e um clique só ainda levanta o escudo.</li>
-        <li>Golpes e habilidades de classe acertam <b>qualquer criatura</b> (menos aldeões, NPCs, animais com nome e os bichos seus e dos aliados). Em jogadores, só onde o PvP vale (guerra, território com PvP ligado).</li>
+        <li>Golpes, habilidades de classe e magias acertam <b>qualquer criatura</b> (menos aldeões, NPCs, animais com nome e os bichos seus e dos aliados) e o <b>Boneco de Treino</b>.</li>
+        <li><b>Jogadores:</b> fora de território vale tudo, mesmo com o PvP do servidor desligado. Dentro de território vale a regra de PvP do dono (e a Lei da Paz do reino). Party (sem fogo amigo) e reino nunca se acertam.</li>
       </ul>
     </div>
     <div class="card"><h3>Vigor e proficiência</h3>
@@ -702,7 +703,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <b>Frascos:</b> garrafa + pólvora + Musgo Lunar (fumaça), 2 slimes (cola), pólvora + Erva-de-Sol (fogo-grego) ou melancia reluzente + Sálvia (cura em área). Clique para arremessar.</p>
     </div>
     <div class="card largo"><h3>Conforto</h3>
-      <p><span class="cmd">/rpg</span> abre o menu com todos os sistemas. <span class="cmd">/placar</span> liga o placar lateral (nível, vigor, mana, estação, lua, hora e talentos).</p>
+      <p><span class="cmd">/rpg</span> abre o menu central (próximo passo, categorias, atalhos e Jornada). Com o pacote de recursos, os menus têm fundo desenhado. <span class="cmd">/placar</span> liga o placar lateral (nível, vigor, mana, estação, lua, hora e talentos).</p>
     </div>
   </div>
 </section>
@@ -1129,7 +1130,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
       <tr><td><span class="cmd">/atributos</span></td><td>Seus atributos (e os acessórios)</td></tr>
-      <tr><td><span class="cmd">/guia</span></td><td>Livro Guia do Aventureiro</td></tr>
+      <tr><td><span class="cmd">/guia &lt;palavra&gt;</span>, <span class="cmd">/guia livro</span></td><td>Busca um assunto no Guia; o livro</td></tr>
+      <tr><td><span class="cmd">/jornada</span></td><td>Jornada do Aventureiro (primeiros passos)</td></tr>
       <tr><td><span class="cmd">/forja</span></td><td>Raridades e suas chances</td></tr>
       <tr><td><span class="cmd">/grimorio</span></td><td>Grimório: magias, criador, secretas, maestria</td></tr>
       <tr><td><span class="cmd">/classe</span></td><td>Árvore de classes, caminho e habilidades</td></tr>
@@ -1144,7 +1146,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/diario</span></td><td>Diário de Viagem</td></tr>
       <tr><td><span class="cmd">/recordes</span></td><td>Recordes do servidor</td></tr>
       <tr><td><span class="cmd">/sentar</span></td><td>Sentar no chão (ou levantar)</td></tr>
-      <tr><td><span class="cmd">/rpg</span></td><td>Menu central com tudo</td></tr>
+      <tr><td><span class="cmd">/rpg</span></td><td>Menu central: próximo passo, categorias e atalhos</td></tr>
       <tr><td><span class="cmd">/placar</span></td><td>Placar lateral</td></tr>
       <tr><td><span class="cmd">/album</span></td><td>Álbum de Cartas</td></tr>
       <tr><td><span class="cmd">/segredos</span></td><td>Segredos</td></tr>
@@ -1176,7 +1178,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.25 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.26 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
