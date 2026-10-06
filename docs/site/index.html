@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manual do RPGAtributos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Lexend:wght@300;400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: almanaque de aventureiro — faixa de seções, grade de estações em ilhotes e a coleção em vitrine pixelada */
+:root {
+  --bg: #EEF1F6;
+  --surface: #FFFFFF;
+  --surface-2: #F5F3FC;
+  --ink: #1A1D26;
+  --muted: #5B6273;
+  --line: #D8DDE7;
+  --accent: #6F43D8;
+  --accent-ink: #FFFFFF;
+  --gold: #A87B0C;
+  --chip: #ECE6FC;
+  --chip-ink: #3E2A86;
+  --shadow: 0 1px 2px rgba(20, 22, 35, .06), 0 8px 24px rgba(20, 22, 35, .06);
+  --display: "Pixelify Sans", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14161C; --surface: #1C1F27; --surface-2: #221F33; --ink: #E8EBF2; --muted: #9BA3B4; --line: #2C313D;
+    --accent: #B08CFF; --accent-ink: #160F2B; --gold: #E2B53C; --chip: #2B2445; --chip-ink: #D9CCFF;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .25); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14161C; --surface: #1C1F27; --surface-2: #221F33; --ink: #E8EBF2; --muted: #9BA3B4; --line: #2C313D;
+  --accent: #B08CFF; --accent-ink: #160F2B; --gold: #E2B53C; --chip: #2B2445; --chip-ink: #D9CCFF;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .25); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-weight: 300; line-height: 1.6; margin: 0; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.15; text-wrap: balance; margin: 0; letter-spacing: .01em; }
+h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); }
+h3 { font-size: 1.2rem; }
+p { margin: 0; }
+a { color: var(--accent); }
+strong, b { font-weight: 600; }
+code, .cmd { font-family: var(--mono); font-size: .82em; background: var(--chip); color: var(--chip-ink); padding: .1em .4em; border-radius: 4px; white-space: nowrap; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; }
+.pixel { image-rendering: pixelated; }
+
+/* topo */
+.topo { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.topo .wrap { display: flex; align-items: center; gap: 18px; padding-block: 10px; }
+.marca { font-family: var(--display); font-weight: 700; font-size: 1.15rem; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.marca span { color: var(--accent); }
+.menu { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.menu a { color: var(--muted); text-decoration: none; font-size: .86rem; padding: 6px 10px; border-radius: 6px; white-space: nowrap; }
+.menu a:hover, .menu a:focus-visible { background: var(--chip); color: var(--chip-ink); outline: none; }
+
+/* abertura */
+.abertura { padding-block: 56px 36px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; }
+.abertura h1 { font-size: clamp(2.6rem, 6.4vw, 4.6rem); }
+.abertura h1 em { font-style: normal; color: var(--accent); }
+.abertura .lead { font-size: 1.12rem; color: var(--muted); max-width: 56ch; margin-top: 16px; }
+.numeros { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 26px; }
+.numeros div { display: flex; flex-direction: column; }
+.numeros b { font-family: var(--display); font-size: 1.7rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
+.numeros span { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.vitrine { position: relative; min-height: 340px; }
+.vitrine img { position: absolute; width: 58%; max-width: 100%; filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .18)); }
+.vitrine img:nth-child(1) { left: 0; top: 18%; }
+.vitrine img:nth-child(2) { right: 0; top: 0; }
+.vitrine img:nth-child(3) { left: 24%; bottom: -6%; }
+
+/* seções */
+.secao { padding-block: 56px; border-top: 1px solid var(--line); }
+.secao > .wrap > header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 32px; margin-bottom: 28px; }
+.secao header p { color: var(--muted); max-width: 62ch; }
+.rotulo { font-size: .74rem; text-transform: uppercase; letter-spacing: .14em; color: var(--accent); font-weight: 600; margin-bottom: 6px; }
+
+/* primeiros passos */
+.passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; counter-reset: passo; }
+.passo { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; counter-increment: passo; }
+.passo::before { content: counter(passo); font-family: var(--display); font-size: 1.9rem; color: var(--accent); display: block; line-height: 1; margin-bottom: 8px; }
+.passo p { color: var(--muted); font-size: .95rem; margin-top: 6px; }
+
+/* mecânicas */
+.areas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.area { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px 20px 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.area h3 { display: flex; align-items: center; gap: 10px; }
+.area h3 i { font-style: normal; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; background: var(--chip); color: var(--chip-ink); font-size: 1rem; flex: none; }
+.area ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; font-size: .93rem; }
+.area li::marker { color: var(--accent); }
+.area .cmds { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; }
+
+/* estações */
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; }
+.filtros button { font: inherit; font-size: .86rem; border: 1px solid var(--line); background: var(--surface); color: var(--muted); padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.filtros button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.filtros button:focus-visible, .abas button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dica-ritual { background: var(--surface-2); border: 1px dashed var(--line); border-radius: 10px; padding: 14px 18px; color: var(--muted); font-size: .93rem; margin-bottom: 20px; }
+.dica-ritual b { color: var(--ink); }
+.estacoes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.estacao { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.estacao figure { margin: 0; background: radial-gradient(120% 90% at 50% 20%, var(--surface-2), var(--surface)); display: grid; place-items: center; aspect-ratio: 4 / 3.2; padding: 8px; }
+.estacao figure img { max-height: 100%; width: auto; max-width: 100%; }
+.estacao .corpo { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.estacao .cat { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.ritual { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; font-size: .8rem; }
+.ritual .bloco { background: var(--ink); color: var(--bg); padding: 3px 8px; border-radius: 5px; font-weight: 600; }
+.ritual .mais { color: var(--muted); }
+.ritual .item { background: var(--chip); color: var(--chip-ink); padding: 3px 8px; border-radius: 5px; }
+.estacao .uso { font-size: .9rem; color: var(--muted); }
+.estacao .cmdlinha { margin-top: auto; }
+
+/* destaques */
+.tabelas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.tabela { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 18px 8px; min-width: 0; }
+.tabela h3 { margin-bottom: 10px; }
+.rolar { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th { text-align: left; font-weight: 600; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 8px 8px; border-bottom: 1px solid var(--line); }
+td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td b { font-weight: 600; }
+
+/* coleção */
+.abas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.abas button { font: inherit; font-size: .86rem; border: 1px solid var(--line); background: var(--surface); color: var(--muted); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.abas button[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 600; }
+.grade-itens { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.item-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; min-width: 0; }
+.item-card img { width: 64px; height: 64px; image-rendering: pixelated; background: var(--surface-2); border-radius: 8px; padding: 6px; }
+.item-card span { font-size: .8rem; line-height: 1.3; }
+.coleção-nota { color: var(--muted); font-size: .9rem; margin-bottom: 16px; }
+
+footer { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var(--muted); font-size: .86rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+
+@media (max-width: 920px) {
+  .abertura { grid-template-columns: 1fr; padding-block: 36px 20px; }
+  .vitrine { min-height: 260px; }
+  .areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tabelas { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .areas, .passos { grid-template-columns: 1fr; }
+  .menu { display: none; }
+  .vitrine { min-height: 210px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .estacao { transition: transform .18s ease, box-shadow .18s ease; }
+  .estacao:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+}
+</style>
+</head>
+<body>
+
+<nav class="topo" aria-label="Seções">
+  <div class="wrap">
+    <a class="marca" href="#inicio">RPG<span>Atributos</span></a>
+    <div class="menu">
+      <a href="#comecar">Começar</a>
+      <a href="#mecanicas">Mecânicas</a>
+      <a href="#estacoes">Estações</a>
+      <a href="#destaques">Posturas e conjuntos</a>
+      <a href="#colecao">Coleção</a>
+    </div>
+  </div>
+</nav>
+
+<main id="inicio">
+  <section class="wrap abertura">
+    <div>
+      <p class="rotulo">Manual do jogador · versão 2.30</p>
+      <h1>Um mundo inteiro <em>dentro</em> do seu Minecraft.</h1>
+      <p class="lead">Atributos que sobem com o uso, classes, magia, deuses, forja com raridades, colônias com moradores de verdade, reinos em guerra, cidades no fundo do mar. Tudo o que o RPGAtributos tem, num lugar só.</p>
+      <div class="numeros">
+        <div><b>13</b><span>atributos</span></div>
+        <div><b>23</b><span>classes</span></div>
+        <div><b>27</b><span>estações</span></div>
+        <div><b>18</b><span>estruturas</span></div>
+        <div><b>6</b><span>deuses</span></div>
+        <div><b>17</b><span>peixes raros</span></div>
+      </div>
+    </div>
+    <div class="vitrine" aria-hidden="true">
+      <img src="img/estacoes/forja.png" alt="">
+      <img src="img/estacoes/alquimia.png" alt="">
+      <img src="img/estacoes/cabana_pesca.png" alt="">
+    </div>
+  </section>
+
+  <section class="secao" id="comecar">
+    <div class="wrap">
+      <header>
+        <div><p class="rotulo">Primeiros passos</p><h2>Comece por aqui</h2></div>
+        <p>Você não precisa decorar nada. O jogo mostra o próximo passo e o Guia responde o resto.</p>
+      </header>
+      <div class="passos">
+        <div class="passo"><h3>Abra o <code>/rpg</code></h3><p>O menu central mostra seu perfil, os três próximos passos sugeridos e todas as categorias do plugin.</p></div>
+        <div class="passo"><h3>Siga a <code>/jornada</code></h3><p>Doze passos do Aventureiro, cada um com recompensa: suba um atributo, forje, cozinhe, ache uma estrutura...</p></div>
+        <div class="passo"><h3>Pergunte ao <code>/guia</code></h3><p>Busca por palavra (<code>/guia forja</code>, <code>/guia reciclar</code>) com o ritual desenhado. <code>/guia livro</code> dá o livro de 80 páginas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" id="mecanicas">
+    <div class="wrap">
+      <header>
+        <div><p class="rotulo">O que existe</p><h2>As mecânicas</h2></div>
+        <p>Seis áreas que se ligam: o combate usa os óleos da alquimia, a pesca alimenta a cozinha, os deuses mexem nas posturas, as colônias defendem o reino.</p>
+      </header>
+      <div class="areas" id="areas"></div>
+    </div>
+  </section>
+
+  <section class="secao" id="estacoes">
+    <div class="wrap">
+      <header>
+        <div><p class="rotulo">Bancadas e altares</p><h2>As 27 estações</h2></div>
+        <div class="filtros" id="filtros" role="group" aria-label="Filtrar estações"></div>
+      </header>
+      <p class="dica-ritual"><b>Como criar uma estação:</b> coloque o bloco e jogue os itens em cima dele com a tecla <b>Q</b>. Quando o ritual fecha, um item passa a flutuar com o nome da estação. Quebrar a estação devolve parte do ritual.</p>
+      <div class="estacoes" id="lista-estacoes"></div>
+    </div>
+  </section>
+
+  <section class="secao" id="destaques">
+    <div class="wrap">
+      <header>
+        <div><p class="rotulo">Combate e armaduras</p><h2>Posturas e conjuntos</h2></div>
+        <p>Escolha a postura no <code>/postura</code> com uma arma de combo na mão. Os conjuntos saem do Ateliê do Curtidor e dão bônus com 2 e com 4 peças.</p>
+      </header>
+      <div class="tabelas">
+        <div class="tabela">
+          <h3>Posturas</h3>
+          <div class="rolar"><table>
+            <thead><tr><th>Postura</th><th>Ganha</th><th>Perde</th></tr></thead>
+            <tbody>
+              <tr><td><b>▲ Ofensiva</b></td><td>+15% de dano, desequilibra mais</td><td>Leva +10% de dano, golpes gastam mais vigor</td></tr>
+              <tr><td><b>■ Defensiva</b></td><td>-20% de dano recebido, cura ½ ❤ por golpe</td><td>-10% de dano, um pouco mais lento</td></tr>
+              <tr><td><b>≈ Ágil</b></td><td>+10% de velocidade, recarga -20%, esquiva barata</td><td>-8% de dano</td></tr>
+              <tr><td><b>✦ Mestra</b></td><td>A de cada arma, na proficiência 20: Duelista, Carrasco, Falange, Maré, Colosso, Atirador Paciente</td><td>—</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="tabela">
+          <h3>Conjuntos de armadura leve</h3>
+          <div class="rolar"><table>
+            <thead><tr><th>Conjunto</th><th>2 peças</th><th>4 peças</th></tr></thead>
+            <tbody>
+              <tr><td><b>Caçador</b></td><td>+5% de velocidade</td><td>+10% com flechas e tridente; na Ágil, +8% de dano</td></tr>
+              <tr><td><b>Urso Polar</b></td><td>+1 ❤</td><td>-10% de dano recebido, resiste a empurrões</td></tr>
+              <tr><td><b>Raposa</b></td><td>Sorte</td><td>De noite: visão noturna e velocidade</td></tr>
+              <tr><td><b>Maré</b></td><td>Respira debaixo d'água</td><td>Graça do golfinho e +5% de peixe raro</td></tr>
+              <tr><td><b>Noite</b></td><td>-50% de dano de queda</td><td>Cai devagar de lugares altos</td></tr>
+              <tr><td><b>Brasa</b></td><td>-30% de dano de fogo</td><td>Sem calor; com pouca vida, Força</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" id="colecao">
+    <div class="wrap">
+      <header>
+        <div><p class="rotulo">Itens com visual próprio</p><h2>A coleção</h2></div>
+        <p>Cada um destes itens tem textura desenhada para o RPGAtributos. Com o pacote de recursos do servidor, é assim que eles aparecem no inventário.</p>
+      </header>
+      <div class="abas" id="abas" role="tablist" aria-label="Grupos de itens"></div>
+      <p class="coleção-nota" id="nota-grupo"></p>
+      <div class="grade-itens" id="grade-itens" role="tabpanel"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>RPGAtributos 2.30 · plugin para servidores Paper 26.3</span>
+    <span>Dúvidas no jogo: <code>/guia</code> e <code>/rpg</code></span>
+  </div>
+</footer>
+
+<script>
+const AREAS = [
+  { ico: "⚔", nome: "Personagem", itens: [
+    "13 atributos do nível 1 ao 100, que sobem fazendo: minerar, lutar, pescar, cozinhar, forjar...",
+    "23 classes: 6 básicas, 10 avançadas e 7 lendárias (um dono por servidor), com habilidades no agachado + F",
+    "Talentos em 4 árvores e o Renascer (até 5 vezes, bônus permanentes e ★ na tag)",
+    "Títulos com bônus, missões dos aldeões, diário de viagem e recordes do servidor",
+    "Mochila que cresce, guarda-roupa e cosméticos"], cmds: ["/atributos", "/classe", "/talentos", "/titulos"] },
+  { ico: "🗡", nome: "Combate", itens: [
+    "Combos de arma: 6 armas, proficiência 1 a 20, 42 golpes, golpes de lenda e de classe",
+    "Posturas com pegada própria, golpe no tempo certo, estilo de D a S e equilíbrio dos inimigos",
+    "Óleos de lâmina e combos que fazem reações com magias; ataque conjunto da party",
+    "Esquiva, Gancho de Escalada e Capa Planadora",
+    "PvP livre fora de território; Boneco de Treino para medir o dano"], cmds: ["/combos", "/postura", "/mochila"] },
+  { ico: "✦", nome: "Magia e fé", itens: [
+    "Infusor Corpóreo, grimório e magias montadas com essência + forma + modificadores",
+    "10 reações elementais, maestria por elemento, Cajado Arcano e 50 magias secretas",
+    "6 deuses com devoção, fé de 1 a 5, preces e milagres",
+    "Astronomia com 12 constelações, Transmutação e 10 runas"], cmds: ["/grimorio", "/deus", "/estrelas"] },
+  { ico: "⚒", nome: "Ofícios", itens: [
+    "Forja do Ferreiro: raridades de Comum a Mítico, refino, gemas engastadas e o Reforjar",
+    "Alquimia: elixires, componentes, óleos, 18 gemas e 19 acessórios",
+    "Cozinha com 19 pratos, plantações com qualidade ★, pomar, barril, colmeia e ervas",
+    "Pesca com 17 peixes raros (5 só no buraco no gelo), tesouros e criaturas marinhas",
+    "Curtume e tecelagem: 6 conjuntos de armadura leve"], cmds: ["/forja", "/alquimia", "/receitas", "/peixes"] },
+  { ico: "🌍", nome: "Mundo", itens: [
+    "Estações de verdade (1 semana cada), festival, luas, eclipse, meteoros e clima",
+    "Mundo perigoso: elites com afixos, hordas, ninhos, chefe mundial e bestiário",
+    "Masmorras, portais, Soberano das Sombras e a Torre Infinita",
+    "18 estruturas (até naufrágios e cidades submersas), 7 Locais Ocultos e 12 Lendas",
+    "Mapas do tesouro, arqueologia, campanha de 8 capítulos, sonhos e Álbum de 54 cartas"], cmds: ["/calendario", "/bestiario", "/lendas", "/album"] },
+  { ico: "🏰", nome: "Comunidade", itens: [
+    "Party com XP dividido e chat próprio",
+    "Territórios protegidos, com regras e expansões",
+    "Colônias: moradores que trabalham, depósitos e um exército",
+    "Reinos com cargos, tesouro, leis, províncias e guerras marcadas",
+    "Domador: companheiros com componentes que evoluem até o estágio III"], cmds: ["/party", "/territorio", "/colonia", "/reino", "/pets"] }
+];
+
+const CATS = { personagem: "Personagem", combate: "Combate", magia: "Magia e fé", oficios: "Ofícios", mundo: "Mundo", comunidade: "Comunidade" };
+
+const ESTACOES = [
+  { id: "santuario_classes", nome: "Santuário das Classes", cat: "personagem", bloco: "Púlpito", itens: ["1 livro e pena", "1 diamante"], uso: "Veja as classes, aceite as tarefas e entre na Prova. Classes dominadas liberam as avançadas.", cmd: "/classe" },
+  { id: "boneco", nome: "Boneco de Treino", cat: "combate", bloco: "Fardo de feno", itens: ["1 abóbora entalhada", "1 suporte de armadura"], uso: "Bata com arma, combo, habilidade ou magia para ver o dano de cada golpe e o dano por segundo." },
+  { id: "amolar", nome: "Pedra de Amolar", cat: "combate", bloco: "Rebolo ou pedra lisa", itens: ["2 pederneiras", "1 lingote de ferro"], uso: "Clique com a arma: ela fica Afiada (+10% de dano) por 100 golpes. Gasta 1 pederneira." },
+  { id: "altar", nome: "Altar Ritualístico", cat: "combate", bloco: "Obsidiana chorona", itens: ["1 olho do ender", "4 velas"], uso: "Jogue a oferenda de um chefe em cima para invocá-lo. Os 6 chefes deixam núcleos e Fragmentos de Forja." },
+  { id: "masmorra", nome: "Portal da Masmorra", cat: "combate", bloco: "Tijolos entalhados", itens: ["1 olho do ender", "1 bússola"], uso: "Entre com a party numa masmorra gerada na hora, em 4 dificuldades, com salas de ondas e um chefe no fim.", cmd: "/masmorra" },
+  { id: "obelisco", nome: "Obelisco da Torre", cat: "combate", bloco: "Obsidiana chorona", itens: ["1 olho do ender", "1 bloco de ouro"], uso: "Suba a Torre Infinita: chefe e baú a cada 10 andares, ranking semanal. Morrer lá não perde itens.", cmd: "/torre" },
+  { id: "infusor", nome: "Infusor Corpóreo", cat: "magia", bloco: "Caldeirão com água", itens: ["1 mesa de encantamento", "1 bigorna"], uso: "Infunda itens no corpo para ganhar mana e bônus, e pegue o grimório onde ficam as suas magias.", cmd: "/grimorio" },
+  { id: "mesa_runica", nome: "Mesa Rúnica", cat: "magia", bloco: "Tufo entalhado", itens: ["4 fragmentos de ametista", "1 bloco de lápis"], uso: "Grave uma das 10 runas num equipamento: explosão, gelo, tempestade, salto duplo, vampirismo e outras." },
+  { id: "transmutacao", nome: "Círculo de Transmutação", cat: "magia", bloco: "Bloco de ametista", itens: ["1 Mercúrio Vivo", "1 lingote de ouro"], uso: "Transforme materiais em outros mais raros, com risco. A Pedra Filosofal melhora todas as chances." },
+  { id: "santuario_deuses", nome: "Santuário dos Deuses", cat: "magia", bloco: "Quartzo entalhado", itens: ["1 maçã dourada", "1 vela"], uso: "Escolha um dos 6 deuses, jogue oferendas e reze todo dia. A fé sobe de 1 a 5 e libera milagres.", cmd: "/deus" },
+  { id: "forja", nome: "Forja do Ferreiro", cat: "oficios", bloco: "Bigorna", itens: ["2 blocos de ferro", "1 balde de lava"], uso: "Itens feitos perto saem forjados, de Comum a Mítico. Agachado + clique: refino. Jogue um equipamento e 1 Fragmento de Forja: Reforjar.", cmd: "/forja" },
+  { id: "reciclagem", nome: "Bancada de Reciclagem", cat: "oficios", bloco: "Rebolo", itens: ["1 funil", "1 tesoura"], uso: "Desmanche armas, ferramentas e armaduras e recupere de 50% a 75% do material. Gemas voltam inteiras." },
+  { id: "alquimia", nome: "Bancada Alquímica", cat: "oficios", bloco: "Suporte de poções", itens: ["2 garrafas de vidro", "1 pó de blaze"], uso: "Elixires, componentes, óleos de lâmina, gemas, acessórios e engastes. Agachado + clique: o suporte normal.", cmd: "/alquimia" },
+  { id: "cozinha", nome: "Cozinha", cat: "oficios", bloco: "Defumador", itens: ["1 caldeirão", "1 balde de água"], uso: "19 pratos com bônus fortes. Ingredientes com qualidade ★ deixam o prato melhor.", cmd: "/receitas" },
+  { id: "cabana_pesca", nome: "Cabana de Pesca", cat: "oficios", bloco: "Fogueira", itens: ["1 vara de pescar", "1 bacalhau", "4 tábuas de abeto"], uso: "A até 12 blocos: isca 30% mais rápida, +4% de peixe raro e ninguém sente frio. Feita para pescar no gelo.", cmd: "/peixes" },
+  { id: "atelie", nome: "Ateliê do Curtidor", cat: "oficios", bloco: "Tear", itens: ["1 tesoura", "4 couros", "2 linhas"], uso: "Curta as peles, teça tecidos e costure os 6 conjuntos de armadura leve. Agachado + clique: o tear normal." },
+  { id: "barril", nome: "Barril de Envelhecimento", cat: "oficios", bloco: "Barril", itens: ["2 lingotes de ferro", "1 favo de mel"], uso: "Bebidas que melhoram com os dias reais: Nova, Envelhecida, Reserva e Lendária." },
+  { id: "colmeia", nome: "Colmeia do Apicultor", cat: "oficios", bloco: "Colmeia", itens: ["1 favo de mel", "1 papoula"], uso: "Com flores perto, faz méis especiais: Dourado, Gelado, Floral, Noturno ou Silvestre. Tire com garrafas." },
+  { id: "canteiro", nome: "Canteiro de Ervas", cat: "oficios", bloco: "Bloco de musgo", itens: ["1 farinha de osso", "1 vaso"], uso: "Uma erva a cada 10 minutos, que depende do lugar. As ervas viram frascos de arremesso e licor." },
+  { id: "cartografo", nome: "Mesa do Cartógrafo", cat: "mundo", bloco: "Mesa de cartografia", itens: ["1 bússola", "3 papéis"], uso: "Com um Mapa do Tesouro na mão, mostra a direção e a distância do X. Sem mapa, lista seus Locais Ocultos." },
+  { id: "pedra_viagem", nome: "Pedra de Viagem", cat: "mundo", bloco: "Ardósia entalhada", itens: ["2 pérolas do ender", "4 fragmentos de ametista"], uso: "Clique para descobrir; depois viaje entre as pedras que você conhece. Custa XP pela distância." },
+  { id: "fogueira", nome: "Fogueira de Acampamento", cat: "mundo", bloco: "Fogueira acesa", itens: ["1 lã", "1 tronco"], uso: "Sentado perto dela, você fica Descansado: +5% de XP." },
+  { id: "bebedouro", nome: "Bebedouro", cat: "mundo", bloco: "Caldeirão com água", itens: ["1 fardo de feno"], uso: "Filhotes a até 8 blocos crescem bem mais rápido, os adultos cruzam antes e os companheiros se curam." },
+  { id: "trofeus", nome: "Estante de Troféus", cat: "mundo", bloco: "Pilar de quartzo", itens: ["1 núcleo de chefe"], uso: "Expõe o núcleo de um chefe. Cada troféu diferente no seu território dá +1% de XP." },
+  { id: "marco", nome: "Marco do Território", cat: "comunidade", bloco: "Magnetita", itens: ["1 estandarte", "4 esmeraldas"], uso: "Protege 3×3 chunks, que crescem com o seu nível. Em outro lugar, com 1 bloco de esmeralda a mais: uma expansão.", cmd: "/territorio" },
+  { id: "prefeitura", nome: "Prefeitura da Colônia", cat: "comunidade", bloco: "Sino (no seu território)", itens: ["1 bloco de esmeralda", "1 cama"], uso: "Moradores de verdade trabalham para você e guardam a produção nos baús de depósito.", cmd: "/colonia" },
+  { id: "altar_domador", nome: "Altar do Domador", cat: "comunidade", bloco: "Fardo de feno", itens: ["1 laço", "1 sela"], uso: "Vincule animais ou invoque criaturas; dê ordens e componentes e veja os companheiros evoluírem.", cmd: "/pets" }
+];
+
+const GRUPOS = [
+  ["peixe", "Peixes raros", "17 peixes que só mordem em certos biomas, horários ou climas. Os 5 últimos saem só num buraco no gelo."],
+  ["prato", "Pratos", "Os 19 pratos da Cozinha, do Pão Caseiro ao Caviar Ancestral."],
+  ["elixir", "Elixires", "Os 12 elixires da Bancada Alquímica, cada um no seu frasco."],
+  ["gema", "Gemas", "As 6 gemas (aqui, lapidadas). Engastadas em itens forjados, cada uma dá um bônus."],
+  ["componente", "Componentes e óleos", "Componentes da alquimia e os 5 óleos de lâmina."],
+  ["oficio", "Peles, couros e tecidos", "O caminho do curtume: a pele crua, o couro curtido e os tecidos do tear."],
+  ["acessorio", "Acessórios", "Anéis, amuletos, cintos e itens de bolso para os espaços do /acessorios."],
+  ["lenda", "Lendas", "Itens únicos no servidor. Estes têm visual próprio; o arco, o escudo e as armaduras mantêm o do jogo."],
+  ["fruta", "Frutas do pomar", "As 5 frutas que nascem penduradas nas árvores do pomar."],
+  ["bebida", "Bebidas do barril", "Bebidas que envelhecem com os dias reais."],
+  ["mel", "Méis", "Os méis especiais da Colmeia do Apicultor."],
+  ["erva", "Ervas", "As ervas do Canteiro, que mudam com o lugar."]
+];
+
+const ITENS = {
+  peixe: [["peixe_carpa_dourada","Carpa Dourada"],["peixe_truta_arco_iris","Truta Arco-Íris"],["peixe_peixe_lua","Peixe-Lua"],["peixe_peixe_pedra","Peixe-Pedra"],["peixe_enguia_eletrica","Enguia Elétrica"],["peixe_peixe_gelo","Peixe-Gelo"],["peixe_koi_celeste","Koi Celeste"],["peixe_baiacu_rei","Baiacu-Rei"],["peixe_salmao_rei","Salmão-Rei"],["peixe_peixe_fantasma","Peixe-Fantasma"],["peixe_peixe_abissal","Peixe Abissal"],["peixe_peixe_dragao","Peixe-Dragão"],["peixe_truta_do_gelo","Truta-do-Gelo"],["peixe_lucio_polar","Lúcio Polar"],["peixe_peixe_lanterna","Peixe-Lanterna Glacial"],["peixe_enguia_de_cristal","Enguia de Cristal"],["peixe_esturjao_ancestral","Esturjão Ancestral"]],
+  prato: [["prato_pao_caseiro","Pão Caseiro"],["prato_ensopado_legumes","Ensopado de Legumes"],["prato_torta_abobora","Torta de Abóbora da Vovó"],["prato_peixe_ervas","Salmão com Ervas"],["prato_batata_recheada","Batata Recheada"],["prato_biscoito_mel","Biscoito de Mel"],["prato_ensopado_cacador","Ensopado do Caçador"],["prato_salada_arcana","Salada Arcana"],["prato_banquete_guerreiro","Banquete do Guerreiro"],["prato_pao_dourado","Pão Dourado"],["prato_sopa_cristalina","Sopa Cristalina"],["prato_torta_rubi","Torta Rubi"],["prato_sopa_pescador","Sopa do Pescador"],["prato_sushi_real","Sushi Real"],["prato_caldeirada_abissal","Caldeirada Abissal"],["prato_caldo_quente","Caldo Quente do Pescador"],["prato_sorvete_cristal","Sorvete de Cristal"],["prato_caviar_ancestral","Caviar Ancestral"],["prato_banquete_lendario","Banquete Lendário"]],
+  gema: [["gema_rubi_2","Rubi"],["gema_safira_2","Safira"],["gema_esmeralda_2","Esmeralda"],["gema_topazio_2","Topázio"],["gema_ametista_2","Ametista"],["gema_onix_2","Ônix"]],
+  elixir: [["elixir_cura","Elixir de Cura"],["elixir_rapidez","Elixir da Rapidez"],["elixir_minerador","Elixir do Minerador"],["elixir_mergulhador","Elixir do Mergulhador"],["elixir_sorte","Elixir da Sorte"],["elixir_pedra","Elixir de Pedra"],["elixir_sombras","Elixir das Sombras"],["elixir_mana","Elixir de Mana"],["elixir_gigante","Elixir do Gigante"],["elixir_fenix","Elixir da Fênix"],["elixir_tita","Elixir do Titã"],["elixir_purificacao","Elixir da Purificação"]],
+  componente: [["componente_po_arcano","Pó Arcano"],["componente_oleo_de_peixe","Óleo de Peixe"],["componente_tintura_vital","Tintura Vital"],["componente_sal_lunar","Sal Lunar"],["componente_mercurio_vivo","Mercúrio Vivo"],["componente_cristal_de_mana","Cristal de Mana"],["componente_solvente","Solvente Alquímico"],["componente_perola_negra","Pérola Negra"],["componente_escama_do_abismo","Escama do Abismo"],["componente_oleo_de_fogo","Óleo de Fogo"],["componente_oleo_gelido","Óleo Gélido"],["componente_oleo_trovejante","Óleo Trovejante"],["componente_oleo_venenoso","Óleo Venenoso"],["componente_oleo_de_prata","Óleo de Prata"]],
+  oficio: [["oficio_pele_de_lobo","Pele de Lobo"],["oficio_pele_de_urso","Pele de Urso Polar"],["oficio_pele_de_raposa","Pele de Raposa"],["oficio_escama_de_guardiao","Escama de Guardião"],["oficio_couro_de_hoglin","Couro de Hoglin"],["oficio_couro_lobo","Couro de Lobo Curtido"],["oficio_couro_urso","Couro de Urso Curtido"],["oficio_couro_raposa","Couro de Raposa Curtido"],["oficio_couro_escamas","Couro de Escamas"],["oficio_couro_brasa","Couro de Brasa"],["oficio_couro_noturno","Couro Noturno"],["oficio_tecido","Tecido de Linha"],["oficio_feltro","Feltro"],["oficio_tecido_de_alga","Tecido de Alga"]],
+  acessorio: [["anel_vigor","Anel do Vigor"],["anel_forca","Anel da Força"],["anel_vento","Anel do Vento"],["anel_mares","Anel das Marés"],["anel_brasas","Anel das Brasas"],["anel_minerador","Anel do Minerador"],["anel_fortuna","Anel da Fortuna"],["anel_sabio","Anel do Sábio"],["amuleto_mana","Amuleto de Mana"],["amuleto_guardiao","Amuleto do Guardião"],["amuleto_vida","Amuleto da Vida"],["amuleto_fenix","Amuleto da Fênix"],["cinto_atleta","Cinto do Atleta"],["cinto_andarilho","Cinto do Andarilho"],["cinto_tita","Cinto do Titã"],["lanterna_bolso","Lanterna de Bolso"],["ima_bolso","Ímã de Bolso"],["relogio_bolso","Relógio de Bolso"],["capa_planadora","Capa Planadora"]],
+  lenda: [["lenda_lamina_do_exorcista","Lâmina do Exorcista"],["lenda_presa_da_tecela","Presa da Tecelã"],["lenda_machado_do_lenhador","Machado do Lenhador Eterno"],["lenda_picareta_do_abismo","Picareta do Abismo"],["lenda_lamina_do_carrasco","Lâmina do Carrasco"],["lenda_martelo_do_forjador","Martelo do Forjador Lendário"],["lenda_lamina_do_arquimago","Lâmina do Arquimago"]],
+  fruta: [["fruta_laranja","Laranja"],["fruta_pessego","Pêssego"],["fruta_cereja","Cereja"],["fruta_limao","Limão"],["fruta_maca_dourada","Maçã Dourada do Pomar"]],
+  bebida: [["bebida_hidromel","Hidromel"],["bebida_cidra","Cidra"],["bebida_vinho","Vinho de Frutas"],["bebida_cerveja","Cerveja de Trigo"],["bebida_licor_arcano","Licor Arcano"],["bebida_licor_de_ervas","Licor de Ervas"],["bebida_licor_de_frutas","Licor de Frutas"]],
+  mel: [["mel_silvestre","Mel Silvestre"],["mel_dourado","Mel Dourado"],["mel_gelado","Mel Gelado"],["mel_noturno","Mel Noturno"],["mel_floral","Mel Floral"]],
+  erva: [["erva_salvia","Sálvia"],["erva_erva_de_sol","Erva-de-Sol"],["erva_musgo_lunar","Musgo Lunar"],["erva_folha_gelida","Folha Gélida"],["erva_raiz_abissal","Raiz Abissal"],["erva_flor_de_cristal","Flor-de-Cristal"]]
+};
+
+function el(tag, attrs, ...filhos) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v; else if (k === "text") e.textContent = v; else e.setAttribute(k, v);
+  }
+  for (const f of filhos) if (f) e.append(f);
+  return e;
+}
+
+// Mecânicas
+const areas = document.getElementById("areas");
+for (const a of AREAS) {
+  const h = el("h3", {}, el("i", { text: a.ico, "aria-hidden": "true" }), document.createTextNode(a.nome));
+  const ul = el("ul");
+  for (const t of a.itens) ul.append(el("li", { text: t }));
+  const cmds = el("div", { class: "cmds" });
+  for (const c of a.cmds) cmds.append(el("code", { text: c }));
+  areas.append(el("article", { class: "area" }, h, ul, cmds));
+}
+
+// Estações
+const lista = document.getElementById("lista-estacoes");
+const filtros = document.getElementById("filtros");
+function cartao(s) {
+  const fig = el("figure", {}, el("img", { src: "img/estacoes/" + s.id + ".png", alt: s.nome + " em um bloco de exemplo", loading: "lazy", width: "330", height: "330" }));
+  const ritual = el("div", { class: "ritual", "aria-label": "Ritual" }, el("span", { class: "bloco", text: s.bloco }));
+  for (const i of s.itens) { ritual.append(el("span", { class: "mais", text: "+" })); ritual.append(el("span", { class: "item", text: i })); }
+  const corpo = el("div", { class: "corpo" },
+    el("span", { class: "cat", text: CATS[s.cat] }),
+    el("h3", { text: s.nome }),
+    ritual,
+    el("p", { class: "uso", text: s.uso }));
+  if (s.cmd) corpo.append(el("div", { class: "cmdlinha" }, el("code", { text: s.cmd })));
+  const art = el("article", { class: "estacao" }, fig, corpo);
+  art.dataset.cat = s.cat;
+  return art;
+}
+for (const s of ESTACOES) lista.append(cartao(s));
+function filtrar(cat) {
+  for (const b of filtros.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.cat === cat));
+  for (const c of lista.children) c.hidden = cat !== "todas" && c.dataset.cat !== cat;
+}
+for (const [cat, nome] of [["todas", "Todas"], ...Object.entries(CATS)]) {
+  const n = cat === "todas" ? ESTACOES.length : ESTACOES.filter(s => s.cat === cat).length;
+  const b = el("button", { type: "button", text: nome + " · " + n });
+  b.dataset.cat = cat;
+  b.addEventListener("click", () => filtrar(cat));
+  filtros.append(b);
+}
+filtrar("todas");
+
+// Coleção
+const abas = document.getElementById("abas"), grade = document.getElementById("grade-itens"), nota = document.getElementById("nota-grupo");
+function abrir(grupo) {
+  const g = GRUPOS.find(x => x[0] === grupo) || GRUPOS[0];
+  for (const b of abas.children) b.setAttribute("aria-selected", String(b.dataset.grupo === g[0]));
+  nota.textContent = g[2];
+  grade.replaceChildren();
+  for (const [arquivo, nome] of (ITENS[g[0]] || [])) {
+    grade.append(el("div", { class: "item-card" },
+      el("img", { src: "img/itens/" + arquivo + ".png", alt: "", loading: "lazy", width: "64", height: "64" }),
+      el("span", { text: nome })));
+  }
+  try { localStorage.setItem("colecao-grupo", g[0]); } catch (e) { }
+}
+for (const g of GRUPOS) {
+  if (!ITENS[g[0]]) continue;
+  const b = el("button", { type: "button", role: "tab", text: g[1] + " · " + ITENS[g[0]].length });
+  b.dataset.grupo = g[0];
+  b.addEventListener("click", () => abrir(g[0]));
+  abas.append(b);
+}
+let inicial = "peixe";
+try { inicial = localStorage.getItem("colecao-grupo") || inicial; } catch (e) { }
+abrir(inicial);
+</script>
+</body>
+</html>
