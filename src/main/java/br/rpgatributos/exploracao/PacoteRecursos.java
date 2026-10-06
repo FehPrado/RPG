@@ -468,9 +468,9 @@ public final class PacoteRecursos implements Listener {
      * {terceira pessoa: rot x,y,z, pos x,y,z; primeira pessoa: rot x,y,z, pos x,y,z}
      */
     private static final Map<String, double[]> PEGADAS = Map.of(
-            "ofensiva", new double[]{0, -90, -25, 0, 5, 1, 0, -90, 0, 1.13, 4.2, 1.13},
-            "defensiva", new double[]{0, -170, 80, -1, 3.5, 1.5, 0, -150, 75, 0, 3.2, 0},
-            "agil", new double[]{0, -90, -125, 0, 1.5, 0.5, 0, -90, -160, 1.13, 2.5, 1.13},
+            "ofensiva", new double[]{90, -90, 0, 0, 5, 1, 0, -90, 0, 1.13, 4.2, 1.13},
+            "defensiva", new double[]{0, -170, 55, -1, 3.5, 1.5, 0, -150, 75, 0, 3.2, 0},
+            "agil", new double[]{-90, -90, 0, 0, 1.5, 0.5, 0, -90, -160, 1.13, 2.5, 1.13},
             "duelista", new double[]{0, -90, 90, 0, 3.5, 2, 0, -90, 80, 1.13, 3.6, 1.13},
             "carrasco", new double[]{0, -90, 10, 0, 6, 0, 0, -90, 15, 1.13, 4.4, 1.13},
             "colosso", new double[]{0, -90, -60, 0, 6, -1.5, 0, -90, -30, 1.13, 4.0, 1.13});

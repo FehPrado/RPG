@@ -833,6 +833,17 @@ Dezesseis estruturas prontas surgem sozinhas em **terra nunca visitada** (chunks
 
 Os guardas aparecem só uma vez. Configure em `estruturas:` no config (chance, distância e se vale só para chunks novos).
 
+### No fundo do mar
+
+| Estrutura | Onde | O que tem |
+|---|---|---|
+| ⚓ **Naufrágio** | Fundo de qualquer oceano | Um navio adernado, de proa enterrada, com rombo no casco, mastro caído e âncora. Cada um tem **nome** e é de um tipo: **mercante** (esmeraldas, lã, especiarias), **pirata** (ouro, mapa do tesouro, às vezes mapa rasgado), **galeão real** (gema, blocos de esmeralda, às vezes Pedra de Proteção) ou **de expedição** (bússola, mapa, Pérola Negra, às vezes relíquia). O **diário do capitão** no baú da cabine conta a história e, se houver uma cidade submersa perto, **aponta a direção dela** |
+| 🔱 **Cidade Submersa** | Mar profundo, longe do spawn. Rara: no máximo uma a cada 3000 × 3000 blocos | Uma cidade de pedra-do-mar de 73 blocos que adorava **Maris**: muralha com portões, avenidas com postes de luz, casas, o **Arquivo** (3 livros com a história da cidade), uma torre, um jardim de corais com a estátua de Maris e o **Templo** no centro, com o **cofre** embaixo (3 baús). Chegando perto, os **Guardas Afogados** e as **Sentinelas das Marés** (guardiões) atacam |
+
+**O coração da cidade:** quem entra no santuário do templo acorda o **Sumo-Sacerdote** (afogado gigante de 220 de vida, com tridente). Ele chama afogados e puxa quem está perto com um redemoinho. Derrotado, deixa o **Coração da cidade** (um condutor), pérolas negras, escamas do abismo, esmeraldas, relíquia e às vezes o tridente dele. Ponha o coração **bem no meio da moldura do altar**: a cidade **desperta**, os guardas somem para sempre, o condutor funciona ali, quem nada nela ganha Graça do Golfinho e quem segue Maris ganha **+80 de devoção**. Quem preferir ficar com o condutor pode: a cidade continua amaldiçoada e o Sumo-Sacerdote volta em 7 dias.
+
+Para respirar, valem as coisas do jogo: poção de respiração, Respiração Aquática no capacete e condutores. Configure em `estruturas.cidade-submersa` (região, chance, distância do spawn e dias para os guardas voltarem).
+
 ### Pacote de recursos do servidor
 
 O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip`) com as texturas do minério e dos itens de mitrilo, do **Cajado Arcano**, do **Gancho de Escalada** (que muda quando é lançado), da **Capa Planadora**, da **Ferradura**, do **Ninho de Pássaro**, dos **12 peixes raros**, dos **16 pratos da Cozinha**, das **variedades raras** (e das sementes de trigo e beterraba), dos **componentes alquímicos**, dos **12 elixires** (cada um com o seu frasco) , das **18 gemas** (bruta, lapidada e perfeita), dos **materiais raros e núcleos dos chefes**, dos **acessórios**, de **7 lendas** (as armas e ferramentas; o arco, o escudo e as armaduras ficam com o visual do jogo, porque têm animação ou acabamentos que o pacote não pode copiar) e dos itens novos: bebidas, cartas, flechas, frascos, méis e ervas. A plantação no chão continua com o visual do jogo: só os itens mudam. Ele é **opcional**: sem ele tudo funciona com a aparência do jogo (o minério parece um bloco de cogumelo, o lingote parece ferro, o cajado parece uma vara de breeze...).
@@ -1212,7 +1223,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.28.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.29.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

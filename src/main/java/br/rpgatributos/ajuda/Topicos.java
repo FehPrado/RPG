@@ -274,10 +274,16 @@ public final class Topicos {
                         "Lua cheia, lua de sangue, eclipse, aurora e chuva de meteoros.")
                 .cmd("calendario").ligados("pomar", "perigo", "astronomia").palavras("estacao inverno verao clima lua festival").pronto();
         t("estruturas", MUNDO, "Estruturas", Material.MOSSY_STONE_BRICKS)
-                .texto("16 tipos surgem em terras novas: torres, minas, fortins, oásis, faróis, vilas saqueadas, santuários...",
+                .texto("16 tipos surgem em terras novas: torres, minas, fortins, oásis, faróis, vilas saqueadas, santuários... E no mar, naufrágios e cidades submersas.",
                         "Alguns têm guardas, outros têm moradores que negociam.")
                 .dica("Poço dos Desejos: jogue 1 esmeralda. Farol: acenda com um bloco de pedra luminosa.")
-                .ligados("enciclopedia", "mapas", "locais").palavras("torre mina cemiterio poco eremita bruxa farol fortim oasis circulo").pronto();
+                .ligados("mar", "enciclopedia", "mapas", "locais").palavras("torre mina cemiterio poco eremita bruxa farol fortim oasis circulo").pronto();
+        t("mar", MUNDO, "Naufrágios e a cidade submersa", Material.PRISMARINE_BRICKS)
+                .texto("Naufrágios no fundo do mar: cada navio tem nome, carga e o diário do capitão (às vezes ele aponta para uma cidade submersa).",
+                        "Cidade Submersa: rara, no mar profundo. Templo de Maris, casas, arquivo com a história, cofre e guardas afogados.",
+                        "No santuário do templo acorda o Sumo-Sacerdote. Ele guarda o Coração da cidade (um condutor).")
+                .dica("Ponha o Coração bem no meio da moldura do altar: a cidade desperta. Leve poção de respiração.")
+                .ligados("estruturas", "deuses", "pesca").palavras("naufragio navio cidade submersa mar oceano templo maris condutor coracao sacerdote").pronto();
         t("locais", MUNDO, "Locais Ocultos", Material.CHISELED_DEEPSLATE)
                 .texto("14 ruínas escondidas com um enigma de alavancas e um guardião. O selo dá tesouros e libera classes lendárias.",
                         "O Mapa Rasgado vira uma bússola que aponta para perto deles.")
