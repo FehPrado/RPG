@@ -139,8 +139,10 @@ perigo:
 mundo-vivo:
   horas-por-estacao: 168              # quanto dura cada estação (168 = uma semana real; cada "dia" dela é 1/7 disso)
   temperatura: true                  # frio e calor nos extremos (nevasca, deserto no verão, Nether)
-  neve-e-gelo-no-inverno: true        # no inverno cai neve e a água congela perto dos jogadores (some na primavera)
-  blocos-de-neve-no-maximo: 4000
+  neve-e-gelo-no-inverno: true        # a estação muda o chão perto dos jogadores: neve e gelo no inverno, flores na primavera, vaga-lumes no verão, folhas secas no outono (tudo some quando ela acaba)
+  blocos-de-neve-no-maximo: 4000      # quantos blocos a estação pode ter posto ao mesmo tempo
+  coletas: true                       # coisas para colher aparecem pelo mundo conforme a estação
+  coletas-por-jogador: 5              # quantas ao mesmo tempo perto de cada jogador (raio de 32 blocos)
   chance-evento-de-clima: 0.08        # a cada 2,5 min: nevasca, neblina, ventania, tempestade elétrica, onda de calor
   chance-lua-de-sangue: 0.2           # em noite de lua cheia
   chance-chuva-de-meteoros: 0.06      # por noite

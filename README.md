@@ -471,6 +471,36 @@ As portas abrem no meio de cada parede (3 de largura, 4 de altura, a partir do c
 | ☘ Outono | Colheitas um pouco mais rápidas, ventanias e neblina; Salmão-Rei e Peixe-Fantasma; Elites Fantasmas |
 | ❄ Inverno | Neve caindo, **neve no chão e água congelando** perto dos jogadores (tudo some sozinho na primavera e nunca dentro dos territórios); plantações ao ar livre quase param, mas **estufas** (com teto) crescem normal; Peixe-Gelo; Elites Gélidos |
 
+**O chão muda com a estação** (perto dos jogadores, fora dos territórios, e some quando a estação acaba):
+- ✿ **Primavera:** pétalas e flores silvestres brotam na grama, e pétalas voam no ar.
+- ☀ **Verão:** arbustos de vaga-lumes aparecem e, de noite, vaga-lumes voam em volta.
+- ☘ **Outono:** folhas laranja, vermelhas e marrons caem das árvores e se juntam no chão debaixo delas.
+- ❄ **Inverno:** neve no chão e água congelando.
+
+### Coisas para colher
+
+Cada estação espalha **3 coisas** pelo mundo, aos poucos, perto de quem explora (até 5 por jogador num raio de 32 blocos, conforme o bioma). Procure o **brilho verde** no chão e clique para pegar (às vezes vêm 2). Todas **se comem** e dão um efeito pequeno; somem quando a estação acaba. Dão XP de Agricultura.
+
+| Estação | Coletas |
+|---|---|
+| ✿ Primavera | Cogumelo-Morel (florestas, regeneração), Alho-Selvagem (resistência), Broto de Samambaia (velocidade) |
+| ☀ Verão | Amora-Silvestre (velocidade), Alga-Doce (praias e rios, fôlego), Groselha (sorte) |
+| ☘ Outono | Castanha (saciedade), Cogumelo-do-Bosque (visão noturna), Avelã (pressa) |
+| ❄ Inverno | Raiz de Inverno (esquenta), Cogumelo-de-Neve (regeneração), Fruto de Zimbro (força) |
+
+### Plantações da estação
+
+**8 plantas**, 2 por estação, com visual próprio crescendo em 4 fases em cima da terra. Plante clicando com as sementes na **terra arada**. Só crescem **na estação delas** e com a **terra molhada** (água perto ou chuva; na chuva crescem mais rápido), mais ou menos 12 minutos por fase. **Farinha de osso** adianta uma fase. As sementes saem do **mato quebrado** (4%) na estação certa, e às vezes voltam na colheita.
+
+| Estação | Plantas |
+|---|---|
+| ✿ Primavera | Morango (rebrota, velocidade), Couve-Flor (regeneração) |
+| ☀ Verão | Mirtilo (rebrota, visão noturna), Pimenta (força) |
+| ☘ Outono | Uva (rebrota, sorte), Abóbora-Moranga (absorção) |
+| ❄ Inverno | Couve Gelada (resistência), Nabo-de-Neve (esquenta) |
+
+A colheita sai com qualidade ★ (pelo nível de Agricultura) e dá XP de Agricultura. Fora de época, a planta para de crescer, mas não morre. Pisar e desfazer a terra arada perde a planta (a semente volta).
+
 **Festivais:** no 4º dia de cada estação (Festa das Flores, Festival do Sol, Festa da Colheita, Festival do Gelo) há +25% de XP nos atributos do tema, e cada jogador ganha uma **lembrança**, um enfeite de cabeça para o guarda-roupa.
 
 **Clima:** de vez em quando acontece um evento de 4 minutos, sorteado pela estação:
@@ -1197,6 +1227,9 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin bancadaalquimica` | Cria a Bancada Alquímica olhando para um suporte de poções |
 | `/rpgadmin peixe <peixe> [qtd]` | Dá um peixe raro |
 | `/rpgadmin oficio <material> [qtd]` | Dá uma pele, couro ou tecido do curtume |
+| `/rpgadmin coleta <coleta> [qtd]` | Dá uma coleta da estação |
+| `/rpgadmin semente <planta> [qtd]` | Dá sementes de uma plantação da estação |
+| `/rpgadmin coletanascer` | Faz uma coleta da estação nascer perto de você |
 | `/rpgadmin conjunto <conjunto>` | Dá as 4 peças de um conjunto |
 | `/rpgadmin atelie` | Transforma o tear que você olha num Ateliê do Curtidor |
 | `/rpgadmin sonho` | Faz você sonhar agora |
@@ -1270,7 +1303,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.30.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.31.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

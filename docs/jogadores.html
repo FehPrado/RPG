@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.30</small></div></div>
+  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.31</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -1084,13 +1084,23 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Estações (1 semana real cada, por padrão)</h3>
       <div class="tabela"><table><thead><tr><th>Estação</th><th>O que muda</th></tr></thead><tbody>
-        <tr><td>✿ Primavera</td><td>Plantas 40% mais rápidas</td></tr>
-        <tr><td>☀ Verão</td><td>Ondas de calor e tempestades</td></tr>
-        <tr><td>☘ Outono</td><td>Ventanias e neblina</td></tr>
+        <tr><td>✿ Primavera</td><td>Plantas 40% mais rápidas; pétalas e flores silvestres na grama</td></tr>
+        <tr><td>☀ Verão</td><td>Ondas de calor e tempestades; vaga-lumes à noite</td></tr>
+        <tr><td>☘ Outono</td><td>Ventanias e neblina; folhas coloridas caindo e folhas secas no chão</td></tr>
         <tr><td>❄ Inverno</td><td>Neve no chão, água congela, plantações ao ar livre quase param (estufas crescem normal)</td></tr>
       </tbody></table></div>
-      <p>Cada dia da estação é um dia real. O <span class="cmd">/calendario</span> e o <span class="cmd">/placar</span> mostram quanto falta para a estação mudar e quais frutas do pomar estão dando.</p>
+      <p>Cada dia da estação é um dia real. O <span class="cmd">/calendario</span> e o <span class="cmd">/placar</span> mostram quanto falta para a estação mudar, as frutas do pomar, as coletas e as plantações da estação.</p>
       <p>No 4º dia de cada estação tem <b>festival</b>: +25% de XP e uma lembrança para a cabeça. <span class="cmd">/calendario</span>.</p>
+    </div>
+    <div class="card largo"><h3>Coisas para colher e plantações da estação</h3>
+      <div class="tabela"><table><thead><tr><th>Estação</th><th>Para colher pelo mundo</th><th>Para plantar</th></tr></thead><tbody>
+        <tr><td>✿ Primavera</td><td>Cogumelo-Morel, Alho-Selvagem, Broto de Samambaia</td><td>Morango (rebrota), Couve-Flor</td></tr>
+        <tr><td>☀ Verão</td><td>Amora-Silvestre, Alga-Doce, Groselha</td><td>Mirtilo (rebrota), Pimenta</td></tr>
+        <tr><td>☘ Outono</td><td>Castanha, Cogumelo-do-Bosque, Avelã</td><td>Uva (rebrota), Abóbora-Moranga</td></tr>
+        <tr><td>❄ Inverno</td><td>Raiz de Inverno, Cogumelo-de-Neve, Fruto de Zimbro</td><td>Couve Gelada, Nabo-de-Neve</td></tr>
+      </tbody></table></div>
+      <p><b>Coletas:</b> procure o brilho verde no chão perto de você e clique. Somem quando a estação acaba. Todas se comem.</p>
+      <p><b>Plantações:</b> as sementes saem do mato quebrado na estação certa. Plante na terra arada; só crescem na estação delas e com a terra molhada. Farinha de osso adianta uma fase.</p>
     </div>
     <div class="card"><h3>Clima e céu</h3>
       <ul>
@@ -1267,7 +1277,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.30 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.31 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

@@ -77,8 +77,12 @@ public final class Estacoes implements Listener {
 
     private final RPGAtributos plugin;
     private final File arquivo;
-    /** Blocos que o inverno mudou (para desfazer na primavera): local → o que era antes. */
-    private final Map<Location, Material> inverno = new LinkedHashMap<>();
+    /**
+     * Blocos que a estação pôs no mundo (para desfazer quando ela acabar): local → {o que era
+     * antes, o que foi posto}. Inverno: neve e gelo; primavera: pétalas e flores silvestres;
+     * verão: arbustos de vaga-lumes; outono: folhas secas no chão.
+     */
+    private final Map<Location, Material[]> inverno = new LinkedHashMap<>();
     private long desvio;
     private Estacao anunciada;
     private boolean festivalAnunciado;
@@ -229,7 +233,7 @@ public final class Estacoes implements Listener {
             anunciarFestival(e);
         }
         if (festival() && segundos % 30 == 0) for (Player p : Bukkit.getOnlinePlayers()) lembranca(p, e);
-        if (e != Estacao.INVERNO && !inverno.isEmpty()) derreter(200);
+        if (!inverno.isEmpty()) derreter(e, 200);
         if (segundos % 2 == 0) {
             for (Player p : Bukkit.getOnlinePlayers()) efeitosVisuais(p, e);
         }
@@ -297,18 +301,51 @@ public final class Estacoes implements Listener {
         if (p.getWorld().getEnvironment() != World.Environment.NORMAL || p.getGameMode() == GameMode.SPECTATOR) return;
         Location l = p.getLocation();
         if (!aoArLivre(l.getBlock())) return;
+        boolean muda = plugin.settings().invernoMudaBlocos;
+        boolean noite = Ceu.noite(p.getWorld());
         switch (e) {
             case INVERNO -> {
                 p.spawnParticle(Particle.SNOWFLAKE, l.clone().add(0, 6, 0), 40, 8, 3, 8, 0.01);
-                if (plugin.settings().invernoMudaBlocos) for (int i = 0; i < 6; i++) nevar(p);
+                if (muda) for (int i = 0; i < 6; i++) nevar(p);
             }
-            case OUTONO -> p.spawnParticle(Particle.DUST, l.clone().add(0, 4, 0), 6, 6, 2, 6, 0,
-                    new Particle.DustOptions(org.bukkit.Color.fromRGB(rnd().nextBoolean() ? 0xD35400 : 0xC98A3C), 1.2f));
+            case OUTONO -> {
+                // Folhas laranja, vermelhas e marrons caindo, e folhas secas se juntando no chão.
+                int[] cores = {0xD35400, 0xC0392B, 0xE67E22, 0x8D5524, 0xF1C40F};
+                for (int i = 0; i < 3; i++) {
+                    p.spawnParticle(Particle.TINTED_LEAVES, l.clone().add(rnd().nextDouble(-7, 7), rnd().nextDouble(3, 7), rnd().nextDouble(-7, 7)),
+                            1, 0, 0, 0, 0, org.bukkit.Color.fromRGB(cores[rnd().nextInt(cores.length)]));
+                }
+                if (muda) for (int i = 0; i < 3; i++) folhasSecas(p);
+            }
             case PRIMAVERA -> {
-                if (rnd().nextDouble() < 0.4) p.spawnParticle(Particle.CHERRY_LEAVES, l.clone().add(0, 4, 0), 3, 6, 2, 6, 0);
+                if (rnd().nextDouble() < 0.5) p.spawnParticle(Particle.CHERRY_LEAVES, l.clone().add(0, 4, 0), 3, 6, 2, 6, 0);
+                if (muda) for (int i = 0; i < 2; i++) florir(p);
             }
-            default -> { }
+            case VERAO -> {
+                if (noite) p.spawnParticle(Particle.FIREFLY, l.clone().add(0, 1.5, 0), 6, 7, 1.5, 7, 0);
+                if (muda && rnd().nextDouble() < 0.2) vagalumes(p);
+            }
         }
+    }
+
+    private Block chaoLivre(Player p, int raio) {
+        if (inverno.size() >= plugin.settings().invernoNeveMax) return null;
+        World w = p.getWorld();
+        int x = p.getLocation().getBlockX() + rnd().nextInt(-raio, raio + 1), z = p.getLocation().getBlockZ() + rnd().nextInt(-raio, raio + 1);
+        if (!w.isChunkLoaded(x >> 4, z >> 4)) return null;
+        Block topo = w.getHighestBlockAt(x, z, org.bukkit.HeightMap.MOTION_BLOCKING_NO_LEAVES);
+        if (plugin.territorios().em(topo.getLocation()) != null) return null;
+        return topo;
+    }
+
+    private void por(Block b, Material antes, String dados) {
+        org.bukkit.block.data.BlockData d = org.bukkit.Bukkit.createBlockData(dados);
+        inverno.put(b.getLocation(), new Material[]{antes, d.getMaterial()});
+        b.setBlockData(d, false);
+    }
+
+    private static String direcao() {
+        return new String[]{"north", "south", "east", "west"}[rnd().nextInt(4)];
     }
 
     /** Neve num chão ao ar livre ou gelo numa água parada, perto do jogador (fora dos territórios). */
@@ -320,27 +357,73 @@ public final class Estacoes implements Listener {
         Block topo = w.getHighestBlockAt(x, z);
         if (plugin.territorios().em(topo.getLocation()) != null) return;
         if (topo.getType() == Material.WATER && topo.getBlockData() instanceof Levelled lv && lv.getLevel() == 0) {
-            inverno.put(topo.getLocation(), Material.WATER);
+            inverno.put(topo.getLocation(), new Material[]{Material.WATER, Material.ICE});
             topo.setType(Material.ICE);
             return;
         }
         Block cima = topo.getRelative(0, 1, 0);
         if (topo.getType().isOccluding() && cima.getType().isAir()) {
-            inverno.put(cima.getLocation(), Material.AIR);
+            inverno.put(cima.getLocation(), new Material[]{Material.AIR, Material.SNOW});
             cima.setType(Material.SNOW);
         }
     }
 
-    private void derreter(int quantos) {
-        Iterator<Map.Entry<Location, Material>> it = inverno.entrySet().iterator();
-        while (it.hasNext() && quantos-- > 0) {
-            Map.Entry<Location, Material> en = it.next();
+    /** Primavera: pétalas e flores silvestres brotam na grama. */
+    private void florir(Player p) {
+        Block topo = chaoLivre(p, 14);
+        if (topo == null || topo.getType() != Material.GRASS_BLOCK) return;
+        Block cima = topo.getRelative(0, 1, 0);
+        if (!cima.getType().isAir() || !aoArLivre(cima)) return;
+        String bioma = p.getWorld().getBiome(cima.getX(), cima.getY(), cima.getZ()).getKey().getKey();
+        boolean petalas = bioma.contains("cherry") || bioma.contains("forest") && rnd().nextBoolean();
+        por(cima, Material.AIR, (petalas ? "pink_petals" : "wildflowers") + "[flower_amount=" + (1 + rnd().nextInt(4)) + ",facing=" + direcao() + "]");
+    }
+
+    /** Verão: arbustos de vaga-lumes (que brilham à noite) aparecem aqui e ali. */
+    private void vagalumes(Player p) {
+        Block topo = chaoLivre(p, 16);
+        if (topo == null || topo.getType() != Material.GRASS_BLOCK) return;
+        Block cima = topo.getRelative(0, 1, 0);
+        if (!cima.getType().isAir() || !aoArLivre(cima)) return;
+        por(cima, Material.AIR, "firefly_bush");
+    }
+
+    /** Outono: folhas secas se juntam no chão debaixo das árvores. */
+    private void folhasSecas(Player p) {
+        Block topo = chaoLivre(p, 14);
+        if (topo == null) return;
+        Material m = topo.getType();
+        if (m != Material.GRASS_BLOCK && m != Material.PODZOL && m != Material.DIRT && m != Material.COARSE_DIRT) return;
+        Block cima = topo.getRelative(0, 1, 0);
+        if (!cima.getType().isAir()) return;
+        boolean copa = false;
+        for (int dy = 2; dy <= 10 && !copa; dy++) copa = org.bukkit.Tag.LEAVES.isTagged(topo.getRelative(0, dy, 0).getType());
+        if (!copa) return;
+        por(cima, Material.AIR, "leaf_litter[segment_amount=" + (1 + rnd().nextInt(4)) + ",facing=" + direcao() + "]");
+    }
+
+    /** De que estação é um bloco posto (para tirar só os das outras estações). */
+    private static Estacao estacaoDe(Material posto) {
+        return switch (posto) {
+            case PINK_PETALS, WILDFLOWERS -> Estacao.PRIMAVERA;
+            case FIREFLY_BUSH -> Estacao.VERAO;
+            case LEAF_LITTER -> Estacao.OUTONO;
+            default -> Estacao.INVERNO;
+        };
+    }
+
+    /** Desfaz até {@code quantos} blocos postos por outras estações. */
+    private void derreter(Estacao atual, int quantos) {
+        Iterator<Map.Entry<Location, Material[]>> it = inverno.entrySet().iterator();
+        while (it.hasNext() && quantos > 0) {
+            Map.Entry<Location, Material[]> en = it.next();
+            Material[] v = en.getValue();
+            if (estacaoDe(v[1]) == atual) continue;
             Location l = en.getKey();
             if (!l.isChunkLoaded()) continue;
+            quantos--;
             Block b = l.getBlock();
-            if ((en.getValue() == Material.WATER && b.getType() == Material.ICE) || (en.getValue() == Material.AIR && b.getType() == Material.SNOW)) {
-                b.setType(en.getValue());
-            }
+            if (b.getType() == v[1]) b.setType(v[0]);
             it.remove();
         }
     }
@@ -355,11 +438,13 @@ public final class Estacoes implements Listener {
         desvio = y.getLong("desvio", 0);
         for (String s : y.getStringList("inverno")) {
             String[] p = s.split(",");
-            if (p.length != 5) continue;
+            if (p.length != 5 && p.length != 6) continue;
             World w = Bukkit.getWorld(p[0]);
             Material m = Material.matchMaterial(p[4]);
-            if (w == null || m == null) continue;
-            try { inverno.put(new Location(w, Integer.parseInt(p[1]), Integer.parseInt(p[2]), Integer.parseInt(p[3])), m); }
+            // Arquivos antigos só tinham o "antes": água virou gelo, ar virou neve.
+            Material posto = p.length == 6 ? Material.matchMaterial(p[5]) : m == Material.WATER ? Material.ICE : Material.SNOW;
+            if (w == null || m == null || posto == null) continue;
+            try { inverno.put(new Location(w, Integer.parseInt(p[1]), Integer.parseInt(p[2]), Integer.parseInt(p[3])), new Material[]{m, posto}); }
             catch (NumberFormatException ignored) { }
         }
     }
@@ -368,9 +453,9 @@ public final class Estacoes implements Listener {
         YamlConfiguration y = new YamlConfiguration();
         y.set("desvio", desvio);
         List<String> l = new ArrayList<>();
-        for (Map.Entry<Location, Material> e : inverno.entrySet()) {
+        for (Map.Entry<Location, Material[]> e : inverno.entrySet()) {
             Location x = e.getKey();
-            l.add(x.getWorld().getName() + "," + x.getBlockX() + "," + x.getBlockY() + "," + x.getBlockZ() + "," + e.getValue().name());
+            l.add(x.getWorld().getName() + "," + x.getBlockX() + "," + x.getBlockY() + "," + x.getBlockZ() + "," + e.getValue()[0].name() + "," + e.getValue()[1].name());
         }
         y.set("inverno", l);
         try { y.save(arquivo); } catch (IOException ex) { plugin.getLogger().warning("Não foi possível salvar estacoes.yml"); }

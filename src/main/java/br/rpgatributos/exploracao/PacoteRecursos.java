@@ -326,8 +326,10 @@ public final class PacoteRecursos implements Listener {
         for (Map.Entry<String, List<String>> en : casos.entrySet()) {
             f.put("assets/minecraft/items/" + en.getKey() + ".json", texto(selecao(en.getKey(), en.getValue())));
             for (String id : en.getValue()) {
-                f.put("assets/rpgatributos/models/item/" + id + ".json", texto(naMao.contains(id)
-                        ? itemComPai("minecraft:item/handheld", "rpgatributos:item/" + id) : itemGerado("rpgatributos:item/" + id)));
+                // As fases das plantações da estação são plantas em X (como as do jogo), mostradas em cima da terra.
+                f.put("assets/rpgatributos/models/item/" + id + ".json", texto(id.startsWith("planta_")
+                        ? "{ \"parent\": \"minecraft:block/cross\", \"textures\": { \"cross\": \"rpgatributos:item/" + id + "\" } }"
+                        : naMao.contains(id) ? itemComPai("minecraft:item/handheld", "rpgatributos:item/" + id) : itemGerado("rpgatributos:item/" + id)));
             }
         }
         // Espadas, machados e maça: a pegada muda com a postura (2ª marca), por cima do visual da lenda (1ª).
@@ -430,8 +432,11 @@ public final class PacoteRecursos implements Listener {
                     .append("\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/").append(ids.get(i)).append("\" } }");
         }
         // A poção do jogo pinta o líquido com a cor da poção; o modelo normal precisa manter isso.
+        // O capim (usado pelas plantações da estação) é pintado com a cor da grama.
         String padrao = vanilla.equals("potion")
                 ? "{ \"type\": \"minecraft:model\", \"model\": \"minecraft:item/potion\", \"tints\": [ { \"type\": \"minecraft:potion\", \"default\": -13083194 } ] }"
+                : vanilla.equals("short_grass")
+                ? "{ \"type\": \"minecraft:model\", \"model\": \"minecraft:item/short_grass\", \"tints\": [ { \"type\": \"minecraft:grass\", \"temperature\": 0.5, \"downfall\": 1.0 } ] }"
                 : "{ \"type\": \"minecraft:model\", \"model\": \"" + BLOCOS.getOrDefault(vanilla, "minecraft:item/" + vanilla) + "\" }";
         return sb.append(" ], \"fallback\": ").append(padrao).append(" } }").toString();
     }

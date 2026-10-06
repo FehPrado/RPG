@@ -1720,6 +1720,7 @@ final class ArteItens {
         vida(l);
         frutas(l);
         oficios(l);
+        estacoesVivas(l);
         return l;
     }
 
@@ -1805,5 +1806,306 @@ final class ArteItens {
         l.add(new Arte("paper", "oficio_tecido", TECIDO_DOBRADO, pele(0xFF7A7060, 0xFFEDE6D6, BRANCO, 0xFFC8BEA8)));
         l.add(new Arte("paper", "oficio_feltro", TECIDO_DOBRADO, pele(0xFF4A3A2A, 0xFFB7A089, 0xFFD8C4AC, 0xFF8A7460)));
         l.add(new Arte("paper", "oficio_tecido_de_alga", TECIDO_DOBRADO, pele(0xFF1A2A10, 0xFF4E7A3A, 0xFF7AA860, 0xFF2E5020)));
+    }
+
+    // =====================================================================
+    //  Estações vivas (2.31): coletas, colheitas, sementes e as fases das plantas
+    // =====================================================================
+
+    private static final String[] COGUMELO = {
+            "................",
+            "................",
+            "................",
+            "......oooo......",
+            ".....occhco.....",
+            "....ochcccco....",
+            "...occcchccco...",
+            "...ochcccccho...",
+            "...occccchcco...",
+            "....oooooooo....",
+            "......osdo......",
+            "......osdo......",
+            "......osdo......",
+            ".....ossddo.....",
+            ".....oooooo.....",
+            "................"};
+
+    private static final String[] BULBO = {
+            "................",
+            ".......g.g......",
+            "......gkg.g.....",
+            ".......gkgk.....",
+            "........gk......",
+            ".......oko......",
+            "......ommmo.....",
+            ".....ohmmmdo....",
+            "....ohmmmmmdo...",
+            "....ohmmmmmdo...",
+            "....ommmmmmdo...",
+            ".....ommmmdo....",
+            "......oddoo.....",
+            ".......oo.......",
+            "................",
+            "................"};
+
+    private static final String[] BROTO = {
+            "................",
+            "................",
+            "......kkkk......",
+            ".....kgggghk....",
+            "....kgkkkkghk...",
+            "....kgk..kgk....",
+            "....kgk.kgk.....",
+            ".....kgggk......",
+            "......kgk.......",
+            "......kgk.......",
+            ".......kgk......",
+            ".......kgk......",
+            "......kgk.......",
+            "......kgk.......",
+            ".......k........",
+            "................"};
+
+    private static final String[] BAGAS = {
+            "................",
+            "................",
+            "........k.......",
+            "........kg......",
+            ".......k.gg.....",
+            ".....oo..oo.....",
+            "....ohmoohmo....",
+            "....omdoomdo....",
+            ".....oooooo.....",
+            "......ohmo......",
+            "......omdo......",
+            ".......oo.......",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] ALGA = {
+            "................",
+            ".......k........",
+            "......kgk.......",
+            "......kgk.......",
+            ".......kgk......",
+            ".......kgk......",
+            "......kgk.......",
+            "......kghk......",
+            ".......kgk......",
+            "........kgk.....",
+            "........kgk.....",
+            ".......kgk......",
+            "......kgk.......",
+            "......kgk.......",
+            ".......k........",
+            "................"};
+
+    private static final String[] NOZ = {
+            "................",
+            "................",
+            "................",
+            "......oooo......",
+            ".....occcco.....",
+            "....occcccco....",
+            "....oooooooo....",
+            "....ohmmmmdo....",
+            "....ohmmmmdo....",
+            "....ommmmmdo....",
+            ".....ommmdo.....",
+            "......oddo......",
+            ".......oo.......",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] RAIZ_INVERNO = {
+            "................",
+            "......g.g.......",
+            ".....gkgk.......",
+            "......kgk.......",
+            ".....oooo.......",
+            "....ohmmdo......",
+            "....ommmdo......",
+            ".....ommdo......",
+            ".....ommdo......",
+            "......omdo......",
+            "......omdo......",
+            ".......odo......",
+            ".......od.......",
+            "........o.......",
+            "................",
+            "................"};
+
+    private static final String[] MORANGUINHO = {
+            "................",
+            "................",
+            ".....g.kg.g.....",
+            "......gkkg......",
+            "....oooggooo....",
+            "...ohmmmmmmmo...",
+            "...ohammammdo...",
+            "...ommmmammdo...",
+            "....omammmdo....",
+            "....ommmamdo....",
+            ".....ommmdo.....",
+            ".....omamdo.....",
+            "......omdo......",
+            ".......oo.......",
+            "................",
+            "................"};
+
+    private static final String[] PIMENTINHA = {
+            "................",
+            "..........kg....",
+            ".........kg.....",
+            "........oko.....",
+            ".......ohmo.....",
+            "......ohmmo.....",
+            "......ommdo.....",
+            ".....ohmmdo.....",
+            ".....ommdo......",
+            "....ohmmdo......",
+            "....ommdo.......",
+            "...ohmdo........",
+            "...omdo.........",
+            "..oodo..........",
+            "..oo............",
+            "................"};
+
+    private static final String[] GOMOS = {
+            "................",
+            "................",
+            ".......kg.......",
+            "........k.......",
+            "....oooooooo....",
+            "...ohmdmmdmmo...",
+            "..ohmmdmmdmmdo..",
+            "..ohmmdmmdmmdo..",
+            "..ommmdmmdmmdo..",
+            "..ommmdmmdmmdo..",
+            "...ommdmmdmdo...",
+            "....oooooooo....",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] FOLHOSA = {
+            "................",
+            "................",
+            "................",
+            ".....kk..kk.....",
+            "....kggkkggk....",
+            "...kgghggghgk...",
+            "..kgggwwwwgggk..",
+            "..kggwwhwwwggk..",
+            "..kgggwwwwgggk..",
+            "...kggggggggk...",
+            "....kkggggkk....",
+            "......kkkk......",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] PACOTE_SEMENTE = {
+            "................",
+            "...oooooooooo...",
+            "...owwwwwwwwo...",
+            "...oaaaaaaaao...",
+            "...owwwwwwwwo...",
+            "...owwwmmwwwo...",
+            "...owwmmmmwwo...",
+            "...owwmhmmwwo...",
+            "...owwwmmwwwo...",
+            "...owwwwwwwwo...",
+            "...oaaaaaaaao...",
+            "...owwwwwwwwo...",
+            "...owgwgwgwwo...",
+            "...owwwwwwwwo...",
+            "...oooooooooo...",
+            "................"};
+
+    /** As 4 fases de uma planta (o chão fica na última linha). */
+    private static final String[][] FASES = {
+            {"................", "................", "................", "................", "................", "................",
+                    "................", "................", "................", "................", "................", "................",
+                    "......h..h......", ".......gg.......", ".......kg.......", ".......kk......."},
+            {"................", "................", "................", "................", "................", "................",
+                    "................", "................", "................", ".....h....h.....", "....hgg..ggh....", ".....gkggkg.....",
+                    "......gkkg......", "...h...kg...h...", "...ggk.kg.kgg...", "......kkkk......"},
+            {"................", "................", "................", "................", "......h..h......", ".....hgb.gbh....",
+                    "....hggkgkggh...", "...b.gkggkg.b...", "..hgg.gkkg.ggh..", "..gkgg.kg.ggkg..", "...gkg.kg.gkg...", "..b.gkgkgkg.b...",
+                    "...hggkkkkggh...", "....gkg.kgkg....", ".....gk.kgk.....", "......kkkk......"},
+            {"................", "................", ".....h....h.....", "....hgm..mgh....", "...hgmdgkgmdh...", "..am.gkggkg.ma..",
+                    "..md.gkggkg.dm..", "...hgg.kg.ggh...", "..gkgma.kamgkg..", "..gkgdd.kddgkg..", "...gkg.kg.gkg...", "..am.gkgkgk.ma..",
+                    "..mdhggkkkgghdm.", "....gkg.kgkg....", ".....gk.kgk.....", "......kkkk......"}};
+
+    private static int escurecer(int argb, double f) {
+        int r = (int) (((argb >> 16) & 255) * f), g = (int) (((argb >> 8) & 255) * f), b = (int) ((argb & 255) * f);
+        return 0xFF000000 | (r << 16) | (g << 8) | b;
+    }
+
+    private static int clarear(int argb, double f) {
+        int r = ((argb >> 16) & 255), g = ((argb >> 8) & 255), b = (argb & 255);
+        r += (int) ((255 - r) * f);
+        g += (int) ((255 - g) * f);
+        b += (int) ((255 - b) * f);
+        return 0xFF000000 | (r << 16) | (g << 8) | b;
+    }
+
+    /** Paleta de fruto/legume a partir de uma cor: contorno, meio, brilho, sombra e destaque. */
+    private static Map<Character, Integer> fruto(int cor, int destaque) {
+        int c = 0xFF000000 | cor;
+        return c('o', escurecer(c, 0.35), 'm', c, 'h', clarear(c, 0.45), 'd', escurecer(c, 0.7), 'a', destaque,
+                'g', 0xFF4E8A2A, 'k', 0xFF2E5A1E, 'c', escurecer(c, 0.6), 's', 0xFFEDE6D6, 'w', BRANCO);
+    }
+
+    private static Map<Character, Integer> folha(int g, int k, int h) {
+        return c('g', g, 'k', k, 'h', h);
+    }
+
+    private static void estacoesVivas(List<Arte> l) {
+        // Coletas (todas em cima da maçã, porque se comem).
+        l.add(new Arte("apple", "coleta_morel", COGUMELO, c('o', 0xFF3A2A18, 'c', 0xFFB08850, 'h', 0xFF6A4A28, 's', 0xFFEDE0C0, 'd', 0xFFC8B890)));
+        l.add(new Arte("apple", "coleta_alho_selvagem", BULBO, c('o', 0xFF6A6458, 'm', 0xFFF2EEDD, 'h', BRANCO, 'd', 0xFFC8C0A8, 'g', 0xFF7CB342, 'k', 0xFF3E6A20)));
+        l.add(new Arte("apple", "coleta_broto_de_samambaia", BROTO, folha(0xFF7CB342, 0xFF2E5A1E, 0xFFB5E07A)));
+        l.add(new Arte("apple", "coleta_amora_silvestre", BAGAS, fruto(0x4A148C, 0xFFFFFFFF)));
+        l.add(new Arte("apple", "coleta_alga_doce", ALGA, folha(0xFF2E7D32, 0xFF143A18, 0xFF8BC34A)));
+        l.add(new Arte("apple", "coleta_groselha", BAGAS, fruto(0xE53935, 0xFFFFFFFF)));
+        l.add(new Arte("apple", "coleta_castanha", NOZ, fruto(0x6D4C41, 0xFFFFFFFF)));
+        l.add(new Arte("apple", "coleta_cogumelo_do_bosque", COGUMELO, c('o', 0xFF4A2410, 'c', 0xFFC0702A, 'h', 0xFFF2D6A0, 's', 0xFFEDE6D6, 'd', 0xFFC8BEA8)));
+        l.add(new Arte("apple", "coleta_avela", NOZ, fruto(0xA1887F, 0xFFFFFFFF)));
+        l.add(new Arte("apple", "coleta_raiz_de_inverno", RAIZ_INVERNO, fruto(0x8D6E63, 0xFFFFFFFF)));
+        l.add(new Arte("apple", "coleta_cogumelo_de_neve", COGUMELO, c('o', 0xFF5A6A7A, 'c', 0xFFE3F2FD, 'h', 0xFF9FC8E8, 's', BRANCO, 'd', 0xFFC8D8E0)));
+        l.add(new Arte("apple", "coleta_fruto_de_zimbro", BAGAS, fruto(0x3949AB, 0xFFFFFFFF)));
+
+        // Colheitas, sementes (pacotinho com a cor da planta) e as 4 fases de cada planta.
+        Object[][] cultivos = {
+                {"morango", MORANGUINHO, 0xE53935, 0xFFFFE082, 0xFFFFFFFF},
+                {"couve_flor", FOLHOSA, 0xF5F0E0, 0xFFFFFFFF, 0xFFFFFFFF},
+                {"mirtilo", BAGAS, 0x3F51B5, 0xFFFFFFFF, 0xFFE8EAF6},
+                {"pimenta", PIMENTINHA, 0xD32F2F, 0xFFFFFFFF, 0xFFFFFFFF},
+                {"uva", BAGAS, 0x7B1FA2, 0xFFFFFFFF, 0xFFF3E5F5},
+                {"abobora_moranga", GOMOS, 0xEF6C00, 0xFFFFFFFF, 0xFFFFE0B2},
+                {"couve_gelada", FOLHOSA, 0x5E9C7A, 0xFFFFFFFF, 0xFFE0F2F1},
+                {"nabo_de_neve", BULBO, 0xEDE7F6, 0xFFFFFFFF, 0xFFFFFFFF}};
+        for (Object[] cv : cultivos) {
+            String id = (String) cv[0];
+            int cor = (int) cv[2], destaque = (int) cv[3], botao = (int) cv[4];
+            Map<Character, Integer> pal = new java.util.HashMap<>(fruto(cor, destaque));
+            if (id.equals("couve_flor")) pal.putAll(c('w', 0xFFF5F0E0, 'h', BRANCO));
+            if (id.equals("couve_gelada")) pal.putAll(c('g', 0xFF5E9C7A, 'k', 0xFF2E5A44, 'h', 0xFFB2DFDB, 'w', 0xFF9CCFB8));
+            if (id.equals("nabo_de_neve")) pal.putAll(c('o', 0xFF6A5A80, 'd', 0xFFB39DDB));
+            l.add(new Arte("apple", "colheita_" + id, (String[]) cv[1], pal));
+            l.add(new Arte("wheat_seeds", "semente_" + id, PACOTE_SEMENTE, c('o', 0xFF5A4A30, 'w', 0xFFF2E6C8, 'a', 0xFF000000 | cor,
+                    'm', 0xFF000000 | cor, 'h', clarear(0xFF000000 | cor, 0.5), 'g', 0xFF8D6E63)));
+            int mCor = 0xFF000000 | cor;
+            Map<Character, Integer> fase = c('k', 0xFF2E5A1E, 'g', 0xFF4E8A2A, 'h', 0xFF8BC34A, 'b', botao,
+                    'm', mCor, 'd', escurecer(mCor, 0.7), 'a', clarear(mCor, 0.45));
+            for (int f = 0; f < 4; f++) l.add(new Arte("short_grass", "planta_" + id + "_" + f, FASES[f], fase));
+        }
     }
 }

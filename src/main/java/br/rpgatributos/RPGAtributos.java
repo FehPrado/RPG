@@ -228,6 +228,8 @@ public final class RPGAtributos extends JavaPlugin {
     private MenuRpg menuRpg;
     private Placar placar;
     private Pomar pomar;
+    private br.rpgatributos.vida.Coletas coletas;
+    private br.rpgatributos.vida.Cultivos cultivos;
     private Estruturas estruturas;
     private Ajuda ajuda;
 
@@ -363,6 +365,10 @@ public final class RPGAtributos extends JavaPlugin {
         placar = new Placar(this);
         pomar = new Pomar(this);
         pomar.carregar();
+        coletas = new br.rpgatributos.vida.Coletas(this);
+        coletas.carregar();
+        cultivos = new br.rpgatributos.vida.Cultivos(this);
+        cultivos.carregar();
         estruturas = new Estruturas(this);
         ajuda = new Ajuda(this);
         estruturas.carregar();
@@ -376,7 +382,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, estruturas, ajuda);
+                canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, estruturas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -560,6 +566,8 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, segredos::tick, 40L, 40L);
         agenda.runTaskTimer(this, placar::tick, 20L, 20L);
         agenda.runTaskTimer(this, pomar::tick, 100L, 100L);
+        agenda.runTaskTimer(this, coletas::tick, 110L, 100L);
+        agenda.runTaskTimer(this, cultivos::tick, 120L, 100L);
         agenda.runTaskTimer(this, estruturas::tick, 40L, 40L);
         agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
@@ -611,6 +619,8 @@ public final class RPGAtributos extends JavaPlugin {
         if (encontros != null) encontros.parar();
         if (placar != null) placar.desligarTodos();
         if (pomar != null) pomar.parar();
+        if (coletas != null) coletas.parar();
+        if (cultivos != null) cultivos.parar();
         if (estruturas != null) estruturas.salvar();
         if (recordes != null) recordes.salvar();
         if (sombras != null) sombras.recolherTodas();
@@ -778,6 +788,8 @@ public final class RPGAtributos extends JavaPlugin {
     public MenuRpg menuRpg() { return menuRpg; }
     public Placar placar() { return placar; }
     public Pomar pomar() { return pomar; }
+    public br.rpgatributos.vida.Coletas coletas() { return coletas; }
+    public br.rpgatributos.vida.Cultivos cultivos() { return cultivos; }
     public Estruturas estruturas() { return estruturas; }
     public Ajuda ajuda() { return ajuda; }
 

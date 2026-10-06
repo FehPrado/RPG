@@ -285,8 +285,21 @@ public final class Topicos {
         // ===================== Mundo e aventura =====================
         t("estacoes", MUNDO, "Estações, clima e céu", Material.CLOCK)
                 .texto("Cada estação dura uma semana real e muda plantas, pesca e monstros. Festival no 4º dia.",
+                        "O chão muda: flores na primavera, vaga-lumes no verão, folhas secas no outono, neve no inverno.",
                         "Lua cheia, lua de sangue, eclipse, aurora e chuva de meteoros.")
-                .cmd("calendario").ligados("pomar", "perigo", "astronomia").palavras("estacao inverno verao clima lua festival").pronto();
+                .cmd("calendario").ligados("coletas", "plantacoes", "pomar", "perigo").palavras("estacao inverno verao clima lua festival").pronto();
+        t("coletas", MUNDO, "Coisas para colher", Material.BROWN_MUSHROOM)
+                .texto("Cada estação espalha 3 coisas pelo chão, conforme o bioma: cogumelos, bagas, nozes, raízes, algas...",
+                        "Procure o brilho verde perto de você e clique para pegar. Elas somem quando a estação acaba.",
+                        "Todas se comem e dão um efeito pequeno.")
+                .dica("O /calendario diz o que dá para colher nesta estação.")
+                .cmd("calendario").ligados("plantacoes", "estacoes", "pomar").palavras("coleta colher cogumelo morel amora castanha raiz alga").pronto();
+        t("plantacoes", OFICIOS, "Plantações da estação", Material.WHEAT_SEEDS)
+                .texto("8 plantas, 2 por estação: morango, couve-flor, mirtilo, pimenta, uva, abóbora-moranga, couve gelada e nabo-de-neve.",
+                        "Plante na terra arada (clique com as sementes). Elas só crescem na estação delas e com a terra molhada.",
+                        "4 fases; farinha de osso adianta uma. Morango, mirtilo e uva rebrotam depois de colher.")
+                .dica("As sementes saem do mato quebrado na estação certa.")
+                .cmd("calendario").ligados("coletas", "fazenda", "cozinha").palavras("plantar semente morango mirtilo uva pimenta couve abobora nabo").pronto();
         t("estruturas", MUNDO, "Estruturas", Material.MOSSY_STONE_BRICKS)
                 .texto("16 tipos surgem em terras novas: torres, minas, fortins, oásis, faróis, vilas saqueadas, santuários... E no mar, naufrágios e cidades submersas.",
                         "Alguns têm guardas, outros têm moradores que negociam.")
