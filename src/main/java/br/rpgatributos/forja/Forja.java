@@ -357,6 +357,8 @@ public final class Forja {
             plugin.runas().decorar(meta); // se tiver runa gravada, a linha dela volta depois de refazer a descrição
             plugin.mitrilo().decorar(meta, tipo); // aprimorado com Mitrilo: bônus e linha voltam também
             plugin.oficios().decorar(meta, tipo); // peça de conjunto do Ateliê: nome, bônus e o +1 de armadura voltam
+            br.rpgatributos.combo.Ligacoes.decorar(meta); // óleo de lâmina passado: a linha dele volta
+            plugin.pedrasAmolar().decorar(meta); // arma afiada: a linha do fio volta
         });
     }
 

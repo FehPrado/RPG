@@ -386,6 +386,27 @@ public final class Ajuda implements Listener {
         if (plugin.titulos().contador(p, "estruturas") < 3) {
             l.add(new Sugestao(Material.MOSSY_STONE_BRICKS, "Explore terras novas", "Estruturas com tesouros, guardas e moradores surgem onde ninguém foi.", "estruturas"));
         }
+        // As coisas das versões 2.27 a 2.31, quando fazem sentido para o jogador.
+        boolean usaCombos = false;
+        for (var ta : br.rpgatributos.combo.TipoArma.values()) if (plugin.combos().nivel(p, ta) >= 3) usaCombos = true;
+        if (usaCombos && plugin.combos().posturas().escolhida(p) == br.rpgatributos.combo.Postura.NEUTRA) {
+            l.add(new Sugestao(Material.SHIELD, "Escolha uma postura", "Ofensiva, Defensiva ou Ágil mudam o jeito de lutar (/postura).", "posturas"));
+        }
+        boolean temPele = false, temSemente = false;
+        for (ItemStack s : p.getInventory().getStorageContents()) {
+            var mo = br.rpgatributos.oficio.MaterialOficio.de(s);
+            if (mo != null && mo.tipo() == br.rpgatributos.oficio.MaterialOficio.Tipo.PELE) temPele = true;
+            if (br.rpgatributos.vida.Cultivo.daSemente(s) != null) temSemente = true;
+        }
+        if (temPele && plugin.titulos().contador(p, "pecas_costuradas") == 0) {
+            l.add(new Sugestao(Material.LOOM, "Curta essa pele", "No Ateliê do Curtidor ela vira couro para uma armadura leve.", "atelie"));
+        }
+        if (temSemente && plugin.titulos().contador(p, "colheitas_estacao") == 0) {
+            l.add(new Sugestao(Material.WHEAT_SEEDS, "Plante as sementes", "Terra arada e molhada; elas só crescem na estação delas.", "plantacoes"));
+        }
+        if (plugin.titulos().contador(p, "coletas") == 0) {
+            l.add(new Sugestao(Material.BROWN_MUSHROOM, "Colha pelo mundo", "Procure o brilho verde no chão: cada estação espalha coisas para colher.", "coletas"));
+        }
         l.add(new Sugestao(Material.IRON_SWORD, "Treine os combos", "Cada arma tem 7 golpes que liberam pela proficiência.", "combos"));
         l.add(new Sugestao(Material.ANVIL, "Forje algo melhor", "Ferraria alta deixa os itens forjados mais raros.", "forja"));
         // Sem repetir o mesmo assunto.

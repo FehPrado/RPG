@@ -243,6 +243,39 @@ public final class Cultivos implements Listener {
     //  Colher, adubar e perder
     // =====================================================================
 
+    /**
+     * Bater na planta: madura, colhe; ainda crescendo, arranca (a semente volta). É o jeito de
+     * tirar uma planta, já que ela cobre a terra arada.
+     */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void aoBater(io.papermc.paper.event.player.PrePlayerAttackEntityEvent e) {
+        if (!(e.getAttacked() instanceof Interaction i)) return;
+        String k = i.getPersistentDataContainer().get(K_ENT, PersistentDataType.STRING);
+        if (k == null) return;
+        e.setCancelled(true);
+        Player p = e.getPlayer();
+        Planta pl = plantas.get(k);
+        if (pl == null) {
+            esconder(k);
+            return;
+        }
+        if (!plugin.territorios().podeConstruir(p.getUniqueId(), i.getLocation())) {
+            p.sendActionBar(Component.text("✖ Essa plantação é do território de outra pessoa.", NamedTextColor.RED));
+            return;
+        }
+        if (pl.fase >= 3) {
+            colher(p, i, k, pl);
+            return;
+        }
+        plantas.remove(k);
+        esconder(k);
+        sujo = true;
+        Location l = i.getLocation().add(0, 0.6, 0);
+        l.getWorld().dropItemNaturally(l, pl.tipo.semente(1));
+        l.getWorld().playSound(l, Sound.BLOCK_CROP_BREAK, 1f, 0.9f);
+        p.sendActionBar(Component.text("🌱 " + pl.tipo.nome() + " arrancado (a semente voltou).", NamedTextColor.GRAY));
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void aoClicar(PlayerInteractEntityEvent e) {
         if (!(e.getRightClicked() instanceof Interaction i)) return;
@@ -282,7 +315,12 @@ public final class Cultivos implements Listener {
                     + (naEstacao ? " (cresce com a terra molhada)" : " — fora de época, só cresce na " + pl.tipo.estacao().nome().toLowerCase(java.util.Locale.ROOT)), pl.tipo.cor()));
             return;
         }
-        // Madura: colhe.
+        colher(p, i, k, pl);
+    }
+
+    private void colher(Player p, Interaction i, String k, Planta pl) {
+        World w = i.getWorld();
+        Location l = i.getLocation().add(0, 0.6, 0);
         int nivel = plugin.stats().getNivel(p, Skill.AGRICULTURA);
         double fracao = Math.min(1, nivel / (double) plugin.settings().nivelMaximo);
         int qtd = 1 + rnd().nextInt(2) + (rnd().nextDouble() < fracao * 0.5 ? 1 : 0);
@@ -291,7 +329,7 @@ public final class Cultivos implements Listener {
         w.dropItemNaturally(l, colheita);
         w.playSound(l, Sound.BLOCK_CROP_BREAK, 1f, 1.1f);
         w.spawnParticle(Particle.ITEM, l, 10, 0.2, 0.2, 0.2, 0.05, pl.tipo.colheita(1));
-        if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) plugin.stats().darXp(p, Skill.AGRICULTURA, 8);
+        if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) plugin.stats().darXp(p, Skill.AGRICULTURA, 5);
         plugin.titulos().registrar(p, "colheitas_estacao", 1);
         plugin.diario().marco(p, "primeira_" + pl.tipo.id(), "Colheu " + pl.tipo.nome() + " pela primeira vez");
         if (pl.tipo.rebrota()) {
@@ -330,6 +368,25 @@ public final class Cultivos implements Listener {
         for (Cultivo c : Cultivo.values()) if (c.estacao() == estacao) daEstacao.add(c);
         if (daEstacao.isEmpty()) return;
         b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 0.3, 0.5), daEstacao.get(rnd().nextInt(daEstacao.size())).semente(1));
+    }
+
+    /**
+     * O Fazendeiro da colônia: colhe até {@code maximo} plantações da estação maduras dentro da
+     * área. As que rebrotam voltam à fase 2; as outras são replantadas (o fazendeiro guarda a semente).
+     */
+    public List<ItemStack> colherEm(java.util.function.Predicate<Location> area, int maximo) {
+        List<ItemStack> l = new ArrayList<>();
+        for (Map.Entry<String, Planta> en : plantas.entrySet()) {
+            if (l.size() >= maximo) break;
+            Planta pl = en.getValue();
+            World w = Bukkit.getWorld(pl.mundo);
+            if (pl.fase < 3 || w == null || !area.test(new Location(w, pl.x, pl.y, pl.z))) continue;
+            l.add(pl.tipo.colheita(1 + rnd().nextInt(2)));
+            pl.fase = pl.tipo.rebrota() ? 1 : 0;
+            sujo = true;
+            if (w.isChunkLoaded(pl.x >> 4, pl.z >> 4)) mostrar(w, en.getKey(), pl);
+        }
+        return l;
     }
 
     public void parar() {

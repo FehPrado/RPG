@@ -266,7 +266,7 @@ public final class Barris extends Estacao {
                 return;
             }
             if (b.pedeFrutas() && contarFrutas(p) < 6) {
-                p.sendMessage(Component.text("Faltam 6 frutas do pomar.", NamedTextColor.RED));
+                p.sendMessage(Component.text("Faltam 6 frutas (do pomar, morango, mirtilo, uva, amora, groselha ou zimbro).", NamedTextColor.RED));
                 return;
             }
             b.ingredientes().forEach((mat, q) -> tirarComuns(p, mat, q));
@@ -309,7 +309,7 @@ public final class Barris extends Estacao {
         ItemStack[] c = p.getInventory().getContents();
         for (int i = 0; i < c.length && qtd > 0; i++) {
             ItemStack s = c[i];
-            if (s == null || s.getType() != m || br.rpgatributos.fazenda.Variedade.de(s) != null || Fruta.de(s) != null) continue;
+            if (s == null || s.getType() != m || !br.rpgatributos.alquimia.Ingrediente.simples(s)) continue;
             int t = Math.min(qtd, s.getAmount());
             s.setAmount(s.getAmount() - t);
             qtd -= t;
@@ -320,7 +320,7 @@ public final class Barris extends Estacao {
     private static int contarComuns(Player p, Material m) {
         int n = 0;
         for (ItemStack s : p.getInventory().getContents()) {
-            if (s != null && s.getType() == m && br.rpgatributos.fazenda.Variedade.de(s) == null && Fruta.de(s) == null) n += s.getAmount();
+            if (s != null && s.getType() == m && br.rpgatributos.alquimia.Ingrediente.simples(s)) n += s.getAmount();
         }
         return n;
     }
@@ -331,16 +331,25 @@ public final class Barris extends Estacao {
         return n;
     }
 
+    /** Fruta que serve no Licor de Frutas: as do pomar, as plantações de fruta e as bagas colhidas pelo mundo. */
+    private static boolean frutaDeLicor(ItemStack s) {
+        if (Fruta.de(s) != null) return true;
+        Cultivo c = Cultivo.daColheita(s);
+        if (c == Cultivo.MORANGO || c == Cultivo.MIRTILO || c == Cultivo.UVA) return true;
+        Coleta k = Coleta.de(s);
+        return k == Coleta.AMORA_SILVESTRE || k == Coleta.GROSELHA || k == Coleta.FRUTO_DE_ZIMBRO;
+    }
+
     private static int contarFrutas(Player p) {
         int n = 0;
-        for (ItemStack s : p.getInventory().getContents()) if (Fruta.de(s) != null) n += s.getAmount();
+        for (ItemStack s : p.getInventory().getContents()) if (frutaDeLicor(s)) n += s.getAmount();
         return n;
     }
 
     private static void tirarFrutas(Player p, int qtd) {
         for (ItemStack s : p.getInventory().getContents()) {
             if (qtd <= 0) return;
-            if (Fruta.de(s) == null) continue;
+            if (!frutaDeLicor(s)) continue;
             int t = Math.min(qtd, s.getAmount());
             s.setAmount(s.getAmount() - t);
             qtd -= t;

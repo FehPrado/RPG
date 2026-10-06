@@ -87,6 +87,8 @@ public final class Estacoes implements Listener {
     private Estacao anunciada;
     private boolean festivalAnunciado;
     private int segundos;
+    /** Quando a limpeza dos blocos de outras estações volta a olhar a lista (0 = já). */
+    private long proximaLimpeza;
 
     public Estacoes(RPGAtributos plugin) {
         this.plugin = plugin;
@@ -226,6 +228,7 @@ public final class Estacoes implements Listener {
             anunciada = e;
             festivalAnunciado = false;
             if (!primeira) anunciarEstacao(e);
+            proximaLimpeza = 0;
             salvar();
         }
         if (festival() && !festivalAnunciado) {
@@ -412,8 +415,14 @@ public final class Estacoes implements Listener {
         };
     }
 
-    /** Desfaz até {@code quantos} blocos postos por outras estações. */
+    /**
+     * Desfaz até {@code quantos} blocos postos por outras estações. Quando sobra menos que isso
+     * para desfazer (o resto está em chunks descarregados), só volta a olhar daqui a 30 s.
+     */
     private void derreter(Estacao atual, int quantos) {
+        long agora = System.currentTimeMillis();
+        if (agora < proximaLimpeza) return;
+        int cota = quantos;
         Iterator<Map.Entry<Location, Material[]>> it = inverno.entrySet().iterator();
         while (it.hasNext() && quantos > 0) {
             Map.Entry<Location, Material[]> en = it.next();
@@ -426,6 +435,7 @@ public final class Estacoes implements Listener {
             if (b.getType() == v[1]) b.setType(v[0]);
             it.remove();
         }
+        if (quantos == cota || quantos > 0) proximaLimpeza = agora + 30_000L;
     }
 
     // =====================================================================

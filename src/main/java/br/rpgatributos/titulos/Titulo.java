@@ -126,7 +126,16 @@ public enum Titulo {
     BOM_SAMARITANO("Bom Samaritano", 0xBCAAA4, Requisito.contador("viajantes", 5, "Ajudar 5 viajantes feridos"), Bonus.vida(2)),
     POMICULTOR("Pomicultor", 0xFF9800, Requisito.contador("frutas", 50, "Colher 50 frutas do pomar"), Bonus.xpSkill(Skill.AGRICULTURA, 0.1)),
     ANDARILHO("Andarilho das Ruínas", 0xA1887F, Requisito.contador("estruturas", 12, "Descobrir 12 estruturas antigas pelo mundo"), Bonus.xpTudo(0.04)),
-    DESEJOSO("Desejoso", 0x4FC3F7, Requisito.contador("desejos", 10, "Fazer 10 pedidos num Poço dos Desejos"), Bonus.velocidade(0.02));
+    DESEJOSO("Desejoso", 0x4FC3F7, Requisito.contador("desejos", 10, "Fazer 10 pedidos num Poço dos Desejos"), Bonus.velocidade(0.02)),
+    // ---------- 2.31.1: os contadores das versões 2.28 a 2.31 ----------
+    IRMAOS_DE_ARMAS("Irmãos de Armas", 0xFFB74D, Requisito.contador("ataques_conjuntos", 25, "Fazer 25 ataques conjuntos com a party"), new Bonus().comDano(1)),
+    ALGOZ_DAS_MARES("Algoz das Marés", 0x26A69A, Requisito.contador("sacerdotes", 3, "Derrotar 3 Sumos-Sacerdotes de cidades submersas"), new Bonus().comDano(1).comVida(2)),
+    CORACAO_DO_MAR("Coração do Mar", 0x26C6DA, Requisito.contador("cidades_despertas", 1, "Devolver o coração de uma cidade submersa"), Bonus.vida(2)),
+    PESCADOR_DO_GELO("Pescador do Gelo", 0x81D4FA, Requisito.contador("peixes_do_gelo", 20, "Pescar 20 peixes do gelo"), Bonus.xpSkill(Skill.PESCA, 0.1)),
+    MESTRE_CURTIDOR("Mestre Curtidor", 0xC08A5A, Requisito.contador("pecas_costuradas", 12, "Costurar 12 peças de armadura leve"), Bonus.armadura(1)),
+    SONHADOR("Sonhador", 0xB39DDB, Requisito.contador("sonhos", 10, "Ter 10 sonhos com lugares desconhecidos"), Bonus.xpTudo(0.03)),
+    COLETOR_DA_ESTACAO("Coletor da Estação", 0x7CB342, Requisito.contador("coletas", 100, "Pegar 100 coisas para colher pelo mundo"), Bonus.xpSkill(Skill.AGRICULTURA, 0.1)),
+    LAVRADOR_DAS_ESTACOES("Lavrador das Estações", 0xE53935, Requisito.contador("colheitas_estacao", 50, "Colher 50 plantações da estação"), Bonus.xpSkill(Skill.AGRICULTURA, 0.15));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(

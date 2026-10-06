@@ -625,6 +625,7 @@ public final class Colonias implements Listener {
             case FAZENDEIRO -> {
                 Location prefeitura = c.prefeitura();
                 if (prefeitura != null) l.addAll(plugin.pomar().colherEm(loc -> naColonia(c, loc), 2)); // frutas maduras do pomar
+                if (prefeitura != null) l.addAll(plugin.cultivos().colherEm(loc -> naColonia(c, loc), 2)); // plantações da estação maduras
                 if (c.plantas.isEmpty()) return l.isEmpty() ? null : l;
                 Material planta = sortear(c.plantas);
                 Material produto = switch (planta) {

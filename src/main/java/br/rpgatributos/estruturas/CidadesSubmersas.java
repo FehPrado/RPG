@@ -73,6 +73,21 @@ final class CidadesSubmersas {
     private final Map<Long, Integer> tentativas = new HashMap<>();
     private final Set<String> obrando = new HashSet<>();
     private final Map<String, UUID> sacerdotes = new HashMap<>();
+    private final Map<String, net.kyori.adventure.bossbar.BossBar> barras = new HashMap<>();
+
+    /** A barra de vida do Sumo-Sacerdote, para quem está a até 40 blocos (como os chefes do Altar). */
+    private void barra(Sitio s, Mob m) {
+        var max = m.getAttribute(Attribute.MAX_HEALTH);
+        float prog = max == null ? 1f : (float) Math.max(0, Math.min(1, m.getHealth() / max.getValue()));
+        var b = barras.computeIfAbsent(s.id, k -> net.kyori.adventure.bossbar.BossBar.bossBar(
+                Component.text("≈ " + Cidade.sacerdote(s.nome) + " de " + s.nome, NamedTextColor.GOLD),
+                1f, net.kyori.adventure.bossbar.BossBar.Color.BLUE, net.kyori.adventure.bossbar.BossBar.Overlay.NOTCHED_10));
+        b.progress(prog);
+        for (Player p : m.getWorld().getPlayers()) {
+            if (p.getLocation().distanceSquared(m.getLocation()) <= 40 * 40) p.showBossBar(b);
+            else p.hideBossBar(b);
+        }
+    }
     private boolean avaliando;
 
     CidadesSubmersas(RPGAtributos plugin, Estruturas estruturas, Projetos projetos) {
@@ -306,7 +321,7 @@ final class CidadesSubmersas {
                     m.getEquipment().setItemInMainHand(new ItemStack(Material.TRIDENT));
                     m.getEquipment().setItemInMainHandDropChance(0.04f);
                 }
-                Estruturas.vida(m, 30);
+                Estruturas.vida(m, 40);
             });
         }
         for (int[] g : Cidade.SENTINELAS) {
@@ -350,7 +365,7 @@ final class CidadesSubmersas {
             m.getEquipment().setHelmetDropChance(0f);
             m.getEquipment().setChestplate(couro(Material.LEATHER_CHESTPLATE, 0x0E4D4A));
             m.getEquipment().setChestplateDropChance(0f);
-            Estruturas.vida(m, 220);
+            Estruturas.vida(m, 450);
             AttributeInstance escala = m.getAttribute(Attribute.SCALE);
             if (escala != null) escala.setBaseValue(1.35);
         });
@@ -367,10 +382,18 @@ final class CidadesSubmersas {
 
     /** Uma vez a cada 2 s: os poderes dos sacerdotes vivos. */
     void poderes(int ciclo) {
+        // Barras de chefe de quem já caiu (ou sumiu) saem da tela.
+        for (var it = barras.entrySet().iterator(); it.hasNext(); ) {
+            var en = it.next();
+            if (sacerdotes.containsKey(en.getKey())) continue;
+            for (Player p : Bukkit.getOnlinePlayers()) p.hideBossBar(en.getValue());
+            it.remove();
+        }
         for (Sitio s : estruturas.sitios) {
             if (s.tipo != Estrutura.CIDADE_SUBMERSA || !sacerdotes.containsKey(s.id)) continue;
             Mob m = sacerdote(s);
             if (m == null) continue;
+            barra(s, m);
             List<Player> perto = new ArrayList<>();
             for (Player p : m.getWorld().getPlayers()) {
                 if (p.getLocation().distanceSquared(m.getLocation()) <= 16 * 16 && !p.isDead()

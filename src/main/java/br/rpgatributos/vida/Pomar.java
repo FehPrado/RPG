@@ -280,8 +280,20 @@ public final class Pomar implements Listener {
         String k = i.getPersistentDataContainer().get(K_FRUTA_ENT, PersistentDataType.STRING);
         if (k == null) return;
         e.setCancelled(true);
-        if (e.getHand() != EquipmentSlot.HAND) return;
-        Player p = e.getPlayer();
+        if (e.getHand() == EquipmentSlot.HAND) colher(e.getPlayer(), i, k);
+    }
+
+    /** Bater na fruta também colhe. */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void aoBater(io.papermc.paper.event.player.PrePlayerAttackEntityEvent e) {
+        if (!(e.getAttacked() instanceof Interaction i)) return;
+        String k = i.getPersistentDataContainer().get(K_FRUTA_ENT, PersistentDataType.STRING);
+        if (k == null) return;
+        e.setCancelled(true);
+        colher(e.getPlayer(), i, k);
+    }
+
+    private void colher(Player p, Interaction i, String k) {
         if (!plugin.territorios().podeConstruir(p.getUniqueId(), i.getLocation())) {
             p.sendActionBar(Component.text("✖ Essa árvore é do território de outra pessoa.", NamedTextColor.RED));
             return;

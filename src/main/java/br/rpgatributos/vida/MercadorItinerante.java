@@ -80,6 +80,22 @@ public final class MercadorItinerante implements Listener {
         l.add(new Oferta(() -> Bebida.values()[rnd().nextInt(Bebida.values().length)].criar(2), 16, 0, 2));
         l.add(new Oferta(() -> Erva.values()[rnd().nextInt(Erva.values().length)].criar(3), 5, 0, 5));
         l.add(new Oferta(() -> Fruta.sortear(rnd()).muda(1), 8, 0, 3));
+        // Sementes das plantações desta estação, um óleo de lâmina e peles para o curtume.
+        var estacao = plugin.estacoes().atual();
+        List<Cultivo> daEstacao = new java.util.ArrayList<>();
+        for (Cultivo c : Cultivo.values()) if (c.estacao() == estacao) daEstacao.add(c);
+        if (!daEstacao.isEmpty()) l.add(new Oferta(() -> daEstacao.get(rnd().nextInt(daEstacao.size())).semente(4), 4, 0, 4));
+        l.add(new Oferta(() -> {
+            List<br.rpgatributos.alquimia.Reagente> oleos = new java.util.ArrayList<>();
+            for (var r : br.rpgatributos.alquimia.Reagente.values()) if (r.oleo()) oleos.add(r);
+            return oleos.get(rnd().nextInt(oleos.size())).criar(1);
+        }, 7, 0, 3));
+        l.add(new Oferta(() -> {
+            var peles = new br.rpgatributos.oficio.MaterialOficio[]{br.rpgatributos.oficio.MaterialOficio.PELE_DE_LOBO,
+                    br.rpgatributos.oficio.MaterialOficio.PELE_DE_URSO, br.rpgatributos.oficio.MaterialOficio.PELE_DE_RAPOSA,
+                    br.rpgatributos.oficio.MaterialOficio.ESCAMA_DE_GUARDIAO, br.rpgatributos.oficio.MaterialOficio.COURO_DE_HOGLIN};
+            return peles[rnd().nextInt(peles.length)].criar(3);
+        }, 9, 0, 3));
         if (rnd().nextDouble() < 0.25) l.add(new Oferta(() -> Raro.ESSENCIA_PRIMORDIAL.criar(1), 48, 2, 1));
         Collections.shuffle(l, rnd());
         return l.subList(0, Math.min(6, l.size()));

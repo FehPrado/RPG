@@ -479,7 +479,7 @@ As portas abrem no meio de cada parede (3 de largura, 4 de altura, a partir do c
 
 ### Coisas para colher
 
-Cada estação espalha **3 coisas** pelo mundo, aos poucos, perto de quem explora (até 5 por jogador num raio de 32 blocos, conforme o bioma). Procure o **brilho verde** no chão e clique para pegar (às vezes vêm 2). Todas **se comem** e dão um efeito pequeno; somem quando a estação acaba. Dão XP de Agricultura.
+Cada estação espalha **3 coisas** pelo mundo, aos poucos, perto de quem explora (até 4 por jogador num raio de 32 blocos, conforme o bioma; elas aparecem devagar). Procure o **brilho verde** no chão e clique (ou bata) para pegar (às vezes vêm 2). Todas **se comem** e dão um efeito pequeno; somem quando a estação acaba. Dão XP de Agricultura.
 
 | Estação | Coletas |
 |---|---|
@@ -490,7 +490,7 @@ Cada estação espalha **3 coisas** pelo mundo, aos poucos, perto de quem explor
 
 ### Plantações da estação
 
-**8 plantas**, 2 por estação, com visual próprio crescendo em 4 fases em cima da terra. Plante clicando com as sementes na **terra arada**. Só crescem **na estação delas** e com a **terra molhada** (água perto ou chuva; na chuva crescem mais rápido), mais ou menos 12 minutos por fase. **Farinha de osso** adianta uma fase. As sementes saem do **mato quebrado** (4%) na estação certa, e às vezes voltam na colheita.
+**8 plantas**, 2 por estação, com visual próprio crescendo em 4 fases em cima da terra. Plante clicando com as sementes na **terra arada**. Só crescem **na estação delas** e com a **terra molhada** (água perto ou chuva; na chuva crescem mais rápido), mais ou menos 12 minutos por fase. **Farinha de osso** adianta uma fase. Clique na planta madura para colher; bater numa planta ainda crescendo arranca ela (a semente volta). As sementes saem do **mato quebrado** (4%) na estação certa, e às vezes voltam na colheita.
 
 | Estação | Plantas |
 |---|---|
@@ -873,7 +873,7 @@ Os guardas aparecem só uma vez. Configure em `estruturas:` no config (chance, d
 | ⚓ **Naufrágio** | Fundo de qualquer oceano | Um navio adernado, de proa enterrada, com rombo no casco, mastro caído e âncora. Cada um tem **nome** e é de um tipo: **mercante** (esmeraldas, lã, especiarias), **pirata** (ouro, mapa do tesouro, às vezes mapa rasgado), **galeão real** (gema, blocos de esmeralda, às vezes Pedra de Proteção) ou **de expedição** (bússola, mapa, Pérola Negra, às vezes relíquia). O **diário do capitão** no baú da cabine conta a história e, se houver uma cidade submersa perto, **aponta a direção dela** |
 | 🔱 **Cidade Submersa** | Mar profundo, longe do spawn. Rara: no máximo uma a cada 3000 × 3000 blocos | Uma cidade de pedra-do-mar de 73 blocos que adorava **Maris**: muralha com portões, avenidas com postes de luz, casas, o **Arquivo** (3 livros com a história da cidade), uma torre, um jardim de corais com a estátua de Maris e o **Templo** no centro, com o **cofre** embaixo (3 baús). Chegando perto, os **Guardas Afogados** e as **Sentinelas das Marés** (guardiões) atacam |
 
-**O coração da cidade:** quem entra no santuário do templo acorda o **Sumo-Sacerdote** (afogado gigante de 220 de vida, com tridente). Ele chama afogados e puxa quem está perto com um redemoinho. Derrotado, deixa o **Coração da cidade** (um condutor), pérolas negras, escamas do abismo, esmeraldas, relíquia e às vezes o tridente dele. Ponha o coração **bem no meio da moldura do altar**: a cidade **desperta**, os guardas somem para sempre, o condutor funciona ali, quem nada nela ganha Graça do Golfinho e quem segue Maris ganha **+80 de devoção**. Quem preferir ficar com o condutor pode: a cidade continua amaldiçoada e o Sumo-Sacerdote volta em 7 dias.
+**O coração da cidade:** quem entra no santuário do templo acorda o **Sumo-Sacerdote** (afogado gigante de 450 de vida, com tridente e barra de chefe). Ele chama afogados e puxa quem está perto com um redemoinho. Derrotado, deixa o **Coração da cidade** (um condutor), pérolas negras, escamas do abismo, esmeraldas, relíquia e às vezes o tridente dele. Ponha o coração **bem no meio da moldura do altar**: a cidade **desperta**, os guardas somem para sempre, o condutor funciona ali, quem nada nela ganha Graça do Golfinho e quem segue Maris ganha **+80 de devoção**. Quem preferir ficar com o condutor pode: a cidade continua amaldiçoada e o Sumo-Sacerdote volta em 7 dias.
 
 Para respirar, valem as coisas do jogo: poção de respiração, Respiração Aquática no capacete e condutores. Configure em `estruturas.cidade-submersa` (região, chance, distância do spawn e dias para os guardas voltarem).
 
@@ -984,8 +984,8 @@ Mudas especiais crescem como árvores do jogo, mas na estação certa as **fruta
 | Macieira Dourada (rara) | Maçã Dourada do Pomar | Outono | Absorção por 1 min |
 
 - **Mudas:** caem de folhas naturais (raro), vêm em ninhos de pássaro, com o Mercador Itinerante e nas carroças tombadas.
-- **Colônia:** o Lenhador não derruba árvores de verdade (a produção dele é do depósito), e o **Fazendeiro colhe as frutas maduras** perto da Prefeitura e guarda no depósito.
-- **Barril:** o **Licor de Frutas** leva 6 frutas do pomar e 1 garrafa de mel.
+- **Colônia:** o Lenhador não derruba árvores de verdade (a produção dele é do depósito), e o **Fazendeiro colhe as frutas maduras e as plantações da estação** do território e guarda no depósito.
+- **Barril:** o **Licor de Frutas** leva 6 frutas (do pomar, morango, mirtilo, uva, amora, groselha ou zimbro) e 1 garrafa de mel.
 - O `/calendario` mostra as frutas da estação. Árvores em território alheio só o dono (e membros) colhem.
 ### Álbum de Cartas (`/album`)
 
@@ -993,7 +993,7 @@ Monstros, chefes e peixes raros às vezes deixam uma **carta** (5% delas são **
 
 ### No mundo
 
-- **Mercador Itinerante:** de tempos em tempos (cerca de 1h30) ele arma a tenda perto de alguém por 20 minutos, com 6 ofertas raras: Fragmento de Forja, Pedra de Proteção, gemas, elixires, mapas, cartas, bebidas e às vezes Essência Primordial. O servidor é avisado de onde ele está.
+- **Mercador Itinerante:** de tempos em tempos (cerca de 1h30) ele arma a tenda perto de alguém por 20 minutos, com 6 ofertas raras (entre elas, às vezes, sementes da estação, um óleo de lâmina ou peles para o curtume): Fragmento de Forja, Pedra de Proteção, gemas, elixires, mapas, cartas, bebidas e às vezes Essência Primordial. O servidor é avisado de onde ele está.
 - **Encontros na estrada:** quem explora sozinho a céu aberto às vezes encontra uma **carroça tombada** com carga, um **acampamento de bandidos** guardando um saque (só abre depois de vencer todos), um **viajante ferido** (dê comida ou cura e ele recompensa) ou uma **estrela cadente** que deixa cristais e gemas.
 - **Segredos** (`/segredos`): 12 conquistas escondidas (dormir no Nether e sobreviver, cair de 60 blocos, pescar num eclipse...). Cada uma dá esmeraldas e XP e entra no Diário.
 
@@ -1122,7 +1122,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 84 títulos com requisitos (duas páginas), por exemplo Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 92 títulos com requisitos (em páginas), por exemplo Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1303,7 +1303,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.31.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.31.1.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

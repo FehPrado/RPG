@@ -573,7 +573,7 @@ public final class Guia implements Listener {
                         .append(t(": clique para colher.")),
                 // 68b
                 titulo("Estruturas", EXPLORACAO)
-                        .append(t("16 tipos surgem em terras novas: torres, minas, fortins, oásis, faróis, vilas saqueadas...\n"))
+                        .append(t("16 tipos em terras novas e 2 no mar: torres, minas, fortins, faróis, naufrágios...\n"))
                         .append(d("Poço"))
                         .append(t(": 1 esmeralda.\n"))
                         .append(d("Farol"))
@@ -639,6 +639,49 @@ public final class Guia implements Listener {
                         .append(d("aparência"))
                         .append(t(" da armadura sem tirá-la, ou esconda uma peça.\n\nNa cabeça vale qualquer item!\n"))
                         .append(d("/guardaroupa")),
+                // 77b: versões 2.27 a 2.31
+                titulo("Posturas", COMBO)
+                        .append(d("/postura"))
+                        .append(t(" com arma de combo na mão:\n"))
+                        .append(d("Ofensiva")).append(t(": +dano\n"))
+                        .append(d("Defensiva")).append(t(": aguenta e cura\n"))
+                        .append(d("Ágil")).append(t(": rápida\n"))
+                        .append(d("Mestra")).append(t(": a da arma, na proficiência 20.\n"))
+                        .append(t("Classe e deus combinam com uma.")),
+                titulo("Estilo", COMBO)
+                        .append(d("Tempo certo"))
+                        .append(t(": depois do 2º clique, um \"tim\" marca o 3º.\n"))
+                        .append(d("Estilo D a S"))
+                        .append(t(": varie os golpes.\n"))
+                        .append(d("Equilíbrio"))
+                        .append(t(": combos param os inimigos fortes.")),
+                titulo("Óleos", ALQUIMIA)
+                        .append(t("Na Bancada (aba Componentes). Segure e clique: vai na arma por 60 golpes.\n"))
+                        .append(d("Fogo, Gélido, Venenoso, Trovejante, Prata"))
+                        .append(t(".\nCombos com óleo fazem reações com as magias.")),
+                titulo("O mar", EXPLORACAO)
+                        .append(d("Naufrágios"))
+                        .append(t(": diário do capitão e carga.\n"))
+                        .append(d("Cidade Submersa"))
+                        .append(t(": rara, no mar fundo. O Sumo-Sacerdote guarda o coração; devolva ao altar.")),
+                titulo("Pesca no gelo", PESCA)
+                        .append(t("Quebre o gelo de um lago gelado e pesque no buraco: 5 peixes só de lá.\n"))
+                        .append(d("Cabana de Pesca"))
+                        .append(t(": fogueira + vara + bacalhau + 4 tábuas de abeto.")),
+                titulo("Curtume", DETALHES)
+                        .append(d("Ateliê do Curtidor"))
+                        .append(t(": tear + tesoura + 4 couros + 2 linhas.\nCurta peles, teça panos e costure "))
+                        .append(d("6 conjuntos"))
+                        .append(t(" de armadura leve.")),
+                titulo("Sonhos", EXPLORACAO)
+                        .append(t("Durma a noite toda: às vezes você sonha com um lugar que nunca viu e acorda sabendo para que lado fica.")),
+                titulo("Estações", FAZENDA)
+                        .append(t("O chão muda com a estação.\n"))
+                        .append(d("Coletas"))
+                        .append(t(": procure o brilho verde.\n"))
+                        .append(d("Plantações"))
+                        .append(t(": sementes do mato, só crescem na estação delas.\n"))
+                        .append(d("/calendario")),
                 // 78
                 titulo("Conquistas", TITULO)
                         .append(d("/titulos"))
@@ -647,7 +690,7 @@ public final class Guia implements Listener {
                         .append(t(": pedidos do dia. Cumprir dá esmeraldas e descontos.")),
                 // 79
                 titulo("Comandos", TITULO)
-                        .append(d("/atributos /classe\n/forja /grimorio\n/receitas /pets\n/peixes /alquimia\n/colonia /reino\n/titulos /bestiario\n/party /territorio\n/masmorra /lendas\n/locais /combos\n/portais /torre\n/mochila /deus /enc\n/cronista /talentos\n/rpg /album /placar"))
+                        .append(d("/rpg /guia /jornada\n/atributos /classe\n/forja /grimorio\n/receitas /pets\n/peixes /alquimia\n/colonia /reino\n/titulos /bestiario\n/party /territorio\n/masmorra /lendas\n/combos /postura\n/portais /torre\n/mochila /deus\n/talentos /album\n/calendario /diario"))
         );
     }
 }

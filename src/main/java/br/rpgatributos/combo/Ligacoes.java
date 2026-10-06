@@ -123,6 +123,8 @@ public final class Ligacoes implements Listener {
         ItemStack mao = p.getInventory().getItemInMainHand();
         Reagente r = Reagente.de(mao);
         if (r == null || !r.oleo()) return;
+        // Baú, porta, alavanca...: o clique é para o bloco, não para passar o óleo.
+        if (e.getClickedBlock() != null && e.getClickedBlock().getType().isInteractable() && !p.isSneaking()) return;
         e.setCancelled(true);
         ItemStack arma = p.getInventory().getItemInOffHand();
         if (TipoArma.de(arma) == null) {
@@ -155,12 +157,22 @@ public final class Ligacoes implements Listener {
 
     /** A linha do óleo no texto da arma (troca a antiga, se houver). */
     private static void lore(ItemStack arma, Reagente r, int golpes) {
-        arma.editMeta(m -> {
-            List<Component> l = m.lore() == null ? new ArrayList<>() : new ArrayList<>(m.lore());
-            l.removeIf(c -> net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(c).startsWith(MARCA_LORE));
-            if (r != null) l.add(Component.text(MARCA_LORE + r.nome() + " · " + golpes + " golpes", r.cor()).decoration(TextDecoration.ITALIC, false));
-            m.lore(l);
-        });
+        arma.editMeta(m -> lore(m, r, golpes));
+    }
+
+    private static void lore(org.bukkit.inventory.meta.ItemMeta m, Reagente r, int golpes) {
+        List<Component> l = m.lore() == null ? new ArrayList<>() : new ArrayList<>(m.lore());
+        l.removeIf(c -> net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(c).startsWith(MARCA_LORE));
+        if (r != null) l.add(Component.text(MARCA_LORE + r.nome() + " · " + golpes + " golpes", r.cor()).decoration(TextDecoration.ITALIC, false));
+        m.lore(l);
+    }
+
+    /** A Forja refez a arma (refino, reforjar): a linha do óleo volta se ainda houver óleo. */
+    public static void decorar(org.bukkit.inventory.meta.ItemMeta m) {
+        String id = m.getPersistentDataContainer().get(K_OLEO, PersistentDataType.STRING);
+        Reagente r = id == null ? null : Reagente.porId(id);
+        if (r == null || !r.oleo()) return;
+        lore(m, r, m.getPersistentDataContainer().getOrDefault(K_OLEO_GOLPES, PersistentDataType.INTEGER, 0));
     }
 
     private static Player atacante(EntityDamageByEntityEvent e) {

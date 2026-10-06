@@ -252,7 +252,7 @@ public final class Settings {
         invernoMudaBlocos = c.getBoolean("mundo-vivo.neve-e-gelo-no-inverno", true);
         invernoNeveMax = Math.max(0, c.getInt("mundo-vivo.blocos-de-neve-no-maximo", 4000));
         coletasAtivas = c.getBoolean("mundo-vivo.coletas", true);
-        coletasPorJogador = Math.max(0, c.getInt("mundo-vivo.coletas-por-jogador", 5));
+        coletasPorJogador = Math.max(0, c.getInt("mundo-vivo.coletas-por-jogador", 4));
         cliChanceEvento = c.getDouble("mundo-vivo.chance-evento-de-clima", 0.08);
         ceuChanceSangue = c.getDouble("mundo-vivo.chance-lua-de-sangue", 0.2);
         ceuChanceMeteoros = c.getDouble("mundo-vivo.chance-chuva-de-meteoros", 0.06);

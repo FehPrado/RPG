@@ -137,7 +137,7 @@ public final class Coletas implements Listener {
                 double dx = pt.x - l.getX(), dz = pt.z - l.getZ();
                 if (dx * dx + dz * dz < 32 * 32) perto++;
             }
-            if (perto < plugin.settings().coletasPorJogador && pontos.size() < MAX_TOTAL && rnd().nextDouble() < 0.5) nascer(p, estacao);
+            if (perto < plugin.settings().coletasPorJogador && pontos.size() < MAX_TOTAL && rnd().nextDouble() < 0.15) nascer(p, estacao);
         }
         // Mostra para quem está perto e dá um brilho de vez em quando.
         for (Map.Entry<String, Ponto> en : pontos.entrySet()) {
@@ -219,18 +219,30 @@ public final class Coletas implements Listener {
         String k = i.getPersistentDataContainer().get(K_ENT, PersistentDataType.STRING);
         if (k == null) return;
         e.setCancelled(true);
-        if (e.getHand() != EquipmentSlot.HAND) return;
+        if (e.getHand() == EquipmentSlot.HAND) pegar(e.getPlayer(), i, k);
+    }
+
+    /** Bater também pega (é o que muita gente tenta primeiro). */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void aoBater(io.papermc.paper.event.player.PrePlayerAttackEntityEvent e) {
+        if (!(e.getAttacked() instanceof Interaction i)) return;
+        String k = i.getPersistentDataContainer().get(K_ENT, PersistentDataType.STRING);
+        if (k == null) return;
+        e.setCancelled(true);
+        pegar(e.getPlayer(), i, k);
+    }
+
+    private void pegar(Player p, Interaction i, String k) {
         Ponto pt = pontos.remove(k);
         esconder(k);
         if (pt == null) return;
         sujo = true;
-        Player p = e.getPlayer();
         int qtd = 1 + (rnd().nextDouble() < 0.15 + plugin.stats().getNivel(p, Skill.AGRICULTURA) * 0.003 ? 1 : 0);
         Location l = i.getLocation().add(0, 0.3, 0);
         l.getWorld().dropItemNaturally(l, pt.tipo.criar(qtd));
         l.getWorld().playSound(l, Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1.3f);
         l.getWorld().spawnParticle(Particle.ITEM, l, 8, 0.1, 0.1, 0.1, 0.05, pt.tipo.criar(1));
-        if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) plugin.stats().darXp(p, Skill.AGRICULTURA, 4);
+        if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) plugin.stats().darXp(p, Skill.AGRICULTURA, 3);
         plugin.titulos().registrar(p, "coletas", 1);
         plugin.diario().marco(p, "primeira_coleta", "Colheu a primeira coleta da estação: " + pt.tipo.nome());
         p.sendActionBar(Component.text(pt.tipo.estacao().icone() + " " + pt.tipo.nome() + (qtd > 1 ? " x" + qtd : ""), pt.tipo.cor()));

@@ -246,7 +246,7 @@ public final class Topicos {
                         "Na estação certa as frutas penduram nas folhas: clique para colher.")
                 .ligados("fazenda", "estacoes", "barril").palavras("fruta muda arvore laranja cereja limao").pronto();
         t("pesca", OFICIOS, "Pesca", Material.FISHING_ROD)
-                .texto("Peixes com qualidade, 12 peixes raros por bioma e clima, Tesouros do Mar e criaturas que lutam de volta.")
+                .texto("Peixes com qualidade, 17 peixes raros por bioma e clima (5 só no buraco no gelo), Tesouros do Mar e criaturas que lutam de volta.")
                 .cmd("peixes").ligados("pescagelo", "alquimia", "cozinha").palavras("peixe raro tesouro mar vara").pronto();
         t("pescagelo", OFICIOS, "Pesca no gelo", Material.PACKED_ICE)
                 .texto("Quebre o gelo de um lago ou mar gelado (ou de qualquer lago no inverno) e pesque no buraco: +5% de peixe raro.",
@@ -301,7 +301,7 @@ public final class Topicos {
                 .dica("As sementes saem do mato quebrado na estação certa.")
                 .cmd("calendario").ligados("coletas", "fazenda", "cozinha").palavras("plantar semente morango mirtilo uva pimenta couve abobora nabo").pronto();
         t("estruturas", MUNDO, "Estruturas", Material.MOSSY_STONE_BRICKS)
-                .texto("16 tipos surgem em terras novas: torres, minas, fortins, oásis, faróis, vilas saqueadas, santuários... E no mar, naufrágios e cidades submersas.",
+                .texto("18 tipos: 16 em terras novas (torres, minas, fortins, oásis, faróis, vilas saqueadas...) e 2 no mar (naufrágios e cidades submersas).",
                         "Alguns têm guardas, outros têm moradores que negociam.")
                 .dica("Poço dos Desejos: jogue 1 esmeralda. Farol: acenda com um bloco de pedra luminosa.")
                 .ligados("mar", "enciclopedia", "mapas", "locais").palavras("torre mina cemiterio poco eremita bruxa farol fortim oasis circulo").pronto();

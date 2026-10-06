@@ -140,6 +140,12 @@ public final class PedrasDeAmolar extends Estacao {
                 + golpes + " golpes.", COR));
     }
 
+    /** A Forja refez a arma (refino, reforjar): a linha "Afiada" volta se ainda tiver fio. */
+    public void decorar(ItemMeta m) {
+        Integer resta = m.getPersistentDataContainer().get(kAfiada, PersistentDataType.INTEGER);
+        if (resta != null && resta > 0) linha(m, resta);
+    }
+
     /** Troca a linha "⚔ Afiada" da descrição (ou tira, com 0). */
     private void linha(ItemMeta m, int golpes) {
         List<Component> lore = m.lore() == null ? new ArrayList<>() : new ArrayList<>(m.lore());
