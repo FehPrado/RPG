@@ -206,6 +206,7 @@ public final class RPGAtributos extends JavaPlugin {
     private BonecosTreino bonecos;
     private PedrasDeAmolar pedrasAmolar;
     private Bebedouros bebedouros;
+    private br.rpgatributos.pesca.CabanasPesca cabanasPesca;
     private Trofeus trofeus;
     private MesasCartografo mesasCartografo;
     private Lapides lapides;
@@ -340,6 +341,7 @@ public final class RPGAtributos extends JavaPlugin {
         bonecos = new BonecosTreino(this);
         pedrasAmolar = new PedrasDeAmolar(this);
         bebedouros = new Bebedouros(this);
+        cabanasPesca = new br.rpgatributos.pesca.CabanasPesca(this);
         trofeus = new Trofeus(this);
         mesasCartografo = new MesasCartografo(this);
         lapides = new Lapides(this);
@@ -366,7 +368,7 @@ public final class RPGAtributos extends JavaPlugin {
                 classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
                 estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), combos.posturas(), combos.ligacoes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista,
                 talentos, evolucao,
-                forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, trofeus,
+                forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, trofeus,
                 mesasCartografo, lapides, recordes, diario,
                 canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, estruturas, ajuda);
         locais.iniciar();
@@ -536,7 +538,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, talentos::tick, 40L, 40L);
         agenda.runTaskTimer(this, evolucao::tick, 40L, 40L);
         // Detalhes: forjados especiais, estações pequenas, natureza, túmulos e recordes.
-        for (Estacao e : List.of(fogueiras, bonecos, pedrasAmolar, bebedouros, trofeus, mesasCartografo, canteiros, colmeias, barris)) {
+        for (Estacao e : List.of(fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, trofeus, mesasCartografo, canteiros, colmeias, barris)) {
             e.iniciar();
             agenda.runTaskTimer(this, e::tick, 5L, 5L);
         }
@@ -747,6 +749,7 @@ public final class RPGAtributos extends JavaPlugin {
     public BonecosTreino bonecos() { return bonecos; }
     public PedrasDeAmolar pedrasAmolar() { return pedrasAmolar; }
     public Bebedouros bebedouros() { return bebedouros; }
+    public br.rpgatributos.pesca.CabanasPesca cabanasPesca() { return cabanasPesca; }
     public Trofeus trofeus() { return trofeus; }
     public MesasCartografo mesasCartografo() { return mesasCartografo; }
     public Lapides lapides() { return lapides; }
@@ -774,7 +777,7 @@ public final class RPGAtributos extends JavaPlugin {
                 || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b) || alquimia.eh(b) || prefeituras.eh(b) || obeliscos.eh(b)
                 || santuariosDivinos.eh(b) || transmutacao.eh(b) || mesasRunicas.eh(b)
                 || fogueiras.eh(b) || bonecos.eh(b) || pedrasAmolar.eh(b) || bebedouros.eh(b) || trofeus.eh(b) || mesasCartografo.eh(b)
-                || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b);
+                || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || cabanasPesca.eh(b);
     }
 
     /**

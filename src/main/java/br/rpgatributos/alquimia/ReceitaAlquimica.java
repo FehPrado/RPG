@@ -85,6 +85,8 @@ public record ReceitaAlquimica(Aba aba, Elixir elixir, Reagente reagente, int qt
         // ---------- óleos de lâmina ----------
         l.add(comp(Reagente.OLEO_DE_FOGO, 2, 0.05, 8, r(Reagente.OLEO_DE_PEIXE, 1), m(Material.BLAZE_POWDER, 1), m(Material.GLASS_BOTTLE, 1)));
         l.add(comp(Reagente.OLEO_GELIDO, 2, 0.1, 9, r(Reagente.OLEO_DE_PEIXE, 1), m(Material.PACKED_ICE, 1), m(Material.SNOWBALL, 2)));
+        l.add(comp(Reagente.OLEO_GELIDO, 3, 0.15, 12, r(Reagente.OLEO_DE_PEIXE, 1), p(PeixeRaro.LUCIO_POLAR, 1)));
+        l.add(comp(Reagente.CRISTAL_DE_MANA, 2, 0.3, 22, p(PeixeRaro.PEIXE_LANTERNA, 1), r(Reagente.PO_ARCANO, 1)));
         l.add(comp(Reagente.OLEO_VENENOSO, 2, 0.1, 9, r(Reagente.OLEO_DE_PEIXE, 1), m(Material.SPIDER_EYE, 2), m(Material.POISONOUS_POTATO, 1)));
         l.add(comp(Reagente.OLEO_TROVEJANTE, 2, 0.25, 14, r(Reagente.OLEO_DE_PEIXE, 1), r(Reagente.MERCURIO_VIVO, 1), m(Material.COPPER_INGOT, 2)));
         l.add(comp(Reagente.OLEO_DE_PRATA, 2, 0.2, 12, r(Reagente.OLEO_DE_PEIXE, 1), m(Material.IRON_NUGGET, 6), m(Material.GLOWSTONE_DUST, 1)));

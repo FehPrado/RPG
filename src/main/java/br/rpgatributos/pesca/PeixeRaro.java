@@ -55,14 +55,39 @@ public enum PeixeRaro {
             c -> c.noite() && c.bioma().contains("deep")),
     PEIXE_DRAGAO("Peixe-Dragão", Material.TROPICAL_FISH, 0xFF4058, 0.85, 1, 150,
             "Oceano, no meio de uma tempestade.", "Coração do Amuleto da Fênix.",
-            c -> c.oceano() && c.tempestade());
+            c -> c.oceano() && c.tempestade()),
+    // ---------- 2.29: só num buraco no gelo ----------
+    TRUTA_DO_GELO("Truta-do-Gelo", Material.SALMON, 0xBFE9FF, 0.1, 10, 20,
+            "Buraco no gelo, de dia.", "Ingrediente do Caldo Quente do Pescador (Cozinha).",
+            c -> c.gelo() && !c.noite()),
+    LUCIO_POLAR("Lúcio Polar", Material.COD, 0xE3F2FD, 0.25, 7, 30,
+            "Buraco no gelo, qualquer hora.", "Faz Óleo Gélido sem gelo compactado (Alquimia).",
+            Contexto::gelo),
+    PEIXE_LANTERNA("Peixe-Lanterna Glacial", Material.TROPICAL_FISH, 0x7FDBFF, 0.35, 5, 40,
+            "Buraco no gelo, de noite.", "Destilado vira Cristal de Mana (Alquimia).",
+            c -> c.gelo() && c.noite()),
+    ENGUIA_DE_CRISTAL("Enguia de Cristal", Material.COD, 0xB39DDB, 0.5, 3, 60,
+            "Buraco no gelo, durante uma nevasca.", "Ingrediente do Sorvete de Cristal (Cozinha).",
+            c -> c.gelo() && c.nevasca()),
+    ESTURJAO_ANCESTRAL("Esturjão Ancestral", Material.COD, 0x546E7A, 0.8, 1, 150,
+            "Buraco no gelo, no inverno, de noite. Raríssimo.", "Dá o Caviar Ancestral (Cozinha).",
+            c -> c.gelo() && c.inverno() && c.noite());
 
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "peixe_raro");
 
-    /** Onde e quando o anzol estava na hora da mordida. */
-    public record Contexto(String bioma, double temperatura, int y, boolean noite, boolean chuva, boolean tempestade) {
+    /**
+     * Onde e quando o anzol estava na hora da mordida. {@code gelo}: num buraco no gelo (bioma
+     * gelado, ou qualquer água congelada no inverno).
+     */
+    public record Contexto(String bioma, double temperatura, int y, boolean noite, boolean chuva, boolean tempestade,
+                           boolean gelo, boolean nevasca, boolean inverno) {
         public boolean oceano() { return bioma.contains("ocean"); }
         public boolean rio() { return bioma.contains("river"); }
+    }
+
+    /** Só sai pescando num buraco no gelo. */
+    public boolean doGelo() {
+        return ordinal() >= TRUTA_DO_GELO.ordinal();
     }
 
     private final String nome;

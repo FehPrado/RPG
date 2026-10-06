@@ -244,6 +244,17 @@ final class ArteItens {
                 c('o', 0xFF140F2E, 'd', 0xFF2A2060, 'm', 0xFF3B2E7E, 'h', 0xFF6A5AB0, 'w', BRANCO, 'k', 0xFF7FFFE0, 'a', 0xFF7FFFE0)));
         l.add(new Arte("tropical_fish", "peixe_peixe_dragao", PEIXE_DRAGAO,
                 c('o', 0xFF5A0A14, 'd', 0xFFB01830, 'm', 0xFFFF4058, 'h', 0xFFFF9AA8, 'w', BRANCO, 'k', PRETO, 'a', 0xFFFFC93C)));
+        // 2.29: os peixes do gelo.
+        l.add(new Arte("salmon", "peixe_truta_do_gelo", PEIXE_LISTRADO,
+                c('o', 0xFF2F5A78, 'd', 0xFF6FA8C8, 'm', 0xFFBFE9FF, 'h', 0xFFF0FBFF, 'w', BRANCO, 'k', PRETO, 'a', 0xFFFF9AB0)));
+        l.add(new Arte("cod", "peixe_lucio_polar", PEIXE_PINTADO,
+                c('o', 0xFF4A5A66, 'd', 0xFF9AAAB6, 'm', 0xFFE3F2FD, 'h', BRANCO, 'w', BRANCO, 'k', PRETO, 'a', 0xFF78909C)));
+        l.add(new Arte("tropical_fish", "peixe_peixe_lanterna", PEIXE_ABISSAL,
+                c('o', 0xFF0E2A40, 'd', 0xFF1E5A80, 'm', 0xFF3F9FD0, 'h', 0xFF7FDBFF, 'w', BRANCO, 'k', 0xFFFFF59D, 'a', 0xFFFFF59D)));
+        l.add(new Arte("cod", "peixe_enguia_de_cristal", ENGUIA,
+                c('o', 0xFF3A2A60, 'd', 0xFF7E6AB0, 'm', 0xFFB39DDB, 'h', 0xFFEDE7F6, 'w', BRANCO, 'k', PRETO, 'a', BRANCO)));
+        l.add(new Arte("cod", "peixe_esturjao_ancestral", PEIXE_COROA,
+                c('o', 0xFF1C262B, 'd', 0xFF37474F, 'm', 0xFF546E7A, 'h', 0xFF90A4AE, 'w', BRANCO, 'k', PRETO, 'c', 0xFFB0BEC5)));
     }
 
     // =====================================================================
@@ -464,6 +475,13 @@ final class ArteItens {
         l.add(new Arte("suspicious_stew", "prato_banquete_lendario", TIGELA,
                 c('o', 0xFF4A3000, 'd', 0xFF9A6A00, 'm', 0xFFE0A800, 'w', 0xFFFFE07A, 'c', 0xFFC0392B, 'a', 0xFFFFD23F,
                         'b', 0xFFFF8C1A, 's', 0xFFFFF59D)));
+        // 2.29: pratos da pesca no gelo.
+        l.add(new Arte("mushroom_stew", "prato_caldo_quente", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFE8C9A0, 'a', 0xFFBFE9FF, 'b', 0xFFFF8C5A)));
+        l.add(new Arte("beetroot_soup", "prato_sorvete_cristal", TIGELA_FRIA,
+                com(TIGELA_MADEIRA, 'c', 0xFFE8E0FF, 'a', 0xFFB39DDB, 'b', BRANCO)));
+        l.add(new Arte("suspicious_stew", "prato_caviar_ancestral", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFF263238, 'a', 0xFF546E7A, 'b', 0xFFFFD23F)));
     }
 
     // =====================================================================

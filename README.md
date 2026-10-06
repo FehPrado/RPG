@@ -264,6 +264,9 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 | Caldeirada Abissal | 75 | Resistência, Visão noturna e Força (Peixe Abissal, Batata Ancestral) |
 | Torta Rubi | 80 | Vida extra II e Regeneração II (Beterraba Rubi) |
 | Banquete Lendário | 90 | Força, Resistência, Regeneração e Velocidade **para todos a até 10 blocos** (as 4 variedades) |
+| Caldo Quente do Pescador | 15 | Resistência ao fogo por 8 min (protege do frio) e Regeneração (Truta-do-Gelo) |
+| Sorvete de Cristal | 50 | Velocidade II e Pressa II (Enguia de Cristal) |
+| Caviar Ancestral | 80 | Força, Resistência, Vida extra II e Sorte (Esturjão Ancestral) |
 
 **Qualidade do prato:** sorteada pelo nível de Culinária. Se a maioria dos ingredientes for Ótima ou melhor, o prato sobe uma qualidade; todos Perfeitos = prato Perfeito. Qualidade aumenta a duração (até +50%), e o nível de Culinária soma mais até +50%.
 
@@ -1004,6 +1007,20 @@ Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir
 | Peixe Abissal | Oceanos profundos, de noite | 60 |
 | Peixe-Dragão | Oceano, durante tempestade (raríssimo e anunciado) | 85 |
 
+### Pesca no gelo
+
+Quebre o gelo de um lago ou mar **gelado** (ou de **qualquer lago congelado no inverno**) e pesque no buraco: o anzol precisa estar numa água cercada de gelo (vale gelo, gelo compactado, gelo azul e bloco de neve). No buraco há **+5% de chance de peixe raro** e 5 peixes que só saem ali:
+
+| Peixe do gelo | Quando | Pesca | Para quê |
+|---|---|---|---|
+| Truta-do-Gelo | De dia | 10 | Caldo Quente do Pescador (Cozinha) |
+| Lúcio Polar | Qualquer hora | 25 | Óleo Gélido sem gelo compactado (Alquimia, sai 3) |
+| Peixe-Lanterna Glacial | De noite | 35 | Destilado vira 2 Cristais de Mana (Alquimia) |
+| Enguia de Cristal | Durante uma nevasca | 50 | Sorvete de Cristal (Cozinha) |
+| Esturjão Ancestral | De noite, no inverno (raríssimo e anunciado) | 80 | Caviar Ancestral (Cozinha) |
+
+**Cabana de Pesca:** jogue **1 vara de pescar, 1 bacalhau cru e 4 tábuas de abeto** numa **fogueira**. A até 12 blocos, a isca afunda **30% mais rápido**, há **+4% de peixe raro** (em qualquer água) e **ninguém sente frio**. Quebrar a fogueira devolve a vara.
+
 ## Alquimia
 
 **Ritual:** jogue **2 garrafas de vidro** e **1 pó de blaze** em cima de um **suporte de poções**: ele vira a **Bancada Alquímica**.
@@ -1223,7 +1240,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.29.1.jar`.
+3. O plugin fica em `target/RPGAtributos-2.29.2.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

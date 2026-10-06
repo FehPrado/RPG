@@ -247,7 +247,14 @@ public final class Topicos {
                 .ligados("fazenda", "estacoes", "barril").palavras("fruta muda arvore laranja cereja limao").pronto();
         t("pesca", OFICIOS, "Pesca", Material.FISHING_ROD)
                 .texto("Peixes com qualidade, 12 peixes raros por bioma e clima, Tesouros do Mar e criaturas que lutam de volta.")
-                .cmd("peixes").ligados("alquimia", "cozinha").palavras("peixe raro tesouro mar vara").pronto();
+                .cmd("peixes").ligados("pescagelo", "alquimia", "cozinha").palavras("peixe raro tesouro mar vara").pronto();
+        t("pescagelo", OFICIOS, "Pesca no gelo", Material.PACKED_ICE)
+                .texto("Quebre o gelo de um lago ou mar gelado (ou de qualquer lago no inverno) e pesque no buraco: +5% de peixe raro.",
+                        "5 peixes só do gelo: Truta-do-Gelo, Lúcio Polar, Peixe-Lanterna, Enguia de Cristal e o raríssimo Esturjão Ancestral.",
+                        "Cabana de Pesca: a até 12 blocos, isca 30% mais rápida, +4% de raro e ninguém sente frio.")
+                .ritual(Material.CAMPFIRE, "Fogueira", Material.FISHING_ROD, 1, Material.COD, 1, Material.SPRUCE_PLANKS, 4)
+                .dica("O Esturjão Ancestral só morde de noite, no inverno. Com ele sai o Caviar Ancestral.")
+                .cmd("peixes").ligados("pesca", "cozinha", "alquimia").palavras("gelo buraco inverno cabana neve truta lucio esturjao caviar").pronto();
         t("barril", OFICIOS, "Barril de Envelhecimento", Material.BARREL)
                 .texto("Bebidas que melhoram com os dias reais: Nova, Envelhecida, Reserva e Lendária.")
                 .ritual(Material.BARREL, "Barril vazio", Material.IRON_INGOT, 2, Material.HONEYCOMB, 1)

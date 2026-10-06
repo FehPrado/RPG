@@ -63,7 +63,7 @@ public final class Temperatura {
         boolean gelado = b.getTemperature() < 0.15;
         boolean inverno = plugin.estacoes().atual() == Estacoes.Estacao.INVERNO;
         if (!nevasca && !(noite && (gelado || inverno))) return false;
-        return pecasDeCouro(p) < 2 && !fogoPerto(p.getLocation());
+        return pecasDeCouro(p) < 2 && !fogoPerto(p.getLocation()) && !plugin.cabanasPesca().perto(p.getLocation());
     }
 
     private boolean comCalor(Player p) {

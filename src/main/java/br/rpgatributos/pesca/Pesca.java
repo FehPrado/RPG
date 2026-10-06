@@ -67,7 +67,8 @@ public final class Pesca implements Listener {
     private static final Set<Material> PEIXES = Set.of(Material.COD, Material.SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH);
     private static final Set<Material> TESOUROS = Set.of(Material.BOW, Material.ENCHANTED_BOOK, Material.NAME_TAG,
             Material.NAUTILUS_SHELL, Material.SADDLE);
-    private static final int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24};
+    /** Os peixes raros no diário: 12 da água comum e, embaixo, os 5 do gelo. */
+    private static final int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 38, 39, 40, 41, 42};
     private static final int S_INFO = 4;
     private static final int S_FECHAR = 49;
 
@@ -166,6 +167,7 @@ public final class Pesca implements Listener {
     private void isca(Player p, FishHook hook) {
         double f = 1 - nivel(p) * cfg().pesIscaRapida
                 - plugin.forjadosEspeciais().iscaExtra(p, vara(p));
+        if (plugin.cabanasPesca().perto(p.getLocation())) f *= 0.7;
         if (f >= 0.999) return;
         int min = Math.max(20, (int) Math.round(hook.getMinWaitTime() * f));
         int max = Math.max(min + 20, (int) Math.round(hook.getMaxWaitTime() * f));
@@ -182,8 +184,29 @@ public final class Pesca implements Listener {
         World w = l.getWorld();
         Block b = l.getBlock();
         long hora = w.getTime();
+        boolean inverno = plugin.estacoes().atual() == br.rpgatributos.mundo.Estacoes.Estacao.INVERNO;
         return new PeixeRaro.Contexto(w.getBiome(b.getX(), b.getY(), b.getZ()).getKey().getKey(), b.getTemperature(), b.getY(),
-                hora >= 13000 && hora <= 23000, w.hasStorm(), w.isThundering());
+                hora >= 13000 && hora <= 23000, w.hasStorm(), w.isThundering(),
+                buracoNoGelo(l, inverno), plugin.ceu().clima() == br.rpgatributos.mundo.Ceu.Clima.NEVASCA, inverno);
+    }
+
+    private static boolean gelo(Material m) {
+        return m == Material.ICE || m == Material.PACKED_ICE || m == Material.BLUE_ICE || m == Material.FROSTED_ICE || m == Material.SNOW_BLOCK;
+    }
+
+    /**
+     * O anzol está num buraco no gelo: a água da superfície tem gelo em volta (pelo menos 14
+     * dos 24 blocos ao redor) e o lugar é gelado (ou é inverno).
+     */
+    private static boolean buracoNoGelo(Location l, boolean inverno) {
+        Block b = l.getBlock();
+        if (b.getType() != Material.WATER) b = b.getRelative(org.bukkit.block.BlockFace.DOWN);
+        if (b.getType() != Material.WATER) return false;
+        for (int i = 0; i < 4 && b.getRelative(org.bukkit.block.BlockFace.UP).getType() == Material.WATER; i++) b = b.getRelative(org.bukkit.block.BlockFace.UP);
+        if (!inverno && b.getTemperature() >= 0.15) return false;
+        int n = 0;
+        for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) if ((x != 0 || z != 0) && gelo(b.getRelative(x, 0, z).getType())) n++;
+        return n >= 14;
     }
 
     private void fisgou(Player p, FishHook hook, Item item, PlayerFishEvent e) {
@@ -231,15 +254,18 @@ public final class Pesca implements Listener {
         }
 
         if (PEIXES.contains(tipo)) {
-            // 3) Peixe raro, se o lugar/horário/clima deixar.
-            if (rnd().nextDouble() < chanceRaro(nivel) + sorteDoMar) {
-                PeixeRaro raro = sortearPeixe(contexto(onde), nivel);
+            // 3) Peixe raro, se o lugar/horário/clima deixar. No buraco no gelo e perto da cabana, mais chance.
+            PeixeRaro.Contexto ctx = contexto(onde);
+            double extra = (ctx.gelo() ? 0.05 : 0) + (plugin.cabanasPesca().perto(onde) ? 0.04 : 0);
+            if (rnd().nextDouble() < chanceRaro(nivel) + sorteDoMar + extra) {
+                PeixeRaro raro = sortearPeixe(ctx, nivel);
                 if (raro != null) {
                     item.setItemStack(raro.criar(1, Qualidade.sortear(fracao(p))));
                     anunciarPeixe(p, raro);
                     if (!criativo) plugin.stats().darXp(p, Skill.PESCA, raro.xp());
                     titulos.registrar(p, "peixes", 1);
                     titulos.registrar(p, "peixes_raros", 1);
+                    if (raro.doGelo()) titulos.registrar(p, "peixes_do_gelo", 1);
                     return;
                 }
             }
@@ -287,11 +313,11 @@ public final class Pesca implements Listener {
                 .append(Component.text(novo ? "! (novo no Diário do Pescador)" : "!", COR)));
         p.playSound(p.getLocation(), Sound.ENTITY_FISHING_BOBBER_SPLASH, 1f, 1.4f);
         p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1f, 1.2f);
-        if (pr == PeixeRaro.PEIXE_DRAGAO) {
+        if (pr == PeixeRaro.PEIXE_DRAGAO || pr == PeixeRaro.ESTURJAO_ANCESTRAL) {
             Bukkit.broadcast(Component.text("⚓ ", COR).append(Component.text(p.getName(), NamedTextColor.YELLOW))
                     .append(Component.text(" pescou um ", NamedTextColor.GRAY))
                     .append(Component.text(pr.nome(), pr.cor(), TextDecoration.BOLD))
-                    .append(Component.text(" no meio da tempestade!", NamedTextColor.GRAY)));
+                    .append(Component.text(pr == PeixeRaro.PEIXE_DRAGAO ? " no meio da tempestade!" : " debaixo do gelo!", NamedTextColor.GRAY)));
         }
     }
 
@@ -459,6 +485,14 @@ public final class Pesca implements Listener {
                     Component.text(visto ? pr.nome() : "??? " + pr.nome(), visto ? pr.cor() : NamedTextColor.DARK_GRAY, TextDecoration.BOLD),
                     lore, visto));
         }
+        inv.setItem(37, item(Material.PACKED_ICE, Component.text("❄ Peixes do gelo", NamedTextColor.AQUA, TextDecoration.BOLD), List.of(
+                Component.text("Só mordem num buraco no gelo:", NamedTextColor.GRAY),
+                Component.text("quebre o gelo de um lago gelado", NamedTextColor.GRAY),
+                Component.text("(ou de qualquer lago no inverno)", NamedTextColor.GRAY),
+                Component.text("e pesque no buraco. +5% de raro.", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("Cabana de Pesca: uma fogueira com", NamedTextColor.DARK_AQUA),
+                Component.text("1 vara, 1 bacalhau e 4 tábuas de abeto.", NamedTextColor.DARK_AQUA)), false));
         inv.setItem(31, item(Material.CHEST, Component.text("Tesouros e criaturas", NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
                 Component.text("Tesouros do Mar trazem esmeraldas,", NamedTextColor.GRAY),
                 Component.text("livros, diamantes e Pérolas Negras.", NamedTextColor.GRAY),
