@@ -468,25 +468,35 @@ public final class PacoteRecursos implements Listener {
      * {terceira pessoa: rot x,y,z, pos x,y,z; primeira pessoa: rot x,y,z, pos x,y,z}
      */
     private static final Map<String, double[]> PEGADAS = Map.of(
-            "ofensiva", new double[]{90, -90, 0, 0, 5, 1, 0, -90, 0, 1.13, 4.2, 1.13},
-            "defensiva", new double[]{0, -170, 55, -1, 3.5, 1.5, 0, -150, 75, 0, 3.2, 0},
-            "agil", new double[]{-90, -90, 0, 0, 1.5, 0.5, 0, -90, -160, 1.13, 2.5, 1.13},
-            "duelista", new double[]{0, -90, 90, 0, 3.5, 2, 0, -90, 80, 1.13, 3.6, 1.13},
-            "carrasco", new double[]{0, -90, 10, 0, 6, 0, 0, -90, 15, 1.13, 4.4, 1.13},
-            "colosso", new double[]{0, -90, -60, 0, 6, -1.5, 0, -90, -30, 1.13, 4.0, 1.13});
+            "ofensiva", new double[]{5, 5, -23, 1, 1.75, 2, 0, -90, 0, 1.13, 4.2, 1.13},
+            "defensiva", new double[]{-24.13, 26.67, 60.62, -2.5, 0.5, 2.5, 0, -150, 75, 0, 3.2, 0},
+            "agil", new double[]{-171.04, 19, 2.93, 0.25, -5, 1, 0, -90, -160, 1.13, 2.5, 1.13},
+            "duelista", new double[]{-142.19, -53.63, -87.98, 2.75, 0.25, -0.25, 0, -90, 80, 1.13, 3.6, 1.13},
+            "carrasco", new double[]{-32.5, 5, 1, 0, 0.25, 1, 0, -90, 15, 1.13, 4.4, 1.13},
+            "colosso", new double[]{15, 40, -141, 2.25, -3, -0.25, 0, -90, -30, 1.13, 4.0, 1.13});
+
+    /** Tamanho da arma na mão em terceira pessoa (x, y, z) em cada postura. */
+    private static final Map<String, double[]> ESCALAS_3P = Map.of(
+            "ofensiva", new double[]{1, 1, 1},
+            "defensiva", new double[]{1, 1, 1},
+            "agil", new double[]{1, 1, 1},
+            "duelista", new double[]{0.8, 0.86, 0.72},
+            "carrasco", new double[]{1.38, 1.29, 1.52},
+            "colosso", new double[]{1, 1, 1});
 
     private static String modeloPegada(String pai, String pegada) {
         double[] v = PEGADAS.get(pegada);
+        double[] e = ESCALAS_3P.getOrDefault(pegada, new double[]{0.85, 0.85, 0.85});
         return "{ \"parent\": \"" + pai + "\", \"display\": { "
-                + transf("thirdperson_righthand", v[0], v[1], v[2], v[3], v[4], v[5], 0.85) + ", "
-                + transf("thirdperson_lefthand", v[0], -v[1], -v[2], v[3], v[4], v[5], 0.85) + ", "
-                + transf("firstperson_righthand", v[6], v[7], v[8], v[9], v[10], v[11], 0.68) + ", "
-                + transf("firstperson_lefthand", v[6], -v[7], -v[8], v[9], v[10], v[11], 0.68) + " } }";
+                + transf("thirdperson_righthand", v[0], v[1], v[2], v[3], v[4], v[5], e[0], e[1], e[2]) + ", "
+                + transf("thirdperson_lefthand", v[0], -v[1], -v[2], v[3], v[4], v[5], e[0], e[1], e[2]) + ", "
+                + transf("firstperson_righthand", v[6], v[7], v[8], v[9], v[10], v[11], 0.68, 0.68, 0.68) + ", "
+                + transf("firstperson_lefthand", v[6], -v[7], -v[8], v[9], v[10], v[11], 0.68, 0.68, 0.68) + " } }";
     }
 
-    private static String transf(String onde, double rx, double ry, double rz, double tx, double ty, double tz, double escala) {
-        return String.format(java.util.Locale.ROOT, "\"%s\": { \"rotation\": [%.1f, %.1f, %.1f], \"translation\": [%.2f, %.2f, %.2f], \"scale\": [%.2f, %.2f, %.2f] }",
-                onde, rx, ry, rz, tx, ty, tz, escala, escala, escala);
+    private static String transf(String onde, double rx, double ry, double rz, double tx, double ty, double tz, double sx, double sy, double sz) {
+        return String.format(java.util.Locale.ROOT, "\"%s\": { \"rotation\": [%.2f, %.2f, %.2f], \"translation\": [%.2f, %.2f, %.2f], \"scale\": [%.2f, %.2f, %.2f] }",
+                onde, rx, ry, rz, tx, ty, tz, sx, sy, sz);
     }
 
     private static String itemGerado(String textura) {

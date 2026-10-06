@@ -1223,7 +1223,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.29.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.29.1.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 
