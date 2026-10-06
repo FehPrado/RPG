@@ -68,7 +68,7 @@ public final class Temperatura {
 
     private boolean comCalor(Player p) {
         World w = p.getWorld();
-        if (p.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE) || p.isInWater()) return false;
+        if (p.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE) || p.isInWater() || plugin.oficios().semCalor(p)) return false;
         if (w.getEnvironment() == World.Environment.NETHER) return true;
         if (w.getEnvironment() != World.Environment.NORMAL || Ceu.noite(w) || w.hasStorm()) return false;
         Block b = p.getLocation().getBlock();

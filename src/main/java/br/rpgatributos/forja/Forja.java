@@ -356,6 +356,7 @@ public final class Forja {
             plugin.lendas().decorar(meta, d.refino()); // se for uma lenda: nome, "Especial", poder e história
             plugin.runas().decorar(meta); // se tiver runa gravada, a linha dela volta depois de refazer a descrição
             plugin.mitrilo().decorar(meta, tipo); // aprimorado com Mitrilo: bônus e linha voltam também
+            plugin.oficios().decorar(meta, tipo); // peça de conjunto do Ateliê: nome, bônus e o +1 de armadura voltam
         });
     }
 

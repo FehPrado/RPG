@@ -256,7 +256,7 @@ public final class Pesca implements Listener {
         if (PEIXES.contains(tipo)) {
             // 3) Peixe raro, se o lugar/horário/clima deixar. No buraco no gelo e perto da cabana, mais chance.
             PeixeRaro.Contexto ctx = contexto(onde);
-            double extra = (ctx.gelo() ? 0.05 : 0) + (plugin.cabanasPesca().perto(onde) ? 0.04 : 0);
+            double extra = (ctx.gelo() ? 0.05 : 0) + (plugin.cabanasPesca().perto(onde) ? 0.04 : 0) + plugin.oficios().bonusPesca(p);
             if (rnd().nextDouble() < chanceRaro(nivel) + sorteDoMar + extra) {
                 PeixeRaro raro = sortearPeixe(ctx, nivel);
                 if (raro != null) {

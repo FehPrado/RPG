@@ -1021,6 +1021,31 @@ Quebre o gelo de um lago ou mar **gelado** (ou de **qualquer lago congelado no i
 
 **Cabana de Pesca:** jogue **1 vara de pescar, 1 bacalhau cru e 4 tábuas de abeto** numa **fogueira**. A até 12 blocos, a isca afunda **30% mais rápido**, há **+4% de peixe raro** (em qualquer água) e **ninguém sente frio**. Quebrar a fogueira devolve a vara.
 
+## Curtume e tecelagem
+
+**Ritual:** jogue **1 tesoura, 4 couros e 2 linhas** em cima de um **tear**: ele vira o **Ateliê do Curtidor** (agachado + clique abre o tear normal). Três abas:
+
+- **Curtir:** pele crua + 1 farinha de osso = couro curtido. **2 membranas de phantom** + 1 farinha de osso = Couro Noturno.
+- **Tecer:** 4 linhas = Tecido de Linha · 3 lãs (qualquer cor) = Feltro · 4 algas secas = Tecido de Alga. Shift + clique faz até 8.
+- **Costurar:** as 24 peças dos 6 conjuntos. Capuz = 3 couros + 1 tecido · Gibão = 5 + 2 · Calças = 4 + 2 · Botas = 2 + 1.
+
+**Peles:** lobos selvagens (50%), ursos polares (65%, até 2), raposas (50%), guardiões (35%; o guardião ancião deixa 3 a 5) e hoglins/zoglins (50%, até 2). Elites sempre deixam uma a mais. Fazer as peças dá XP de Ferraria.
+
+| Conjunto | Couro + tecido | 2 peças | 4 peças |
+|---|---|---|---|
+| Caçador | Lobo + Linha | +5% de velocidade | +10% de dano com flechas e tridente; na postura Ágil, +8% de dano e a esquiva gasta 25% menos vigor |
+| Urso Polar | Urso + Feltro | +1 ❤ de vida máxima | -10% de dano recebido e resiste a empurrões |
+| Raposa | Raposa + Linha | Sorte (saque e pesca melhores) | De noite: visão noturna e velocidade |
+| Maré | Escamas + Alga | Respira debaixo d'água | Graça do golfinho na água e +5% de peixe raro |
+| Noite | Noturno + Linha | -50% de dano de queda | Caindo do alto, você desce devagar |
+| Brasa | Brasa + Feltro | -30% de dano de fogo e lava | Não sente calor e, com pouca vida, ganha Força |
+
+Cada peça tem cor própria e **+1 de armadura** além do couro comum, e protege do frio como todo couro. **Na Forja:** jogue a peça e 1 Fragmento de Forja na Forja do Ferreiro (o Reforjar): ela sai com raridade e status de forja, e continua contando para o conjunto. O refino também funciona.
+
+## Sonhos
+
+Quem **dorme a noite inteira** tem 40% de chance de sonhar com um lugar que ainda não conhece: uma estrutura (até naufrágios e cidades submersas, a até 3000 blocos) ou um **Local Oculto**. Ao acordar, o jogador sabe para que lado fica (e a distância, no caso das estruturas). Um sonho por dia, nunca o mesmo lugar duas vezes; os sonhos ficam anotados no `/diario`.
+
 ## Alquimia
 
 **Ritual:** jogue **2 garrafas de vidro** e **1 pó de blaze** em cima de um **suporte de poções**: ele vira a **Bancada Alquímica**.
@@ -1171,6 +1196,11 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin liberarclasse <classe lendária>` | Tira a classe lendária do dono atual |
 | `/rpgadmin bancadaalquimica` | Cria a Bancada Alquímica olhando para um suporte de poções |
 | `/rpgadmin peixe <peixe> [qtd]` | Dá um peixe raro |
+| `/rpgadmin oficio <material> [qtd]` | Dá uma pele, couro ou tecido do curtume |
+| `/rpgadmin conjunto <conjunto>` | Dá as 4 peças de um conjunto |
+| `/rpgadmin atelie` | Transforma o tear que você olha num Ateliê do Curtidor |
+| `/rpgadmin sonho` | Faz você sonhar agora |
+| `/rpgadmin cabanapesca` | Transforma a fogueira que você olha numa Cabana de Pesca |
 | `/rpgadmin componente <componente> [qtd]` | Dá componentes alquímicos |
 | `/rpgadmin gema <gema> [grau] [qtd]` | Dá gemas (grau 1 a 3) |
 | `/rpgadmin elixir <elixir> [qualidade]` | Dá um elixir pronto |
@@ -1240,7 +1270,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.29.2.jar`.
+3. O plugin fica em `target/RPGAtributos-2.30.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

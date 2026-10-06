@@ -33,6 +33,7 @@ public final class MateriaisListener implements Listener {
                 || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.ItensDetalhes.K_FERRADURA)
                 || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.ItensDetalhes.K_NINHO)
                 || i.getPersistentDataContainer().has(RELIQUIA)
+                || i.getPersistentDataContainer().has(br.rpgatributos.oficio.MaterialOficio.CHAVE)
                 || (i.getType() == org.bukkit.Material.BREEZE_ROD && i.getPersistentDataContainer().has(FORJADO));
     }
 

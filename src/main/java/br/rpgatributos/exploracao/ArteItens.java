@@ -1719,6 +1719,91 @@ final class ArteItens {
         lendas(l);
         vida(l);
         frutas(l);
+        oficios(l);
         return l;
+    }
+
+    // =====================================================================
+    //  Curtume e tecelagem (2.30)
+    // =====================================================================
+
+    private static final String[] PELE_ESTICADA = {
+            "................",
+            "...oo......oo...",
+            "..ommo....ommo..",
+            "..ommmooooommo..",
+            "...ommmmmmmmo...",
+            "...ommhmmmmmo...",
+            "..ommhhmmmmmmo..",
+            "..ommmmmmmmdmo..",
+            "..ommmmmmmmdmo..",
+            "..ommmmmmmddmo..",
+            "...ommmmmmdmo...",
+            "...ommmmmmmmo...",
+            "..ommo....ommo..",
+            "..ommo....ommo..",
+            "...oo......oo...",
+            "................"};
+
+    private static final String[] COURO_COSTURADO = {
+            "................",
+            "................",
+            "..oooooooooooo..",
+            "..ohhhhhhhhhho..",
+            "..ohwmwmwmwmdo..",
+            "..ohmmmmmmmmdo..",
+            "..ohmmmmmmmmdo..",
+            "..ohmmmmmmmmdo..",
+            "..ohmmmmmmmmdo..",
+            "..ohmmmmmmmmdo..",
+            "..ohwmwmwmwmdo..",
+            "..oddddddddddo..",
+            "..oooooooooooo..",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] TECIDO_DOBRADO = {
+            "................",
+            "................",
+            "................",
+            "...oooooooooo...",
+            "..ohhhhhhhhhho..",
+            "..ommmmmmmmmmo..",
+            "..oddddddddddo..",
+            "..ohhhhhhhhhho..",
+            "..ommmmmmmmmmo..",
+            "..oddddddddddo..",
+            "..ohhhhhhhhhho..",
+            "..ommmmmmmmmmo..",
+            "..ommmmmmmmmmo..",
+            "...oooooooooo...",
+            "................",
+            "................"};
+
+    private static Map<Character, Integer> pele(int o, int m, int h, int d) {
+        return c('o', o, 'm', m, 'h', h, 'd', d);
+    }
+
+    private static Map<Character, Integer> couro(int o, int m, int h, int d, int w) {
+        return c('o', o, 'm', m, 'h', h, 'd', d, 'w', w);
+    }
+
+    private static void oficios(List<Arte> l) {
+        l.add(new Arte("rabbit_hide", "oficio_pele_de_lobo", PELE_ESTICADA, pele(0xFF3A3A3A, 0xFF8A8A8A, 0xFFBDBDBD, 0xFF5E5E5E)));
+        l.add(new Arte("rabbit_hide", "oficio_pele_de_urso", PELE_ESTICADA, pele(0xFF7A7A70, 0xFFF2F2F2, BRANCO, 0xFFCFCFC4)));
+        l.add(new Arte("rabbit_hide", "oficio_pele_de_raposa", PELE_ESTICADA, pele(0xFF5A2A0A, 0xFFE07B2E, 0xFFFFC58A, 0xFFB0541A)));
+        l.add(new Arte("rabbit_hide", "oficio_couro_de_hoglin", PELE_ESTICADA, pele(0xFF3A1A10, 0xFFA0523A, 0xFFD08A6A, 0xFF6A3020)));
+        l.add(new Arte("prismarine_shard", "oficio_escama_de_guardiao", ESCAMA,
+                c('o', 0xFF1E4A40, 'd', 0xFF3E7A6A, 'm', 0xFF5FA89A, 'h', 0xFFA8E0D0, 'a', 0xFFE07B2E)));
+        l.add(new Arte("leather", "oficio_couro_lobo", COURO_COSTURADO, couro(0xFF2A2420, 0xFF6D6460, 0xFF9A908A, 0xFF4A4240, 0xFFD8D0C0)));
+        l.add(new Arte("leather", "oficio_couro_urso", COURO_COSTURADO, couro(0xFF6A665E, 0xFFE6E1D6, BRANCO, 0xFFB8B2A6, 0xFF8A7A60)));
+        l.add(new Arte("leather", "oficio_couro_raposa", COURO_COSTURADO, couro(0xFF4A2008, 0xFFC9682A, 0xFFE8955A, 0xFF8A4418, 0xFFFFE0B0)));
+        l.add(new Arte("leather", "oficio_couro_escamas", COURO_COSTURADO, couro(0xFF123A36, 0xFF3E8C82, 0xFF6FC0B4, 0xFF26605A, 0xFFE07B2E)));
+        l.add(new Arte("leather", "oficio_couro_brasa", COURO_COSTURADO, couro(0xFF2A0A06, 0xFF8B2E22, 0xFFC0503A, 0xFF5A1A12, 0xFFFFB300)));
+        l.add(new Arte("leather", "oficio_couro_noturno", COURO_COSTURADO, couro(0xFF100A1C, 0xFF3B2E5A, 0xFF6A5A90, 0xFF241C3A, 0xFFB39DDB)));
+        l.add(new Arte("paper", "oficio_tecido", TECIDO_DOBRADO, pele(0xFF7A7060, 0xFFEDE6D6, BRANCO, 0xFFC8BEA8)));
+        l.add(new Arte("paper", "oficio_feltro", TECIDO_DOBRADO, pele(0xFF4A3A2A, 0xFFB7A089, 0xFFD8C4AC, 0xFF8A7460)));
+        l.add(new Arte("paper", "oficio_tecido_de_alga", TECIDO_DOBRADO, pele(0xFF1A2A10, 0xFF4E7A3A, 0xFF7AA860, 0xFF2E5020)));
     }
 }

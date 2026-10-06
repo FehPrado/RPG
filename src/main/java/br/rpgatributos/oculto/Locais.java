@@ -187,6 +187,25 @@ public final class Locais implements Listener {
         return false;
     }
 
+    /** Um Local Oculto que pode aparecer num sonho. */
+    public record PistaSonho(String id, TipoLocal tipo, int x, int z) { }
+
+    /** O Local Oculto mais perto que o jogador ainda não achou nem sonhou. */
+    public PistaSonho paraSonhar(Player p, Location daqui, java.util.Set<String> sonhados) {
+        List<String> achados = lista(p, K_DESCOBERTOS);
+        Local melhor = null;
+        double best = Double.MAX_VALUE;
+        for (Local l : locais.values()) {
+            if (!l.mundo.equals(daqui.getWorld().getName()) || achados.contains(l.id) || sonhados.contains(l.id)) continue;
+            double d2 = (l.x - daqui.getX()) * (l.x - daqui.getX()) + (l.z - daqui.getZ()) * (l.z - daqui.getZ());
+            if (d2 < best) {
+                best = d2;
+                melhor = l;
+            }
+        }
+        return melhor == null ? null : new PistaSonho(melhor.id, melhor.tipo, melhor.x, melhor.z);
+    }
+
     /** Locais que o jogador já achou (para o /locais). */
     public List<String> descobertos(Player p) {
         List<String> s = new ArrayList<>();

@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.29</small></div></div>
+  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.30</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -110,6 +110,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <a href="#mobilidade">≋ Mobilidade e mochila</a>
   <a href="#forja">⚒ Forja e refino</a>
   <a href="#arcano">✦ Arcano e magias</a>
+  <a href="#curtume">✂ Curtume e sonhos</a>
   <a href="#alquimia">⚗ Alquimia e gemas</a>
   <a href="#visual">👕 Guarda-roupa e títulos</a>
   <div class="grupo">Vida no mundo</div>
@@ -448,6 +449,37 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <div class="card"><h3>50 magias secretas</h3>
       <p>Combinações específicas viram magias com efeito único (Bola de Fogo, Nevasca, Meteoro, Fênix, Buraco Negro, Sopro do Dragão...). O grimório dá uma dica de cada.</p>
       <p>As 5 <b>proibidas</b> (Chuva de Meteoros, Zero Absoluto, Julgamento, Ruptura Dimensional, Renascer da Floresta) só vêm de <b>Tomos Proibidos</b>: chefes do Altar, selos dos Locais Ocultos e masmorras Difícil/Pesadelo.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="curtume">
+  <h2><span class="ico">✂</span>Curtume, tecelagem e sonhos</h2>
+  <div class="grade">
+    <div class="card"><h3>Ateliê do Curtidor</h3>
+      <div class="ritual"><span class="b">Tear</span><span class="mais">+</span><span class="i">1 tesoura</span><span class="mais">+</span><span class="i">4 couros</span><span class="mais">+</span><span class="i">2 linhas</span></div>
+      <ul>
+        <li><b>Curtir:</b> pele crua + farinha de osso = couro curtido (2 membranas de phantom = Couro Noturno).</li>
+        <li><b>Tecer:</b> 4 linhas = Tecido · 3 lãs = Feltro · 4 algas secas = Tecido de Alga.</li>
+        <li><b>Costurar:</b> Capuz 3+1, Gibão 5+2, Calças 4+2, Botas 2+1 (couros + tecidos).</li>
+        <li><b>Peles:</b> lobos, ursos polares, raposas, guardiões e hoglins (elites sempre deixam).</li>
+        <li>Agachado + clique: o tear normal.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>Conjuntos de armadura leve</h3>
+      <div class="tabela"><table><thead><tr><th>Conjunto</th><th>2 peças</th><th>4 peças</th></tr></thead><tbody>
+        <tr><td>Caçador (lobo + linha)</td><td>+5% de velocidade</td><td>+10% com flechas e tridente; na Ágil, +8% de dano e esquiva mais barata</td></tr>
+        <tr><td>Urso Polar (urso + feltro)</td><td>+1 ❤</td><td>-10% de dano recebido, resiste a empurrões</td></tr>
+        <tr><td>Raposa (raposa + linha)</td><td>Sorte</td><td>De noite: visão noturna e velocidade</td></tr>
+        <tr><td>Maré (escamas + alga)</td><td>Respira debaixo d'água</td><td>Graça do golfinho e +5% de peixe raro</td></tr>
+        <tr><td>Noite (noturno + linha)</td><td>-50% de dano de queda</td><td>Caindo do alto, desce devagar</td></tr>
+        <tr><td>Brasa (brasa + feltro)</td><td>-30% de dano de fogo</td><td>Sem calor; com pouca vida, Força</td></tr>
+      </tbody></table></div>
+      <p class="muted">Cada peça tem +1 de armadura e protege do frio. Jogue a peça + 1 Fragmento de Forja na Forja: ela ganha raridade e continua no conjunto.</p>
+    </div>
+    <div class="card"><h3>Sonhos</h3>
+      <p>Durma a noite inteira: às vezes você sonha com um lugar que ainda não conhece (estrutura, naufrágio, cidade submersa ou Local Oculto) e acorda sabendo para que lado fica.</p>
+      <p class="muted">Um sonho por dia, nunca o mesmo lugar. Ficam no <span class="cmd">/diario</span>.</p>
     </div>
   </div>
 </section>
@@ -1235,7 +1267,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.29 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.30 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

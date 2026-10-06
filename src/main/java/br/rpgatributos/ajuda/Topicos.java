@@ -255,6 +255,13 @@ public final class Topicos {
                 .ritual(Material.CAMPFIRE, "Fogueira", Material.FISHING_ROD, 1, Material.COD, 1, Material.SPRUCE_PLANKS, 4)
                 .dica("O Esturjão Ancestral só morde de noite, no inverno. Com ele sai o Caviar Ancestral.")
                 .cmd("peixes").ligados("pesca", "cozinha", "alquimia").palavras("gelo buraco inverno cabana neve truta lucio esturjao caviar").pronto();
+        t("atelie", OFICIOS, "Curtume e tecelagem", Material.LOOM)
+                .texto("Ateliê do Curtidor: curta as peles (com farinha de osso), teça linha, lã ou alga e costure armaduras leves.",
+                        "Peles: lobos, ursos polares, raposas, guardiões e hoglins. Membrana de phantom vira Couro Noturno.",
+                        "6 conjuntos (Caçador, Urso Polar, Raposa, Maré, Noite e Brasa), cada um com bônus de 2 e de 4 peças.")
+                .ritual(Material.LOOM, "Tear", Material.SHEARS, 1, Material.LEATHER, 4, Material.STRING, 2)
+                .dica("Jogue uma peça e um Fragmento de Forja na Forja: ela é reforjada com raridade e o conjunto continua valendo.")
+                .ligados("forja", "posturas", "pescagelo").palavras("curtume couro pele tear tecido costurar conjunto armadura leve lobo urso raposa").pronto();
         t("barril", OFICIOS, "Barril de Envelhecimento", Material.BARREL)
                 .texto("Bebidas que melhoram com os dias reais: Nova, Envelhecida, Reserva e Lendária.")
                 .ritual(Material.BARREL, "Barril vazio", Material.IRON_INGOT, 2, Material.HONEYCOMB, 1)
@@ -285,6 +292,12 @@ public final class Topicos {
                         "Alguns têm guardas, outros têm moradores que negociam.")
                 .dica("Poço dos Desejos: jogue 1 esmeralda. Farol: acenda com um bloco de pedra luminosa.")
                 .ligados("mar", "enciclopedia", "mapas", "locais").palavras("torre mina cemiterio poco eremita bruxa farol fortim oasis circulo").pronto();
+        t("sonhos", MUNDO, "Sonhos", Material.RED_BED)
+                .texto("Durma a noite inteira: às vezes você sonha com um lugar que ainda não conhece.",
+                        "Pode ser uma estrutura, um naufrágio, uma cidade submersa ou até um Local Oculto.",
+                        "Ao acordar, você sabe para que lado fica. Um sonho por dia, nunca o mesmo lugar.")
+                .dica("Os sonhos ficam anotados no seu /diario.")
+                .ligados("estruturas", "locais", "mar").palavras("sonho dormir cama pista lugar").pronto();
         t("mar", MUNDO, "Naufrágios e a cidade submersa", Material.PRISMARINE_BRICKS)
                 .texto("Naufrágios no fundo do mar: cada navio tem nome, carga e o diário do capitão (às vezes ele aponta para uma cidade submersa).",
                         "Cidade Submersa: rara, no mar profundo. Templo de Maris, casas, arquivo com a história, cofre e guardas afogados.",

@@ -207,6 +207,9 @@ public final class RPGAtributos extends JavaPlugin {
     private PedrasDeAmolar pedrasAmolar;
     private Bebedouros bebedouros;
     private br.rpgatributos.pesca.CabanasPesca cabanasPesca;
+    private br.rpgatributos.oficio.Oficios oficios;
+    private br.rpgatributos.oficio.Ateliers ateliers;
+    private br.rpgatributos.mundo.Sonhos sonhos;
     private Trofeus trofeus;
     private MesasCartografo mesasCartografo;
     private Lapides lapides;
@@ -342,6 +345,9 @@ public final class RPGAtributos extends JavaPlugin {
         pedrasAmolar = new PedrasDeAmolar(this);
         bebedouros = new Bebedouros(this);
         cabanasPesca = new br.rpgatributos.pesca.CabanasPesca(this);
+        oficios = new br.rpgatributos.oficio.Oficios(this);
+        ateliers = new br.rpgatributos.oficio.Ateliers(this, oficios);
+        sonhos = new br.rpgatributos.mundo.Sonhos(this);
         trofeus = new Trofeus(this);
         mesasCartografo = new MesasCartografo(this);
         lapides = new Lapides(this);
@@ -368,7 +374,7 @@ public final class RPGAtributos extends JavaPlugin {
                 classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
                 estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), combos.posturas(), combos.ligacoes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista,
                 talentos, evolucao,
-                forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, trofeus,
+                forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
                 canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, estruturas, ajuda);
         locais.iniciar();
@@ -538,11 +544,12 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, talentos::tick, 40L, 40L);
         agenda.runTaskTimer(this, evolucao::tick, 40L, 40L);
         // Detalhes: forjados especiais, estações pequenas, natureza, túmulos e recordes.
-        for (Estacao e : List.of(fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, trofeus, mesasCartografo, canteiros, colmeias, barris)) {
+        for (Estacao e : List.of(fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, ateliers, trofeus, mesasCartografo, canteiros, colmeias, barris)) {
             e.iniciar();
             agenda.runTaskTimer(this, e::tick, 5L, 5L);
         }
         agenda.runTaskTimer(this, forjadosEspeciais::tick, 10L, 10L);
+        agenda.runTaskTimer(this, oficios::tick, 20L, 20L);
         agenda.runTaskTimer(this, natureza::tick, 40L, 40L);
         agenda.runTaskTimer(this, lapides::tick, 40L, 40L);
         agenda.runTaskTimer(this, recordes::tick, 100L, 100L);
@@ -750,6 +757,9 @@ public final class RPGAtributos extends JavaPlugin {
     public PedrasDeAmolar pedrasAmolar() { return pedrasAmolar; }
     public Bebedouros bebedouros() { return bebedouros; }
     public br.rpgatributos.pesca.CabanasPesca cabanasPesca() { return cabanasPesca; }
+    public br.rpgatributos.oficio.Oficios oficios() { return oficios; }
+    public br.rpgatributos.oficio.Ateliers ateliers() { return ateliers; }
+    public br.rpgatributos.mundo.Sonhos sonhos() { return sonhos; }
     public Trofeus trofeus() { return trofeus; }
     public MesasCartografo mesasCartografo() { return mesasCartografo; }
     public Lapides lapides() { return lapides; }
@@ -777,7 +787,7 @@ public final class RPGAtributos extends JavaPlugin {
                 || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b) || alquimia.eh(b) || prefeituras.eh(b) || obeliscos.eh(b)
                 || santuariosDivinos.eh(b) || transmutacao.eh(b) || mesasRunicas.eh(b)
                 || fogueiras.eh(b) || bonecos.eh(b) || pedrasAmolar.eh(b) || bebedouros.eh(b) || trofeus.eh(b) || mesasCartografo.eh(b)
-                || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || cabanasPesca.eh(b);
+                || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || cabanasPesca.eh(b) || ateliers.eh(b);
     }
 
     /**

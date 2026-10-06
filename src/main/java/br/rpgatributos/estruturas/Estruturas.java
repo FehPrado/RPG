@@ -112,7 +112,7 @@ public final class Estruturas implements Listener {
     public static final NamespacedKey K_EREMITA = new NamespacedKey("rpgatributos", "eremita");
 
     private static final String[] NOMES_EREMITA = {"Aldo", "Tobias", "Celeste", "Matias", "Odete", "Bento", "Irene", "Joaquim", "Lúcia", "Severino"};
-    static final String[] DIRECOES = {"a leste", "ao nordeste", "ao norte", "ao noroeste", "a oeste", "ao sudoeste", "ao sul", "ao sudeste"};
+    public static final String[] DIRECOES = {"a leste", "ao nordeste", "ao norte", "ao noroeste", "a oeste", "ao sudoeste", "ao sul", "ao sudeste"};
     private static final String[] FALAS = {
             "O Rei Caído não caiu sozinho. Junte as moedas dele e as perguntas certas aparecem.",
             "As masmorras respiram. Quanto mais fundo, mais elas lembram de quem entrou.",
@@ -1072,6 +1072,25 @@ public final class Estruturas implements Listener {
                 .append(Component.text("\"" + boato(p, e.getRightClicked().getLocation(), daqui) + "\"", NamedTextColor.GRAY)
                         .decoration(TextDecoration.BOLD, false)));
         plugin.diario().marco(p, "eremita", "Conversou com um morador das terras distantes");
+    }
+
+    /** Uma estrutura que pode aparecer num sonho. */
+    public record PistaSonho(String id, Estrutura tipo, String nome, int x, int z) { }
+
+    /** A estrutura mais perto (até 3000 blocos) que o jogador nunca visitou nem sonhou. */
+    public PistaSonho paraSonhar(Player p, Location daqui, java.util.Set<String> sonhados) {
+        Sitio melhor = null;
+        double best = 3000.0 * 3000.0;
+        for (Sitio s : sitios) {
+            if (!s.mundo.equals(daqui.getWorld().getName()) || s.visitantes.contains(p.getUniqueId()) || sonhados.contains(s.id)) continue;
+            if (s.tipo == Estrutura.CIDADE_SUBMERSA && !CidadesSubmersas.pronta(s)) continue;
+            double d2 = s.distancia2(daqui);
+            if (d2 < best) {
+                best = d2;
+                melhor = s;
+            }
+        }
+        return melhor == null ? null : new PistaSonho(melhor.id, melhor.tipo, melhor.nome, melhor.x, melhor.z);
     }
 
     /** Conta onde fica a estrutura mais perto que você ainda não viu; ou só uma história. */
