@@ -285,6 +285,12 @@ estruturas:
   chance-por-chunk: 0.02              # chance de cada chunk novo tentar receber uma (se o chão servir)
   distancia-minima: 160               # blocos entre duas estruturas
   so-chunks-novos: true               # true = só em terra nunca visitada (nunca encosta em obra de jogador)
+  cidade-submersa:
+    ativada: true
+    regiao: 3000                      # no máximo uma cidade em cada quadrado de 3000 x 3000 blocos
+    chance: 0.02                      # chance de cada chunk novo de mar profundo tentar receber uma
+    distancia-do-spawn: 800           # nenhuma cidade mais perto do spawn que isso
+    dias-para-voltar: 7               # dias reais até os guardas e o Sumo-Sacerdote voltarem
 
 # ==========================================================
 #  Doma (companheiros e Altar do Domador)

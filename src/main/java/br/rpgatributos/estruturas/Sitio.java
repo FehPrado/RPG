@@ -29,8 +29,16 @@ final class Sitio {
     long diaOfertas = -1;
     /** Farol: até quando a lanterna fica acesa (0 = apagada). */
     long acesoAte;
-    /** Vila Saqueada: de onde vieram os atacantes (só na hora de construir). */
+    /** Vila Saqueada e naufrágio: para onde a história aponta (só na hora de construir). */
     String pista;
+    /** Naufrágio: o nome do navio. Cidade submersa: o nome da cidade. */
+    String nome;
+    /** Cidade submersa: quantas etapas da obra já foram feitas (para continuar se o servidor parar no meio). */
+    int fase;
+    /** Cidade submersa: a semente da obra (as etapas que faltam saem iguais). */
+    long semente;
+    /** Cidade submersa: quando o Sumo-Sacerdote caiu pela última vez (0 = nunca). */
+    long chefeEm;
     final Set<UUID> visitantes = new HashSet<>();
 
     Sitio(String id, Estrutura tipo, String mundo, int x, int y, int z, int rot) {

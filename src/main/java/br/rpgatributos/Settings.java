@@ -92,6 +92,9 @@ public final class Settings {
     public final boolean estrAtivadas, estrSoChunksNovos;
     public final double estrChance;
     public final int estrDistancia;
+    public final boolean cidadeAtivada;
+    public final int cidadeRegiao, cidadeDistanciaSpawn, cidadeDiasParaVoltar;
+    public final double cidadeChance;
 
     // doma (companheiros)
     public final double domaXpDomar, domaXpCruzar, domaXpVincular, domaXpComponente, domaXpPorBloco, domaXpAbate;
@@ -333,6 +336,11 @@ public final class Settings {
         estrSoChunksNovos = c.getBoolean("estruturas.so-chunks-novos", true);
         estrChance = Math.max(0, Math.min(1, c.getDouble("estruturas.chance-por-chunk", 0.02)));
         estrDistancia = Math.max(32, c.getInt("estruturas.distancia-minima", 160));
+        cidadeAtivada = c.getBoolean("estruturas.cidade-submersa.ativada", true);
+        cidadeRegiao = Math.max(500, c.getInt("estruturas.cidade-submersa.regiao", 3000));
+        cidadeChance = Math.max(0, Math.min(1, c.getDouble("estruturas.cidade-submersa.chance", 0.02)));
+        cidadeDistanciaSpawn = Math.max(0, c.getInt("estruturas.cidade-submersa.distancia-do-spawn", 800));
+        cidadeDiasParaVoltar = Math.max(1, c.getInt("estruturas.cidade-submersa.dias-para-voltar", 7));
 
         domaXpDomar = c.getDouble("doma.xp-domar", 25);
         domaXpCruzar = c.getDouble("doma.xp-cruzar", 2);

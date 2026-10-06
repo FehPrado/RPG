@@ -49,7 +49,13 @@ public enum Estrutura {
             3, 6, 4, 8, b -> b.contains("windswept") || b.contains("meadow") || b.contains("grove") || b.contains("badlands")
             || b.contains("stony") || b.contains("savanna_plateau") || b.contains("slopes") || b.contains("taiga")),
     FORTIM("Fortim em Ruínas", "o", 0x90A4AE, "Os soldados ainda montam guarda. Mesmo mortos.",
-            2, 7, 2, 10, b -> b.contains("plains") || b.contains("forest") || b.contains("taiga") || b.contains("savanna") || b.contains("meadow"));
+            2, 7, 2, 10, b -> b.contains("plains") || b.contains("forest") || b.contains("taiga") || b.contains("savanna") || b.contains("meadow")),
+    // ---------- 2.29: o mar ----------
+    NAUFRAGIO("Naufrágio", "um", 0x4DB6AC, "Cada navio no fundo tem uma história. Este deixou um diário.",
+            6, 7, 4, 14, b -> b.contains("ocean")),
+    /** Não é sorteada por chunk: a {@link CidadesSubmersas} escolhe o lugar (uma por região, no mar fundo). */
+    CIDADE_SUBMERSA("Cidade Submersa", "a", 0x26C6DA, "Ela adorava Maris. Um dia, o mar a levou de volta.",
+            0, 36, 12, 24, b -> b.contains("ocean"));
 
     private final String nome, artigo, frase;
     private final TextColor cor;
@@ -88,8 +94,13 @@ public enum Estrutura {
     }
 
     public boolean aceita(String bioma) {
-        if (this == FAROL) return this.bioma.test(bioma); // o farol é justamente na praia
+        if (this == FAROL || submersa()) return this.bioma.test(bioma); // o farol é justamente na praia; os do mar, no mar
         return !agua(bioma) && this.bioma.test(bioma);
+    }
+
+    /** Fica no fundo do mar. */
+    public boolean submersa() {
+        return this == NAUFRAGIO || this == CIDADE_SUBMERSA;
     }
 
     /** Construída sobre palafitas: aceita água rasa no chão e não aterra nada. */

@@ -112,7 +112,7 @@ public final class Estruturas implements Listener {
     public static final NamespacedKey K_EREMITA = new NamespacedKey("rpgatributos", "eremita");
 
     private static final String[] NOMES_EREMITA = {"Aldo", "Tobias", "Celeste", "Matias", "Odete", "Bento", "Irene", "Joaquim", "Lúcia", "Severino"};
-    private static final String[] DIRECOES = {"a leste", "ao nordeste", "ao norte", "ao noroeste", "a oeste", "ao sudoeste", "ao sul", "ao sudeste"};
+    static final String[] DIRECOES = {"a leste", "ao nordeste", "ao norte", "ao noroeste", "a oeste", "ao sudoeste", "ao sul", "ao sudeste"};
     private static final String[] FALAS = {
             "O Rei Caído não caiu sozinho. Junte as moedas dele e as perguntas certas aparecem.",
             "As masmorras respiram. Quanto mais fundo, mais elas lembram de quem entrou.",
@@ -138,19 +138,21 @@ public final class Estruturas implements Listener {
 
     private final RPGAtributos plugin;
     private final Projetos projetos;
+    final CidadesSubmersas cidades;
     private final File arquivo;
     private final NamespacedKey kChunk, kPoco, kAltar;
-    private final List<Sitio> sitios = new ArrayList<>();
+    final List<Sitio> sitios = new ArrayList<>();
     private final Map<UUID, Long> ultimaFala = new HashMap<>();
     /** Trocas da bruxa (que não é aldeã), uma por cabana por dia. */
     private final Map<String, Merchant> mercadores = new HashMap<>();
     private final Map<String, Integer> recusas = new java.util.TreeMap<>();
-    private boolean sujo;
+    boolean sujo;
     private int ciclo;
 
     public Estruturas(RPGAtributos plugin) {
         this.plugin = plugin;
         this.projetos = new Projetos(plugin);
+        this.cidades = new CidadesSubmersas(plugin, this, projetos);
         this.arquivo = new File(plugin.getDataFolder(), "estruturas.yml");
         this.kChunk = new NamespacedKey(plugin, "estrutura_v1");
         this.kPoco = new NamespacedKey(plugin, "poco_desejo_dia");
@@ -187,11 +189,22 @@ public final class Estruturas implements Listener {
             }
             s.diaOfertas = c.getLong("dia-ofertas", -1);
             s.acesoAte = c.getLong("aceso-ate");
+            s.nome = c.getString("nome");
+            s.fase = c.getInt("fase");
+            s.semente = c.getLong("semente");
+            s.chefeEm = c.getLong("chefe-em");
             for (String v : c.getStringList("visitantes")) {
                 try { s.visitantes.add(UUID.fromString(v)); } catch (IllegalArgumentException ignored) { }
             }
             sitios.add(s);
         }
+        // Termina as cidades submersas que ficaram pela metade (depois que os mundos carregam).
+        Bukkit.getScheduler().runTaskLater(plugin, cidades::retomar, 100L);
+    }
+
+    void adicionar(Sitio s) {
+        sitios.add(s);
+        salvar();
     }
 
     public void salvar() {
@@ -211,6 +224,10 @@ public final class Estruturas implements Listener {
             if (s.eremita != null) y.set(b + "eremita", s.eremita.toString());
             if (s.diaOfertas >= 0) y.set(b + "dia-ofertas", s.diaOfertas);
             if (s.acesoAte > 0) y.set(b + "aceso-ate", s.acesoAte);
+            if (s.nome != null) y.set(b + "nome", s.nome);
+            if (s.fase != 0) y.set(b + "fase", s.fase);
+            if (s.semente != 0) y.set(b + "semente", s.semente);
+            if (s.chefeEm != 0) y.set(b + "chefe-em", s.chefeEm);
             if (!s.visitantes.isEmpty()) y.set(b + "visitantes", s.visitantes.stream().map(UUID::toString).toList());
         }
         try {
@@ -240,7 +257,8 @@ public final class Estruturas implements Listener {
         var pdc = c.getPersistentDataContainer();
         if (pdc.has(kChunk)) return;
         pdc.set(kChunk, PersistentDataType.BYTE, (byte) 1);
-        Random r = new Random(w.getSeed() ^ (c.getX() * 0x9E3779B97F4A7C15L) ^ (c.getZ() * 0xC2B2AE3D27D4EB4FL) ^ 0x57A0L);
+        if (novo) cidades.talvez(c);
+        Random r =new Random(w.getSeed() ^ (c.getX() * 0x9E3779B97F4A7C15L) ^ (c.getZ() * 0xC2B2AE3D27D4EB4FL) ^ 0x57A0L);
         if (r.nextDouble() >= plugin.settings().estrChance) return;
         // Até 3 tipos diferentes: se o chão não serve para um, talvez sirva para outro.
         List<Estrutura> tipos = new ArrayList<>();
@@ -266,6 +284,26 @@ public final class Estruturas implements Listener {
             if (ehChao(b.getType())) return b;
         }
         return null;
+    }
+
+    /**
+     * O fundo do mar na coluna, com pelo menos {@code profundidade} blocos de água por cima
+     * (algas e corais contam como água). Null se for raso, seco ou congelado até o fundo.
+     */
+    static Block fundoDoMar(World w, int x, int z, int profundidade) {
+        int y = w.getHighestBlockYAt(x, z, HeightMap.OCEAN_FLOOR);
+        Block chao = w.getBlockAt(x, y, z);
+        if (!chao.getType().isSolid()) return null;
+        for (int d = 1; d <= profundidade; d++) if (!molhado(w.getBlockAt(x, y + d, z))) return null;
+        return chao;
+    }
+
+    /** Água, ou planta/coral que vive dentro dela. */
+    static boolean molhado(Block b) {
+        Material m = b.getType();
+        if (m == Material.WATER || m == Material.BUBBLE_COLUMN || m == Material.KELP || m == Material.KELP_PLANT
+                || m == Material.SEAGRASS || m == Material.TALL_SEAGRASS) return true;
+        return b.getBlockData() instanceof Waterlogged wl && wl.isWaterlogged();
     }
 
     /**
@@ -331,11 +369,13 @@ public final class Estruturas implements Listener {
         return recusas;
     }
 
-    private Sitio perto(World w, int x, int z, double raio) {
+    Sitio perto(World w, int x, int z, double raio) {
         for (Sitio s : sitios) {
             if (!s.mundo.equals(w.getName())) continue;
             double dx = s.x - x, dz = s.z - z;
-            if (dx * dx + dz * dz < raio * raio) return s;
+            // A cidade submersa é grande: a distância conta a partir da muralha dela.
+            double lim = raio + (s.tipo == Estrutura.CIDADE_SUBMERSA ? Cidade.RAIO + 8 : 0);
+            if (dx * dx + dz * dz < lim * lim) return s;
         }
         return null;
     }
@@ -363,8 +403,8 @@ public final class Estruturas implements Listener {
         int n = 0, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         for (int dx = -raio; dx <= raio; dx++) {
             for (int dz = -raio; dz <= raio; dz++) {
-                Block g = t.palafita() ? superficie(w, x + dx, z + dz) : chao(w, x + dx, z + dz);
-                if (g == null && !forcar) return recusa("água ou lava");
+                Block g = t.submersa() ? fundoDoMar(w, x + dx, z + dz, 7) : t.palafita() ? superficie(w, x + dx, z + dz) : chao(w, x + dx, z + dz);
+                if (g == null && !forcar) return recusa(t.submersa() ? "mar raso" : "água ou lava");
                 int h = g == null ? w.getHighestBlockYAt(x + dx, z + dz) : g.getY();
                 if (g != null) tipos.merge(g.getType(), 1, Integer::sum);
                 alt[dx + raio][dz + raio] = h;
@@ -423,7 +463,11 @@ public final class Estruturas implements Listener {
                 for (int yy = y0 + 1; yy <= y0 + t.altura(); yy++) {
                     Block b = w.getBlockAt(gx, yy, gz);
                     if (b.getType().isAir()) continue;
-                    if (natural && Tag.LOGS.isTagged(b.getType())) derrubar(b);
+                    if (t.submersa()) {
+                        // No mar, o que sai (alga, coral, pedra) vira água; acima da superfície, ar.
+                        if (b.getType() == Material.WATER) continue;
+                        b.setType(yy < w.getSeaLevel() ? Material.WATER : Material.AIR, false);
+                    } else if (natural && Tag.LOGS.isTagged(b.getType())) derrubar(b);
                     else b.setType(Material.AIR, false);
                 }
             }
@@ -433,7 +477,14 @@ public final class Estruturas implements Listener {
         s.fundo = fundo;
         if (t == Estrutura.SANTUARIO_ESQUECIDO) s.deus = Deus.values()[r.nextInt(Deus.values().length)];
         if (t == Estrutura.VILA_SAQUEADA) s.pista = pista(w, x, z);
-        projetos.construir(s, new Obra(w, x, y0, z, rot, r));
+        if (t == Estrutura.NAUFRAGIO) {
+            s.fundo = r.nextInt(Mar.Navio.values().length);
+            s.nome = Mar.Navio.values()[s.fundo].nome(r);
+            s.pista = cidades.pista(w, x, z);
+        }
+        Obra obra = new Obra(w, x, y0, z, rot, r);
+        obra.submersa = t.submersa();
+        projetos.construir(s, obra);
         sitios.add(s);
         salvar();
         plugin.getLogger().info("Estrutura nova: " + t.nome() + " em " + w.getName() + " " + x + " " + y0 + " " + z);
@@ -483,15 +534,17 @@ public final class Estruturas implements Listener {
                 Location l = p.getLocation();
                 for (Sitio s : sitios) {
                     if (!s.mundo.equals(w.getName())) continue;
+                    if (s.tipo == Estrutura.CIDADE_SUBMERSA && !CidadesSubmersas.pronta(s)) continue;
                     double d2 = s.distancia2(l);
                     // O farol aceso dá sorte (pesca e saque) a quem navega perto.
                     if (s.tipo == Estrutura.FAROL && s.acesoAte > agora && d2 <= 96 * 96) {
                         PotionEffect sorte = p.getPotionEffect(PotionEffectType.LUCK);
                         if (sorte == null || sorte.getDuration() < 200) p.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 300, 0, true, false, true));
                     }
-                    if (d2 > 48 * 48) continue;
+                    double alcance = Math.max(48, s.tipo.raio() + 20), achar = Math.max(22, s.tipo.raio() + 8);
+                    if (d2 > alcance * alcance) continue;
                     double dy = l.getY() - s.y;
-                    if (d2 <= 22 * 22 && Math.abs(dy) <= 30 && s.visitantes.add(p.getUniqueId())) descobrir(p, s);
+                    if (d2 <= achar * achar && Math.abs(dy) <= 30 && s.visitantes.add(p.getUniqueId())) descobrir(p, s);
                     if (s.tipo.temMorador() && d2 <= 40 * 40) garantirMorador(s, w);
                     boolean perto20 = jogando && !s.guardas && d2 <= 20 * 20 && Math.abs(dy) <= 24;
                     switch (s.tipo) {
@@ -517,10 +570,12 @@ public final class Estruturas implements Listener {
                         case FAROL -> {
                             if (s.acesoAte > 0 && agora > s.acesoAte) apagarFarol(s, w);
                         }
+                        case CIDADE_SUBMERSA -> cidades.tick(s, w, p, jogando, d2, dy);
                         default -> { }
                     }
                 }
             }
+            cidades.poderes(ciclo);
         }
         if (sujo && ciclo % 15 == 0) salvar();
     }
@@ -532,7 +587,12 @@ public final class Estruturas implements Listener {
 
     private void descobrir(Player p, Sitio s) {
         sujo = true;
-        p.showTitle(Title.title(Component.text("⌂ " + s.tipo.nome(), s.tipo.cor(), TextDecoration.BOLD),
+        String titulo = switch (s.tipo) {
+            case NAUFRAGIO -> s.nome != null ? "Naufrágio do " + s.nome : s.tipo.nome();
+            case CIDADE_SUBMERSA -> s.nome != null ? s.nome + ", a Cidade Submersa" : s.tipo.nome();
+            default -> s.tipo.nome();
+        };
+        p.showTitle(Title.title(Component.text("⌂ " + titulo, s.tipo.cor(), TextDecoration.BOLD),
                 Component.text(s.tipo.frase(), NamedTextColor.GRAY),
                 Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(3000), Duration.ofMillis(800))));
         p.playSound(p.getLocation(), Sound.BLOCK_BELL_RESONATE, 0.6f, 0.7f);
@@ -548,7 +608,7 @@ public final class Estruturas implements Listener {
     //  Guardas
     // ---------------------------------------------------------------------
 
-    private <T extends Mob> T guarda(Sitio s, Location l, Class<T> c, String nome, NamedTextColor cor, Consumer<T> extra) {
+    <T extends Mob> T guarda(Sitio s, Location l, Class<T> c, String nome, NamedTextColor cor, Consumer<T> extra) {
         T m = l.getWorld().spawn(l, c, x -> {
             x.customName(Component.text(nome, cor));
             x.setRemoveWhenFarAway(true);
@@ -676,7 +736,7 @@ public final class Estruturas implements Listener {
         }
     }
 
-    private static void vida(Mob m, double max) {
+    static void vida(Mob m, double max) {
         AttributeInstance a = m.getAttribute(Attribute.MAX_HEALTH);
         if (a == null) return;
         a.setBaseValue(max);
@@ -828,6 +888,7 @@ public final class Estruturas implements Listener {
                 if (r.nextDouble() < 0.3) e.getDrops().add(Raro.PEDRA_DE_PROTECAO.criar(1));
                 if (quem != null) plugin.diario().marco(quem, "capitao_fortim", "Derrotou o Capitão Esquecido de um fortim");
             }
+            case "sacerdote" -> cidades.sacerdoteMorreu(e, v.substring(0, v.indexOf(':')));
             case "guardiao" -> {
                 e.getDrops().add(plugin.arqueologia().reliquiaAleatoria());
                 if (r.nextDouble() < 0.4) e.getDrops().add(Raro.PAGINA_DE_LENDA.criar(1));
@@ -1136,6 +1197,11 @@ public final class Estruturas implements Listener {
         rezar(e.getPlayer(), s);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void aoColocar(org.bukkit.event.block.BlockPlaceEvent e) {
+        if (e.getBlockPlaced().getType() == Material.CONDUIT) cidades.aoColocarCondutor(e.getPlayer(), e.getBlockPlaced());
+    }
+
     private Sitio lanternaDoFarol(Block b) {
         if (b.getType() != Material.REDSTONE_LAMP && b.getType() != Material.SEA_LANTERN) return null;
         for (Sitio s : sitios) {
@@ -1196,13 +1262,15 @@ public final class Estruturas implements Listener {
             default -> 0;
         };
         Location l = p.getLocation().add(f.getDirection().multiply(t.raio() + 3));
+        if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(p.getWorld(), l.getBlockX(), l.getBlockZ());
         Sitio s = construir(p.getWorld(), l.getBlockX(), l.getBlockZ(), t, rot, new Random(), true, true);
         return s == null ? "Não deu para construir aqui (fundo demais para a mina?)." : null;
     }
 
     /** Pelo console: {@code /rpgadmin estrutura <tipo> <mundo> <x> <z>}. */
     public String construirEm(World w, int x, int z, Estrutura t) {
-        Sitio s = construir(w, x, z, t, ThreadLocalRandom.current().nextInt(4), new Random(), true, true);
+        if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(w, x, z);
+        Sitio s =construir(w, x, z, t, ThreadLocalRandom.current().nextInt(4), new Random(), true, true);
         return s == null ? "Não deu para construir aqui (fundo demais para a mina?)." : null;
     }
 
@@ -1212,7 +1280,7 @@ public final class Estruturas implements Listener {
         ordem.sort((a, b) -> Double.compare(a.distancia2(l), b.distancia2(l)));
         List<String> linhas = new ArrayList<>();
         for (Sitio s : ordem.subList(0, Math.min(max, ordem.size()))) {
-            linhas.add(s.tipo.nome() + (s.deus != null ? " (" + s.deus.nome() + ")" : "") + " — " + s.x + " " + s.y + " " + s.z
+            linhas.add(s.tipo.nome() + (s.deus != null ? " (" + s.deus.nome() + ")" : "") + (s.nome != null ? " (" + s.nome + ")" : "") + " — " + s.x + " " + s.y + " " + s.z
                     + " (" + (int) Math.sqrt(s.distancia2(l)) + " blocos, " + s.visitantes.size() + " visitante(s))");
         }
         return linhas;

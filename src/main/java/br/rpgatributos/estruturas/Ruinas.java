@@ -72,7 +72,7 @@ final class Ruinas {
         return dz == a ? "north" : dz == -a ? "south" : dx == a ? "west" : "east";
     }
 
-    private static ItemStack livro(String titulo, String autor, String... paginas) {
+    static ItemStack livro(String titulo, String autor, String... paginas) {
         ItemStack livro = new ItemStack(Material.WRITTEN_BOOK);
         livro.editMeta(BookMeta.class, m -> {
             m.title(Component.text(titulo));
@@ -82,7 +82,7 @@ final class Ruinas {
         return livro;
     }
 
-    private static void porLivro(Block pulpito, ItemStack livro) {
+    static void porLivro(Block pulpito, ItemStack livro) {
         if (pulpito.getState(false) instanceof Lectern lec) lec.getInventory().setItem(0, livro);
     }
 

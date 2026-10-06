@@ -47,10 +47,12 @@ final class Projetos {
 
     private final RPGAtributos plugin;
     private final Ruinas ruinas;
+    private final Mar mar;
 
     Projetos(RPGAtributos plugin) {
         this.plugin = plugin;
         this.ruinas = new Ruinas(plugin, this);
+        this.mar = new Mar(plugin, this);
     }
 
     void construir(Sitio s, Obra o) {
@@ -71,6 +73,8 @@ final class Projetos {
             case CIRCULO_DE_PEDRAS -> ruinas.circulo(o);
             case FORJA_DOS_ANOES -> ruinas.forjaAnoes(o);
             case FORTIM -> ruinas.fortim(o);
+            case NAUFRAGIO -> mar.naufragio(o, Mar.Navio.values()[Math.floorMod(s.fundo, Mar.Navio.values().length)], s.nome, s.pista);
+            case CIDADE_SUBMERSA -> { } // feita por etapas na CidadesSubmersas
         }
         o.conectar();
     }

@@ -35,6 +35,11 @@ final class Obra {
     final int x, y, z, rot;
     final Random r;
     private final List<Block> ligar;
+    /**
+     * Obra no fundo do mar: abaixo do nível do mar, "ar" vira água e o que pode ficar
+     * alagado (escadas, lajes, baús, cercas, lanternas...) fica alagado.
+     */
+    boolean submersa;
 
     Obra(World w, int x, int y, int z, int rot, Random r) {
         this(w, x, y, z, rot, r, new ArrayList<>());
@@ -53,7 +58,22 @@ final class Obra {
     /** Uma parte da obra com origem própria e giro extra (a tenda de um acampamento, por exemplo). */
     Obra parte(int dx, int dz, int giroExtra) {
         Block b = bloco(dx, 0, dz);
-        return new Obra(w, b.getX(), y, b.getZ(), rot + giroExtra, r, ligar);
+        Obra o = new Obra(w, b.getX(), y, b.getZ(), rot + giroExtra, r, ligar);
+        o.submersa = submersa;
+        return o;
+    }
+
+    /** Uma parte com origem em outra altura também (andares da cidade submersa). */
+    Obra parte(int dx, int dy, int dz, int giroExtra) {
+        Block b = bloco(dx, dy, dz);
+        Obra o = new Obra(w, b.getX(), b.getY(), b.getZ(), rot + giroExtra, r, ligar);
+        o.submersa = submersa;
+        return o;
+    }
+
+    /** Debaixo d'água de verdade (abaixo da superfície do mar). */
+    boolean noFundo(Block b) {
+        return submersa && b.getY() < w.getSeaLevel();
     }
 
     Block bloco(int dx, int dy, int dz) {
@@ -90,7 +110,12 @@ final class Obra {
 
     Block por(int dx, int dy, int dz, BlockData d) {
         Block b = bloco(dx, dy, dz);
-        b.setBlockData(girar(d.clone()), false);
+        BlockData g = girar(d.clone());
+        if (noFundo(b)) {
+            if (g.getMaterial().isAir()) g = Material.WATER.createBlockData();
+            else if (g instanceof org.bukkit.block.data.Waterlogged wl) wl.setWaterlogged(true);
+        }
+        b.setBlockData(g, false);
         if (d instanceof Fence || d instanceof GlassPane || d instanceof Wall) ligar.add(b);
         return b;
     }
