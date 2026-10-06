@@ -7,6 +7,7 @@ import br.rpgatributos.party.Party;
 import br.rpgatributos.sombra.Sombras;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -179,10 +180,65 @@ public final class Golpes implements Listener {
         return 6 + 1.5 * poder;
     }
 
+    /** Ligado pelo Combos (postura, estilo e equilíbrio). */
+    private Combos combos;
+    /** Um golpe de combo está ferindo agora (para o número de dano subir). */
+    boolean ferindo;
+    /** O golpe sendo usado agora saiu no tempo certo. */
+    boolean perfeitoAgora;
+    /** Quem já contou como acerto no ar neste golpe (o estilo só sobe uma vez por golpe). */
+    private final Set<UUID> aereosDoGolpe = new HashSet<>();
+
+    void ligar(Combos c) {
+        this.combos = c;
+    }
+
+    /** Começa um golpe novo (zera as marcas do anterior). */
+    void comecar(boolean perfeito) {
+        perfeitoAgora = perfeito;
+        aereosDoGolpe.clear();
+    }
+
+    private static boolean voa(Entity e) {
+        return e instanceof org.bukkit.entity.Flying || e instanceof org.bukkit.entity.Bat || e instanceof org.bukkit.entity.Bee
+                || e instanceof org.bukkit.entity.Allay || e instanceof org.bukkit.entity.Vex || e instanceof org.bukkit.entity.Blaze
+                || e instanceof org.bukkit.entity.Parrot || e instanceof org.bukkit.entity.EnderDragon || e instanceof org.bukkit.entity.Wither;
+    }
+
     private void ferir(Player p, LivingEntity e, double valor) {
         if (!e.isValid() || e.isDead()) return;
+        double v = valor;
+        // No ar (lançado ou pulando): +30%, fica suspenso um instante e conta para o estilo.
+        boolean noAr = !e.isOnGround() && !e.isInWater() && !voa(e) && !(e instanceof org.bukkit.entity.ArmorStand);
+        if (noAr) {
+            v *= 1.3;
+            if (combos != null && aereosDoGolpe.add(e.getUniqueId())) {
+                combos.estilo().bonus(p, 8);
+                p.sendActionBar(Component.text("☁ No ar! +30%", NamedTextColor.AQUA, TextDecoration.BOLD));
+            }
+            e.getWorld().spawnParticle(Particle.CLOUD, e.getLocation(), 6, 0.3, 0.1, 0.3, 0.02);
+            if (!(e instanceof Player) && !Chefes.ehChefe(e)) {
+                Vector vel = e.getVelocity();
+                e.setVelocity(new Vector(vel.getX() * 0.4, Math.max(vel.getY(), 0.28), vel.getZ() * 0.4));
+            }
+        }
         e.setNoDamageTicks(0);
-        plugin.alvos().ferir(p, e, valor);
+        ferindo = true;
+        try {
+            plugin.alvos().ferir(p, e, v);
+        } finally {
+            ferindo = false;
+        }
+        if (combos == null) return;
+        combos.ligacoes().aoGolpe(p, e, v);
+        // Equilíbrio do inimigo, cura da postura Defensiva e o "tranco" do acerto.
+        double eq = v * combos.posturas().multEquilibrio(p) * (perfeitoAgora ? 1.3 : 1) * (noAr ? 1.2 : 1);
+        combos.equilibrio().golpe(p, e, eq, combos.estilo());
+        if (combos.posturas().curaNoGolpe(p)) {
+            var max = p.getAttribute(Attribute.MAX_HEALTH);
+            if (max != null) p.setHealth(Math.min(max.getValue(), p.getHealth() + 1));
+        }
+        if (!(e instanceof Player) && e.isValid()) e.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 4, 2, false, false, false));
     }
 
     private static void empurrar(LivingEntity e, Location de, double forca, double cima) {

@@ -1396,6 +1396,14 @@ public final class Conjuracao {
         return t == EntityType.ENDERMAN || t == EntityType.BLAZE || t == EntityType.SNOW_GOLEM || t == EntityType.STRIDER;
     }
 
+    /**
+     * Golpe de arma com elemento (óleo de lâmina ou runa): marca o alvo como uma magia marcaria,
+     * e um elemento diferente que já estava nele causa a reação (combo + magia).
+     */
+    public void elementoDeGolpe(Player p, LivingEntity alvo, Essencia e, double pot) {
+        reacoes.aoAtingir(p, alvo, java.util.EnumSet.of(e), pot);
+    }
+
     void ferir(Player p, LivingEntity alvo, double dano) {
         if (dano <= 0 || alvo.isDead()) return;
         if (alvo instanceof Player) dano *= cfg().arcDanoPvp;

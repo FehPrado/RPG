@@ -198,7 +198,7 @@ public final class Mobilidade implements Listener {
         Long espera = esperaEsquiva.get(p.getUniqueId());
         if (espera != null && espera > t) return;
         boolean criativo = p.getGameMode() == GameMode.CREATIVE;
-        double custoVigor = Math.max(0, cfg().mobEsquivaVigor - plugin.talentos().vigorEsquivaMenos(p));
+        double custoVigor = Math.max(0, cfg().mobEsquivaVigor - plugin.talentos().vigorEsquivaMenos(p)) * plugin.combos().posturas().multEsquiva(p);
         if (!criativo && plugin.combos().vigor(p) < custoVigor) {
             p.sendActionBar(Component.text("✖ Vigor insuficiente para esquivar", NamedTextColor.RED));
             return;

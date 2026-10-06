@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.26</small></div></div>
+  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.28</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -281,6 +281,41 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     </div>
     <div class="card"><h3>Finalizador em cadeia</h3>
       <p>Acerte <b>3 golpes de combo diferentes em 10 s</b>: o próximo combo (até 8 s depois) sai com +50% de dano e uma explosão em volta.</p>
+    </div>
+    <div class="card largo"><h3>Posturas (<span class="cmd">/postura</span>)</h3>
+      <div class="tabela"><table><thead><tr><th>Postura</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>▲ Ofensiva</td><td>+15% de dano e desequilibra mais; leva +10% de dano e gasta +10% de vigor</td></tr>
+        <tr><td>■ Defensiva</td><td>-20% de dano recebido, resiste a empurrões e cada golpe cura ½ ❤; -10% de dano</td></tr>
+        <tr><td>≈ Ágil</td><td>+10% de velocidade, recarga -20%, esquiva custa metade; -8% de dano</td></tr>
+        <tr><td>✦ Mestra</td><td>A da arma na proficiência 20: Duelista, Carrasco, Falange, Maré, Colosso ou Atirador Paciente</td></tr>
+      </tbody></table></div>
+      <p class="muted">Com o pacote, espada, machado e maça mudam o jeito de segurar em cada postura.</p>
+      <p><b>Afinidade:</b> sua classe e seu deus combinam com uma postura (veja no menu). Classe: +8% de dano e metade das penalidades. Deus: +1% de dano por nível de fé.</p>
+    </div>
+    <div class="card largo"><h3>Óleos de lâmina</h3>
+      <p>Feitos na Bancada Alquímica (aba Componentes), todos com 1 Óleo de Peixe. <b>Segure e clique com o direito</b>: o óleo vai na arma da outra mão (ou na 1ª arma da barra) e dura 60 golpes.</p>
+      <div class="tabela"><table><thead><tr><th>Óleo</th><th>Receita (+ Óleo de Peixe)</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Fogo</td><td>pó de blaze, frasco</td><td>incendeia</td></tr>
+        <tr><td>Gélido</td><td>gelo compactado, 2 bolas de neve</td><td>lentidão e congela</td></tr>
+        <tr><td>Venenoso</td><td>2 olhos de aranha, batata venenosa</td><td>veneno</td></tr>
+        <tr><td>Trovejante</td><td>Mercúrio Vivo, 2 lingotes de cobre</td><td>às vezes uma faísca salta para outro inimigo</td></tr>
+        <tr><td>Prata</td><td>6 pepitas de ferro, pó de glowstone</td><td>+40% em mortos-vivos</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Ligações</h3>
+      <ul>
+        <li><b>Combos × magia:</b> com óleo ou runa na arma, os combos levam o elemento e fazem reações com as magias (suas ou da party). Óleo Gélido + magia de Fogo = Derreter.</li>
+        <li><b>Ataque conjunto:</b> dois da mesma party acertam combos no mesmo inimigo em até 3 s: dano extra, muito equilíbrio e estilo.</li>
+        <li><b>Companheiros:</b> no finalizador, eles atacam o alvo do combo.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Estilo, tempo certo e equilíbrio</h3>
+      <ul>
+        <li><b>Tempo certo:</b> depois do 2º clique, um "tim" marca o 3º. Acertou: golpe perfeito (+25% de dano, 30% menos vigor).</li>
+        <li><b>Estilo D → S:</b> varie os golpes e não apanhe. Mais rank = mais dano e XP.</li>
+        <li><b>Equilíbrio:</b> combos enchem a barra dos inimigos fortes; cheia, eles ficam parados 4 s e levam +50%.</li>
+        <li><b>No ar:</b> golpe em quem está no ar dá +30%.</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -1136,6 +1171,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/grimorio</span></td><td>Grimório: magias, criador, secretas, maestria</td></tr>
       <tr><td><span class="cmd">/classe</span></td><td>Árvore de classes, caminho e habilidades</td></tr>
       <tr><td><span class="cmd">/combos</span></td><td>Combos de arma: proficiência e golpes</td></tr>
+      <tr><td><span class="cmd">/postura</span></td><td>Postura de combate</td></tr>
       <tr><td><span class="cmd">/mochila</span></td><td>Sua mochila</td></tr>
       <tr><td><span class="cmd">/deus</span>, <span class="cmd">/deus milagre</span></td><td>Sua fé e o milagre</td></tr>
       <tr><td><span class="cmd">/estrelas</span></td><td>Diário das Estrelas</td></tr>
@@ -1178,7 +1214,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.26 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.28 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

@@ -744,7 +744,36 @@ final class ArteItens {
                 c('o', 0xFF0A0614, 'd', 0xFF1E1430, 'm', 0xFF3B2E5A, 'h', 0xFF6A5A90, 'w', BRANCO)));
         l.add(new Arte("turtle_scute", "componente_escama_do_abismo", ESCAMA,
                 c('o', 0xFF0E3A32, 'd', 0xFF1E6A5A, 'm', 0xFF2E8B7A, 'h', 0xFF7FD0C0, 'a', 0xFF1E6A5A)));
+        // Óleos de lâmina: frasco fino pingando.
+        l.add(new Arte("honey_bottle", "componente_oleo_de_fogo", FRASCO_OLEO,
+                com(VIDRO, 'l', 0xFFFF7043, 'd', 0xFFB0301A, 'a', 0xFFFFD180)));
+        l.add(new Arte("experience_bottle", "componente_oleo_gelido", FRASCO_OLEO,
+                com(VIDRO, 'l', 0xFF81D4FA, 'd', 0xFF2A7AB0, 'a', BRANCO)));
+        l.add(new Arte("experience_bottle", "componente_oleo_trovejante", FRASCO_OLEO,
+                com(VIDRO, 'l', 0xFFFFF176, 'd', 0xFFC0A020, 'a', BRANCO)));
+        l.add(new Arte("dragon_breath", "componente_oleo_venenoso", FRASCO_OLEO,
+                com(VIDRO, 'l', 0xFF8BC34A, 'd', 0xFF3A6A1A, 'a', 0xFFD8FFA0)));
+        l.add(new Arte("ominous_bottle", "componente_oleo_de_prata", FRASCO_OLEO,
+                com(VIDRO, 'l', 0xFFD8D8E0, 'd', 0xFF8A8A9A, 'a', BRANCO)));
     }
+
+    private static final String[] FRASCO_OLEO = {
+            "................",
+            "......oooo......",
+            "......occo......",
+            "......oooo......",
+            "......ogwo......",
+            "......ogwo......",
+            ".....ogllwo.....",
+            ".....oalllo.....",
+            ".....ollllo.....",
+            ".....ollllo.....",
+            ".....odlldo.....",
+            "......oooo......",
+            ".........l......",
+            ".........d......",
+            "................",
+            "................"};
 
     // =====================================================================
     //  Elixires

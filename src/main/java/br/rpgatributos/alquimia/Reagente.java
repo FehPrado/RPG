@@ -25,7 +25,18 @@ public enum Reagente {
     CRISTAL_DE_MANA("Cristal de Mana", "prismarine_crystals", 0x7FD7FF, "Guarda mana como uma bateria."),
     SOLVENTE("Solvente Alquímico", "experience_bottle", 0x9ACD32, "Solta gemas engastadas sem quebrá-las."),
     PEROLA_NEGRA("Pérola Negra", "ender_pearl", 0x3B2E5A, "Vem do fundo do mar: Tesouros do Mar e criaturas marinhas."),
-    ESCAMA_DO_ABISMO("Escama do Abismo", "turtle_scute", 0x2E8B7A, "Cai das criaturas marinhas que mordem a isca.");
+    ESCAMA_DO_ABISMO("Escama do Abismo", "turtle_scute", 0x2E8B7A, "Cai das criaturas marinhas que mordem a isca."),
+    // ---------- óleos de lâmina (passados na arma) ----------
+    OLEO_DE_FOGO("Óleo de Fogo", "honey_bottle", 0xFF7043, "Os golpes incendeiam. Elemento: Fogo."),
+    OLEO_GELIDO("Óleo Gélido", "experience_bottle", 0x81D4FA, "Os golpes congelam e deixam lento. Elemento: Gelo."),
+    OLEO_TROVEJANTE("Óleo Trovejante", "experience_bottle", 0xFFF176, "Às vezes um choque salta para outro inimigo. Elemento: Energia."),
+    OLEO_VENENOSO("Óleo Venenoso", "dragon_breath", 0x8BC34A, "Os golpes envenenam. Elemento: Natureza."),
+    OLEO_DE_PRATA("Óleo de Prata", "ominous_bottle", 0xE0E0E0, "+40% de dano contra mortos-vivos. Elemento: Vida.");
+
+    /** É um óleo de lâmina (vai na arma, não é ingrediente). */
+    public boolean oleo() {
+        return name().startsWith("OLEO_") && this != OLEO_DE_PEIXE;
+    }
 
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "reagente");
 
@@ -51,10 +62,18 @@ public enum Reagente {
         i.editMeta(m -> {
             m.itemName(Component.text(nome, cor));
             m.setItemModel(modelo);
-            m.lore(List.of(
+            m.lore((oleo() ? List.of(
                     Component.text(descricao, NamedTextColor.GRAY),
                     Component.empty(),
-                    Component.text("⚗ Componente alquímico", cor))
+                    Component.text("Segure e clique com o botão direito: o óleo", NamedTextColor.WHITE),
+                    Component.text("vai na arma da outra mão (ou na 1ª arma", NamedTextColor.WHITE),
+                    Component.text("da sua barra) e dura 60 golpes.", NamedTextColor.WHITE),
+                    Component.empty(),
+                    Component.text("🜄 Óleo de lâmina", cor))
+                    : List.of(
+                    Component.text(descricao, NamedTextColor.GRAY),
+                    Component.empty(),
+                    Component.text("⚗ Componente alquímico", cor)))
                     .stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, name());
             br.rpgatributos.exploracao.PacoteRecursos.marcar(m, "componente_" + id());

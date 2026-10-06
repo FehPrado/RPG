@@ -333,6 +333,7 @@ public final class Chefes implements Listener {
     }
 
     private void tentarHabilidade(Ativo a, List<Player> naLuta, int agora, double vidaRel) {
+        if (plugin.combos().equilibrio().quebrado(a.entidade)) return; // desequilibrado: não solta habilidade
         if (rnd().nextDouble() > (a.furia ? 0.6 : 0.35)) return;
         List<Habilidade> prontas = new ArrayList<>();
         for (Habilidade h : a.chefe.habilidades()) {

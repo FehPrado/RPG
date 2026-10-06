@@ -557,6 +557,48 @@ Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direi
 
 **Lança:** o clique esquerdo da lança é a estocada dela, que não é um balanço normal do braço; o plugin percebe a estocada pela força do ataque e conta como `E` normalmente.
 
+### Posturas, estilo e equilíbrio
+
+**Posturas** (`/postura` ou o botão no `/combos`): valem enquanto você segura uma arma de combo.
+
+| Postura | Efeito |
+|---|---|
+| ◇ Neutra | Sem bônus e sem perdas (padrão) |
+| ▲ Ofensiva | +15% de dano e desequilibra +25%; leva +10% de dano e os golpes custam +10% de vigor |
+| ■ Defensiva | -20% de dano recebido, resiste a empurrões, cada golpe de combo cura ½ ❤; -10% de dano e 5% mais lento |
+| ≈ Ágil | +10% de velocidade, golpes recarregam 20% mais rápido, esquiva custa metade do vigor; -8% de dano |
+| ✦ Mestra | A da arma na mão, na proficiência 20: **Duelista** (espada: +15% de dano e janela maior do golpe perfeito), **Carrasco** (machado: +40% em quem tem menos de 35% da vida), **Falange** (lança: +10% de dano e -25% de dano de quem está na frente), **Maré** (tridente: na água ou chuva +30% de dano e +20% de velocidade), **Colosso** (maça: +10% de dano, desequilibra o dobro, resiste a empurrões), **Atirador Paciente** (arco: parado há 1 s, +35% de dano) |
+
+- **Visual:** aura de partículas na cor da postura. Com o pacote de recursos, **espada, machado e maça mudam o jeito de segurar** (erguida, em guarda, invertida e a pegada da Mestra). Lança, tridente e arco ficam com a pegada normal.
+- **Golpe no tempo certo:** depois do 2º clique, um "tim" com faíscas marca o momento do 3º. Acertando a janela, o golpe sai **perfeito**: +25% de dano, 30% menos vigor, mais estilo e mais equilíbrio.
+- **Medidor de estilo (D, C, B, A, S):** golpes diferentes, golpes perfeitos, acertos no ar, finalizadores e quebrar o equilíbrio sobem o rank; repetir o mesmo golpe, apanhar ou parar de lutar derrubam. Bônus: C +4% de dano, B +8% e +10% de XP de proficiência, A +12% e +20%, S +18% e +30%. O rank aparece na barra de vigor.
+- **Equilíbrio dos inimigos:** quem tem 40 de vida ou mais (chefes, elites, guardiões...) tem uma barra de equilíbrio que os golpes de combo enchem. Cheia, o inimigo fica **parado por 4 s e leva +50% de dano** (chefes não soltam habilidades). Depois ele fica 8 s sem poder ser desequilibrado.
+- **No ar:** golpe de combo em quem está no ar (lançado ou pulando) dá +30% de dano e segura o alvo no ar por um instante.
+- **Impacto:** o dano dos golpes aparece subindo do alvo, cada acerto dá um tranco curto, e um "plim" avisa quando o golpe sai da recarga.
+- **Afinidade:** sua classe e seu deus combinam com uma das posturas gerais (aparece no menu do `/postura`). Classe que combina: **+8% de dano e metade das penalidades** da postura. Deus que combina: **+1% de dano por nível de fé**.
+
+| Postura | Classes | Deuses |
+|---|---|---|
+| ▲ Ofensiva | Guerreiro, Berserker, Assassino, Senhor da Guerra, Lâmina Fantasma, Soberano das Sombras | Bellum, Mortis |
+| ■ Defensiva | Cavaleiro, Paladino, Santo Paladino, Ferreiro, Mestre Forjador, Herdeiro do Ferreiro | Ferrum, Sylva |
+| ≈ Ágil | Arqueiro, Ladino, Atirador, Caçador, Arqueiro Celestial, Mago, Elementalista, Feiticeiro, Arquimago, Domador, Mestre das Feras, Senhor das Feras | Maris, Arcanus |
+
+### Ligações: óleos, magia, party e companheiros
+
+**Óleos de lâmina** (Bancada Alquímica, aba Componentes; todos levam 1 Óleo de Peixe): segure o óleo e **clique com o botão direito**. Ele vai na arma de combo da outra mão (ou na 1ª arma de combo da barra) e dura **60 golpes** (+1 a cada 2 níveis de Alquimia). A arma mostra o óleo e os golpes que restam.
+
+| Óleo | Receita (+ Óleo de Peixe) | Efeito | Elemento |
+|---|---|---|---|
+| Óleo de Fogo | pó de blaze, frasco | incendeia o alvo | Fogo |
+| Óleo Gélido | gelo compactado, 2 bolas de neve | lentidão II 2 s e congela | Gelo |
+| Óleo Venenoso | 2 olhos de aranha, batata venenosa | veneno 3 s | Natureza |
+| Óleo Trovejante | Mercúrio Vivo, 2 lingotes de cobre | 15% de chance de uma faísca saltar para outro inimigo (3 de dano) | Energia |
+| Óleo de Prata | 6 pepitas de ferro, pó de glowstone | +40% de dano em mortos-vivos | Vida |
+
+- **Combos × magia:** com óleo (ou com runa de Explosão, Gelo, Tempestade ou Vampírica), cada golpe de combo marca o alvo com o elemento e faz **reações** com as magias: as suas e as da party. Ex.: Óleo Gélido + magia de Fogo = Derreter; Óleo de Fogo + Óleo Venenoso de um amigo = Queimada; Óleo de Prata + Runa Vampírica = Corrupção. A força da reação sobe com a proficiência da arma. Runas: Explosão = Fogo, Gelo = Gelo, Tempestade = Energia, Vampírica = Sombra (o óleo vale mais que a runa).
+- **Ataque conjunto:** dois da mesma party acertam combos no mesmo inimigo com até 3 s de diferença: **+50% do golpe como dano extra**, muito equilíbrio, +15 de estilo para os dois e um raio de luz ligando os dois ao alvo. 4 s de recarga por alvo.
+- **Companheiros:** no **finalizador**, seus companheiros a até 24 blocos partem para cima do alvo do combo.
+
 ## Mobilidade e mochila
 
 - **Esquiva:** dois toques rápidos em **A**, **D** ou **S** fazem um salto rápido para o lado ou para trás, com um instante de invulnerabilidade. Gasta 15 de vigor e tem 1,2 s de recarga. Não funciona agachado, montado ou voando.
@@ -958,7 +1000,7 @@ Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir
 - **Agachado + clique:** o suporte de poções normal. Poções comuns feitas nele também dão XP de Alquimia.
 - `/alquimia` mostra todas as receitas em qualquer lugar.
 
-**Componentes:** Pó Arcano, Óleo de Peixe, Tintura Vital, Sal Lunar, Mercúrio Vivo, Cristal de Mana e Solvente Alquímico são feitos na bancada (vários usam peixes raros). Pérola Negra e Escama do Abismo só vêm da pesca.
+**Componentes:** Pó Arcano, Óleo de Peixe, Tintura Vital, Sal Lunar, Mercúrio Vivo, Cristal de Mana e Solvente Alquímico são feitos na bancada (vários usam peixes raros). Pérola Negra e Escama do Abismo só vêm da pesca. Os **óleos de lâmina** (Fogo, Gélido, Venenoso, Trovejante e Prata) também ficam nesta aba; veja "Ligações" em Combos.
 
 **11 elixires:** Cura, Rapidez, Minerador, Mergulhador, Sorte, Pedra, Sombras, Mana, Gigante, Fênix e Titã. São mais fortes e mais longos que as poções comuns, e vários têm 2 a 4 efeitos. A qualidade (sorteada pelo nível, melhor com ingredientes ★★+) e o nível de Alquimia aumentam a duração.
 
@@ -1037,6 +1079,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/portais` | todos | Portais abertos: onde estão e quanto falta para transbordarem |
 | `/sombras` | Soberano | O exército das sombras |
 | `/torre [ranking\|sair]` | todos | Torre Infinita: recordes, ranking e sair da subida |
+| `/postura [nome]` | todos | Postura de combate (menu ou direto) |
 | `/combos [arma]` | todos | Combos de arma: proficiência e golpes de cada sequência |
 | `/mochila` | todos | Sua mochila (cresce com o nível total) |
 | `/deus [milagre]` | todos | Sua fé: deus, devoção, oração e milagre |
@@ -1169,7 +1212,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.26.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.28.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

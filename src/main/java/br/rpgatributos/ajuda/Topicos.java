@@ -116,7 +116,20 @@ public final class Topicos {
                         "Espada, machado, lança, tridente e maça começam com D; arco e besta com E.",
                         "Cada arma tem proficiência de 1 a 20, que libera golpes novos.")
                 .dica("Escolha quais golpes ficam em cada sequência no /combos. Agachado não solta combo.")
-                .cmd("combos").ligados("mobilidade", "boneco", "classes").palavras("golpe vigor proficiencia ataque").pronto();
+                .cmd("combos").ligados("posturas", "mobilidade", "boneco").palavras("golpe vigor proficiencia ataque").pronto();
+        t("posturas", COMBATE, "Posturas, estilo e equilíbrio", Material.SHIELD)
+                .texto("Postura (/postura): Ofensiva (+dano), Defensiva (leva menos dano e cura nos golpes), Ágil (velocidade e recarga) ou a Mestra da arma (proficiência 20).",
+                        "Variar os golpes sobe o estilo (D até S): mais dano e XP. Apanhar ou repetir o mesmo golpe derruba.",
+                        "Combos enchem o equilíbrio dos inimigos fortes; cheio, eles ficam parados e levam +50% de dano.")
+                .dica("Depois do 2º clique, um \"tim\" marca o tempo certo do 3º: golpe perfeito, mais forte e mais barato. Acertar quem está no ar dá +30%.")
+                .cmd("postura").ligados("combos", "ligacoes", "boneco", "mobilidade").palavras("postura estilo rank equilibrio perfeito aereo ofensiva defensiva agil mestra").pronto();
+        t("ligacoes", COMBATE, "Combos com magia, party e feras", Material.IRON_CHAIN)
+                .texto("Óleo de lâmina ou runa na arma: os golpes de combo levam o elemento e fazem reações com as magias (as suas ou as da party).",
+                        "Ataque conjunto: dois da mesma party acertam combos no mesmo inimigo em até 3 s. Dano extra, muito equilíbrio e estilo.",
+                        "No finalizador, seus companheiros partem para cima do alvo.",
+                        "Sua classe e seu deus combinam com uma postura: veja no /postura.")
+                .dica("Guerreiro de Óleo Gélido + mago de fogo no mesmo alvo = Derreter. Óleo de Fogo + Óleo Venenoso de um amigo = Queimada.")
+                .cmd("postura").ligados("oleos", "posturas", "magias", "party", "companheiros").palavras("ligacao elemento reacao conjunto party companheiro afinidade classe deus").pronto();
         t("mobilidade", COMBATE, "Esquiva, gancho e planador", Material.FEATHER)
                 .texto("Esquiva: dois toques rápidos em A, D ou S.",
                         "Gancho de Escalada: vara de pesca + gancho de armadilha + 3 ferros na bancada.",
@@ -208,7 +221,13 @@ public final class Topicos {
                 .texto("Elixires, componentes, gemas e acessórios. Clique para abrir; agachado + clique é o suporte normal.")
                 .ritual(Material.BREWING_STAND, "Suporte de poções", Material.GLASS_BOTTLE, 2, Material.BLAZE_POWDER, 1)
                 .dica("/alquimia mostra todas as receitas em qualquer lugar.")
-                .cmd("alquimia").ligados("gemas", "acessorios", "pesca").palavras("elixir componente pocao bancada").pronto();
+                .cmd("alquimia").ligados("oleos", "gemas", "acessorios", "pesca").palavras("elixir componente pocao bancada").pronto();
+        t("oleos", OFICIOS, "Óleos de lâmina", Material.HONEY_BOTTLE)
+                .texto("Feitos na Bancada Alquímica (aba Componentes) com Óleo de Peixe.",
+                        "Segure o óleo e clique com o direito: ele vai na arma da outra mão (ou na 1ª arma da barra) e dura 60 golpes.",
+                        "Fogo incendeia · Gélido deixa lento · Trovejante solta faíscas · Venenoso envenena · Prata +40% em mortos-vivos.")
+                .dica("Cada 2 níveis de Alquimia dá +1 golpe. O óleo também dá elemento aos combos.")
+                .cmd("alquimia").ligados("alquimia", "ligacoes", "combos").palavras("oleo lamina veneno fogo gelo prata trovao arma").pronto();
         t("gemas", OFICIOS, "Gemas", Material.EMERALD)
                 .texto("6 gemas em 3 graus. Engaste em itens forjados (aba Engastar da Bancada Alquímica).",
                         "Cada gema dá um bônus diferente em arma, arco, armadura ou ferramenta.")

@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -64,7 +65,7 @@ public final class Combos implements Listener, CommandExecutor {
 
     public static final TextColor COR = TextColor.color(0xFFB74D);
     public static final int NIVEL_MAXIMO = 20;
-    private static final int S_INFO = 8, S_NIVEL = 13, S_FECHAR = 49;
+    private static final int S_INFO = 8, S_NIVEL = 13, S_POSTURA = 47, S_FECHAR = 49;
     private static final int[] S_ABAS = {1, 2, 3, 4, 5, 6};
     private static final int[] S_ESPACOS = {19, 21, 23, 25};
     private static final int[] S_GOLPES = {37, 38, 39, 40, 41, 42, 43};
@@ -110,9 +111,18 @@ public final class Combos implements Listener, CommandExecutor {
     private final Map<TipoArma, NamespacedKey> kXp = new EnumMap<>(TipoArma.class);
     private final Map<TipoArma, NamespacedKey> kEspacos = new EnumMap<>(TipoArma.class);
 
+    private final Estilo estilo = new Estilo();
+    private final Equilibrio equilibrio;
+    private final Posturas posturas;
+    private final Ligacoes ligacoes;
+
     public Combos(RPGAtributos plugin) {
         this.plugin = plugin;
         this.golpes = new Golpes(plugin);
+        this.equilibrio = new Equilibrio(plugin);
+        this.posturas = new Posturas(plugin, this);
+        this.ligacoes = new Ligacoes(plugin, this);
+        golpes.ligar(this);
         for (TipoArma t : TipoArma.values()) {
             kXp.put(t, new NamespacedKey(plugin, "prof_" + t.id()));
             kEspacos.put(t, new NamespacedKey(plugin, "combos_" + t.id()));
@@ -120,6 +130,10 @@ public final class Combos implements Listener, CommandExecutor {
     }
 
     public Golpes golpes() { return golpes; }
+    public Estilo estilo() { return estilo; }
+    public Equilibrio equilibrio() { return equilibrio; }
+    public Posturas posturas() { return posturas; }
+    public Ligacoes ligacoes() { return ligacoes; }
     private Settings cfg() { return plugin.settings(); }
     private static long agora() { return System.currentTimeMillis(); }
 
@@ -161,6 +175,7 @@ public final class Combos implements Listener, CommandExecutor {
     public void darXp(Player p, TipoArma t, double qtd) {
         if (qtd <= 0) return;
         int antes = nivel(p, t);
+        qtd *= 1 + estilo.rank(p).xp();
         p.getPersistentDataContainer().set(kXp.get(t), PersistentDataType.DOUBLE, xp(p, t) + qtd * cfg().multiplicadorXp);
         int depois = nivel(p, t);
         if (depois > antes) subiu(p, t, antes, depois);
@@ -273,11 +288,16 @@ public final class Combos implements Listener, CommandExecutor {
             barra(p, v, max, t);
         }
         esperaXp.values().removeIf(x -> t - x > 5000);
+        estilo.tick();
+        equilibrio.tick();
+        posturas.tick();
+        ligacoes.tick();
     }
 
     private void barra(Player p, double v, double max, long t) {
         UUID id = p.getUniqueId();
-        boolean mostrar = v < max - 0.01 || t < mostrarAte.getOrDefault(id, 0L);
+        Estilo.Rank rank = estilo.rank(p);
+        boolean mostrar = v < max - 0.01 || t < mostrarAte.getOrDefault(id, 0L) || rank != Estilo.Rank.D;
         BossBar b = barras.get(id);
         if (!mostrar) {
             if (b != null) {
@@ -287,6 +307,10 @@ public final class Combos implements Listener, CommandExecutor {
             return;
         }
         Component nome = Component.text("⚡ Vigor " + (int) v + " / " + (int) max, COR);
+        String postura = posturas.rotulo(p);
+        if (postura != null) nome = nome.append(Component.text("   " + postura, posturas.ativa(p).cor()));
+        if (rank != Estilo.Rank.D) nome = nome.append(Component.text("   Estilo ", NamedTextColor.GRAY))
+                .append(Component.text(rank.name(), rank.cor(), TextDecoration.BOLD));
         float prog = (float) Math.max(0, Math.min(1, v / max));
         if (b == null) {
             b = BossBar.bossBar(nome, prog, BossBar.Color.YELLOW, BossBar.Overlay.NOTCHED_10);
@@ -304,6 +328,7 @@ public final class Combos implements Listener, CommandExecutor {
             if (b != null) p.hideBossBar(b);
         }
         golpes.parar();
+        equilibrio.parar();
     }
 
     // =====================================================================
@@ -332,17 +357,29 @@ public final class Combos implements Listener, CommandExecutor {
             en.forcaAtaque = p.getAttackCooldown();
             entradas.put(id, en);
         }
+        long intervalo = en.seq.isEmpty() ? 0 : t0 - en.ultimo;
         en.seq.append(c);
         en.ultimo = t0;
         int n = en.seq.length();
         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.35f, 0.9f + 0.25f * n);
         if (n < 3) {
             p.sendActionBar(progresso(en.seq.toString(), t));
+            if (n == 2) avisarTempoCerto(p, en);
             return true;
         }
         entradas.remove(id);
-        executar(p, t, en.seq.toString());
+        executar(p, t, en.seq.toString(), intervalo);
         return true;
+    }
+
+    /** Depois do 2º clique, um brilho e um "tim" marcam o tempo certo do 3º. */
+    private void avisarTempoCerto(Player p, Entrada en) {
+        long inicio = posturas.janelaPerfeita(p)[0];
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline() || entradas.get(p.getUniqueId()) != en || en.seq.length() != 2) return;
+            p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.7f, 1.8f);
+            p.spawnParticle(Particle.ELECTRIC_SPARK, p.getEyeLocation().add(p.getLocation().getDirection().multiply(0.8)), 6, 0.15, 0.15, 0.15, 0.02);
+        }, Math.max(1, inicio / 50));
     }
 
     private static Component progresso(String feito, TipoArma t) {
@@ -355,7 +392,7 @@ public final class Combos implements Listener, CommandExecutor {
         return c;
     }
 
-    private void executar(Player p, TipoArma t, String seq) {
+    private void executar(Player p, TipoArma t, String seq, long intervalo) {
         String[] seqs = t.sequencias();
         int espaco = -1;
         for (int i = 0; i < seqs.length; i++) if (seqs[i].equals(seq)) espaco = i;
@@ -377,30 +414,66 @@ public final class Combos implements Listener, CommandExecutor {
             return;
         }
         boolean criativo = p.getGameMode() == GameMode.CREATIVE;
-        if (!criativo && vigor(p) < g.vigor()) {
-            falhar(p, "Vigor insuficiente para " + g.nome() + " (" + (int) g.vigor() + ")");
+        // Golpe no tempo certo: o 3º clique dentro da janela depois do "tim".
+        long[] janela = posturas.janelaPerfeita(p);
+        boolean perfeito = intervalo >= janela[0] && intervalo <= janela[1];
+        double custo = g.vigor() * posturas.multVigor(p) * (perfeito ? 0.7 : 1);
+        if (!criativo && vigor(p) < custo) {
+            falhar(p, "Vigor insuficiente para " + g.nome() + " (" + (int) Math.ceil(custo) + ")");
             return;
         }
         double forca = 1 + cfg().comDanoPorNivel * (nivel(p, t) - 1);
+        if (perfeito) forca *= 1.25;
         Long carga = finalizador.get(p.getUniqueId());
         boolean finaliza = carga != null && carga > t0;
         if (finaliza) forca *= 1.5;
-        if (!golpes.usar(p, g, forca)) return;
-        if (!criativo) darVigor(p, -g.vigor());
+        golpes.comecar(perfeito);
+        boolean usou;
+        try {
+            usou = golpes.usar(p, g, forca);
+        } finally {
+            golpes.perfeitoAgora = false;
+        }
+        if (!usou) return;
+        if (!criativo) darVigor(p, -custo);
         else mostrarAte.put(p.getUniqueId(), t0 + 3000);
-        recargas.get(p.getUniqueId()).put(g, t0 + g.recarga() * 1000L);
+        long recarga = Math.round(g.recarga() * 1000L * posturas.multRecarga(p));
+        recargas.get(p.getUniqueId()).put(g, t0 + recarga);
+        avisarPronto(p, g, recarga);
         emCombate.put(p.getUniqueId(), t0);
         plugin.titulos().registrar(p, "combos", 1);
+        estilo.golpe(p, g, perfeito, finaliza);
+        if (perfeito) {
+            p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 0.9f, 1.4f);
+            p.getWorld().spawnParticle(Particle.ENCHANTED_HIT, p.getLocation().add(0, 1.2, 0).add(p.getLocation().getDirection()), 12, 0.3, 0.3, 0.3, 0.2);
+            plugin.titulos().registrar(p, "golpes_perfeitos", 1);
+        }
         if (finaliza) {
             finalizador.remove(p.getUniqueId());
             golpes.finalizar(p, forca);
+            ligacoes.finalizador(p);
             plugin.titulos().registrar(p, "finalizadores", 1);
             p.showTitle(Title.title(Component.empty(), Component.text("⚡ FINALIZADOR! ⚡", NamedTextColor.GOLD, TextDecoration.BOLD),
                     Title.Times.times(Duration.ofMillis(50), Duration.ofMillis(900), Duration.ofMillis(300))));
         } else {
             encadear(p, g, t0);
         }
-        p.sendActionBar(Component.text(t.simbolo() + " " + g.nome() + "!", t.cor(), TextDecoration.BOLD));
+        Estilo.Rank rank = estilo.rank(p);
+        Component barra = Component.text(t.simbolo() + " " + g.nome() + "!", t.cor(), TextDecoration.BOLD);
+        if (perfeito) barra = barra.append(Component.text("  ✦ Perfeito", NamedTextColor.GOLD, TextDecoration.BOLD));
+        if (rank != Estilo.Rank.D) barra = barra.append(Component.text("   [" + rank.name() + "]", rank.cor(), TextDecoration.BOLD));
+        p.sendActionBar(barra);
+    }
+
+    /** Um "plim" baixinho quando a recarga do golpe acaba. */
+    private void avisarPronto(Player p, Golpe g, long recargaMs) {
+        if (recargaMs < 2500) return;
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline() || TipoArma.de(p.getInventory().getItemInMainHand()) == null) return;
+            if (entradas.containsKey(p.getUniqueId())) return; // no meio de uma sequência, não atrapalha
+            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.35f, 1.6f);
+            p.sendActionBar(Component.text("✔ " + g.nome() + " pronto", NamedTextColor.GREEN));
+        }, recargaMs / 50);
     }
 
     /** Finalizador em cadeia: 3 golpes diferentes em 10 s carregam o próximo (+50% e explosão). */
@@ -561,6 +634,7 @@ public final class Combos implements Listener, CommandExecutor {
     public void aoSair(PlayerQuitEvent e) {
         UUID id = e.getPlayer().getUniqueId();
         entradas.remove(id);
+        estilo.sair(id);
         barras.remove(id);
         semEsquerdo.remove(id);
         emCombate.remove(id);
@@ -682,6 +756,13 @@ public final class Combos implements Listener, CommandExecutor {
             if (falta == null && contem(esp, g)) it.editMeta(m -> m.setEnchantmentGlintOverride(true));
             inv.setItem(S_EXTRAS[i], it);
         }
+        Postura ps = posturas.escolhida(p);
+        inv.setItem(S_POSTURA, item(ps.icone(), Component.text(ps.simbolo() + " Postura: " + ps.nome(), ps.cor(), TextDecoration.BOLD), List.of(
+                Component.text("Ofensiva, Defensiva, Ágil e a Mestra", NamedTextColor.GRAY),
+                Component.text("de cada arma (proficiência " + NIVEL_MAXIMO + ").", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("Estilo agora: " + estilo.rank(p).name(), estilo.rank(p).cor()),
+                Component.text("» Clique para trocar a postura", NamedTextColor.YELLOW))));
         inv.setItem(S_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of()));
         ItemStack vidro = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         vidro.editMeta(m -> m.setHideTooltip(true));
@@ -700,6 +781,10 @@ public final class Combos implements Listener, CommandExecutor {
         e.setCancelled(true);
         if (!(e.getWhoClicked() instanceof Player p) || e.getRawSlot() >= topo.getSize()) return;
         int slot = e.getSlot();
+        if (slot == S_POSTURA) {
+            posturas.abrir(p);
+            return;
+        }
         if (slot == S_FECHAR) {
             p.closeInventory();
             return;

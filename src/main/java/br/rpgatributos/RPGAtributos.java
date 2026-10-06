@@ -364,7 +364,7 @@ public final class RPGAtributos extends JavaPlugin {
                 parties, menuParty, territorios, marcos, menusTerritorio, new ProtecaoListener(this),
                 companheiros, comportamento, altaresDomador, menusDomador, masmorras, portaisMasmorra,
                 classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
-                estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista,
+                estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), combos.posturas(), combos.ligacoes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista,
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, trofeus,
                 mesasCartografo, lapides, recordes, diario,
@@ -413,6 +413,8 @@ public final class RPGAtributos extends JavaPlugin {
         if (cta != null) cta.setExecutor(talentos);
         PluginCommand cre = getCommand("renascer");
         if (cre != null) cre.setExecutor(renascimento);
+        PluginCommand cPostura = getCommand("postura");
+        if (cPostura != null) cPostura.setExecutor(combos.posturas());
         PluginCommand cse = getCommand("sentar");
         if (cse != null) cse.setExecutor(assentos);
         PluginCommand cdi = getCommand("diario");

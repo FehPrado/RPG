@@ -99,6 +99,11 @@ commands:
     usage: /combos [arma]
     aliases: [combo, golpes]
     permission: rpg.combos
+  postura:
+    description: Postura de combate (Neutra, Ofensiva, Defensiva, Ágil ou a Mestra da arma).
+    usage: /postura [neutra|ofensiva|defensiva|agil|mestra]
+    aliases: [posturas, estilo]
+    permission: rpg.combos
   mochila:
     description: Sua mochila — um baú pessoal que cresce com o nível total.
     usage: /mochila

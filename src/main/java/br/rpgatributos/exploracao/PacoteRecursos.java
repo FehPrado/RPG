@@ -152,8 +152,36 @@ public final class PacoteRecursos implements Listener {
     /** Marca o item para usar o visual do pacote (sem o pacote, ele continua com o visual do jogo). */
     public static void marcar(ItemMeta m, String id) {
         var cmd = m.getCustomModelDataComponent();
-        cmd.setStrings(List.of("rpgatributos:" + id)); // o pacote olha a primeira string
+        // O pacote olha a primeira string para o visual; a segunda é a postura (pegada da arma).
+        List<String> l = new java.util.ArrayList<>(cmd.getStrings());
+        if (l.isEmpty()) l.add("rpgatributos:" + id);
+        else l.set(0, "rpgatributos:" + id);
+        cmd.setStrings(l);
         m.setCustomModelDataComponent(cmd);
+    }
+
+    /** Põe (ou tira, com null) a postura na segunda marca do item, sem mexer no visual da primeira. */
+    public static void marcarPostura(ItemMeta m, String postura) {
+        var cmd = m.getCustomModelDataComponent();
+        List<String> l = new java.util.ArrayList<>(cmd.getStrings());
+        if (postura == null) {
+            if (l.size() < 2) return;
+            while (l.size() > 1) l.removeLast();
+            if (l.getFirst().isEmpty()) l.clear();
+        } else {
+            if (l.isEmpty()) l.add("");
+            if (l.size() == 1) l.add("rpgatributos:postura_" + postura);
+            else l.set(1, "rpgatributos:postura_" + postura);
+        }
+        cmd.setStrings(l);
+        m.setCustomModelDataComponent(cmd);
+    }
+
+    /** A postura marcada no item ("" se nenhuma). */
+    public static String postura(ItemStack i) {
+        if (i == null || i.isEmpty() || !i.hasItemMeta()) return "";
+        List<String> l = i.getItemMeta().getCustomModelDataComponent().getStrings();
+        return l.size() < 2 ? "" : l.get(1).replace("rpgatributos:postura_", "");
     }
 
     /** Itens feitos antes das texturas (gancho, cajado forjado, acessórios) ganham a marca. */
@@ -164,7 +192,7 @@ public final class PacoteRecursos implements Listener {
         // Acessórios: o item do jogo por baixo pode ter mudado (escudo e relógio têm modelos especiais).
         boolean modeloCerto = acessorio == null || acessorio.modelo().equals(i.getItemMeta().getItemModel());
         List<String> atual = i.getItemMeta().getCustomModelDataComponent().getStrings();
-        if (modeloCerto && atual.size() == 1 && atual.getFirst().equals("rpgatributos:" + id)) return i;
+        if (modeloCerto && !atual.isEmpty() && atual.getFirst().equals("rpgatributos:" + id)) return i;
         i.editMeta(m -> {
             marcar(m, id);
             if (acessorio != null) m.setItemModel(acessorio.modelo());
@@ -302,6 +330,22 @@ public final class PacoteRecursos implements Listener {
                         ? itemComPai("minecraft:item/handheld", "rpgatributos:item/" + id) : itemGerado("rpgatributos:item/" + id)));
             }
         }
+        // Espadas, machados e maça: a pegada muda com a postura (2ª marca), por cima do visual da lenda (1ª).
+        for (Material m : Material.values()) {
+            String n = m.name();
+            if (m.isLegacy() || !m.isItem() || !(n.endsWith("_SWORD") || n.endsWith("_AXE") || m == Material.MACE)) continue;
+            String vanilla = n.toLowerCase(java.util.Locale.ROOT);
+            List<String> lendas = casos.getOrDefault(vanilla, List.of());
+            List<String> pegadas = new java.util.ArrayList<>(List.of("ofensiva", "defensiva", "agil"));
+            pegadas.add(n.endsWith("_SWORD") ? "duelista" : n.endsWith("_AXE") ? "carrasco" : "colosso");
+            f.put("assets/minecraft/items/" + vanilla + ".json", texto(selecaoPostura(vanilla, lendas, pegadas)));
+            for (String pg : pegadas) {
+                f.put("assets/rpgatributos/models/item/postura/" + vanilla + "_" + pg + ".json", texto(modeloPegada("minecraft:item/" + vanilla, pg)));
+                for (String id : lendas) {
+                    f.put("assets/rpgatributos/models/item/postura/" + id + "_" + pg + ".json", texto(modeloPegada("rpgatributos:item/" + id, pg)));
+                }
+            }
+        }
         f.put("assets/minecraft/items/fishing_rod.json", texto(vara()));
         f.put("assets/rpgatributos/models/item/gancho.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/gancho")));
         f.put("assets/rpgatributos/models/item/gancho_lancado.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/gancho_lancado")));
@@ -390,6 +434,59 @@ public final class PacoteRecursos implements Listener {
                 ? "{ \"type\": \"minecraft:model\", \"model\": \"minecraft:item/potion\", \"tints\": [ { \"type\": \"minecraft:potion\", \"default\": -13083194 } ] }"
                 : "{ \"type\": \"minecraft:model\", \"model\": \"" + BLOCOS.getOrDefault(vanilla, "minecraft:item/" + vanilla) + "\" }";
         return sb.append(" ], \"fallback\": ").append(padrao).append(" } }").toString();
+    }
+
+    /**
+     * Arma com postura: primeiro olha a 2ª marca (postura) e depois a 1ª (lenda). Sem marca, o
+     * modelo normal. Cada postura usa um modelo que só muda a posição na mão.
+     */
+    private static String selecaoPostura(String vanilla, List<String> lendas, List<String> pegadas) {
+        StringBuilder sb = new StringBuilder("{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"index\": 1, \"cases\": [ ");
+        for (int i = 0; i < pegadas.size(); i++) {
+            String pg = pegadas.get(i);
+            sb.append(i == 0 ? "" : ", ").append("{ \"when\": \"rpgatributos:postura_").append(pg).append("\", \"model\": ")
+                    .append(porLenda(vanilla, lendas, pg)).append(" }");
+        }
+        return sb.append(" ], \"fallback\": ").append(porLenda(vanilla, lendas, null)).append(" } }").toString();
+    }
+
+    private static String porLenda(String vanilla, List<String> lendas, String pegada) {
+        String padrao = "{ \"type\": \"minecraft:model\", \"model\": \""
+                + (pegada == null ? "minecraft:item/" + vanilla : "rpgatributos:item/postura/" + vanilla + "_" + pegada) + "\" }";
+        if (lendas.isEmpty()) return padrao;
+        StringBuilder sb = new StringBuilder("{ \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ ");
+        for (int i = 0; i < lendas.size(); i++) {
+            String id = lendas.get(i);
+            sb.append(i == 0 ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(id).append("\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"")
+                    .append(pegada == null ? "rpgatributos:item/" + id : "rpgatributos:item/postura/" + id + "_" + pegada).append("\" } }");
+        }
+        return sb.append(" ], \"fallback\": ").append(padrao).append(" }").toString();
+    }
+
+    /**
+     * Como a arma fica na mão em cada postura (rotação, posição e escala; a mão esquerda espelha).
+     * {terceira pessoa: rot x,y,z, pos x,y,z; primeira pessoa: rot x,y,z, pos x,y,z}
+     */
+    private static final Map<String, double[]> PEGADAS = Map.of(
+            "ofensiva", new double[]{0, -90, -25, 0, 5, 1, 0, -90, 0, 1.13, 4.2, 1.13},
+            "defensiva", new double[]{0, -170, 80, -1, 3.5, 1.5, 0, -150, 75, 0, 3.2, 0},
+            "agil", new double[]{0, -90, -125, 0, 1.5, 0.5, 0, -90, -160, 1.13, 2.5, 1.13},
+            "duelista", new double[]{0, -90, 90, 0, 3.5, 2, 0, -90, 80, 1.13, 3.6, 1.13},
+            "carrasco", new double[]{0, -90, 10, 0, 6, 0, 0, -90, 15, 1.13, 4.4, 1.13},
+            "colosso", new double[]{0, -90, -60, 0, 6, -1.5, 0, -90, -30, 1.13, 4.0, 1.13});
+
+    private static String modeloPegada(String pai, String pegada) {
+        double[] v = PEGADAS.get(pegada);
+        return "{ \"parent\": \"" + pai + "\", \"display\": { "
+                + transf("thirdperson_righthand", v[0], v[1], v[2], v[3], v[4], v[5], 0.85) + ", "
+                + transf("thirdperson_lefthand", v[0], -v[1], -v[2], v[3], v[4], v[5], 0.85) + ", "
+                + transf("firstperson_righthand", v[6], v[7], v[8], v[9], v[10], v[11], 0.68) + ", "
+                + transf("firstperson_lefthand", v[6], -v[7], -v[8], v[9], v[10], v[11], 0.68) + " } }";
+    }
+
+    private static String transf(String onde, double rx, double ry, double rz, double tx, double ty, double tz, double escala) {
+        return String.format(java.util.Locale.ROOT, "\"%s\": { \"rotation\": [%.1f, %.1f, %.1f], \"translation\": [%.2f, %.2f, %.2f], \"scale\": [%.2f, %.2f, %.2f] }",
+                onde, rx, ry, rz, tx, ty, tz, escala, escala, escala);
     }
 
     private static String itemGerado(String textura) {
