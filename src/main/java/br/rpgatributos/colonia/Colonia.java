@@ -97,9 +97,9 @@ public final class Colonia {
     long proximaChegada;
     final List<Location> depositos = new ArrayList<>();
     final List<Cidadao> cidadaos = new ArrayList<>();
-    /** A casa que o Construtor está erguendo (null = nenhuma) e quantas ele já terminou. */
-    Obras.Obra obra;
-    int casas;
+    /** Obras em andamento (canteiros cercados) e construções prontas. */
+    final List<Obra> obras = new ArrayList<>();
+    final List<Construcao> construcoes = new ArrayList<>();
 
     // ---------- achado na última varredura (não é salvo) ----------
     int camas;

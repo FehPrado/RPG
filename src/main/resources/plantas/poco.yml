@@ -1,0 +1,49 @@
+# Projeto de construção da colônia (Poço da Praça).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Poço da Praça"
+descricao:
+  - "Um poço com telhado e flores."
+  - "Cada praça deixa a colônia mais feliz (até 2)."
+icone: WATER_BUCKET
+nivel: 1
+efeito: PRACA
+legenda:
+  "C": "cobblestone"
+  "A": "water"
+  "M": "cobblestone_wall"
+  "O": "oak_fence"
+  "U": "spruce_slab[type=bottom]"
+  "n": "lantern[hanging=true]"
+  "Y": "potted_poppy"
+camadas:
+  # 0
+  - - "CCCCC"
+    - "CCCCC"
+    - "CCACC"
+    - "CCCCC"
+    - "CCCCC"
+  # 1
+  - - "Y...Y"
+    - ".MMM."
+    - ".MAM."
+    - ".MMM."
+    - "Y...Y"
+  # 2
+  - - "....."
+    - ".O.O."
+    - "....."
+    - ".O.O."
+    - "....."
+  # 3
+  - - "....."
+    - ".O.O."
+    - "..n.."
+    - ".O.O."
+    - "....."
+  # 4
+  - - "....."
+    - ".UUU."
+    - ".UUU."
+    - ".UUU."
+    - "....."

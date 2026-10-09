@@ -1,0 +1,52 @@
+# Projeto de construção da colônia (Fazenda).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Fazenda"
+descricao:
+  - "Plantação cercada com água no meio,"
+  - "trigo plantado e a composteira do Fazendeiro."
+icone: WHEAT
+nivel: 1
+efeito: FAZENDA
+legenda:
+  "L": "oak_log"
+  "X": "oak_log[axis=x]"
+  "Z": "oak_log[axis=z]"
+  "F": "farmland[moisture=7]"
+  "A": "water"
+  "O": "oak_fence"
+  "G": "oak_fence_gate[facing=south]"
+  "K": "composter"
+  "w": "wheat[age=0]"
+  "N": "lantern[hanging=false]"
+camadas:
+  # 0
+  - - "LXXXXXXXL"
+    - "ZFFFFFFFZ"
+    - "ZFFFFFFFZ"
+    - "ZFFFFFFFZ"
+    - "ZFFFAFFFZ"
+    - "ZFFFFFFFZ"
+    - "ZFFFFFFFZ"
+    - "ZFFFFFFFZ"
+    - "LXXXXXXXL"
+  # 1
+  - - "OOOOOOOOO"
+    - "OKwwwwwwO"
+    - "OwwwwwwwO"
+    - "OwwwwwwwO"
+    - "Owww.wwwO"
+    - "OwwwwwwwO"
+    - "OwwwwwwwO"
+    - "OwwwwwwwO"
+    - "OOOOGOOOO"
+  # 2
+  - - "N.......N"
+    - "........."
+    - "........."
+    - "........."
+    - "........."
+    - "........."
+    - "........."
+    - "........."
+    - "N.......N"

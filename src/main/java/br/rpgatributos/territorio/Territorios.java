@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -168,7 +169,10 @@ public final class Territorios implements Listener {
         // Chunks conquistados em guerra (do Rei) e as expansões passam do máximo normal.
         Territorio t = de(p.getUniqueId());
         int expansoes = t == null ? 0 : t.expansoes().size() * cfg().terChunksPorExpansao;
-        return Math.min(cfg().terChunksMax, cfg().terChunksIniciais + extra) + plugin.reinos().chunksExtras(p.getUniqueId()) + expansoes;
+        // Torres de Vigia da colônia também passam do máximo normal.
+        int lado = 2 * cfg().terRaioTorre + 1;
+        int torres = t == null ? 0 : t.torres().size() * lado * lado;
+        return Math.min(cfg().terChunksMax, cfg().terChunksIniciais + extra) + plugin.reinos().chunksExtras(p.getUniqueId()) + expansoes + torres;
     }
 
     /** Quantos Marcos de Expansão o jogador pode ter (1 a cada N níveis somados, até o máximo). */
@@ -224,6 +228,32 @@ public final class Territorios implements Listener {
         plugin.titulos().definirMinimo(p, "chunks", t.chunks().size());
         salvar();
         ondeEsta.remove(p.getUniqueId());
+    }
+
+    /**
+     * Uma Torre de Vigia da colônia ficou pronta: os chunks livres em volta dela (raio do config)
+     * entram no território. @return quantos chunks entraram.
+     */
+    public int expandirPorTorre(UUID dono, Location torre) {
+        Territorio t = de(dono);
+        if (t == null || torre.getWorld() == null || !t.mundo().equals(torre.getWorld().getName())) return 0;
+        for (int[] e : t.torres()) if (e[0] == torre.getBlockX() && e[1] == torre.getBlockY() && e[2] == torre.getBlockZ()) return 0;
+        t.torresEditaveis().add(new int[]{torre.getBlockX(), torre.getBlockY(), torre.getBlockZ()});
+        int r = cfg().terRaioTorre, novos = 0;
+        int cx = torre.getBlockX() >> 4, cz = torre.getBlockZ() >> 4;
+        for (int dx = -r; dx <= r; dx++) {
+            for (int dz = -r; dz <= r; dz++) {
+                if (em(t.mundo(), cx + dx, cz + dz) == null) {
+                    indexar(t, cx + dx, cz + dz);
+                    novos++;
+                }
+            }
+        }
+        Player p = Bukkit.getPlayer(dono);
+        if (p != null) plugin.titulos().definirMinimo(p, "chunks", t.chunks().size());
+        salvar();
+        ondeEsta.clear();
+        return novos;
     }
 
     /**
@@ -550,6 +580,10 @@ public final class Territorios implements Listener {
                     String[] p = e.split(",");
                     t.expansoesEditaveis().add(new int[]{Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2])});
                 }
+                for (String e : s.getStringList("torres")) {
+                    String[] p = e.split(",");
+                    t.torresEditaveis().add(new int[]{Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2])});
+                }
                 ConfigurationSection mem = s.getConfigurationSection("membros");
                 if (mem != null) for (String u : mem.getKeys(false)) t.membrosEditaveis().put(UUID.fromString(u), mem.getString(u, "?"));
                 for (String f : s.getStringList("regras")) {
@@ -580,6 +614,9 @@ public final class Territorios implements Listener {
             List<String> exp = new ArrayList<>();
             for (int[] e : t.expansoes()) exp.add(e[0] + "," + e[1] + "," + e[2]);
             if (!exp.isEmpty()) y.set(base + "expansoes", exp);
+            List<String> torres = new ArrayList<>();
+            for (int[] e : t.torres()) torres.add(e[0] + "," + e[1] + "," + e[2]);
+            if (!torres.isEmpty()) y.set(base + "torres", torres);
             for (Map.Entry<UUID, String> m : t.membros().entrySet()) y.set(base + "membros." + m.getKey(), m.getValue());
             List<String> regras = new ArrayList<>();
             for (Flag f : t.flagsLigadas()) regras.add(f.id());

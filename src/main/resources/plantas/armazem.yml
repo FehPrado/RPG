@@ -1,0 +1,90 @@
+# Projeto de construção da colônia (Armazém).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Armazém"
+descricao:
+  - "Galpão de abeto com 7 baús."
+  - "Pronto, os baús viram depósito da colônia."
+icone: CHEST
+nivel: 2
+efeito: ARMAZEM
+legenda:
+  "P": "stone_bricks"
+  "L": "spruce_log"
+  "T": "spruce_planks"
+  "J": "glass_pane"
+  "D": "spruce_door[facing=north,half=lower,hinge=left]"
+  "d": "spruce_door[facing=north,half=upper,hinge=left]"
+  "K": "chest[facing=south]"
+  "k": "chest[facing=east]"
+  "R": "chest[facing=west]"
+  "N": "lantern[hanging=false]"
+  "n": "lantern[hanging=true]"
+  "E": "spruce_stairs[facing=east,half=bottom]"
+  "Q": "spruce_stairs[facing=west,half=bottom]"
+  "S": "spruce_slab[type=bottom]"
+camadas:
+  # 0
+  - - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+  # 1
+  - - "LTTTTTL"
+    - "TKKKKKT"
+    - "T.....T"
+    - "Tk...RT"
+    - "T.....T"
+    - "TN...NT"
+    - "LTTDTTL"
+  # 2
+  - - "LTTJTTL"
+    - "T.....T"
+    - "T.....T"
+    - "J.....J"
+    - "T.....T"
+    - "T.....T"
+    - "LTTdTTL"
+  # 3
+  - - "LTTTTTL"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "LTTTTTL"
+  # 4
+  - - "ETTTTTQ"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "ETTTTTQ"
+  # 5
+  - - ".ETTTQ."
+    - ".E...Q."
+    - ".E...Q."
+    - ".E.n.Q."
+    - ".E...Q."
+    - ".E...Q."
+    - ".ETTTQ."
+  # 6
+  - - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+  # 7
+  - - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."

@@ -1,0 +1,93 @@
+# Projeto de construção da colônia (Torre de Vigia).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Torre de Vigia"
+descricao:
+  - "Torre de pedra com escada e mirante."
+  - "Pronta, o território cresce em volta dela."
+icone: SPYGLASS
+nivel: 1
+efeito: TORRE_DE_VIGIA
+legenda:
+  "C": "cobblestone"
+  "S": "stone_bricks"
+  "H": "ladder[facing=south]"
+  "D": "spruce_door[facing=north,half=lower,hinge=left]"
+  "d": "spruce_door[facing=north,half=upper,hinge=left]"
+  "W": "wall_torch[facing=north]"
+  "T": "spruce_planks"
+  "M": "stone_brick_wall"
+  "N": "lantern[hanging=false]"
+camadas:
+  # 0
+  - - "CCCCC"
+    - "CCCCC"
+    - "CCCCC"
+    - "CCCCC"
+    - "CCCCC"
+  # 1
+  - - "SSSSS"
+    - "S.H.S"
+    - "S...S"
+    - "S...S"
+    - "SSDSS"
+  # 2
+  - - "SSSSS"
+    - "S.H.S"
+    - "S...S"
+    - "S...S"
+    - "SSdSS"
+  # 3
+  - - "SSSSS"
+    - "S.H.S"
+    - "S...S"
+    - "S.W.S"
+    - "SSSSS"
+  # 4
+  - - "SSSSS"
+    - "S.H.S"
+    - "....."
+    - "S...S"
+    - "SSSSS"
+  # 5
+  - - "SSSSS"
+    - "S.H.S"
+    - "S...S"
+    - "S...S"
+    - "SSSSS"
+  # 6
+  - - "SSSSS"
+    - "S.H.S"
+    - "S...S"
+    - "S.W.S"
+    - "SSSSS"
+  # 7
+  - - "SSSSS"
+    - "S.H.S"
+    - "....."
+    - "S...S"
+    - "SS.SS"
+  # 8
+  - - "SSSSS"
+    - "S.H.S"
+    - "S...S"
+    - "S...S"
+    - "SSSSS"
+  # 9
+  - - "SSSSS"
+    - "STHTS"
+    - "STTTS"
+    - "STTTS"
+    - "SSSSS"
+  # 10
+  - - "MMMMM"
+    - "M...M"
+    - "M...M"
+    - "M...M"
+    - "MMMMM"
+  # 11
+  - - "N...N"
+    - "....."
+    - "....."
+    - "....."
+    - "N...N"

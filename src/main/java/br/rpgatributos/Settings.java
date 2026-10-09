@@ -121,6 +121,8 @@ public final class Settings {
     public final boolean partyAvisoVida;
     public final int terChunksIniciais, terNiveisPorChunk, terChunksMax, terMembrosMax;
     public final int terExpansoesMax, terNiveisPorExpansao, terChunksPorExpansao;
+    /** Raio (em chunks) que cada Torre de Vigia da colônia acrescenta ao território (1 = 3x3). */
+    public final int terRaioTorre;
     public final boolean terExigirVizinho;
     public final List<String> terMundosBloqueados;
 
@@ -393,6 +395,7 @@ public final class Settings {
         terExpansoesMax = Math.max(0, c.getInt("territorio.expansoes-maximo", 2));
         terNiveisPorExpansao = Math.max(1, c.getInt("territorio.niveis-por-expansao", 300));
         terChunksPorExpansao = Math.max(1, c.getInt("territorio.chunks-por-expansao", 9));
+        terRaioTorre = Math.max(0, Math.min(3, c.getInt("territorio.raio-torre-de-vigia", 1)));
         terMembrosMax = Math.max(0, c.getInt("territorio.membros-maximo", 10));
         terExigirVizinho = c.getBoolean("territorio.chunks-precisam-ser-vizinhos", true);
         terMundosBloqueados = List.copyOf(c.getStringList("territorio.mundos-bloqueados"));

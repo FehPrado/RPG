@@ -377,7 +377,7 @@ public final class RPGAtributos extends JavaPlugin {
                 chefes, eventos, mercadores, altares, new MateriaisListener(), missoes, agricultura, cozinha, reciclagem,
                 parties, menuParty, territorios, marcos, menusTerritorio, new ProtecaoListener(this),
                 companheiros, comportamento, altaresDomador, menusDomador, masmorras, portaisMasmorra,
-                classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
+                classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, colonias.obras(), prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
                 estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), combos.posturas(), combos.ligacoes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista,
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
@@ -512,6 +512,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, prefeituras::tick, 5L, 5L);
         agenda.runTaskTimer(this, colonias::tick, 20L, 20L);
         agenda.runTaskTimer(this, colonias::tickSoldados, 10L, 10L);
+        agenda.runTaskTimer(this, colonias.obras()::tick, 10L, 10L);
         // Reinos: guerras marcadas e captura de Marcos (1 segundo).
         agenda.runTaskTimer(this, reinos::tick, 20L, 20L);
         // Mundo perigoso: Elites (meio segundo), ninhos, hordas e Chefe Mundial (1 segundo).
@@ -676,6 +677,7 @@ public final class RPGAtributos extends JavaPlugin {
         reloadConfig();
         settings = new Settings(getConfig());
         if (controle != null) controle.aplicarLimites();
+        if (colonias != null) colonias.obras().recarregarPlantas();
         for (Player p : getServer().getOnlinePlayers()) {
             bonus.aplicar(p);
             tags.garantir(p);

@@ -1,0 +1,71 @@
+# Projeto de construção da colônia (Quartel).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Quartel"
+descricao:
+  - "Alojamento de pedra com 4 camas"
+  - "e 2 alvos (8 vagas de soldado)."
+icone: TARGET
+nivel: 2
+efeito: QUARTEL
+legenda:
+  "P": "stone_bricks"
+  "C": "cobblestone"
+  "L": "spruce_log"
+  "H": "red_bed[facing=north,part=head]"
+  "F": "red_bed[facing=north,part=foot]"
+  "A": "target"
+  "J": "glass_pane"
+  "D": "spruce_door[facing=north,half=lower,hinge=left]"
+  "d": "spruce_door[facing=north,half=upper,hinge=left]"
+  "N": "lantern[hanging=false]"
+  "M": "cobblestone_wall"
+camadas:
+  # 0
+  - - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+  # 1
+  - - "LCCCCCCCL"
+    - "CHHA.AHHC"
+    - "CFF...FFC"
+    - "C.......C"
+    - "C.......C"
+    - "CN.....NC"
+    - "LCCCDCCCL"
+  # 2
+  - - "LCCJCJCCL"
+    - "C.......C"
+    - "C.......C"
+    - "J.......J"
+    - "C.......C"
+    - "C.......C"
+    - "LCCCdCCCL"
+  # 3
+  - - "LCCCCCCCL"
+    - "C.......C"
+    - "C.......C"
+    - "C.......C"
+    - "C.......C"
+    - "C.......C"
+    - "LCCCCCCCL"
+  # 4
+  - - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+    - "PPPPPPPPP"
+  # 5
+  - - "M.M.M.M.M"
+    - "........."
+    - "M.......M"
+    - "........."
+    - "M.......M"
+    - "........."
+    - "M.M.M.M.M"
