@@ -28,7 +28,7 @@ public final class Territorio {
     private final Map<UUID, String> membros = new LinkedHashMap<>();
     private final EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
     private final List<int[]> expansoes = new ArrayList<>();
-    /** Torres de Vigia da colônia (x, y, z): cada uma soma os chunks em volta dela. */
+    /** Torres de Vigia da colônia (x, y, z, raio em chunks): cada uma soma os chunks em volta dela. */
     private final List<int[]> torres = new ArrayList<>();
 
     Territorio(UUID dono, String nomeDono, Location marco, ItemStack bandeira) {

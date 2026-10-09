@@ -28,6 +28,10 @@ final class Obra {
     int passo;
     /** O Construtor (entidade) que está nela. */
     UUID construtor;
+    /** Do jeito do jogador: ele mesmo constrói dentro da cerca e pede a vistoria (sem Construtor). */
+    boolean livre;
+    /** Blocos a mais de cada lado da área do projeto (só nas livres). */
+    int extra;
     /** Blocos da cerca do canteiro (x, y, z), para tirar no fim. */
     final List<int[]> cerca = new ArrayList<>();
 
@@ -53,7 +57,7 @@ final class Obra {
 
     World world() { return Bukkit.getWorld(mundo); }
 
-    boolean comecou() { return fase != Fase.CANTEIRO || passo > 0; }
+    boolean comecou() { return !livre && (fase != Fase.CANTEIRO || passo > 0); }
 
     /** Bloco do mundo de um ponto da planta. */
     Block bloco(World w, Planta p, int lx, int ly, int lz) {
@@ -63,6 +67,7 @@ final class Obra {
 
     /** Retângulo (minX, minZ, maxX, maxZ) da planta no mundo, com {@code folga} blocos a mais de cada lado. */
     int[] area(Planta p, int folga) {
+        folga += extra;
         int[] a = Planta.girar(-p.largura() / 2, -p.profundidade() / 2, rot);
         int[] b = Planta.girar(p.largura() - 1 - p.largura() / 2, p.profundidade() - 1 - p.profundidade() / 2, rot);
         return new int[]{x + Math.min(a[0], b[0]) - folga, z + Math.min(a[1], b[1]) - folga,
@@ -71,8 +76,13 @@ final class Obra {
 
     /** O ponto bem na frente da entrada, do lado de dentro da cerca (onde o Construtor fica). */
     Location entrada(World w, Planta p) {
-        Block b = bloco(w, p, p.largura() / 2, 0, p.profundidade());
+        Block b = bloco(w, p, p.largura() / 2, 0, p.profundidade() + extra);
         return b.getLocation().add(0.5, 1, 0.5);
+    }
+
+    /** Onde fica o portão da cerca (no meio da frente). */
+    Block portao(World w, Planta p) {
+        return bloco(w, p, p.largura() / 2, 0, p.profundidade() + 1 + extra);
     }
 
     Location centro(World w) { return new Location(w, x + 0.5, y + 1, z + 0.5); }
@@ -91,6 +101,8 @@ final class Obra {
         s.set("fase", fase.name());
         s.set("passo", passo);
         if (construtor != null) s.set("construtor", construtor.toString());
+        if (livre) s.set("livre", true);
+        if (extra > 0) s.set("extra", extra);
         List<String> l = new ArrayList<>();
         for (int[] c : cerca) l.add(c[0] + "," + c[1] + "," + c[2]);
         s.set("cerca", l);
@@ -103,6 +115,8 @@ final class Obra {
                     Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2]), Integer.parseInt(p[3]));
             o.fase = Fase.valueOf(s.getString("fase", "CANTEIRO"));
             o.passo = Math.max(0, s.getInt("passo"));
+            o.livre = s.getBoolean("livre");
+            o.extra = Math.max(0, s.getInt("extra"));
             String c = s.getString("construtor");
             if (c != null) o.construtor = UUID.fromString(c);
             for (String linha : s.getStringList("cerca")) {

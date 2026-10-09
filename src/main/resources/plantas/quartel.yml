@@ -20,6 +20,30 @@ legenda:
   "d": "spruce_door[facing=north,half=upper,hinge=left]"
   "N": "lantern[hanging=false]"
   "M": "cobblestone_wall"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 70
+    camas: 2
+    portas: 1
+    luz: 1
+    coberto: 70
+    itens:
+      target: 1
+  - blocos: 120
+    camas: 4
+    portas: 1
+    luz: 2
+    coberto: 80
+    itens:
+      target: 2
+  - blocos: 200
+    camas: 6
+    portas: 1
+    luz: 3
+    coberto: 85
+    itens:
+      target: 4
 camadas:
   # 0
   - - "PPPPPPPPP"

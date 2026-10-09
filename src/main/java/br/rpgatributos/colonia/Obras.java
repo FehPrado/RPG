@@ -78,13 +78,14 @@ public final class Obras implements Listener {
             Material.SANDSTONE, Material.CLAY, Material.SNOW_BLOCK, Material.DIRT_PATH, Material.FARMLAND, Material.MOSS_BLOCK);
     private static final Material CERCA = Material.OAK_FENCE, PORTAO = Material.OAK_FENCE_GATE;
 
-    private enum Tipo { CATALOGO, LISTA, OBRA }
+    private enum Tipo { CATALOGO, LISTA, OBRA, CONSTRUCAO }
 
     private static final class Tela implements InventoryHolder {
         final Tipo tipo;
         final Colonia colonia;
         final List<String> ids = new ArrayList<>();
         UUID obra;
+        int construcao = -1;
         Inventory inventario;
 
         Tela(Tipo tipo, Colonia colonia) {
@@ -98,7 +99,10 @@ public final class Obras implements Listener {
 
     private static final int[] SLOTS_LISTA = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
     private static final int[] SLOTS_MATERIAIS = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
-    private static final int O_INFO = 4, O_GIRAR = 45, O_MOVER = 46, O_CONTORNO = 47, O_TRAZER = 48, O_VOLTAR = 49, O_CANCELAR = 53;
+    private static final int O_INFO = 4, O_GIRAR = 45, O_MOVER = 46, O_CONTORNO = 47, O_TRAZER = 48, O_VOLTAR = 49, O_AREA_MENOS = 50,
+            O_AREA_MAIS = 51, O_CANCELAR = 53;
+    /** Do seu jeito: até quantos blocos a mais de cada lado a área pode crescer. */
+    private static final int EXTRA_MAX = 6;
     private static final int L_INFO = 4, VOLTAR = 49;
 
     private final RPGAtributos plugin;
@@ -186,9 +190,10 @@ public final class Obras implements Listener {
                 if (!c.dentro(new Location(w, canto[0], o.y, canto[1]))) return "A obra precisa caber perto da Prefeitura.";
             }
         }
-        if (o.y < c.y - Colonia.ABAIXO || o.y + p.altura() > c.y + Colonia.ACIMA) return "Alto ou fundo demais em relação à Prefeitura.";
-        if (o.y + p.altura() >= w.getMaxHeight() || o.y - 4 <= w.getMinHeight()) return "Não cabe nessa altura.";
-        if (c.x >= a[0] - 1 && c.x <= a[2] + 1 && c.z >= a[1] - 1 && c.z <= a[3] + 1 && Math.abs(c.y - o.y) < p.altura() + 3) {
+        int alt = o.livre ? alturaVistoria(p) : p.altura();
+        if (o.y < c.y - Colonia.ABAIXO || o.y + alt > c.y + Colonia.ACIMA) return "Alto ou fundo demais em relação à Prefeitura.";
+        if (o.y + alt >= w.getMaxHeight() || o.y - 4 <= w.getMinHeight()) return "Não cabe nessa altura.";
+        if (c.x >= a[0] - 1 && c.x <= a[2] + 1 && c.z >= a[1] - 1 && c.z <= a[3] + 1 && Math.abs(c.y - o.y) < alt + 3) {
             return "Muito perto da Prefeitura (o sino precisa ficar livre).";
         }
         for (Obra outra : c.obras) {
@@ -199,11 +204,12 @@ public final class Obras implements Listener {
         for (Construcao k : c.construcoes) {
             Planta pk = plantas.de(k.planta());
             if (pk == null || !k.mundo().equals(o.mundo)) continue;
-            Obra fantasma = new Obra(UUID.randomUUID(), k.planta(), k.mundo(), k.x(), k.y(), k.z(), k.rot());
-            if (sobrepoe(o.area(p, 1), fantasma.area(pk, 0)) && Math.abs(k.y() - o.y) < Math.max(p.altura(), pk.altura())) {
+            if (sobrepoe(o.area(p, 1), k.area().area(pk, 0)) && Math.abs(k.y - o.y) < Math.max(alt, pk.altura())) {
                 return "Fica em cima de uma construção pronta (" + pk.nome() + ").";
             }
         }
+        // Do seu jeito: o que já tem na área é do jogador e conta na vistoria.
+        if (o.livre) return null;
         // O que já tem na área: nada de baús, estações ou coisas que alguém construiu.
         for (int ly = 0; ly < p.altura(); ly++) {
             for (int lz = 0; lz < p.profundidade(); lz++) {
@@ -224,6 +230,13 @@ public final class Obras implements Listener {
             }
         }
         return null;
+    }
+
+    /** Até que altura a vistoria olha numa área "do seu jeito". */
+    static int alturaVistoria(Planta p) {
+        int pedida = 0;
+        for (Vistoria.Requisito r : p.niveis()) pedida = Math.max(pedida, r.altura());
+        return Math.min(40, Math.max(p.altura(), pedida) + 6);
     }
 
     private static boolean sobrepoe(int[] a, int[] b) {
@@ -247,7 +260,7 @@ public final class Obras implements Listener {
         World w = o.world();
         if (w == null) return;
         int[] a = o.area(p, 2);
-        Block portao = o.bloco(w, p, p.largura() / 2, 0, p.profundidade() + 1);
+        Block portao = o.portao(w, p);
         List<Block> postas = new ArrayList<>();
         for (int x = a[0]; x <= a[2]; x++) {
             for (int z = a[1]; z <= a[3]; z++) {
@@ -348,6 +361,7 @@ public final class Obras implements Listener {
         }
         Planta p = plantas.deItem(e.getItem());
         if (p == null) return;
+        boolean livre = plantas.livre(e.getItem());
         e.setCancelled(true);
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || clicado == null) {
             jogador.sendActionBar(Component.text("Clique com o botão direito no CHÃO onde quer a obra.", Prefeituras.COR));
@@ -367,6 +381,7 @@ public final class Obras implements Listener {
         int rot = 0;
         for (int i = 0; i < 4; i++) if (Planta.GIRO[i] == frente) rot = i;
         Obra o = new Obra(UUID.randomUUID(), p.id(), chao.getWorld().getName(), chao.getX(), chao.getY(), chao.getZ(), rot);
+        o.livre = livre;
         String erro = impedimento(c, p, o);
         if (erro != null) {
             Colonias.erro(jogador, "✖ " + erro);
@@ -382,9 +397,15 @@ public final class Obras implements Listener {
         jogador.playSound(jogador.getLocation(), Sound.BLOCK_WOOD_PLACE, 1f, 0.8f);
         jogador.sendMessage(Component.text("⌂ Canteiro da obra marcado: " + p.nome() + ". ", Prefeituras.COR, TextDecoration.BOLD)
                 .append(Component.text("A entrada fica do lado do portão.", NamedTextColor.GRAY)));
-        jogador.sendMessage(Component.text("  1. Agachado + clique na cerca: girar, mudar de lugar ou ver os materiais.", NamedTextColor.GRAY));
-        jogador.sendMessage(Component.text("  2. Ponha um baú DENTRO da cerca (fora da obra) com os materiais.", NamedTextColor.GRAY));
-        jogador.sendMessage(Component.text("  3. Um Construtor livre (posto: bancada de trabalho) vem erguer a obra.", NamedTextColor.GRAY));
+        if (livre) {
+            jogador.sendMessage(Component.text("  1. Agachado + clique na cerca: girar, aumentar a área ou ver o mínimo de cada nível.", NamedTextColor.GRAY));
+            jogador.sendMessage(Component.text("  2. Construa do seu jeito DENTRO da cerca, atendendo o mínimo do nível 1.", NamedTextColor.GRAY));
+            jogador.sendMessage(Component.text("  3. Peça a vistoria no menu da cerca: passou, vira construção da colônia.", NamedTextColor.GRAY));
+        } else {
+            jogador.sendMessage(Component.text("  1. Agachado + clique na cerca: girar, mudar de lugar ou ver os materiais.", NamedTextColor.GRAY));
+            jogador.sendMessage(Component.text("  2. Ponha um baú DENTRO da cerca (fora da obra) com os materiais.", NamedTextColor.GRAY));
+            jogador.sendMessage(Component.text("  3. Um Construtor livre (posto: bancada de trabalho) vem erguer a obra.", NamedTextColor.GRAY));
+        }
         colonias.salvar();
     }
 
@@ -405,7 +426,7 @@ public final class Obras implements Listener {
         for (Colonia c : colonias.todas()) {
             for (Obra o : c.obras) {
                 Planta p = plantas.de(o.planta);
-                if (p == null || !o.mundo.equals(b.getWorld().getName()) || !o.dentro(p, b.getX(), b.getZ(), 1)) continue;
+                if (p == null || o.livre || !o.mundo.equals(b.getWorld().getName()) || !o.dentro(p, b.getX(), b.getZ(), 1)) continue;
                 if (o.dentro(p, b.getX(), b.getZ(), 0)) {
                     e.getPlayer().sendMessage(Component.text("⌂ Esse baú está dentro da área da construção: o Construtor vai precisar do lugar. "
                             + "Ponha entre a obra e a cerca.", NamedTextColor.GOLD));
@@ -500,6 +521,7 @@ public final class Obras implements Listener {
     }
 
     private void tickObra(Colonia c, Obra o) {
+        if (o.livre) return; // do seu jeito: quem constrói é o jogador
         World w = o.world();
         if (w == null || !w.isChunkLoaded(o.x >> 4, o.z >> 4)) return;
         Planta p = plantas.de(o.planta);
@@ -720,36 +742,19 @@ public final class Obras implements Listener {
     private void concluir(Colonia c, Obra o, Planta p, Colonia.Cidadao ci) {
         World w = o.world();
         List<Block> ligar = new ArrayList<>();
-        List<Location> baus = new ArrayList<>();
         for (Planta.Bloco pb : p.ordem()) {
             BlockData d = pb.dados();
             Block b = o.bloco(w, p, pb.lx(), pb.ly(), pb.lz());
             if (d instanceof Fence || d instanceof GlassPane || d instanceof Wall) ligar.add(b);
-            Material m = d.getMaterial();
-            if (m == Material.CHEST || m == Material.TRAPPED_CHEST || m == Material.BARREL) baus.add(b.getLocation());
         }
         conectar(ligar);
         removerCerca(o);
         c.obras.remove(o);
-        c.construcoes.add(new Construcao(p.id(), o.mundo, o.x, o.y, o.z, o.rot));
-        Component extra = Component.empty();
-        switch (p.efeito()) {
-            case TORRE_DE_VIGIA -> {
-                int n = plugin.territorios().expandirPorTorre(c.dono, o.centro(w));
-                extra = Component.text(" O território cresceu " + n + (n == 1 ? " chunk" : " chunks") + " em volta da torre.", NamedTextColor.GREEN);
-            }
-            case ARMAZEM -> {
-                int n = 0;
-                for (Location l : baus) {
-                    boolean ja = false;
-                    for (Location d : c.depositos) if (d.getBlock().equals(l.getBlock())) ja = true;
-                    if (!ja) { c.depositos.add(l); n++; }
-                }
-                extra = Component.text(" " + n + " baús viraram depósito da colônia.", NamedTextColor.GREEN);
-            }
-            case PRACA -> extra = Component.text(" A colônia ficou mais feliz.", NamedTextColor.GREEN);
-            default -> { }
-        }
+        // O desenho pronto é pelo menos o nível 1; se tiver mais, a vistoria diz.
+        Construcao k = new Construcao(p.id(), o.mundo, o.x, o.y, o.z, o.rot, 0, false, 1);
+        k.nivel = Math.max(1, vistoriar(w, p, k.area()).nivel(p.niveis()));
+        c.construcoes.add(k);
+        Component extra = aplicarNivel(c, k, p);
         colonias.alterarFelicidade(c, 3);
         colonias.ganharXp(c, ci, 20);
         colonias.varrer(c);
@@ -778,14 +783,159 @@ public final class Obras implements Listener {
         c.obras.clear();
     }
 
-    /** Quantas construções prontas desse tipo a colônia tem. */
-    int quantas(Colonia c, Planta.Efeito e) {
+    /** A soma dos níveis das construções prontas desse tipo. */
+    int niveis(Colonia c, Planta.Efeito e) {
         int n = 0;
         for (Construcao k : c.construcoes) {
             Planta p = plantas.de(k.planta());
-            if (p != null && p.efeito() == e) n++;
+            if (p != null && p.efeito() == e) n += k.nivel;
         }
         return n;
+    }
+
+    /** Bônus de produção de quem trabalha com uma construção da colônia: +10% por nível da melhor delas. */
+    double bonus(Colonia c, Profissao prof) {
+        int melhor = 0;
+        for (Construcao k : c.construcoes) {
+            Planta p = plantas.de(k.planta());
+            if (p != null && p.efeito().trabalhador() == prof) melhor = Math.max(melhor, k.nivel);
+        }
+        return 1 + 0.1 * melhor;
+    }
+
+    // =====================================================================
+    //  Vistoria e níveis
+    // =====================================================================
+
+    private static long chaveBloco(int x, int y, int z) {
+        return ((long) (x & 0x3FFFFFF) << 38) | ((long) (z & 0x3FFFFFF) << 12) | (y & 0xFFF);
+    }
+
+    /** Conta o que tem na área (da planta, ou maior nas do seu jeito). */
+    Vistoria vistoriar(World w, Planta p, Obra area) {
+        int[] a = area.area(p, 0);
+        int topo = area.livre ? alturaVistoria(p) : p.altura() + 2;
+        Set<Long> marcados = new HashSet<>();
+        for (int cx = a[0] >> 4; cx <= a[2] >> 4; cx++) {
+            for (int cz = a[1] >> 4; cz <= a[3] >> 4; cz++) {
+                if (!w.isChunkLoaded(cx, cz)) continue;
+                for (Block b : colocados.todos(w.getChunkAt(cx, cz))) marcados.add(chaveBloco(b.getX(), b.getY(), b.getZ()));
+            }
+        }
+        Vistoria v = new Vistoria();
+        for (int x = a[0]; x <= a[2]; x++) {
+            for (int z = a[1]; z <= a[3]; z++) {
+                boolean coberta = false;
+                for (int ly = 0; ly < topo; ly++) {
+                    Block b = w.getBlockAt(x, area.y + ly, z);
+                    Material m = b.getType();
+                    if (m.isAir()) continue;
+                    boolean colocado = !Vistoria.natural(m) || marcados.contains(chaveBloco(b.getX(), b.getY(), b.getZ()));
+                    v.contar(ly, b.getBlockData(), colocado);
+                    if (ly >= 2 && m.isSolid() && !Tag.LEAVES.isTagged(m)) coberta = true;
+                }
+                if (x != a[0] && x != a[2] && z != a[1] && z != a[3]) v.coluna(coberta);
+            }
+        }
+        return v;
+    }
+
+    /** O que o nível da construção dá (torre: mais território; armazém: baús viram depósito). @return a frase para o dono. */
+    private Component aplicarNivel(Colonia c, Construcao k, Planta p) {
+        World w = Bukkit.getWorld(k.mundo);
+        if (w == null || k.nivel <= 0) return Component.empty();
+        Obra area = k.area();
+        switch (p.efeito()) {
+            case TORRE_DE_VIGIA -> {
+                int raio = Math.min(3, plugin.settings().terRaioTorre + k.nivel - 1);
+                int n = plugin.territorios().expandirPorTorre(c.dono, area.centro(w), raio);
+                int lado = 2 * raio + 1;
+                return Component.text(" A torre vigia " + lado + "×" + lado + " chunks" + (n > 0 ? " (+" + n + " no território)." : "."), NamedTextColor.GREEN);
+            }
+            case ARMAZEM -> {
+                int[] a = area.area(p, 0);
+                int n = 0, topo = area.livre ? alturaVistoria(p) : p.altura();
+                for (int x = a[0]; x <= a[2]; x++) {
+                    for (int z = a[1]; z <= a[3]; z++) {
+                        for (int ly = 0; ly < topo; ly++) {
+                            Block b = w.getBlockAt(x, area.y + ly, z);
+                            Material m = b.getType();
+                            if (m != Material.CHEST && m != Material.TRAPPED_CHEST && m != Material.BARREL) continue;
+                            boolean ja = false;
+                            for (Location d : c.depositos) if (d.getBlock().equals(b)) ja = true;
+                            if (!ja) { c.depositos.add(b.getLocation()); n++; }
+                        }
+                    }
+                }
+                return Component.text(n > 0 ? " " + n + " baús viraram depósito da colônia." : "", NamedTextColor.GREEN);
+            }
+            case PRACA -> { return Component.text(" A colônia ficou mais feliz.", NamedTextColor.GREEN); }
+            case FAZENDA, BIBLIOTECA -> {
+                return Component.text(" " + p.efeito().trabalhador().nome() + " produz +" + 10 * k.nivel + "%.", NamedTextColor.GREEN);
+            }
+            default -> { return Component.empty(); }
+        }
+    }
+
+    /**
+     * Pede a vistoria: numa área do seu jeito que atende o nível 1, ela vira construção da colônia;
+     * numa construção pronta, o nível sobe (ou desce) conforme o que tem lá agora.
+     */
+    private void pedirVistoria(Player jogador, Colonia c, Obra o, Construcao k) {
+        Planta p = plantas.de(o != null ? o.planta : k.planta);
+        World w = Bukkit.getWorld(o != null ? o.mundo : k.mundo);
+        if (p == null || w == null) return;
+        Obra area = o != null ? o : k.area();
+        int[] a = area.area(p, 0);
+        for (int cx = a[0] >> 4; cx <= a[2] >> 4; cx++) {
+            for (int cz = a[1] >> 4; cz <= a[3] >> 4; cz++) {
+                if (!w.isChunkLoaded(cx, cz)) { Colonias.erro(jogador, "Chegue mais perto da construção para a vistoria."); return; }
+            }
+        }
+        Vistoria v = vistoriar(w, p, area);
+        int nivel = v.nivel(p.niveis());
+        if (p.niveis().isEmpty()) nivel = 1;
+        if (o != null) {
+            if (nivel < 1) {
+                Colonias.erro(jogador, "✖ Ainda não atende o mínimo do nível 1. Veja no menu o que falta.");
+                return;
+            }
+            removerCerca(o);
+            c.obras.remove(o);
+            Construcao nova = new Construcao(p.id(), o.mundo, o.x, o.y, o.z, o.rot, o.extra, true, nivel);
+            c.construcoes.add(nova);
+            Component extra = aplicarNivel(c, nova, p);
+            colonias.alterarFelicidade(c, 3);
+            colonias.varrer(c);
+            colonias.salvar();
+            Location centro = area.centro(w);
+            w.spawnParticle(Particle.TOTEM_OF_UNDYING, centro.clone().add(0, 2, 0), 50, 2, 1.5, 2, 0.2);
+            w.playSound(centro, Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.1f);
+            jogador.sendMessage(Component.text("⌂ Vistoria aprovada: " + p.nome() + " (nível " + nivel + "/" + p.nivelMaximo() + "), feita do seu jeito!",
+                    Prefeituras.COR, TextDecoration.BOLD).append(extra));
+            jogador.showTitle(Title.title(Component.text("⌂ " + p.nome() + " aprovada! ⌂", Prefeituras.COR, TextDecoration.BOLD),
+                    Component.text("Nível " + nivel, NamedTextColor.GRAY),
+                    Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(2500), Duration.ofMillis(600))));
+            return;
+        }
+        int antes = k.nivel;
+        // O desenho do Construtor nunca cai abaixo do 1 enquanto tiver o mínimo; uma livre pode ficar "precisando de reparo" (0).
+        k.nivel = nivel;
+        colonias.salvar();
+        if (nivel > antes) {
+            Component extra = aplicarNivel(c, k, p);
+            Location centro = area.centro(w);
+            w.spawnParticle(Particle.HAPPY_VILLAGER, centro.clone().add(0, 2, 0), 40, 2, 1.5, 2, 0);
+            w.playSound(centro, Sound.ENTITY_PLAYER_LEVELUP, 0.8f, 1.2f);
+            jogador.sendMessage(Component.text("⌂ " + p.nome() + " subiu para o nível " + nivel + "/" + p.nivelMaximo() + "!", Prefeituras.COR, TextDecoration.BOLD)
+                    .append(extra));
+        } else if (nivel < antes) {
+            jogador.sendMessage(Component.text("⌂ " + p.nome() + " caiu para o nível " + nivel + (nivel == 0 ? " (precisa de reparo: não conta para nada)" : "")
+                    + ". Veja no menu o que falta.", NamedTextColor.RED));
+        } else {
+            jogador.sendMessage(Component.text("⌂ " + p.nome() + " continua no nível " + nivel + "/" + p.nivelMaximo()
+                    + (nivel < p.nivelMaximo() ? ". Veja no menu o que falta para o próximo." : " (máximo)."), Prefeituras.COR));
+        }
     }
 
     // =====================================================================
@@ -798,15 +948,18 @@ public final class Obras implements Listener {
         t.inventario = Bukkit.createInventory(t, 54, Component.text("⌂ Projetos de construção"));
         Inventory inv = t.inventario;
         inv.setItem(L_INFO, Colonias.item(Material.WRITABLE_BOOK, Component.text("Como construir", Prefeituras.COR, TextDecoration.BOLD), List.of(
-                Component.text("1. Pegue um projeto aqui.", NamedTextColor.GRAY),
-                Component.text("2. Clique com ele no chão: o lado em que", NamedTextColor.GRAY),
-                Component.text("   você está vira a ENTRADA. Aparece uma", NamedTextColor.GRAY),
-                Component.text("   cerca em volta do canteiro.", NamedTextColor.GRAY),
-                Component.text("3. Agachado + clique na cerca: girar ou", NamedTextColor.GRAY),
-                Component.text("   mudar de lugar (antes de começar).", NamedTextColor.GRAY),
-                Component.text("4. Ponha um baú dentro da cerca com os", NamedTextColor.GRAY),
-                Component.text("   materiais da lista.", NamedTextColor.GRAY),
-                Component.text("5. O Construtor livre vem e ergue a obra.", NamedTextColor.GRAY),
+                Component.text("Clique: projeto pronto. O Construtor ergue", NamedTextColor.GRAY),
+                Component.text("  o desenho com o material de um baú.", NamedTextColor.GRAY),
+                Component.text("Botão direito: do seu jeito. Você constrói", NamedTextColor.GRAY),
+                Component.text("  na área e pede a vistoria: precisa ter o", NamedTextColor.GRAY),
+                Component.text("  mínimo do nível 1.", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("Com o projeto, clique no chão: o lado em", NamedTextColor.GRAY),
+                Component.text("que você está vira a ENTRADA e aparece uma", NamedTextColor.GRAY),
+                Component.text("cerca. Agachado + clique nela abre o menu.", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("Toda construção tem níveis: melhore e peça", NamedTextColor.GRAY),
+                Component.text("a vistoria de novo em Obras.", NamedTextColor.GRAY),
                 Component.empty(),
                 Component.text("Obras ao mesmo tempo: " + c.obras.size() + " / " + maxObras(c), NamedTextColor.WHITE)), false));
         int i = 0;
@@ -817,15 +970,24 @@ public final class Obras implements Listener {
             for (String d : pl.descricao()) lore.add(Component.text(d, NamedTextColor.GRAY));
             lore.add(Colonias.linha("Tamanho: ", pl.largura() + "×" + pl.profundidade() + ", altura " + pl.altura(), NamedTextColor.WHITE));
             lore.add(Component.text(pl.efeito().texto(), NamedTextColor.AQUA));
+            lore.add(Colonias.linha("Níveis: ", String.valueOf(pl.nivelMaximo()), NamedTextColor.WHITE));
             int prontas = 0;
-            for (Construcao k : c.construcoes) if (k.planta().equals(pl.id())) prontas++;
+            for (Construcao k : c.construcoes) if (k.planta.equals(pl.id())) prontas++;
             if (prontas > 0) lore.add(Colonias.linha("Prontas na colônia: ", String.valueOf(prontas), NamedTextColor.GREEN));
             lore.add(Component.empty());
-            lore.add(Component.text("Materiais:", NamedTextColor.GRAY));
-            lore.addAll(listaMateriais(pl.materiais(), 8));
+            lore.add(Component.text("Materiais do projeto pronto:", NamedTextColor.GRAY));
+            lore.addAll(listaMateriais(pl.materiais(), 6));
+            if (!pl.niveis().isEmpty()) {
+                lore.add(Component.empty());
+                lore.add(Component.text("Do seu jeito, o mínimo (nível 1):", NamedTextColor.GOLD));
+                lore.addAll(linhasRequisito(pl.niveis().get(0), null));
+            }
             lore.add(Component.empty());
             if (!liberada) lore.add(Component.text("✖ Colônia nível " + pl.nivel(), NamedTextColor.RED));
-            else lore.add(Component.text("» Clique para pegar o projeto", NamedTextColor.YELLOW));
+            else {
+                lore.add(Component.text("» Clique: projeto pronto (Construtor)", NamedTextColor.YELLOW));
+                if (!pl.niveis().isEmpty()) lore.add(Component.text("» Botão direito: do seu jeito (você)", NamedTextColor.YELLOW));
+            }
             inv.setItem(SLOTS_LISTA[i], Colonias.item(liberada ? pl.icone() : Material.GRAY_DYE,
                     Component.text(pl.nome(), liberada ? Prefeituras.COR : NamedTextColor.DARK_GRAY, TextDecoration.BOLD), lore, false));
             t.ids.add(pl.id());
@@ -848,6 +1010,23 @@ public final class Obras implements Listener {
         return r;
     }
 
+    /** As linhas de um nível; com a vistoria, cada uma vem com ✔ / ✖ e o que tem. */
+    private static List<Component> linhasRequisito(Vistoria.Requisito r, Vistoria v) {
+        List<Component> l = new ArrayList<>();
+        for (Vistoria.Linha x : r.linhas(v == null ? new Vistoria() : v)) {
+            Component nome = x.bloco() == null ? Component.text(x.nome()) : Component.translatable(x.bloco().translationKey());
+            if (v == null) {
+                l.add(Component.text(" " + x.minimo() + " · ", NamedTextColor.WHITE).append(nome.color(NamedTextColor.GRAY)));
+            } else {
+                boolean ok = x.ok();
+                l.add(Component.text(ok ? " ✔ " : " ✖ ", ok ? NamedTextColor.GREEN : NamedTextColor.RED)
+                        .append(nome.color(NamedTextColor.GRAY))
+                        .append(Component.text(": " + x.tem() + " / " + x.minimo(), ok ? NamedTextColor.GREEN : NamedTextColor.RED)));
+            }
+        }
+        return l;
+    }
+
     /** As obras em andamento e as construções prontas. */
     void abrirLista(Player p, Colonia c) {
         Tela t = new Tela(Tipo.LISTA, c);
@@ -861,29 +1040,39 @@ public final class Obras implements Listener {
         Inventory inv = t.inventario;
         inv.clear();
         t.ids.clear();
-        Map<String, Integer> prontas = new LinkedHashMap<>();
-        for (Construcao k : c.construcoes) {
-            Planta pk = plantas.de(k.planta());
-            prontas.merge(pk == null ? k.planta() : pk.nome(), 1, Integer::sum);
-        }
         List<Component> info = new ArrayList<>();
         info.add(Colonias.linha("Obras: ", c.obras.size() + " / " + maxObras(c), NamedTextColor.WHITE));
+        info.add(Colonias.linha("Construções prontas: ", String.valueOf(c.construcoes.size()), NamedTextColor.GREEN));
         info.add(Colonias.linha("Construtores: ", c.quantos(Profissao.CONSTRUTOR) + "  ·  bancadas: " + c.postos.getOrDefault(Profissao.CONSTRUTOR, 0),
                 NamedTextColor.WHITE));
         info.add(Component.empty());
-        info.add(Component.text("Construções prontas:", NamedTextColor.GRAY));
-        if (prontas.isEmpty()) info.add(Component.text(" nenhuma ainda", NamedTextColor.DARK_GRAY));
-        prontas.forEach((n, q) -> info.add(Component.text(" " + q + "x " + n, NamedTextColor.GREEN)));
+        info.add(Component.text("Primeiro as obras, depois as prontas.", NamedTextColor.GRAY));
+        info.add(Component.text("Numa pronta: vistoria para subir de nível.", NamedTextColor.GRAY));
         inv.setItem(L_INFO, Colonias.item(Material.BRICKS, Component.text("Obras e construções", Prefeituras.COR, TextDecoration.BOLD), info, false));
-        for (int i = 0; i < c.obras.size() && i < SLOTS_LISTA.length; i++) {
-            Obra o = c.obras.get(i);
+        int slot = 0;
+        for (Obra o : c.obras) {
+            if (slot >= SLOTS_LISTA.length) break;
             Planta pl = plantas.de(o.planta);
             List<Component> lore = new ArrayList<>(resumo(c, o, pl));
             lore.add(Component.empty());
             lore.add(Component.text("» Clique para ver a obra", NamedTextColor.YELLOW));
-            inv.setItem(SLOTS_LISTA[i], Colonias.item(pl == null ? Material.BARRIER : pl.icone(),
-                    Component.text(pl == null ? o.planta : pl.nome(), Prefeituras.COR, TextDecoration.BOLD), lore, false));
-            t.ids.add(o.id.toString());
+            inv.setItem(SLOTS_LISTA[slot++], Colonias.item(pl == null ? Material.BARRIER : pl.icone(),
+                    Component.text((o.livre ? "📐 " : "⚒ ") + (pl == null ? o.planta : pl.nome()), Prefeituras.COR, TextDecoration.BOLD), lore, false));
+            t.ids.add("o:" + o.id);
+        }
+        for (int i = 0; i < c.construcoes.size() && slot < SLOTS_LISTA.length; i++) {
+            Construcao k = c.construcoes.get(i);
+            Planta pl = plantas.de(k.planta);
+            List<Component> lore = new ArrayList<>();
+            lore.add(Colonias.linha("Nível: ", k.nivel + " / " + (pl == null ? "?" : pl.nivelMaximo()) + (k.nivel == 0 ? " (precisa de reparo)" : ""),
+                    k.nivel == 0 ? NamedTextColor.RED : NamedTextColor.GREEN));
+            lore.add(Colonias.linha("Feita: ", k.livre ? "do seu jeito" : "pelo Construtor", NamedTextColor.WHITE));
+            lore.add(Colonias.linha("Onde: ", k.x + ", " + k.y + ", " + k.z, NamedTextColor.GRAY));
+            lore.add(Component.empty());
+            lore.add(Component.text("» Clique: vistoria e o que falta", NamedTextColor.YELLOW));
+            inv.setItem(SLOTS_LISTA[slot++], Colonias.item(pl == null ? Material.BARRIER : pl.icone(),
+                    Component.text("✔ " + (pl == null ? k.planta : pl.nome()), NamedTextColor.GREEN, TextDecoration.BOLD), lore, false));
+            t.ids.add("k:" + i);
         }
         inv.setItem(VOLTAR, Colonias.item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of(), false));
         Colonias.preencher(inv);
@@ -905,6 +1094,14 @@ public final class Obras implements Listener {
             l.add(Component.text("Projeto sumiu (plantas/" + o.planta + ".yml).", NamedTextColor.RED));
             return l;
         }
+        int[] a = o.area(p, 0);
+        l.add(Colonias.linha("Área: ", (a[2] - a[0] + 1) + "×" + (a[3] - a[1] + 1), NamedTextColor.WHITE));
+        l.add(Colonias.linha("Onde: ", o.x + ", " + o.y + ", " + o.z, NamedTextColor.GRAY));
+        if (o.livre) {
+            l.add(Colonias.linha("Quem constrói: ", "você, do seu jeito", NamedTextColor.WHITE));
+            l.add(Component.text("Atenda o mínimo do nível 1 e peça a vistoria.", NamedTextColor.GRAY));
+            return l;
+        }
         World w = o.world();
         if (o.bau == null && w != null && w.isChunkLoaded(o.x >> 4, o.z >> 4)) o.bau = acharBau(o, p, w);
         String fase = switch (o.fase) {
@@ -915,7 +1112,6 @@ public final class Obras implements Listener {
         };
         l.add(Colonias.linha("Fase: ", fase, NamedTextColor.WHITE));
         l.add(Colonias.linha("Progresso: ", progresso(o, p) + "%", NamedTextColor.GREEN));
-        l.add(Colonias.linha("Onde: ", o.x + ", " + o.y + ", " + o.z, NamedTextColor.GRAY));
         Colonia.Cidadao ci = o.construtor == null ? null : colonias.cidadao(c, o.construtor);
         l.add(Colonias.linha("Construtor: ", ci == null ? "esperando um livre" : ci.nome + " (nível " + ci.nivel + ")",
                 ci == null ? NamedTextColor.RED : NamedTextColor.WHITE));
@@ -931,7 +1127,7 @@ public final class Obras implements Listener {
         Tela t = new Tela(Tipo.OBRA, c);
         t.obra = o.id;
         Planta pl = plantas.de(o.planta);
-        t.inventario = Bukkit.createInventory(t, 54, Component.text("⌂ Obra: " + (pl == null ? o.planta : pl.nome())));
+        t.inventario = Bukkit.createInventory(t, 54, Component.text((o.livre ? "⌂ Do seu jeito: " : "⌂ Obra: ") + (pl == null ? o.planta : pl.nome())));
         desenharObra(t, o);
         p.openInventory(t.inventario);
     }
@@ -943,7 +1139,12 @@ public final class Obras implements Listener {
         Planta p = plantas.de(o.planta);
         inv.setItem(O_INFO, Colonias.item(p == null ? Material.BARRIER : p.icone(),
                 Component.text(p == null ? o.planta : p.nome(), Prefeituras.COR, TextDecoration.BOLD), resumo(c, o, p), false));
-        if (p != null) {
+        if (p != null && o.livre) {
+            // Do seu jeito: o que já tem na área, nível por nível.
+            World w = o.world();
+            Vistoria v = w != null && w.isChunkLoaded(o.x >> 4, o.z >> 4) ? vistoriar(w, p, o) : null;
+            desenharNiveis(inv, p, v, v == null ? 0 : v.nivel(p.niveis()));
+        } else if (p != null) {
             Inventory bau = inventario(o.bau);
             List<Map.Entry<Material, Integer>> falta = new ArrayList<>(restante(o, p).entrySet());
             falta.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
@@ -972,16 +1173,85 @@ public final class Obras implements Listener {
         inv.setItem(O_MOVER, Colonias.item(podeMexer ? Material.PAPER : Material.GRAY_DYE, Component.text("Mudar de lugar", podeMexer ? NamedTextColor.YELLOW : NamedTextColor.DARK_GRAY),
                 List.of(Component.text(podeMexer ? "Tira a cerca e devolve o projeto." : "A obra já começou.", NamedTextColor.GRAY)), false));
         inv.setItem(O_CONTORNO, Colonias.item(Material.SPYGLASS, Component.text("Mostrar o contorno", NamedTextColor.YELLOW),
-                List.of(Component.text("Partículas no tamanho da construção.", NamedTextColor.GRAY)), false));
-        inv.setItem(O_TRAZER, Colonias.item(Material.HOPPER, Component.text("Trazer do depósito", NamedTextColor.YELLOW), List.of(
-                Component.text("Passa o que falta (e que o depósito", NamedTextColor.GRAY),
-                Component.text("da colônia tiver) para o baú da obra.", NamedTextColor.GRAY)), false));
+                List.of(Component.text("Partículas no tamanho da área.", NamedTextColor.GRAY)), false));
+        if (o.livre) {
+            inv.setItem(O_TRAZER, Colonias.item(Material.WRITABLE_BOOK, Component.text("✔ Pedir a vistoria", NamedTextColor.GREEN, TextDecoration.BOLD), List.of(
+                    Component.text("Confere o que você construiu na área.", NamedTextColor.GRAY),
+                    Component.text("Atendeu o nível 1: vira construção da", NamedTextColor.GRAY),
+                    Component.text("colônia (e a cerca some).", NamedTextColor.GRAY)), true));
+            int[] a = p == null ? new int[]{0, 0, 0, 0} : o.area(p, 0);
+            inv.setItem(O_AREA_MENOS, Colonias.item(Material.RED_STAINED_GLASS_PANE, Component.text("Área menor", NamedTextColor.YELLOW), List.of(
+                    Component.text("Agora: " + (a[2] - a[0] + 1) + "×" + (a[3] - a[1] + 1), NamedTextColor.GRAY),
+                    Component.text("O menor é o tamanho do projeto.", NamedTextColor.DARK_GRAY)), false));
+            inv.setItem(O_AREA_MAIS, Colonias.item(Material.LIME_STAINED_GLASS_PANE, Component.text("Área maior", NamedTextColor.YELLOW), List.of(
+                    Component.text("+1 bloco de cada lado (até +" + EXTRA_MAX + ").", NamedTextColor.GRAY)), false));
+        } else {
+            inv.setItem(O_TRAZER, Colonias.item(Material.HOPPER, Component.text("Trazer do depósito", NamedTextColor.YELLOW), List.of(
+                    Component.text("Passa o que falta (e que o depósito", NamedTextColor.GRAY),
+                    Component.text("da colônia tiver) para o baú da obra.", NamedTextColor.GRAY)), false));
+        }
         inv.setItem(O_VOLTAR, Colonias.item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of(), false));
         inv.setItem(O_CANCELAR, Colonias.item(Material.RED_DYE, Component.text("Cancelar a obra", NamedTextColor.RED), List.of(
                 Component.text("Tira a cerca e devolve o projeto.", NamedTextColor.GRAY),
                 Component.text("O que já foi construído fica.", NamedTextColor.GRAY),
                 Component.text("Shift + clique para confirmar.", NamedTextColor.DARK_GRAY)), false));
         Colonias.preencher(inv);
+    }
+
+    /** Um item por nível (19, 20, 21...), com o que cada um pede; com a vistoria, o que já tem. */
+    private void desenharNiveis(Inventory inv, Planta p, Vistoria v, int atual) {
+        inv.setItem(13, Colonias.item(Material.BOOK, Component.text("Níveis da construção", NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+                Component.text("Cada nível pede um mínimo. O nível 1 é o", NamedTextColor.GRAY),
+                Component.text("que você precisa para ela valer; os outros,", NamedTextColor.GRAY),
+                Component.text("para ela dar mais (" + p.efeito().texto().toLowerCase(java.util.Locale.ROOT) + ").", NamedTextColor.GRAY)), false));
+        List<Vistoria.Requisito> niveis = p.niveis();
+        for (int i = 0; i < niveis.size() && i < SLOTS_MATERIAIS.length; i++) {
+            int n = i + 1;
+            boolean feito = v != null && n <= atual;
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text(feito ? "✔ Atingido" : n == atual + 1 ? "Próximo nível" : "Mais adiante",
+                    feito ? NamedTextColor.GREEN : n == atual + 1 ? NamedTextColor.YELLOW : NamedTextColor.DARK_GRAY));
+            lore.addAll(linhasRequisito(niveis.get(i), v));
+            ItemStack it = Colonias.item(feito ? Material.LIME_DYE : n == atual + 1 ? Material.YELLOW_DYE : Material.GRAY_DYE,
+                    Component.text("Nível " + n, feito ? NamedTextColor.GREEN : NamedTextColor.GOLD, TextDecoration.BOLD), lore, n == atual + 1);
+            it.setAmount(n);
+            inv.setItem(SLOTS_MATERIAIS[i], it);
+        }
+    }
+
+    /** Uma construção pronta: nível, o que falta para o próximo e a vistoria. */
+    private void abrirConstrucao(Player p, Colonia c, int indice) {
+        if (indice < 0 || indice >= c.construcoes.size()) { abrirLista(p, c); return; }
+        Construcao k = c.construcoes.get(indice);
+        Planta pl = plantas.de(k.planta);
+        Tela t = new Tela(Tipo.CONSTRUCAO, c);
+        t.construcao = indice;
+        t.inventario = Bukkit.createInventory(t, 54, Component.text("⌂ " + (pl == null ? k.planta : pl.nome()) + " · nível " + k.nivel));
+        Inventory inv = t.inventario;
+        World w = Bukkit.getWorld(k.mundo);
+        Vistoria v = null;
+        if (pl != null && w != null && w.isChunkLoaded(k.x >> 4, k.z >> 4)) v = vistoriar(w, pl, k.area());
+        List<Component> info = new ArrayList<>();
+        info.add(Colonias.linha("Nível: ", k.nivel + " / " + (pl == null ? "?" : pl.nivelMaximo()) + (k.nivel == 0 ? " (precisa de reparo)" : ""),
+                k.nivel == 0 ? NamedTextColor.RED : NamedTextColor.GREEN));
+        if (pl != null) info.add(Component.text(pl.efeito().texto(), NamedTextColor.AQUA));
+        info.add(Colonias.linha("Feita: ", k.livre ? "do seu jeito" : "pelo Construtor", NamedTextColor.WHITE));
+        info.add(Colonias.linha("Onde: ", k.x + ", " + k.y + ", " + k.z, NamedTextColor.GRAY));
+        if (v == null) info.add(Component.text("Chegue perto para ver o que tem lá agora.", NamedTextColor.DARK_GRAY));
+        inv.setItem(O_INFO, Colonias.item(pl == null ? Material.BARRIER : pl.icone(),
+                Component.text(pl == null ? k.planta : pl.nome(), Prefeituras.COR, TextDecoration.BOLD), info, false));
+        if (pl != null) desenharNiveis(inv, pl, v, k.nivel);
+        inv.setItem(O_CONTORNO, Colonias.item(Material.SPYGLASS, Component.text("Mostrar o contorno", NamedTextColor.YELLOW),
+                List.of(Component.text("Partículas no tamanho da área.", NamedTextColor.GRAY)), false));
+        inv.setItem(O_TRAZER, Colonias.item(Material.WRITABLE_BOOK, Component.text("✔ Pedir a vistoria", NamedTextColor.GREEN, TextDecoration.BOLD), List.of(
+                Component.text("Melhorou a construção? A vistoria", NamedTextColor.GRAY),
+                Component.text("confere e sobe o nível.", NamedTextColor.GRAY)), true));
+        inv.setItem(O_VOLTAR, Colonias.item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of(), false));
+        inv.setItem(O_CANCELAR, Colonias.item(Material.RED_DYE, Component.text("Tirar da lista da colônia", NamedTextColor.RED), List.of(
+                Component.text("Os blocos ficam; ela só deixa de contar.", NamedTextColor.GRAY),
+                Component.text("Shift + clique para confirmar.", NamedTextColor.DARK_GRAY)), false));
+        Colonias.preencher(inv);
+        p.openInventory(inv);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -993,7 +1263,7 @@ public final class Obras implements Listener {
         Colonia c = t.colonia;
         if (colonias.de(c.dono) != c) { p.closeInventory(); return; }
         int slot = e.getSlot();
-        if (t.tipo != Tipo.OBRA && slot == VOLTAR) { colonias.abrir(p, c); return; }
+        if ((t.tipo == Tipo.CATALOGO || t.tipo == Tipo.LISTA) && slot == VOLTAR) { colonias.abrir(p, c); return; }
         switch (t.tipo) {
             case CATALOGO -> {
                 for (int i = 0; i < t.ids.size(); i++) {
@@ -1002,10 +1272,12 @@ public final class Obras implements Listener {
                     if (pl == null) return;
                     if (!colonias.gerencia(p, c)) { Colonias.erro(p, "Só o dono da colônia e quem gerencia o território pegam projetos."); return; }
                     if (c.nivel < pl.nivel()) { Colonias.erro(p, "Libera no nível " + pl.nivel() + " da colônia."); return; }
-                    for (ItemStack sobra : p.getInventory().addItem(plantas.item(pl)).values()) p.getWorld().dropItemNaturally(p.getLocation(), sobra);
+                    boolean livre = e.isRightClick() && !pl.niveis().isEmpty();
+                    for (ItemStack sobra : p.getInventory().addItem(plantas.item(pl, livre)).values()) p.getWorld().dropItemNaturally(p.getLocation(), sobra);
                     p.playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
-                    p.sendMessage(Component.text("⌂ Projeto: " + pl.nome() + ". Clique com ele no chão onde quer a obra (o seu lado vira a entrada).",
-                            Prefeituras.COR));
+                    p.sendMessage(Component.text(livre
+                            ? "⌂ Projeto do seu jeito: " + pl.nome() + ". Clique no chão onde quer a área (o seu lado vira a entrada)."
+                            : "⌂ Projeto: " + pl.nome() + ". Clique com ele no chão onde quer a obra (o seu lado vira a entrada).", Prefeituras.COR));
                     p.closeInventory();
                     return;
                 }
@@ -1013,12 +1285,46 @@ public final class Obras implements Listener {
             case LISTA -> {
                 for (int i = 0; i < t.ids.size(); i++) {
                     if (SLOTS_LISTA[i] != slot) continue;
-                    Obra o = obra(c, UUID.fromString(t.ids.get(i)));
-                    if (o != null) abrirObra(p, c, o);
+                    String id = t.ids.get(i);
+                    if (id.startsWith("o:")) {
+                        Obra o = obra(c, UUID.fromString(id.substring(2)));
+                        if (o != null) abrirObra(p, c, o);
+                    } else {
+                        abrirConstrucao(p, c, Integer.parseInt(id.substring(2)));
+                    }
                     return;
                 }
             }
             case OBRA -> cliqueObra(p, t, slot, e.isShiftClick());
+            case CONSTRUCAO -> cliqueConstrucao(p, t, slot, e.isShiftClick());
+        }
+    }
+
+    private void cliqueConstrucao(Player p, Tela t, int slot, boolean shift) {
+        Colonia c = t.colonia;
+        if (t.construcao < 0 || t.construcao >= c.construcoes.size()) { abrirLista(p, c); return; }
+        Construcao k = c.construcoes.get(t.construcao);
+        Planta pl = plantas.de(k.planta);
+        switch (slot) {
+            case O_VOLTAR -> abrirLista(p, c);
+            case O_CONTORNO -> {
+                if (pl != null) mostrarContorno(k.area(), pl, true);
+                p.closeInventory();
+            }
+            case O_TRAZER -> {
+                if (!colonias.daColonia(p, c)) return;
+                pedirVistoria(p, c, null, k);
+                abrirConstrucao(p, c, t.construcao);
+            }
+            case O_CANCELAR -> {
+                if (!colonias.gerencia(p, c)) { Colonias.erro(p, "Só o dono da colônia e quem gerencia o território."); return; }
+                if (!shift) { Colonias.erro(p, "Shift + clique para confirmar."); return; }
+                c.construcoes.remove(t.construcao);
+                p.sendMessage(Component.text("⌂ Construção tirada da lista (os blocos continuam lá).", NamedTextColor.GRAY));
+                colonias.salvar();
+                abrirLista(p, c);
+            }
+            default -> { }
         }
     }
 
@@ -1038,6 +1344,8 @@ public final class Obras implements Listener {
             case O_GIRAR -> {
                 if (o.comecou() || pl == null) { Colonias.erro(p, "A obra já começou: não dá mais para girar."); return; }
                 Obra nova = new Obra(o.id, o.planta, o.mundo, o.x, o.y, o.z, (o.rot + 1) % 4);
+                nova.livre = o.livre;
+                nova.extra = o.extra;
                 String erro = impedimento(c, pl, nova);
                 if (erro != null) { Colonias.erro(p, "✖ Girando não cabe: " + erro); return; }
                 removerCerca(o);
@@ -1049,17 +1357,40 @@ public final class Obras implements Listener {
                 colonias.salvar();
                 desenharObra(t, o);
             }
+            case O_AREA_MENOS, O_AREA_MAIS -> {
+                if (!o.livre || pl == null) return;
+                int novo = o.extra + (slot == O_AREA_MAIS ? 1 : -1);
+                if (novo < 0 || novo > EXTRA_MAX) { Colonias.erro(p, novo < 0 ? "Já está no tamanho do projeto." : "Esse é o maior tamanho."); return; }
+                Obra nova = new Obra(o.id, o.planta, o.mundo, o.x, o.y, o.z, o.rot);
+                nova.livre = true;
+                nova.extra = novo;
+                String erro = impedimento(c, pl, nova);
+                if (erro != null) { Colonias.erro(p, "✖ Desse tamanho não cabe: " + erro); return; }
+                removerCerca(o);
+                o.extra = novo;
+                criarCerca(o, pl);
+                mostrarContorno(o, pl, true);
+                p.playSound(p.getLocation(), Sound.BLOCK_WOOD_PLACE, 1f, 1.1f);
+                colonias.salvar();
+                desenharObra(t, o);
+            }
             case O_MOVER -> {
                 if (o.comecou() || pl == null) { Colonias.erro(p, "A obra já começou: cancele se quiser tirar."); return; }
                 removerCerca(o);
                 c.obras.remove(o);
-                for (ItemStack sobra : p.getInventory().addItem(plantas.item(pl)).values()) p.getWorld().dropItemNaturally(p.getLocation(), sobra);
+                for (ItemStack sobra : p.getInventory().addItem(plantas.item(pl, o.livre)).values()) p.getWorld().dropItemNaturally(p.getLocation(), sobra);
                 p.sendMessage(Component.text("⌂ Cerca tirada. O projeto voltou: clique no chão em outro lugar.", Prefeituras.COR));
                 colonias.salvar();
                 p.closeInventory();
             }
             case O_TRAZER -> {
                 if (!colonias.daColonia(p, c) || pl == null) return;
+                if (o.livre) {
+                    pedirVistoria(p, c, o, null);
+                    if (c.obras.contains(o)) desenharObra(t, o);
+                    else p.closeInventory();
+                    return;
+                }
                 Inventory bau = inventario(o.bau);
                 if (bau == null) { Colonias.erro(p, "Ponha primeiro um baú dentro da cerca (fora da obra)."); return; }
                 int movidos = 0;
@@ -1085,7 +1416,7 @@ public final class Obras implements Listener {
                 if (!shift) { Colonias.erro(p, "Shift + clique para confirmar."); return; }
                 removerCerca(o);
                 c.obras.remove(o);
-                if (pl != null) for (ItemStack sobra : p.getInventory().addItem(plantas.item(pl)).values()) p.getWorld().dropItemNaturally(p.getLocation(), sobra);
+                if (pl != null) for (ItemStack sobra : p.getInventory().addItem(plantas.item(pl, o.livre)).values()) p.getWorld().dropItemNaturally(p.getLocation(), sobra);
                 p.sendMessage(Component.text("⌂ Obra cancelada. O projeto voltou para você.", NamedTextColor.GRAY));
                 colonias.salvar();
                 abrirLista(p, c);

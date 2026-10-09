@@ -18,6 +18,24 @@ legenda:
   "T": "spruce_planks"
   "M": "stone_brick_wall"
   "N": "lantern[hanging=false]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 80
+    altura: 9
+    luz: 1
+    itens:
+      ladder: 6
+  - blocos: 150
+    altura: 14
+    luz: 2
+    itens:
+      ladder: 10
+  - blocos: 240
+    altura: 20
+    luz: 4
+    itens:
+      ladder: 16
 camadas:
   # 0
   - - "CCCCC"

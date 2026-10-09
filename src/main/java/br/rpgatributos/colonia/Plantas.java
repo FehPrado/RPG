@@ -31,12 +31,13 @@ public final class Plantas {
     private static final List<String> PADRAO = List.of("casa", "fazenda", "poco", "torre_de_vigia", "armazem", "biblioteca", "quartel");
 
     private final RPGAtributos plugin;
-    private final NamespacedKey kProjeto;
+    private final NamespacedKey kProjeto, kLivre;
     private final Map<String, Planta> porId = new LinkedHashMap<>();
 
     Plantas(RPGAtributos plugin) {
         this.plugin = plugin;
         this.kProjeto = new NamespacedKey(plugin, "projeto_colonia");
+        this.kLivre = new NamespacedKey(plugin, "projeto_livre");
     }
 
     void carregar() {
@@ -64,7 +65,12 @@ public final class Plantas {
             if (!f.exists()) continue;
             String id = f.getName().substring(0, f.getName().length() - 4).toLowerCase(Locale.ROOT);
             try {
-                porId.put(id, Planta.ler(id, YamlConfiguration.loadConfiguration(f)));
+                Planta pl = Planta.ler(id, YamlConfiguration.loadConfiguration(f));
+                porId.put(id, pl);
+                // O desenho pronto precisa valer pelo menos o nível 1 que ele mesmo pede.
+                if (!pl.niveis().isEmpty() && pl.vistoriaDoDesenho().nivel(pl.niveis()) < 1) {
+                    plugin.getLogger().warning("O desenho de plantas/" + f.getName() + " não atende o próprio nível 1 (veja os requisitos em niveis).");
+                }
             } catch (IllegalArgumentException ex) {
                 plugin.getLogger().warning("Projeto de colônia inválido (plantas/" + f.getName() + "): " + ex.getMessage());
             }
@@ -81,10 +87,17 @@ public final class Plantas {
     // =====================================================================
 
     /** O papel do projeto, que o jogador coloca no chão para marcar a obra. */
-    ItemStack item(Planta p) {
+    ItemStack item(Planta p) { return item(p, false); }
+
+    /**
+     * O papel do projeto. {@code livre}: o jogador constrói do jeito dele dentro da cerca e pede a
+     * vistoria (precisa atender o mínimo do nível 1); senão, o Construtor ergue o desenho pronto.
+     */
+    ItemStack item(Planta p, boolean livre) {
         ItemStack i = new ItemStack(Material.PAPER);
         i.editMeta(m -> {
-            m.displayName(Component.text("📜 Projeto: " + p.nome(), Prefeituras.COR, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+            m.displayName(Component.text((livre ? "📐 Do seu jeito: " : "📜 Projeto: ") + p.nome(), Prefeituras.COR, TextDecoration.BOLD)
+                    .decoration(TextDecoration.ITALIC, false));
             List<Component> lore = new ArrayList<>();
             for (String d : p.descricao()) lore.add(Component.text(d, NamedTextColor.GRAY));
             lore.add(Component.text("Tamanho: " + p.largura() + "×" + p.profundidade() + ", altura " + p.altura(), NamedTextColor.WHITE));
@@ -93,12 +106,27 @@ public final class Plantas {
             lore.add(Component.text("» Clique com o botão direito no chão onde", NamedTextColor.YELLOW));
             lore.add(Component.text("  quer a obra. O lado em que VOCÊ está", NamedTextColor.YELLOW));
             lore.add(Component.text("  vira a ENTRADA.", NamedTextColor.YELLOW));
-            lore.add(Component.text("  Aparece uma cerca em volta: deixe um baú", NamedTextColor.GRAY));
-            lore.add(Component.text("  com os materiais dentro dela.", NamedTextColor.GRAY));
+            if (livre) {
+                lore.add(Component.text("  Aparece uma cerca em volta: construa você", NamedTextColor.GRAY));
+                lore.add(Component.text("  mesmo lá dentro e peça a vistoria (agachado", NamedTextColor.GRAY));
+                lore.add(Component.text("  + clique na cerca).", NamedTextColor.GRAY));
+                if (!p.niveis().isEmpty()) {
+                    lore.add(Component.empty());
+                    lore.add(Component.text("Mínimo (nível 1):", NamedTextColor.GOLD));
+                    for (Vistoria.Linha l : p.niveis().get(0).linhas(new Vistoria())) {
+                        lore.add(l.bloco() == null ? Component.text(" " + l.minimo() + " · " + l.nome(), NamedTextColor.GRAY)
+                                : Component.text(" " + l.minimo() + "x ", NamedTextColor.GRAY).append(Component.translatable(l.bloco().translationKey())));
+                    }
+                }
+            } else {
+                lore.add(Component.text("  Aparece uma cerca em volta: deixe um baú", NamedTextColor.GRAY));
+                lore.add(Component.text("  com os materiais dentro dela.", NamedTextColor.GRAY));
+            }
             m.lore(lore.stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             m.addItemFlags(ItemFlag.values());
             m.setEnchantmentGlintOverride(true);
             m.getPersistentDataContainer().set(kProjeto, PersistentDataType.STRING, p.id());
+            if (livre) m.getPersistentDataContainer().set(kLivre, PersistentDataType.BYTE, (byte) 1);
         });
         return i;
     }
@@ -107,5 +135,10 @@ public final class Plantas {
     Planta deItem(ItemStack i) {
         if (i == null || i.isEmpty() || i.getType() != Material.PAPER || !i.hasItemMeta()) return null;
         return de(i.getItemMeta().getPersistentDataContainer().get(kProjeto, PersistentDataType.STRING));
+    }
+
+    /** O projeto é "do seu jeito" (o jogador constrói)? */
+    boolean livre(ItemStack i) {
+        return deItem(i) != null && i.getItemMeta().getPersistentDataContainer().has(kLivre, PersistentDataType.BYTE);
     }
 }

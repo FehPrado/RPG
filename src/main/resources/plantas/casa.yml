@@ -22,6 +22,24 @@ legenda:
   "E": "oak_stairs[facing=east,half=bottom]"
   "Q": "oak_stairs[facing=west,half=bottom]"
   "S": "oak_slab[type=bottom]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 40
+    camas: 2
+    portas: 1
+    luz: 1
+    coberto: 70
+  - blocos: 90
+    camas: 4
+    portas: 1
+    luz: 2
+    coberto: 80
+  - blocos: 150
+    camas: 6
+    portas: 2
+    luz: 4
+    coberto: 85
 camadas:
   # 0
   - - "PPPPPPP"

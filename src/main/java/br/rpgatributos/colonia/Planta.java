@@ -36,20 +36,26 @@ public final class Planta {
 
     /** O que a construção faz quando fica pronta (além dos blocos que ela tem). */
     public enum Efeito {
-        CASA("Casa: camas para os moradores"),
-        TORRE_DE_VIGIA("Aumenta o território em volta dela"),
-        ARMAZEM("Os baús dela viram depósito da colônia"),
-        BIBLIOTECA("Atris e estantes para o Bibliotecário"),
-        QUARTEL("Alvos (quartel) e camas para os soldados"),
-        FAZENDA("Plantação pronta com composteira"),
-        PRACA("Deixa a colônia mais feliz"),
-        NENHUM("Decoração");
+        CASA("Casa: camas para os moradores", null),
+        TORRE_DE_VIGIA("Aumenta o território em volta dela (mais a cada nível)", null),
+        ARMAZEM("Os baús dela viram depósito da colônia", null),
+        BIBLIOTECA("Bibliotecário produz +10% por nível", Profissao.BIBLIOTECARIO),
+        QUARTEL("Alvos (quartel) e camas para os soldados", null),
+        FAZENDA("Fazendeiro produz +10% por nível", Profissao.FAZENDEIRO),
+        PRACA("Colônia +5% de felicidade por nível", null),
+        NENHUM("Decoração", null);
 
         private final String texto;
+        private final Profissao trabalhador;
 
-        Efeito(String texto) { this.texto = texto; }
+        Efeito(String texto, Profissao trabalhador) {
+            this.texto = texto;
+            this.trabalhador = trabalhador;
+        }
 
         public String texto() { return texto; }
+        /** Quem trabalha melhor com essa construção na colônia (null = ninguém). */
+        public Profissao trabalhador() { return trabalhador; }
     }
 
     /** Um bloco do desenho, em coordenadas da planta. */
@@ -71,8 +77,12 @@ public final class Planta {
     /** Ordem em que o Construtor põe os blocos: camada por camada, e o que precisa de apoio por último. */
     private final List<Bloco> ordem;
     private final Map<Material, Integer> materiais;
+    /** O mínimo de cada nível da construção (o 1º é o que quem constrói do próprio jeito precisa atender). */
+    private final List<Vistoria.Requisito> niveis;
 
-    private Planta(String id, String nome, List<String> descricao, Material icone, int nivel, Efeito efeito, BlockData[][][] grade) {
+    private Planta(String id, String nome, List<String> descricao, Material icone, int nivel, Efeito efeito, BlockData[][][] grade,
+                   List<Vistoria.Requisito> niveis) {
+        this.niveis = niveis;
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -116,6 +126,35 @@ public final class Planta {
     List<Bloco> ordem() { return ordem; }
     /** Tudo o que a obra inteira gasta. */
     public Map<Material, Integer> materiais() { return materiais; }
+
+    public List<Vistoria.Requisito> niveis() { return niveis; }
+
+    /** Quantos níveis a construção tem (pelo menos 1). */
+    public int nivelMaximo() { return Math.max(1, niveis.size()); }
+
+    /** A vistoria do próprio desenho (o que o Construtor deixa pronto). */
+    Vistoria vistoriaDoDesenho() {
+        Vistoria v = new Vistoria();
+        for (int ly = 0; ly < altura; ly++) {
+            for (int lz = 0; lz < profundidade; lz++) {
+                for (int lx = 0; lx < largura; lx++) {
+                    BlockData d = grade[ly][lz][lx];
+                    if (d != null) v.contar(ly, d, true);
+                }
+            }
+        }
+        for (int lz = 1; lz < profundidade - 1; lz++) {
+            for (int lx = 1; lx < largura - 1; lx++) {
+                boolean coberta = false;
+                for (int ly = 2; ly < altura && !coberta; ly++) {
+                    BlockData d = grade[ly][lz][lx];
+                    coberta = d != null && d.getMaterial().isSolid();
+                }
+                v.coluna(coberta);
+            }
+        }
+        return v;
+    }
 
     /** O que tem nesse lugar do desenho (null = não mexe). */
     BlockData em(int lx, int ly, int lz) { return grade[ly][lz][lx]; }
@@ -173,7 +212,20 @@ public final class Planta {
         }
         if (w < 3 || d < 3) throw new IllegalArgumentException("a planta precisa ter pelo menos 3x3");
         List<String> descricao = List.copyOf(s.getStringList("descricao"));
-        return new Planta(id, nome, descricao, icone, Math.max(1, s.getInt("nivel", 1)), efeito, grade);
+        List<Vistoria.Requisito> niveis = new ArrayList<>();
+        List<?> reqs = s.getList("niveis");
+        if (reqs != null) {
+            for (Object o : reqs) {
+                if (!(o instanceof Map<?, ?> m)) throw new IllegalArgumentException("niveis: cada nível é uma lista de requisitos");
+                org.bukkit.configuration.MemoryConfiguration sec = new org.bukkit.configuration.MemoryConfiguration();
+                for (Map.Entry<?, ?> e : m.entrySet()) {
+                    if (e.getValue() instanceof Map<?, ?> sub) sec.createSection(String.valueOf(e.getKey()), sub);
+                    else sec.set(String.valueOf(e.getKey()), e.getValue());
+                }
+                niveis.add(Vistoria.Requisito.ler(sec));
+            }
+        }
+        return new Planta(id, nome, descricao, icone, Math.max(1, s.getInt("nivel", 1)), efeito, grade, Collections.unmodifiableList(niveis));
     }
 
     // =====================================================================

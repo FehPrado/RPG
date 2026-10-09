@@ -16,6 +16,15 @@ legenda:
   "U": "spruce_slab[type=bottom]"
   "n": "lantern[hanging=true]"
   "Y": "potted_poppy"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 15
+    luz: 1
+  - blocos: 40
+    luz: 3
+  - blocos: 80
+    luz: 6
 camadas:
   # 0
   - - "CCCCC"

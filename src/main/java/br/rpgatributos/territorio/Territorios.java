@@ -170,8 +170,8 @@ public final class Territorios implements Listener {
         Territorio t = de(p.getUniqueId());
         int expansoes = t == null ? 0 : t.expansoes().size() * cfg().terChunksPorExpansao;
         // Torres de Vigia da colônia também passam do máximo normal.
-        int lado = 2 * cfg().terRaioTorre + 1;
-        int torres = t == null ? 0 : t.torres().size() * lado * lado;
+        int torres = 0;
+        if (t != null) for (int[] e : t.torres()) torres += (2 * e[3] + 1) * (2 * e[3] + 1);
         return Math.min(cfg().terChunksMax, cfg().terChunksIniciais + extra) + plugin.reinos().chunksExtras(p.getUniqueId()) + expansoes + torres;
     }
 
@@ -235,11 +235,18 @@ public final class Territorios implements Listener {
      * entram no território. @return quantos chunks entraram.
      */
     public int expandirPorTorre(UUID dono, Location torre) {
+        return expandirPorTorre(dono, torre, cfg().terRaioTorre);
+    }
+
+    /** Igual, com o raio (em chunks) que a torre vigia: torres de nível maior vigiam mais longe. */
+    public int expandirPorTorre(UUID dono, Location torre, int r) {
         Territorio t = de(dono);
         if (t == null || torre.getWorld() == null || !t.mundo().equals(torre.getWorld().getName())) return 0;
-        for (int[] e : t.torres()) if (e[0] == torre.getBlockX() && e[1] == torre.getBlockY() && e[2] == torre.getBlockZ()) return 0;
-        t.torresEditaveis().add(new int[]{torre.getBlockX(), torre.getBlockY(), torre.getBlockZ()});
-        int r = cfg().terRaioTorre, novos = 0;
+        int[] esta = null;
+        for (int[] e : t.torresEditaveis()) if (e[0] == torre.getBlockX() && e[1] == torre.getBlockY() && e[2] == torre.getBlockZ()) esta = e;
+        if (esta == null) t.torresEditaveis().add(new int[]{torre.getBlockX(), torre.getBlockY(), torre.getBlockZ(), r});
+        else esta[3] = Math.max(esta[3], r);
+        int novos = 0;
         int cx = torre.getBlockX() >> 4, cz = torre.getBlockZ() >> 4;
         for (int dx = -r; dx <= r; dx++) {
             for (int dz = -r; dz <= r; dz++) {
@@ -582,7 +589,8 @@ public final class Territorios implements Listener {
                 }
                 for (String e : s.getStringList("torres")) {
                     String[] p = e.split(",");
-                    t.torresEditaveis().add(new int[]{Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2])});
+                    int raio = p.length > 3 ? Integer.parseInt(p[3]) : cfg().terRaioTorre;
+                    t.torresEditaveis().add(new int[]{Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2]), raio});
                 }
                 ConfigurationSection mem = s.getConfigurationSection("membros");
                 if (mem != null) for (String u : mem.getKeys(false)) t.membrosEditaveis().put(UUID.fromString(u), mem.getString(u, "?"));
@@ -615,7 +623,7 @@ public final class Territorios implements Listener {
             for (int[] e : t.expansoes()) exp.add(e[0] + "," + e[1] + "," + e[2]);
             if (!exp.isEmpty()) y.set(base + "expansoes", exp);
             List<String> torres = new ArrayList<>();
-            for (int[] e : t.torres()) torres.add(e[0] + "," + e[1] + "," + e[2]);
+            for (int[] e : t.torres()) torres.add(e[0] + "," + e[1] + "," + e[2] + "," + e[3]);
             if (!torres.isEmpty()) y.set(base + "torres", torres);
             for (Map.Entry<UUID, String> m : t.membros().entrySet()) y.set(base + "membros." + m.getKey(), m.getValue());
             List<String> regras = new ArrayList<>();

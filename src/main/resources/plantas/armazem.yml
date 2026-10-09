@@ -23,6 +23,24 @@ legenda:
   "E": "spruce_stairs[facing=east,half=bottom]"
   "Q": "spruce_stairs[facing=west,half=bottom]"
   "S": "spruce_slab[type=bottom]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 50
+    baus: 4
+    portas: 1
+    luz: 1
+    coberto: 70
+  - blocos: 90
+    baus: 10
+    portas: 1
+    luz: 2
+    coberto: 80
+  - blocos: 150
+    baus: 16
+    portas: 1
+    luz: 3
+    coberto: 85
 camadas:
   # 0
   - - "PPPPPPP"

@@ -617,7 +617,8 @@ public final class Colonias implements Listener {
             int usados = ocupados.merge(p, 1, Integer::sum);
             if (usados > c.postos.getOrDefault(p, 0)) continue; // falta posto para ele
             if (noite && !ci.tem(Traco.MADRUGADOR)) continue;
-            double mult = (1 + 0.1 * ci.nivel) * c.fatorFelicidade() * (c.nivel >= Colonia.NIVEL_MAXIMO ? 1.2 : 1) * ci.fatorPessoal();
+            double mult = (1 + 0.1 * ci.nivel) * c.fatorFelicidade() * (c.nivel >= Colonia.NIVEL_MAXIMO ? 1.2 : 1) * ci.fatorPessoal()
+                    * obras.bonus(c, p); // Fazenda e Biblioteca da colônia: +10% por nível
             List<ItemStack> feitos = trabalhar(c, ci, mult);
             if (feitos == null) continue;
             if (ci.tem(Traco.SORTE) && !feitos.isEmpty() && rnd().nextDouble() < 0.12) {
@@ -647,7 +648,7 @@ public final class Colonias implements Listener {
 
     /** Quanto o jeito e o humor dos moradores (e as praças) mexem na felicidade da colônia. */
     private double humorDaColonia(Colonia c) {
-        double pracas = Math.min(10, 5 * obras.quantas(c, Planta.Efeito.PRACA));
+        double pracas = Math.min(15, 5 * obras.niveis(c, Planta.Efeito.PRACA));
         return pracas + humorDosMoradores(c);
     }
 

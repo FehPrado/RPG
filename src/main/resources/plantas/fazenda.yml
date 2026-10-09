@@ -19,6 +19,22 @@ legenda:
   "K": "composter"
   "w": "wheat[age=0]"
   "N": "lantern[hanging=false]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 10
+    itens:
+      farmland: 16
+      composter: 1
+  - blocos: 20
+    itens:
+      farmland: 40
+      composter: 1
+  - blocos: 40
+    luz: 2
+    itens:
+      farmland: 80
+      composter: 2
 camadas:
   # 0
   - - "LXXXXXXXL"
