@@ -122,7 +122,7 @@ public final class Obras implements Listener {
         plantas.carregar();
     }
 
-    /** /rpgadmin recarregar: lê os projetos de novo. */
+    /** /rpgadmin reload: lê os projetos de novo. */
     public void recarregarPlantas() {
         plantas.carregar();
     }

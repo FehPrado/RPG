@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Os projetos de construção da colônia. Os que vêm com o plugin são copiados para
  * plugins/RPGAtributos/plantas/ na primeira vez; o admin pode editar ou criar outros ali
- * (um .yml por projeto) e usar /rpgadmin recarregar.
+ * (um .yml por projeto) e usar /rpgadmin reload.
  */
 public final class Plantas {
 

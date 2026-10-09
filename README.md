@@ -324,6 +324,30 @@ Cada morador precisa do **seu** posto: 2 fazendeiros precisam de 2 composteiras.
 
 **Níveis da colônia** (Prefeitura → Melhorar, pago com o depósito): cada nível libera +3 moradores (até 15) e novas profissões. O nível 5 dá +20% de produção. Os moradores ficam protegidos de outros jogadores e não fazem comércio. Se a Prefeitura for quebrada, eles viram aldeões comuns.
 
+### Construções (projetos)
+
+No estilo MineColonies: a colônia cresce com construções que os **Construtores** erguem bloco a bloco.
+1. **Pegue um projeto** na Prefeitura → **📜 Projetos**.
+2. **Clique com o projeto no chão** onde quer a obra. **O lado em que você está vira a entrada.** Aparece uma **cerca** em volta do canteiro, com um **portão** na entrada e um corredor de 1 bloco entre a cerca e a obra.
+3. **Agachado + clique na cerca** abre o menu da obra: **girar 90°**, **mudar de lugar** (a cerca some e o projeto volta), ver o contorno em partículas, a lista de materiais e **trazer do depósito** o que faltar. Girar e mudar só até a obra começar.
+4. **Ponha um baú dentro da cerca** (no corredor, fora da obra) com os materiais.
+5. Um **Construtor** livre (posto: bancada de trabalho; um posto por Construtor) vai até lá, **limpa o terreno** (o que sai vai para o baú da obra), tapa buracos sob o piso e **ergue a construção** de dia, tirando tudo do baú. Se faltar algo, ele avisa quanto falta e espera.
+6. Pronta, a cerca some e a construção entra na lista da Prefeitura → **⚒ Obras**.
+
+| Projeto | Tamanho | Nível | O que faz |
+|---|---|---|---|
+| Casa | 7×7 | 1 | 2 camas, janelas, porta e lanterna |
+| Fazenda | 9×9 | 1 | Plantação cercada com água, trigo e a composteira do Fazendeiro |
+| Poço da Praça | 5×5 | 1 | Deixa a colônia mais feliz (+5 cada, até 2) |
+| Torre de Vigia | 5×5, 12 de altura | 1 | **Aumenta o território**: soma os chunks em volta dela (3×3, `territorio.raio-torre-de-vigia`), além do limite normal |
+| Armazém | 7×7 | 2 | 7 baús que viram depósito da colônia |
+| Biblioteca | 9×9 | 2 | Estantes e 2 atris (postos do Bibliotecário) |
+| Quartel | 9×7 | 2 | 4 camas e 2 alvos (8 vagas de soldado) |
+
+- A colônia toca **1 + o nível** obras ao mesmo tempo. A obra precisa caber inteira (com a cerca) no território, longe da Prefeitura, e não aceita baús, camas, estações do plugin nem coisas construídas por jogadores na área (o chão aplainado pode).
+- Os blocos que o Construtor põe contam como **colocados**: quebrar a casa não dá XP de atributo.
+- **Projetos próprios:** os projetos ficam em `plugins/RPGAtributos/plantas/*.yml`. Cada arquivo tem a legenda (uma letra por bloco, como `oak_stairs[facing=east]`) e as camadas de baixo para cima; em cada camada a 1ª linha é o **fundo** e a última é a **frente** (a entrada), e `south` é o lado da entrada. `.` é ar e `~` é "não mexe". Crie um arquivo novo e use `/rpgadmin reload`.
+
 ### Exército
 
 Duas profissões a mais na colônia: **Soldado** (espada, liberado no nível 2) e **Arqueiro** (arco, nível 3). O posto delas é o **Quartel**, um **bloco de alvo** perto da Prefeitura, e cada um abriga 4 soldados.
