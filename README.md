@@ -339,10 +339,26 @@ No estilo MineColonies: a colônia cresce com construções que os **Construtore
 | Casa | 7×7 | 1 | 2 camas, janelas, porta e lanterna |
 | Fazenda | 9×9 | 1 | Plantação cercada com água, trigo e a composteira do Fazendeiro |
 | Poço da Praça | 5×5 | 1 | Deixa a colônia mais feliz (+5 cada, até 2) |
-| Torre de Vigia | 5×5, 12 de altura | 1 | **Aumenta o território**: soma os chunks em volta dela (3×3, `territorio.raio-torre-de-vigia`), além do limite normal |
+| Torre de Vigia | 5×5, 12 de altura | 1 | **Aumenta o território**: soma os chunks em volta dela (3×3, `territorio.raio-torre-de-vigia`, +1 de raio por nível), além do limite normal |
 | Armazém | 7×7 | 2 | 7 baús que viram depósito da colônia |
 | Biblioteca | 9×9 | 2 | Estantes e 2 atris (postos do Bibliotecário) |
 | Quartel | 9×7 | 2 | 4 camas e 2 alvos (8 vagas de soldado) |
+
+**Do seu jeito (botão direito no projeto):** em vez do desenho pronto, você mesmo constrói. A cerca marca a área (agachado + clique: **área maior/menor**, até +6 de cada lado, e girar a entrada). Construa lá dentro e peça a **vistoria** no menu da cerca: se atender o **mínimo do nível 1**, vira construção da colônia e a cerca some. O menu mostra, nível por nível, o que já tem (✔) e o que falta (✖).
+
+**Níveis das construções** (como os prédios do MineColonies): cada projeto tem 3 níveis, cada um com um mínimo de **blocos construídos**, camas, portas, luzes, baús, **% do piso com teto**, altura e blocos certos (atris, estantes, alvos, terra arada...). Melhore a construção e peça a vistoria de novo em **⚒ Obras**: o nível sobe (ou desce, se você desmontar; no nível 0 ela "precisa de reparo" e não conta).
+
+| Projeto | Nível 1 (mínimo) | O que o nível dá |
+|---|---|---|
+| Casa | 40 blocos, 2 camas, 1 porta, 1 luz, 70% coberto | As camas trazem moradores |
+| Fazenda | 16 terras aradas, 1 composteira | Fazendeiro +10% por nível |
+| Poço da Praça | 15 blocos, 1 luz | Felicidade +5% por nível (até 15%) |
+| Torre de Vigia | 80 blocos, 9 de altura, 6 escadas de mão, 1 luz | Vigia 3×3 chunks, 5×5 no nível 2, 7×7 no 3 |
+| Armazém | 50 blocos, 4 baús, porta, luz, 70% coberto | Todos os baús dela viram depósito |
+| Biblioteca | 80 blocos, 1 atril, 10 estantes, porta, luz, 70% coberto | Bibliotecário +10% por nível |
+| Quartel | 70 blocos, 2 camas, 1 alvo, porta, luz, 70% coberto | Alvos = vagas de soldado |
+
+"Blocos construídos" são blocos firmes que não são terreno natural (terra, pedra, areia, troncos e minérios só contam se alguém colocou). Os números estão em `niveis:` de cada `plantas/*.yml`; o plugin avisa no console se o desenho pronto não atende o próprio nível 1.
 
 - A colônia toca **1 + o nível** obras ao mesmo tempo. A obra precisa caber inteira (com a cerca) no território, longe da Prefeitura, e não aceita baús, camas, estações do plugin nem coisas construídas por jogadores na área (o chão aplainado pode).
 - Os blocos que o Construtor põe contam como **colocados**: quebrar a casa não dá XP de atributo.
