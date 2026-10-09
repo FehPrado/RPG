@@ -40,6 +40,14 @@ public final class Colonia {
         double xp;
         /** Quantas vezes seguidas não foi achado (para saber se sumiu de vez). */
         int sumido;
+        /** O jeito dele (1 ou 2 traços). */
+        final List<Traco> tracos = new ArrayList<>();
+        /** O que ele pediu (null = nada) e quantos turnos faltam para o prazo acabar. */
+        Pedido pedido;
+        int prazo;
+        /** Humor por um tempo: +1 contente (pedido atendido), -1 chateado (esquecido), 0 normal. */
+        int humor;
+        int humorTurnos;
 
         Cidadao(UUID entidade, String nome, Profissao profissao, int nivel, double xp) {
             this.entidade = entidade;
@@ -47,6 +55,23 @@ public final class Colonia {
             this.profissao = profissao;
             this.nivel = nivel;
             this.xp = xp;
+        }
+
+        boolean tem(Traco t) { return tracos.contains(t); }
+
+        /** Multiplicador de produção pelo jeito e pelo humor de agora. */
+        double fatorPessoal() {
+            double f = 1;
+            if (tem(Traco.DEDICACAO)) f *= 1.15;
+            if (tem(Traco.PREGUICA)) f *= 0.85;
+            if (humor > 0) f *= 1.15;
+            else if (humor < 0) f *= 0.9;
+            return f;
+        }
+
+        /** Quanto come por turno. */
+        double fome() {
+            return 0.25 * (tem(Traco.APETITE) ? 1.8 : tem(Traco.FRUGALIDADE) ? 0.6 : 1);
         }
 
         public UUID entidade() { return entidade; }
@@ -72,6 +97,9 @@ public final class Colonia {
     long proximaChegada;
     final List<Location> depositos = new ArrayList<>();
     final List<Cidadao> cidadaos = new ArrayList<>();
+    /** A casa que o Construtor está erguendo (null = nenhuma) e quantas ele já terminou. */
+    Obras.Obra obra;
+    int casas;
 
     // ---------- achado na última varredura (não é salvo) ----------
     int camas;

@@ -108,14 +108,23 @@ public final class Colonias implements Listener {
     private static final int P_AJUDA = 16;
     private static final int[] P_CIDADAOS = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43, 46, 47};
     private static final int P_FECHAR = 49;
-    private static final int[] C_PROFISSOES = {19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 32};
+    /** Profissões no menu do morador: as de trabalho nas duas fileiras de cima, as de guerra embaixo. */
+    private static final int[] C_PROFISSOES = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 30, 31, 32};
     private static final int P_EXERCITO = 22;
     private static final int C_INFO = 4;
     private static final int C_VOLTAR = 36;
+    private static final int C_PEDIDO = 40;
     private static final int C_DISPENSAR = 44;
+    /** Chance por turno de um morador sem pedido fazer um (no máximo 2 pedidos abertos por colônia). */
+    private static final double CHANCE_PEDIDO = 0.02;
 
     private final RPGAtributos plugin;
     private final NamespacedKey kCidadao;
+    /** Cavalo de um Cavaleiro (guarda o dono da colônia). */
+    private final NamespacedKey kMontaria;
+    private final Obras obras = new Obras(this);
+    /** Cavaleiro a pé → quando pode pegar outro cavalo. */
+    private final Map<UUID, Long> proximoCavalo = new HashMap<>();
     private final File arquivo;
     private final Map<UUID, Colonia> porDono = new HashMap<>();
     /** Cidadão (entidade) → dono da colônia. */
@@ -129,6 +138,7 @@ public final class Colonias implements Listener {
     public Colonias(RPGAtributos plugin) {
         this.plugin = plugin;
         this.kCidadao = new NamespacedKey(plugin, "cidadao_colonia");
+        this.kMontaria = new NamespacedKey(plugin, "montaria_colonia");
         this.arquivo = new File(plugin.getDataFolder(), "colonias.yml");
     }
 
@@ -224,12 +234,34 @@ public final class Colonias implements Listener {
         Location onde = lugarLivre(base);
         String nome = NOMES[rnd().nextInt(NOMES.length)];
         Villager v = criarMorador(c, nome, onde);
-        c.cidadaos.add(new Colonia.Cidadao(v.getUniqueId(), nome, Profissao.DESEMPREGADO, 1, 0));
+        Colonia.Cidadao ci = new Colonia.Cidadao(v.getUniqueId(), nome, Profissao.DESEMPREGADO, 1, 0);
+        ci.tracos.addAll(Traco.sortear());
+        c.cidadaos.add(ci);
         cidadaos.put(v.getUniqueId(), c.dono);
         v.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, v.getLocation().add(0, 1, 0), 20, 0.4, 0.6, 0.4);
         v.getWorld().playSound(v.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 1f, 1f);
         Player dono = Bukkit.getPlayer(c.dono);
-        if (dono != null) dono.sendMessage(Component.text("⌂ " + nome + " chegou na sua colônia! Dê um trabalho a ele(a) na Prefeitura.", Prefeituras.COR));
+        if (dono != null) {
+            dono.sendMessage(Component.text("⌂ " + nome + " chegou na sua colônia! Dê um trabalho a ele(a) na Prefeitura.", Prefeituras.COR)
+                    .append(Component.text(" (" + nomesTracos(ci) + ")", NamedTextColor.GRAY)));
+        }
+    }
+
+    private static String nomesTracos(Colonia.Cidadao ci) {
+        return String.join(", ", ci.tracos.stream().map(Traco::nome).toList());
+    }
+
+    /** Nome sobre a cabeça: "Ana · Fazendeiro", com um ❗ quando tem pedido aberto. */
+    private Component nomeMorador(Colonia.Cidadao ci) {
+        Component n = Component.text(ci.nome, NamedTextColor.YELLOW).append(Component.text(" · " + ci.profissao.nome(),
+                ci.profissao == Profissao.DESEMPREGADO ? NamedTextColor.GRAY : ci.profissao.cor()));
+        return ci.pedido == null ? n : n.append(Component.text(" ❗", NamedTextColor.GOLD, TextDecoration.BOLD));
+    }
+
+    private void renomear(Colonia c, Colonia.Cidadao ci) {
+        Entity e = Bukkit.getEntity(ci.entidade);
+        if (e instanceof Villager v) v.customName(nomeMorador(ci));
+        else if (e != null && ci.profissao.soldado()) nomearSoldado(c, ci, e);
     }
 
     private static Location lugarLivre(Location base) {
@@ -267,7 +299,7 @@ public final class Colonias implements Listener {
             } finally {
                 trocandoProfissao.remove(v.getUniqueId());
             }
-            v.customName(Component.text(ci.nome, NamedTextColor.YELLOW).append(Component.text(" · " + p.nome(), p.cor())));
+            v.customName(nomeMorador(ci));
             v.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, v.getLocation().add(0, 1.5, 0), 10, 0.3, 0.3, 0.3);
         }
     }
@@ -279,6 +311,7 @@ public final class Colonias implements Listener {
 
     private void perderCidadao(UUID id, String motivo) {
         UUID dono = cidadaos.remove(id);
+        proximoCavalo.remove(id);
         Colonia c = dono == null ? null : porDono.get(dono);
         if (c == null) return;
         Colonia.Cidadao ci = cidadao(c, id);
@@ -315,14 +348,29 @@ public final class Colonias implements Listener {
         return false;
     }
 
-    private int contar(Colonia c, Predicate<ItemStack> teste) {
+    int contar(Colonia c, Predicate<ItemStack> teste) {
         int n = 0;
         for (Inventory inv : inventarios(c)) for (ItemStack s : inv.getContents()) if (s != null && teste.test(s)) n += s.getAmount();
         return n;
     }
 
+    /** Quanto o depósito tem de cada tipo de item que passa no teste. */
+    Map<Material, Integer> contarPorTipo(Colonia c, Predicate<ItemStack> teste) {
+        Map<Material, Integer> n = new EnumMap<>(Material.class);
+        for (Inventory inv : inventarios(c)) {
+            for (ItemStack s : inv.getContents()) if (s != null && !s.isEmpty() && teste.test(s)) n.merge(s.getType(), s.getAmount(), Integer::sum);
+        }
+        return n;
+    }
+
+    /** O tipo do primeiro item do depósito que passa no teste (null = nenhum). */
+    Material primeiroTipo(Colonia c, Predicate<ItemStack> teste) {
+        for (Inventory inv : inventarios(c)) for (ItemStack s : inv.getContents()) if (s != null && !s.isEmpty() && teste.test(s)) return s.getType();
+        return null;
+    }
+
     /** Tira {@code qtd} itens do depósito. @return a qualidade de cada unidade tirada. */
-    private List<Qualidade> tirar(Colonia c, Predicate<ItemStack> teste, int qtd) {
+    List<Qualidade> tirar(Colonia c, Predicate<ItemStack> teste, int qtd) {
         List<Qualidade> qs = new ArrayList<>();
         for (Inventory inv : inventarios(c)) {
             ItemStack[] cont = inv.getContents();
@@ -352,7 +400,8 @@ public final class Colonias implements Listener {
 
     private static final Set<Material> POSTOS_BLOCO = Set.of(Material.COMPOSTER, Material.FLETCHING_TABLE, Material.BARREL,
             Material.STONECUTTER, Material.SMOKER, Material.BREWING_STAND, Material.ANVIL, Material.CHIPPED_ANVIL,
-            Material.DAMAGED_ANVIL, Material.HAY_BLOCK, Material.TARGET);
+            Material.DAMAGED_ANVIL, Material.HAY_BLOCK, Material.TARGET, Material.CARTOGRAPHY_TABLE, Material.LECTERN,
+            Material.CRAFTING_TABLE);
     private static final Set<Material> PLANTAS = Set.of(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.BEETROOTS);
 
     /** Os chunks que a colônia enxerga: o território inteiro do dono (ou, sem território, os perto da Prefeitura). */
@@ -440,6 +489,9 @@ public final class Colonias implements Listener {
                     case ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL -> plugin.forjas().eh(b) ? Profissao.FERREIRO : null;
                     case HAY_BLOCK -> plugin.altaresDomador().eh(b) ? Profissao.TRATADOR : null;
                     case TARGET -> Profissao.SOLDADO;
+                    case CARTOGRAPHY_TABLE -> Profissao.MERCADOR;
+                    case LECTERN -> Profissao.BIBLIOTECARIO;
+                    case CRAFTING_TABLE -> Profissao.CONSTRUTOR;
                     default -> null;
                 };
                 if (p != null) s.postos.merge(p, 1, Integer::sum);
@@ -528,8 +580,9 @@ public final class Colonias implements Listener {
         }
         comer(c);
         double alvo = 50 + (c.camas >= c.cidadaos.size() ? 15 : -20) + 25 * c.alimentados - (c.alimentados < 0.5 ? 25 : 0)
-                + (c.comeuPratos ? 15 : 0);
+                + (c.comeuPratos ? 15 : 0) + humorDaColonia(c);
         c.felicidade += (Math.max(0, Math.min(100, alvo)) - c.felicidade) * 0.3;
+        pedidos(c);
 
         // Chegam moradores novos se houver cama, comida e felicidade.
         long agora = System.currentTimeMillis();
@@ -538,9 +591,11 @@ public final class Colonias implements Listener {
             c.proximaChegada = agora + CHEGADA_MS;
         }
 
-        // Trabalham de dia.
+        // Trabalham de dia (quem acorda cedo pega também o começo e o fim da noite).
         long hora = w.getTime();
-        if (hora > 12500 && hora < 23500) return;
+        boolean noite = hora > 12500 && hora < 23500;
+        boolean madrugada = hora > 12500 && hora < 14500 || hora > 22000 && hora < 23500;
+        if (noite && !madrugada) return;
         if (c.depositos.isEmpty()) {
             avisar(c, "Defina um baú de depósito na Prefeitura: sem ele ninguém trabalha.");
             return;
@@ -552,9 +607,15 @@ public final class Colonias implements Listener {
             if (p == Profissao.DESEMPREGADO || p.soldado()) continue;
             int usados = ocupados.merge(p, 1, Integer::sum);
             if (usados > c.postos.getOrDefault(p, 0)) continue; // falta posto para ele
-            double mult = (1 + 0.1 * ci.nivel) * c.fatorFelicidade() * (c.nivel >= Colonia.NIVEL_MAXIMO ? 1.2 : 1);
+            if (noite && !ci.tem(Traco.MADRUGADOR)) continue;
+            double mult = (1 + 0.1 * ci.nivel) * c.fatorFelicidade() * (c.nivel >= Colonia.NIVEL_MAXIMO ? 1.2 : 1) * ci.fatorPessoal();
             List<ItemStack> feitos = trabalhar(c, ci, mult);
             if (feitos == null) continue;
+            if (ci.tem(Traco.SORTE) && !feitos.isEmpty() && rnd().nextDouble() < 0.12) {
+                ItemStack extra = feitos.get(rnd().nextInt(feitos.size())).clone();
+                extra.setAmount(1);
+                feitos.add(extra);
+            }
             for (ItemStack s : feitos) if (!guardar(c, s)) cheio = true;
             ganharXp(c, ci, 5);
             if (Bukkit.getEntity(ci.entidade) instanceof Villager v) {
@@ -575,8 +636,85 @@ public final class Colonias implements Listener {
         if (p != null) p.sendMessage(Component.text("⌂ " + msg, NamedTextColor.GOLD));
     }
 
+    /** Quanto o jeito e o humor dos moradores mexem na felicidade da colônia (até ±12). */
+    private static double humorDaColonia(Colonia c) {
+        double d = 0;
+        for (Colonia.Cidadao ci : c.cidadaos) {
+            if (ci.tem(Traco.BOM_HUMOR)) d += 3;
+            if (ci.tem(Traco.MAU_HUMOR)) d -= 3;
+            if (ci.humor < 0) d -= 2;
+        }
+        return Math.max(-12, Math.min(12, d));
+    }
+
+    /** Humor passando, prazos correndo e, de vez em quando, um pedido novo. */
+    private void pedidos(Colonia c) {
+        int abertos = 0;
+        for (Colonia.Cidadao ci : c.cidadaos) if (ci.pedido != null) abertos++;
+        Player dono = Bukkit.getPlayer(c.dono);
+        for (Colonia.Cidadao ci : c.cidadaos) {
+            if (ci.humorTurnos > 0 && --ci.humorTurnos == 0) ci.humor = 0;
+            if (ci.pedido != null) {
+                if (--ci.prazo > 0) continue;
+                // Ninguém atendeu: fica chateado.
+                if (dono != null) dono.sendMessage(Component.text("⌂ " + ci.nome + " ficou chateado(a): ninguém trouxe " + ci.pedido.texto() + ".",
+                        NamedTextColor.GRAY));
+                ci.pedido = null;
+                ci.humor = -1;
+                ci.humorTurnos = Pedido.CHATEADO;
+                alterarFelicidade(c, -5);
+                renomear(c, ci);
+                continue;
+            }
+            if (abertos >= 2 || ci.humor != 0 || rnd().nextDouble() >= CHANCE_PEDIDO) continue;
+            ci.pedido = Pedido.sortear(ci.profissao);
+            ci.prazo = Pedido.PRAZO;
+            abertos++;
+            renomear(c, ci);
+            if (dono != null) {
+                dono.sendMessage(Component.text("⌂ " + ci.nome + " (" + ci.profissao.nome() + ") tem um pedido: ", Prefeituras.COR)
+                        .append(Component.text(ci.pedido.texto(), NamedTextColor.WHITE))
+                        .append(Component.text(". \"" + ci.pedido.motivo() + "\" Fale com " + ci.nome + " para entregar.", NamedTextColor.GRAY)));
+            }
+        }
+    }
+
+    /** O jogador entrega o pedido do morador (tira do inventário dele). */
+    private void entregarPedido(Player p, Colonia c, Colonia.Cidadao ci) {
+        Pedido pe = ci.pedido;
+        if (pe == null) return;
+        int tem = 0;
+        for (ItemStack s : p.getInventory().getStorageContents()) if (pe.serve(s)) tem += s.getAmount();
+        if (tem < pe.qtd()) { erro(p, "Você precisa ter " + pe.texto() + " no inventário."); return; }
+        int falta = pe.qtd();
+        ItemStack[] cont = p.getInventory().getStorageContents();
+        for (int i = 0; i < cont.length && falta > 0; i++) {
+            if (!pe.serve(cont[i])) continue;
+            int tira = Math.min(falta, cont[i].getAmount());
+            cont[i].setAmount(cont[i].getAmount() - tira);
+            if (cont[i].getAmount() <= 0) cont[i] = null;
+            falta -= tira;
+        }
+        p.getInventory().setStorageContents(cont);
+        ci.pedido = null;
+        ci.humor = 1;
+        ci.humorTurnos = Pedido.CONTENTE;
+        alterarFelicidade(c, 8);
+        ganharXp(c, ci, 15);
+        renomear(c, ci);
+        Entity e = Bukkit.getEntity(ci.entidade);
+        if (e != null) {
+            e.getWorld().spawnParticle(Particle.HEART, e.getLocation().add(0, 2, 0), 6, 0.4, 0.3, 0.4);
+            e.getWorld().playSound(e.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 1f, 1.1f);
+        }
+        p.sendMessage(Component.text("⌂ " + ci.nome + " adorou! A colônia ficou mais feliz e " + ci.nome + " vai trabalhar com mais vontade.",
+                Prefeituras.COR));
+        salvar();
+    }
+
     private void ganharXp(Colonia c, Colonia.Cidadao ci, double xp) {
         if (ci.nivel >= 10) return;
+        if (ci.tem(Traco.CURIOSIDADE)) xp *= 1.5;
         ci.xp += xp;
         while (ci.nivel < 10 && ci.xp >= Colonia.Cidadao.xpParaProximo(ci.nivel)) {
             ci.xp -= Colonia.Cidadao.xpParaProximo(ci.nivel);
@@ -593,7 +731,7 @@ public final class Colonias implements Listener {
 
     /** Cada morador come um pouco por turno. Pratos da Cozinha alimentam mais e deixam todos felizes. */
     private void comer(Colonia c) {
-        c.fome += c.cidadaos.size() * 0.25;
+        for (Colonia.Cidadao ci : c.cidadaos) c.fome += ci.fome();
         int precisa = (int) Math.floor(c.fome);
         if (precisa <= 0) return;
         int comidos = 0, pratos = 0;
@@ -606,6 +744,7 @@ public final class Colonias implements Listener {
         }
         c.alimentados = Math.min(1, comidos / (double) precisa);
         c.comeuPratos = pratos > 0;
+        if (pratos > 0) for (Colonia.Cidadao ci : c.cidadaos) if (ci.tem(Traco.APETITE)) alterarFelicidade(c, 1);
         c.fome = Math.max(0, c.fome - comidos);
         if (c.alimentados < 1) avisar(c, "A colônia está com fome! Coloque comida no depósito.");
     }
@@ -713,9 +852,154 @@ public final class Colonias implements Listener {
                     return null;
                 }
             }
-            case DESEMPREGADO, SOLDADO, ARQUEIRO -> { return null; }
+            case MERCADOR -> {
+                int esmeraldas = vender(c, ci, mult);
+                if (esmeraldas <= 0) return null;
+                l.add(new ItemStack(Material.EMERALD, esmeraldas));
+            }
+            case BIBLIOTECARIO -> {
+                if (contar(c, simples(Material.BOOK)) >= 1 && contar(c, simples(Material.LAPIS_LAZULI)) >= 4) {
+                    tirar(c, simples(Material.BOOK), 1);
+                    tirar(c, simples(Material.LAPIS_LAZULI), 4);
+                    l.add(livroEncantado(ci));
+                } else if (contar(c, simples(Material.PAPER)) >= 3 && contar(c, simples(Material.LEATHER)) >= 1) {
+                    tirar(c, simples(Material.PAPER), 3);
+                    tirar(c, simples(Material.LEATHER), 1);
+                    l.add(new ItemStack(Material.BOOK, rnd().nextDouble() < 0.05 * ci.nivel ? 2 : 1));
+                } else if (contar(c, simples(Material.SUGAR_CANE)) >= 3) {
+                    tirar(c, simples(Material.SUGAR_CANE), 3);
+                    l.add(new ItemStack(Material.PAPER, quantidade(3, 3, mult)));
+                } else {
+                    return null;
+                }
+            }
+            case CONSTRUTOR -> {
+                if (!construir(c, ci, mult)) return null;
+            }
+            case DESEMPREGADO, SOLDADO, ARQUEIRO, CAVALEIRO -> { return null; }
         }
         return l;
+    }
+
+    // ---------- Mercador ----------
+
+    /** Quantos itens valem 1 esmeralda na estrada (só o que está aqui é vendido). */
+    private static int preco(Material m) {
+        String n = m.name();
+        if (n.endsWith("_LOG") || n.endsWith("_STEM")) return 16;
+        if (n.endsWith("_SAPLING")) return 24;
+        return switch (m) {
+            case WHEAT -> 20;
+            case CARROT -> 22;
+            case POTATO -> 26;
+            case BEETROOT -> 15;
+            case WHEAT_SEEDS, BEETROOT_SEEDS, STICK, ROTTEN_FLESH -> 32;
+            case COD -> 15;
+            case SALMON -> 13;
+            case INK_SAC -> 8;
+            case COBBLESTONE -> 48;
+            case COAL -> 15;
+            case RAW_IRON -> 6;
+            case IRON_INGOT -> 4;
+            case RAW_COPPER -> 20;
+            case COPPER_INGOT -> 12;
+            case RAW_GOLD -> 4;
+            case GOLD_INGOT -> 3;
+            case REDSTONE -> 12;
+            case LEATHER -> 6;
+            case WHITE_WOOL -> 12;
+            case EGG -> 16;
+            case FEATHER, BONE -> 24;
+            case STRING -> 14;
+            case BEEF, CHICKEN -> 12;
+            case PORKCHOP, MUTTON -> 8;
+            case APPLE -> 16;
+            case BREAD -> 6;
+            default -> 0;
+        };
+    }
+
+    /** Quanto de cada coisa fica guardado (o Mercador só vende o que passar disso). */
+    private static int reserva(Material m) {
+        String n = m.name();
+        // Material de construção e de comida fica com folga para o Construtor e para a fome.
+        if (m == Material.COBBLESTONE || n.endsWith("_LOG") || n.endsWith("_STEM")) return 192;
+        return m.isEdible() ? 128 : 64;
+    }
+
+    /** Vende a sobra do depósito, a que tiver mais sobrando primeiro. @return as esmeraldas ganhas. */
+    private int vender(Colonia c, Colonia.Cidadao ci, double mult) {
+        int teto = quantidade(1, 1 + ci.nivel / 3, mult);
+        Map<Material, Integer> tem = contarPorTipo(c, s -> preco(s.getType()) > 0 && Ingrediente.simples(s));
+        List<Map.Entry<Material, Integer>> sobras = new ArrayList<>(tem.entrySet());
+        sobras.sort((a, b) -> Integer.compare((b.getValue() - reserva(b.getKey())) / preco(b.getKey()),
+                (a.getValue() - reserva(a.getKey())) / preco(a.getKey())));
+        int ganhou = 0;
+        for (Map.Entry<Material, Integer> e : sobras) {
+            int lotes = (e.getValue() - reserva(e.getKey())) / preco(e.getKey());
+            if (lotes <= 0) break;
+            int n = Math.min(lotes, teto - ganhou);
+            tirar(c, simples(e.getKey()), n * preco(e.getKey()));
+            ganhou += n;
+            if (ganhou >= teto) break;
+        }
+        return ganhou;
+    }
+
+    // ---------- Bibliotecário ----------
+
+    /** Um livro com um encantamento ao acaso; o nível sobe com o nível do bibliotecário (raros só do nível 7 em diante). */
+    private static ItemStack livroEncantado(Colonia.Cidadao ci) {
+        List<org.bukkit.enchantments.Enchantment> comuns = new ArrayList<>(), raros = new ArrayList<>();
+        for (org.bukkit.enchantments.Enchantment e : io.papermc.paper.registry.RegistryAccess.registryAccess()
+                .getRegistry(io.papermc.paper.registry.RegistryKey.ENCHANTMENT)) {
+            if (e.isCursed()) continue;
+            if (e.isTreasure()) { if (e.isTradeable()) raros.add(e); }
+            else if (e.isDiscoverable()) comuns.add(e);
+        }
+        List<org.bukkit.enchantments.Enchantment> de = ci.nivel >= 7 && !raros.isEmpty() && rnd().nextDouble() < 0.08 ? raros : comuns;
+        ItemStack livro = new ItemStack(Material.ENCHANTED_BOOK);
+        if (de.isEmpty()) return livro;
+        org.bukkit.enchantments.Enchantment e = de.get(rnd().nextInt(de.size()));
+        int max = e.getMaxLevel();
+        int nivel = 1 + (int) Math.floor((max - 1) * Math.min(1, (ci.nivel + rnd().nextInt(0, 5)) / 12.0) + 0.0001);
+        livro.editMeta(org.bukkit.inventory.meta.EnchantmentStorageMeta.class, m -> m.addStoredEnchant(e, Math.max(1, Math.min(max, nivel)), true));
+        return livro;
+    }
+
+    // ---------- Construtor ----------
+
+    /** Uma casa por vez, só quando faltam camas. @return se trabalhou neste turno. */
+    private boolean construir(Colonia c, Colonia.Cidadao ci, double mult) {
+        if (c.obra == null) {
+            if (c.camas >= c.maxCidadaos() || !c.varrida) return false;
+            c.obra = obras.procurarLugar(c, chunksDaColonia(c));
+            if (c.obra == null) {
+                avisar(c, ci.nome + " (Construtor) não achou lugar para uma casa: precisa de um chão plano e livre de 9×9 no território.");
+                return false;
+            }
+            Player dono = Bukkit.getPlayer(c.dono);
+            if (dono != null) dono.sendMessage(Component.text("⌂ " + ci.nome + " começou uma casa nova em " + c.obra.x + ", " + c.obra.y + ", " + c.obra.z
+                    + ". Deixe madeira, pedra, 3 vidros, 2 camas (ou 6 lãs) e uma luz no depósito.", Prefeituras.COR));
+        }
+        int feitos = obras.construir(c, c.obra, quantidade(8, 12, mult));
+        if (Bukkit.getEntity(ci.entidade) instanceof Villager v && v.getWorld().getName().equals(c.obra.mundo)) {
+            v.getPathfinder().moveTo(c.obra.centro(v.getWorld()), 0.6);
+        }
+        if (c.obra.falta != null) avisar(c, "A casa nova parou: falta " + c.obra.falta + " no depósito.");
+        if (obras.pronta(c.obra)) {
+            c.casas++;
+            Location centro = c.obra.centro(c.world());
+            centro.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, centro.clone().add(0, 2, 0), 40, 2, 1.5, 2, 0.2);
+            centro.getWorld().playSound(centro, Sound.ENTITY_VILLAGER_CELEBRATE, 1f, 1f);
+            Player dono = Bukkit.getPlayer(c.dono);
+            if (dono != null) dono.sendMessage(Component.text("⌂ " + ci.nome + " terminou uma casa nova! Mais 2 camas: novos moradores podem chegar.",
+                    Prefeituras.COR, TextDecoration.BOLD));
+            c.obra = null;
+            varrer(c);
+            salvar();
+        }
+        return feitos > 0;
     }
 
     private static int quantidade(int min, int max, double mult) {
@@ -833,6 +1117,7 @@ public final class Colonias implements Listener {
                 linha("Felicidade: ", Math.round(c.felicidade) + "% (produção ×" + String.format("%.2f", c.fatorFelicidade()).replace('.', ',') + ")",
                         c.felicidade >= 60 ? NamedTextColor.GREEN : c.felicidade >= 40 ? NamedTextColor.YELLOW : NamedTextColor.RED),
                 linha("Comida: ", alimentados + "% atendida" + (c.comeuPratos ? " (com pratos!)" : ""), alimentados >= 100 ? NamedTextColor.GREEN : NamedTextColor.RED),
+                linha("Casas erguidas: ", c.casas + (c.obra == null ? "" : "  (uma em obra: " + c.obra.passo * 100 / c.obra.total() + "%)"), NamedTextColor.WHITE),
                 Component.empty(),
                 Component.text("Chega um morador novo a cada 4 min se", NamedTextColor.GRAY),
                 Component.text("houver cama livre, comida e felicidade.", NamedTextColor.GRAY)), false));
@@ -853,7 +1138,7 @@ public final class Colonias implements Listener {
         List<Component> postos = new ArrayList<>();
         postos.add(Component.text(territorio(c) != null ? "Encontrados no território (" + c.censo.size() + " chunks):" : "Encontrados até " + Colonia.RAIO + " blocos da Prefeitura:", NamedTextColor.GRAY));
         for (Profissao p : Profissao.values()) {
-            if (p == Profissao.DESEMPREGADO) continue;
+            if (p == Profissao.DESEMPREGADO || (p.soldado() && p != Profissao.SOLDADO)) continue;
             int n = c.postos.getOrDefault(p, 0);
             postos.add(Component.text(" " + p.nomePosto() + ": ", NamedTextColor.GRAY)
                     .append(Component.text(n + " (" + p.nome() + ")", n > 0 ? NamedTextColor.GREEN : NamedTextColor.DARK_GRAY)));
@@ -890,10 +1175,12 @@ public final class Colonias implements Listener {
                 Component.text("1. Coloque camas e defina um baú de depósito.", NamedTextColor.GRAY),
                 Component.text("2. Construa postos no seu território:", NamedTextColor.GRAY),
                 Component.text("   composteira, barril, cortador de pedras,", NamedTextColor.WHITE),
-                Component.text("   bancada de flechas, Cozinha, Forja...", NamedTextColor.WHITE),
+                Component.text("   bancada de flechas, bancada de trabalho,", NamedTextColor.WHITE),
+                Component.text("   mesa de cartografia, atril, Cozinha, Forja...", NamedTextColor.WHITE),
                 Component.text("3. Dê um trabalho a cada morador.", NamedTextColor.GRAY),
                 Component.text("4. Mantenha comida no depósito (pratos", NamedTextColor.GRAY),
                 Component.text("   da Cozinha deixam todos felizes).", NamedTextColor.GRAY),
+                Component.text("5. Atenda os pedidos (❗) dos moradores.", NamedTextColor.GRAY),
                 Component.empty(),
                 Component.text("Eles trabalham de dia e dormem à noite.", NamedTextColor.DARK_GRAY)), false));
 
@@ -921,6 +1208,15 @@ public final class Colonias implements Listener {
             List<Component> lore = new ArrayList<>();
             lore.add(linha("Profissão: ", ci.profissao.nome(), ci.profissao.cor()));
             lore.add(linha("Nível: ", ci.nivel + " / 10", NamedTextColor.WHITE));
+            lore.add(linha("Jeito: ", nomesTracos(ci), NamedTextColor.AQUA));
+            if (ci.pedido != null) lore.add(Component.text("❗ Pede " + ci.pedido.texto(), NamedTextColor.GOLD));
+            else if (ci.humor > 0) lore.add(Component.text("☺ Contente", NamedTextColor.GREEN));
+            else if (ci.humor < 0) lore.add(Component.text("☹ Chateado(a)", NamedTextColor.RED));
+            if (ci.profissao == Profissao.CONSTRUTOR && c.obra != null && !semPosto) {
+                lore.add(Component.text("⚒ Casa em obra: " + c.obra.passo * 100 / c.obra.total() + "%", NamedTextColor.GOLD));
+            } else if (ci.profissao == Profissao.CONSTRUTOR && !semPosto && c.camas >= c.maxCidadaos()) {
+                lore.add(Component.text("✔ Camas de sobra: nada para construir", NamedTextColor.GRAY));
+            }
             if (semPosto) lore.add(Component.text("✖ Sem posto: precisa de " + ci.profissao.nomePosto(), NamedTextColor.RED));
             else if (ci.profissao == Profissao.FAZENDEIRO && c.plantas.isEmpty()) lore.add(Component.text("✖ Sem plantações por perto", NamedTextColor.RED));
             else if (ci.profissao == Profissao.PESCADOR && c.agua < 8) lore.add(Component.text("✖ Sem água por perto", NamedTextColor.RED));
@@ -948,16 +1244,44 @@ public final class Colonias implements Listener {
         Inventory inv = t.inventario;
         inv.clear();
         double prox = Colonia.Cidadao.xpParaProximo(ci.nivel);
-        inv.setItem(C_INFO, item(ci.profissao.icone(), Component.text(ci.nome, NamedTextColor.YELLOW, TextDecoration.BOLD), List.of(
+        List<Component> info = new ArrayList<>(List.of(
                 linha("Profissão: ", ci.profissao.nome(), ci.profissao.cor()),
                 Component.text(ci.profissao.descricao(), NamedTextColor.GRAY),
                 linha("Nível: ", ci.nivel + " / 10" + (ci.nivel < 10 ? "  (" + (int) ci.xp + "/" + (int) prox + " XP)" : ""), NamedTextColor.WHITE),
-                linha("Produção: ", "+" + ci.nivel * 10 + "% pelo nível", NamedTextColor.GREEN)), false));
+                linha("Produção: ", "+" + ci.nivel * 10 + "% pelo nível", NamedTextColor.GREEN),
+                Component.empty(),
+                Component.text("Jeito:", NamedTextColor.GRAY)));
+        for (Traco tr : ci.tracos) {
+            info.add(Component.text(" " + (tr.bom() ? "✦ " : "✧ ") + tr.nome() + ": ", tr.cor())
+                    .append(Component.text(tr.descricao(), NamedTextColor.GRAY)));
+        }
+        if (ci.humor != 0) {
+            info.add(Component.empty());
+            info.add(ci.humor > 0 ? Component.text("☺ Contente: produz 15% a mais por um tempo.", NamedTextColor.GREEN)
+                    : Component.text("☹ Chateado(a): produz 10% a menos por um tempo.", NamedTextColor.RED));
+        }
+        inv.setItem(C_INFO, item(ci.profissao.icone(), Component.text(ci.nome, NamedTextColor.YELLOW, TextDecoration.BOLD), info, false));
+        if (ci.pedido != null) {
+            inv.setItem(C_PEDIDO, item(ci.pedido.icone(), Component.text("❗ Pedido de " + ci.nome, NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+                    Component.text("\"" + ci.pedido.motivo() + "\"", NamedTextColor.WHITE, TextDecoration.ITALIC),
+                    linha("Quer: ", ci.pedido.texto(), NamedTextColor.YELLOW),
+                    linha("Prazo: ", ci.prazo + " min", ci.prazo > 10 ? NamedTextColor.GREEN : NamedTextColor.RED),
+                    Component.empty(),
+                    Component.text("Atender: colônia +8% de felicidade e", NamedTextColor.GRAY),
+                    Component.text(ci.nome + " contente (+15% de produção).", NamedTextColor.GRAY),
+                    Component.text("Esquecer: colônia -5% e " + ci.nome + " chateado(a).", NamedTextColor.DARK_GRAY),
+                    Component.empty(),
+                    Component.text("» Clique para entregar (do seu inventário)", NamedTextColor.YELLOW)), true));
+        } else {
+            inv.setItem(C_PEDIDO, item(Material.PAPER, Component.text("Sem pedidos", NamedTextColor.GRAY), List.of(
+                    Component.text("De vez em quando um morador pede alguma coisa:", NamedTextColor.DARK_GRAY),
+                    Component.text("um ❗ aparece sobre a cabeça dele.", NamedTextColor.DARK_GRAY)), false));
+        }
         Profissao[] todas = Profissao.values();
         for (int i = 0; i < todas.length && i < C_PROFISSOES.length; i++) {
             Profissao p = todas[i];
             boolean liberada = c.nivel >= p.nivelColonia();
-            int postos = c.postos.getOrDefault(p, 0);
+            int postos = c.postos.getOrDefault(p.soldado() ? Profissao.SOLDADO : p, 0);
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text(p.descricao(), NamedTextColor.GRAY));
             if (p != Profissao.DESEMPREGADO) {
@@ -1023,6 +1347,14 @@ public final class Colonias implements Listener {
         Colonia.Cidadao ci = cidadao(c, t.cidadao);
         if (ci == null) { p.closeInventory(); return; }
         if (slot == C_VOLTAR) { abrir(p, c); return; }
+        if (slot == C_PEDIDO) {
+            // Qualquer um ligado à colônia pode atender um pedido.
+            if (ci.pedido == null) return;
+            if (!daColonia(p, c)) { erro(p, "Só quem é da colônia pode atender os pedidos."); return; }
+            entregarPedido(p, c, ci);
+            desenharCidadao(t, ci);
+            return;
+        }
         if (!gerencia(p, c)) { erro(p, "Só o dono da colônia e os membros do território podem mexer aqui."); return; }
         if (slot == C_DISPENSAR) {
             if (!e.isShiftClick()) { erro(p, "Shift + clique para confirmar."); return; }
@@ -1179,7 +1511,7 @@ public final class Colonias implements Listener {
     private int cicloSoldados;
 
     public int quantosSoldados(Colonia c) {
-        return c.quantos(Profissao.SOLDADO) + c.quantos(Profissao.ARQUEIRO);
+        return c.quantos(Profissao.SOLDADO) + c.quantos(Profissao.ARQUEIRO) + c.quantos(Profissao.CAVALEIRO);
     }
 
     private int vagasSoldados(Colonia c) {
@@ -1214,6 +1546,7 @@ public final class Colonias implements Listener {
     private void trocarEntidade(Colonia c, Colonia.Cidadao ci, Entity velha) {
         Location onde = velha.getLocation();
         if (velha instanceof org.bukkit.entity.LivingEntity le) devolverEquipamento(c, le);
+        tirarCavalo(c, velha);
         org.bukkit.entity.LivingEntity nova = ci.profissao.soldado() ? criarSoldado(c, ci, onde) : criarMorador(c, ci.nome, onde);
         cidadaos.remove(ci.entidade);
         velha.getPersistentDataContainer().remove(kCidadao);
@@ -1228,7 +1561,7 @@ public final class Colonias implements Listener {
     private org.bukkit.entity.Skeleton criarSoldado(Colonia c, Colonia.Cidadao ci, Location onde) {
         org.bukkit.Color cor = corUniforme(c);
         boolean arqueiro = ci.profissao == Profissao.ARQUEIRO;
-        return onde.getWorld().spawn(onde, org.bukkit.entity.Skeleton.class, s -> {
+        org.bukkit.entity.Skeleton soldado = onde.getWorld().spawn(onde, org.bukkit.entity.Skeleton.class, s -> {
             s.setShouldBurnInDay(false);
             s.setPersistent(true);
             s.setRemoveWhenFarAway(false);
@@ -1247,22 +1580,86 @@ public final class Colonias implements Listener {
             atributosSoldado(s, ci);
             nomearSoldado(c, ci, s);
         });
+        if (ci.profissao == Profissao.CAVALEIRO) montar(c, soldado);
+        return soldado;
+    }
+
+    // ---------- Cavaleiro ----------
+
+    private boolean montariaDe(Entity e, Colonia c) {
+        return e instanceof org.bukkit.entity.Horse && c.dono.toString().equals(e.getPersistentDataContainer().get(kMontaria, PersistentDataType.STRING));
+    }
+
+    /** O Cavaleiro sobe num cavalo novo da colônia (selado, manso, sem soltar nada). */
+    private void montar(Colonia c, org.bukkit.entity.Skeleton s) {
+        org.bukkit.entity.Horse cavalo = s.getWorld().spawn(s.getLocation(), org.bukkit.entity.Horse.class, h -> {
+            h.setAdult();
+            h.setTamed(true);
+            h.setPersistent(true);
+            h.setRemoveWhenFarAway(false);
+            h.setColor(org.bukkit.entity.Horse.Color.values()[rnd().nextInt(org.bukkit.entity.Horse.Color.values().length)]);
+            h.setStyle(org.bukkit.entity.Horse.Style.values()[rnd().nextInt(org.bukkit.entity.Horse.Style.values().length)]);
+            h.getInventory().setSaddle(itemUniforme(Material.SADDLE, null));
+            var vida = h.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+            if (vida != null) { vida.setBaseValue(30); h.setHealth(30); }
+            var vel = h.getAttribute(org.bukkit.attribute.Attribute.MOVEMENT_SPEED);
+            if (vel != null) vel.setBaseValue(0.3);
+            for (EquipmentSlot sl : EquipmentSlot.values()) {
+                try { h.getEquipment().setDropChance(sl, 0); } catch (IllegalArgumentException ignored) { }
+            }
+            h.getPersistentDataContainer().set(kMontaria, PersistentDataType.STRING, c.dono.toString());
+        });
+        cavalo.addPassenger(s);
+    }
+
+    /** Some com o cavalo do Cavaleiro (a armadura de verdade dele volta para o depósito). */
+    private void tirarCavalo(Colonia c, Entity cavaleiro) {
+        Entity v = cavaleiro.getVehicle();
+        if (v == null || !montariaDe(v, c)) return;
+        if (v instanceof org.bukkit.entity.Horse h) {
+            ItemStack armadura = h.getEquipment().getItem(EquipmentSlot.BODY);
+            if (!armadura.isEmpty() && !uniforme(armadura) && !guardar(c, armadura)) h.getWorld().dropItemNaturally(h.getLocation(), armadura);
+            h.getEquipment().setItem(EquipmentSlot.BODY, null);
+        }
+        v.eject();
+        v.remove();
+    }
+
+    /** Cavaleiro a pé: sobe de volta num cavalo da colônia por perto, ou pega outro (a cada 2 min). */
+    private void remontar(Colonia c, Colonia.Cidadao ci, org.bukkit.entity.Skeleton s) {
+        if (s.getVehicle() != null) return;
+        for (Entity e : s.getNearbyEntities(12, 6, 12)) {
+            if (montariaDe(e, c) && e.getPassengers().isEmpty()) {
+                s.teleport(e.getLocation());
+                e.addPassenger(s);
+                return;
+            }
+        }
+        long agora = System.currentTimeMillis();
+        Long quando = proximoCavalo.get(ci.entidade);
+        if (quando == null) { proximoCavalo.put(ci.entidade, agora + 120_000); return; }
+        if (agora < quando) return;
+        proximoCavalo.remove(ci.entidade);
+        montar(c, s);
     }
 
     private static void atributosSoldado(org.bukkit.entity.LivingEntity s, Colonia.Cidadao ci) {
+        double jeito = ci.tem(Traco.CORAGEM) ? 1.2 : ci.tem(Traco.MEDO) ? 0.85 : 1;
+        boolean cavaleiro = ci.profissao == Profissao.CAVALEIRO;
         var vida = s.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
         if (vida != null) {
-            vida.setBaseValue(20 + 3 * ci.nivel);
+            vida.setBaseValue(Math.round((20 + 3 * ci.nivel + (cavaleiro ? 10 : 0)) * jeito));
             s.setHealth(vida.getValue());
         }
         var dano = s.getAttribute(org.bukkit.attribute.Attribute.ATTACK_DAMAGE);
-        if (dano != null) dano.setBaseValue(2 + 0.5 * ci.nivel);
+        if (dano != null) dano.setBaseValue((2 + 0.5 * ci.nivel + (cavaleiro ? 1.5 : 0)) * jeito);
     }
 
     private void nomearSoldado(Colonia c, Colonia.Cidadao ci, Entity s) {
         var r = plugin.reinos().de(c.dono);
-        s.customName(Component.text("⚔ " + ci.nome, r == null ? NamedTextColor.WHITE : r.cor())
-                .append(Component.text(" · " + ci.profissao.nome() + " Nv " + ci.nivel, NamedTextColor.GRAY)));
+        Component n = Component.text("⚔ " + ci.nome, r == null ? NamedTextColor.WHITE : r.cor())
+                .append(Component.text(" · " + ci.profissao.nome() + " Nv " + ci.nivel, NamedTextColor.GRAY));
+        s.customName(ci.pedido == null ? n : n.append(Component.text(" ❗", NamedTextColor.GOLD, TextDecoration.BOLD)));
     }
 
     /** Equipamento de verdade (não o uniforme) volta para o depósito. */

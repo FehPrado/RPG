@@ -5,97 +5,137 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Guia do Jogador</title>
 <meta name="description" content="Tudo o que existe no servidor RPGAtributos: atributos, forja, magias, classes, masmorras, portais, Torre Infinita e mais.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Lexend:wght@300;400;600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
+/* Layout: o mesmo almanaque do Manual — índice ao lado, seções em cartões, títulos em fonte pixelada */
 :root{
-  --bg:#f5efe3;--surface:#fffdf8;--surface-2:#f0e7d6;--text:#2a2118;--muted:#6b5d4d;--border:#e1d4bd;
-  --accent:#9a5b13;--accent-soft:#f3e2c4;--roxo:#5e35b1;--roxo-soft:#ece5fa;--verde:#2e7d32;--vermelho:#b3261e;
-  --code:#efe4cf;--sombra:0 1px 2px rgba(60,40,10,.06),0 4px 16px rgba(60,40,10,.06);
-  --raio:14px;--fonte:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
-  --mono:ui-monospace,"Cascadia Code",Consolas,monospace;
+  --bg:#EEF1F6;--surface:#FFFFFF;--surface-2:#F5F3FC;--text:#1A1D26;--muted:#5B6273;--border:#D8DDE7;
+  --accent:#6F43D8;--accent-ink:#FFFFFF;--accent-soft:#ECE6FC;--chip-ink:#3E2A86;--gold:#A87B0C;
+  --roxo:#6F43D8;--roxo-soft:#ECE6FC;--verde:#2E7D32;--vermelho:#B3261E;--code:#ECE6FC;
+  --sombra:0 1px 2px rgba(20,22,35,.06),0 8px 24px rgba(20,22,35,.06);--raio:12px;
+  --display:"Pixelify Sans","Trebuchet MS",system-ui,sans-serif;
+  --fonte:"Lexend","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#13111a;--surface:#1c1925;--surface-2:#252131;--text:#ece6f5;--muted:#a69db6;--border:#352f45;
-  --accent:#f2b45a;--accent-soft:#3a2d18;--roxo:#b39ddb;--roxo-soft:#2c2540;--verde:#81c784;--vermelho:#ef9a9a;
-  --code:#2a2537;--sombra:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  --bg:#14161C;--surface:#1C1F27;--surface-2:#221F33;--text:#E8EBF2;--muted:#9BA3B4;--border:#2C313D;
+  --accent:#B08CFF;--accent-ink:#160F2B;--accent-soft:#2B2445;--chip-ink:#D9CCFF;--gold:#E2B53C;
+  --roxo:#B08CFF;--roxo-soft:#2B2445;--verde:#81C784;--vermelho:#EF9A9A;--code:#2B2445;
+  --sombra:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --bg:#13111a;--surface:#1c1925;--surface-2:#252131;--text:#ece6f5;--muted:#a69db6;--border:#352f45;
-  --accent:#f2b45a;--accent-soft:#3a2d18;--roxo:#b39ddb;--roxo-soft:#2c2540;--verde:#81c784;--vermelho:#ef9a9a;
-  --code:#2a2537;--sombra:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  --bg:#14161C;--surface:#1C1F27;--surface-2:#221F33;--text:#E8EBF2;--muted:#9BA3B4;--border:#2C313D;
+  --accent:#B08CFF;--accent-ink:#160F2B;--accent-soft:#2B2445;--chip-ink:#D9CCFF;--gold:#E2B53C;
+  --roxo:#B08CFF;--roxo-soft:#2B2445;--verde:#81C784;--vermelho:#EF9A9A;--code:#2B2445;
+  --sombra:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:84px}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--fonte);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:300 16px/1.6 var(--fonte);-webkit-text-size-adjust:100%}
 [hidden]{display:none!important}
 a{color:var(--accent)}
-header.topo{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
-.topo-in{max-width:1240px;margin:0 auto;padding:12px 16px;display:flex;gap:12px;align-items:center}
-.marca{display:flex;align-items:center;gap:10px;min-width:0}
-.marca .selo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--roxo));display:grid;place-items:center;color:#fff;font-size:20px;flex:none}
-.marca b{display:block;font-size:16px;line-height:1.2}
-.marca small{color:var(--muted);font-size:12.5px}
-.busca{flex:1;display:flex;justify-content:flex-end;gap:8px}
-.busca input{width:100%;max-width:340px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-size:15px}
-.busca input:focus{outline:2px solid var(--accent);outline-offset:1px}
-.botao{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:8px 11px;font:inherit;cursor:pointer;flex:none}
-.layout{max-width:1240px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px}
-nav.indice{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 92px);overflow:auto;padding:18px 0 24px}
-nav.indice a{display:flex;gap:8px;align-items:center;padding:5px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14.5px}
-nav.indice a:hover{background:var(--surface-2);color:var(--text)}
-nav.indice a.ativo{background:var(--accent-soft);color:var(--accent);font-weight:600}
+b,strong{font-weight:600}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.15;text-wrap:balance;letter-spacing:.01em}
+
+/* topo */
+header.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.topo-in{max-width:1240px;margin:0 auto;padding:10px 16px;display:flex;gap:14px;align-items:center}
+.marca{display:flex;align-items:baseline;gap:10px;min-width:0;text-decoration:none;color:var(--text)}
+.marca b{font-family:var(--display);font-size:1.2rem;font-weight:700;white-space:nowrap}
+.marca b span{color:var(--accent)}
+.marca small{color:var(--muted);font-size:.8rem;white-space:nowrap}
+.busca{flex:1;display:flex;justify-content:flex-end;gap:8px;min-width:0}
+.busca input{width:100%;max-width:340px;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-size:.92rem}
+.busca input:focus-visible,.botao:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.botao{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:7px 11px;font:inherit;cursor:pointer;flex:none}
+
+/* índice */
+.layout{max-width:1240px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px}
+nav.indice{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 80px);overflow:auto;padding:22px 0 24px;scrollbar-width:thin}
+nav.indice a{display:flex;gap:8px;align-items:center;padding:5px 10px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:.88rem}
+nav.indice a:hover,nav.indice a:focus-visible{background:var(--accent-soft);color:var(--chip-ink);outline:none}
+nav.indice a.ativo{background:var(--accent);color:var(--accent-ink);font-weight:600}
 nav.indice a.apagado{opacity:.35}
-nav.indice .grupo{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 10px 4px;font-weight:700}
-main{padding:22px 0 60px;min-width:0}
-.hero{background:linear-gradient(135deg,var(--accent-soft),var(--roxo-soft));border:1px solid var(--border);border-radius:20px;padding:26px 24px;margin-bottom:26px}
-.hero h1{margin:0 0 6px;font-size:clamp(26px,4vw,36px);line-height:1.15}
-.hero p{margin:0;color:var(--muted);max-width:760px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.chip{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 11px;font-size:13.5px}
-.secao{margin:0 0 34px}
-.secao>h2{display:flex;align-items:center;gap:10px;font-size:24px;margin:0 0 14px;padding-top:6px}
-.secao>h2 .ico{width:34px;height:34px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;font-size:18px;flex:none}
-.secao>p.intro{color:var(--muted);margin:-6px 0 14px}
-.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--raio);padding:16px 18px;box-shadow:var(--sombra);min-width:0}
+nav.indice .grupo{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:16px 10px 4px;font-weight:600}
+main{padding:28px 0 64px;min-width:0}
+
+/* abertura */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;padding:12px 0 30px;margin-bottom:12px;border-bottom:1px solid var(--border)}
+.hero .rotulo{font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-weight:600;margin:0 0 8px}
+.hero h1{margin:0 0 12px;font-size:clamp(2.1rem,4.6vw,3.4rem)}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{margin:0;color:var(--muted);max-width:60ch;font-size:1.02rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:20px}
+.chip{display:flex;flex-direction:column;font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.chip b{font-family:var(--display);font-size:1.6rem;line-height:1;color:var(--text);text-transform:none;letter-spacing:0;font-variant-numeric:tabular-nums}
+.vitrine{position:relative;min-height:280px}
+.vitrine img{position:absolute;width:58%;max-width:100%;filter:drop-shadow(0 12px 18px rgba(0,0,0,.18))}
+.vitrine img:nth-child(1){left:0;top:16%}
+.vitrine img:nth-child(2){right:0;top:0}
+.vitrine img:nth-child(3){left:22%;bottom:-8%}
+
+/* seções e cartões */
+.secao{margin:0;padding:30px 0 10px;border-top:1px solid var(--border)}
+.secao:first-of-type{border-top:0}
+.secao>h2{display:flex;align-items:center;gap:12px;font-size:clamp(1.4rem,2.6vw,1.9rem);margin:0 0 14px}
+.secao>h2 .ico{width:36px;height:36px;border-radius:8px;background:var(--accent-soft);color:var(--chip-ink);display:grid;place-items:center;font-size:1.05rem;flex:none;font-family:var(--fonte)}
+.secao>p.intro{color:var(--muted);margin:-4px 0 16px;max-width:70ch}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--raio);padding:16px 18px;min-width:0}
 .card.largo{grid-column:1/-1}
-.card h3{margin:0 0 8px;font-size:17px}
+.card h3{margin:0 0 8px;font-size:1.12rem}
 .card p{margin:6px 0}
 .card ul,.card ol{margin:6px 0;padding-left:20px}
 .card li{margin:3px 0}
-.ritual{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 8px;font-size:14.5px}
-.ritual .b{background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:2px 9px;font-weight:600}
-.ritual .i{background:var(--surface-2);border-radius:8px;padding:2px 9px}
+.card li::marker{color:var(--accent)}
+
+/* ritual, comandos e tabelas */
+.ritual{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:6px 0 10px;font-size:.84rem}
+.ritual .b{background:var(--text);color:var(--bg);border-radius:5px;padding:3px 8px;font-weight:600}
+.ritual .i{background:var(--accent-soft);color:var(--chip-ink);border-radius:5px;padding:3px 8px}
 .ritual .mais{color:var(--muted)}
-code,.cmd{font-family:var(--mono);font-size:.88em;background:var(--code);border-radius:6px;padding:1px 6px;white-space:nowrap}
+code,.cmd{font-family:var(--mono);font-size:.82em;background:var(--code);color:var(--chip-ink);border-radius:4px;padding:.1em .4em;white-space:nowrap}
 .cmd{cursor:pointer;border:1px solid transparent}
 .cmd:hover{border-color:var(--accent)}
-kbd{font-family:var(--mono);font-size:.82em;background:var(--surface);border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:1px 6px}
-.tabela{overflow-x:auto;margin:8px 0;border:1px solid var(--border);border-radius:10px}
-table{border-collapse:collapse;width:100%;font-size:14.5px}
-th,td{padding:7px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border)}
-th{background:var(--surface-2);font-size:13px;letter-spacing:.02em;white-space:nowrap}
+kbd{font-family:var(--mono);font-size:.8em;background:var(--surface);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:1px 6px}
+.tabela{overflow-x:auto;margin:8px 0;border:1px solid var(--border);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border)}
+th{background:var(--surface-2);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 tbody tr:last-child td{border-bottom:0}
-.nota{background:var(--roxo-soft);border-left:4px solid var(--roxo);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:14.5px}
-.aviso{background:color-mix(in srgb,var(--vermelho) 12%,transparent);border-left:4px solid var(--vermelho);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:14.5px}
+.nota{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:6px;padding:8px 12px;margin:10px 0;font-size:.9rem}
+.aviso{background:color-mix(in srgb,var(--vermelho) 12%,transparent);border-left:3px solid var(--vermelho);border-radius:6px;padding:8px 12px;margin:10px 0;font-size:.9rem}
 .muted{color:var(--muted)}
+
+/* galeria das estações */
+.dioramas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0 0 16px}
+.dioramas figure{margin:0;background:radial-gradient(120% 90% at 50% 20%,var(--surface-2),var(--surface));border:1px solid var(--border);border-radius:10px;padding:8px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.dioramas img{width:100%;max-width:150px;height:auto;aspect-ratio:1/1;object-fit:contain}
+.dioramas figcaption{font-size:.78rem;text-align:center;line-height:1.25}
+
 #vazio{text-align:center;color:var(--muted);padding:40px 0}
-#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:7px 14px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:7px 14px;border-radius:999px;font-size:.88rem;opacity:0;transition:opacity .2s;pointer-events:none}
 #toast.on{opacity:1}
-footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40px;border-top:1px solid var(--border)}
+footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 40px;border-top:1px solid var(--border)}
 @media (max-width:900px){
   .layout{grid-template-columns:1fr;gap:0}
-  nav.indice{position:sticky;top:61px;z-index:9;max-height:none;display:flex;overflow-x:auto;gap:4px;padding:8px 0;background:var(--bg);border-bottom:1px solid var(--border);margin:0 -16px;padding-left:16px;padding-right:16px}
+  nav.indice{position:sticky;top:56px;z-index:9;max-height:none;display:flex;overflow-x:auto;gap:4px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--border);margin:0 -16px}
   nav.indice .grupo{display:none}
   nav.indice a{white-space:nowrap;flex:none;border:1px solid var(--border);background:var(--surface)}
   html{scroll-padding-top:120px}
   .marca small{display:none}
+  .hero{grid-template-columns:1fr}
+  .vitrine{min-height:220px}
 }
-@media (max-width:520px){.marca b{font-size:14px}.hero{padding:20px 16px}}
+@media (max-width:520px){.marca b{font-size:1rem}.vitrine{min-height:180px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">⚔</div><div><b>RPGAtributos</b><small>Guia do Jogador · versão 2.31</small></div></div>
+  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.31</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -143,9 +183,24 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 
 <main id="conteudo">
 <div class="hero">
-  <h1>Bem-vindo ao RPG do servidor</h1>
-  <p>Aqui tudo evolui com o uso: minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. Não precisa de mod nem de resource pack.</p>
-  <div class="chips"><span class="chip">13 atributos até o nível 100</span><span class="chip">24 classes</span><span class="chip">50 magias secretas</span><span class="chip">42 golpes de combo</span><span class="chip">16 estruturas pelo mundo</span><span class="chip">12 lendas únicas</span><span class="chip">Livro <code>/guia</code> com 80 páginas</span></div>
+  <div>
+    <p class="rotulo">Guia do Jogador · versão 2.31</p>
+    <h1>Tudo evolui <em>com o uso</em>.</h1>
+    <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
+    <div class="chips">
+      <span class="chip"><b>13</b>atributos</span>
+      <span class="chip"><b>24</b>classes</span>
+      <span class="chip"><b>27</b>estações</span>
+      <span class="chip"><b>18</b>estruturas</span>
+      <span class="chip"><b>50</b>magias secretas</span>
+      <span class="chip"><b>12</b>lendas</span>
+    </div>
+  </div>
+  <div class="vitrine" aria-hidden="true">
+    <img src="site/img/estacoes/forja.png" alt="">
+    <img src="site/img/estacoes/alquimia.png" alt="">
+    <img src="site/img/estacoes/cabana_pesca.png" alt="">
+  </div>
 </div>
 
 <section class="secao" id="inicio">
@@ -184,6 +239,35 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <section class="secao" id="rituais">
   <h2><span class="ico">✨</span>Todas as estações (rituais)</h2>
   <p class="intro">Coloque o bloco, jogue os itens em cima dele com <kbd>Q</kbd> (você tem 30 segundos) e pronto. Não dá para criar estação no território dos outros.</p>
+  <div class="dioramas">
+    <figure><img src="site/img/estacoes/santuario_classes.png" alt="Santuário das Classes" loading="lazy" width="150" height="150"><figcaption>Santuário das Classes</figcaption></figure>
+    <figure><img src="site/img/estacoes/boneco.png" alt="Boneco de Treino" loading="lazy" width="150" height="150"><figcaption>Boneco de Treino</figcaption></figure>
+    <figure><img src="site/img/estacoes/amolar.png" alt="Pedra de Amolar" loading="lazy" width="150" height="150"><figcaption>Pedra de Amolar</figcaption></figure>
+    <figure><img src="site/img/estacoes/altar.png" alt="Altar Ritualístico" loading="lazy" width="150" height="150"><figcaption>Altar Ritualístico</figcaption></figure>
+    <figure><img src="site/img/estacoes/masmorra.png" alt="Portal da Masmorra" loading="lazy" width="150" height="150"><figcaption>Portal da Masmorra</figcaption></figure>
+    <figure><img src="site/img/estacoes/obelisco.png" alt="Obelisco da Torre" loading="lazy" width="150" height="150"><figcaption>Obelisco da Torre</figcaption></figure>
+    <figure><img src="site/img/estacoes/infusor.png" alt="Infusor Corpóreo" loading="lazy" width="150" height="150"><figcaption>Infusor Corpóreo</figcaption></figure>
+    <figure><img src="site/img/estacoes/mesa_runica.png" alt="Mesa Rúnica" loading="lazy" width="150" height="150"><figcaption>Mesa Rúnica</figcaption></figure>
+    <figure><img src="site/img/estacoes/transmutacao.png" alt="Círculo de Transmutação" loading="lazy" width="150" height="150"><figcaption>Círculo de Transmutação</figcaption></figure>
+    <figure><img src="site/img/estacoes/santuario_deuses.png" alt="Santuário dos Deuses" loading="lazy" width="150" height="150"><figcaption>Santuário dos Deuses</figcaption></figure>
+    <figure><img src="site/img/estacoes/forja.png" alt="Forja do Ferreiro" loading="lazy" width="150" height="150"><figcaption>Forja do Ferreiro</figcaption></figure>
+    <figure><img src="site/img/estacoes/reciclagem.png" alt="Bancada de Reciclagem" loading="lazy" width="150" height="150"><figcaption>Bancada de Reciclagem</figcaption></figure>
+    <figure><img src="site/img/estacoes/alquimia.png" alt="Bancada Alquímica" loading="lazy" width="150" height="150"><figcaption>Bancada Alquímica</figcaption></figure>
+    <figure><img src="site/img/estacoes/cozinha.png" alt="Cozinha" loading="lazy" width="150" height="150"><figcaption>Cozinha</figcaption></figure>
+    <figure><img src="site/img/estacoes/cabana_pesca.png" alt="Cabana de Pesca" loading="lazy" width="150" height="150"><figcaption>Cabana de Pesca</figcaption></figure>
+    <figure><img src="site/img/estacoes/atelie.png" alt="Ateliê do Curtidor" loading="lazy" width="150" height="150"><figcaption>Ateliê do Curtidor</figcaption></figure>
+    <figure><img src="site/img/estacoes/barril.png" alt="Barril de Envelhecimento" loading="lazy" width="150" height="150"><figcaption>Barril de Envelhecimento</figcaption></figure>
+    <figure><img src="site/img/estacoes/colmeia.png" alt="Colmeia do Apicultor" loading="lazy" width="150" height="150"><figcaption>Colmeia do Apicultor</figcaption></figure>
+    <figure><img src="site/img/estacoes/canteiro.png" alt="Canteiro de Ervas" loading="lazy" width="150" height="150"><figcaption>Canteiro de Ervas</figcaption></figure>
+    <figure><img src="site/img/estacoes/cartografo.png" alt="Mesa do Cartógrafo" loading="lazy" width="150" height="150"><figcaption>Mesa do Cartógrafo</figcaption></figure>
+    <figure><img src="site/img/estacoes/pedra_viagem.png" alt="Pedra de Viagem" loading="lazy" width="150" height="150"><figcaption>Pedra de Viagem</figcaption></figure>
+    <figure><img src="site/img/estacoes/fogueira.png" alt="Fogueira de Acampamento" loading="lazy" width="150" height="150"><figcaption>Fogueira de Acampamento</figcaption></figure>
+    <figure><img src="site/img/estacoes/bebedouro.png" alt="Bebedouro" loading="lazy" width="150" height="150"><figcaption>Bebedouro</figcaption></figure>
+    <figure><img src="site/img/estacoes/trofeus.png" alt="Estante de Troféus" loading="lazy" width="150" height="150"><figcaption>Estante de Troféus</figcaption></figure>
+    <figure><img src="site/img/estacoes/marco.png" alt="Marco do Território" loading="lazy" width="150" height="150"><figcaption>Marco do Território</figcaption></figure>
+    <figure><img src="site/img/estacoes/prefeitura.png" alt="Prefeitura da Colônia" loading="lazy" width="150" height="150"><figcaption>Prefeitura da Colônia</figcaption></figure>
+    <figure><img src="site/img/estacoes/altar_domador.png" alt="Altar do Domador" loading="lazy" width="150" height="150"><figcaption>Altar do Domador</figcaption></figure>
+  </div>
   <div class="grade">
     <div class="card largo"><div class="tabela"><table><thead><tr><th>Estação</th><th>Bloco</th><th>Itens jogados em cima</th><th>Para que serve</th></tr></thead><tbody>
       <tr><td><b>Forja do Ferreiro</b></td><td>Bigorna</td><td>2 blocos de ferro + 1 balde de lava</td><td>Itens forjados com raridade, refino e Cajado Arcano</td></tr>

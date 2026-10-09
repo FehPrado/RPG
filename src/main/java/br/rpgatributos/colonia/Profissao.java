@@ -30,15 +30,23 @@ public enum Profissao {
             "Cuida dos animais: couro, lã, ovos, penas e carne."),
     ALQUIMISTA("Alquimista", Material.BREWING_STAND, 0x4FD1A5, Villager.Profession.CLERIC, 4, Material.BREWING_STAND, Posto.BANCADA_ALQUIMICA,
             "Faz Pó Arcano e Óleo de Peixe com o que tiver no depósito."),
+    MERCADOR("Mercador", Material.EMERALD, 0x3DDC84, Villager.Profession.CARTOGRAPHER, 2, Material.CARTOGRAPHY_TABLE, Posto.BLOCO,
+            "Vende a sobra do depósito na estrada e traz esmeraldas."),
+    BIBLIOTECARIO("Bibliotecário", Material.BOOK, 0xB39DDB, Villager.Profession.LIBRARIAN, 3, Material.LECTERN, Posto.BLOCO,
+            "Faz papel, livros e, com lápis-lazúli, livros encantados."),
+    CONSTRUTOR("Construtor", Material.BRICKS, 0xD7A86E, Villager.Profession.LEATHERWORKER, 1, Material.CRAFTING_TABLE, Posto.BLOCO,
+            "Ergue casas prontas (2 camas, porta e luz) com madeira, pedra e vidro do depósito."),
     SOLDADO("Soldado", Material.IRON_SWORD, 0xFF5555, Villager.Profession.NONE, 2, Material.TARGET, Posto.QUARTEL,
             "Veste a armadura e luta de espada: defende a colônia e vai à guerra."),
     ARQUEIRO("Arqueiro", Material.BOW, 0xFFAA00, Villager.Profession.NONE, 3, Material.TARGET, Posto.QUARTEL,
-            "Luta de arco, de longe.");
+            "Luta de arco, de longe."),
+    CAVALEIRO("Cavaleiro", Material.SADDLE, 0xFFD54F, Villager.Profession.NONE, 4, Material.TARGET, Posto.QUARTEL,
+            "Luta montado a cavalo: mais vida, mais rápido e bate forte.");
 
     /** Cada Quartel (bloco de alvo) abriga 4 soldados. */
     public static final int SOLDADOS_POR_QUARTEL = 4;
 
-    public boolean soldado() { return this == SOLDADO || this == ARQUEIRO; }
+    public boolean soldado() { return this == SOLDADO || this == ARQUEIRO || this == CAVALEIRO; }
 
     /** Que tipo de posto a profissão precisa. */
     public enum Posto { NENHUM, BLOCO, COZINHA, FORJA, ALTAR_DOMADOR, BANCADA_ALQUIMICA, QUARTEL }
@@ -84,6 +92,9 @@ public enum Profissao {
                 case LENHADOR -> "Bancada de flechas";
                 case PESCADOR -> "Barril";
                 case MINERADOR -> "Cortador de pedras";
+                case MERCADOR -> "Mesa de cartografia";
+                case BIBLIOTECARIO -> "Atril";
+                case CONSTRUTOR -> "Bancada de trabalho";
                 default -> "?";
             };
             case COZINHA -> "Cozinha";
