@@ -295,6 +295,22 @@ estruturas:
     chance: 0.02                      # chance de cada chunk novo de mar profundo tentar receber uma
     distancia-do-spawn: 800           # nenhuma cidade mais perto do spawn que isso
     dias-para-voltar: 7               # dias reais até os guardas e o Sumo-Sacerdote voltarem
+  ilha-do-ceu:
+    ativada: true
+    regiao: 2500                      # no máximo uma Ilha do Céu em cada quadrado de 2500 x 2500 blocos
+    chance: 0.03                      # chance de cada chunk novo de terra firme tentar receber uma
+    distancia-do-spawn: 500           # nenhuma ilha mais perto do spawn que isso
+
+# ==========================================================
+#  Profundezas (abaixo do y 0: escuridão, Raízes de Luz e Penumbra)
+# ==========================================================
+profundezas:
+  ativadas: true
+  escuridao: true                     # abaixo do y 0, longe de uma Raiz de Luz acesa, tudo fica escuro (Visão Noturna resolve)
+  abaixo-de-y: 0
+  chance-de-raiz-por-chunk: 0.1       # chance de cada chunk novo ganhar uma Raiz de Luz adormecida numa caverna funda
+  chance-de-penumbra: 0.3             # chance de um monstro nascido no escuro das profundezas ser da Penumbra (rouba corações máximos)
+  chance-do-coracao: 0.15             # chance de acender uma raiz acordar o Coração da Penumbra (chefe)
 
 # ==========================================================
 #  Doma (companheiros e Altar do Domador)
@@ -416,6 +432,13 @@ forja:
   # A partir de qual raridade o servidor inteiro fica sabendo: comum, raro, epico, unico, lendario, mitico
   anunciar-no-chat-a-partir-de: lendario
   raio-ao-forjar-mitico: true   # só o efeito visual do raio, não causa dano nem fogo
+
+  # Armas com nome (Presa do Inverno, Talha-Raízes...): nome, história e textura próprios, só aparência.
+  # Ao forjar, a chance cresce com a raridade (2% no Comum até 45% no Mítico), vezes o multiplicador.
+  armas-com-nome:
+    ativadas: true
+    multiplicador-de-chance: 1.0
+    chance-por-bau: 0.05          # baús de estruturas (do plugin e do jogo) que trazem uma já forjada
 
   # Chance relativa de cada raridade no nível 0 de Ferraria (peso-inicial) e no nível máximo
   # (peso-final). Entre os dois, a chance muda aos poucos a cada nível.

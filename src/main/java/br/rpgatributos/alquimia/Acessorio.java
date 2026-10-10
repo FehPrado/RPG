@@ -48,6 +48,8 @@ public enum Acessorio {
             List.of(), pocao(PotionEffectType.REGENERATION, 0), Especial.NENHUM),
     AMULETO_FENIX("Amuleto da Fênix", Tipo.AMULETO, "totem_of_undying", 0xFF7A1A, "Escapa da morte uma vez a cada 10 minutos",
             List.of(), null, Especial.FENIX),
+    AMULETO_VENTOS("Amuleto dos Ventos", Tipo.AMULETO, "feather", 0x9FD8F5, "+6 blocos de queda segura e +8% de velocidade",
+            List.of(m(Attribute.SAFE_FALL_DISTANCE, 6, Operation.ADD_NUMBER), m(Attribute.MOVEMENT_SPEED, 0.08, Operation.ADD_SCALAR)), null, Especial.NENHUM),
 
     // ---------- cintos ----------
     CINTO_ATLETA("Cinto do Atleta", Tipo.CINTO, "lead", 0x55FF55, "+10% de pulo e +2 blocos de queda segura",
@@ -65,7 +67,9 @@ public enum Acessorio {
     RELOGIO_BOLSO("Relógio de Bolso", Tipo.BOLSO, "gold_ingot", 0xFFC93C, "Agachado: mostra hora, coordenadas e bioma",
             List.of(), null, Especial.RELOGIO),
     CAPA_PLANADORA("Capa Planadora", Tipo.BOLSO, "phantom_membrane", 0xA0C4FF, "No ar, aperte pular para planar (agache para soltar)",
-            List.of(), null, Especial.PLANADOR);
+            List.of(), null, Especial.PLANADOR),
+    BALAO_DE_CRISTAL("Balão de Cristal", Tipo.BOLSO, "string", 0xBFE6FF, "No ar, aperte pular para abrir o balão: desce devagar, mas anda devagar",
+            List.of(), null, Especial.BALAO);
 
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "acessorio");
 
@@ -86,7 +90,11 @@ public enum Acessorio {
     }
 
     /** Algo que o plugin faz além de atributos e efeitos de poção. */
-    public enum Especial { NENHUM, MANA, XP, FENIX, LANTERNA, IMA, RELOGIO, PLANADOR }
+    public enum Especial { NENHUM, MANA, XP, FENIX, LANTERNA, IMA, RELOGIO, PLANADOR, BALAO }
+
+    /** Quantas vezes o Balão de Cristal abre antes de estourar. */
+    public static final int USOS_BALAO = 5;
+    public static final NamespacedKey CHAVE_USOS = new NamespacedKey("rpgatributos", "balao_usos");
 
     public record Mod(Attribute atributo, double valor, Operation operacao) {}
 
@@ -134,6 +142,10 @@ public enum Acessorio {
             m.setMaxStackSize(1);
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text("✧ " + efeito, NamedTextColor.WHITE));
+            if (this == BALAO_DE_CRISTAL) {
+                lore.add(linhaUsos(USOS_BALAO));
+                m.getPersistentDataContainer().set(CHAVE_USOS, PersistentDataType.INTEGER, USOS_BALAO);
+            }
             lore.add(Component.empty());
             lore.add(Component.text("Coloque num espaço de " + tipo.nome().toLowerCase(Locale.ROOT) + ":", NamedTextColor.GRAY));
             lore.add(Component.text("/acessorios", NamedTextColor.YELLOW));
@@ -145,6 +157,12 @@ public enum Acessorio {
             br.rpgatributos.exploracao.PacoteRecursos.marcar(m, id()); // visual próprio, se o pacote tiver
         });
         return i;
+    }
+
+    /** "Usos: 3/5" do Balão de Cristal (a 2ª linha da descrição). */
+    public static Component linhaUsos(int usos) {
+        return Component.text("◌ Usos: " + usos + "/" + USOS_BALAO + " (estoura no último)", usos <= 1 ? NamedTextColor.RED : NamedTextColor.AQUA)
+                .decoration(TextDecoration.ITALIC, false);
     }
 
     public static Acessorio de(ItemStack item) {

@@ -174,14 +174,14 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 <main id="inicio">
   <section class="wrap abertura">
     <div>
-      <p class="rotulo">Manual do jogador · versão 2.31</p>
+      <p class="rotulo">Manual do jogador · versão 2.35</p>
       <h1>Um mundo inteiro <em>dentro</em> do seu Minecraft.</h1>
       <p class="lead">Atributos que sobem com o uso, classes, magia, deuses, forja com raridades, colônias com moradores de verdade, reinos em guerra, cidades no fundo do mar. Tudo o que o RPGAtributos tem, num lugar só.</p>
       <div class="numeros">
         <div><b>13</b><span>atributos</span></div>
         <div><b>24</b><span>classes</span></div>
-        <div><b>27</b><span>estações</span></div>
-        <div><b>18</b><span>estruturas</span></div>
+        <div><b>28</b><span>estações</span></div>
+        <div><b>19</b><span>estruturas</span></div>
         <div><b>6</b><span>deuses</span></div>
         <div><b>17</b><span>peixes raros</span></div>
       </div>
@@ -220,7 +220,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   <section class="secao" id="estacoes">
     <div class="wrap">
       <header>
-        <div><p class="rotulo">Bancadas e altares</p><h2>As 27 estações</h2></div>
+        <div><p class="rotulo">Bancadas e altares</p><h2>As 28 estações</h2></div>
         <div class="filtros" id="filtros" role="group" aria-label="Filtrar estações"></div>
       </header>
       <p class="dica-ritual"><b>Como criar uma estação:</b> coloque o bloco e jogue os itens em cima dele com a tecla <b>Q</b>. Quando o ritual fecha, um item passa a flutuar com o nome da estação. Quebrar a estação devolve parte do ritual.</p>
@@ -280,7 +280,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 <footer>
   <div class="wrap">
-    <span>RPGAtributos 2.31 · plugin para servidores Paper 26.3</span>
+    <span>RPGAtributos 2.35 · plugin para servidores Paper 26.3</span>
     <span>Dúvidas no jogo: <code>/guia</code> e <code>/rpg</code></span>
   </div>
 </footer>
@@ -297,7 +297,7 @@ const AREAS = [
     "Combos de arma: 6 armas, proficiência 1 a 20, 42 golpes, golpes de lenda e de classe",
     "Posturas com pegada própria, golpe no tempo certo, estilo de D a S e equilíbrio dos inimigos",
     "Óleos de lâmina e combos que fazem reações com magias; ataque conjunto da party",
-    "Esquiva, Gancho de Escalada e Capa Planadora",
+    "Esquiva, Gancho de Escalada, Capa Planadora e o Balão de Cristal",
     "PvP livre fora de território; Boneco de Treino para medir o dano"], cmds: ["/combos", "/postura", "/mochila"] },
   { ico: "✦", nome: "Magia e fé", itens: [
     "Infusor Corpóreo, grimório e magias montadas com essência + forma + modificadores",
@@ -305,23 +305,25 @@ const AREAS = [
     "6 deuses com devoção, fé de 1 a 5, preces e milagres",
     "Astronomia com 12 constelações, Transmutação e 10 runas"], cmds: ["/grimorio", "/deus", "/estrelas"] },
   { ico: "⚒", nome: "Ofícios", itens: [
-    "Forja do Ferreiro: raridades de Comum a Mítico, refino, gemas engastadas e o Reforjar",
+    "Forja do Ferreiro: raridades de Comum a Mítico, refino, gemas engastadas, o Reforjar e 25 armas com nome (3D na mão)",
     "Alquimia: elixires, componentes, óleos, 18 gemas e 19 acessórios",
-    "Cozinha com 19 pratos, plantações com qualidade ★, 8 plantações da estação, pomar, barril, colmeia e ervas",
+    "Cozinha com 32 pratos, plantações com qualidade ★, 20 plantações da estação com estufa e colheitas gigantes, pomar, barril, colmeia e ervas",
+    "Criação de animais com corações e produtos diários, e o Tacho do Artesão (queijo, geleia, conserva, maionese, óleo de trufa)",
     "Pesca com 17 peixes raros (5 só no buraco no gelo), tesouros e criaturas marinhas",
     "Curtume e tecelagem: 6 conjuntos de armadura leve"], cmds: ["/forja", "/alquimia", "/receitas", "/peixes"] },
   { ico: "🌍", nome: "Mundo", itens: [
     "Estações de verdade (1 semana cada): o chão muda (flores, vaga-lumes, folhas secas, neve), 12 coisas para colher, festival, luas e clima",
     "Mundo perigoso: elites com afixos, hordas, ninhos, chefe mundial e bestiário",
     "Masmorras, portais, Soberano das Sombras e a Torre Infinita",
-    "18 estruturas (até naufrágios e cidades submersas), 7 Locais Ocultos e 12 Lendas",
+    "19 estruturas (até naufrágios, cidades submersas e Ilhas do Céu), 7 Locais Ocultos e 12 Lendas",
+    "Profundezas escuras abaixo do y 0: Raízes de Luz para acender e a Penumbra, que rouba corações",
     "Mapas do tesouro, arqueologia, campanha de 8 capítulos, sonhos e Álbum de 54 cartas"], cmds: ["/calendario", "/bestiario", "/lendas", "/album"] },
   { ico: "🏰", nome: "Comunidade", itens: [
     "Party com XP dividido e chat próprio",
     "Territórios protegidos, com regras e expansões",
-    "Colônias: moradores que trabalham, depósitos e um exército",
+    "Colônias estilo MineColonies: 15 profissões, 16 construções com 3 níveis, casa para cada morador, traços e pedidos dos moradores, exército com cavaleiros",
     "Reinos com cargos, tesouro, leis, províncias e guerras marcadas",
-    "Domador: companheiros com componentes que evoluem até o estágio III"], cmds: ["/party", "/territorio", "/colonia", "/reino", "/pets"] }
+    "Domador: companheiros com componentes que aparecem no corpo (asas, alforjes, armaduras) e evoluem até o estágio III, com auréola"], cmds: ["/party", "/territorio", "/colonia", "/reino", "/pets"] }
 ];
 
 const CATS = { personagem: "Personagem", combate: "Combate", magia: "Magia e fé", oficios: "Ofícios", mundo: "Mundo", comunidade: "Comunidade" };
@@ -346,6 +348,7 @@ const ESTACOES = [
   { id: "barril", nome: "Barril de Envelhecimento", cat: "oficios", bloco: "Barril", itens: ["2 lingotes de ferro", "1 favo de mel"], uso: "Bebidas que melhoram com os dias reais: Nova, Envelhecida, Reserva e Lendária." },
   { id: "colmeia", nome: "Colmeia do Apicultor", cat: "oficios", bloco: "Colmeia", itens: ["1 favo de mel", "1 papoula"], uso: "Com flores perto, faz méis especiais: Dourado, Gelado, Floral, Noturno ou Silvestre. Tire com garrafas." },
   { id: "canteiro", nome: "Canteiro de Ervas", cat: "oficios", bloco: "Bloco de musgo", itens: ["1 farinha de osso", "1 vaso"], uso: "Uma erva a cada 10 minutos, que depende do lugar. As ervas viram frascos de arremesso e licor." },
+  { id: "tacho", nome: "Tacho do Artesão", cat: "oficios", bloco: "Vaso decorado", itens: ["4 garrafas de vidro", "1 açúcar"], uso: "Clique com o ingrediente: leite vira queijo, fruta vira geleia, legume vira conserva, ovo vira maionese e trufa vira óleo. Guarda a qualidade; clique de novo quando estiver pronto." },
   { id: "cartografo", nome: "Mesa do Cartógrafo", cat: "mundo", bloco: "Mesa de cartografia", itens: ["1 bússola", "3 papéis"], uso: "Com um Mapa do Tesouro na mão, mostra a direção e a distância do X. Sem mapa, lista seus Locais Ocultos." },
   { id: "pedra_viagem", nome: "Pedra de Viagem", cat: "mundo", bloco: "Ardósia entalhada", itens: ["2 pérolas do ender", "4 fragmentos de ametista"], uso: "Clique para descobrir; depois viaje entre as pedras que você conhece. Custa XP pela distância." },
   { id: "fogueira", nome: "Fogueira de Acampamento", cat: "mundo", bloco: "Fogueira acesa", itens: ["1 lã", "1 tronco"], uso: "Sentado perto dela, você fica Descansado: +5% de XP." },
@@ -358,10 +361,11 @@ const ESTACOES = [
 
 const GRUPOS = [
   ["coleta", "Coisas para colher", "3 por estação, espalhadas pelo chão perto de quem explora. Procure o brilho verde. Todas se comem."],
-  ["colheita", "Plantações da estação", "As 8 colheitas: 2 por estação, plantadas na terra arada. Morango, mirtilo e uva rebrotam."],
+  ["colheita", "Plantações da estação", "As 20 colheitas: 5 por estação (o milho vai do verão ao outono e a cebola do inverno à primavera). Numa estufa com teto de vidro, crescem o ano todo."],
   ["semente", "Sementes", "Saem do mato quebrado na estação certa."],
   ["peixe", "Peixes raros", "17 peixes que só mordem em certos biomas, horários ou climas. Os 5 últimos saem só num buraco no gelo."],
-  ["prato", "Pratos", "Os 19 pratos da Cozinha, do Pão Caseiro ao Caviar Ancestral."],
+  ["prato", "Pratos", "Os 32 pratos da Cozinha, do Pão Caseiro ao Banquete da Fazenda."],
+  ["artesao", "Artesanato e trufas", "O que sai do Tacho do Artesão (com a qualidade do ingrediente) e a trufa que o porco feliz acha."],
   ["elixir", "Elixires", "Os 12 elixires da Bancada Alquímica, cada um no seu frasco."],
   ["gema", "Gemas", "As 6 gemas (aqui, lapidadas). Engastadas em itens forjados, cada uma dá um bônus."],
   ["componente", "Componentes e óleos", "Componentes da alquimia e os 5 óleos de lâmina."],
@@ -371,15 +375,18 @@ const GRUPOS = [
   ["fruta", "Frutas do pomar", "As 5 frutas que nascem penduradas nas árvores do pomar."],
   ["bebida", "Bebidas do barril", "Bebidas que envelhecem com os dias reais."],
   ["mel", "Méis", "Os méis especiais da Colmeia do Apicultor."],
-  ["erva", "Ervas", "As ervas do Canteiro, que mudam com o lugar."]
+  ["erva", "Ervas", "As ervas do Canteiro, que mudam com o lugar."],
+  ["nomeada", "Armas com nome", "Nascem assim na Forja (mais nas raridades altas), em baús e com os chefes. Na mão viram 3D."],
+  ["ceu", "Céu e profundezas","O Balão de Cristal para descer das Ilhas do Céu, o que o Guardião dos Ventos deixa e as Sementes Brilhantes das Raízes de Luz."]
 ];
 
 const ITENS = {
   coleta: [["coleta_morel","Cogumelo-Morel"],["coleta_alho_selvagem","Alho-Selvagem"],["coleta_broto_de_samambaia","Broto de Samambaia"],["coleta_amora_silvestre","Amora-Silvestre"],["coleta_alga_doce","Alga-Doce"],["coleta_groselha","Groselha"],["coleta_castanha","Castanha"],["coleta_cogumelo_do_bosque","Cogumelo-do-Bosque"],["coleta_avela","Avelã"],["coleta_raiz_de_inverno","Raiz de Inverno"],["coleta_cogumelo_de_neve","Cogumelo-de-Neve"],["coleta_fruto_de_zimbro","Fruto de Zimbro"]],
-  colheita: [["colheita_morango","Morango"],["colheita_couve_flor","Couve-Flor"],["colheita_mirtilo","Mirtilo"],["colheita_pimenta","Pimenta"],["colheita_uva","Uva"],["colheita_abobora_moranga","Abóbora-Moranga"],["colheita_couve_gelada","Couve Gelada"],["colheita_nabo_de_neve","Nabo-de-Neve"]],
-  semente: [["semente_morango","Sementes de Morango"],["semente_couve_flor","Sementes de Couve-Flor"],["semente_mirtilo","Sementes de Mirtilo"],["semente_pimenta","Sementes de Pimenta"],["semente_uva","Sementes de Uva"],["semente_abobora_moranga","Sementes de Abóbora-Moranga"],["semente_couve_gelada","Sementes de Couve Gelada"],["semente_nabo_de_neve","Sementes de Nabo-de-Neve"]],
+  colheita: [["colheita_morango","Morango"],["colheita_couve_flor","Couve-Flor"],["colheita_pastinaca","Pastinaca"],["colheita_alho","Alho"],["colheita_feijao_verde","Feijão-Verde"],["colheita_mirtilo","Mirtilo"],["colheita_pimenta","Pimenta"],["colheita_tomate","Tomate"],["colheita_milho","Milho"],["colheita_melao","Melão"],["colheita_uva","Uva"],["colheita_abobora_moranga","Abóbora-Moranga"],["colheita_berinjela","Berinjela"],["colheita_inhame","Inhame"],["colheita_oxicoco","Oxicoco"],["colheita_couve_gelada","Couve Gelada"],["colheita_nabo_de_neve","Nabo-de-Neve"],["colheita_cebola","Cebola"],["colheita_rabanete_gelado","Rabanete-Gelado"],["colheita_alho_poro","Alho-Poró"]],
+  semente: [["semente_morango","Sementes de Morango"],["semente_couve_flor","Sementes de Couve-Flor"],["semente_pastinaca","Sementes de Pastinaca"],["semente_alho","Sementes de Alho"],["semente_feijao_verde","Sementes de Feijão-Verde"],["semente_mirtilo","Sementes de Mirtilo"],["semente_pimenta","Sementes de Pimenta"],["semente_tomate","Sementes de Tomate"],["semente_milho","Sementes de Milho"],["semente_melao","Sementes de Melão"],["semente_uva","Sementes de Uva"],["semente_abobora_moranga","Sementes de Abóbora-Moranga"],["semente_berinjela","Sementes de Berinjela"],["semente_inhame","Sementes de Inhame"],["semente_oxicoco","Sementes de Oxicoco"],["semente_couve_gelada","Sementes de Couve Gelada"],["semente_nabo_de_neve","Sementes de Nabo-de-Neve"],["semente_cebola","Sementes de Cebola"],["semente_rabanete_gelado","Sementes de Rabanete-Gelado"],["semente_alho_poro","Sementes de Alho-Poró"]],
   peixe: [["peixe_carpa_dourada","Carpa Dourada"],["peixe_truta_arco_iris","Truta Arco-Íris"],["peixe_peixe_lua","Peixe-Lua"],["peixe_peixe_pedra","Peixe-Pedra"],["peixe_enguia_eletrica","Enguia Elétrica"],["peixe_peixe_gelo","Peixe-Gelo"],["peixe_koi_celeste","Koi Celeste"],["peixe_baiacu_rei","Baiacu-Rei"],["peixe_salmao_rei","Salmão-Rei"],["peixe_peixe_fantasma","Peixe-Fantasma"],["peixe_peixe_abissal","Peixe Abissal"],["peixe_peixe_dragao","Peixe-Dragão"],["peixe_truta_do_gelo","Truta-do-Gelo"],["peixe_lucio_polar","Lúcio Polar"],["peixe_peixe_lanterna","Peixe-Lanterna Glacial"],["peixe_enguia_de_cristal","Enguia de Cristal"],["peixe_esturjao_ancestral","Esturjão Ancestral"]],
-  prato: [["prato_pao_caseiro","Pão Caseiro"],["prato_ensopado_legumes","Ensopado de Legumes"],["prato_torta_abobora","Torta de Abóbora da Vovó"],["prato_peixe_ervas","Salmão com Ervas"],["prato_batata_recheada","Batata Recheada"],["prato_biscoito_mel","Biscoito de Mel"],["prato_ensopado_cacador","Ensopado do Caçador"],["prato_salada_arcana","Salada Arcana"],["prato_banquete_guerreiro","Banquete do Guerreiro"],["prato_pao_dourado","Pão Dourado"],["prato_sopa_cristalina","Sopa Cristalina"],["prato_torta_rubi","Torta Rubi"],["prato_sopa_pescador","Sopa do Pescador"],["prato_sushi_real","Sushi Real"],["prato_caldeirada_abissal","Caldeirada Abissal"],["prato_caldo_quente","Caldo Quente do Pescador"],["prato_sorvete_cristal","Sorvete de Cristal"],["prato_caviar_ancestral","Caviar Ancestral"],["prato_banquete_lendario","Banquete Lendário"]],
+  prato: [["prato_pao_caseiro","Pão Caseiro"],["prato_ensopado_legumes","Ensopado de Legumes"],["prato_torta_abobora","Torta de Abóbora da Vovó"],["prato_peixe_ervas","Salmão com Ervas"],["prato_batata_recheada","Batata Recheada"],["prato_biscoito_mel","Biscoito de Mel"],["prato_ensopado_cacador","Ensopado do Caçador"],["prato_salada_arcana","Salada Arcana"],["prato_banquete_guerreiro","Banquete do Guerreiro"],["prato_pao_dourado","Pão Dourado"],["prato_sopa_cristalina","Sopa Cristalina"],["prato_torta_rubi","Torta Rubi"],["prato_sopa_pescador","Sopa do Pescador"],["prato_sushi_real","Sushi Real"],["prato_caldeirada_abissal","Caldeirada Abissal"],["prato_caldo_quente","Caldo Quente do Pescador"],["prato_sorvete_cristal","Sorvete de Cristal"],["prato_caviar_ancestral","Caviar Ancestral"],["prato_banquete_lendario","Banquete Lendário"],["prato_pao_com_geleia","Pão com Geleia"],["prato_salada_primavera","Salada da Primavera"],["prato_milho_assado","Milho Assado com Mel"],["prato_omelete_queijo","Omelete de Queijo"],["prato_torta_morango","Torta de Morango"],["prato_creme_abobora","Creme de Abóbora-Moranga"],["prato_sorvete_melao","Sorvete de Melão"],["prato_pizza_da_roca","Pizza da Roça"],["prato_sopa_de_inverno","Sopa de Inverno"],["prato_ratatouille","Ratatouille"],["prato_bolo_oxicoco","Bolo de Oxicoco"],["prato_risoto_trufa","Risoto de Trufa"],["prato_banquete_fazenda","Banquete da Fazenda"]],
+  artesao: [["artesao_queijo","Queijo"],["artesao_queijo_de_cabra","Queijo de Cabra"],["artesao_maionese","Maionese"],["artesao_geleia","Geleia"],["artesao_conserva","Conserva"],["artesao_oleo_de_trufa","Óleo de Trufa"],["produto_trufa","Trufa"]],
   gema: [["gema_rubi_2","Rubi"],["gema_safira_2","Safira"],["gema_esmeralda_2","Esmeralda"],["gema_topazio_2","Topázio"],["gema_ametista_2","Ametista"],["gema_onix_2","Ônix"]],
   elixir: [["elixir_cura","Elixir de Cura"],["elixir_rapidez","Elixir da Rapidez"],["elixir_minerador","Elixir do Minerador"],["elixir_mergulhador","Elixir do Mergulhador"],["elixir_sorte","Elixir da Sorte"],["elixir_pedra","Elixir de Pedra"],["elixir_sombras","Elixir das Sombras"],["elixir_mana","Elixir de Mana"],["elixir_gigante","Elixir do Gigante"],["elixir_fenix","Elixir da Fênix"],["elixir_tita","Elixir do Titã"],["elixir_purificacao","Elixir da Purificação"]],
   componente: [["componente_po_arcano","Pó Arcano"],["componente_oleo_de_peixe","Óleo de Peixe"],["componente_tintura_vital","Tintura Vital"],["componente_sal_lunar","Sal Lunar"],["componente_mercurio_vivo","Mercúrio Vivo"],["componente_cristal_de_mana","Cristal de Mana"],["componente_solvente","Solvente Alquímico"],["componente_perola_negra","Pérola Negra"],["componente_escama_do_abismo","Escama do Abismo"],["componente_oleo_de_fogo","Óleo de Fogo"],["componente_oleo_gelido","Óleo Gélido"],["componente_oleo_trovejante","Óleo Trovejante"],["componente_oleo_venenoso","Óleo Venenoso"],["componente_oleo_de_prata","Óleo de Prata"]],
@@ -389,7 +396,9 @@ const ITENS = {
   fruta: [["fruta_laranja","Laranja"],["fruta_pessego","Pêssego"],["fruta_cereja","Cereja"],["fruta_limao","Limão"],["fruta_maca_dourada","Maçã Dourada do Pomar"]],
   bebida: [["bebida_hidromel","Hidromel"],["bebida_cidra","Cidra"],["bebida_vinho","Vinho de Frutas"],["bebida_cerveja","Cerveja de Trigo"],["bebida_licor_arcano","Licor Arcano"],["bebida_licor_de_ervas","Licor de Ervas"],["bebida_licor_de_frutas","Licor de Frutas"]],
   mel: [["mel_silvestre","Mel Silvestre"],["mel_dourado","Mel Dourado"],["mel_gelado","Mel Gelado"],["mel_noturno","Mel Noturno"],["mel_floral","Mel Floral"]],
-  erva: [["erva_salvia","Sálvia"],["erva_erva_de_sol","Erva-de-Sol"],["erva_musgo_lunar","Musgo Lunar"],["erva_folha_gelida","Folha Gélida"],["erva_raiz_abissal","Raiz Abissal"],["erva_flor_de_cristal","Flor-de-Cristal"]]
+  erva: [["erva_salvia","Sálvia"],["erva_erva_de_sol","Erva-de-Sol"],["erva_musgo_lunar","Musgo Lunar"],["erva_folha_gelida","Folha Gélida"],["erva_raiz_abissal","Raiz Abissal"],["erva_flor_de_cristal","Flor-de-Cristal"]],
+  ceu: [["balao_de_cristal","Balão de Cristal"],["amuleto_ventos","Amuleto dos Ventos"],["raro_fragmento_celeste","Fragmento Celeste"],["ceu_fruta_celeste","Fruta Celeste"],["ceu_semente_brilhante","Semente Brilhante"]],
+  nomeada: [["nomeada_presa_do_inverno","Presa do Inverno"],["nomeada_lamina_de_thalassa","Lâmina de Thalassa"],["nomeada_aurora_de_aerilia","Aurora de Aerília"],["nomeada_juramento_do_fortim","Juramento do Fortim"],["nomeada_brasa_dos_anoes","Brasa dos Anões"],["nomeada_sussurro_da_penumbra","Sussurro da Penumbra"],["nomeada_talha_raizes","Talha-Raízes"],["nomeada_furia_do_saqueador","Fúria do Saqueador"],["nomeada_machado_do_faroleiro","Machado do Faroleiro"],["nomeada_sino_de_maris","Sino de Maris"],["nomeada_martelo_do_eremita","Martelo do Eremita"],["nomeada_arco_do_cacador_silencioso","Arco do Caçador Silencioso"],["nomeada_asa_de_zefira","Asa de Zéfira"],["nomeada_arco_das_brasas","Arco das Brasas"],["nomeada_besta_do_capitao","Besta do Capitão"],["nomeada_besta_glacial","Besta Glacial"],["nomeada_picareta_do_mineiro_perdido","Picareta do Mineiro Perdido"],["nomeada_quebra_cristais","Quebra-Cristais"],["nomeada_picareta_das_profundezas","Picareta das Profundezas"],["nomeada_pa_do_coveiro","Pá do Coveiro"],["nomeada_pa_do_arqueologo","Pá do Arqueólogo"],["nomeada_enxada_da_colheita_dourada","Enxada da Colheita Dourada"],["nomeada_enxada_do_jardim_suspenso","Enxada do Jardim Suspenso"],["nomeada_vara_do_pescador_do_gelo","Vara do Pescador do Gelo"],["nomeada_vara_de_coral","Vara de Coral"]]
 };
 
 function el(tag, attrs, ...filhos) {

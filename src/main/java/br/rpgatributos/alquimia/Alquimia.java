@@ -708,7 +708,10 @@ public final class Alquimia extends Estacao {
         Elixir x = Elixir.de(e.getItem());
         if (x == null) return;
         if (x.mana() > 0) plugin.arcano().darMana(e.getPlayer(), x.mana());
-        if (x == Elixir.PURIFICACAO) plugin.maldicoes().curar(e.getPlayer());
+        if (x == Elixir.PURIFICACAO) {
+            plugin.maldicoes().curar(e.getPlayer());
+            plugin.profundezas().curar(e.getPlayer());
+        }
         plugin.titulos().registrar(e.getPlayer(), "elixires", 1);
     }
 

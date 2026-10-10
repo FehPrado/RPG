@@ -283,7 +283,39 @@ public final class Forja {
         ItemStack item = base.clone();
         item.setAmount(1);
         construir(item, d);
+        // Às vezes a peça já nasce com nome (mais chance nas raridades altas).
+        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && !br.rpgatributos.lenda.Lendas.marcado(item)
+                && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < Nomeada.chance(r) * plugin.settings().nomeadasChance) {
+            Nomeada n = Nomeada.sortear(item.getType());
+            if (n != null) {
+                nomear(item, n);
+                if (ferreiro != null) {
+                    ferreiro.sendMessage(net.kyori.adventure.text.Component.text("⚒ A peça saiu da forja com nome: ", net.kyori.adventure.text.format.NamedTextColor.GOLD)
+                            .append(net.kyori.adventure.text.Component.text(n.nome(), r.cor())));
+                    plugin.diario().marco(ferreiro, "arma_nomeada", "Forjou uma arma com nome: " + n.nome());
+                }
+            }
+        }
         return item;
+    }
+
+    /** Põe o nome (e o visual) numa peça forjada. */
+    public void nomear(ItemStack item, Nomeada n) {
+        item.editMeta(m -> m.getPersistentDataContainer().set(Nomeada.CHAVE, org.bukkit.persistence.PersistentDataType.STRING, n.name()));
+        reconstruir(item);
+    }
+
+    /** Uma arma com nome pronta (forjada na raridade dada), para baús e chefes. */
+    public ItemStack criarNomeada(Nomeada n, Raridade r) {
+        ItemStack item = forjar(null, new ItemStack(n.sortearMaterial()), r);
+        if (Nomeada.de(item) != n) nomear(item, n);
+        return item;
+    }
+
+    /** Uma arma com nome qualquer. */
+    public ItemStack criarNomeada(Raridade r) {
+        Nomeada[] todas = Nomeada.values();
+        return criarNomeada(todas[java.util.concurrent.ThreadLocalRandom.current().nextInt(todas.length)], r);
     }
 
     /** Refaz nome, atributos e descrição (ex.: depois de virar Netherite). */
@@ -354,6 +386,7 @@ public final class Forja {
             meta.setEnchantmentGlintOverride(r.peloMenos(Raridade.LENDARIO) ? Boolean.TRUE : null);
             meta.lore(semItalico(montarDescricao(tipo, cat, tier, d)));
             plugin.lendas().decorar(meta, d.refino()); // se for uma lenda: nome, "Especial", poder e história
+            Nomeada.decorar(meta, d.refino(), r.cor()); // arma com nome: nome, história e visual próprios
             plugin.runas().decorar(meta); // se tiver runa gravada, a linha dela volta depois de refazer a descrição
             plugin.mitrilo().decorar(meta, tipo); // aprimorado com Mitrilo: bônus e linha voltam também
             plugin.oficios().decorar(meta, tipo); // peça de conjunto do Ateliê: nome, bônus e o +1 de armadura voltam

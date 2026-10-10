@@ -682,6 +682,11 @@ public final class Guia implements Listener {
                         .append(d("Plantações"))
                         .append(t(": sementes do mato, só crescem na estação delas.\n"))
                         .append(d("/calendario")),
+                titulo("Céu e fundo", EXPLORACAO)
+                        .append(d("Ilhas do Céu"))
+                        .append(t(": pise na Plataforma de Vento, no chão perto delas. Sem planador, a volta é queda!\n"))
+                        .append(d("Profundezas"))
+                        .append(t(": abaixo do y 0 é escuro. Acenda as Raízes de Luz e fuja da Penumbra.")),
                 // 78
                 titulo("Conquistas", TITULO)
                         .append(d("/titulos"))

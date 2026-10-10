@@ -815,6 +815,8 @@ final class Projetos {
             }
         }
         itens.addAll(extras);
+        ItemStack nomeada = plugin.nomeadas() == null ? null : plugin.nomeadas().talvezParaBau();
+        if (nomeada != null) itens.add(nomeada);
         List<Integer> vagas = new ArrayList<>();
         for (int i = 0; i < inv.getSize(); i++) if (inv.getItem(i) == null) vagas.add(i);
         Collections.shuffle(vagas, o.r);

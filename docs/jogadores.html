@@ -135,7 +135,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.31</small></a>
+  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.35</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -157,6 +157,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   <a href="#fazenda">☘ Fazenda e cozinha</a>
   <a href="#fe">✧ Fé e mistério</a>
   <a href="#descobertas">🗺 Exploração e campanha</a>
+  <a href="#ceu">☁ Céu e Profundezas</a>
   <a href="#progressao">★ Talentos e renascer</a>
   <a href="#detalhes">♨ Detalhes do dia a dia</a>
   <a href="#vida">🛢 Vida no mundo</a>
@@ -185,14 +186,14 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <main id="conteudo">
 <div class="hero">
   <div>
-    <p class="rotulo">Guia do Jogador · versão 2.31</p>
+    <p class="rotulo">Guia do Jogador · versão 2.35</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
       <span class="chip"><b>13</b>atributos</span>
       <span class="chip"><b>24</b>classes</span>
-      <span class="chip"><b>27</b>estações</span>
-      <span class="chip"><b>18</b>estruturas</span>
+      <span class="chip"><b>28</b>estações</span>
+      <span class="chip"><b>19</b>estruturas</span>
       <span class="chip"><b>50</b>magias secretas</span>
       <span class="chip"><b>12</b>lendas</span>
     </div>
@@ -260,6 +261,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     <figure><img src="site/img/estacoes/barril.png" alt="Barril de Envelhecimento" loading="lazy" width="150" height="150"><figcaption>Barril de Envelhecimento</figcaption></figure>
     <figure><img src="site/img/estacoes/colmeia.png" alt="Colmeia do Apicultor" loading="lazy" width="150" height="150"><figcaption>Colmeia do Apicultor</figcaption></figure>
     <figure><img src="site/img/estacoes/canteiro.png" alt="Canteiro de Ervas" loading="lazy" width="150" height="150"><figcaption>Canteiro de Ervas</figcaption></figure>
+    <figure><img src="site/img/estacoes/tacho.png" alt="Tacho do Artesão" loading="lazy" width="150" height="150"><figcaption>Tacho do Artesão</figcaption></figure>
     <figure><img src="site/img/estacoes/cartografo.png" alt="Mesa do Cartógrafo" loading="lazy" width="150" height="150"><figcaption>Mesa do Cartógrafo</figcaption></figure>
     <figure><img src="site/img/estacoes/pedra_viagem.png" alt="Pedra de Viagem" loading="lazy" width="150" height="150"><figcaption>Pedra de Viagem</figcaption></figure>
     <figure><img src="site/img/estacoes/fogueira.png" alt="Fogueira de Acampamento" loading="lazy" width="150" height="150"><figcaption>Fogueira de Acampamento</figcaption></figure>
@@ -419,6 +421,10 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     <div class="card"><h3>Capa Planadora</h3>
       <p>Acessório de bolso (Bancada Alquímica: 4 membranas de phantom, 6 penas, 2 couros). No ar, aperte <kbd>pular</kbd> para planar. Pule de novo ou agache para soltar.</p>
     </div>
+    <div class="card"><h3>Balão de Cristal</h3>
+      <div class="ritual"><span class="b">Bancada Alquímica</span><span class="i">4 lãs brancas</span><span class="mais">+</span><span class="i">4 linhas</span></div>
+      <p>A capa barata: abre do mesmo jeito (pule no ar), desce ainda mais devagar, mas anda bem mais devagar e <b>estoura no fim do 5º voo</b>. A descrição mostra os usos que restam.</p>
+    </div>
     <div class="card"><h3>Mochila</h3>
       <p><span class="cmd">/mochila</span>: baú pessoal com 1 fileira no começo e +1 a cada 150 níveis somados, até 6. Não cai quando você morre.</p>
     </div>
@@ -473,6 +479,16 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li>Lendário/Mítico de diamante ou netherite: chance de Fragmento de Forja. Refino +5 ou mais devolve 1 Fragmento garantido.</li>
         <li>Gemas engastadas voltam inteiras.</li>
       </ul>
+    </div>
+    <div class="card largo"><h3>Armas com nome</h3>
+      <p>Às vezes a peça já nasce com <b>nome, história e visual próprios</b>: quanto mais rara, maior a chance (2% nas Comuns até 45% nas Míticas). Também aparecem em baús de estruturas e com os chefes. É só aparência: a força é a da raridade.</p>
+      <p>No inventário aparece o desenho dela; <b>na mão, no chão, no suporte e na moldura vira 3D</b> (espadas, machados, maças e ferramentas).</p>
+      <div class="tabela"><table><thead><tr><th>Tipo</th><th>Armas</th></tr></thead><tbody>
+        <tr><td>Espadas</td><td>Presa do Inverno, Lâmina de Thalassa, Aurora de Aerília, Juramento do Fortim, Brasa dos Anões, Sussurro da Penumbra</td></tr>
+        <tr><td>Machados e maças</td><td>Talha-Raízes, Fúria do Saqueador, Machado do Faroleiro, Sino de Maris, Martelo do Eremita</td></tr>
+        <tr><td>Arcos e bestas</td><td>Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Besta do Capitão, Besta Glacial</td></tr>
+        <tr><td>Ferramentas</td><td>Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral</td></tr>
+      </tbody></table></div>
     </div>
   </div>
 </section>
@@ -597,9 +613,9 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <p>2 anéis, 1 amuleto, 1 cinto e 2 bolsos. Não ocupam a armadura e <b>não caem ao morrer</b>.</p>
       <div class="tabela"><table><thead><tr><th>Tipo</th><th>Opções</th></tr></thead><tbody>
         <tr><td>Anéis</td><td>Vigor, Força, Vento, Marés, Brasas, Minerador, Fortuna, Sábio</td></tr>
-        <tr><td>Amuletos</td><td>Mana, Guardião, Vida, <b>Fênix</b> (escapa da morte a cada 10 min)</td></tr>
+        <tr><td>Amuletos</td><td>Mana, Guardião, Vida, <b>Fênix</b> (escapa da morte a cada 10 min), <b>Ventos</b> (queda segura e velocidade)</td></tr>
         <tr><td>Cintos</td><td>Atleta, Andarilho, Titã</td></tr>
-        <tr><td>Bolso</td><td><b>Lanterna de Bolso</b>, Ímã, Relógio, <b>Capa Planadora</b></td></tr>
+        <tr><td>Bolso</td><td><b>Lanterna de Bolso</b>, Ímã, Relógio, <b>Capa Planadora</b>, <b>Balão de Cristal</b></td></tr>
       </tbody></table></div>
     </div>
   </div>
@@ -767,6 +783,48 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>7. As Ruínas Contam</td><td>6 relíquias diferentes</td><td>Essência Primordial</td></tr>
         <tr><td>8. O Selo</td><td>Romper o selo de um Local Oculto</td><td>2 lingotes de mitrilo e mapa lendário</td></tr>
       </tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="ceu">
+  <h2><span class="ico">☁</span>Céu e Profundezas</h2>
+  <p class="intro">Lá em cima, ilhas flutuantes com tesouros e um guardião. Lá embaixo, abaixo do y 0, cavernas escuras de verdade, com raízes que acendem e uma sombra que rouba corações.</p>
+  <div class="grade">
+    <div class="card"><h3>Ilhas do Céu</h3>
+      <p>Arquipélagos raros entre o y 200 e o teto do mundo: uma ilha principal com uma raiz de pedra pendurada embaixo, 3 ilhotas e uma ponte de cordas.</p>
+      <ul>
+        <li><b>Jardim Suspenso</b>: a Árvore Celeste solta <b>Frutas Celestes</b> para quem fica embaixo.</li>
+        <li><b>Observatório Antigo</b>: pilares de quartzo e o púlpito do astrônomo.</li>
+        <li><b>Forja dos Ventos</b>: forja em ruínas e um moinho de lã.</li>
+        <li><b>Ninho do Guardião</b>: pise no ninho e acorda o <b>Guardião dos Ventos</b> (320 de vida). Ele deixa <b>Fragmentos Celestes</b>.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Plataforma de Vento</h3>
+      <p>No chão, a 28 blocos da ilha: um patamar de pedra com 4 lanternas azuis. Pise na <b>placa de pressão</b> do meio e você é lançado até a ilha.</p>
+      <p class="aviso"><b>Não há volta segura.</b> Sem Capa Planadora, Balão de Cristal ou élitro, só dá para descer caindo. Água, pérola do ender ou uma Fruta Celeste também salvam.</p>
+    </div>
+    <div class="card"><h3>Itens do céu</h3>
+      <ul>
+        <li><b>Fruta Celeste</b>: Queda Lenta por 90 s e pulo mais alto por 60 s.</li>
+        <li><b>Fragmento Celeste</b> → Bancada Alquímica: <b>Amuleto dos Ventos</b> (+6 de queda segura e +8% de velocidade).</li>
+        <li>Todo baú das ilhas tem lã e linha, para o Balão.</li>
+      </ul>
+      <div class="ritual"><span class="b">Bancada Alquímica</span><span class="i">2 Fragmentos Celestes</span><span class="mais">+</span><span class="i">6 penas</span><span class="mais">+</span><span class="i">2 lingotes de ouro</span></div>
+    </div>
+    <div class="card"><h3>Profundezas</h3>
+      <p>Abaixo do <b>y 0</b>, longe de uma raiz acesa, tudo fica escuro (a Visão Noturna ajuda).</p>
+      <ul>
+        <li><b>Raízes de Luz</b> adormecidas brilham de leve nas cavernas fundas. <b>Clique no bulbo</b>: ela acende para sempre, para todos, e ilumina a caverna em volta.</li>
+        <li>Quem acende ganha XP e <b>Sementes Brilhantes</b>: arremesse e o lugar fica iluminado por 2 minutos.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>A Penumbra</h3>
+      <p>Monstros de nome roxo <b>da Penumbra</b> roubam <b>1 coração máximo</b> a cada golpe (até 5).</p>
+      <ul>
+        <li>Os corações voltam ao <b>sol</b>, perto de uma <b>raiz acesa</b>, com o <b>Elixir da Purificação</b> ou ao morrer.</li>
+        <li>Às vezes, acender uma raiz acorda o <b>Coração da Penumbra</b> (350 de vida): ele rouba corações e chama zumbis da Penumbra.</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -948,6 +1006,20 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       </tbody></table></div>
       <p class="nota">Ideia: vaca de cogumelo + Sela + Asas = montaria voadora.</p>
     </div>
+    <div class="card"><h3>Visual dos companheiros</h3>
+      <p>Com o pacote de recursos, os componentes aparecem no bicho:</p>
+      <ul>
+        <li><b>Sela, Alforje, Farol e Asas</b> viram peças 3D que acompanham o companheiro. As asas batem quando ele está no ar.</li>
+        <li>Cavalos e lobos ganham <b>armadura própria</b>: Couraça, Pele de Netherite, Chamas ou Coração do Mar. É só aparência e não sai com tesoura.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Evolução visível</h3>
+      <ul>
+        <li><b>Estágio II</b>: maior e com pó prateado.</li>
+        <li><b>Estágio III</b>: pó dourado, <b>auréola</b> girando sobre a cabeça e partículas da criatura (fumaça, chamas azuis, flocos de neve, faíscas...).</li>
+        <li>O <b>Corcel Celeste</b> ganha armadura branca e dourada; o <b>Lobo das Sombras</b>, roxa-escura.</li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -1020,13 +1092,17 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Fazendeiro</td><td>Composteira (na Fazenda)</td><td>1</td></tr>
         <tr><td>Lenhador</td><td>Bancada de flechas</td><td>1</td></tr>
         <tr><td>Pescador</td><td>Barril (com água perto)</td><td>1</td></tr>
+        <tr><td>Construtor</td><td>Bancada de trabalho (ergue os projetos)</td><td>1</td></tr>
         <tr><td>Minerador</td><td>Cortador de pedras</td><td>2</td></tr>
         <tr><td>Cozinheiro</td><td>Cozinha</td><td>2</td></tr>
+        <tr><td>Mercador</td><td>Mesa de cartografia: vende a sobra do depósito e traz esmeraldas</td><td>2</td></tr>
         <tr><td>Soldado</td><td>Alvo num Quartel</td><td>2</td></tr>
         <tr><td>Ferreiro</td><td>Forja do Ferreiro</td><td>3</td></tr>
         <tr><td>Tratador</td><td>Altar do Domador</td><td>3</td></tr>
+        <tr><td>Bibliotecário</td><td>Atril: papel, livros e, com 4 lápis-lazúli, livros encantados</td><td>3</td></tr>
         <tr><td>Arqueiro</td><td>Alvo num Quartel</td><td>3</td></tr>
         <tr><td>Alquimista</td><td>Bancada Alquímica</td><td>4</td></tr>
+        <tr><td>Cavaleiro</td><td>Alvo num Quartel (luta a cavalo)</td><td>4</td></tr>
       </tbody></table></div>
       <p class="muted">Cada nível da colônia (pago com o depósito) libera +3 moradores, até 15. O nível 5 dá +20% de produção.</p>
     </div>
@@ -1036,7 +1112,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li>O lado em que <b>você</b> está vira a <b>entrada</b>. Aparece uma cerca em volta do canteiro, com um portão.</li>
         <li><b>Agachado + clique na cerca:</b> girar, mudar de lugar, ver o contorno e os materiais, trazer do depósito.</li>
         <li>Ponha um <b>baú dentro da cerca</b> (fora da obra): o <b>Construtor</b> livre vem, limpa o terreno e ergue tudo bloco a bloco.</li>
-        <li>Projetos: Casa, Fazenda, Poço da Praça, <b>Torre de Vigia</b> (aumenta o território 3×3 chunks em volta dela), Armazém, Biblioteca e Quartel.</li>
+        <li>16 projetos: Casa, Fazenda, Poço da Praça, <b>Torre de Vigia</b> (aumenta o território 3×3 chunks em volta dela), Armazém, Biblioteca, Quartel e a construção de cada profissão.</li>
         <li><b>Do seu jeito</b> (botão direito no projeto): você constrói na área cercada e pede a <b>vistoria</b>. Precisa ter o mínimo do nível 1 (blocos, camas, portas, luz, teto...).</li>
         <li>Cada construção pronta tem uma <b>placa</b>: clique abre o menu dela; quebrar (2 vezes) desfaz a construção.</li>
         <li><b>Cada profissão tem a sua construção</b> (Oficina do Construtor, Fazenda, Cabana do Lenhador, Cabana do Pescador, Mina, Mercado, Taverna, Biblioteca, Quartel, Ferraria, Estábulo, Laboratório): o posto só vale <b>dentro</b> dela, e cada nível dá +10% de produção.</li>
@@ -1044,12 +1120,22 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li>Toda construção tem <b>3 níveis</b>: melhore e peça a vistoria de novo em Obras. Torre vigia mais longe, Fazenda e Biblioteca dão +10% por nível, a Praça deixa todos mais felizes.</li>
       </ul>
     </div>
+    <div class="card"><h3>Jeito e pedidos</h3>
+      <p>Cada morador tem <b>1 ou 2 traços</b> (veja no menu dele): Dedicação ou Preguiça (±15% de produção), Apetite grande ou Come pouco, Bom ou Mau humor (felicidade da colônia), Coragem ou Medo (força como soldado), Acorda cedo (trabalha no começo da noite), Curiosidade (+50% de XP) e Sorte (às vezes um item a mais).</p>
+      <ul>
+        <li>De vez em quando um morador faz um <b>pedido</b>: aparece um <b>❗</b> sobre a cabeça dele. Pode ser algo da profissão (enxada, vara, carvão, escudo...) ou um prato, flores, frutas, mel, um livro...</li>
+        <li>Clique no morador e no botão do pedido para entregar (sai do seu inventário).</li>
+        <li><b>Atendido:</b> +8% de felicidade e o morador fica <b>contente</b> (+15% de produção por um tempo).</li>
+        <li><b>Esquecido</b> (prazo de ~30 min): -5% de felicidade e ele fica <b>chateado</b>.</li>
+      </ul>
+    </div>
     <div class="card"><h3>Exército</h3>
       <ul>
-        <li>Soldados e arqueiros vestem o uniforme na cor do reino, não queimam no sol e os aldeões não têm medo deles.</li>
+        <li>Soldados, arqueiros e cavaleiros vestem o uniforme na cor do reino, não queimam no sol e os aldeões não têm medo deles.</li>
+        <li>O <b>Cavaleiro</b> (colônia nível 4) luta montado: mais vida e dano, e o cavalo o leva até o inimigo. Se o cavalo morrer, ele pega outro em 2 minutos.</li>
         <li>Cada Quartel (bloco de alvo) abriga 4 soldados.</li>
         <li><b>Ordens:</b> guardar a colônia, seguir você ou atacar o Marco inimigo (na guerra).</li>
-        <li>Shift + clique no Exército equipa todos com o melhor do depósito.</li>
+        <li>Shift + clique no Exército equipa todos com o melhor do depósito (o cavalo do Cavaleiro ganha a melhor armadura de cavalo).</li>
       </ul>
     </div>
   </div>
@@ -1405,7 +1491,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.31 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.35 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

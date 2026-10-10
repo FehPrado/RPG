@@ -455,6 +455,8 @@ final class CidadesSubmersas {
         e.getDrops().add(Reagente.ESCAMA_DO_ABISMO.criar(2 + r.nextInt(3)));
         e.getDrops().add(new ItemStack(Material.EMERALD, 8 + r.nextInt(9)));
         e.getDrops().add(plugin.arqueologia().reliquiaAleatoria());
+        ItemStack nomeada = plugin.nomeadas().talvezDeChefe(0.3);
+        if (nomeada != null) e.getDrops().add(nomeada);
         if (r.nextDouble() < 0.4) e.getDrops().add(Raro.PAGINA_DE_LENDA.criar(1));
         if (r.nextDouble() < 0.35) {
             ItemStack t = new ItemStack(Material.TRIDENT);

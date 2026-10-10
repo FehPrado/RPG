@@ -35,7 +35,7 @@ public enum Profissao {
     BIBLIOTECARIO("Bibliotecário", Material.BOOK, 0xB39DDB, Villager.Profession.LIBRARIAN, 3, Material.LECTERN, Posto.BLOCO,
             "Faz papel, livros e, com lápis-lazúli, livros encantados."),
     CONSTRUTOR("Construtor", Material.BRICKS, 0xD7A86E, Villager.Profession.LEATHERWORKER, 1, Material.CRAFTING_TABLE, Posto.BLOCO,
-            "Ergue casas prontas (2 camas, porta e luz) com madeira, pedra e vidro do depósito."),
+            "Ergue as construções dos projetos da Prefeitura, bloco a bloco, com o material do baú da obra."),
     SOLDADO("Soldado", Material.IRON_SWORD, 0xFF5555, Villager.Profession.NONE, 2, Material.TARGET, Posto.QUARTEL,
             "Veste a armadura e luta de espada: defende a colônia e vai à guerra."),
     ARQUEIRO("Arqueiro", Material.BOW, 0xFFAA00, Villager.Profession.NONE, 3, Material.TARGET, Posto.QUARTEL,

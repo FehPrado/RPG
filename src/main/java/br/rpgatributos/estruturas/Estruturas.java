@@ -139,6 +139,7 @@ public final class Estruturas implements Listener {
     private final RPGAtributos plugin;
     private final Projetos projetos;
     final CidadesSubmersas cidades;
+    final IlhasDoCeu ilhas;
     private final File arquivo;
     private final NamespacedKey kChunk, kPoco, kAltar;
     final List<Sitio> sitios = new ArrayList<>();
@@ -153,6 +154,7 @@ public final class Estruturas implements Listener {
         this.plugin = plugin;
         this.projetos = new Projetos(plugin);
         this.cidades = new CidadesSubmersas(plugin, this, projetos);
+        this.ilhas = new IlhasDoCeu(plugin, this, projetos);
         this.arquivo = new File(plugin.getDataFolder(), "estruturas.yml");
         this.kChunk = new NamespacedKey(plugin, "estrutura_v1");
         this.kPoco = new NamespacedKey(plugin, "poco_desejo_dia");
@@ -200,6 +202,7 @@ public final class Estruturas implements Listener {
         }
         // Termina as cidades submersas que ficaram pela metade (depois que os mundos carregam).
         Bukkit.getScheduler().runTaskLater(plugin, cidades::retomar, 100L);
+        Bukkit.getScheduler().runTaskLater(plugin, ilhas::retomar, 120L);
     }
 
     void adicionar(Sitio s) {
@@ -257,7 +260,10 @@ public final class Estruturas implements Listener {
         var pdc = c.getPersistentDataContainer();
         if (pdc.has(kChunk)) return;
         pdc.set(kChunk, PersistentDataType.BYTE, (byte) 1);
-        if (novo) cidades.talvez(c);
+        if (novo) {
+            cidades.talvez(c);
+            ilhas.talvez(c);
+        }
         Random r =new Random(w.getSeed() ^ (c.getX() * 0x9E3779B97F4A7C15L) ^ (c.getZ() * 0xC2B2AE3D27D4EB4FL) ^ 0x57A0L);
         if (r.nextDouble() >= plugin.settings().estrChance) return;
         // Até 3 tipos diferentes: se o chão não serve para um, talvez sirva para outro.
@@ -374,7 +380,7 @@ public final class Estruturas implements Listener {
             if (!s.mundo.equals(w.getName())) continue;
             double dx = s.x - x, dz = s.z - z;
             // A cidade submersa é grande: a distância conta a partir da muralha dela.
-            double lim = raio + (s.tipo == Estrutura.CIDADE_SUBMERSA ? Cidade.RAIO + 8 : 0);
+            double lim = raio + (s.tipo == Estrutura.CIDADE_SUBMERSA ? Cidade.RAIO + 8 : s.tipo == Estrutura.ILHA_DO_CEU ? Ilha.ALCANCE : 0);
             if (dx * dx + dz * dz < lim * lim) return s;
         }
         return null;
@@ -534,7 +540,7 @@ public final class Estruturas implements Listener {
                 Location l = p.getLocation();
                 for (Sitio s : sitios) {
                     if (!s.mundo.equals(w.getName())) continue;
-                    if (s.tipo == Estrutura.CIDADE_SUBMERSA && !CidadesSubmersas.pronta(s)) continue;
+                    if (s.tipo == Estrutura.CIDADE_SUBMERSA && !CidadesSubmersas.pronta(s) || s.tipo == Estrutura.ILHA_DO_CEU && !IlhasDoCeu.pronta(s)) continue;
                     double d2 = s.distancia2(l);
                     // O farol aceso dá sorte (pesca e saque) a quem navega perto.
                     if (s.tipo == Estrutura.FAROL && s.acesoAte > agora && d2 <= 96 * 96) {
@@ -571,11 +577,13 @@ public final class Estruturas implements Listener {
                             if (s.acesoAte > 0 && agora > s.acesoAte) apagarFarol(s, w);
                         }
                         case CIDADE_SUBMERSA -> cidades.tick(s, w, p, jogando, d2, dy);
+                        case ILHA_DO_CEU -> ilhas.tick(s, w, p, jogando, d2, dy);
                         default -> { }
                     }
                 }
             }
             cidades.poderes(ciclo);
+            ilhas.poderes(ciclo);
         }
         if (sujo && ciclo % 15 == 0) salvar();
     }
@@ -590,6 +598,7 @@ public final class Estruturas implements Listener {
         String titulo = switch (s.tipo) {
             case NAUFRAGIO -> s.nome != null ? "Naufrágio do " + s.nome : s.tipo.nome();
             case CIDADE_SUBMERSA -> s.nome != null ? s.nome + ", a Cidade Submersa" : s.tipo.nome();
+            case ILHA_DO_CEU -> IlhasDoCeu.titulo(s);
             default -> s.tipo.nome();
         };
         p.showTitle(Title.title(Component.text("⌂ " + titulo, s.tipo.cor(), TextDecoration.BOLD),
@@ -889,6 +898,7 @@ public final class Estruturas implements Listener {
                 if (quem != null) plugin.diario().marco(quem, "capitao_fortim", "Derrotou o Capitão Esquecido de um fortim");
             }
             case "sacerdote" -> cidades.sacerdoteMorreu(e, v.substring(0, v.indexOf(':')));
+            case "ventos" -> ilhas.guardiaoMorreu(e, v.substring(0, v.indexOf(':')));
             case "guardiao" -> {
                 e.getDrops().add(plugin.arqueologia().reliquiaAleatoria());
                 if (r.nextDouble() < 0.4) e.getDrops().add(Raro.PAGINA_DE_LENDA.criar(1));
@@ -1216,6 +1226,29 @@ public final class Estruturas implements Listener {
         rezar(e.getPlayer(), s);
     }
 
+    /** Fruta Celeste: leve como o vento (dá para descer da ilha sem planador). */
+    @EventHandler(ignoreCancelled = true)
+    public void aoComerFruta(org.bukkit.event.player.PlayerItemConsumeEvent e) {
+        if (br.rpgatributos.exploracao.ItemCeu.de(e.getItem()) != br.rpgatributos.exploracao.ItemCeu.FRUTA_CELESTE) return;
+        Player p = e.getPlayer();
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 90 * 20, 0, false, true, true));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 60 * 20, 1, false, true, true));
+        p.getWorld().spawnParticle(Particle.CHERRY_LEAVES, p.getLocation().add(0, 1, 0), 20, 0.4, 0.6, 0.4, 0);
+        p.sendActionBar(Component.text("☁ Você está leve como o vento", NamedTextColor.AQUA));
+    }
+
+    /** Pisou na Plataforma de Vento de uma Ilha do Céu: lá vai ele. */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void aoPisar(PlayerInteractEvent e) {
+        if (e.getAction() != Action.PHYSICAL || e.getClickedBlock() == null) return;
+        ilhas.pisou(e.getPlayer(), e.getClickedBlock());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoCairDaIlha(EntityDamageEvent e) {
+        ilhas.aoCair(e);
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void aoColocar(org.bukkit.event.block.BlockPlaceEvent e) {
         if (e.getBlockPlaced().getType() == Material.CONDUIT) cidades.aoColocarCondutor(e.getPlayer(), e.getBlockPlaced());
@@ -1282,6 +1315,7 @@ public final class Estruturas implements Listener {
         };
         Location l = p.getLocation().add(f.getDirection().multiply(t.raio() + 3));
         if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(p.getWorld(), l.getBlockX(), l.getBlockZ());
+        if (t == Estrutura.ILHA_DO_CEU) return ilhas.fundarAqui(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockZ() - Ilha.PLATAFORMA);
         Sitio s = construir(p.getWorld(), l.getBlockX(), l.getBlockZ(), t, rot, new Random(), true, true);
         return s == null ? "Não deu para construir aqui (fundo demais para a mina?)." : null;
     }
@@ -1289,6 +1323,7 @@ public final class Estruturas implements Listener {
     /** Pelo console: {@code /rpgadmin estrutura <tipo> <mundo> <x> <z>}. */
     public String construirEm(World w, int x, int z, Estrutura t) {
         if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(w, x, z);
+        if (t == Estrutura.ILHA_DO_CEU) return ilhas.fundarAqui(w, x, z);
         Sitio s =construir(w, x, z, t, ThreadLocalRandom.current().nextInt(4), new Random(), true, true);
         return s == null ? "Não deu para construir aqui (fundo demais para a mina?)." : null;
     }

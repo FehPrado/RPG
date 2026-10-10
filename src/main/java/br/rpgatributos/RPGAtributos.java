@@ -233,6 +233,9 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.vida.Cultivos cultivos;
     private br.rpgatributos.vida.Criacao criacao;
     private Estruturas estruturas;
+    private br.rpgatributos.mundo.Profundezas profundezas;
+    private br.rpgatributos.domador.VisualDomador visualDomador;
+    private br.rpgatributos.forja.NomeadasNoMundo nomeadas;
     private Ajuda ajuda;
 
     private static RPGAtributos instancia;
@@ -377,6 +380,10 @@ public final class RPGAtributos extends JavaPlugin {
         estruturas = new Estruturas(this);
         ajuda = new Ajuda(this);
         estruturas.carregar();
+        profundezas = new br.rpgatributos.mundo.Profundezas(this);
+        profundezas.carregar();
+        visualDomador = new br.rpgatributos.domador.VisualDomador(this);
+        nomeadas = new br.rpgatributos.forja.NomeadasNoMundo(this);
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
                 chefes, eventos, mercadores, altares, new MateriaisListener(), missoes, agricultura, cozinha, reciclagem,
@@ -387,7 +394,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, ajuda);
+                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -578,6 +585,8 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, cultivos::tick, 120L, 100L);
         agenda.runTaskTimer(this, criacao::tick, 40L, 20L);
         agenda.runTaskTimer(this, estruturas::tick, 40L, 40L);
+        agenda.runTaskTimer(this, profundezas::tick, 50L, 40L);
+        agenda.runTaskTimer(this, visualDomador::tick, 20L, 1L);
         agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
@@ -632,6 +641,8 @@ public final class RPGAtributos extends JavaPlugin {
         if (cultivos != null) cultivos.parar();
         if (criacao != null) criacao.salvar();
         if (estruturas != null) estruturas.salvar();
+        if (profundezas != null) profundezas.parar();
+        if (visualDomador != null) visualDomador.parar();
         if (recordes != null) recordes.salvar();
         if (sombras != null) sombras.recolherTodas();
         if (torre != null) torre.encerrarTodas();
@@ -804,6 +815,8 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.vida.Cultivos cultivos() { return cultivos; }
     public br.rpgatributos.vida.Criacao criacao() { return criacao; }
     public Estruturas estruturas() { return estruturas; }
+    public br.rpgatributos.mundo.Profundezas profundezas() { return profundezas; }
+    public br.rpgatributos.forja.NomeadasNoMundo nomeadas() { return nomeadas; }
     public Ajuda ajuda() { return ajuda; }
 
     /** O bloco é alguma estação de ritual (Forja, Infusor, Altares, Cozinha, Reciclagem, Marco)? */

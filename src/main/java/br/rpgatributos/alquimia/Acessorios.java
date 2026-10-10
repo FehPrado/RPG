@@ -122,6 +122,44 @@ public final class Acessorios implements Listener {
         carregar(p, itens(p));
     }
 
+    /**
+     * Abre o Balão de Cristal: gasta um uso (a linha "Usos" do item muda).
+     * @return quantos usos sobraram (0 = estoura quando o voo acabar), ou -1 se não tem balão.
+     */
+    public int gastarBalao(Player p) {
+        ItemStack[] itens = itens(p);
+        for (int i = 0; i < itens.length; i++) {
+            if (Acessorio.de(itens[i]) != Acessorio.BALAO_DE_CRISTAL) continue;
+            int usos = itens[i].getPersistentDataContainer().getOrDefault(Acessorio.CHAVE_USOS, PersistentDataType.INTEGER, Acessorio.USOS_BALAO);
+            int restam = Math.max(0, usos - 1);
+            itens[i].editMeta(m -> {
+                m.getPersistentDataContainer().set(Acessorio.CHAVE_USOS, PersistentDataType.INTEGER, restam);
+                List<Component> lore = m.lore() == null ? new ArrayList<>() : new ArrayList<>(m.lore());
+                if (lore.size() > 1) lore.set(1, Acessorio.linhaUsos(restam));
+                m.lore(lore);
+            });
+            salvar(p, itens);
+            return restam;
+        }
+        return -1;
+    }
+
+    /** O balão sem usos estoura (some do espaço de bolso). */
+    public void estourarBalao(Player p) {
+        ItemStack[] itens = itens(p);
+        for (int i = 0; i < itens.length; i++) {
+            if (Acessorio.de(itens[i]) != Acessorio.BALAO_DE_CRISTAL) continue;
+            if (itens[i].getPersistentDataContainer().getOrDefault(Acessorio.CHAVE_USOS, PersistentDataType.INTEGER, 1) > 0) continue;
+            itens[i] = null;
+            salvar(p, itens);
+            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 1f, 1.3f);
+            p.getWorld().spawnParticle(Particle.ITEM, p.getLocation().add(0, 2.2, 0), 20, 0.3, 0.3, 0.3, 0.05,
+                    new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS));
+            p.sendActionBar(Component.text("◌ O Balão de Cristal estourou!", NamedTextColor.RED));
+            return;
+        }
+    }
+
     public boolean tem(Player p, Acessorio.Especial e) {
         Acessorio[] a = equipados.get(p.getUniqueId());
         if (a == null) return false;

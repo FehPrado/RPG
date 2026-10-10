@@ -97,6 +97,14 @@ public final class Settings {
     public final int estrDistancia;
     public final boolean cidadeAtivada;
     public final int cidadeRegiao, cidadeDistanciaSpawn, cidadeDiasParaVoltar;
+    public final boolean ilhaAtivada;
+    public final int ilhaRegiao, ilhaDistanciaSpawn;
+    public final double ilhaChance;
+    public final boolean profAtivadas, profEscuridao;
+    public final int profAltura;
+    public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
+    public final boolean nomeadasAtivadas;
+    public final double nomeadasChance, nomeadasChanceBau;
     public final double cidadeChance;
 
     // doma (companheiros)
@@ -352,6 +360,19 @@ public final class Settings {
         cidadeChance = Math.max(0, Math.min(1, c.getDouble("estruturas.cidade-submersa.chance", 0.02)));
         cidadeDistanciaSpawn = Math.max(0, c.getInt("estruturas.cidade-submersa.distancia-do-spawn", 800));
         cidadeDiasParaVoltar = Math.max(1, c.getInt("estruturas.cidade-submersa.dias-para-voltar", 7));
+        ilhaAtivada = c.getBoolean("estruturas.ilha-do-ceu.ativada", true);
+        ilhaRegiao = Math.max(500, c.getInt("estruturas.ilha-do-ceu.regiao", 2500));
+        ilhaChance = Math.max(0, Math.min(1, c.getDouble("estruturas.ilha-do-ceu.chance", 0.03)));
+        ilhaDistanciaSpawn = Math.max(0, c.getInt("estruturas.ilha-do-ceu.distancia-do-spawn", 500));
+        profAtivadas = c.getBoolean("profundezas.ativadas", true);
+        profEscuridao = c.getBoolean("profundezas.escuridao", true);
+        profAltura = c.getInt("profundezas.abaixo-de-y", 0);
+        profChanceRaiz = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-raiz-por-chunk", 0.1)));
+        profChancePenumbra = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-penumbra", 0.3)));
+        profChanceCoracao = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-do-coracao", 0.15)));
+        nomeadasAtivadas = c.getBoolean("forja.armas-com-nome.ativadas", true);
+        nomeadasChance = Math.max(0, c.getDouble("forja.armas-com-nome.multiplicador-de-chance", 1.0));
+        nomeadasChanceBau = Math.max(0, Math.min(1, c.getDouble("forja.armas-com-nome.chance-por-bau", 0.05)));
 
         domaXpDomar = c.getDouble("doma.xp-domar", 25);
         domaXpCruzar = c.getDouble("doma.xp-cruzar", 2);

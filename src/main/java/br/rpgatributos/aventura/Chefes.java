@@ -690,6 +690,8 @@ public final class Chefes implements Listener {
         int n = c.nivel();
         e.getDrops().clear();
         e.setDroppedExp(80 * n);
+        ItemStack nomeada = plugin.nomeadas().talvezDeChefe(0.15 + 0.05 * n);
+        if (nomeada != null) e.getDrops().add(nomeada);
 
         List<Player> participantes = new ArrayList<>();
         for (Map.Entry<UUID, Double> en : a.dano.entrySet()) {

@@ -55,7 +55,11 @@ public enum Estrutura {
             6, 7, 4, 14, b -> b.contains("ocean")),
     /** Não é sorteada por chunk: a {@link CidadesSubmersas} escolhe o lugar (uma por região, no mar fundo). */
     CIDADE_SUBMERSA("Cidade Submersa", "a", 0x26C6DA, "Ela adorava Maris. Um dia, o mar a levou de volta.",
-            0, 36, 12, 24, b -> b.contains("ocean"));
+            0, 36, 12, 24, b -> b.contains("ocean")),
+    // ---------- 2.33: o céu ----------
+    /** Não é sorteada por chunk: a {@link IlhasDoCeu} escolhe o lugar (uma por região, em terra firme, lá no alto). */
+    ILHA_DO_CEU("Ilha do Céu", "a", 0x90CAF9, "Lá em cima, o vento ainda lembra de quem morou entre as nuvens.",
+            0, 30, 99, 0, b -> !b.contains("ocean") && !b.contains("river"));
 
     private final String nome, artigo, frase;
     private final TextColor cor;

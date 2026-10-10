@@ -2,3 +2,6 @@ target/
 *.class
 .idea/
 *.iml
+
+# Pacote de referência (direitos do autor, não vai para o git)
+NewDefault*.zip

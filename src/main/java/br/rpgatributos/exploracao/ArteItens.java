@@ -1192,7 +1192,70 @@ final class ArteItens {
                 c('o', 0xFF263238, 'w', 0xFFECEFF1, 'c', 0xFF26C6DA, 'a', 0xFF80DEEA, 'k', 0xFF102027, 'y', 0xFFFFEB3B)));
         l.add(new Arte("echo_shard", "raro_nucleo_arauto", COROA,
                 c('o', 0xFF2A1A3A, 'g', 0xFFFFC107, 'a', 0xFFC77DFF, 'p', 0xFF7C4DFF, 'b', 0xFF40C4FF)));
+        l.add(new Arte("feather", "raro_fragmento_celeste", CELESTE,
+                c('o', 0xFF2E5C7A, 'w', BRANCO, 'h', 0xFFD9F3FF, 'c', 0xFF9FD8F5, 'd', 0xFF5FA8D3)));
+        l.add(new Arte("apple", "ceu_fruta_celeste", FRUTA_CEU,
+                c('o', 0xFF3A2A5A, 'w', BRANCO, 'h', 0xFFE8E0FF, 'p', 0xFFB39DDB, 'd', 0xFF7E57C2, 'g', 0xFF66BB6A, 'k', 0xFF5D4037)));
+        l.add(new Arte("snowball", "ceu_semente_brilhante", SEMENTE_LUZ,
+                c('o', 0xFF5D4A1A, 'w', BRANCO, 'y', 0xFFFFF59D, 'a', 0xFFFFD54F, 'd', 0xFFF9A825)));
     }
+
+    /** Fragmento Celeste: um cristal azul-claro com reflexo branco. */
+    private static final String[] CELESTE = {
+            "................",
+            "..........oo....",
+            ".........ohwo...",
+            "........ohwco...",
+            ".......ohwcco...",
+            "......ohwccdo...",
+            ".....ohhccdo....",
+            "....ohwccdo.....",
+            "...ohwccdo......",
+            "...ohccdo.......",
+            "..ohccdo........",
+            "..ocddo.........",
+            "..oddo..........",
+            "..ooo...........",
+            "................",
+            "................"};
+
+    /** Fruta Celeste: lilás, com brilho e uma folha. */
+    private static final String[] FRUTA_CEU = {
+            "................",
+            ".......k........",
+            "......kgg.......",
+            ".....ooko.......",
+            "....ohwppo......",
+            "...ohwpppdo.....",
+            "...ohppppdo.....",
+            "...opppppdo.....",
+            "...oppppddo.....",
+            "....oppddo......",
+            ".....oddo.......",
+            "......oo........",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    /** Semente Brilhante: um grão dourado que acende. */
+    private static final String[] SEMENTE_LUZ = {
+            "................",
+            "................",
+            ".......w........",
+            "......oyo.......",
+            ".....oyyao......",
+            "....oywyaao.....",
+            "....oyyyaao..w..",
+            "....oyyaado.....",
+            ".w...oyaddo.....",
+            ".....oaaddo.....",
+            "......oddo......",
+            ".......oo.......",
+            "................",
+            "................",
+            "................",
+            "................"};
 
     // =====================================================================
     //  Acessórios
@@ -1333,6 +1396,7 @@ final class ArteItens {
         amuleto(l, "amuleto_guardiao", "prismarine_shard", 0xFF3D6BFF, 0xFFA0C4FF);
         amuleto(l, "amuleto_vida", "golden_apple", 0xFFFF4D6D, 0xFFFFB0C0);
         amuleto(l, "amuleto_fenix", "totem_of_undying", 0xFFFF7A1A, 0xFFFFF04D);
+        amuleto(l, "amuleto_ventos", "feather", 0xFF9FD8F5, 0xFFE1F5FE);
         cinto(l, "cinto_atleta", "lead", 0xFF43A047, 0xFFA5D6A7);
         cinto(l, "cinto_andarilho", "leather", 0xFF8D6E63, 0xFFD7CCC8);
         cinto(l, "cinto_tita", "iron_ingot", 0xFF616161, 0xFFBDBDBD);
@@ -1340,7 +1404,28 @@ final class ArteItens {
                 c('o', 0xFF212121, 'm', 0xFF455A64, 'g', 0xFF607D8B, 'y', 0xFFFFE082, 'f', 0xFFFF9800, 'h', 0xFFFFF8E1)));
         l.add(new Arte("lodestone", "ima_bolso", IMA, c('o', 0xFF212121, 'w', 0xFFE0E0E0, 'r', 0xFFE53935, 'a', 0xFF90CAF9)));
         l.add(new Arte("gold_ingot", "relogio_bolso", RELOGIO, c('o', 0xFF3E2723, 'g', OURO, 'w', 0xFFFFF8E1, 'k', 0xFF212121)));
+        l.add(new Arte("string", "balao_de_cristal", BALAO,
+                c('o', 0xFF4F7FA8, 'c', 0xFF9FD8F5, 'l', 0xFFD9F3FF, 'w', 0xFFFFFFFF, 's', 0xFFEDE6D6, 'b', 0xFF8D6E63, 'd', 0xFF5D4037)));
     }
+
+    /** Balão de Cristal: o globo de vidro claro, as linhas e um cestinho. */
+    private static final String[] BALAO = {
+            ".....oooooo.....",
+            "....occcclwo....",
+            "...occcccllwo...",
+            "...occcccclco...",
+            "...occcccccco...",
+            "...occcccccco...",
+            "....occcccco....",
+            ".....occcco.....",
+            "......oooo......",
+            "......s..s......",
+            ".....s....s.....",
+            ".....s....s.....",
+            "....dbbbbbbd....",
+            "....dbbbbbbd....",
+            ".....dddddd.....",
+            "................"};
 
     // =====================================================================
     //  Lendas (armas e ferramentas; arco, escudo e armaduras ficam com o visual do jogo)
@@ -1742,6 +1827,7 @@ final class ArteItens {
         frutas(l);
         oficios(l);
         estacoesVivas(l);
+        ArteNomeadas.registrar(l);
         return l;
     }
 

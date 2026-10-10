@@ -295,7 +295,7 @@ public final class Topicos {
                 .dica("O /calendario diz o que dá para colher nesta estação.")
                 .cmd("calendario").ligados("plantacoes", "estacoes", "pomar").palavras("coleta colher cogumelo morel amora castanha raiz alga").pronto();
         t("plantacoes", OFICIOS, "Plantações da estação", Material.WHEAT_SEEDS)
-                .texto("8 plantas, 2 por estação: morango, couve-flor, mirtilo, pimenta, uva, abóbora-moranga, couve gelada e nabo-de-neve.",
+                .texto("20 plantas, 5 por estação (o milho vai do verão ao outono e a cebola do inverno à primavera). Numa estufa com teto de vidro, crescem o ano todo.",
                         "Plante na terra arada (clique com as sementes). Elas só crescem na estação delas e com a terra molhada.",
                         "4 fases; farinha de osso adianta uma. Morango, mirtilo e uva rebrotam depois de colher.")
                 .dica("As sementes saem do mato quebrado na estação certa.")
@@ -317,6 +317,20 @@ public final class Topicos {
                         "No santuário do templo acorda o Sumo-Sacerdote. Ele guarda o Coração da cidade (um condutor).")
                 .dica("Ponha o Coração bem no meio da moldura do altar: a cidade desperta. Leve poção de respiração.")
                 .ligados("estruturas", "deuses", "pesca").palavras("naufragio navio cidade submersa mar oceano templo maris condutor coracao sacerdote").pronto();
+        t("ceu", MUNDO, "Ilhas do Céu", Material.FEATHER)
+                .texto("Arquipélagos raros lá no alto: Jardim Suspenso, Observatório Antigo, Forja dos Ventos ou Ninho do Guardião.",
+                        "No chão, um pouco ao lado da ilha, fica a Plataforma de Vento: pise na placa e ela te lança até lá.",
+                        "Não há volta segura. Leve Capa Planadora, Balão de Cristal ou élitro, ou coma uma Fruta Celeste (Queda Lenta).",
+                        "No Ninho mora o Guardião dos Ventos: ele deixa Fragmentos Celestes (Amuleto dos Ventos, na Bancada Alquímica).")
+                .dica("Balão de Cristal: 4 lãs brancas + 4 linhas na Bancada Alquímica. Mais lento que a capa e estoura em 5 usos.")
+                .ligados("estruturas", "profundezas", "acessorios").palavras("ilha ceu nuvem plataforma vento lancar balao capa fruta celeste guardiao ninho fragmento").pronto();
+        t("profundezas", MUNDO, "Profundezas", Material.SHROOMLIGHT)
+                .texto("Abaixo do y 0 o mundo fica escuro de verdade (Visão Noturna ajuda).",
+                        "Raízes de Luz adormecidas brilham de leve nas cavernas fundas: clique no bulbo e ela ilumina a área para sempre.",
+                        "Criaturas da Penumbra roubam corações máximos. Eles voltam ao sol, perto de uma raiz acesa ou com o Elixir da Purificação.",
+                        "Às vezes, acender uma raiz acorda o Coração da Penumbra.")
+                .dica("Arremesse uma Semente Brilhante (das raízes) para iluminar um canto por 2 minutos.")
+                .ligados("ceu", "mitrilo", "alquimia").palavras("profundeza escuro escuridao raiz luz penumbra coracao semente brilhante caverna").pronto();
         t("locais", MUNDO, "Locais Ocultos", Material.CHISELED_DEEPSLATE)
                 .texto("14 ruínas escondidas com um enigma de alavancas e um guardião. O selo dá tesouros e libera classes lendárias.",
                         "O Mapa Rasgado vira uma bússola que aponta para perto deles.")

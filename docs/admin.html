@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.31</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.35</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.31.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.35.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -178,6 +178,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>recordes.yml</code></td><td>Recordes do servidor e as placas de recordes</td></tr>
       <tr><td><code>pomares.yml</code></td><td>Árvores frutíferas e as frutas penduradas</td></tr>
       <tr><td><code>estruturas.yml</code></td><td>Estruturas prontas já construídas (tipo, lugar, quem visitou, guardas, eremita)</td></tr>
+      <tr><td><code>profundezas.yml</code></td><td>Raízes de Luz das profundezas (lugar e se estão acesas). A Penumbra de cada jogador fica no próprio jogador</td></tr>
       <tr><td><code>pacote/RPGAtributos-recursos.zip</code></td><td>Pacote de recursos gerado a cada início (pode apagar: ele é refeito)</td></tr>
       <tr><td><code>pacote/texturas/</code>, <code>pacote/texturas-padrao/</code></td><td>Suas texturas (entram no lugar das originais) e os desenhos originais. Os fundos dos menus são <code>menu_rpg.png</code>, <code>menu_categoria.png</code>, <code>menu_topico.png</code> e <code>menu_jornada.png</code> (176×222)</td></tr>
       <tr><td>No chunk (PDC)</td><td>Posição dos minérios de mitrilo e marcas de "já gerado" (mitrilo, sítios de arqueologia e estruturas)</td></tr>
@@ -207,6 +208,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>forja.so-na-forja-do-ferreiro</code></td><td>true</td><td>false = qualquer bancada forja</td></tr>
         <tr><td><code>forja.anunciar-no-chat-a-partir-de</code></td><td>lendario</td><td>Raridade anunciada no chat</td></tr>
         <tr><td><code>forja.raridades.*</code></td><td>—</td><td>Pesos (nível 0 e máximo) e multiplicador de cada raridade</td></tr>
+        <tr><td><code>forja.armas-com-nome.ativadas</code></td><td>true</td><td>Armas com nome, história e visual próprios (2.35)</td></tr>
+        <tr><td><code>forja.armas-com-nome.multiplicador-de-chance</code></td><td>1.0</td><td>Multiplica a chance de nascer com nome ao forjar (2% no Comum até 45% no Mítico)</td></tr>
+        <tr><td><code>forja.armas-com-nome.chance-por-bau</code></td><td>0.05</td><td>Chance de um baú de estrutura trazer uma já forjada</td></tr>
         <tr><td><code>arcano.dano-em-jogadores</code></td><td>0.6</td><td>Magias fazem 60% do dano em PvP</td></tr>
         <tr><td><code>arcano.anunciar-descoberta</code></td><td>true</td><td>Avisa quando alguém descobre magia secreta</td></tr>
       </tbody></table></div>
@@ -334,6 +338,16 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>estruturas.chance-por-chunk</code></td><td>0.02</td><td>Chance de cada chunk novo tentar receber uma (tenta até 3 tipos; só constrói se o chão servir). Dá mais ou menos 1 a cada 300×300 blocos de terra</td></tr>
         <tr><td><code>estruturas.distancia-minima</code></td><td>160</td><td>Blocos entre duas estruturas</td></tr>
         <tr><td><code>estruturas.so-chunks-novos</code></td><td>true</td><td>Só em terra nunca visitada; false também tenta em chunks antigos sem obra de jogador e fora de territórios</td></tr>
+        <tr><td><code>estruturas.ilha-do-ceu.ativada</code></td><td>true</td><td>Ilhas do Céu (2.33), com a Plataforma de Vento no chão</td></tr>
+        <tr><td><code>estruturas.ilha-do-ceu.regiao</code></td><td>2500</td><td>No máximo uma ilha em cada quadrado desse tamanho</td></tr>
+        <tr><td><code>estruturas.ilha-do-ceu.chance</code></td><td>0.03</td><td>Chance de cada chunk novo de terra firme tentar receber uma</td></tr>
+        <tr><td><code>estruturas.ilha-do-ceu.distancia-do-spawn</code></td><td>500</td><td>Nenhuma ilha mais perto do spawn que isso</td></tr>
+        <tr><td><code>profundezas.ativadas</code></td><td>true</td><td>Raízes de Luz, Penumbra e Coração da Penumbra (2.33)</td></tr>
+        <tr><td><code>profundezas.escuridao</code></td><td>true</td><td>Escuridão abaixo do y das profundezas, longe de uma raiz acesa (Visão Noturna resolve)</td></tr>
+        <tr><td><code>profundezas.abaixo-de-y</code></td><td>0</td><td>Onde começam as profundezas</td></tr>
+        <tr><td><code>profundezas.chance-de-raiz-por-chunk</code></td><td>0.1</td><td>Chance de um chunk novo ganhar uma Raiz de Luz numa caverna funda</td></tr>
+        <tr><td><code>profundezas.chance-de-penumbra</code></td><td>0.3</td><td>Chance de um monstro nascido no escuro ser da Penumbra (rouba 1 coração máximo por golpe, até 5)</td></tr>
+        <tr><td><code>profundezas.chance-do-coracao</code></td><td>0.15</td><td>Chance de acender uma raiz acordar o Coração da Penumbra</td></tr>
       </tbody></table></div>
       <p>Nunca nascem em território, em cima de estrutura do Minecraft, na água ou em chão muito irregular. Cada uma cabe num chunk só. <span class="cmd">/rpgadmin estruturas</span> mostra quantos lugares foram recusados e por quê.</p>
     </div>
@@ -533,6 +547,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin bebida &lt;tipo&gt; [grau 0-3]</span></td><td>Dá uma bebida do barril (3 = Lendária)</td></tr>
       <tr><td><span class="cmd">/rpgadmin muda|fruta &lt;fruta&gt; [qtd]</span></td><td>Mudas e frutas do pomar</td></tr>
       <tr><td><span class="cmd">/rpgadmin estrutura &lt;tipo&gt;</span></td><td>Constrói a estrutura à sua frente (console: &lt;tipo&gt; &lt;mundo&gt; &lt;x&gt; &lt;z&gt;)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin nomeada &lt;arma|aleatoria&gt; [raridade]</span></td><td>Uma arma com nome já forjada (padrão: Épica)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin raiz</span> · <span class="cmd">coracaopenumbra</span> · <span class="cmd">penumbra</span></td><td>Planta uma Raiz de Luz no chão embaixo de você · acorda o Coração da Penumbra · zera a sua Penumbra</td></tr>
+      <tr><td><span class="cmd">/rpgadmin itemceu       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>lt;fruta_celeste|semente_brilhante      <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>gt; [qtd]</span></td><td>Fruta Celeste ou Semente Brilhante (o Fragmento Celeste vem com <span class="cmd">/rpgadmin raro fragmento_celeste</span>)</td></tr>
       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td><td>Lista as mais perto · tira a mais perto do registro (os blocos ficam)</td></tr>
       <tr><td><span class="cmd">/rpgadmin mercador</span></td><td>O Mercador Itinerante aparece perto de você</td></tr>
       <tr><td><span class="cmd">/rpgadmin encontro [carroca|bandidos|viajante|estrela]</span></td><td>Começa um encontro perto de você</td></tr>
@@ -599,6 +616,58 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Pronta: a placa aparece; clique nela, peça a vistoria. Os moradores ganham casa (veja no menu de cada um).</li>
         <li>Botão direito num projeto (do seu jeito): construa algo e peça a vistoria; o menu mostra ✔/✖ de cada exigência.</li>
         <li>Torre de Vigia pronta: o território cresce 3×3 chunks. Quebre a placa 2 vezes: os chunks saem.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Armas com nome (2.35)</h3>
+      <ol>
+        <li>Suba o pacote novo.</li>
+        <li><span class="cmd">/rpgadmin nomeada presa_do_inverno</span>: no inventário, o desenho; na mão, o modelo 3D. Troque de postura: a pegada muda e o 3D acompanha.</li>
+        <li>Jogue a espada no chão e ponha numa moldura: 3D nos dois.</li>
+        <li><span class="cmd">/rpgadmin nomeada asa_de_zefira</span> e puxe o arco: o desenho muda nas 3 fases. Uma besta: carregue flecha e foguete.</li>
+        <li><span class="cmd">/rpgadmin nomeada vara_de_coral</span>: lance e recolha (a linha some quando está lançada).</li>
+        <li>Refine uma arma com nome na Forja: o nome (com o +1) e a história continuam.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Domador e visual (2.35)</h3>
+      <ol>
+        <li>Suba o pacote novo (armaduras de cavalo e lobo e as peças 3D).</li>
+        <li>Num cavalo companheiro, ponha Sela, Alforje, Farol e Asas no Altar do Domador: as peças aparecem no bicho e as asas batem quando ele voa.</li>
+        <li>Ponha Chamas (ou Couraça, Netherite, Coração do Mar): a armadura aparece. Tente tirar pelo inventário do cavalo ou com tesoura no lobo: não sai. Mate o bicho: ela não cai.</li>
+        <li>Ponha uma armadura de cavalo de verdade: ela fica no lugar da de visual.</li>
+        <li>Olhe para um companheiro e use <span class="cmd">/rpgadmin companheironivel 25</span>: estágio III com auréola e partículas. Um cavalo sem componente de armadura vira Corcel Celeste (branco e dourado).</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Céu e Profundezas (2.33)</h3>
+      <ol>
+        <li>Suba o pacote novo (Balão, Fragmento e Fruta Celeste, Semente Brilhante, Amuleto dos Ventos).</li>
+        <li><span class="cmd">/rpgadmin estrutura ilha_do_ceu</span>: a ilha sai lá no alto em 1 a 2 s (o tipo é sorteado). O console mostra onde ficou a Plataforma de Vento.</li>
+        <li>Sem Capa, pise na placa de pressão da plataforma: aparece o aviso e você é lançado até a ilha, sem dano no pouso.</li>
+        <li>Faça um Balão de Cristal (Bancada Alquímica: 4 lãs brancas + 4 linhas), ponha no bolso e pule da ilha: plane, veja os usos baixarem e o balão estourar no 5º voo.</li>
+        <li>Num Ninho do Guardião, pise no ninho: o Guardião dos Ventos aparece com barra de chefe. No Jardim, espere embaixo da árvore: cai uma Fruta Celeste.</li>
+        <li>Desça abaixo do y 0: a tela escurece. Use <span class="cmd">/rpgadmin raiz</span> numa caverna e clique no bulbo: a caverna acende, a escuridão some e saem Sementes Brilhantes.</li>
+        <li>Apanhe de um monstro de nome roxo (da Penumbra): a vida máxima cai 1 coração. Suba ao sol ou beba o Elixir da Purificação: volta.</li>
+        <li><span class="cmd">/rpgadmin coracaopenumbra</span>: o chefe com barra roxa, que chama zumbis da Penumbra.</li>
+        <li>Config: <code>estruturas.ilha-do-ceu</code> e <code>profundezas</code>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Jeito, pedidos e Cavaleiro (2.32)</h3>
+      <ol>
+        <li>Clique num morador: o menu mostra o <b>Jeito</b> (1 ou 2 traços). Moradores antigos ganham traços na primeira carga.</li>
+        <li>Rode <span class="cmd">/rpgadmin turnocolonia</span> várias vezes (2% por morador por turno, até 2 abertos): aparece um <b>❗</b> sobre a cabeça e a mensagem do pedido.</li>
+        <li>Pegue o item pedido e clique no botão do pedido (no meio de baixo do menu do morador): sai do inventário, a felicidade sobe 8% e ele fica contente.</li>
+        <li>Mercador (mesa de cartografia): deixe mais de 2 packs de trigo no depósito e rode um turno de dia: some trigo e entram esmeraldas. Diamantes nunca são vendidos.</li>
+        <li>Bibliotecário (atril): ponha 1 livro e 4 lápis-lazúli no depósito: sai um livro encantado.</li>
+        <li><span class="cmd">/rpgadmin nivelcolonia 4</span>, um bloco de alvo no território e a profissão Cavaleiro: ele aparece montado. Com armadura de cavalo no depósito, Exército → Shift + clique: o cavalo veste.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Vida no campo (2.32)</h3>
+      <ol>
+        <li>Suba o pacote novo (artesanato, trufa, pratos e plantações novas).</li>
+        <li>Agachado + mão vazia num animal da fazenda: ele vira seu. <span class="cmd">/animais</span> lista os corações. Faça carinho e dê comida; no dia seguinte veja o produto.</li>
+        <li>Olhe um vaso decorado e use <span class="cmd">/rpgadmin tacho</span>. Clique com leite, fruta, legume, ovo ou trufa: espere e clique de novo para pegar. Confira as texturas.</li>
+        <li><span class="cmd">/rpgadmin semente &lt;planta&gt;</span> e plante. Troque a estação com <span class="cmd">/rpgadmin estacao</span>: fora de época ela murcha; numa estufa com teto de vidro, não.</li>
+        <li>Plante 9 couves-flores, melões ou abóboras-morangas em 3×3 e deixe amadurecer: às vezes viram uma gigante.</li>
+        <li>Cozinhe um dos 13 pratos novos (pizza da roça, risoto de trufa...).</li>
       </ol>
     </div>
     <div class="card"><h3>Portais</h3>
@@ -848,7 +917,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.31 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<footer>RPGAtributos 2.35 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

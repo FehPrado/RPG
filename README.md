@@ -17,7 +17,7 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **portais** que se abrem pelo mundo e **transbordam** monstros se ninguém os fechar, a classe única **Soberano das Sombras** e a **Torre Infinita** com ranking semanal;
 - **combos de arma**: 3 cliques com a arma na mão soltam golpes (42 no total), com Vigor e proficiência por tipo de arma;
 - **fé e mistério**: seis deuses com santuários, oferendas e milagres, constelações observadas pela luneta, transmutação alquímica e runas gravadas nos equipamentos;
-- **exploração**: Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
+- **exploração**: **Ilhas do Céu** (lançado por uma Plataforma de Vento) e as **Profundezas** escuras com Raízes de Luz e a Penumbra, Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
 - **progressão extra**: **talentos** em 4 árvores, **renascer** com bônus permanente (até ★★★★★) e **evolução dos companheiros** (Lobo → Lobo Alfa → Lobo das Sombras);
 - **detalhes do dia a dia**: barco, carrinho, vara, élitro e armadura de cavalo forjados, Boneco de Treino, Pedra de Amolar, Fogueira de Acampamento (sentar e descansar), Bebedouro, troféus de chefe, túmulo ao morrer, animais raros, ninhos, recordes e o Diário de Viagem;
 - **vida no mundo**: Barril de Envelhecimento, apicultura, Canteiro de Ervas, Álbum de Cartas, Mercador Itinerante, encontros na estrada, segredos, flechas especiais e frascos de arremesso;
@@ -98,6 +98,7 @@ Até +5, falhar só gasta o material. De +6 a +8, o item perde 1 nível. No +9 e
 **Conjuntos:** vestindo as 4 peças de armadura forjadas, a raridade mais baixa entre elas dá um bônus extra. Vai de +1 de armadura (Comum) até +5 de armadura, +4 corações, +10% de velocidade, Regeneração e Resistência (Mítico).
 
 **Mesa de ferraria:** subir um item forjado para Netherite mantém a raridade, em qualquer mesa. Item achado no mundo é forjado ao ser melhorado numa mesa a até 6 blocos de uma Forja do Ferreiro.
+**Armas com nome:** às vezes a peça já nasce com **nome, história e visual próprios**: 2% das Comuns forjadas, 5% das Raras, 10% das Épicas, 18% das Únicas, 30% das Lendárias e 45% das Míticas (`forja.armas-com-nome`). Elas também aparecem em **5% dos baús** de estruturas (do plugin e do jogo) e com os chefes (Altar, Sumo-Sacerdote, Guardião dos Ventos e Coração da Penumbra), já forjadas. São 25: **espadas** (Presa do Inverno, Lâmina de Thalassa, Aurora de Aerília, Juramento do Fortim, Brasa dos Anões, Sussurro da Penumbra), **machados e maças** (Talha-Raízes, Fúria do Saqueador, Machado do Faroleiro, Sino de Maris, Martelo do Eremita), **arcos e bestas** (Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Besta do Capitão, Besta Glacial) e **ferramentas** (Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral). **Só muda a aparência:** a força continua sendo a da raridade. Com o pacote de recursos, no inventário aparece o desenho delas e na mão, no chão, no suporte e na moldura um **modelo 3D** (espadas, machados, maças e ferramentas; os arcos e as bestas mudam de desenho conforme a corda é puxada). O nome e a história ficam ao refinar e reforjar.
 
 ## Bancada de Reciclagem
 
@@ -348,18 +349,39 @@ Um jeito simples de ter uma vila com moradores trabalhando, no estilo Minecoloni
 
 | Profissão | Posto (no território) | Produz | Colônia nível |
 |---|---|---|---|
-| Fazendeiro | Composteira | Trigo, cenoura, batata e beterraba das plantações em volta (com qualidade ★, às vezes uma variedade rara) | 1 |
+| Fazendeiro | Composteira | Trigo, cenoura, batata e beterraba das plantações em volta (com qualidade ★, às vezes uma variedade rara), frutas maduras do pomar e plantações da estação | 1 |
 | Lenhador | Bancada de flechas | Troncos (do tipo de árvore que houver perto), mudas e maçãs | 1 |
 | Pescador | Barril (com água perto) | Peixes com qualidade, às vezes peixes raros | 1 |
+| Construtor | Bancada de trabalho | Ergue as construções dos projetos (veja abaixo) | 1 |
 | Minerador | Cortador de pedras | Pedra, carvão, minérios brutos e, às vezes, diamante | 2 |
 | Cozinheiro | Cozinha | Pratos com os ingredientes do depósito | 2 |
+| Mercador | Mesa de cartografia | Vende na estrada a **sobra** do depósito (o que passa de 1 pack, ou de 2 de comida e 3 de pedregulho e troncos) e põe **esmeraldas** no depósito: até 1 + nível÷3 por turno. Nunca vende diamantes, itens do plugin nem o que não está na tabela de preços | 2 |
 | Ferreiro | Forja do Ferreiro | Conserta equipamentos do depósito e funde minérios brutos | 3 |
 | Tratador | Altar do Domador | Couro, lã, ovos, penas e carne | 3 |
+| Bibliotecário | Atril | 3 canas → papel; 3 papéis + 1 couro → livro; 1 livro + 4 lápis-lazúli → **livro encantado** ao acaso (o nível do encantamento sobe com o do bibliotecário; do nível 7 em diante, às vezes um raro como Remendo) | 3 |
 | Alquimista | Bancada Alquímica | Pó Arcano e Óleo de Peixe | 4 |
 
 Cada morador precisa do **seu** posto: 2 fazendeiros precisam de 2 composteiras.
 
 **Níveis da colônia** (Prefeitura → Melhorar, pago com o depósito): cada nível libera +3 moradores (até 15) e novas profissões. O nível 5 dá +20% de produção. Os moradores ficam protegidos de outros jogadores e não fazem comércio. Se a Prefeitura for quebrada, eles viram aldeões comuns.
+
+### Jeito e pedidos dos moradores
+
+Cada morador chega com **1 ou 2 traços** (o "jeito" dele, no menu do morador), que nunca se contradizem:
+
+| Traço | Efeito |
+|---|---|
+| Dedicação / Preguiça | Produz 15% a mais / a menos |
+| Apetite grande / Come pouco | Come quase o dobro (mas pratos da Cozinha o deixam radiante) / pouco mais da metade |
+| Bom humor / Mau humor | A colônia fica mais / menos feliz |
+| Coragem / Medo | Como soldado: +20% / -15% de vida e dano |
+| Acorda cedo | Trabalha também no começo e no fim da noite |
+| Curiosidade | Ganha 50% a mais de XP |
+| Sorte | Às vezes rende um item a mais |
+
+**Pedidos pessoais:** de vez em quando um morador pede alguma coisa e um **❗** aparece sobre a cabeça dele (no máximo 2 pedidos abertos por colônia). Metade das vezes é algo da profissão dele (enxada de ferro para o Fazendeiro, vara de pescar para o Pescador, 16 carvões para o Ferreiro, escudo para o Soldado, maçãs para o cavalo do Cavaleiro...), e na outra metade algo de qualquer um: um prato da Cozinha, flores, frutas do pomar, uma coleta da estação, mel, uma bebida do barril, uma lanterna, um livro. Clique no morador e no botão do pedido para entregar (sai do seu inventário; qualquer jogador da colônia pode atender).
+- **Atendido:** a colônia ganha **+8% de felicidade** e o morador fica **contente** (+15% de produção por 20 turnos).
+- **Esquecido** (o prazo é de 30 turnos, ~30 min com a colônia carregada): **-5% de felicidade** e o morador fica **chateado** (-10% por 10 turnos).
 
 ### Construções (projetos)
 
@@ -408,7 +430,7 @@ No estilo MineColonies: a colônia cresce com construções que os **Construtore
 | Minerador | Mina | Cortador de pedras | 2 |
 | Mercador | Mercado | Mesa de cartografia | 2 |
 | Cozinheiro | Taverna | Cozinha (faça o ritual no defumador) | 2 |
-| Bibliotecário | Biblioteca | Atril | 2 |
+| Bibliotecário | Biblioteca | Atril | 3 |
 | Soldado, Arqueiro, Cavaleiro | Quartel | Alvo (4 vagas cada) | 2 |
 | Ferreiro | Ferraria | Forja do Ferreiro (ritual na bigorna) | 3 |
 | Tratador | Estábulo | Altar do Domador (ritual no fardo de feno) | 3 |
@@ -426,11 +448,12 @@ Com as duas opções em `false`, volta o jeito antigo: posto em qualquer lugar d
 
 ### Exército
 
-Duas profissões a mais na colônia: **Soldado** (espada, liberado no nível 2) e **Arqueiro** (arco, nível 3). O posto delas é o **Quartel**, um **bloco de alvo** perto da Prefeitura, e cada um abriga 4 soldados.
+Três profissões de guerra na colônia: **Soldado** (espada, liberado no nível 2), **Arqueiro** (arco, nível 3) e **Cavaleiro** (nível 4). O posto delas é o **Quartel**, um **bloco de alvo** perto da Prefeitura, e cada um abriga 4 soldados.
+- O **Cavaleiro** luta **montado** num cavalo selado da colônia: +10 de vida e +1,5 de dano, enxerga inimigos mais longe e o cavalo o leva até eles. Se o cavalo morrer, ele pega outro em 2 minutos. O cavalo é protegido como o próprio Cavaleiro e some junto com ele.
 - O morador **veste a armadura**: vira um guerreiro com o uniforme na **cor do reino**. Não queima no sol e os aldeões não têm medo dele.
 - Os soldados atacam monstros sempre. Na **guerra**, também atacam os jogadores e os soldados do reino inimigo. Nunca atacam aldeões, aliados nem o dono.
 - **Ordens** (Prefeitura → Exército, clique): **guardar** a colônia, **seguir você** ou **atacar** o Marco inimigo mais perto (só na guerra).
-- **Shift + clique** no Exército equipa todos com as **melhores armas e armaduras do depósito**. Itens forjados contam, com os bônus deles.
+- **Shift + clique** no Exército equipa todos com as **melhores armas e armaduras do depósito**. Itens forjados contam, com os bônus deles. O cavalo do Cavaleiro também ganha a melhor armadura de cavalo do depósito.
 - Soldados sobem de nível ao vencer inimigos (mais vida e dano) e se curam quando descansam.
 
 ## Reinos e guerras
@@ -488,6 +511,11 @@ Duas profissões a mais na colônia: **Soldado** (espada, liberado no nível 2) 
 | Pele de Netherite | lingote de netherite | 60 | +6 armadura, +4 resistência, quase não é empurrado, imune a fogo |
 
 **Exemplo:** vaca de cogumelo + Sela + Asas = montaria voadora (Doma 50). Patrulhar + Coletor = um ajudante que recolhe os itens de uma fazenda.
+
+**Visual (com o pacote de recursos):** os componentes aparecem no bicho.
+- **Peças 3D que acompanham o companheiro:** Sela (quando ele não tem a sela do próprio jogo), Alforje (bolsas dos dois lados), Farol (uma lanterna acesa no lombo) e **Asas** (abertas nas costas, batendo quando ele está no ar).
+- **Armaduras próprias em cavalos e lobos:** Couraça (aço com rebites), Pele de Netherite (escura com brilho roxo), Chamas (fogo) e Coração do Mar (ondas turquesa). Vale a do componente mais forte. É só aparência: a proteção continua vindo do componente, ela não se gasta, não cai quando o bicho morre e não sai com tesoura nem pelo inventário do cavalo. Se você puser uma armadura de verdade no cavalo ou no lobo, a sua fica no lugar.
+- Chamas soltam faíscas de fogo e o Coração do Mar pinga água.
 
 - Componentes precisam do item **inteiro** (sem desgaste). Tirar devolve o item; se o companheiro morrer, componentes e alforje caem no chão.
 - A vida, a armadura e o dano dos companheiros crescem com a Doma do dono. Ninguém da party (nem outros jogadores, onde não há PvP) fere os seus companheiros.
@@ -742,6 +770,7 @@ Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direi
 - **Esquiva:** dois toques rápidos em **A**, **D** ou **S** fazem um salto rápido para o lado ou para trás, com um instante de invulnerabilidade. Gasta 15 de vigor e tem 1,2 s de recarga. Não funciona agachado, montado ou voando.
 - **Gancho de Escalada:** bancada com **1 vara de pescar + 1 gancho de armadilha + 3 lingotes de ferro**. Lance num bloco e recolha: você é puxado até lá (até 40 blocos), sem dano de queda. Num monstro, puxa ele até você; num chefe ou jogador, puxa você até ele.
 - **Capa Planadora:** acessório de bolso feito na Bancada Alquímica (4 membranas de phantom, 6 penas, 2 couros). No ar, aperte **pular** para planar: você desce devagar para onde olha e não leva dano de queda. Pule de novo ou agache para soltar.
+- **Balão de Cristal:** a versão barata da capa (Bancada Alquímica: 4 lãs brancas + 4 linhas). Abre do mesmo jeito, desce ainda mais devagar, mas anda bem mais devagar e **estoura no fim do 5º voo** (a descrição mostra os usos que restam).
 - **Mochila** (`/mochila`): um baú pessoal que começa com 1 fileira e ganha mais uma a cada 150 níveis somados, até 6 (54 espaços). Fica salva no jogador e não cai quando ele morre.
 
 ## Equilíbrio de criaturas
@@ -982,6 +1011,36 @@ Os guardas aparecem só uma vez. Configure em `estruturas:` no config (chance, d
 
 Para respirar, valem as coisas do jogo: poção de respiração, Respiração Aquática no capacete e condutores. Configure em `estruturas.cidade-submersa` (região, chance, distância do spawn e dias para os guardas voltarem).
 
+### Ilhas do Céu
+
+Arquipélagos raros lá no alto (do y 200 até o teto do mundo, no máximo um a cada 2500 × 2500 blocos, em terra firme): uma ilha principal com uma "raiz" de pedra pendurada embaixo, 3 ilhotas em volta, uma ponte de cordas e uma construção:
+
+| Ilha | O que tem |
+|---|---|
+| 🌸 **Jardim Suspenso** | A **Árvore Celeste** (cerejeira com copa de azaleia florida) e um laguinho. De tempos em tempos (5 min) a árvore solta uma **Fruta Celeste** para quem está embaixo |
+| 🔭 **Observatório Antigo** | Anel de pilares de quartzo, piso de calcita e o púlpito do astrônomo; baú com luneta, Sal Lunar e Pó Arcano |
+| ⚒ **Forja dos Ventos** | Forja em ruínas (alto-forno, bigorna, ferraria) e um moinho de pás de lã; baú com Fragmento de Forja e lingotes |
+| 🪺 **Ninho do Guardião** | Um ninho enorme com ovos. Quem pisa nele acorda o **Guardião dos Ventos** (breeze gigante de 320 de vida, com barra de chefe; com menos da metade da vida, as rajadas jogam todo mundo para o alto). Deixa **Fragmentos Celestes**, Frutas Celestes, membranas, varas de breeze e esmeraldas, e volta depois de `cidade-submersa.dias-para-voltar` dias |
+
+Todo baú das ilhas tem lã e linha (para o Balão de Cristal).
+
+**Como subir:** no chão, a 28 blocos da ilha (do lado sem ilhotas, em chão plano e aberto), fica a **Plataforma de Vento**: um patamar de pedra com 4 lanternas azuis, uma placa de aviso e uma **placa de pressão** no meio. Pisou, você é **lançado** até 12 blocos acima da ilha e empurrado para dentro dela (esse pouso não machuca).
+- **Não há volta segura.** Quem subiu sem **Capa Planadora**, **Balão de Cristal** ou élitro só desce caindo (a placa e a tela avisam). Água embaixo, pérola do ender ou uma **Fruta Celeste** (Queda Lenta por 90 s e pulo mais alto por 60 s) também resolvem.
+- **Fragmento Celeste** (material raro) → na Bancada Alquímica: **Amuleto dos Ventos** (+6 blocos de queda segura e +8% de velocidade).
+- Os sonhos também apontam para as ilhas.
+
+Configure em `estruturas.ilha-do-ceu` (região, chance e distância do spawn).
+
+### Profundezas
+
+Abaixo do **y 0** o mundo fica escuro de verdade: longe de uma Raiz de Luz acesa, você fica com **Escuridão** (a Visão Noturna resolve).
+- **Raízes de Luz:** nascem adormecidas nas cavernas fundas (um tronco de raízes de mangue com um bulbo marrom em cima, que brilha de leve quando você chega perto). **Clique no bulbo:** ela acende para sempre, para todos, e ilumina a caverna em volta (cerca de 20 blocos); até 40 blocos dela não há escuridão nem Penumbra. Quem acende ganha XP e **Sementes Brilhantes**.
+- **Semente Brilhante:** arremesse (como bola de neve) e o lugar onde ela cai fica iluminado por 2 minutos.
+- **Penumbra:** parte dos monstros que nascem no escuro das profundezas é **da Penumbra** (nome roxo). Cada golpe deles **rouba 1 coração máximo** (até 5). Os corações voltam **ao sol** (1 a cada 10 s), **perto de uma raiz acesa**, ao acender uma raiz, ao morrer ou com o **Elixir da Purificação**.
+- **Coração da Penumbra:** às vezes (15%) acender uma raiz acorda o chefe (esqueleto wither gigante de 350 de vida, com barra de chefe, que rouba corações e chama zumbis da Penumbra). Deixa Sementes Brilhantes, Fragmento de Forja, Pedra de Proteção, fragmentos de eco e às vezes Essência Primordial.
+
+Configure em `profundezas` (ligar, escuridão, altura, chance de raiz por chunk, de Penumbra e do Coração).
+
 ### Pacote de recursos do servidor
 
 O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip`) com as texturas do minério e dos itens de mitrilo, do **Cajado Arcano**, do **Gancho de Escalada** (que muda quando é lançado), da **Capa Planadora**, da **Ferradura**, do **Ninho de Pássaro**, dos **12 peixes raros**, dos **16 pratos da Cozinha**, das **variedades raras** (e das sementes de trigo e beterraba), dos **componentes alquímicos**, dos **12 elixires** (cada um com o seu frasco) , das **18 gemas** (bruta, lapidada e perfeita), dos **materiais raros e núcleos dos chefes**, dos **acessórios**, de **7 lendas** (as armas e ferramentas; o arco, o escudo e as armaduras ficam com o visual do jogo, porque têm animação ou acabamentos que o pacote não pode copiar) e dos itens novos: bebidas, cartas, flechas, frascos, méis e ervas. A plantação no chão continua com o visual do jogo: só os itens mudam. Ele é **opcional**: sem ele tudo funciona com a aparência do jogo (o minério parece um bloco de cogumelo, o lingote parece ferro, o cajado parece uma vara de breeze...).
@@ -1022,6 +1081,8 @@ Os companheiros ganham XP lutando (5 por monstro, 20 por Elite, 60 por chefe), a
 | ★★★ III | 25 | +25% de tamanho, mais +15%, Golpe Feroz com 25% e o **Vínculo Ancestral**: o dono a até 12 blocos recebe 8% menos dano |
 
 Quem não tem nome dado pelo jogador ganha o nome do estágio: Lobo Alfa → **Lobo das Sombras**, Cavalo → Corcel de Guerra → **Corcel Celeste**, Golem de Ferro → Golem de Guerra → **Colosso de Ferro**, Gato → Gato Selvagem → **Pantera Sombria**... (as outras criaturas viram "Veterano" e "Ancestral"). O nível e o estágio aparecem no `/pets`. Libertar o companheiro zera a evolução.
+
+**Evolução visível:** no estágio II o companheiro solta um pó prateado; no III, pó dourado, uma **auréola** dourada girando sobre a cabeça e partículas da própria criatura (fumaça no Lobo das Sombras, chamas azuis na Raposa Espiritual, flocos no Urso do Inverno Eterno, faíscas na Ave do Trovão...). O **Corcel Celeste** ganha uma armadura branca e dourada e o **Lobo das Sombras** uma roxa-escura (se não tiverem a de um componente).
 ## Detalhes do dia a dia
 
 ### Mais coisas na Forja
@@ -1214,9 +1275,9 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | Tipo | Acessórios |
 |---|---|
 | Anéis | Vigor (+2 ❤), Força (+1 dano), Vento (+5% velocidade), Marés (respiração aquática), Brasas (resistência ao fogo), Minerador (Pressa), Fortuna (+sorte), Sábio (+5% XP em tudo) |
-| Amuletos | Mana (+40 mana, +1/s), Guardião (+2 armadura, +1 resistência), Vida (Regeneração), **Fênix** (escapa da morte a cada 10 minutos) |
+| Amuletos | Mana (+40 mana, +1/s), Guardião (+2 armadura, +1 resistência), Vida (Regeneração), **Fênix** (escapa da morte a cada 10 minutos), **Ventos** (+6 de queda segura e +8% de velocidade; 2 Fragmentos Celestes) |
 | Cintos | Atleta (pulo e queda segura), Andarilho (sobe blocos sem pular), Titã (+2 ❤ e resistência a repulsão) |
-| Bolso | **Lanterna de Bolso** (ilumina em volta, sem colocar blocos), Ímã (puxa itens do chão), Relógio (agachado: hora, coordenadas e bioma), **Capa Planadora** (no ar, pule para planar) |
+| Bolso | **Lanterna de Bolso** (ilumina em volta, sem colocar blocos), Ímã (puxa itens do chão), Relógio (agachado: hora, coordenadas e bioma), **Capa Planadora** (no ar, pule para planar), **Balão de Cristal** (4 lãs brancas + 4 linhas: plana mais devagar e estoura em 5 usos) |
 
 ## Guarda-roupa
 
@@ -1399,6 +1460,11 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin encontro [carroca\|bandidos\|viajante\|estrela]` | Começa um encontro perto de você |
 | `/rpgadmin estrutura <tipo>` | Constrói a estrutura à sua frente (pelo console: `<tipo> <mundo> <x> <z>`) |
 | `/rpgadmin estruturas` | Lista as estruturas mais perto de você |
+| `/rpgadmin nomeada <arma ou aleatoria> [raridade]` | Uma arma com nome já forjada (padrão: Épica) |
+| `/rpgadmin raiz` | Planta uma Raiz de Luz no chão embaixo de você (precisa de 5 blocos de ar em cima) |
+| `/rpgadmin coracaopenumbra` | O Coração da Penumbra aparece à sua frente |
+| `/rpgadmin penumbra` | Zera a sua Penumbra |
+| `/rpgadmin itemceu <fruta_celeste|semente_brilhante> [qtd]` | Dá Fruta Celeste ou Semente Brilhante (o Fragmento Celeste vem com `/rpgadmin raro fragmento_celeste`) |
 | `/rpgadmin esquecerestrutura` | Tira do registro a estrutura mais perto (os blocos ficam) |
 | `/rpgadmin reload` | Recarrega o config |
 
@@ -1408,7 +1474,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.31.1.jar`.
+3. O plugin fica em `target/RPGAtributos-2.35.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
 

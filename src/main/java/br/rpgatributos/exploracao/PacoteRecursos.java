@@ -220,6 +220,8 @@ public final class PacoteRecursos implements Listener {
         if (e != null) return "elixir_" + e.id();
         var raro = br.rpgatributos.aventura.Raro.de(i);
         if (raro != null) return "raro_" + raro.id();
+        var ceu = ItemCeu.de(i);
+        if (ceu != null) return "ceu_" + ceu.id();
         String lenda = i.getPersistentDataContainer().get(K_LENDA, org.bukkit.persistence.PersistentDataType.STRING);
         if (lenda != null) return "lenda_" + lenda.toLowerCase(java.util.Locale.ROOT);
         var erva = br.rpgatributos.vida.Erva.de(i);
@@ -349,6 +351,43 @@ public final class PacoteRecursos implements Listener {
             }
         }
         f.put("assets/minecraft/items/fishing_rod.json", texto(vara()));
+        // Armas com nome em 3D (na mão, no chão, no suporte e na moldura), com as pegadas das posturas.
+        for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
+            if (!ArteNomeadas3D.tem3D(n.categoria())) continue;
+            String v = n.visual();
+            f.put("assets/rpgatributos/models/item/" + v + "_3d.json", texto(ArteNomeadas3D.modelo(n, false)));
+            if (n.categoria() == br.rpgatributos.forja.Categoria.VARA) {
+                f.put("assets/rpgatributos/models/item/" + v + "_cast_3d.json", texto(ArteNomeadas3D.modelo(n, true)));
+            }
+            for (String pg : List.of("ofensiva", "defensiva", "agil", "duelista", "carrasco", "colosso")) {
+                if (PEGADAS.containsKey(pg)) {
+                    f.put("assets/rpgatributos/models/item/postura/" + v + "_3d_" + pg + ".json", texto(modeloPegada("rpgatributos:item/" + v + "_3d", pg)));
+                }
+            }
+        }
+        // Arcos, bestas e varas com nome: modelos do jogo (mesma posição na mão), textura própria em cada fase.
+        f.put("assets/minecraft/items/bow.json", texto(arcos()));
+        f.put("assets/minecraft/items/crossbow.json", texto(bestas()));
+        for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
+            String v = n.visual();
+            switch (n.categoria()) {
+                case ARCO -> {
+                    for (String s : new String[]{"", "_pulling_0", "_pulling_1", "_pulling_2"}) {
+                        f.put("assets/rpgatributos/models/item/" + v + s + ".json", texto(itemComPai("minecraft:item/bow", "rpgatributos:item/" + v + s)));
+                    }
+                }
+                case BESTA -> {
+                    for (String s : new String[]{"", "_pulling_0", "_pulling_1", "_pulling_2", "_arrow", "_firework"}) {
+                        f.put("assets/rpgatributos/models/item/" + v + s + ".json", texto(itemComPai("minecraft:item/crossbow", "rpgatributos:item/" + v + s)));
+                    }
+                }
+                case VARA -> {
+                    f.put("assets/rpgatributos/models/item/" + v + ".json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/" + v)));
+                    f.put("assets/rpgatributos/models/item/" + v + "_cast.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/" + v + "_cast")));
+                }
+                default -> { }
+            }
+        }
         f.put("assets/rpgatributos/models/item/gancho.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/gancho")));
         f.put("assets/rpgatributos/models/item/gancho_lancado.json", texto(itemComPai("minecraft:item/handheld_rod", "rpgatributos:item/gancho_lancado")));
 
@@ -366,6 +405,10 @@ public final class PacoteRecursos implements Listener {
         texturas.put("item/ferradura", desenho(FERRADURA, CORES_FERRADURA));
         texturas.put("item/ninho_de_passaro", desenho(NINHO, CORES_NINHO));
         for (ArteItens.Arte a : ArteItens.todas()) texturas.putIfAbsent("item/" + a.id(), desenho(a.desenho(), a.cores()));
+        for (ArteNomeadas.Desenho d : ArteNomeadas.desenhos()) texturas.putIfAbsent("item/" + d.id(), desenho(d.linhas(), d.cores()));
+        for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
+            if (ArteNomeadas3D.tem3D(n.categoria())) texturas.put("item/" + n.visual() + "_cores", ArteNomeadas3D.cores(ArteNomeadas.paleta(n)));
+        }
         File padrao = new File(pasta, "texturas-padrao"), proprias = new File(pasta, "texturas");
         if (!padrao.exists() && !padrao.mkdirs()) throw new IOException("não criei a pasta " + padrao);
         if (!proprias.exists() && proprias.mkdirs()) {
@@ -388,6 +431,8 @@ public final class PacoteRecursos implements Listener {
             f.put("assets/rpgatributos/textures/" + t.getKey() + ".png", textura(new File(proprias, nome), original));
         }
         f.put("assets/rpgatributos/font/menus.json", texto(fonteMenus()));
+        // Domador: armaduras próprias de cavalo e lobo e as peças 3D dos companheiros.
+        f.putAll(br.rpgatributos.domador.VisualDomador.arquivosDoPacote());
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try (ZipOutputStream zip = new ZipOutputStream(bytes)) {
@@ -428,8 +473,10 @@ public final class PacoteRecursos implements Listener {
     private static String selecao(String vanilla, List<String> ids) {
         StringBuilder sb = new StringBuilder("{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ ");
         for (int i = 0; i < ids.size(); i++) {
-            sb.append(i == 0 ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(ids.get(i))
-                    .append("\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/").append(ids.get(i)).append("\" } }");
+            String id = ids.get(i);
+            String json = TRES_D.contains(id) ? contexto("rpgatributos:item/" + id, "rpgatributos:item/" + id + "_3d")
+                    : "{ \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/" + id + "\" }";
+            sb.append(i == 0 ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(id).append("\", \"model\": ").append(json).append(" }");
         }
         // A poção do jogo pinta o líquido com a cor da poção; o modelo normal precisa manter isso.
         // O capim (usado pelas plantações da estação) é pintado com a cor da grama.
@@ -462,10 +509,31 @@ public final class PacoteRecursos implements Listener {
         StringBuilder sb = new StringBuilder("{ \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ ");
         for (int i = 0; i < lendas.size(); i++) {
             String id = lendas.get(i);
-            sb.append(i == 0 ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(id).append("\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"")
-                    .append(pegada == null ? "rpgatributos:item/" + id : "rpgatributos:item/postura/" + id + "_" + pegada).append("\" } }");
+            String modelo = pegada == null ? "rpgatributos:item/" + id : "rpgatributos:item/postura/" + id + "_" + pegada;
+            String json = TRES_D.contains(id)
+                    ? contexto("rpgatributos:item/" + id, pegada == null ? "rpgatributos:item/" + id + "_3d" : "rpgatributos:item/postura/" + id + "_3d_" + pegada)
+                    : "{ \"type\": \"minecraft:model\", \"model\": \"" + modelo + "\" }";
+            sb.append(i == 0 ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(id).append("\", \"model\": ").append(json).append(" }");
         }
         return sb.append(" ], \"fallback\": ").append(padrao).append(" }").toString();
+    }
+
+    /** As armas com nome que têm modelo 3D (o id do visual). */
+    private static final java.util.Set<String> TRES_D = tresD();
+
+    private static java.util.Set<String> tresD() {
+        java.util.Set<String> s = new java.util.HashSet<>();
+        for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
+            if (ArteNomeadas3D.tem3D(n.categoria())) s.add(n.visual());
+        }
+        return s;
+    }
+
+    /** No inventário, o desenho 2D; na mão, no chão, no suporte e na moldura, o modelo 3D. */
+    private static String contexto(String modelo2d, String modelo3d) {
+        return "{ \"type\": \"minecraft:select\", \"property\": \"minecraft:display_context\", \"cases\": [ "
+                + "{ \"when\": \"gui\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + modelo2d + "\" } } ], "
+                + "\"fallback\": { \"type\": \"minecraft:model\", \"model\": \"" + modelo3d + "\" } }";
     }
 
     /**
@@ -514,9 +582,64 @@ public final class PacoteRecursos implements Listener {
 
     /** A vara de pescar do jogo troca de modelo quando está lançada; o Gancho também. */
     private static String vara() {
-        return "{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ "
-                + "{ \"when\": \"rpgatributos:gancho\", \"model\": " + lancada("rpgatributos:item/gancho", "rpgatributos:item/gancho_lancado") + " } ], "
-                + "\"fallback\": " + lancada("minecraft:item/fishing_rod", "minecraft:item/fishing_rod_cast") + " } }";
+        StringBuilder casos = new StringBuilder("{ \"when\": \"rpgatributos:gancho\", \"model\": "
+                + lancada("rpgatributos:item/gancho", "rpgatributos:item/gancho_lancado") + " }");
+        for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
+            if (n.categoria() != br.rpgatributos.forja.Categoria.VARA) continue;
+            String m = "rpgatributos:item/" + n.visual();
+            // Parada e lançada: no inventário o desenho; na mão, o modelo 3D.
+            String vara3d = "{ \"type\": \"minecraft:condition\", \"property\": \"minecraft:fishing_rod/cast\", "
+                    + "\"on_false\": " + contexto(m, m + "_3d") + ", \"on_true\": " + contexto(m + "_cast", m + "_cast_3d") + " }";
+            casos.append(", { \"when\": \"rpgatributos:").append(n.visual()).append("\", \"model\": ").append(vara3d).append(" }");
+        }
+        return "{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ " + casos
+                + " ], \"fallback\": " + lancada("minecraft:item/fishing_rod", "minecraft:item/fishing_rod_cast") + " } }";
+    }
+
+    /** O arco do jogo: parado, ou puxando (3 fases pelo tempo puxando). */
+    private static String arcoPuxando(String base) {
+        return "{ \"type\": \"minecraft:condition\", \"property\": \"minecraft:using_item\", "
+                + "\"on_false\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "\" }, "
+                + "\"on_true\": { \"type\": \"minecraft:range_dispatch\", \"property\": \"minecraft:use_duration\", \"scale\": 0.05, "
+                + "\"entries\": [ { \"threshold\": 0.65, \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_1\" } }, "
+                + "{ \"threshold\": 0.9, \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_2\" } } ], "
+                + "\"fallback\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_0\" } } }";
+    }
+
+    private static String arcos() {
+        StringBuilder casos = new StringBuilder();
+        for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
+            if (n.categoria() != br.rpgatributos.forja.Categoria.ARCO) continue;
+            casos.append(casos.isEmpty() ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(n.visual()).append("\", \"model\": ")
+                    .append(arcoPuxando("rpgatributos:item/" + n.visual())).append(" }");
+        }
+        return "{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ " + casos
+                + " ], \"fallback\": " + arcoPuxando("minecraft:item/bow") + " } }";
+    }
+
+    /** A besta do jogo: carregada com flecha ou foguete; senão parada ou puxando (3 fases). */
+    private static String bestaCarregando(String base, boolean doJogo) {
+        String parada = doJogo ? "minecraft:item/crossbow" : base;
+        return "{ \"type\": \"minecraft:select\", \"property\": \"minecraft:charge_type\", \"cases\": [ "
+                + "{ \"when\": \"arrow\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_arrow\" } }, "
+                + "{ \"when\": \"rocket\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_firework\" } } ], "
+                + "\"fallback\": { \"type\": \"minecraft:condition\", \"property\": \"minecraft:using_item\", "
+                + "\"on_false\": { \"type\": \"minecraft:model\", \"model\": \"" + parada + "\" }, "
+                + "\"on_true\": { \"type\": \"minecraft:range_dispatch\", \"property\": \"minecraft:crossbow/pull\", "
+                + "\"entries\": [ { \"threshold\": 0.58, \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_1\" } }, "
+                + "{ \"threshold\": 1.0, \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_2\" } } ], "
+                + "\"fallback\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_0\" } } } }";
+    }
+
+    private static String bestas() {
+        StringBuilder casos = new StringBuilder();
+        for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
+            if (n.categoria() != br.rpgatributos.forja.Categoria.BESTA) continue;
+            casos.append(casos.isEmpty() ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(n.visual()).append("\", \"model\": ")
+                    .append(bestaCarregando("rpgatributos:item/" + n.visual(), false)).append(" }");
+        }
+        return "{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ " + casos
+                + " ], \"fallback\": " + bestaCarregando("minecraft:item/crossbow", true) + " } }";
     }
 
     private static String lancada(String normal, String lancado) {

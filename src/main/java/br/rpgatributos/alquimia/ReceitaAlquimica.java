@@ -127,6 +127,7 @@ public record ReceitaAlquimica(Aba aba, Elixir elixir, Reagente reagente, int qt
         l.add(acess(Acessorio.ANEL_VIGOR, 0.2, 35, g(Gema.RUBI, 1, 1), m(Material.GOLD_INGOT, 2), r(Reagente.PO_ARCANO, 1)));
         l.add(acess(Acessorio.ANEL_VENTO, 0.2, 35, g(Gema.TOPAZIO, 1, 1), m(Material.GOLD_INGOT, 2), m(Material.FEATHER, 4)));
         l.add(acess(Acessorio.IMA_BOLSO, 0.25, 35, r(Reagente.MERCURIO_VIVO, 1), m(Material.IRON_INGOT, 4), m(Material.REDSTONE, 2)));
+        l.add(acess(Acessorio.BALAO_DE_CRISTAL, 0, 10, m(Material.WHITE_WOOL, 4), m(Material.STRING, 4)));
         l.add(acess(Acessorio.CAPA_PLANADORA, 0.2, 30, m(Material.PHANTOM_MEMBRANE, 4), m(Material.FEATHER, 6), m(Material.LEATHER, 2)));
         l.add(acess(Acessorio.ANEL_FORCA, 0.3, 40, g(Gema.ONIX, 1, 1), m(Material.IRON_INGOT, 2), r(Reagente.MERCURIO_VIVO, 1)));
         l.add(acess(Acessorio.ANEL_MARES, 0.3, 40, g(Gema.SAFIRA, 1, 1), r(Reagente.ESCAMA_DO_ABISMO, 1), m(Material.GOLD_INGOT, 2)));
@@ -138,6 +139,7 @@ public record ReceitaAlquimica(Aba aba, Elixir elixir, Reagente reagente, int qt
         l.add(acess(Acessorio.AMULETO_GUARDIAO, 0.45, 60, g(Gema.SAFIRA, 2, 1), m(Material.IRON_BLOCK, 1), r(Reagente.MERCURIO_VIVO, 1)));
         l.add(acess(Acessorio.ANEL_SABIO, 0.5, 70, g(Gema.ESMERALDA, 2, 1), r(Reagente.CRISTAL_DE_MANA, 1), m(Material.GOLD_INGOT, 2)));
         l.add(acess(Acessorio.CINTO_TITA, 0.5, 70, g(Gema.ONIX, 2, 1), m(Material.LEATHER, 3), m(Material.IRON_BLOCK, 1)));
+        l.add(acess(Acessorio.AMULETO_VENTOS, 0.35, 45, raro(Raro.FRAGMENTO_CELESTE, 2), m(Material.FEATHER, 6), m(Material.GOLD_INGOT, 2)));
         l.add(acess(Acessorio.AMULETO_VIDA, 0.6, 90, g(Gema.RUBI, 2, 1), r(Reagente.TINTURA_VITAL, 2), m(Material.GOLDEN_APPLE, 1)));
         l.add(acess(Acessorio.AMULETO_FENIX, 0.85, 200, p(PeixeRaro.PEIXE_DRAGAO, 1), r(Reagente.PEROLA_NEGRA, 1), g(Gema.RUBI, 3, 1),
                 m(Material.TOTEM_OF_UNDYING, 1)));

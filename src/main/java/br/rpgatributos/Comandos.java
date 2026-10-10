@@ -329,6 +329,9 @@ public final class Comandos implements TabExecutor {
                     /rpgadmin muda|fruta <fruta> [qtd]  (pomar)
                     /rpgadmin estrutura <tipo>  (constrói à sua frente; console: <tipo> <mundo> <x> <z>)
                     /rpgadmin estruturas  (as mais perto de você), /rpgadmin esquecerestrutura
+                    /rpgadmin raiz  (Raiz de Luz no chão embaixo de você), /rpgadmin coracaopenumbra, /rpgadmin penumbra  (zera a sua)
+                    /rpgadmin itemceu <fruta_celeste|semente_brilhante> [qtd], /rpgadmin raro fragmento_celeste [qtd]
+                    /rpgadmin nomeada <arma|aleatoria> [raridade]  (arma com nome já forjada)
                     /rpgadmin reload""", NamedTextColor.YELLOW));
             return;
         }
@@ -366,6 +369,8 @@ public final class Comandos implements TabExecutor {
             case "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro" -> { adminDetalhes(sender, sub, args); return; }
             case "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta" -> { adminVida(sender, sub, args); return; }
             case "estrutura", "estruturas", "esquecerestrutura" -> { adminEstruturas(sender, sub, args); return; }
+            case "raiz", "coracaopenumbra", "itemceu", "penumbra" -> { adminProfundezas(sender, sub, args); return; }
+            case "nomeada" -> { adminNomeada(sender, args); return; }
             case "guerra" -> {
                 if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
                     String erro = plugin.reinos().guerraAgora(args[2], args[3]);
@@ -459,6 +464,59 @@ public final class Comandos implements TabExecutor {
         if (plugin.forjas().eh(b)) { erro(sender, "Essa bigorna já é uma Forja do Ferreiro."); return; }
         plugin.forjas().criar(b, p);
         ok(sender, "Forja do Ferreiro criada.");
+    }
+
+    // ================= armas com nome (admin) =================
+
+    private void adminNomeada(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        String nomes = String.join("|", java.util.Arrays.stream(br.rpgatributos.forja.Nomeada.values()).map(br.rpgatributos.forja.Nomeada::id).toList());
+        if (args.length < 2) { erro(sender, "Use: /rpgadmin nomeada <" + nomes + "|aleatoria> [comum|raro|epico|unico|lendario|mitico]"); return; }
+        br.rpgatributos.forja.Raridade r = br.rpgatributos.forja.Raridade.EPICO;
+        if (args.length >= 3) {
+            for (br.rpgatributos.forja.Raridade x : br.rpgatributos.forja.Raridade.values()) if (x.id().equalsIgnoreCase(args[2])) r = x;
+        }
+        ItemStack item;
+        if (args[1].equalsIgnoreCase("aleatoria")) item = plugin.forja().criarNomeada(r);
+        else {
+            br.rpgatributos.forja.Nomeada n = br.rpgatributos.forja.Nomeada.porId(args[1]);
+            if (n == null) { erro(sender, "Arma inválida. Use: " + nomes); return; }
+            item = plugin.forja().criarNomeada(n, r);
+        }
+        p.getInventory().addItem(item).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
+        ok(sender, "Arma com nome entregue.");
+    }
+
+    // ================= profundezas (admin) =================
+
+    private void adminProfundezas(CommandSender sender, String sub, String[] args) {
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        switch (sub) {
+            case "raiz" -> {
+                String falha = plugin.profundezas().plantarAqui(p);
+                if (falha != null) erro(sender, falha);
+                else ok(sender, "Raiz de Luz plantada (clique no bulbo para acender).");
+            }
+            case "coracaopenumbra" -> {
+                plugin.profundezas().coracaoAqui(p);
+                ok(sender, "O Coração da Penumbra acordou.");
+            }
+            case "penumbra" -> {
+                plugin.profundezas().curar(p);
+                ok(sender, "Sua Penumbra foi zerada.");
+            }
+            case "itemceu" -> {
+                br.rpgatributos.exploracao.ItemCeu i = args.length >= 2 ? br.rpgatributos.exploracao.ItemCeu.porId(args[1]) : null;
+                if (i == null) { erro(sender, "Use: /rpgadmin itemceu <fruta_celeste|semente_brilhante> [qtd]"); return; }
+                int qtd = 1;
+                if (args.length >= 3) {
+                    try { qtd = Math.max(1, Integer.parseInt(args[2])); } catch (NumberFormatException e) { erro(sender, "Quantidade inválida."); return; }
+                }
+                p.getInventory().addItem(i.criar(qtd)).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
+                ok(sender, qtd + "x " + i.nome() + ".");
+            }
+            default -> { }
+        }
     }
 
     // ================= aventura (admin) =================
@@ -1577,7 +1635,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

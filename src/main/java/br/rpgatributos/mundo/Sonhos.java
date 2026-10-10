@@ -131,6 +131,8 @@ public final class Sonhos implements Listener {
             case NAUFRAGIO -> "Um navio deitado no fundo do mar. O capitão escrevia no diário um nome: " + (nome == null ? "?" : nome) + ".";
             case CIDADE_SUBMERSA -> "Torres de pedra-do-mar brilhando debaixo d'água, e um templo que chamava por você: "
                     + (nome == null ? "a cidade" : nome) + ".";
+            case ILHA_DO_CEU -> "Uma ilha flutuando acima das nuvens, e no chão uma pedra que soprava o vento para o alto: "
+                    + (nome == null ? "a ilha" : nome) + ".";
         };
     }
 

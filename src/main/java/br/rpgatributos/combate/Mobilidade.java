@@ -60,6 +60,9 @@ public final class Mobilidade implements Listener {
     private final Map<UUID, Long> semQueda = new HashMap<>();
     private final Map<UUID, Long> esperaGancho = new HashMap<>();
     private final Set<UUID> planando = new HashSet<>();
+    /** Quem está planando com o Balão de Cristal (mais lento) e quem o estoura quando o voo acabar. */
+    private final Set<UUID> deBalao = new HashSet<>();
+    private final Set<UUID> estourar = new HashSet<>();
     private int ciclo;
 
     public Mobilidade(RPGAtributos plugin) {
@@ -172,9 +175,7 @@ public final class Mobilidade implements Listener {
         Input antigo = entradas.put(p.getUniqueId(), novo);
         if (antigo == null) return;
         if (novo.isJump() && !antigo.isJump()) pular(p);
-        if (novo.isSneak() && !antigo.isSneak() && planando.remove(p.getUniqueId())) {
-            p.sendActionBar(Component.text("≋ Você soltou a capa", NamedTextColor.GRAY));
-        }
+        if (novo.isSneak() && !antigo.isSneak() && planando.contains(p.getUniqueId())) soltar(p, true);
         if (novo.isLeft() && !antigo.isLeft()) toque(p, ESQUERDA);
         if (novo.isRight() && !antigo.isRight()) toque(p, DIREITA);
         if (novo.isBackward() && !antigo.isBackward()) toque(p, TRAS);
@@ -220,43 +221,76 @@ public final class Mobilidade implements Listener {
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BREEZE_JUMP, 0.7f, 1.4f);
     }
 
-    private boolean temPlanador(Player p) {
-        return plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR);
+    /** Capa Planadora ou Balão de Cristal no bolso. */
+    public boolean temPlanador(Player p) {
+        return plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR) || plugin.acessorios().tem(p, Acessorio.Especial.BALAO);
     }
 
     private void pular(Player p) {
         if (!temPlanador(p)) return;
         if (plugin.runas().saltoDisponivel(p)) return; // o pulo duplo da Runa do Salto vem antes de planar
-        if (planando.remove(p.getUniqueId())) {
-            p.sendActionBar(Component.text("≋ Você soltou a capa", NamedTextColor.GRAY));
+        if (planando.contains(p.getUniqueId())) {
+            soltar(p, true);
             return;
         }
         if (p.isOnGround() || p.isInWater() || p.isGliding() || p.isFlying() || p.isInsideVehicle()) return;
         if (p.getVelocity().getY() > 0.1) return; // ainda subindo do pulo
+        if (plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR)) {
+            planando.add(p.getUniqueId());
+            p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_ELYTRA, 0.8f, 1.2f);
+            p.sendActionBar(Component.text("≋ Planando (pule ou agache para soltar)", COR));
+            return;
+        }
+        // Só o Balão: cada vez que abre gasta um uso; no último, estoura quando o voo acabar.
+        int restam = plugin.acessorios().gastarBalao(p);
+        if (restam < 0) return;
         planando.add(p.getUniqueId());
-        p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_ELYTRA, 0.8f, 1.2f);
-        p.sendActionBar(Component.text("≋ Planando (pule ou agache para soltar)", COR));
+        deBalao.add(p.getUniqueId());
+        if (restam == 0) estourar.add(p.getUniqueId());
+        p.getWorld().playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1f, 0.8f);
+        p.sendActionBar(Component.text("◌ Balão aberto · " + (restam == 0 ? "último voo!" : restam + (restam == 1 ? " uso restante" : " usos restantes")),
+                restam == 0 ? NamedTextColor.RED : NamedTextColor.AQUA));
+    }
+
+    /** Fim do voo (soltou, pousou, caiu na água...). O balão do último uso estoura aqui. */
+    private void soltar(Player p, boolean avisar) {
+        UUID id = p.getUniqueId();
+        planando.remove(id);
+        boolean balao = deBalao.remove(id);
+        if (estourar.remove(id)) plugin.acessorios().estourarBalao(p);
+        else if (avisar) p.sendActionBar(Component.text(balao ? "◌ Você fechou o balão" : "≋ Você soltou a capa", NamedTextColor.GRAY));
     }
 
     /** A cada tick: quem está planando desce devagar e vai para onde olha. */
     public void tick() {
         ciclo++;
         if (planando.isEmpty()) return;
-        for (Iterator<UUID> it = planando.iterator(); it.hasNext(); ) {
-            Player p = Bukkit.getPlayer(it.next());
-            if (p == null || p.isOnGround() || p.isInWater() || p.isInsideVehicle() || p.isGliding() || p.isFlying() || p.isDead() || !temPlanador(p)) {
-                it.remove();
+        for (UUID id : List.copyOf(planando)) {
+            Player p = Bukkit.getPlayer(id);
+            if (p == null) {
+                planando.remove(id);
+                deBalao.remove(id);
+                estourar.remove(id);
                 continue;
             }
+            if (p.isOnGround() || p.isInWater() || p.isInsideVehicle() || p.isGliding() || p.isFlying() || p.isDead() || !temPlanador(p)) {
+                soltar(p, false);
+                continue;
+            }
+            // O balão anda bem mais devagar que a capa, mas desce mais devagar também.
+            boolean balao = deBalao.contains(id);
             Vector olhar = p.getLocation().getDirection().setY(0);
             if (olhar.lengthSquared() < 1e-4) olhar = new Vector(0, 0, 0);
-            else olhar.normalize().multiply(0.62);
+            else olhar.normalize().multiply(balao ? 0.3 : 0.62);
             Vector atual = p.getVelocity();
             Vector nova = atual.clone().multiply(0.5).add(olhar.multiply(0.5));
-            nova.setY(atual.getY() > 0 ? atual.getY() * 0.9 : Math.max(atual.getY(), -0.11));
+            nova.setY(atual.getY() > 0 ? atual.getY() * 0.9 : Math.max(atual.getY(), balao ? -0.07 : -0.11));
             p.setVelocity(nova);
             p.setFallDistance(0);
-            if (ciclo % 5 == 0) p.getWorld().spawnParticle(Particle.CLOUD, p.getLocation(), 2, 0.2, 0, 0.2, 0);
+            if (ciclo % 5 == 0) {
+                if (balao) p.getWorld().spawnParticle(Particle.END_ROD, p.getLocation().add(0, 2.4, 0), 1, 0.3, 0.1, 0.3, 0);
+                else p.getWorld().spawnParticle(Particle.CLOUD, p.getLocation(), 2, 0.2, 0, 0.2, 0);
+            }
         }
     }
 
@@ -293,6 +327,8 @@ public final class Mobilidade implements Listener {
         entradas.remove(id);
         toques.remove(id);
         planando.remove(id);
+        deBalao.remove(id);
+        estourar.remove(id);
         invulneravel.remove(id);
     }
 }

@@ -44,7 +44,11 @@ public enum Raro {
     NUCLEO_TEMPESTADE("Olho da Tempestade", Material.PRISMARINE_SHARD, 0xDDEFEF,
             "O vento gira em volta dele sem parar.", "Infunda no corpo para um poder lendário."),
     NUCLEO_ARAUTO("Coroa do Arauto", Material.ECHO_SHARD, 0xC77DFF,
-            "Ecoa uma voz do fim do mundo.", "Infunda no corpo para um poder lendário.");
+            "Ecoa uma voz do fim do mundo.", "Infunda no corpo para um poder lendário."),
+
+    // 2.33: o céu
+    FRAGMENTO_CELESTE("Fragmento Celeste", Material.FEATHER, 0x9FD8F5,
+            "Uma lasca de céu que o vento esqueceu de levar.", "Na Bancada Alquímica: Amuleto dos Ventos.");
 
     /** Chave fixa (namespace do plugin) para não depender da instância do plugin. */
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "raro");
