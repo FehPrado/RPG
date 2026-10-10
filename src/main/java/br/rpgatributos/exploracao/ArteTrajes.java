@@ -6,10 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -118,25 +115,15 @@ public final class ArteTrajes {
         return m;
     }
 
-    /** Os ícones entram nas peças de armadura do jogo (couro, malha, ferro, ouro, diamante, netherita...). */
-    static void registrar(List<ArteItens.Arte> l) {
-        for (Traje t : Traje.values()) {
-            Map<Character, Integer> cores = paleta(t);
-            for (Traje.Peca p : Traje.Peca.values()) {
-                for (String v : hospedeiros(p)) l.add(new ArteItens.Arte(v, t.visual(p), molde(p), cores));
-            }
+    /** O ícone de uma peça (16x16). */
+    public static BufferedImage icone(Traje t, Traje.Peca p) {
+        String[] m = molde(p);
+        Map<Character, Integer> cores = paleta(t);
+        BufferedImage im = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) im.setRGB(x, y, cores.getOrDefault(m[y].charAt(x), 0));
         }
-    }
-
-    /** Os itens do jogo de cada peça (o casco de tartaruga fica de fora). */
-    public static List<String> hospedeiros(Traje.Peca p) {
-        List<String> l = new ArrayList<>();
-        for (org.bukkit.Material m : org.bukkit.Material.values()) {
-            String n = m.name();
-            if (m.isLegacy() || !m.isItem() || !n.endsWith(p.sufixo()) || m == org.bukkit.Material.TURTLE_HELMET) continue;
-            l.add(n.toLowerCase(Locale.ROOT));
-        }
-        return l;
+        return im;
     }
 
     // =====================================================================
@@ -295,10 +282,22 @@ public final class ArteTrajes {
     //  Pacote de recursos
     // =====================================================================
 
-    /** Arquivos do equipamento de cada traje (o ícone de cada peça entra pelo {@link ArteItens}). */
+    /**
+     * Arquivos de cada traje: o equipamento (textura no corpo) e o modelo próprio de cada peça
+     * (o item aponta para ele pelo componente item_model; as armaduras do jogo ficam intactas,
+     * com tingimento e enfeites).
+     */
     public static Map<String, byte[]> arquivosDoPacote() throws IOException {
         Map<String, byte[]> f = new HashMap<>();
         for (Traje t : Traje.values()) {
+            for (Traje.Peca p : Traje.Peca.values()) {
+                String v = t.visual(p);
+                f.put("assets/rpgatributos/items/" + v + ".json",
+                        ("{ \"model\": { \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/" + v + "\" } }").getBytes(StandardCharsets.UTF_8));
+                f.put("assets/rpgatributos/models/item/" + v + ".json",
+                        ("{ \"parent\": \"minecraft:item/generated\", \"textures\": { \"layer0\": \"rpgatributos:item/" + v + "\" } }").getBytes(StandardCharsets.UTF_8));
+                f.put("assets/rpgatributos/textures/item/" + v + ".png", png(icone(t, p)));
+            }
             String id = t.equipamento();
             f.put("assets/rpgatributos/equipment/" + id + ".json", ("""
                     { "layers": {

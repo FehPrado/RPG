@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Trajes: armaduras com nome, as irmãs das {@link Nomeada armas com nome}. Cada traje tem quatro
  * peças (elmo, peitoral, grevas e botas) com nome, história e visual próprios, no inventário e
- * no corpo de quem veste (o componente de equipamento do jogo aponta para a textura do pacote).
+ * no corpo de quem veste (o item aponta para o modelo e para o equipamento próprios do pacote).
  * Só aparência: a força continua sendo a da raridade. O desenho fica no {@code ArteTrajes}.
  */
 public enum Traje {
@@ -166,13 +166,17 @@ public enum Traje {
         lore.add(1, Component.text(t.nome() + " · peça com nome (só aparência)", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
         lore.add(2, Component.empty());
         meta.lore(lore);
-        br.rpgatributos.exploracao.PacoteRecursos.marcar(meta, t.visual(p));
     }
 
-    /** Põe a textura do traje no corpo de quem veste (componente de equipamento do jogo). */
+    /**
+     * O visual do traje: o ícone (componente item_model, com modelo próprio no pacote) e a
+     * textura no corpo de quem veste (componente de equipamento do jogo).
+     */
     public static void vestir(ItemStack item) {
         Traje t = de(item);
-        if (t == null || !aceita(item)) return;
+        Peca p = item == null ? null : Peca.de(item.getType());
+        if (t == null || p == null || !aceita(item)) return;
+        item.setData(DataComponentTypes.ITEM_MODEL, Key.key("rpgatributos", t.visual(p)));
         Equippable base = item.getData(DataComponentTypes.EQUIPPABLE);
         if (base == null) return;
         Key k = Key.key("rpgatributos", t.equipamento());
