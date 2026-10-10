@@ -1481,7 +1481,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
 3. O plugin fica em `target/RPGAtributos-2.36.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). Os jars **não vão para o git** (`*.jar` no `.gitignore`); para publicar uma versão, crie uma tag (`git tag v2.36.0 && git push origin v2.36.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.36.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.36.0 && git push origin v2.36.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 
