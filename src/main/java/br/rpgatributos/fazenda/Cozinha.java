@@ -59,7 +59,9 @@ public final class Cozinha extends Estacao {
             Material.WHEAT, Material.CARROT, Material.POTATO, Material.BEETROOT, Material.PUMPKIN,
             Material.SWEET_BERRIES, Material.GLOW_BERRIES, Material.COCOA_BEANS, Material.MELON_SLICE,
             Material.COD, Material.SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH);
-    private static final int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+    private static final int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34,
+            37, 38, 39, 40, 41, 42, 43};
+    private static final int S_ANTERIOR = 45, S_PROXIMA = 53;
     private static final int S_INFO = 4;
     private static final int S_FECHAR = 49;
 
@@ -67,6 +69,7 @@ public final class Cozinha extends Estacao {
         Inventory inventario;
         /** A Cozinha onde o jogador está (null = só o livro de receitas). */
         Location cozinha;
+        int pagina;
 
         @Override
         public Inventory getInventory() { return inventario; }
@@ -198,8 +201,13 @@ public final class Cozinha extends Estacao {
                         : Component.text("Clique num prato para cozinhar.", NamedTextColor.YELLOW)), false));
 
         Prato[] pratos = Prato.values();
-        for (int i = 0; i < pratos.length && i < SLOTS.length; i++) {
-            Prato pr = pratos[i];
+        int paginas = (pratos.length + SLOTS.length - 1) / SLOTS.length;
+        t.pagina = Math.max(0, Math.min(paginas - 1, t.pagina));
+        if (t.pagina > 0) inv.setItem(S_ANTERIOR, item(Material.ARROW, Component.text("« Página anterior", NamedTextColor.YELLOW), List.of(), false));
+        if (t.pagina < paginas - 1) inv.setItem(S_PROXIMA, item(Material.ARROW, Component.text("Próxima página »", NamedTextColor.YELLOW),
+                List.of(Component.text("Página " + (t.pagina + 1) + " de " + paginas, NamedTextColor.GRAY)), false));
+        for (int i = 0; i < SLOTS.length && t.pagina * SLOTS.length + i < pratos.length; i++) {
+            Prato pr = pratos[t.pagina * SLOTS.length + i];
             boolean liberado = nivel >= pr.nivelNecessario(max);
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text((liberado ? "✔" : "✖") + " Culinária nível " + pr.nivelNecessario(max),
@@ -211,7 +219,8 @@ public final class Cozinha extends Estacao {
                 int tem = contar(p.getInventory(), ing);
                 boolean ok = tem >= ing.qtd();
                 temTudo &= ok;
-                Component nome = ing.variedade() != null ? Component.text(ing.variedade().nome(), ing.variedade().cor())
+                Component nome = ing.extra() != null ? Component.text(ing.extra().nome(), ing.extra().cor())
+                        : ing.variedade() != null ? Component.text(ing.variedade().nome(), ing.variedade().cor())
                         : ing.peixe() != null ? Component.text(ing.peixe().nome(), ing.peixe().cor())
                         : Component.translatable(ing.material().translationKey());
                 lore.add(Component.text((ok ? " ✔ " : " ✖ ") + ing.qtd() + "x ", ok ? NamedTextColor.GREEN : NamedTextColor.RED)
@@ -257,6 +266,7 @@ public final class Cozinha extends Estacao {
 
     private static boolean combina(ItemStack s, Prato.Ingrediente ing) {
         if (s == null || s.isEmpty()) return false;
+        if (ing.extra() != null) return ing.extra().teste().test(s);
         if (ing.variedade() != null) return Variedade.de(s) == ing.variedade() && !Variedade.ehSemente(s);
         if (ing.peixe() != null) return PeixeRaro.de(s) == ing.peixe();
         return s.getType() == ing.material() && Ingrediente.simples(s);
@@ -321,7 +331,7 @@ public final class Cozinha extends Estacao {
         int comQualidade = 0, otimos = 0, perfeitos = 0;
         for (Prato.Ingrediente ing : pr.ingredientes()) {
             List<Qualidade> qs = tirar(inv, ing);
-            boolean conta = ing.variedade() != null || ing.peixe() != null || COM_QUALIDADE.contains(ing.material());
+            boolean conta = ing.extra() != null || ing.variedade() != null || ing.peixe() != null || COM_QUALIDADE.contains(ing.material());
             if (!conta) continue;
             for (Qualidade q : qs) {
                 comQualidade++;
@@ -421,10 +431,16 @@ public final class Cozinha extends Estacao {
         e.setCancelled(true);
         if (!(e.getWhoClicked() instanceof Player p) || e.getRawSlot() >= topo.getSize()) return;
         if (e.getSlot() == S_FECHAR) { p.closeInventory(); return; }
+        if (e.getSlot() == S_ANTERIOR || e.getSlot() == S_PROXIMA) {
+            if (e.getCurrentItem() == null || e.getCurrentItem().getType() != Material.ARROW) return;
+            t.pagina += e.getSlot() == S_PROXIMA ? 1 : -1;
+            desenhar(p, t);
+            return;
+        }
         Prato[] pratos = Prato.values();
-        for (int i = 0; i < pratos.length && i < SLOTS.length; i++) {
+        for (int i = 0; i < SLOTS.length && t.pagina * SLOTS.length + i < pratos.length; i++) {
             if (SLOTS[i] == e.getSlot()) {
-                cozinhar(p, t, pratos[i]);
+                cozinhar(p, t, pratos[t.pagina * SLOTS.length + i]);
                 return;
             }
         }

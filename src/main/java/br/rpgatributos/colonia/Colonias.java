@@ -1099,6 +1099,7 @@ public final class Colonias implements Listener {
     }
 
     private static Predicate<ItemStack> teste(Prato.Ingrediente ing) {
+        if (ing.extra() != null) return ing.extra().teste();
         if (ing.variedade() != null) return s -> Variedade.de(s) == ing.variedade() && !Variedade.ehSemente(s);
         if (ing.peixe() != null) return s -> PeixeRaro.de(s) == ing.peixe();
         return simples(ing.material());

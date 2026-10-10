@@ -482,6 +482,27 @@ final class ArteItens {
                 com(TIGELA_MADEIRA, 'c', 0xFFE8E0FF, 'a', 0xFFB39DDB, 'b', BRANCO)));
         l.add(new Arte("suspicious_stew", "prato_caviar_ancestral", TIGELA,
                 com(TIGELA_MADEIRA, 'c', 0xFF263238, 'a', 0xFF546E7A, 'b', 0xFFFFD23F)));
+        // 2.33: vida no campo.
+        l.add(new Arte("bread", "prato_pao_com_geleia", PAO, com(MASSA, 'h', 0xFFE5577A, 'm', 0xFFC2185B)));
+        l.add(new Arte("beetroot_soup", "prato_salada_primavera", TIGELA_FRIA,
+                com(TIGELA_MADEIRA, 'c', 0xFF8BC34A, 'a', 0xFFF3E5AB, 'b', 0xFF7CB342)));
+        l.add(new Arte("baked_potato", "prato_milho_assado", BATATA_RECHEADA, com(MASSA, 'a', 0xFFFBC02D, 'b', 0xFFFFB300)));
+        l.add(new Arte("baked_potato", "prato_omelete_queijo", BATATA_RECHEADA, com(MASSA, 'm', 0xFFFFE082, 'a', 0xFFFBC02D, 'b', 0xFF8BC34A)));
+        l.add(new Arte("pumpkin_pie", "prato_torta_morango", TORTA, com(CROSTA, 'c', 0xFFE53935, 'a', 0xFFFFCDD2)));
+        l.add(new Arte("mushroom_stew", "prato_creme_abobora", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFEF6C00, 'a', 0xFFFFCC80, 'b', 0xFFAD5A8C)));
+        l.add(new Arte("beetroot_soup", "prato_sorvete_melao", TIGELA_FRIA,
+                com(TIGELA_MADEIRA, 'c', 0xFFC5E1A5, 'a', 0xFFFFB3C1, 'b', BRANCO)));
+        l.add(new Arte("pumpkin_pie", "prato_pizza_da_roca", TORTA, com(CROSTA, 'c', 0xFFD84315, 'a', 0xFFFBC02D)));
+        l.add(new Arte("mushroom_stew", "prato_sopa_de_inverno", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFEDE7F6, 'a', 0xFF5E9C7A, 'b', 0xFFEF5350)));
+        l.add(new Arte("rabbit_stew", "prato_ratatouille", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFC62828, 'a', 0xFF6A1B9A, 'b', 0xFFFBC02D)));
+        l.add(new Arte("pumpkin_pie", "prato_bolo_oxicoco", TORTA, com(CROSTA, 'c', 0xFFB71C1C, 'a', 0xFFFFF0F0)));
+        l.add(new Arte("mushroom_stew", "prato_risoto_trufa", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFF5F0E0, 'a', 0xFF5D4037, 'b', 0xFFD4A017)));
+        l.add(new Arte("suspicious_stew", "prato_banquete_fazenda", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFF5F0E0, 'a', 0xFF7B1FA2, 'b', 0xFFFBC02D)));
     }
 
     // =====================================================================
