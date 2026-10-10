@@ -284,9 +284,20 @@ public final class Forja {
         item.setAmount(1);
         construir(item, d);
         // Às vezes a peça já nasce com nome (mais chance nas raridades altas).
-        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && !br.rpgatributos.lenda.Lendas.marcado(item)
+        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && Traje.de(item) == null && !br.rpgatributos.lenda.Lendas.marcado(item)
                 && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < Nomeada.chance(r) * plugin.settings().nomeadasChance) {
             Nomeada n = Nomeada.sortear(item.getType());
+            if (n == null && Traje.aceita(item)) {
+                // Armadura: vira peça de um Traje (armadura com nome).
+                Traje t = Traje.sortear();
+                nomearTraje(item, t);
+                if (ferreiro != null) {
+                    Traje.Peca pc = Traje.Peca.de(item.getType());
+                    ferreiro.sendMessage(net.kyori.adventure.text.Component.text("⚒ A peça saiu da forja com nome: ", net.kyori.adventure.text.format.NamedTextColor.GOLD)
+                            .append(net.kyori.adventure.text.Component.text(t.nome(pc), r.cor())));
+                    plugin.diario().marco(ferreiro, "traje", "Forjou uma armadura com nome: " + t.nome(pc));
+                }
+            }
             if (n != null) {
                 nomear(item, n);
                 if (ferreiro != null) {
@@ -312,10 +323,28 @@ public final class Forja {
         return item;
     }
 
-    /** Uma arma com nome qualquer. */
+    /** Uma arma com nome qualquer (às vezes uma peça de Traje, a armadura com nome). */
     public ItemStack criarNomeada(Raridade r) {
+        java.util.concurrent.ThreadLocalRandom rnd = java.util.concurrent.ThreadLocalRandom.current();
+        if (rnd.nextDouble() < 0.3) {
+            Traje.Peca[] pecas = Traje.Peca.values();
+            return criarTraje(Traje.sortear(), pecas[rnd.nextInt(pecas.length)], r);
+        }
         Nomeada[] todas = Nomeada.values();
-        return criarNomeada(todas[java.util.concurrent.ThreadLocalRandom.current().nextInt(todas.length)], r);
+        return criarNomeada(todas[rnd.nextInt(todas.length)], r);
+    }
+
+    /** Põe o traje (nome e visual) numa peça de armadura forjada. */
+    public void nomearTraje(ItemStack item, Traje t) {
+        item.editMeta(m -> m.getPersistentDataContainer().set(Traje.CHAVE, org.bukkit.persistence.PersistentDataType.STRING, t.name()));
+        reconstruir(item);
+    }
+
+    /** Uma peça de Traje pronta (forjada na raridade dada), para baús, chefes e o admin. */
+    public ItemStack criarTraje(Traje t, Traje.Peca p, Raridade r) {
+        ItemStack item = forjar(null, new ItemStack(Traje.sortearMaterial(p)), r);
+        if (Traje.de(item) != t) nomearTraje(item, t);
+        return item;
     }
 
     /** Refaz nome, atributos e descrição (ex.: depois de virar Netherite). */
@@ -387,12 +416,14 @@ public final class Forja {
             meta.lore(semItalico(montarDescricao(tipo, cat, tier, d)));
             plugin.lendas().decorar(meta, d.refino()); // se for uma lenda: nome, "Especial", poder e história
             Nomeada.decorar(meta, d.refino(), r.cor()); // arma com nome: nome, história e visual próprios
+            Traje.decorar(meta, tipo, d.refino(), r.cor()); // armadura com nome (Traje): idem
             plugin.runas().decorar(meta); // se tiver runa gravada, a linha dela volta depois de refazer a descrição
             plugin.mitrilo().decorar(meta, tipo); // aprimorado com Mitrilo: bônus e linha voltam também
             plugin.oficios().decorar(meta, tipo); // peça de conjunto do Ateliê: nome, bônus e o +1 de armadura voltam
             br.rpgatributos.combo.Ligacoes.decorar(meta); // óleo de lâmina passado: a linha dele volta
             plugin.pedrasAmolar().decorar(meta); // arma afiada: a linha do fio volta
         });
+        Traje.vestir(item); // Traje: a textura dele no corpo de quem veste
     }
 
     private List<Component> montarDescricao(Material tipo, Categoria cat, Tier tier, DadosForja d) {

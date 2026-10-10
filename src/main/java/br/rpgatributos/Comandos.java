@@ -332,6 +332,7 @@ public final class Comandos implements TabExecutor {
                     /rpgadmin raiz  (Raiz de Luz no chão embaixo de você), /rpgadmin coracaopenumbra, /rpgadmin penumbra  (zera a sua)
                     /rpgadmin itemceu <fruta_celeste|semente_brilhante> [qtd], /rpgadmin raro fragmento_celeste [qtd]
                     /rpgadmin nomeada <arma|aleatoria> [raridade]  (arma com nome já forjada)
+                    /rpgadmin traje <traje|aleatorio> [capacete|peitoral|calca|botas|todas] [raridade]  (armadura com nome)
                     /rpgadmin reload""", NamedTextColor.YELLOW));
             return;
         }
@@ -371,6 +372,7 @@ public final class Comandos implements TabExecutor {
             case "estrutura", "estruturas", "esquecerestrutura" -> { adminEstruturas(sender, sub, args); return; }
             case "raiz", "coracaopenumbra", "itemceu", "penumbra" -> { adminProfundezas(sender, sub, args); return; }
             case "nomeada" -> { adminNomeada(sender, args); return; }
+            case "traje" -> { adminTraje(sender, args); return; }
             case "guerra" -> {
                 if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
                     String erro = plugin.reinos().guerraAgora(args[2], args[3]);
@@ -485,6 +487,29 @@ public final class Comandos implements TabExecutor {
         }
         p.getInventory().addItem(item).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
         ok(sender, "Arma com nome entregue.");
+    }
+
+    private void adminTraje(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        String nomes = String.join("|", java.util.Arrays.stream(br.rpgatributos.forja.Traje.values()).map(br.rpgatributos.forja.Traje::id).toList());
+        if (args.length < 2) { erro(sender, "Use: /rpgadmin traje <" + nomes + "|aleatorio> [capacete|peitoral|calca|botas|todas] [raridade]"); return; }
+        br.rpgatributos.forja.Traje t = args[1].equalsIgnoreCase("aleatorio") ? br.rpgatributos.forja.Traje.sortear() : br.rpgatributos.forja.Traje.porId(args[1]);
+        if (t == null) { erro(sender, "Traje inválido. Use: " + nomes); return; }
+        java.util.List<br.rpgatributos.forja.Traje.Peca> pecas = new java.util.ArrayList<>(java.util.List.of(br.rpgatributos.forja.Traje.Peca.values()));
+        if (args.length >= 3 && !args[2].equalsIgnoreCase("todas")) {
+            br.rpgatributos.forja.Traje.Peca pc = br.rpgatributos.forja.Traje.Peca.porId(args[2]);
+            if (pc == null) { erro(sender, "Peça inválida: capacete, peitoral, calca, botas ou todas."); return; }
+            pecas = java.util.List.of(pc);
+        }
+        br.rpgatributos.forja.Raridade r = br.rpgatributos.forja.Raridade.EPICO;
+        if (args.length >= 4) {
+            for (br.rpgatributos.forja.Raridade x : br.rpgatributos.forja.Raridade.values()) if (x.id().equalsIgnoreCase(args[3])) r = x;
+        }
+        for (br.rpgatributos.forja.Traje.Peca pc : pecas) {
+            ItemStack item = plugin.forja().criarTraje(t, pc, r);
+            p.getInventory().addItem(item).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
+        }
+        ok(sender, t.nome() + " entregue.");
     }
 
     // ================= profundezas (admin) =================
@@ -1635,7 +1660,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "reload"));
                 } else if (args.length == 2 && List.of("carta", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

@@ -433,6 +433,8 @@ public final class PacoteRecursos implements Listener {
         f.put("assets/rpgatributos/font/menus.json", texto(fonteMenus()));
         // Domador: armaduras próprias de cavalo e lobo e as peças 3D dos companheiros.
         f.putAll(br.rpgatributos.domador.VisualDomador.arquivosDoPacote());
+        // Trajes (armaduras com nome): a textura no corpo de quem veste.
+        f.putAll(ArteTrajes.arquivosDoPacote());
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try (ZipOutputStream zip = new ZipOutputStream(bytes)) {

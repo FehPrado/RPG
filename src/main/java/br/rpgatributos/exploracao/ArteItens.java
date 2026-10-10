@@ -1828,6 +1828,7 @@ final class ArteItens {
         oficios(l);
         estacoesVivas(l);
         ArteNomeadas.registrar(l);
+        ArteTrajes.registrar(l);
         return l;
     }
 
