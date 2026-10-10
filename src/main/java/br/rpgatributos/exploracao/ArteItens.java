@@ -2086,6 +2086,44 @@ final class ArteItens {
             "................",
             "................"};
 
+    /** Fatia de queijo. */
+    private static final String[] QUEIJO = {
+            "................",
+            "................",
+            "................",
+            "..........oo....",
+            "........oohho...",
+            "......oohhmmo...",
+            "....oohhmmmdmo..",
+            "..oohhmmmmmmmo..",
+            "..ommdmmmmdmmo..",
+            "..ommmmmmmmmdo..",
+            "..ommdmmmmmmdo..",
+            "..odddddddddddo.",
+            "...ooooooooooo..",
+            "................",
+            "................",
+            "................"};
+
+    /** Pote de vidro com tampa de pano (geleia, conserva, maionese, óleo). */
+    private static final String[] POTE = {
+            "................",
+            "................",
+            ".....aaaaaa.....",
+            "....aawaawaa....",
+            ".....oooooo.....",
+            "....oggmmmmo....",
+            "...ogmmhmmmdo...",
+            "...ogmhmmmmdo...",
+            "...ogmmmmmmdo...",
+            "...ogmmmmmddo...",
+            "...ogmmmmmddo...",
+            "...ommmmmdddo...",
+            "....oddddddo....",
+            ".....oooooo.....",
+            "................",
+            "................"};
+
     private static final String[][] FASES = {
             {"................", "................", "................", "................", "................", "................",
                     "................", "................", "................", "................", "................", "................",
@@ -2180,6 +2218,15 @@ final class ArteItens {
         // 2.33: produtos dos animais.
         l.add(new Arte("clay_ball", "produto_trufa", NOZ, c('o', 0xFF2A1A10, 'm', 0xFF5D4037, 'h', 0xFF8D6E63, 'd', 0xFF3E2723, 'a', 0xFFBCAAA4,
                 'g', 0xFF4E8A2A, 'k', 0xFF2E5A1E, 'c', 0xFF4E342E, 's', 0xFFD7CCC8, 'w', 0xFFEFEBE9)));
+        // 2.33: artesanato do Tacho.
+        l.add(new Arte("bread", "artesao_queijo", QUEIJO, c('o', 0xFF8A6A10, 'm', 0xFFFBC02D, 'h', 0xFFFFF176, 'd', 0xFFE0A000)));
+        l.add(new Arte("bread", "artesao_queijo_de_cabra", QUEIJO, c('o', 0xFF8A8070, 'm', 0xFFF5F0E0, 'h', BRANCO, 'd', 0xFFD7CCC8)));
+        Object[][] potes = {{"geleia", 0xC2185B}, {"conserva", 0x689F38}, {"maionese", 0xFFF3C4}, {"oleo_de_trufa", 0xD4A017}};
+        for (Object[] pt : potes) {
+            int m = 0xFF000000 | (int) pt[1];
+            l.add(new Arte("honey_bottle", "artesao_" + pt[0], POTE, c('o', 0xFF4A4A4A, 'g', 0xFFE0F7FA, 'm', m, 'h', clarear(m, 0.4),
+                    'd', escurecer(m, 0.7), 'a', 0xFF8D6E63, 'w', BRANCO)));
+        }
         // A planta murcha (fora de época): a fase 2 em tons de palha seca.
         l.add(new Arte("dead_bush", "planta_murcha", FASES[2], c('k', 0xFF5A4022, 'g', 0xFF8A6A3A, 'h', 0xFFB89A5E, 'b', 0xFF6A5030,
                 'm', 0xFF7A5A30, 'd', 0xFF4A3218, 'a', 0xFFA08050)));

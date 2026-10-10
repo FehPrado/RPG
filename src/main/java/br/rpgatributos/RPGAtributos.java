@@ -219,6 +219,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Canteiros canteiros;
     private Colmeias colmeias;
     private Barris barris;
+    private br.rpgatributos.vida.Tachos tachos;
     private Album album;
     private MercadorItinerante mercador;
     private Encontros encontros;
@@ -358,6 +359,7 @@ public final class RPGAtributos extends JavaPlugin {
         canteiros = new Canteiros(this);
         colmeias = new Colmeias(this);
         barris = new Barris(this);
+        tachos = new br.rpgatributos.vida.Tachos(this);
         mercador = new MercadorItinerante(this);
         encontros = new Encontros(this);
         flechas = new Flechas(this);
@@ -385,7 +387,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, ajuda);
+                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -556,7 +558,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, talentos::tick, 40L, 40L);
         agenda.runTaskTimer(this, evolucao::tick, 40L, 40L);
         // Detalhes: forjados especiais, estações pequenas, natureza, túmulos e recordes.
-        for (Estacao e : List.of(fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, ateliers, trofeus, mesasCartografo, canteiros, colmeias, barris)) {
+        for (Estacao e : List.of(fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, ateliers, trofeus, mesasCartografo, canteiros, colmeias, barris, tachos)) {
             e.iniciar();
             agenda.runTaskTimer(this, e::tick, 5L, 5L);
         }
@@ -788,6 +790,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Canteiros canteiros() { return canteiros; }
     public Colmeias colmeias() { return colmeias; }
     public Barris barris() { return barris; }
+    public br.rpgatributos.vida.Tachos tachos() { return tachos; }
     public Album album() { return album; }
     public MercadorItinerante mercador() { return mercador; }
     public Encontros encontros() { return encontros; }
@@ -809,7 +812,7 @@ public final class RPGAtributos extends JavaPlugin {
                 || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b) || alquimia.eh(b) || prefeituras.eh(b) || obeliscos.eh(b)
                 || santuariosDivinos.eh(b) || transmutacao.eh(b) || mesasRunicas.eh(b)
                 || fogueiras.eh(b) || bonecos.eh(b) || pedrasAmolar.eh(b) || bebedouros.eh(b) || trofeus.eh(b) || mesasCartografo.eh(b)
-                || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || cabanasPesca.eh(b) || ateliers.eh(b);
+                || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || tachos.eh(b) || cabanasPesca.eh(b) || ateliers.eh(b);
     }
 
     /**
