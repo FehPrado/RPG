@@ -161,7 +161,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>config.yml</code></td><td>Todas as opções</td></tr>
       <tr><td><code>parties.yml</code>, <code>territorios.yml</code></td><td>Parties e territórios</td></tr>
       <tr><td><code>companheiros.yml</code></td><td>Companheiros (os dados também ficam na criatura)</td></tr>
-      <tr><td><code>colonias.yml</code></td><td>Colônias (os moradores são aldeões salvos no mundo)</td></tr>
+      <tr><td><code>colonias.yml</code></td><td>Colônias: moradores (jeito, pedido, humor, casa), obras em andamento e construções prontas (nível, placa, camas). Os moradores são aldeões salvos no mundo</td></tr>
+      <tr><td><code>plantas/*.yml</code></td><td>Projetos de construção da colônia (um arquivo por projeto). Os 16 que vêm com o plugin são copiados na primeira vez; edite ou crie outros e use <span class="cmd">/rpgadmin reload</span></td></tr>
       <tr><td><code>reinos.yml</code></td><td>Reinos, cargos, tesouro e guerras marcadas</td></tr>
       <tr><td><code>lendas.yml</code>, <code>classes_lendarias.yml</code></td><td>Donos das lendas e das classes lendárias</td></tr>
       <tr><td><code>pedras.yml</code>, <code>locais.yml</code></td><td>Pedras de Viagem e Locais Ocultos (apague <code>locais.yml</code> para sortear novos)</td></tr>
@@ -225,6 +226,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>territorio.chunks-maximo</code></td><td>60</td><td>Tamanho máximo do território</td></tr>
         <tr><td><code>territorio.expansoes-maximo</code> / <code>niveis-por-expansao</code> / <code>chunks-por-expansao</code></td><td>2 / 300 / 9</td><td>Marcos de Expansão: quantos, a cada quantos níveis somados e quantos chunks cada um dá</td></tr>
         <tr><td><code>territorio.mundos-bloqueados</code></td><td>[]</td><td>Mundos sem territórios</td></tr>
+        <tr><td><code>territorio.raio-torre-de-vigia</code></td><td>1</td><td>Chunks em volta de cada Torre de Vigia da colônia (1 = 3×3); cada nível da torre soma +1 (até 3). Fica fora do limite normal e sai junto se a torre for desfeita</td></tr>
+        <tr><td><code>colonia.trabalho-nas-construcoes</code></td><td>true</td><td>Cada profissão só conta o posto dentro da sua construção pronta (Fazenda, Mina, Ferraria...); o Construtor tem 1 vaga de graça e +1 por nível da Oficina. <code>false</code> = posto em qualquer lugar do território</td></tr>
+        <tr><td><code>colonia.moradia-nas-casas</code></td><td>true</td><td>Cada morador mora numa Casa e dorme na cama dela; sem casa fica triste e produz 15% a menos, e só chega morador novo com vaga nas casas. <code>false</code> = qualquer cama serve</td></tr>
         <tr><td><code>reino.esmeraldas-para-fundar</code></td><td>32</td><td>Custo do reino</td></tr>
         <tr><td><code>guerra.dia-da-semana</code> / <code>hora</code></td><td>SATURDAY / 20</td><td>Horário das guerras</td></tr>
         <tr><td><code>guerra.duracao-minutos</code></td><td>60</td><td>Duração da guerra</td></tr>
@@ -328,6 +332,24 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>estruturas.so-chunks-novos</code></td><td>true</td><td>Só em terra nunca visitada; false também tenta em chunks antigos sem obra de jogador e fora de territórios</td></tr>
       </tbody></table></div>
       <p>Nunca nascem em território, em cima de estrutura do Minecraft, na água ou em chão muito irregular. Cada uma cabe num chunk só. <span class="cmd">/rpgadmin estruturas</span> mostra quantos lugares foram recusados e por quê.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="plantas">
+  <h2><span class="ico">📐</span>Projetos da colônia (plantas)</h2>
+  <div class="grade">
+    <div class="card largo"><h3>Como é um arquivo</h3>
+      <p>Cada projeto é um <code>plugins/RPGAtributos/plantas/&lt;id&gt;.yml</code>. O jogador pega na Prefeitura → Projetos: clique = o Construtor ergue o desenho; botão direito = "do seu jeito" (ele constrói e pede a vistoria).</p>
+      <div class="tabela"><table><thead><tr><th>Campo</th><th>O que é</th></tr></thead><tbody>
+        <tr><td><code>nome</code>, <code>descricao</code>, <code>icone</code></td><td>Como aparece no catálogo</td></tr>
+        <tr><td><code>nivel</code></td><td>Nível da colônia para liberar o projeto</td></tr>
+        <tr><td><code>efeito</code></td><td>O que a construção faz: <code>CASA</code>, <code>TORRE_DE_VIGIA</code>, <code>ARMAZEM</code>, <code>BIBLIOTECA</code>, <code>QUARTEL</code>, <code>FAZENDA</code>, <code>PRACA</code>, <code>OFICINA</code>, <code>CABANA_LENHADOR</code>, <code>CABANA_PESCADOR</code>, <code>MINA</code>, <code>MERCADO</code>, <code>FERRARIA</code>, <code>TAVERNA</code>, <code>ESTABULO</code>, <code>LABORATORIO</code> ou <code>NENHUM</code></td></tr>
+        <tr><td><code>legenda</code></td><td>Uma letra por bloco, com estado: <code>"E": "oak_stairs[facing=east,half=bottom]"</code>. Ponha as letras entre aspas (<code>"N"</code> e <code>"Y"</code> sem aspas viram verdadeiro/falso no YAML). <code>.</code> é ar (o Construtor limpa) e <code>~</code> é "não mexe"</td></tr>
+        <tr><td><code>camadas</code></td><td>De baixo (0 = chão) para cima. Em cada camada, a 1ª linha é o <b>fundo</b> e a última é a <b>frente</b> (a entrada); <code>south</code> é o lado da entrada. Todas as linhas com a mesma largura</td></tr>
+        <tr><td><code>niveis</code></td><td>Lista com o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito): <code>blocos</code> (firmes construídos), <code>camas</code>, <code>portas</code>, <code>luz</code>, <code>baus</code>, <code>coberto</code> (% do piso com teto), <code>altura</code> e <code>itens</code> (bloco: quantidade)</td></tr>
+      </tbody></table></div>
+      <p class="muted">Ao carregar, o console avisa se o desenho estiver errado (letra fora da legenda, linha de largura diferente) ou se ele não atender o próprio nível 1.</p>
     </div>
   </div>
 </section>
@@ -441,6 +463,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><span class="cmd">/rpgadmin colono [qtd]</span></td><td>Moradores chegam agora</td></tr>
         <tr><td><span class="cmd">/rpgadmin turnocolonia</span></td><td>Um turno de trabalho agora</td></tr>
         <tr><td><span class="cmd">/rpgadmin nivelcolonia &lt;1-5&gt;</span></td><td>Nível da sua colônia</td></tr>
+        <tr><td><span class="cmd">/rpgadmin prefeitura</span></td><td>Cria a Prefeitura olhando para um sino</td></tr>
         <tr><td><span class="cmd">/rpgadmin guerra iniciar &lt;A&gt; &lt;B&gt;</span></td><td>Guerra começando agora</td></tr>
         <tr><td><span class="cmd">/rpgadmin guerra encerrar</span></td><td>Encerra as guerras</td></tr>
       </tbody></table></div>
@@ -560,6 +583,16 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <section class="secao" id="testes">
   <h2><span class="ico">✅</span>Roteiro de testes rápido</h2>
   <div class="grade">
+    <div class="card"><h3>Colônia (construções)</h3>
+      <ol>
+        <li>No seu território, <span class="cmd">/rpgadmin prefeitura</span> olhando para um sino e <span class="cmd">/rpgadmin colono 3</span>.</li>
+        <li>Prefeitura → Projetos → Casa. Clique no chão: a cerca aparece com o portão do seu lado. Agachado + clique na cerca: girar.</li>
+        <li>Ponha um baú dentro da cerca e use "Trazer do depósito" (ou encha à mão). Dê a profissão Construtor a um morador: ele vai até lá e ergue a casa (de dia).</li>
+        <li>Pronta: a placa aparece; clique nela, peça a vistoria. Os moradores ganham casa (veja no menu de cada um).</li>
+        <li>Botão direito num projeto (do seu jeito): construa algo e peça a vistoria; o menu mostra ✔/✖ de cada exigência.</li>
+        <li>Torre de Vigia pronta: o território cresce 3×3 chunks. Quebre a placa 2 vezes: os chunks saem.</li>
+      </ol>
+    </div>
     <div class="card"><h3>Portais</h3>
       <ol>
         <li><span class="cmd">/rpgadmin portal normal</span>: anel, placa e aviso no chat.</li>
