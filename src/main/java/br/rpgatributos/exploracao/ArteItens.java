@@ -2177,6 +2177,9 @@ final class ArteItens {
                     'm', mCor, 'd', escurecer(mCor, 0.7), 'a', clarear(mCor, 0.45));
             for (int f = 0; f < 4; f++) l.add(new Arte("short_grass", "planta_" + id + "_" + f, FASES[f], fase));
         }
+        // 2.33: produtos dos animais.
+        l.add(new Arte("clay_ball", "produto_trufa", NOZ, c('o', 0xFF2A1A10, 'm', 0xFF5D4037, 'h', 0xFF8D6E63, 'd', 0xFF3E2723, 'a', 0xFFBCAAA4,
+                'g', 0xFF4E8A2A, 'k', 0xFF2E5A1E, 'c', 0xFF4E342E, 's', 0xFFD7CCC8, 'w', 0xFFEFEBE9)));
         // A planta murcha (fora de época): a fase 2 em tons de palha seca.
         l.add(new Arte("dead_bush", "planta_murcha", FASES[2], c('k', 0xFF5A4022, 'g', 0xFF8A6A3A, 'h', 0xFFB89A5E, 'b', 0xFF6A5030,
                 'm', 0xFF7A5A30, 'd', 0xFF4A3218, 'a', 0xFFA08050)));

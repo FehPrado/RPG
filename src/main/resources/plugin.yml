@@ -84,6 +84,11 @@ commands:
     usage: /guardaroupa
     aliases: [roupas, wardrobe]
     permission: rpg.chapeu
+  animais:
+    description: Seus animais da fazenda (corações, comida e produtos do dia).
+    usage: /animais
+    aliases: [fazenda, criacao]
+    permission: rpg.vida
   calendario:
     description: Estação do ano, fase da lua, clima e eventos do céu.
     usage: /calendario
