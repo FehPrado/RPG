@@ -250,6 +250,13 @@ public final class RPGAtributos extends JavaPlugin {
         saveDefaultConfig();
         completarConfig();
         settings = new Settings(getConfig());
+        // Backup dos dados (uma vez por dia, antes de carregar qualquer coisa).
+        try {
+            int n = Backups.fazer(getDataFolder().toPath(), getConfig().getInt("backup.dias", 7), java.time.LocalDate.now());
+            if (n > 0) getLogger().info("Backup dos dados: " + n + " arquivos em backups/" + java.time.LocalDate.now() + ".");
+        } catch (java.io.IOException ex) {
+            getLogger().warning("Não consegui fazer o backup dos dados: " + ex.getMessage());
+        }
         stats = new StatsManager(this);
         bonus = new BonusManager(this);
         talentos = new Talentos(this);
@@ -586,7 +593,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, criacao::tick, 40L, 20L);
         agenda.runTaskTimer(this, estruturas::tick, 40L, 40L);
         agenda.runTaskTimer(this, profundezas::tick, 50L, 40L);
-        agenda.runTaskTimer(this, visualDomador::tick, 20L, 1L);
+        agenda.runTaskTimer(this, visualDomador::tick, 20L, 2L); // a cada 2 ticks (o display anda suave entre um e outro)
         agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);

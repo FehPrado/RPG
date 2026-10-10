@@ -5,3 +5,6 @@ target/
 
 # Pacote de referência (direitos do autor, não vai para o git)
 NewDefault*.zip
+
+# Jars compilados: baixe pelo GitHub (Actions ou Releases), não vão para o git
+*.jar
