@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.35.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.36.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -348,6 +348,10 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>profundezas.chance-de-raiz-por-chunk</code></td><td>0.1</td><td>Chance de um chunk novo ganhar uma Raiz de Luz numa caverna funda</td></tr>
         <tr><td><code>profundezas.chance-de-penumbra</code></td><td>0.3</td><td>Chance de um monstro nascido no escuro ser da Penumbra (rouba 1 coração máximo por golpe, até 5)</td></tr>
         <tr><td><code>profundezas.chance-do-coracao</code></td><td>0.15</td><td>Chance de acender uma raiz acordar o Coração da Penumbra</td></tr>
+        <tr><td><code>profundezas.penumbra-maxima</code></td><td>5</td><td>Quantos corações máximos a Penumbra pode roubar (1 a 9)</td></tr>
+        <tr><td><code>profundezas.luz-que-protege</code></td><td>10</td><td>Luz de tocha/lanterna a partir da qual não há escuridão (bases e minas iluminadas); o território amigo também fica claro</td></tr>
+        <tr><td><code>profundezas.poco-da-colonia.chance-de-penumbra</code></td><td>0.03</td><td>Mina nível 3 + raiz acesa debaixo do território: chance, por Minerador e turno, de algo da Penumbra subir pelo poço</td></tr>
+        <tr><td><code>backup.dias</code></td><td>7</td><td>Ao ligar, copia os .yml do plugin para <code>backups/AAAA-MM-DD</code> (1 vez por dia) e guarda os últimos dias (0 desliga)</td></tr>
       </tbody></table></div>
       <p>Nunca nascem em território, em cima de estrutura do Minecraft, na água ou em chão muito irregular. Cada uma cabe num chunk só. <span class="cmd">/rpgadmin estruturas</span> mostra quantos lugares foram recusados e por quê.</p>
     </div>
@@ -548,6 +552,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin muda|fruta &lt;fruta&gt; [qtd]</span></td><td>Mudas e frutas do pomar</td></tr>
       <tr><td><span class="cmd">/rpgadmin estrutura &lt;tipo&gt;</span></td><td>Constrói a estrutura à sua frente (console: &lt;tipo&gt; &lt;mundo&gt; &lt;x&gt; &lt;z&gt;)</td></tr>
       <tr><td><span class="cmd">/rpgadmin nomeada &lt;arma|aleatoria&gt; [raridade]</span></td><td>Uma arma com nome já forjada (padrão: Épica)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin traje &lt;traje|aleatorio&gt; [capacete|peitoral|calca|botas|todas] [raridade]</span></td><td>Peças de um Traje (armadura com nome) já forjadas</td></tr>
       <tr><td><span class="cmd">/rpgadmin raiz</span> · <span class="cmd">coracaopenumbra</span> · <span class="cmd">penumbra</span></td><td>Planta uma Raiz de Luz no chão embaixo de você · acorda o Coração da Penumbra · zera a sua Penumbra</td></tr>
       <tr><td><span class="cmd">/rpgadmin itemceu       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>lt;fruta_celeste|semente_brilhante      <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>gt; [qtd]</span></td><td>Fruta Celeste ou Semente Brilhante (o Fragmento Celeste vem com <span class="cmd">/rpgadmin raro fragmento_celeste</span>)</td></tr>
       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td><td>Lista as mais perto · tira a mais perto do registro (os blocos ficam)</td></tr>
@@ -648,6 +653,15 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Apanhe de um monstro de nome roxo (da Penumbra): a vida máxima cai 1 coração. Suba ao sol ou beba o Elixir da Purificação: volta.</li>
         <li><span class="cmd">/rpgadmin coracaopenumbra</span>: o chefe com barra roxa, que chama zumbis da Penumbra.</li>
         <li>Config: <code>estruturas.ilha-do-ceu</code> e <code>profundezas</code>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Profundezas × Colônia e Trajes (2.36)</h3>
+      <ol>
+        <li>Abaixo do y 0, ponha tochas em volta (luz 10+) ou fique no seu território: a escuridão não vem.</li>
+        <li>Numa colônia com a Mina no nível 3, use <span class="cmd">/rpgadmin raiz</span> numa caverna abaixo do território e acenda. A placa da Mina mostra <b>Poço das Profundezas aberto</b>; rode <span class="cmd">/rpgadmin turnocolonia</span> e veja ametista e mitrilo no depósito.</li>
+        <li><span class="cmd">/rpgadmin traje penumbra todas</span>: vista as 4 peças e olhe em terceira pessoa (F5): a textura própria aparece no corpo. Teste o Guarda-roupa e a mesa de ferraria (Netherite).</li>
+        <li>Reinicie o servidor com o Coração da Penumbra vivo: a barra de chefe volta quando ele carrega.</li>
+        <li>Jars: não vão mais para o git. Baixe pelo GitHub Actions (artefato) ou crie uma tag <code>v2.36.0</code> para virar Release com o jar.</li>
       </ol>
     </div>
     <div class="card"><h3>Jeito, pedidos e Cavaleiro (2.32)</h3>

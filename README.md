@@ -98,7 +98,9 @@ Até +5, falhar só gasta o material. De +6 a +8, o item perde 1 nível. No +9 e
 **Conjuntos:** vestindo as 4 peças de armadura forjadas, a raridade mais baixa entre elas dá um bônus extra. Vai de +1 de armadura (Comum) até +5 de armadura, +4 corações, +10% de velocidade, Regeneração e Resistência (Mítico).
 
 **Mesa de ferraria:** subir um item forjado para Netherite mantém a raridade, em qualquer mesa. Item achado no mundo é forjado ao ser melhorado numa mesa a até 6 blocos de uma Forja do Ferreiro.
-**Armas com nome:** às vezes a peça já nasce com **nome, história e visual próprios**: 2% das Comuns forjadas, 5% das Raras, 10% das Épicas, 18% das Únicas, 30% das Lendárias e 45% das Míticas (`forja.armas-com-nome`). Elas também aparecem em **5% dos baús** de estruturas (do plugin e do jogo) e com os chefes (Altar, Sumo-Sacerdote, Guardião dos Ventos e Coração da Penumbra), já forjadas. São 25: **espadas** (Presa do Inverno, Lâmina de Thalassa, Aurora de Aerília, Juramento do Fortim, Brasa dos Anões, Sussurro da Penumbra), **machados e maças** (Talha-Raízes, Fúria do Saqueador, Machado do Faroleiro, Sino de Maris, Martelo do Eremita), **arcos e bestas** (Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Besta do Capitão, Besta Glacial) e **ferramentas** (Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral). **Só muda a aparência:** a força continua sendo a da raridade. Com o pacote de recursos, no inventário aparece o desenho delas e na mão, no chão, no suporte e na moldura um **modelo 3D** (espadas, machados, maças e ferramentas; os arcos e as bestas mudam de desenho conforme a corda é puxada). O nome e a história ficam ao refinar e reforjar.
+**Armas com nome:** às vezes a peça já nasce com **nome, história e visual próprios**: 2% das Comuns forjadas, 5% das Raras, 10% das Épicas, 18% das Únicas, 30% das Lendárias e 45% das Míticas (`forja.armas-com-nome`). Elas também aparecem em **5% dos baús** de estruturas (do plugin e do jogo) e com os chefes (Altar, Sumo-Sacerdote, Guardião dos Ventos e Coração da Penumbra), já forjadas. São 37: **espadas** (Presa do Inverno, Lâmina de Thalassa, Aurora de Aerília, Juramento do Fortim, Brasa dos Anões, Sussurro da Penumbra, Lâmina da Raiz de Luz, Fio do Guardião dos Ventos, Promessa do Primeiro Colono, Lâmina do Eclipse), **machados e maças** (Talha-Raízes, Fúria do Saqueador, Machado do Faroleiro, Machado do Velho Lenhador, Mordida da Geada, Sino de Maris, Martelo do Eremita, Martelo do Mestre de Obras, Coração Roubado), **arcos e bestas** (Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Arco das Folhas Caídas, Besta do Capitão, Besta Glacial, Besta da Torre de Vigia) e **ferramentas** (Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Picareta do Poço Fundo, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada das Quatro Estações, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral). **Só muda a aparência:** a força continua sendo a da raridade. Com o pacote de recursos, no inventário aparece o desenho delas e na mão, no chão, no suporte e na moldura um **modelo 3D** (espadas, machados, maças e ferramentas; os arcos e as bestas mudam de desenho conforme a corda é puxada). O nome e a história ficam ao refinar e reforjar.
+
+**Trajes (armaduras com nome):** a armadura forjada também pode nascer com nome (mesmas chances; 30% das armas com nome de baús e chefes são peças de Traje). São **8 Trajes** de 4 peças, cada um com história, ícone próprio e **textura própria no corpo de quem veste**, pintada pelo plugin: **da Penumbra** (escamas roxas), **dos Ventos** (placas brancas e douradas), **de Thalassa** (escamas verde-mar e coral), **do Fortim** (placas de aço e vermelho), **dos Anões** (bronze), **da Geada** (gelo), **da Colheita** (tecido de palha) e **da Raiz de Luz** (tecido de raiz com veios âmbar). As peças se chamam Elmo/Peitoral/Grevas/Botas (placas), Elmo/Cota/Grevas/Botas (escamas) ou Capuz/Gibão/Calças/Botas (tecido), por exemplo **Elmo da Penumbra** e **Gibão da Colheita**. Só aparência, como as armas; funcionam com o Guarda-roupa e continuam ao virar Netherite.
 
 ## Bancada de Reciclagem
 
@@ -1033,13 +1035,15 @@ Configure em `estruturas.ilha-do-ceu` (região, chance e distância do spawn).
 
 ### Profundezas
 
-Abaixo do **y 0** o mundo fica escuro de verdade: longe de uma Raiz de Luz acesa, você fica com **Escuridão** (a Visão Noturna resolve).
+Abaixo do **y 0** o mundo fica escuro de verdade: longe de uma Raiz de Luz acesa, você fica com **Escuridão** (a Visão Noturna resolve). **Bases e minas iluminadas** (luz de tocha ou lanterna 10 ou mais) e o **seu território** (ou de quem te deu permissão) ficam claros.
 - **Raízes de Luz:** nascem adormecidas nas cavernas fundas (um tronco de raízes de mangue com um bulbo marrom em cima, que brilha de leve quando você chega perto). **Clique no bulbo:** ela acende para sempre, para todos, e ilumina a caverna em volta (cerca de 20 blocos); até 40 blocos dela não há escuridão nem Penumbra. Quem acende ganha XP e **Sementes Brilhantes**.
 - **Semente Brilhante:** arremesse (como bola de neve) e o lugar onde ela cai fica iluminado por 2 minutos.
-- **Penumbra:** parte dos monstros que nascem no escuro das profundezas é **da Penumbra** (nome roxo). Cada golpe deles **rouba 1 coração máximo** (até 5). Os corações voltam **ao sol** (1 a cada 10 s), **perto de uma raiz acesa**, ao acender uma raiz, ao morrer ou com o **Elixir da Purificação**.
-- **Coração da Penumbra:** às vezes (15%) acender uma raiz acorda o chefe (esqueleto wither gigante de 350 de vida, com barra de chefe, que rouba corações e chama zumbis da Penumbra). Deixa Sementes Brilhantes, Fragmento de Forja, Pedra de Proteção, fragmentos de eco e às vezes Essência Primordial.
+- **Penumbra:** parte dos monstros que nascem no escuro das profundezas é **da Penumbra** (nome roxo). Cada golpe deles **rouba 1 coração máximo** (até 5, `profundezas.penumbra-maxima`). Os corações voltam **ao sol** (1 a cada 10 s), **perto de uma raiz acesa**, ao acender uma raiz, ao morrer ou com o **Elixir da Purificação**.
+- **Coração da Penumbra:** às vezes (15%) acender uma raiz acorda o chefe (esqueleto wither gigante de 350 de vida, com barra de chefe, que rouba corações e chama até 6 zumbis da Penumbra; continua sendo chefe depois de reiniciar o servidor). Deixa Sementes Brilhantes, Fragmento de Forja, Pedra de Proteção, fragmentos de eco e às vezes Essência Primordial.
 
-Configure em `profundezas` (ligar, escuridão, altura, chance de raiz por chunk, de Penumbra e do Coração).
+- **Poço das Profundezas (colônia):** com a **Mina no nível 3** e uma **Raiz de Luz acesa debaixo do território** da colônia, o Minerador desce ao fundo: traz ardósia, ferro, ouro, redstone, lápis, **ametista**, mais diamante, **mitrilo bruto**, **Sementes Brilhantes**, às vezes **fragmento de eco** e, bem raro, uma arma com nome perdida lá embaixo. Mas às vezes (3% por Minerador e turno) **algo da Penumbra sobe pelo poço** e aparece na Mina. A placa da Mina mostra se o poço está aberto.
+
+Configure em `profundezas` (ligar, escuridão, altura, luz que protege, máximo da Penumbra, chance de raiz por chunk, de Penumbra, do Coração e do poço da colônia).
 
 ### Pacote de recursos do servidor
 
@@ -1461,6 +1465,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin estrutura <tipo>` | Constrói a estrutura à sua frente (pelo console: `<tipo> <mundo> <x> <z>`) |
 | `/rpgadmin estruturas` | Lista as estruturas mais perto de você |
 | `/rpgadmin nomeada <arma ou aleatoria> [raridade]` | Uma arma com nome já forjada (padrão: Épica) |
+| `/rpgadmin traje <traje ou aleatorio> [capacete/peitoral/calca/botas/todas] [raridade]` | Peças de um Traje (armadura com nome) já forjadas |
 | `/rpgadmin raiz` | Planta uma Raiz de Luz no chão embaixo de você (precisa de 5 blocos de ar em cima) |
 | `/rpgadmin coracaopenumbra` | O Coração da Penumbra aparece à sua frente |
 | `/rpgadmin penumbra` | Zera a sua Penumbra |
@@ -1473,10 +1478,12 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 ## Como gerar o .jar
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
-2. Rode `mvn package` nesta pasta.
-3. O plugin fica em `target/RPGAtributos-2.35.0.jar`.
+2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
+3. O plugin fica em `target/RPGAtributos-2.36.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). Os jars **não vão para o git** (`*.jar` no `.gitignore`); para publicar uma versão, crie uma tag (`git tag v2.36.0 && git push origin v2.36.0`) e o jar aparece em **Releases**.
+
+Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 
 ## Instalar
 
