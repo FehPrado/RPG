@@ -503,6 +503,8 @@ public final class Colonias implements Listener {
                     case CRAFTING_TABLE -> Profissao.CONSTRUTOR;
                     default -> null;
                 };
+                // Fazendeiro, Bibliotecário e soldados: só vale o posto que está dentro da construção deles.
+                if (p != null && p.construcao() != null && !obras.postoNaConstrucao(c, p.construcao(), x, y, z)) p = null;
                 if (p != null) s.postos.merge(p, 1, Integer::sum);
             }
             s.blocosPosto.clear();
@@ -1180,7 +1182,7 @@ public final class Colonias implements Listener {
         var reino = plugin.reinos().de(c.dono);
         inv.setItem(P_EXERCITO, item(Material.IRON_SWORD, Component.text("⚔ Exército", NamedTextColor.RED, TextDecoration.BOLD), List.of(
                 linha("Soldados: ", soldados + " / " + vagasSoldados(c) + " vagas", NamedTextColor.WHITE),
-                linha("Quartéis: ", c.postos.getOrDefault(Profissao.SOLDADO, 0) + " (bloco de alvo, " + Profissao.SOLDADOS_POR_QUARTEL + " vagas cada)", NamedTextColor.GRAY),
+                linha("Alvos nos Quartéis: ", c.postos.getOrDefault(Profissao.SOLDADO, 0) + " (" + Profissao.SOLDADOS_POR_QUARTEL + " vagas cada)", NamedTextColor.GRAY),
                 linha("Reino: ", reino == null ? "nenhum" : reino.nome(), reino == null ? NamedTextColor.DARK_GRAY : reino.cor()),
                 linha("Ordem: ", nomeOrdem(c), NamedTextColor.YELLOW),
                 Component.empty(),
@@ -1383,7 +1385,7 @@ public final class Colonias implements Listener {
             if (c.nivel < nova.nivelColonia()) { erro(p, "Libera no nível " + nova.nivelColonia() + " da colônia."); return; }
             if (nova == ci.profissao) return;
             if (nova.soldado() && !ci.profissao.soldado() && quantosSoldados(c) >= vagasSoldados(c)) {
-                erro(p, "Faltam vagas no Quartel: cada bloco de alvo no território abriga " + Profissao.SOLDADOS_POR_QUARTEL + " soldados.");
+                erro(p, "Faltam vagas: cada alvo dentro de um Quartel (construção da colônia) abriga " + Profissao.SOLDADOS_POR_QUARTEL + " soldados.");
                 return;
             }
             definirProfissao(c, ci, nova);
@@ -2040,7 +2042,9 @@ public final class Colonias implements Listener {
             }
             for (String linha : s.getStringList("construcoes")) {
                 Construcao k = Construcao.ler(linha);
-                if (k != null) c.construcoes.add(k);
+                if (k == null) continue;
+                c.construcoes.add(k);
+                obras.indexar(k);
             }
             porDono.put(dono, c);
         }

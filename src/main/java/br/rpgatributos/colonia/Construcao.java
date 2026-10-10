@@ -14,6 +14,8 @@ final class Construcao {
     final int extra;
     final boolean livre;
     int nivel;
+    /** A placa da construção (x, y, z), como o bloco do prédio no MineColonies: clique abre o menu, quebrar desfaz. */
+    int[] placa;
 
     Construcao(String planta, String mundo, int x, int y, int z, int rot, int extra, boolean livre, int nivel) {
         this.planta = planta;
@@ -39,7 +41,8 @@ final class Construcao {
     }
 
     String salvar() {
-        return planta + ";" + mundo + ";" + x + ";" + y + ";" + z + ";" + rot + ";" + extra + ";" + livre + ";" + nivel;
+        return planta + ";" + mundo + ";" + x + ";" + y + ";" + z + ";" + rot + ";" + extra + ";" + livre + ";" + nivel + ";"
+                + (placa == null ? "-" : placa[0] + "," + placa[1] + "," + placa[2]);
     }
 
     static Construcao ler(String s) {
@@ -49,8 +52,13 @@ final class Construcao {
             int extra = p.length > 6 ? Integer.parseInt(p[6]) : 0;
             boolean livre = p.length > 7 && Boolean.parseBoolean(p[7]);
             int nivel = p.length > 8 ? Integer.parseInt(p[8]) : 1;
-            return new Construcao(p[0], p[1], Integer.parseInt(p[2]), Integer.parseInt(p[3]), Integer.parseInt(p[4]), Integer.parseInt(p[5]),
+            Construcao k = new Construcao(p[0], p[1], Integer.parseInt(p[2]), Integer.parseInt(p[3]), Integer.parseInt(p[4]), Integer.parseInt(p[5]),
                     extra, livre, nivel);
+            if (p.length > 9 && !p[9].equals("-")) {
+                String[] q = p[9].split(",");
+                k.placa = new int[]{Integer.parseInt(q[0]), Integer.parseInt(q[1]), Integer.parseInt(q[2])};
+            }
+            return k;
         } catch (NumberFormatException ex) {
             return null;
         }

@@ -88,12 +88,12 @@ public enum Profissao {
         return switch (posto) {
             case NENHUM -> "nenhum";
             case BLOCO -> switch (this) {
-                case FAZENDEIRO -> "Composteira";
+                case FAZENDEIRO -> "Composteira numa Fazenda";
                 case LENHADOR -> "Bancada de flechas";
                 case PESCADOR -> "Barril";
                 case MINERADOR -> "Cortador de pedras";
                 case MERCADOR -> "Mesa de cartografia";
-                case BIBLIOTECARIO -> "Atril";
+                case BIBLIOTECARIO -> "Atril numa Biblioteca";
                 case CONSTRUTOR -> "Bancada de trabalho";
                 default -> "?";
             };
@@ -101,7 +101,20 @@ public enum Profissao {
             case FORJA -> "Forja do Ferreiro";
             case ALTAR_DOMADOR -> "Altar do Domador";
             case BANCADA_ALQUIMICA -> "Bancada Alquímica";
-            case QUARTEL -> "Quartel (bloco de alvo)";
+            case QUARTEL -> "Alvo num Quartel";
+        };
+    }
+
+    /**
+     * A construção onde essa profissão trabalha (como as cabanas do MineColonies): o posto só conta
+     * se estiver dentro de uma construção desse tipo, pronta (nível 1 ou mais). null = posto em qualquer lugar.
+     */
+    public Planta.Efeito construcao() {
+        return switch (this) {
+            case FAZENDEIRO -> Planta.Efeito.FAZENDA;
+            case BIBLIOTECARIO -> Planta.Efeito.BIBLIOTECA;
+            case SOLDADO, ARQUEIRO, CAVALEIRO -> Planta.Efeito.QUARTEL;
+            default -> null;
         };
     }
 

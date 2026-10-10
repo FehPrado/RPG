@@ -30,6 +30,8 @@ public final class Territorio {
     private final List<int[]> expansoes = new ArrayList<>();
     /** Torres de Vigia da colônia (x, y, z, raio em chunks): cada uma soma os chunks em volta dela. */
     private final List<int[]> torres = new ArrayList<>();
+    /** Chunks que cada torre ("x,y,z") pôs no território: saem junto se a torre for desfeita. */
+    private final Map<String, List<Long>> chunksDasTorres = new LinkedHashMap<>();
 
     Territorio(UUID dono, String nomeDono, Location marco, ItemStack bandeira) {
         this.dono = dono;
@@ -88,6 +90,7 @@ public final class Territorio {
 
     public List<int[]> torres() { return Collections.unmodifiableList(torres); }
     List<int[]> torresEditaveis() { return torres; }
+    Map<String, List<Long>> chunksDasTorres() { return chunksDasTorres; }
 
     /** É o Marco principal ou o de uma expansão? */
     public boolean ehMarco(int x, int y, int z) {

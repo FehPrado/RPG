@@ -111,6 +111,10 @@ public final class Obras implements Listener {
     private final MarcadorDeBlocos colocados;
     /** "mundo;x;y;z" de cada bloco de cerca → a obra. */
     private final Map<String, Obra> cercas = new HashMap<>();
+    /** "mundo;x;y;z" da placa de cada construção pronta → a construção. */
+    private final Map<String, Construcao> placas = new HashMap<>();
+    /** Quem quebrou uma placa e precisa quebrar de novo para confirmar → (chave da placa, até quando). */
+    private final Map<UUID, Map.Entry<String, Long>> confirmando = new HashMap<>();
     private int ciclo;
 
     Obras(RPGAtributos plugin, Colonias colonias) {
@@ -347,6 +351,23 @@ public final class Obras implements Listener {
         if (e.getHand() != EquipmentSlot.HAND) return;
         Player jogador = e.getPlayer();
         Block clicado = e.getClickedBlock();
+        // Clique na placa de uma construção: o menu dela (como o bloco do prédio no MineColonies).
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK && clicado != null) {
+            Construcao k = placas.get(chave(clicado.getWorld().getName(), clicado.getX(), clicado.getY(), clicado.getZ()));
+            if (k != null) {
+                e.setCancelled(true);
+                Colonia c = coloniaDa(k);
+                if (c == null) return;
+                if (!colonias.daColonia(jogador, c)) {
+                    Planta pk = plantas.de(k.planta);
+                    jogador.sendActionBar(Component.text("⌂ " + (pk == null ? k.planta : pk.nome()) + " da colônia de " + c.nomeDono + " · nível " + k.nivel,
+                            Prefeituras.COR));
+                    return;
+                }
+                abrirConstrucao(jogador, c, c.construcoes.indexOf(k));
+                return;
+            }
+        }
         // Agachado + clique na cerca: menu da obra.
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && clicado != null && jogador.isSneaking()) {
             Obra o = daCerca(clicado);
@@ -411,12 +432,66 @@ public final class Obras implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void aoQuebrar(BlockBreakEvent e) {
+        Block b0 = e.getBlock();
+        String kp = chave(b0.getWorld().getName(), b0.getX(), b0.getY(), b0.getZ());
+        Construcao k = placas.get(kp);
+        if (k != null) {
+            Player jog = e.getPlayer();
+            Colonia c = coloniaDa(k);
+            Planta pk = plantas.de(k.planta);
+            String nome = pk == null ? k.planta : pk.nome();
+            if (c == null || !colonias.gerencia(jog, c)) {
+                e.setCancelled(true);
+                jog.sendActionBar(Component.text("Essa é a placa de uma construção da colônia (" + nome + ").", NamedTextColor.RED));
+                return;
+            }
+            Map.Entry<String, Long> conf = confirmando.get(jog.getUniqueId());
+            if (conf == null || !conf.getKey().equals(kp) || System.currentTimeMillis() > conf.getValue()) {
+                e.setCancelled(true);
+                confirmando.put(jog.getUniqueId(), Map.entry(kp, System.currentTimeMillis() + 10_000));
+                jog.sendMessage(Component.text("⌂ Quebrar a placa DESFAZ a construção (" + nome + ")"
+                        + (pk != null && pk.efeito() == Planta.Efeito.TORRE_DE_VIGIA ? " e o território que ela vigia" : "")
+                        + ". Os blocos ficam. Quebre de novo em 10 segundos para confirmar.", NamedTextColor.GOLD));
+                return;
+            }
+            confirmando.remove(jog.getUniqueId());
+            e.setDropItems(false);
+            removerConstrucao(c, k, false);
+            jog.sendMessage(Component.text("⌂ " + nome + " deixou de ser uma construção da colônia.", NamedTextColor.GRAY));
+            return;
+        }
         Obra o = daCerca(e.getBlock());
         if (o == null) return;
         e.setCancelled(true);
         Planta p = plantas.de(o.planta);
         e.getPlayer().sendActionBar(Component.text("Essa cerca marca a obra" + (p == null ? "" : " (" + p.nome() + ")")
                 + ". Agachado + clique nela abre o menu.", Prefeituras.COR));
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoExplodirEntidade(org.bukkit.event.entity.EntityExplodeEvent e) {
+        e.blockList().removeIf(this::protegido);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoExplodirBloco(org.bukkit.event.block.BlockExplodeEvent e) {
+        e.blockList().removeIf(this::protegido);
+    }
+
+    /** Cerca de canteiro ou placa de construção (explosão e pistão não mexem). */
+    private boolean protegido(Block b) {
+        String k = chave(b.getWorld().getName(), b.getX(), b.getY(), b.getZ());
+        return cercas.containsKey(k) || placas.containsKey(k);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoEmpurrar(org.bukkit.event.block.BlockPistonExtendEvent e) {
+        for (Block b : e.getBlocks()) if (protegido(b)) { e.setCancelled(true); return; }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoPuxar(org.bukkit.event.block.BlockPistonRetractEvent e) {
+        for (Block b : e.getBlocks()) if (protegido(b)) { e.setCancelled(true); return; }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -509,6 +584,7 @@ public final class Obras implements Listener {
 
     public void tick() {
         ciclo++;
+        if (ciclo % 120 == 0) conferirPlacas();
         for (Colonia c : List.copyOf(colonias.todas())) {
             for (Obra o : List.copyOf(c.obras)) {
                 try {
@@ -754,6 +830,7 @@ public final class Obras implements Listener {
         Construcao k = new Construcao(p.id(), o.mundo, o.x, o.y, o.z, o.rot, 0, false, 1);
         k.nivel = Math.max(1, vistoriar(w, p, k.area()).nivel(p.niveis()));
         c.construcoes.add(k);
+        colocarPlaca(c, k, p);
         Component extra = aplicarNivel(c, k, p);
         colonias.alterarFelicidade(c, 3);
         colonias.ganharXp(c, ci, 20);
@@ -801,6 +878,133 @@ public final class Obras implements Listener {
             if (p != null && p.efeito().trabalhador() == prof) melhor = Math.max(melhor, k.nivel);
         }
         return 1 + 0.1 * melhor;
+    }
+
+    // =====================================================================
+    //  A placa da construção (o "bloco do prédio")
+    // =====================================================================
+
+    private Colonia coloniaDa(Construcao k) {
+        for (Colonia c : colonias.todas()) if (c.construcoes.contains(k)) return c;
+        return null;
+    }
+
+    /** Uma construção (carregada do arquivo) entra no índice das placas. */
+    void indexar(Construcao k) {
+        if (k.placa != null) placas.put(chave(k.mundo, k.placa[0], k.placa[1], k.placa[2]), k);
+    }
+
+    private boolean temPlaca(Construcao k) {
+        if (k.placa == null) return false;
+        World w = Bukkit.getWorld(k.mundo);
+        if (w == null || !w.isChunkLoaded(k.placa[0] >> 4, k.placa[2] >> 4)) return true; // longe: não dá para saber, confia
+        return Tag.SIGNS.isTagged(w.getBlockAt(k.placa[0], k.placa[1], k.placa[2]).getType());
+    }
+
+    /**
+     * Põe a placa no chão, do lado de dentro e perto da entrada, virada para ela.
+     * @return false se não achou lugar.
+     */
+    private boolean colocarPlaca(Colonia c, Construcao k, Planta p) {
+        World w = Bukkit.getWorld(k.mundo);
+        if (w == null) return false;
+        if (k.placa != null) placas.remove(chave(k.mundo, k.placa[0], k.placa[1], k.placa[2]));
+        k.placa = null;
+        Obra area = k.area();
+        int meio = p.largura() / 2;
+        Block achado = null;
+        // Da frente para o fundo, do meio para os lados.
+        for (int lz = p.profundidade() - 2 + k.extra; lz >= 1 - k.extra && achado == null; lz--) {
+            for (int d = 0; d <= meio + k.extra && achado == null; d++) {
+                for (int lx : new int[]{meio - d, meio + d}) {
+                    for (int ly = 1; ly <= 3 && achado == null; ly++) {
+                        Block b = area.bloco(w, p, lx, ly, lz);
+                        Block baixo = b.getRelative(BlockFace.DOWN);
+                        if ((b.getType().isAir() || (b.isReplaceable() && !b.isLiquid())) && baixo.getType().isSolid() && !Tag.SIGNS.isTagged(baixo.getType())) {
+                            achado = b;
+                        }
+                    }
+                }
+            }
+        }
+        if (achado == null) return false;
+        org.bukkit.block.data.type.Sign dados = (org.bukkit.block.data.type.Sign) Material.OAK_SIGN.createBlockData();
+        dados.setRotation(Planta.face(BlockFace.SOUTH, k.rot));
+        achado.setBlockData(dados, false);
+        k.placa = new int[]{achado.getX(), achado.getY(), achado.getZ()};
+        indexar(k);
+        escreverPlaca(c, k, p);
+        return true;
+    }
+
+    private void escreverPlaca(Colonia c, Construcao k, Planta p) {
+        if (k.placa == null) return;
+        World w = Bukkit.getWorld(k.mundo);
+        if (w == null || !w.isChunkLoaded(k.placa[0] >> 4, k.placa[2] >> 4)) return;
+        if (!(w.getBlockAt(k.placa[0], k.placa[1], k.placa[2]).getState() instanceof org.bukkit.block.Sign placa)) return;
+        var lado = placa.getSide(org.bukkit.block.sign.Side.FRONT);
+        lado.line(0, Component.text("⌂ " + p.nome(), NamedTextColor.DARK_GREEN, TextDecoration.BOLD));
+        lado.line(1, Component.text(k.nivel == 0 ? "precisa de reparo" : "Nível " + k.nivel + " / " + p.nivelMaximo(),
+                k.nivel == 0 ? NamedTextColor.DARK_RED : NamedTextColor.BLACK));
+        lado.line(2, Component.text("de " + c.nomeDono, NamedTextColor.DARK_GRAY));
+        lado.line(3, Component.text("(clique: menu)", NamedTextColor.GRAY));
+        placa.setWaxed(true);
+        placa.update(true, false);
+    }
+
+    /** A cada minuto: placa que sumiu (o chão saiu de baixo, alguém tirou...) deixa a construção precisando de reparo. */
+    private void conferirPlacas() {
+        for (Colonia c : colonias.todas()) {
+            for (Construcao k : c.construcoes) {
+                if (k.nivel <= 0 || temPlaca(k)) continue;
+                if (k.placa != null) placas.remove(chave(k.mundo, k.placa[0], k.placa[1], k.placa[2]));
+                k.placa = null;
+                k.nivel = 0;
+                Planta p = plantas.de(k.planta);
+                avisarDono(c, Component.text("⌂ A placa da construção " + (p == null ? k.planta : p.nome()) + " sumiu: ela precisa de reparo. "
+                        + "Peça a vistoria em Obras para pôr outra.", NamedTextColor.GOLD));
+                colonias.salvar();
+            }
+        }
+    }
+
+    /** O posto (x, y, z) está dentro de uma construção pronta desse tipo? */
+    boolean postoNaConstrucao(Colonia c, Planta.Efeito tipo, int x, int y, int z) {
+        for (Construcao k : c.construcoes) {
+            if (k.nivel <= 0 || !k.mundo.equals(c.mundo)) continue;
+            Planta p = plantas.de(k.planta);
+            if (p == null || p.efeito() != tipo) continue;
+            Obra area = k.area();
+            int topo = k.livre ? alturaVistoria(p) : p.altura() + 2;
+            if (area.dentro(p, x, z, 0) && y >= k.y && y < k.y + topo) return true;
+        }
+        return false;
+    }
+
+    /** A construção deixa de ser da colônia: a placa sai e o que ela dava acaba. */
+    private void removerConstrucao(Colonia c, Construcao k, boolean tirarPlaca) {
+        Planta p = plantas.de(k.planta);
+        World w = Bukkit.getWorld(k.mundo);
+        if (k.placa != null) {
+            placas.remove(chave(k.mundo, k.placa[0], k.placa[1], k.placa[2]));
+            if (tirarPlaca && w != null) {
+                Block b = w.getBlockAt(k.placa[0], k.placa[1], k.placa[2]);
+                if (Tag.SIGNS.isTagged(b.getType())) b.setType(Material.AIR, false);
+            }
+        }
+        c.construcoes.remove(k);
+        if (p != null && w != null) {
+            Obra area = k.area();
+            if (p.efeito() == Planta.Efeito.TORRE_DE_VIGIA) {
+                int n = plugin.territorios().removerTorre(c.dono, area.centro(w));
+                if (n > 0) avisarDono(c, Component.text("⌂ Sem a torre, " + n + " chunks saíram do território.", NamedTextColor.GOLD));
+            } else if (p.efeito() == Planta.Efeito.ARMAZEM) {
+                c.depositos.removeIf(d -> d.getWorld() != null && d.getWorld().getName().equals(k.mundo)
+                        && area.dentro(p, d.getBlockX(), d.getBlockZ(), 0) && d.getBlockY() >= k.y && d.getBlockY() < k.y + alturaVistoria(p));
+            }
+        }
+        colonias.varrer(c);
+        colonias.salvar();
     }
 
     // =====================================================================
@@ -900,9 +1104,14 @@ public final class Obras implements Listener {
                 Colonias.erro(jogador, "✖ Ainda não atende o mínimo do nível 1. Veja no menu o que falta.");
                 return;
             }
+            Construcao nova = new Construcao(p.id(), o.mundo, o.x, o.y, o.z, o.rot, o.extra, true, nivel);
+            if (!colocarPlaca(c, nova, p)) {
+                Colonias.erro(jogador, "✖ Atende o nível " + nivel + ", mas falta lugar para a placa da construção: deixe 1 bloco livre no chão, "
+                        + "do lado de dentro, perto da entrada.");
+                return;
+            }
             removerCerca(o);
             c.obras.remove(o);
-            Construcao nova = new Construcao(p.id(), o.mundo, o.x, o.y, o.z, o.rot, o.extra, true, nivel);
             c.construcoes.add(nova);
             Component extra = aplicarNivel(c, nova, p);
             colonias.alterarFelicidade(c, 3);
@@ -919,8 +1128,13 @@ public final class Obras implements Listener {
             return;
         }
         int antes = k.nivel;
-        // O desenho do Construtor nunca cai abaixo do 1 enquanto tiver o mínimo; uma livre pode ficar "precisando de reparo" (0).
+        // Sem a placa a construção não vale: a vistoria põe ela de volta (se tiver lugar).
+        if (!temPlaca(k) && !colocarPlaca(c, k, p)) {
+            Colonias.erro(jogador, "✖ A placa da construção sumiu e não há lugar para pôr outra: deixe 1 bloco livre no chão perto da entrada.");
+            nivel = 0;
+        }
         k.nivel = nivel;
+        escreverPlaca(c, k, p);
         colonias.salvar();
         if (nivel > antes) {
             Component extra = aplicarNivel(c, k, p);
@@ -1247,8 +1461,9 @@ public final class Obras implements Listener {
                 Component.text("Melhorou a construção? A vistoria", NamedTextColor.GRAY),
                 Component.text("confere e sobe o nível.", NamedTextColor.GRAY)), true));
         inv.setItem(O_VOLTAR, Colonias.item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of(), false));
-        inv.setItem(O_CANCELAR, Colonias.item(Material.RED_DYE, Component.text("Tirar da lista da colônia", NamedTextColor.RED), List.of(
-                Component.text("Os blocos ficam; ela só deixa de contar.", NamedTextColor.GRAY),
+        inv.setItem(O_CANCELAR, Colonias.item(Material.RED_DYE, Component.text("Desfazer a construção", NamedTextColor.RED), List.of(
+                Component.text("Os blocos ficam; ela só deixa de contar", NamedTextColor.GRAY),
+                Component.text("(a torre devolve o território que vigiava).", NamedTextColor.GRAY),
                 Component.text("Shift + clique para confirmar.", NamedTextColor.DARK_GRAY)), false));
         Colonias.preencher(inv);
         p.openInventory(inv);
@@ -1319,9 +1534,8 @@ public final class Obras implements Listener {
             case O_CANCELAR -> {
                 if (!colonias.gerencia(p, c)) { Colonias.erro(p, "Só o dono da colônia e quem gerencia o território."); return; }
                 if (!shift) { Colonias.erro(p, "Shift + clique para confirmar."); return; }
-                c.construcoes.remove(t.construcao);
-                p.sendMessage(Component.text("⌂ Construção tirada da lista (os blocos continuam lá).", NamedTextColor.GRAY));
-                colonias.salvar();
+                removerConstrucao(c, k, true);
+                p.sendMessage(Component.text("⌂ Construção desfeita (os blocos continuam lá).", NamedTextColor.GRAY));
                 abrirLista(p, c);
             }
             default -> { }

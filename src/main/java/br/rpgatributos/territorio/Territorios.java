@@ -246,12 +246,14 @@ public final class Territorios implements Listener {
         for (int[] e : t.torresEditaveis()) if (e[0] == torre.getBlockX() && e[1] == torre.getBlockY() && e[2] == torre.getBlockZ()) esta = e;
         if (esta == null) t.torresEditaveis().add(new int[]{torre.getBlockX(), torre.getBlockY(), torre.getBlockZ(), r});
         else esta[3] = Math.max(esta[3], r);
+        List<Long> daTorre = t.chunksDasTorres().computeIfAbsent(torre.getBlockX() + "," + torre.getBlockY() + "," + torre.getBlockZ(), k -> new ArrayList<>());
         int novos = 0;
         int cx = torre.getBlockX() >> 4, cz = torre.getBlockZ() >> 4;
         for (int dx = -r; dx <= r; dx++) {
             for (int dz = -r; dz <= r; dz++) {
                 if (em(t.mundo(), cx + dx, cz + dz) == null) {
                     indexar(t, cx + dx, cz + dz);
+                    daTorre.add(Territorio.chave(cx + dx, cz + dz));
                     novos++;
                 }
             }
@@ -261,6 +263,36 @@ public final class Territorios implements Listener {
         salvar();
         ondeEsta.clear();
         return novos;
+    }
+
+    /**
+     * A Torre de Vigia foi desfeita: os chunks que ela pôs saem do território, menos os que outra
+     * torre ainda vigia e os dos Marcos. @return quantos chunks saíram.
+     */
+    public int removerTorre(UUID dono, Location torre) {
+        Territorio t = de(dono);
+        if (t == null) return 0;
+        String chave = torre.getBlockX() + "," + torre.getBlockY() + "," + torre.getBlockZ();
+        t.torresEditaveis().removeIf(e -> e[0] == torre.getBlockX() && e[1] == torre.getBlockY() && e[2] == torre.getBlockZ());
+        List<Long> dela = t.chunksDasTorres().remove(chave);
+        if (dela == null) { salvar(); return 0; }
+        int saiu = 0;
+        for (long k : dela) {
+            if (!t.chunks().contains(k) || t.chunkComMarco(k)) continue;
+            int cx = Territorio.chunkX(k), cz = Territorio.chunkZ(k);
+            int[] outra = null;
+            for (int[] e : t.torres()) if (Math.abs((e[0] >> 4) - cx) <= e[3] && Math.abs((e[2] >> 4) - cz) <= e[3]) outra = e;
+            if (outra != null) {
+                // Outra torre vigia esse chunk: fica, e passa a ser dela.
+                t.chunksDasTorres().computeIfAbsent(outra[0] + "," + outra[1] + "," + outra[2], x -> new ArrayList<>()).add(k);
+                continue;
+            }
+            desindexar(t, k);
+            saiu++;
+        }
+        ondeEsta.clear();
+        salvar();
+        return saiu;
     }
 
     /**
@@ -587,6 +619,17 @@ public final class Territorios implements Listener {
                     String[] p = e.split(",");
                     t.expansoesEditaveis().add(new int[]{Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2])});
                 }
+                ConfigurationSection tc = s.getConfigurationSection("torres-chunks");
+                if (tc != null) {
+                    for (String k : tc.getKeys(false)) {
+                        List<Long> l = new ArrayList<>();
+                        for (String c : tc.getStringList(k)) {
+                            String[] xz = c.split(",");
+                            l.add(Territorio.chave(Integer.parseInt(xz[0]), Integer.parseInt(xz[1])));
+                        }
+                        t.chunksDasTorres().put(k.replace('_', ','), l);
+                    }
+                }
                 for (String e : s.getStringList("torres")) {
                     String[] p = e.split(",");
                     int raio = p.length > 3 ? Integer.parseInt(p[3]) : cfg().terRaioTorre;
@@ -625,6 +668,11 @@ public final class Territorios implements Listener {
             List<String> torres = new ArrayList<>();
             for (int[] e : t.torres()) torres.add(e[0] + "," + e[1] + "," + e[2] + "," + e[3]);
             if (!torres.isEmpty()) y.set(base + "torres", torres);
+            for (Map.Entry<String, List<Long>> e : t.chunksDasTorres().entrySet()) {
+                List<String> l = new ArrayList<>();
+                for (long k : e.getValue()) l.add(Territorio.chunkX(k) + "," + Territorio.chunkZ(k));
+                y.set(base + "torres-chunks." + e.getKey().replace(',', '_'), l);
+            }
             for (Map.Entry<UUID, String> m : t.membros().entrySet()) y.set(base + "membros." + m.getKey(), m.getValue());
             List<String> regras = new ArrayList<>();
             for (Flag f : t.flagsLigadas()) regras.add(f.id());
