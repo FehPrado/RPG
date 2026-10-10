@@ -123,6 +123,8 @@ public final class Settings {
     public final int terExpansoesMax, terNiveisPorExpansao, terChunksPorExpansao;
     /** Raio (em chunks) que cada Torre de Vigia da colônia acrescenta ao território (1 = 3x3). */
     public final int terRaioTorre;
+    /** Colônia: cada profissão trabalha dentro da sua construção; cada morador mora numa Casa. */
+    public final boolean colTrabalhoNasConstrucoes, colMoradiaNasCasas;
     public final boolean terExigirVizinho;
     public final List<String> terMundosBloqueados;
 
@@ -396,6 +398,8 @@ public final class Settings {
         terNiveisPorExpansao = Math.max(1, c.getInt("territorio.niveis-por-expansao", 300));
         terChunksPorExpansao = Math.max(1, c.getInt("territorio.chunks-por-expansao", 9));
         terRaioTorre = Math.max(0, Math.min(3, c.getInt("territorio.raio-torre-de-vigia", 1)));
+        colTrabalhoNasConstrucoes = c.getBoolean("colonia.trabalho-nas-construcoes", true);
+        colMoradiaNasCasas = c.getBoolean("colonia.moradia-nas-casas", true);
         terMembrosMax = Math.max(0, c.getInt("territorio.membros-maximo", 10));
         terExigirVizinho = c.getBoolean("territorio.chunks-precisam-ser-vizinhos", true);
         terMundosBloqueados = List.copyOf(c.getStringList("territorio.mundos-bloqueados"));

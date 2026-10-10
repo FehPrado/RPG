@@ -181,6 +181,56 @@ public final class Colonias implements Listener {
 
     Territorio territorioDe(Colonia c) { return territorio(c); }
 
+    private boolean trabalhoNasConstrucoes() { return plugin.settings().colTrabalhoNasConstrucoes; }
+
+    private boolean moradiaNasCasas() { return plugin.settings().colMoradiaNasCasas; }
+
+    /** Onde fica o posto da profissão (com o nome da construção, quando ela precisa de uma). */
+    String nomePosto(Profissao p) {
+        if (!trabalhoNasConstrucoes() || p.construcao() == null) return p.nomePosto();
+        String casa = p.construcao().name();
+        for (Planta pl : obras.plantas().todas()) if (pl.efeito() == p.construcao()) { casa = pl.nome(); break; }
+        if (p == Profissao.CONSTRUTOR) return casa + " (1 Construtor trabalha sem ela)";
+        return p.nomePosto() + " dentro de: " + casa;
+    }
+
+    /** Sem casa produz 15% a menos; numa casa de nível 2 ou 3, 5% a mais por nível acima do 1. */
+    private double fatorMoradia(Colonia c, Colonia.Cidadao ci) {
+        if (!moradiaNasCasas()) return 1;
+        Construcao casa = obras.casaDe(c, ci);
+        return casa == null ? 0.85 : 1 + 0.05 * (casa.nivel - 1);
+    }
+
+    /** Cada aldeão dorme na cama da casa dele (a IA do jogo usa a memória "casa"). */
+    private void camasDosMoradores(Colonia c) {
+        for (Colonia.Cidadao ci : c.cidadaos) {
+            if (!(Bukkit.getEntity(ci.entidade) instanceof Villager v)) continue;
+            Location cama = obras.camaDe(c, ci);
+            if (cama != null) v.setMemory(org.bukkit.entity.memory.MemoryKey.HOME, cama);
+        }
+    }
+
+    private Component textoCasa(Colonia c, Colonia.Cidadao ci) {
+        Construcao casa = obras.casaDe(c, ci);
+        if (casa == null) return Component.text("✖ Sem casa: produz 15% a menos e fica triste", NamedTextColor.RED);
+        Planta p = obras.plantas().de(casa.planta);
+        return linha("Casa: ", (p == null ? casa.planta : p.nome()) + " nível " + casa.nivel + " (" + casa.x + ", " + casa.z + ")", NamedTextColor.WHITE);
+    }
+
+    /** Moradores que não são soldados e estão sem casa. */
+    private int semCasa(Colonia c) {
+        int n = 0;
+        for (Colonia.Cidadao ci : c.cidadaos) if (!ci.profissao.soldado() && ci.casa == null) n++;
+        return n;
+    }
+
+    /** Quantos moradores a colônia pode ter pelas camas (ou, com moradia nas casas, pelas vagas das Casas). */
+    private int vagasMoradia(Colonia c) {
+        if (!moradiaNasCasas()) return c.camas;
+        // Os 2 fundadores dormem na Prefeitura; soldados moram no quartel.
+        return Math.max(2, obras.vagasCasas(c) + quantosSoldados(c));
+    }
+
     boolean gerencia(Player p, Colonia c) {
         if (p.getUniqueId().equals(c.dono)) return true;
         Territorio t = territorio(c);
@@ -503,8 +553,9 @@ public final class Colonias implements Listener {
                     case CRAFTING_TABLE -> Profissao.CONSTRUTOR;
                     default -> null;
                 };
-                // Fazendeiro, Bibliotecário e soldados: só vale o posto que está dentro da construção deles.
-                if (p != null && p.construcao() != null && !obras.postoNaConstrucao(c, p.construcao(), x, y, z)) p = null;
+                // Cada profissão só vale com o posto dentro da construção dela (a do Construtor é contada à parte).
+                if (p != null && trabalhoNasConstrucoes() && p.construcao() != null && p != Profissao.CONSTRUTOR
+                        && !obras.postoNaConstrucao(c, p.construcao(), x, y, z)) p = null;
                 if (p != null) s.postos.merge(p, 1, Integer::sum);
             }
             s.blocosPosto.clear();
@@ -524,6 +575,7 @@ public final class Colonias implements Listener {
         }
         c.camas = camasPartes / 2;
         c.agua = agua;
+        if (trabalhoNasConstrucoes()) c.postos.put(Profissao.CONSTRUTOR, obras.vagasConstrutor(c));
         c.varrida = true;
         redesenharMenus(c);
     }
@@ -590,14 +642,23 @@ public final class Colonias implements Listener {
             if (++ci.sumido >= 5) perderCidadao(ci.entidade, "não voltou para casa e saiu da colônia.");
         }
         comer(c);
-        double alvo = 50 + (c.camas >= c.cidadaos.size() ? 15 : -20) + 25 * c.alimentados - (c.alimentados < 0.5 ? 25 : 0)
+        int moradia;
+        if (moradiaNasCasas()) {
+            obras.distribuirCasas(c);
+            int sem = semCasa(c);
+            moradia = sem == 0 ? 15 : -Math.min(20, 5 * sem);
+            camasDosMoradores(c);
+        } else {
+            moradia = c.camas >= c.cidadaos.size() ? 15 : -20;
+        }
+        double alvo = 50 + moradia + 25 * c.alimentados - (c.alimentados < 0.5 ? 25 : 0)
                 + (c.comeuPratos ? 15 : 0) + humorDaColonia(c);
         c.felicidade += (Math.max(0, Math.min(100, alvo)) - c.felicidade) * 0.3;
         pedidos(c);
 
         // Chegam moradores novos se houver cama, comida e felicidade.
         long agora = System.currentTimeMillis();
-        if (agora >= c.proximaChegada && c.cidadaos.size() < Math.min(c.maxCidadaos(), c.camas) && c.felicidade >= 40) {
+        if (agora >= c.proximaChegada && c.cidadaos.size() < Math.min(c.maxCidadaos(), vagasMoradia(c)) && c.felicidade >= 40) {
             chegar(c);
             c.proximaChegada = agora + CHEGADA_MS;
         }
@@ -620,7 +681,8 @@ public final class Colonias implements Listener {
             if (usados > c.postos.getOrDefault(p, 0)) continue; // falta posto para ele
             if (noite && !ci.tem(Traco.MADRUGADOR)) continue;
             double mult = (1 + 0.1 * ci.nivel) * c.fatorFelicidade() * (c.nivel >= Colonia.NIVEL_MAXIMO ? 1.2 : 1) * ci.fatorPessoal()
-                    * obras.bonus(c, p); // Fazenda e Biblioteca da colônia: +10% por nível
+                    * obras.bonus(c, p) // a construção da profissão: +10% por nível
+                    * fatorMoradia(c, ci);
             List<ItemStack> feitos = trabalhar(c, ci, mult);
             if (feitos == null) continue;
             if (ci.tem(Traco.SORTE) && !feitos.isEmpty() && rnd().nextDouble() < 0.12) {
@@ -1093,7 +1155,10 @@ public final class Colonias implements Listener {
         inv.setItem(P_INFO, item(Material.BELL, Component.text("⌂ Colônia de " + c.nomeDono, Prefeituras.COR, TextDecoration.BOLD), List.of(
                 linha("Nível: ", c.nivel + " / " + Colonia.NIVEL_MAXIMO, NamedTextColor.WHITE),
                 linha("Moradores: ", c.cidadaos.size() + " / " + c.maxCidadaos(), NamedTextColor.WHITE),
-                linha("Camas: ", String.valueOf(c.camas), c.camas >= c.cidadaos.size() ? NamedTextColor.GREEN : NamedTextColor.RED),
+                moradiaNasCasas()
+                        ? linha("Vagas nas Casas: ", obras.vagasCasas(c) + (semCasa(c) > 0 ? "  (" + semCasa(c) + " sem casa)" : ""),
+                                semCasa(c) == 0 ? NamedTextColor.GREEN : NamedTextColor.RED)
+                        : linha("Camas: ", String.valueOf(c.camas), c.camas >= c.cidadaos.size() ? NamedTextColor.GREEN : NamedTextColor.RED),
                 linha("Felicidade: ", Math.round(c.felicidade) + "% (produção ×" + String.format("%.2f", c.fatorFelicidade()).replace('.', ',') + ")",
                         c.felicidade >= 60 ? NamedTextColor.GREEN : c.felicidade >= 40 ? NamedTextColor.YELLOW : NamedTextColor.RED),
                 linha("Comida: ", alimentados + "% atendida" + (c.comeuPratos ? " (com pratos!)" : ""), alimentados >= 100 ? NamedTextColor.GREEN : NamedTextColor.RED),
@@ -1120,7 +1185,7 @@ public final class Colonias implements Listener {
         for (Profissao p : Profissao.values()) {
             if (p == Profissao.DESEMPREGADO || (p.soldado() && p != Profissao.SOLDADO)) continue;
             int n = c.postos.getOrDefault(p, 0);
-            postos.add(Component.text(" " + p.nomePosto() + ": ", NamedTextColor.GRAY)
+            postos.add(Component.text(" " + nomePosto(p) + ": ", NamedTextColor.GRAY)
                     .append(Component.text(n + " (" + p.nome() + ")", n > 0 ? NamedTextColor.GREEN : NamedTextColor.DARK_GRAY)));
         }
         postos.add(linha(" Água: ", c.agua >= 8 ? "sim" : "não", c.agua >= 8 ? NamedTextColor.GREEN : NamedTextColor.DARK_GRAY));
@@ -1203,6 +1268,7 @@ public final class Colonias implements Listener {
             lore.add(linha("Profissão: ", ci.profissao.nome(), ci.profissao.cor()));
             lore.add(linha("Nível: ", ci.nivel + " / 10", NamedTextColor.WHITE));
             lore.add(linha("Jeito: ", nomesTracos(ci), NamedTextColor.AQUA));
+            if (moradiaNasCasas() && !ci.profissao.soldado()) lore.add(textoCasa(c, ci));
             if (ci.pedido != null) lore.add(Component.text("❗ Pede " + ci.pedido.texto(), NamedTextColor.GOLD));
             else if (ci.humor > 0) lore.add(Component.text("☺ Contente", NamedTextColor.GREEN));
             else if (ci.humor < 0) lore.add(Component.text("☹ Chateado(a)", NamedTextColor.RED));
@@ -1213,7 +1279,7 @@ public final class Colonias implements Listener {
                 lore.add(dele == null ? Component.text("⚒ Livre: marque uma obra com um projeto", NamedTextColor.GRAY)
                         : Component.text("⚒ Construindo: " + (pd == null ? dele.planta : pd.nome()), NamedTextColor.GOLD));
             }
-            if (semPosto) lore.add(Component.text("✖ Sem posto: precisa de " + ci.profissao.nomePosto(), NamedTextColor.RED));
+            if (semPosto) lore.add(Component.text("✖ Sem posto: precisa de " + nomePosto(ci.profissao), NamedTextColor.RED));
             else if (ci.profissao == Profissao.FAZENDEIRO && c.plantas.isEmpty()) lore.add(Component.text("✖ Sem plantações por perto", NamedTextColor.RED));
             else if (ci.profissao == Profissao.PESCADOR && c.agua < 8) lore.add(Component.text("✖ Sem água por perto", NamedTextColor.RED));
             else if (ci.profissao.soldado()) lore.add(Component.text("⚔ Em serviço", NamedTextColor.RED));
@@ -1245,6 +1311,7 @@ public final class Colonias implements Listener {
                 Component.text(ci.profissao.descricao(), NamedTextColor.GRAY),
                 linha("Nível: ", ci.nivel + " / 10" + (ci.nivel < 10 ? "  (" + (int) ci.xp + "/" + (int) prox + " XP)" : ""), NamedTextColor.WHITE),
                 linha("Produção: ", "+" + ci.nivel * 10 + "% pelo nível", NamedTextColor.GREEN),
+                moradiaNasCasas() && !ci.profissao.soldado() ? textoCasa(c, ci) : linha("Mora: ", "no quartel", NamedTextColor.GRAY),
                 Component.empty(),
                 Component.text("Jeito:", NamedTextColor.GRAY)));
         for (Traco tr : ci.tracos) {
@@ -1281,7 +1348,7 @@ public final class Colonias implements Listener {
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text(p.descricao(), NamedTextColor.GRAY));
             if (p != Profissao.DESEMPREGADO) {
-                lore.add(linha("Posto: ", p.nomePosto(), NamedTextColor.WHITE));
+                lore.add(linha("Posto: ", nomePosto(p), NamedTextColor.WHITE));
                 lore.add(linha("Postos achados: ", postos + "  ·  trabalhando: " + c.quantos(p), postos > 0 ? NamedTextColor.GREEN : NamedTextColor.RED));
             }
             lore.add(Component.empty());
@@ -1391,7 +1458,7 @@ public final class Colonias implements Listener {
             definirProfissao(c, ci, nova);
             p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
             if (nova != Profissao.DESEMPREGADO && c.quantos(nova) > c.postos.getOrDefault(nova, 0)) {
-                p.sendMessage(Component.text("⌂ Atenção: falta um posto (" + nova.nomePosto() + ") no território para " + ci.nome + " trabalhar.",
+                p.sendMessage(Component.text("⌂ Atenção: falta um posto (" + nomePosto(nova) + ") no território para " + ci.nome + " trabalhar.",
                         NamedTextColor.GOLD));
             }
             salvar();
@@ -2026,6 +2093,7 @@ public final class Colonias implements Listener {
                         ci.humorTurnos = Integer.parseInt(p[9]);
                         if (ci.pedido != null && ci.prazo <= 0) ci.prazo = Pedido.PRAZO;
                     }
+                    if (p.length >= 11 && !p[10].equals("-")) ci.casa = p[10];
                     c.cidadaos.add(ci);
                     cidadaos.put(id, dono);
                 } catch (IllegalArgumentException ignored) { }
@@ -2068,7 +2136,8 @@ public final class Colonias implements Listener {
             for (Colonia.Cidadao ci : c.cidadaos) {
                 String tracos = ci.tracos.isEmpty() ? "-" : String.join(",", ci.tracos.stream().map(Traco::id).toList());
                 cid.add(ci.entidade + ";" + ci.nome + ";" + ci.profissao.name() + ";" + ci.nivel + ";" + Math.round(ci.xp * 10) / 10.0
-                        + ";" + tracos + ";" + (ci.pedido == null ? "-" : ci.pedido.id()) + ";" + ci.prazo + ";" + ci.humor + ";" + ci.humorTurnos);
+                        + ";" + tracos + ";" + (ci.pedido == null ? "-" : ci.pedido.id()) + ";" + ci.prazo + ";" + ci.humor + ";" + ci.humorTurnos
+                        + ";" + (ci.casa == null ? "-" : ci.casa));
             }
             y.set(b + "cidadaos", cid);
             for (Obra o : c.obras) o.salvar(y.createSection(b + "obras." + o.id));

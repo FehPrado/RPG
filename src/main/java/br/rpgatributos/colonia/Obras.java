@@ -660,7 +660,9 @@ public final class Obras implements Listener {
         int postos = c.postos.getOrDefault(Profissao.CONSTRUTOR, 0);
         if (ocupados.size() >= postos) {
             if (c.quantos(Profissao.CONSTRUTOR) > 0) {
-                colonias.avisar(c, "Obra parada: cada Construtor precisa de uma bancada de trabalho no território (posto).");
+                colonias.avisar(c, plugin.settings().colTrabalhoNasConstrucoes
+                        ? "Obra parada: todos os Construtores com vaga estão ocupados. Cada nível de Oficina do Construtor dá mais uma vaga."
+                        : "Obra parada: cada Construtor precisa de uma bancada de trabalho no território (posto).");
             } else {
                 colonias.avisar(c, "Obra parada: dê a profissão Construtor a um morador (posto: bancada de trabalho).");
             }
@@ -828,7 +830,9 @@ public final class Obras implements Listener {
         c.obras.remove(o);
         // O desenho pronto é pelo menos o nível 1; se tiver mais, a vistoria diz.
         Construcao k = new Construcao(p.id(), o.mundo, o.x, o.y, o.z, o.rot, 0, false, 1);
-        k.nivel = Math.max(1, vistoriar(w, p, k.area()).nivel(p.niveis()));
+        Vistoria vk = vistoriar(w, p, k.area());
+        k.nivel = Math.max(1, vk.nivel(p.niveis()));
+        k.camas = vk.camas;
         c.construcoes.add(k);
         colocarPlaca(c, k, p);
         Component extra = aplicarNivel(c, k, p);
@@ -1008,6 +1012,115 @@ public final class Obras implements Listener {
     }
 
     // =====================================================================
+    //  Moradia: cada morador numa Casa
+    // =====================================================================
+
+    /** Camas de cada Casa (posição da cabeceira), achadas no último turno. */
+    private final Map<String, List<Location>> camasDasCasas = new HashMap<>();
+
+    /** Vagas de Construtor: 1 de graça (para erguer a primeira Oficina) + o nível de cada Oficina pronta. */
+    int vagasConstrutor(Colonia c) {
+        return 1 + niveis(c, Planta.Efeito.OFICINA);
+    }
+
+    private List<Construcao> casas(Colonia c) {
+        List<Construcao> l = new ArrayList<>();
+        for (Construcao k : c.construcoes) {
+            Planta p = plantas.de(k.planta);
+            if (p != null && p.efeito() == Planta.Efeito.CASA && k.nivel >= 1) l.add(k);
+        }
+        return l;
+    }
+
+    Construcao casaDe(Colonia c, Colonia.Cidadao ci) {
+        if (ci.casa == null) return null;
+        for (Construcao k : casas(c)) if (k.chave().equals(ci.casa)) return k;
+        return null;
+    }
+
+    /** Quantos moradores cabem nas Casas (as camas delas). */
+    int vagasCasas(Colonia c) {
+        int n = 0;
+        for (Construcao k : casas(c)) n += Math.max(0, k.camas);
+        return n;
+    }
+
+    /** As cabeceiras das camas de uma casa, numa ordem fixa. */
+    private List<Location> acharCamas(Construcao k, Planta p) {
+        List<Location> l = new ArrayList<>();
+        World w = Bukkit.getWorld(k.mundo);
+        if (w == null || !w.isChunkLoaded(k.x >> 4, k.z >> 4)) return l;
+        Obra area = k.area();
+        int[] a = area.area(p, 0);
+        int topo = k.livre ? alturaVistoria(p) : p.altura() + 2;
+        for (int x = a[0]; x <= a[2]; x++) {
+            for (int z = a[1]; z <= a[3]; z++) {
+                for (int ly = 0; ly < topo; ly++) {
+                    Block b = w.getBlockAt(x, k.y + ly, z);
+                    if (b.getBlockData() instanceof org.bukkit.block.data.type.Bed cama && cama.getPart() == org.bukkit.block.data.type.Bed.Part.HEAD) {
+                        l.add(b.getLocation());
+                    }
+                }
+            }
+        }
+        return l;
+    }
+
+    /**
+     * A cada turno: quem perdeu a casa (desfeita, cheia, sem camas) fica sem; quem está sem ganha
+     * uma com vaga (como no MineColonies, a colônia distribui sozinha). Guarda as camas de cada casa.
+     */
+    void distribuirCasas(Colonia c) {
+        Map<String, Integer> livres = new LinkedHashMap<>();
+        camasDasCasas.keySet().removeIf(k -> k.startsWith(c.dono + "|"));
+        for (Construcao k : casas(c)) {
+            Planta p = plantas.de(k.planta);
+            List<Location> camas = p == null ? List.of() : acharCamas(k, p);
+            if (!camas.isEmpty()) {
+                k.camas = camas.size();
+                camasDasCasas.put(c.dono + "|" + k.chave(), camas);
+            }
+            livres.put(k.chave(), Math.max(0, k.camas));
+        }
+        for (Colonia.Cidadao ci : c.cidadaos) {
+            if (ci.profissao.soldado()) { ci.casa = null; continue; }
+            if (ci.casa == null) continue;
+            Integer vagas = livres.get(ci.casa);
+            if (vagas == null || vagas <= 0) ci.casa = null;
+            else livres.put(ci.casa, vagas - 1);
+        }
+        for (Colonia.Cidadao ci : c.cidadaos) {
+            if (ci.casa != null || ci.profissao.soldado()) continue;
+            for (Map.Entry<String, Integer> e : livres.entrySet()) {
+                if (e.getValue() <= 0) continue;
+                ci.casa = e.getKey();
+                e.setValue(e.getValue() - 1);
+                break;
+            }
+        }
+    }
+
+    /** A cama do morador na casa dele (a IA do aldeão dorme nela), ou null. */
+    Location camaDe(Colonia c, Colonia.Cidadao ci) {
+        if (ci.casa == null) return null;
+        List<Location> camas = camasDasCasas.get(c.dono + "|" + ci.casa);
+        if (camas == null || camas.isEmpty()) return null;
+        int i = 0;
+        for (Colonia.Cidadao outro : c.cidadaos) {
+            if (outro == ci) break;
+            if (ci.casa.equals(outro.casa)) i++;
+        }
+        return i < camas.size() ? camas.get(i) : null;
+    }
+
+    /** Quem mora nessa casa. */
+    List<Colonia.Cidadao> moradores(Colonia c, Construcao k) {
+        List<Colonia.Cidadao> l = new ArrayList<>();
+        for (Colonia.Cidadao ci : c.cidadaos) if (k.chave().equals(ci.casa)) l.add(ci);
+        return l;
+    }
+
+    // =====================================================================
     //  Vistoria e níveis
     // =====================================================================
 
@@ -1105,6 +1218,7 @@ public final class Obras implements Listener {
                 return;
             }
             Construcao nova = new Construcao(p.id(), o.mundo, o.x, o.y, o.z, o.rot, o.extra, true, nivel);
+            nova.camas = v.camas;
             if (!colocarPlaca(c, nova, p)) {
                 Colonias.erro(jogador, "✖ Atende o nível " + nivel + ", mas falta lugar para a placa da construção: deixe 1 bloco livre no chão, "
                         + "do lado de dentro, perto da entrada.");
@@ -1134,6 +1248,7 @@ public final class Obras implements Listener {
             nivel = 0;
         }
         k.nivel = nivel;
+        k.camas = v.camas;
         escreverPlaca(c, k, p);
         colonias.salvar();
         if (nivel > antes) {
@@ -1451,6 +1566,11 @@ public final class Obras implements Listener {
         if (pl != null) info.add(Component.text(pl.efeito().texto(), NamedTextColor.AQUA));
         info.add(Colonias.linha("Feita: ", k.livre ? "do seu jeito" : "pelo Construtor", NamedTextColor.WHITE));
         info.add(Colonias.linha("Onde: ", k.x + ", " + k.y + ", " + k.z, NamedTextColor.GRAY));
+        if (pl != null && pl.efeito() == Planta.Efeito.CASA) {
+            List<Colonia.Cidadao> mor = moradores(c, k);
+            info.add(Colonias.linha("Moradores: ", mor.size() + " / " + Math.max(0, k.camas) + " camas", NamedTextColor.WHITE));
+            for (Colonia.Cidadao ci : mor) info.add(Component.text(" ⌂ " + ci.nome + " (" + ci.profissao.nome() + ")", NamedTextColor.GRAY));
+        }
         if (v == null) info.add(Component.text("Chegue perto para ver o que tem lá agora.", NamedTextColor.DARK_GRAY));
         inv.setItem(O_INFO, Colonias.item(pl == null ? Material.BARRIER : pl.icone(),
                 Component.text(pl == null ? k.planta : pl.nome(), Prefeituras.COR, TextDecoration.BOLD), info, false));

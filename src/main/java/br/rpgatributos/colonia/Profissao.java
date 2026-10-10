@@ -88,12 +88,12 @@ public enum Profissao {
         return switch (posto) {
             case NENHUM -> "nenhum";
             case BLOCO -> switch (this) {
-                case FAZENDEIRO -> "Composteira numa Fazenda";
+                case FAZENDEIRO -> "Composteira";
                 case LENHADOR -> "Bancada de flechas";
                 case PESCADOR -> "Barril";
                 case MINERADOR -> "Cortador de pedras";
                 case MERCADOR -> "Mesa de cartografia";
-                case BIBLIOTECARIO -> "Atril numa Biblioteca";
+                case BIBLIOTECARIO -> "Atril";
                 case CONSTRUTOR -> "Bancada de trabalho";
                 default -> "?";
             };
@@ -101,7 +101,7 @@ public enum Profissao {
             case FORJA -> "Forja do Ferreiro";
             case ALTAR_DOMADOR -> "Altar do Domador";
             case BANCADA_ALQUIMICA -> "Bancada Alquímica";
-            case QUARTEL -> "Alvo num Quartel";
+            case QUARTEL -> "Alvo";
         };
     }
 
@@ -114,7 +114,16 @@ public enum Profissao {
             case FAZENDEIRO -> Planta.Efeito.FAZENDA;
             case BIBLIOTECARIO -> Planta.Efeito.BIBLIOTECA;
             case SOLDADO, ARQUEIRO, CAVALEIRO -> Planta.Efeito.QUARTEL;
-            default -> null;
+            case CONSTRUTOR -> Planta.Efeito.OFICINA;
+            case LENHADOR -> Planta.Efeito.CABANA_LENHADOR;
+            case PESCADOR -> Planta.Efeito.CABANA_PESCADOR;
+            case MINERADOR -> Planta.Efeito.MINA;
+            case MERCADOR -> Planta.Efeito.MERCADO;
+            case FERREIRO -> Planta.Efeito.FERRARIA;
+            case COZINHEIRO -> Planta.Efeito.TAVERNA;
+            case TRATADOR -> Planta.Efeito.ESTABULO;
+            case ALQUIMISTA -> Planta.Efeito.LABORATORIO;
+            case DESEMPREGADO -> null;
         };
     }
 

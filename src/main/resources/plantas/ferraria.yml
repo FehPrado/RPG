@@ -1,0 +1,113 @@
+# Projeto de construção da colônia (Ferraria).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Ferraria"
+descricao:
+  - "Oficina de pedra com bigorna e fornalhas."
+  - "Faça a Forja do Ferreiro na bigorna."
+icone: ANVIL
+nivel: 3
+efeito: FERRARIA
+legenda:
+  "P": "stone_bricks"
+  "L": "stone_bricks"
+  "T": "cobblestone"
+  "J": "glass_pane"
+  "D": "spruce_door[facing=north,half=lower,hinge=left]"
+  "d": "spruce_door[facing=north,half=upper,hinge=left]"
+  "N": "lantern[hanging=false]"
+  "W": "wall_torch[facing=north]"
+  "E": "stone_brick_stairs[facing=east,half=bottom]"
+  "Q": "stone_brick_stairs[facing=west,half=bottom]"
+  "S": "stone_brick_slab[type=bottom]"
+  "A": "anvil[facing=east]"
+  "F": "furnace[facing=south]"
+  "B": "blast_furnace[facing=south]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 40
+    portas: 1
+    luz: 1
+    coberto: 70
+    itens:
+      anvil: 1
+  - blocos: 80
+    portas: 1
+    luz: 2
+    coberto: 80
+    itens:
+      anvil: 1
+      furnace: 1
+  - blocos: 140
+    portas: 1
+    luz: 3
+    coberto: 85
+    itens:
+      anvil: 2
+      furnace: 1
+camadas:
+  # 0
+  - - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+  # 1
+  - - "LTTTTTL"
+    - "TA.F.NT"
+    - "T..B..T"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "LTTDTTL"
+  # 2
+  - - "LTTJTTL"
+    - "T.....T"
+    - "T.....T"
+    - "J.....J"
+    - "T.....T"
+    - "T.....T"
+    - "LTTdTTL"
+  # 3
+  - - "LTTTTTL"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "T..W..T"
+    - "LTTTTTL"
+  # 4
+  - - "ETTTTTQ"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "ETTTTTQ"
+  # 5
+  - - ".ETTTQ."
+    - ".E...Q."
+    - ".E...Q."
+    - ".E...Q."
+    - ".E...Q."
+    - ".E...Q."
+    - ".ETTTQ."
+  # 6
+  - - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+  # 7
+  - - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."

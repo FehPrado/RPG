@@ -1,0 +1,112 @@
+# Projeto de construção da colônia (Oficina do Construtor).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Oficina do Construtor"
+descricao:
+  - "Bancada e baú do Construtor."
+  - "Cada nível dá mais uma vaga de Construtor."
+icone: CRAFTING_TABLE
+nivel: 1
+efeito: OFICINA
+legenda:
+  "P": "cobblestone"
+  "L": "oak_log"
+  "T": "oak_planks"
+  "J": "glass_pane"
+  "D": "oak_door[facing=north,half=lower,hinge=left]"
+  "d": "oak_door[facing=north,half=upper,hinge=left]"
+  "N": "lantern[hanging=false]"
+  "W": "wall_torch[facing=north]"
+  "E": "oak_stairs[facing=east,half=bottom]"
+  "Q": "oak_stairs[facing=west,half=bottom]"
+  "S": "oak_slab[type=bottom]"
+  "K": "crafting_table"
+  "C": "chest[facing=south]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 40
+    portas: 1
+    luz: 1
+    coberto: 70
+    itens:
+      crafting_table: 1
+  - blocos: 80
+    portas: 1
+    luz: 2
+    coberto: 80
+    itens:
+      crafting_table: 1
+      chest: 1
+  - blocos: 140
+    portas: 1
+    luz: 3
+    coberto: 85
+    itens:
+      crafting_table: 2
+      chest: 1
+camadas:
+  # 0
+  - - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+    - "PPPPPPP"
+  # 1
+  - - "LTTTTTL"
+    - "TK.C.NT"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "LTTDTTL"
+  # 2
+  - - "LTTJTTL"
+    - "T.....T"
+    - "T.....T"
+    - "J.....J"
+    - "T.....T"
+    - "T.....T"
+    - "LTTdTTL"
+  # 3
+  - - "LTTTTTL"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "T.....T"
+    - "T..W..T"
+    - "LTTTTTL"
+  # 4
+  - - "ETTTTTQ"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "E.....Q"
+    - "ETTTTTQ"
+  # 5
+  - - ".ETTTQ."
+    - ".E...Q."
+    - ".E...Q."
+    - ".E...Q."
+    - ".E...Q."
+    - ".E...Q."
+    - ".ETTTQ."
+  # 6
+  - - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+    - "..ETQ.."
+  # 7
+  - - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."
+    - "...S..."

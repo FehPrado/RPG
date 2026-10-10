@@ -48,6 +48,8 @@ public final class Colonia {
         /** Humor por um tempo: +1 contente (pedido atendido), -1 chateado (esquecido), 0 normal. */
         int humor;
         int humorTurnos;
+        /** A Casa onde ele mora (chave da construção; null = sem casa). Soldados moram no quartel. */
+        String casa;
 
         Cidadao(UUID entidade, String nome, Profissao profissao, int nivel, double xp) {
             this.entidade = entidade;

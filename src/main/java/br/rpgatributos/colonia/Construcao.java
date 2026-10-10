@@ -16,6 +16,8 @@ final class Construcao {
     int nivel;
     /** A placa da construção (x, y, z), como o bloco do prédio no MineColonies: clique abre o menu, quebrar desfaz. */
     int[] placa;
+    /** Camas que a última vistoria achou (-1 = ainda não sabe). Numa Casa, é quantos moradores cabem. */
+    int camas = -1;
 
     Construcao(String planta, String mundo, int x, int y, int z, int rot, int extra, boolean livre, int nivel) {
         this.planta = planta;
@@ -30,6 +32,9 @@ final class Construcao {
     }
 
     String planta() { return planta; }
+
+    /** Identifica a construção (o morador guarda qual é a casa dele). */
+    String chave() { return mundo + "@" + x + "," + y + "," + z; }
     String mundo() { return mundo; }
 
     /** A mesma área como uma obra (para contas de lugar, contorno e vistoria). */
@@ -42,7 +47,7 @@ final class Construcao {
 
     String salvar() {
         return planta + ";" + mundo + ";" + x + ";" + y + ";" + z + ";" + rot + ";" + extra + ";" + livre + ";" + nivel + ";"
-                + (placa == null ? "-" : placa[0] + "," + placa[1] + "," + placa[2]);
+                + (placa == null ? "-" : placa[0] + "," + placa[1] + "," + placa[2]) + ";" + camas;
     }
 
     static Construcao ler(String s) {
@@ -58,6 +63,7 @@ final class Construcao {
                 String[] q = p[9].split(",");
                 k.placa = new int[]{Integer.parseInt(q[0]), Integer.parseInt(q[1]), Integer.parseInt(q[2])};
             }
+            if (p.length > 10) k.camas = Integer.parseInt(p[10]);
             return k;
         } catch (NumberFormatException ex) {
             return null;

@@ -377,6 +377,15 @@ territorio:
   mundos-bloqueados: []               # mundos onde não dá para criar território (ex.: [world_the_end])
 
 # ==========================================================
+#  Colônia (estilo MineColonies)
+# ==========================================================
+colonia:
+  trabalho-nas-construcoes: true      # cada profissão só trabalha com o posto DENTRO da sua construção (Fazenda, Mina, Ferraria...);
+                                      # o Construtor ganha vagas com a Oficina do Construtor (1 vem de graça). false = posto em qualquer lugar.
+  moradia-nas-casas: true             # cada morador mora numa Casa da colônia (a cama dela vira a dele); sem casa fica triste
+                                      # e produz menos, e só chega morador novo se houver vaga nas casas. false = qualquer cama serve.
+
+# ==========================================================
 #  Ferraria (atributo) e Forja (itens com raridade)
 # ==========================================================
 

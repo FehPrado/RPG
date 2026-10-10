@@ -28,7 +28,8 @@ import java.util.Map;
 public final class Plantas {
 
     /** Projetos que vêm com o plugin (arquivo plantas/&lt;id&gt;.yml dentro do jar). */
-    private static final List<String> PADRAO = List.of("casa", "fazenda", "poco", "torre_de_vigia", "armazem", "biblioteca", "quartel");
+    private static final List<String> PADRAO = List.of("casa", "oficina", "fazenda", "poco", "torre_de_vigia", "cabana_lenhador",
+            "cabana_pescador", "armazem", "biblioteca", "quartel", "mina", "mercado", "taverna", "ferraria", "estabulo", "laboratorio");
 
     private final RPGAtributos plugin;
     private final NamespacedKey kProjeto, kLivre;

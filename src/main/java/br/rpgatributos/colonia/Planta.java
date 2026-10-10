@@ -43,6 +43,15 @@ public final class Planta {
         QUARTEL("Alvos (quartel) e camas para os soldados", null),
         FAZENDA("Fazendeiro produz +10% por nível", Profissao.FAZENDEIRO),
         PRACA("Colônia +5% de felicidade por nível", null),
+        OFICINA("Vagas de Construtor: +1 por nível", Profissao.CONSTRUTOR),
+        CABANA_LENHADOR("Lenhador produz +10% por nível", Profissao.LENHADOR),
+        CABANA_PESCADOR("Pescador produz +10% por nível (precisa de água perto)", Profissao.PESCADOR),
+        MINA("Minerador produz +10% por nível", Profissao.MINERADOR),
+        MERCADO("Mercador vende +10% por nível", Profissao.MERCADOR),
+        FERRARIA("Ferreiro trabalha +10% por nível (faça a Forja na bigorna)", Profissao.FERREIRO),
+        TAVERNA("Cozinheiro produz +10% por nível (faça a Cozinha no defumador)", Profissao.COZINHEIRO),
+        ESTABULO("Tratador produz +10% por nível (faça o Altar no fardo de feno)", Profissao.TRATADOR),
+        LABORATORIO("Alquimista produz +10% por nível (faça a Bancada no suporte)", Profissao.ALQUIMISTA),
         NENHUM("Decoração", null);
 
         private final String texto;
