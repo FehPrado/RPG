@@ -311,6 +311,10 @@ profundezas:
   chance-de-raiz-por-chunk: 0.1       # chance de cada chunk novo ganhar uma Raiz de Luz adormecida numa caverna funda
   chance-de-penumbra: 0.3             # chance de um monstro nascido no escuro das profundezas ser da Penumbra (rouba corações máximos)
   chance-do-coracao: 0.15             # chance de acender uma raiz acordar o Coração da Penumbra (chefe)
+  penumbra-maxima: 5                  # quantos corações máximos a Penumbra pode roubar (1 a 9)
+  luz-que-protege: 10                 # luz de tocha/lanterna (0-15) a partir da qual não há escuridão: bases e minas iluminadas ficam claras
+  poco-da-colonia:                    # Mina da colônia no nível 3 + Raiz de Luz acesa debaixo do território: o Minerador desce ao fundo
+    chance-de-penumbra: 0.03          # chance, por Minerador e turno, de uma criatura da Penumbra subir pelo poço
 
 # ==========================================================
 #  Doma (companheiros e Altar do Domador)
@@ -495,3 +499,10 @@ tag:
   mostrar-nivel: true
   tamanho-maximo: 32
   altura-extra: 0.3
+
+# ==========================================================
+#  Backup automático
+# ==========================================================
+
+backup:
+  dias: 7                             # ao ligar, copia os .yml do plugin para backups/AAAA-MM-DD (1 vez por dia) e guarda os últimos 7 dias (0 = desliga)

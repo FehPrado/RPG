@@ -874,6 +874,22 @@ public final class Obras implements Listener {
         return n;
     }
 
+    /** O maior nível entre as construções com esse efeito (0 = nenhuma). */
+    int melhorNivel(Colonia c, Planta.Efeito e) {
+        Construcao k = melhor(c, e);
+        return k == null ? 0 : k.nivel;
+    }
+
+    /** A construção de maior nível com esse efeito (null = nenhuma). */
+    Construcao melhor(Colonia c, Planta.Efeito e) {
+        Construcao achada = null;
+        for (Construcao k : c.construcoes) {
+            Planta p = plantas.de(k.planta());
+            if (p != null && p.efeito() == e && (achada == null || k.nivel > achada.nivel)) achada = k;
+        }
+        return achada;
+    }
+
     /** Bônus de produção de quem trabalha com uma construção da colônia: +10% por nível da melhor delas. */
     double bonus(Colonia c, Profissao prof) {
         int melhor = 0;
@@ -1564,6 +1580,16 @@ public final class Obras implements Listener {
         info.add(Colonias.linha("Nível: ", k.nivel + " / " + (pl == null ? "?" : pl.nivelMaximo()) + (k.nivel == 0 ? " (precisa de reparo)" : ""),
                 k.nivel == 0 ? NamedTextColor.RED : NamedTextColor.GREEN));
         if (pl != null) info.add(Component.text(pl.efeito().texto(), NamedTextColor.AQUA));
+        if (pl != null && pl.efeito() == Planta.Efeito.MINA && plugin.settings().profAtivadas) {
+            if (colonias.pocoAberto(c)) {
+                info.add(Component.text("☾ Poço das Profundezas aberto: o Minerador desce ao fundo", NamedTextColor.GOLD));
+                info.add(Component.text("  (ardósia, mitrilo, ametista, eco; às vezes algo sobe junto)", NamedTextColor.GRAY));
+            } else {
+                info.add(Component.text("☾ Poço das Profundezas: fechado", NamedTextColor.DARK_GRAY));
+                info.add(Component.text("  precisa da Mina no nível 3 e de uma Raiz de Luz", NamedTextColor.GRAY));
+                info.add(Component.text("  acesa debaixo do território (abaixo do y 0)", NamedTextColor.GRAY));
+            }
+        }
         info.add(Colonias.linha("Feita: ", k.livre ? "do seu jeito" : "pelo Construtor", NamedTextColor.WHITE));
         info.add(Colonias.linha("Onde: ", k.x + ", " + k.y + ", " + k.z, NamedTextColor.GRAY));
         if (pl != null && pl.efeito() == Planta.Efeito.CASA) {

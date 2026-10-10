@@ -44,6 +44,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
@@ -64,6 +65,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 
 /**
  * As Profundezas: abaixo do y 0 o mundo fica escuro de verdade. Raízes de Luz adormecidas
@@ -78,7 +80,10 @@ public final class Profundezas implements Listener {
     private static final NamedTextColor ROXO = NamedTextColor.DARK_PURPLE;
     /** Até onde a luz de uma raiz acesa espanta a escuridão e a Penumbra. */
     private static final int RAIO_LUZ = 40;
-    private static final int MAX_PENUMBRA = 10;
+    /** Tamanho das células do índice de raízes (a busca só olha as células em volta). */
+    private static final int CELULA = 32;
+    /** Quantos zumbis da Penumbra o Coração deixa vivos em volta dele, no máximo. */
+    private static final int MAX_INVOCADOS = 6;
     private static final Material BULBO_ADORMECIDO = Material.BROWN_MUSHROOM_BLOCK, BULBO_ACESO = Material.SHROOMLIGHT;
 
     /** Uma Raiz de Luz (o bloco é o bulbo, no alto dela). */
@@ -106,6 +111,8 @@ public final class Profundezas implements Listener {
     private final File arquivo;
     private final NamespacedKey kPenumbra, kStacks, kModificador, kCoracao, kChunk;
     private final List<Raiz> raizes = new ArrayList<>();
+    /** Índice das raízes: mundo → célula de 32x32 blocos → raízes ali. */
+    private final Map<String, Map<Long, List<Raiz>>> grade = new HashMap<>();
     /** Luzes das Sementes Brilhantes: bloco → quando apagar. */
     private final Map<Block, Long> luzesTemporarias = new HashMap<>();
     /** Coração da Penumbra vivo → a barra de chefe dele. */
@@ -132,6 +139,11 @@ public final class Profundezas implements Listener {
         return w.getEnvironment() == World.Environment.NORMAL && !plugin.masmorras().ehMundo(w);
     }
 
+    /** Quantos corações a Penumbra pode roubar (config). */
+    private int maxPenumbra() {
+        return cfg().profPenumbraMaxima;
+    }
+
     private boolean fundo(Location l) {
         return cfg().profAtivadas && mundoCerto(l.getWorld()) && l.getY() < cfg().profAltura;
     }
@@ -142,13 +154,25 @@ public final class Profundezas implements Listener {
 
     public void carregar() {
         raizes.clear();
+        grade.clear();
         if (!arquivo.exists()) return;
         YamlConfiguration y = YamlConfiguration.loadConfiguration(arquivo);
         for (String l : y.getStringList("raizes")) {
             String[] p = l.split(",");
             if (p.length < 5) continue;
             try {
-                raizes.add(new Raiz(p[0], Integer.parseInt(p[1]), Integer.parseInt(p[2]), Integer.parseInt(p[3]), Boolean.parseBoolean(p[4])));
+                adicionar(new Raiz(p[0], Integer.parseInt(p[1]), Integer.parseInt(p[2]), Integer.parseInt(p[3]), Boolean.parseBoolean(p[4])));
+            } catch (NumberFormatException ignored) { }
+        }
+        // Luzes de Sementes Brilhantes que ficaram acesas (o servidor caiu antes de apagarem): voltam
+        // para a lista e apagam na hora certa.
+        for (String l : y.getStringList("luzes")) {
+            String[] p = l.split(",");
+            if (p.length < 5) continue;
+            World w = Bukkit.getWorld(p[0]);
+            if (w == null) continue;
+            try {
+                luzesTemporarias.put(w.getBlockAt(Integer.parseInt(p[1]), Integer.parseInt(p[2]), Integer.parseInt(p[3])), Long.parseLong(p[4]));
             } catch (NumberFormatException ignored) { }
         }
     }
@@ -158,6 +182,12 @@ public final class Profundezas implements Listener {
         List<String> l = new ArrayList<>();
         for (Raiz r : raizes) l.add(r.mundo + "," + r.x + "," + r.y + "," + r.z + "," + r.acesa);
         y.set("raizes", l);
+        List<String> luzes = new ArrayList<>();
+        for (var en : luzesTemporarias.entrySet()) {
+            Block b = en.getKey();
+            luzes.add(b.getWorld().getName() + "," + b.getX() + "," + b.getY() + "," + b.getZ() + "," + en.getValue());
+        }
+        y.set("luzes", luzes);
         try {
             y.save(arquivo);
             sujo = false;
@@ -237,21 +267,77 @@ public final class Profundezas implements Listener {
         Block bulbo = chao.getRelative(0, 4, 0);
         bulbo.setType(BULBO_ADORMECIDO, false);
         Raiz r = new Raiz(chao.getWorld().getName(), bulbo.getX(), bulbo.getY(), bulbo.getZ(), false);
-        raizes.add(r);
+        adicionar(r);
         sujo = true;
         return r;
     }
 
-    private Raiz raizEm(Block b) {
-        for (Raiz r : raizes) {
-            if (r.x == b.getX() && r.y == b.getY() && r.z == b.getZ() && r.mundo.equals(b.getWorld().getName())) return r;
+    // ---------- índice ----------
+
+    private static long celula(int x, int z) {
+        return ((long) Math.floorDiv(x, CELULA) << 32) ^ (Math.floorDiv(z, CELULA) & 0xFFFFFFFFL);
+    }
+
+    private void adicionar(Raiz r) {
+        raizes.add(r);
+        grade.computeIfAbsent(r.mundo, k -> new HashMap<>()).computeIfAbsent(celula(r.x, r.z), k -> new ArrayList<>()).add(r);
+    }
+
+    /** As raízes até {@code raio} blocos (no plano) de um ponto: só olha as células em volta. */
+    private List<Raiz> raizesPerto(Location l, int raio) {
+        Map<Long, List<Raiz>> m = grade.get(l.getWorld().getName());
+        if (m == null) return List.of();
+        List<Raiz> achadas = new ArrayList<>();
+        int x = l.getBlockX(), z = l.getBlockZ();
+        for (int cx = Math.floorDiv(x - raio, CELULA); cx <= Math.floorDiv(x + raio, CELULA); cx++) {
+            for (int cz = Math.floorDiv(z - raio, CELULA); cz <= Math.floorDiv(z + raio, CELULA); cz++) {
+                List<Raiz> l2 = m.get(((long) cx << 32) ^ (cz & 0xFFFFFFFFL));
+                if (l2 == null) continue;
+                for (Raiz r : l2) if (r.perto(l, raio)) achadas.add(r);
+            }
         }
+        return achadas;
+    }
+
+    private Raiz raizEm(Block b) {
+        Map<Long, List<Raiz>> m = grade.get(b.getWorld().getName());
+        List<Raiz> l = m == null ? null : m.get(celula(b.getX(), b.getZ()));
+        if (l == null) return null;
+        for (Raiz r : l) if (r.x == b.getX() && r.y == b.getY() && r.z == b.getZ()) return r;
         return null;
     }
 
     private boolean pertoDeLuz(Location l) {
-        for (Raiz r : raizes) if (r.acesa && r.perto(l, RAIO_LUZ)) return true;
+        for (Raiz r : raizesPerto(l, RAIO_LUZ)) if (r.acesa) return true;
         return false;
+    }
+
+    /** Luz de tocha/lanterna forte ou dentro de um território amigo: a escuridão não entra. */
+    private boolean protegido(Player p, Location l) {
+        int luz = Math.max(l.getBlock().getLightFromBlocks(), p.getEyeLocation().getBlock().getLightFromBlocks());
+        if (luz >= cfg().profLuzQueProtege) return true;
+        var t = plugin.territorios().em(l);
+        return t != null && plugin.territorios().amigo(t, p.getUniqueId());
+    }
+
+    // ---------- para a colônia ----------
+
+    /** Há uma Raiz de Luz acesa num lugar que passa no filtro (ex.: debaixo do território de uma colônia)? */
+    public boolean raizAcesa(String mundo, Predicate<Location> onde) {
+        World w = Bukkit.getWorld(mundo);
+        if (w == null) return false;
+        for (Raiz r : raizes) if (r.acesa && r.mundo.equals(mundo) && onde.test(new Location(w, r.x, r.y, r.z))) return true;
+        return false;
+    }
+
+    /** Algo sobe das profundezas: uma criatura da Penumbra aparece aqui (o poço da Mina da colônia). */
+    public LivingEntity criaturaDaPenumbra(Location l) {
+        boolean esqueleto = ThreadLocalRandom.current().nextDouble() < 0.35;
+        LivingEntity m = esqueleto ? l.getWorld().spawn(l, org.bukkit.entity.Skeleton.class, this::marcarPenumbra)
+                : l.getWorld().spawn(l, Zombie.class, this::marcarPenumbra);
+        l.getWorld().spawnParticle(Particle.SQUID_INK, l.clone().add(0, 1, 0), 20, 0.3, 0.6, 0.3, 0.02);
+        l.getWorld().playSound(l, Sound.ENTITY_WARDEN_HEARTBEAT, 1f, 1.2f);
+        return m;
     }
 
     // =====================================================================
@@ -324,13 +410,13 @@ public final class Profundezas implements Listener {
             int pen = penumbra(p);
             if (fundo(l)) {
                 boolean luz = pertoDeLuz(l);
-                if (cfg().profEscuridao && jogando && !luz && !p.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                if (cfg().profEscuridao && jogando && !luz && !p.hasPotionEffect(PotionEffectType.NIGHT_VISION) && !protegido(p, l)) {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 60, 0, true, false, false));
                 }
                 if (luz && pen > 0) mudarPenumbra(p, -1);
                 // Raízes adormecidas por perto brilham de leve, para serem achadas.
-                for (Raiz r : raizes) {
-                    if (r.acesa || !r.perto(l, 28)) continue;
+                for (Raiz r : raizesPerto(l, 28)) {
+                    if (r.acesa) continue;
                     p.spawnParticle(Particle.END_ROD, r.x + 0.5, r.y + 0.6, r.z + 0.5, 2, 0.3, 0.3, 0.3, 0.01);
                 }
             } else if (pen > 0) {
@@ -349,6 +435,7 @@ public final class Profundezas implements Listener {
             if (en.getValue() > agora) continue;
             if (en.getKey().getType() == Material.LIGHT) en.getKey().setType(Material.AIR, false);
             it.remove();
+            sujo = true;
         }
         poderesDoCoracao();
         if (sujo && ciclo % 15 == 0) salvar();
@@ -380,7 +467,7 @@ public final class Profundezas implements Listener {
     public void aoApanhar(EntityDamageByEntityEvent e) {
         if (!(e.getEntity() instanceof Player p) || !daPenumbra(e.getDamager())) return;
         if (p.getGameMode() != GameMode.SURVIVAL && p.getGameMode() != GameMode.ADVENTURE) return;
-        if (penumbra(p) >= MAX_PENUMBRA) return;
+        if (penumbra(p) >= maxPenumbra()) return;
         mudarPenumbra(p, 1);
         p.getWorld().spawnParticle(Particle.SQUID_INK, p.getLocation().add(0, 1, 0), 10, 0.3, 0.5, 0.3, 0.02);
     }
@@ -390,12 +477,12 @@ public final class Profundezas implements Listener {
     }
 
     private void mudarPenumbra(Player p, int delta) {
-        int antes = penumbra(p), depois = Math.max(0, Math.min(MAX_PENUMBRA, antes + delta));
+        int antes = Math.min(penumbra(p), maxPenumbra()), depois = Math.max(0, Math.min(maxPenumbra(), antes + delta));
         if (antes == depois) return;
         p.getPersistentDataContainer().set(kStacks, PersistentDataType.INTEGER, depois);
         aplicarPenumbra(p);
         if (delta > 0) {
-            p.sendActionBar(Component.text("☾ A Penumbra roubou 1 coração (" + depois + "/" + MAX_PENUMBRA + ")", ROXO));
+            p.sendActionBar(Component.text("☾ A Penumbra roubou 1 coração (" + depois + "/" + maxPenumbra() + ")", ROXO));
             p.playSound(p.getLocation(), Sound.ENTITY_WARDEN_HEARTBEAT, 0.8f, 1.4f);
         } else if (depois == 0) {
             p.sendActionBar(Component.text("☀ A Penumbra foi embora", COR));
@@ -408,7 +495,7 @@ public final class Profundezas implements Listener {
         AttributeInstance vida = p.getAttribute(Attribute.MAX_HEALTH);
         if (vida == null) return;
         for (AttributeModifier m : List.copyOf(vida.getModifiers())) if (m.getKey().equals(kModificador)) vida.removeModifier(m);
-        int n = penumbra(p);
+        int n = Math.min(penumbra(p), maxPenumbra()); // se o limite da config baixou, vale o novo
         if (n > 0) vida.addModifier(new AttributeModifier(kModificador, -2.0 * n, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY));
         if (p.getHealth() > vida.getValue()) p.setHealth(vida.getValue());
     }
@@ -443,6 +530,7 @@ public final class Profundezas implements Listener {
         if (!alvo.getType().isAir()) return;
         alvo.setType(Material.LIGHT, false);
         luzesTemporarias.put(alvo, System.currentTimeMillis() + 120_000);
+        salvar(); // se o servidor cair, a luz não fica para sempre
         alvo.getWorld().spawnParticle(Particle.END_ROD, alvo.getLocation().add(0.5, 0.5, 0.5), 25, 0.4, 0.4, 0.4, 0.05);
         alvo.getWorld().playSound(alvo.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1f, 1.5f);
     }
@@ -475,7 +563,7 @@ public final class Profundezas implements Listener {
             m.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_SWORD));
             m.getEquipment().setItemInMainHandDropChance(0f);
         });
-        coracoes.put(c.getUniqueId(), BossBar.bossBar(Component.text("☾ Coração da Penumbra", ROXO), 1f, BossBar.Color.PURPLE, BossBar.Overlay.NOTCHED_10));
+        registrarCoracao(c);
         w.playSound(onde, Sound.ENTITY_WARDEN_EMERGE, 1.5f, 0.8f);
         w.spawnParticle(Particle.SQUID_INK, onde.clone().add(0, 1, 0), 120, 1.5, 1.5, 1.5, 0.05);
         for (Player p : w.getPlayers()) {
@@ -483,6 +571,19 @@ public final class Profundezas implements Listener {
             p.showTitle(Title.title(Component.text("☾ Coração da Penumbra", ROXO),
                     Component.text("A luz acordou o que dormia no escuro.", NamedTextColor.GRAY),
                     Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(2500), Duration.ofMillis(600))));
+        }
+    }
+
+    private void registrarCoracao(LivingEntity c) {
+        coracoes.computeIfAbsent(c.getUniqueId(),
+                id -> BossBar.bossBar(Component.text("☾ Coração da Penumbra", ROXO), 1f, BossBar.Color.PURPLE, BossBar.Overlay.NOTCHED_10));
+    }
+
+    /** O Coração continua sendo chefe depois de reiniciar o servidor (ou quando o chunk dele volta a carregar). */
+    @EventHandler
+    public void aoCarregarEntidades(EntitiesLoadEvent e) {
+        for (Entity x : e.getEntities()) {
+            if (x instanceof LivingEntity le && x.getPersistentDataContainer().has(kCoracao)) registrarCoracao(le);
         }
     }
 
@@ -501,9 +602,11 @@ public final class Profundezas implements Listener {
                 if (p.getLocation().distanceSquared(c.getLocation()) <= 40 * 40) p.showBossBar(en.getValue());
                 else p.hideBossBar(en.getValue());
             }
-            // A cada 10 s chama dois zumbis da Penumbra.
+            // A cada 10 s chama dois zumbis da Penumbra (até 6 vivos em volta dele).
             if (ciclo % 5 == 0 && c.getTarget() != null) {
-                for (int i = 0; i < 2; i++) {
+                long vivos = c.getNearbyEntities(24, 12, 24).stream()
+                        .filter(x -> x instanceof Zombie && x.getPersistentDataContainer().has(kPenumbra)).count();
+                for (int i = 0; i < 2 && vivos + i < MAX_INVOCADOS; i++) {
                     Location l = c.getLocation().add(ThreadLocalRandom.current().nextInt(-3, 4), 0, ThreadLocalRandom.current().nextInt(-3, 4));
                     if (!l.getBlock().getType().isAir()) l = c.getLocation();
                     Zombie z = c.getWorld().spawn(l, Zombie.class, this::marcarPenumbra);

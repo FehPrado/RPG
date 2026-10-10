@@ -837,6 +837,51 @@ public final class Colonias implements Listener {
     }
 
     /** O que um morador produz neste turno (null = não trabalhou). */
+    // =====================================================================
+    //  Poço das Profundezas (Mina nível 3 + Raiz de Luz acesa debaixo do território)
+    // =====================================================================
+
+    /** A colônia pode minerar nas Profundezas: Mina no nível 3 e uma Raiz de Luz acesa debaixo do território. */
+    public boolean pocoAberto(Colonia c) {
+        if (!plugin.settings().profAtivadas || obras.melhorNivel(c, Planta.Efeito.MINA) < 3) return false;
+        Territorio t = territorio(c);
+        return plugin.profundezas().raizAcesa(c.mundo, l -> t != null ? plugin.territorios().em(l) == t
+                : Math.abs(l.getBlockX() - c.x) <= Colonia.RAIO && Math.abs(l.getBlockZ() - c.z) <= Colonia.RAIO);
+    }
+
+    /** O Minerador desce pelo poço: ardósia, mitrilo, ametista, eco e Sementes Brilhantes, mas às vezes algo sobe junto. */
+    private void descerAoPoco(Colonia c, Colonia.Cidadao ci, double mult, List<ItemStack> l) {
+        double b = ci.nivel * 0.005;
+        l.add(new ItemStack(Material.COBBLED_DEEPSLATE, quantidade(4, 8, mult)));
+        if (rnd().nextDouble() < 0.35) l.add(new ItemStack(Material.COAL, quantidade(1, 3, mult)));
+        if (rnd().nextDouble() < 0.3 + b) l.add(new ItemStack(Material.RAW_IRON, quantidade(1, 3, mult)));
+        if (rnd().nextDouble() < 0.15 + b) l.add(new ItemStack(Material.RAW_GOLD, quantidade(1, 2, mult)));
+        if (rnd().nextDouble() < 0.15) l.add(new ItemStack(Material.REDSTONE, quantidade(3, 5, mult)));
+        if (rnd().nextDouble() < 0.12) l.add(new ItemStack(Material.LAPIS_LAZULI, quantidade(3, 5, mult)));
+        if (rnd().nextDouble() < 0.15) l.add(new ItemStack(Material.AMETHYST_SHARD, quantidade(2, 4, mult)));
+        if (rnd().nextDouble() < 0.05 + b) l.add(new ItemStack(Material.DIAMOND));
+        if (rnd().nextDouble() < 0.06 + ci.nivel * 0.002) l.add(br.rpgatributos.exploracao.Mitrilo.bruto(1));
+        if (rnd().nextDouble() < 0.04) l.add(br.rpgatributos.exploracao.ItemCeu.SEMENTE_BRILHANTE.criar(1));
+        if (rnd().nextDouble() < 0.015) l.add(new ItemStack(Material.ECHO_SHARD));
+        // Bem raro: uma arma com nome perdida lá embaixo.
+        if (plugin.settings().nomeadasAtivadas && rnd().nextDouble() < 0.003) {
+            var n = rnd().nextBoolean() ? br.rpgatributos.forja.Nomeada.PICARETA_DAS_PROFUNDEZAS : br.rpgatributos.forja.Nomeada.SUSSURRO_DA_PENUMBRA;
+            l.add(plugin.forja().criarNomeada(n, br.rpgatributos.forja.Raridade.RARO));
+            avisar(c, ci.nome + " achou uma arma com nome no fundo do poço!");
+        }
+        // Às vezes algo da Penumbra sobe junto: aparece na Mina (os soldados e você que lutem).
+        if (rnd().nextDouble() < plugin.settings().colPocoChancePenumbra) {
+            Construcao mina = obras.melhor(c, Planta.Efeito.MINA);
+            World w = mina == null ? null : Bukkit.getWorld(mina.mundo);
+            if (w != null && w.isChunkLoaded(mina.x >> 4, mina.z >> 4)) {
+                Block bl = w.getBlockAt(mina.x, mina.y + 1, mina.z);
+                for (int k = 0; k < 8 && !(bl.isPassable() && bl.getRelative(0, 1, 0).isPassable()); k++) bl = bl.getRelative(0, 1, 0);
+                plugin.profundezas().criaturaDaPenumbra(bl.getLocation().add(0.5, 0, 0.5));
+                avisar(c, "Algo da Penumbra subiu pelo poço da Mina!");
+            }
+        }
+    }
+
     private List<ItemStack> trabalhar(Colonia c, Colonia.Cidadao ci, double mult) {
         List<ItemStack> l = new ArrayList<>();
         switch (ci.profissao) {
@@ -877,6 +922,10 @@ public final class Colonias implements Listener {
                 if (rnd().nextDouble() < 0.05) l.add(new ItemStack(Material.INK_SAC));
             }
             case MINERADOR -> {
+                if (pocoAberto(c)) {
+                    descerAoPoco(c, ci, mult, l);
+                    return l;
+                }
                 l.add(new ItemStack(Material.COBBLESTONE, quantidade(4, 8, mult)));
                 double b = ci.nivel * 0.005;
                 if (rnd().nextDouble() < 0.4) l.add(new ItemStack(Material.COAL, quantidade(1, 3, mult)));

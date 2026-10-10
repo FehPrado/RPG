@@ -83,7 +83,8 @@ public final class VisualDomador implements Listener {
     private Companheiros comp() { return plugin.companheiros(); }
 
     // =====================================================================
-    //  A cada tick: as peças seguem o bicho; a cada 2 s: armadura e partículas
+    //  A cada 2 ticks: as peças seguem o bicho (o teleporte suave do display cobre o meio);
+    //  a cada 2 s: armadura e partículas
     // =====================================================================
 
     public void tick() {
@@ -124,7 +125,7 @@ public final class VisualDomador implements Listener {
                 }
                 posicionar(c, p, d);
             }
-            if (ciclo % 40 == 0) {
+            if (ciclo % 20 == 0) {
                 armadura(c, comps, est);
                 particulas(c, comps, est);
             }
@@ -168,7 +169,7 @@ public final class VisualDomador implements Listener {
             case ALFORJE -> { y = h * 0.6; s = (float) (w * 0.9); }
             case FAROL -> { y = h * 1.02; s = 0.45f; }
             case ASAS -> { y = h * 0.82; s = (float) (w * 1.25); }
-            default -> { y = h + 0.3; s = (float) (w * 0.75); yaw += (ciclo * 3) % 360; } // a auréola gira devagar
+            default -> { y = h + 0.3; s = (float) (w * 0.75); yaw += (ciclo * 6) % 360; } // a auréola gira devagar
         }
         Location l = c.getLocation().add(0, y, 0);
         l.setYaw(yaw);
@@ -179,9 +180,9 @@ public final class VisualDomador implements Listener {
             d.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(s, s, s), new AxisAngle4f()));
         }
         // Asas: batem quando ele está no ar (montado e voando) ou correndo.
-        if (p == Peca.ASAS && ciclo % 4 == 0) {
+        if (p == Peca.ASAS && ciclo % 2 == 0) {
             boolean noAr = !c.isOnGround();
-            boolean baixas = noAr && (ciclo / 4) % 2 == 0;
+            boolean baixas = noAr && (ciclo / 2) % 2 == 0;
             d.setItemStack(itemDaPeca(p, baixas));
         }
     }

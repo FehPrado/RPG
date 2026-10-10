@@ -101,8 +101,10 @@ public final class Settings {
     public final int ilhaRegiao, ilhaDistanciaSpawn;
     public final double ilhaChance;
     public final boolean profAtivadas, profEscuridao;
-    public final int profAltura;
+    public final int profAltura, profPenumbraMaxima, profLuzQueProtege;
     public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
+    /** Chance, por Minerador e turno, de algo da Penumbra subir pelo poço da Mina. */
+    public final double colPocoChancePenumbra;
     public final boolean nomeadasAtivadas;
     public final double nomeadasChance, nomeadasChanceBau;
     public final double cidadeChance;
@@ -367,9 +369,12 @@ public final class Settings {
         profAtivadas = c.getBoolean("profundezas.ativadas", true);
         profEscuridao = c.getBoolean("profundezas.escuridao", true);
         profAltura = c.getInt("profundezas.abaixo-de-y", 0);
+        profPenumbraMaxima = Math.max(1, Math.min(9, c.getInt("profundezas.penumbra-maxima", 5)));
+        profLuzQueProtege = Math.max(1, Math.min(16, c.getInt("profundezas.luz-que-protege", 10)));
         profChanceRaiz = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-raiz-por-chunk", 0.1)));
         profChancePenumbra = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-penumbra", 0.3)));
         profChanceCoracao = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-do-coracao", 0.15)));
+        colPocoChancePenumbra = Math.max(0, Math.min(1, c.getDouble("profundezas.poco-da-colonia.chance-de-penumbra", 0.03)));
         nomeadasAtivadas = c.getBoolean("forja.armas-com-nome.ativadas", true);
         nomeadasChance = Math.max(0, c.getDouble("forja.armas-com-nome.multiplicador-de-chance", 1.0));
         nomeadasChanceBau = Math.max(0, Math.min(1, c.getDouble("forja.armas-com-nome.chance-por-bau", 0.05)));
