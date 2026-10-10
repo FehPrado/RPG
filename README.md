@@ -311,7 +311,7 @@ Um jeito simples de ter uma vila com moradores trabalhando, no estilo Minecoloni
 
 | Profissão | Posto (no território) | Produz | Colônia nível |
 |---|---|---|---|
-| Fazendeiro | Composteira | Trigo, cenoura, batata e beterraba das plantações em volta (com qualidade ★, às vezes uma variedade rara) | 1 |
+| Fazendeiro | Composteira dentro de uma Fazenda | Trigo, cenoura, batata e beterraba das plantações em volta (com qualidade ★, às vezes uma variedade rara) | 1 |
 | Lenhador | Bancada de flechas | Troncos (do tipo de árvore que houver perto), mudas e maçãs | 1 |
 | Pescador | Barril (com água perto) | Peixes com qualidade, às vezes peixes raros | 1 |
 | Minerador | Cortador de pedras | Pedra, carvão, minérios brutos e, às vezes, diamante | 2 |
@@ -357,6 +357,10 @@ No estilo MineColonies: a colônia cresce com construções que os **Construtore
 | Armazém | 50 blocos, 4 baús, porta, luz, 70% coberto | Todos os baús dela viram depósito |
 | Biblioteca | 80 blocos, 1 atril, 10 estantes, porta, luz, 70% coberto | Bibliotecário +10% por nível |
 | Quartel | 70 blocos, 2 camas, 1 alvo, porta, luz, 70% coberto | Alvos = vagas de soldado |
+
+**Placa da construção** (o "bloco do prédio" do MineColonies): toda construção pronta ganha uma placa no chão, do lado de dentro perto da entrada, com o nome, o nível e o dono. **Clique nela** abre o menu da construção. **Quebrar a placa desfaz a construção** (pede para quebrar de novo em 10 segundos; os blocos ficam): a Torre de Vigia devolve os chunks que ela tinha posto no território (menos os que outra torre ainda vigia) e o Armazém tira seus baús do depósito. Explosão e pistão não mexem nela. Se a placa sumir de outro jeito, a construção fica "precisando de reparo" (nível 0) até uma nova vistoria pôr outra.
+
+**Trabalho dentro da construção:** o **Fazendeiro** só conta a composteira que fica dentro de uma **Fazenda**, o **Bibliotecário** só o atril dentro de uma **Biblioteca**, e **soldados** só os alvos dentro de um **Quartel** (prontos, nível 1 ou mais). As outras profissões continuam com o posto em qualquer lugar do território.
 
 "Blocos construídos" são blocos firmes que não são terreno natural (terra, pedra, areia, troncos e minérios só contam se alguém colocou). Os números estão em `niveis:` de cada `plantas/*.yml`; o plugin avisa no console se o desenho pronto não atende o próprio nível 1.
 
