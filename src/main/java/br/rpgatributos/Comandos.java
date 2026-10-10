@@ -321,7 +321,8 @@ public final class Comandos implements TabExecutor {
                     /rpgadmin boneco|pedraamolar|fogueira|bebedouro|cartografo  (cria a estação no bloco que você olha)
                     /rpgadmin ferradura [qtd], /rpgadmin ninhopassaro [qtd]
                     /rpgadmin animalraro [ouro|neve]  (o animal que você olha vira raro)
-                    /rpgadmin barril|colmeia|canteiro  (cria a estação no bloco que você olha)
+                    /rpgadmin barril|tacho|colmeia|canteiro  (cria a estação no bloco que você olha)
+                    /rpgadmin artesanato <queijo|geleia|...> [qtd], /rpgadmin trufa [qtd]
                     /rpgadmin carta <carta> [brilhante], flecha|frasco|erva|mel <tipo> [qtd], bebida <tipo> [grau 0-3]
                     /rpgadmin mercador  (o Mercador Itinerante aparece perto de você)
                     /rpgadmin encontro [carroca|bandidos|viajante|estrela]
@@ -363,7 +364,7 @@ public final class Comandos implements TabExecutor {
             case "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote" -> { adminExploracao(sender, sub, args); return; }
             case "talentopontos", "renascer", "companheironivel" -> { adminProgressao(sender, sub, args); return; }
             case "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro" -> { adminDetalhes(sender, sub, args); return; }
-            case "barril", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta" -> { adminVida(sender, sub, args); return; }
+            case "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta" -> { adminVida(sender, sub, args); return; }
             case "estrutura", "estruturas", "esquecerestrutura" -> { adminEstruturas(sender, sub, args); return; }
             case "guerra" -> {
                 if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
@@ -800,6 +801,8 @@ public final class Comandos implements TabExecutor {
                 case "muda" -> entregar(p, br.rpgatributos.vida.Fruta.valueOf(a1).muda(qtd));
                 case "fruta" -> entregar(p, br.rpgatributos.vida.Fruta.valueOf(a1).fruta(qtd));
                 case "mel" -> entregar(p, br.rpgatributos.vida.Mel.valueOf(a1).criar(qtd));
+                case "artesanato" -> entregar(p, br.rpgatributos.vida.Artesanato.valueOf(a1).criar(null, null, qtd));
+                case "trufa" -> entregar(p, br.rpgatributos.vida.Criacao.trufa(Math.max(1, quantidade(args, 1, 1))));
                 case "bebida" -> {
                     int grau = args.length >= 3 ? Math.max(0, Math.min(3, Integer.parseInt(args[2]))) : 0;
                     entregar(p, br.rpgatributos.vida.Bebida.valueOf(a1).criar(grau));
@@ -818,6 +821,7 @@ public final class Comandos implements TabExecutor {
                     Block b = p.getTargetBlockExact(6);
                     Material precisa = switch (sub) {
                         case "barril" -> Material.BARREL;
+                        case "tacho" -> Material.DECORATED_POT;
                         case "colmeia" -> Material.BEEHIVE;
                         default -> Material.MOSS_BLOCK;
                     };
@@ -827,6 +831,7 @@ public final class Comandos implements TabExecutor {
                     if (plugin.ehEstacao(b)) { erro(sender, "Esse bloco já é uma estação."); return; }
                     switch (sub) {
                         case "barril" -> plugin.barris().criar(b, p);
+                        case "tacho" -> plugin.tachos().criar(b, p);
                         case "colmeia" -> plugin.colmeias().criar(b, p);
                         default -> plugin.canteiros().criar(b, p);
                     }
@@ -1572,8 +1577,8 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "reload"));
-                } else if (args.length == 2 && List.of("carta", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta").contains(sub)) {
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "reload"));
+                } else if (args.length == 2 && List.of("carta", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();
                         case "flecha" -> br.rpgatributos.vida.Flechas.Tipo.values();
@@ -1581,6 +1586,7 @@ public final class Comandos implements TabExecutor {
                         case "erva" -> br.rpgatributos.vida.Erva.values();
                         case "mel" -> br.rpgatributos.vida.Mel.values();
                         case "bebida" -> br.rpgatributos.vida.Bebida.values();
+                        case "artesanato" -> br.rpgatributos.vida.Artesanato.values();
                         case "muda", "fruta" -> br.rpgatributos.vida.Fruta.values();
                         default -> new Enum<?>[0];
                     };
@@ -1679,7 +1685,7 @@ public final class Comandos implements TabExecutor {
                             "tesouros", "especies_peixe", "criaturas_marinhas", "gema_perfeita", "alquimias", "elixires", "acessorios"));
                 } else if (args.length == 2 && !List.of("reload", "infusor", "forjaferreiro", "altar", "cozinha", "reciclagem", "adubo",
                         "marco", "ignorar", "altardomador", "portalmasmorra", "fecharmasmorras", "santuario", "prova",
-                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
+                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
                     return null;
                 } else if (args.length == 3 && List.of("set", "addxp", "reset").contains(sub)) {
                     for (Skill s : Skill.values()) op.add(s.id());
