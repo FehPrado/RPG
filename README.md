@@ -311,7 +311,7 @@ Um jeito simples de ter uma vila com moradores trabalhando, no estilo Minecoloni
 
 | Profissão | Posto (no território) | Produz | Colônia nível |
 |---|---|---|---|
-| Fazendeiro | Composteira dentro de uma Fazenda | Trigo, cenoura, batata e beterraba das plantações em volta (com qualidade ★, às vezes uma variedade rara) | 1 |
+| Fazendeiro | Composteira | Trigo, cenoura, batata e beterraba das plantações em volta (com qualidade ★, às vezes uma variedade rara) | 1 |
 | Lenhador | Bancada de flechas | Troncos (do tipo de árvore que houver perto), mudas e maçãs | 1 |
 | Pescador | Barril (com água perto) | Peixes com qualidade, às vezes peixes raros | 1 |
 | Minerador | Cortador de pedras | Pedra, carvão, minérios brutos e, às vezes, diamante | 2 |
@@ -360,7 +360,26 @@ No estilo MineColonies: a colônia cresce com construções que os **Construtore
 
 **Placa da construção** (o "bloco do prédio" do MineColonies): toda construção pronta ganha uma placa no chão, do lado de dentro perto da entrada, com o nome, o nível e o dono. **Clique nela** abre o menu da construção. **Quebrar a placa desfaz a construção** (pede para quebrar de novo em 10 segundos; os blocos ficam): a Torre de Vigia devolve os chunks que ela tinha posto no território (menos os que outra torre ainda vigia) e o Armazém tira seus baús do depósito. Explosão e pistão não mexem nela. Se a placa sumir de outro jeito, a construção fica "precisando de reparo" (nível 0) até uma nova vistoria pôr outra.
 
-**Trabalho dentro da construção:** o **Fazendeiro** só conta a composteira que fica dentro de uma **Fazenda**, o **Bibliotecário** só o atril dentro de uma **Biblioteca**, e **soldados** só os alvos dentro de um **Quartel** (prontos, nível 1 ou mais). As outras profissões continuam com o posto em qualquer lugar do território.
+**Cada profissão tem a sua construção** (as cabanas do MineColonies; `colonia.trabalho-nas-construcoes`): o posto só conta se estiver **dentro** da construção pronta (nível 1 ou mais), e ela dá **+10% de produção por nível** a quem trabalha lá.
+
+| Profissão | Construção | Posto lá dentro | Nível da colônia |
+|---|---|---|---|
+| Construtor | Oficina do Construtor | — (1 Construtor trabalha sem ela; +1 vaga por nível da Oficina) | 1 |
+| Fazendeiro | Fazenda | Composteira | 1 |
+| Lenhador | Cabana do Lenhador | Bancada de flechas | 1 |
+| Pescador | Cabana do Pescador (perto da água) | Barril | 1 |
+| Minerador | Mina | Cortador de pedras | 2 |
+| Mercador | Mercado | Mesa de cartografia | 2 |
+| Cozinheiro | Taverna | Cozinha (faça o ritual no defumador) | 2 |
+| Bibliotecário | Biblioteca | Atril | 2 |
+| Soldado, Arqueiro, Cavaleiro | Quartel | Alvo (4 vagas cada) | 2 |
+| Ferreiro | Ferraria | Forja do Ferreiro (ritual na bigorna) | 3 |
+| Tratador | Estábulo | Altar do Domador (ritual no fardo de feno) | 3 |
+| Alquimista | Laboratório | Bancada Alquímica (ritual no suporte de poções) | 4 |
+
+**Casa de cada morador** (`colonia.moradia-nas-casas`): cada morador mora numa **Casa** da colônia. A colônia distribui sozinha pelas camas das casas prontas, e o aldeão **dorme na cama da casa dele**. **Sem casa:** fica triste (até -20% de felicidade) e produz 15% a menos. **Casa de nível 2 ou 3:** +5% de produção por nível acima do 1. **Morador novo só chega se houver vaga nas casas** (os 2 fundadores dormem na Prefeitura; soldados moram no quartel). O menu mostra a casa de cada um e, na Casa, quem mora nela.
+
+Com as duas opções em `false`, volta o jeito antigo: posto em qualquer lugar do território e qualquer cama serve.
 
 "Blocos construídos" são blocos firmes que não são terreno natural (terra, pedra, areia, troncos e minérios só contam se alguém colocou). Os números estão em `niveis:` de cada `plantas/*.yml`; o plugin avisa no console se o desenho pronto não atende o próprio nível 1.
 
