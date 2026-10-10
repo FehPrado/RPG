@@ -108,7 +108,7 @@ public enum Cultivo {
                             Component.text(rebrota ? "Rebrota depois de colher." : "Colha e plante de novo.", NamedTextColor.DARK_GRAY),
                             Component.text(velocidade() + ".", NamedTextColor.DARK_GRAY),
                             Component.text(gigante ? "9 juntas (3×3) podem virar uma gigante!" : "Na estufa (teto de vidro) cresce o ano todo.", NamedTextColor.DARK_GRAY),
-                            Component.empty(), Component.text(estacao.icone() + " Semente da estação", cor))
+                            Component.empty(), Component.text(estacao().icone() + " Semente da estação", cor))
                     .stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             m.getPersistentDataContainer().set(K_SEMENTE, PersistentDataType.STRING, name());
             PacoteRecursos.marcar(m, "semente_" + id());
@@ -122,7 +122,7 @@ public enum Cultivo {
             m.itemName(Component.text(nome, cor));
             m.lore(List.of(Component.text("Ao comer: " + descricaoEfeito + ".", NamedTextColor.GRAY),
                             Component.text("Colhido " + quando() + ".", NamedTextColor.DARK_GRAY),
-                            Component.empty(), Component.text(estacao.icone() + " Plantação da estação", cor))
+                            Component.empty(), Component.text(estacao().icone() + " Plantação da estação", cor))
                     .stream().map(c -> c.decoration(TextDecoration.ITALIC, false)).toList());
             m.getPersistentDataContainer().set(K_COLHEITA, PersistentDataType.STRING, name());
             PacoteRecursos.marcar(m, "colheita_" + id());
