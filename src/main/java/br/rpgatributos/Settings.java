@@ -45,6 +45,8 @@ public final class Settings {
     public final boolean temperaturaAtiva, invernoMudaBlocos;
     public final int invernoNeveMax, coletasPorJogador;
     public final boolean coletasAtivas;
+    /** Plantações da estação: as fora de época murcham quando a estação troca (menos na estufa); gigantes 3×3. */
+    public final boolean plantasMurcham, colheitasGigantes;
     public final double cliChanceEvento, ceuChanceSangue, ceuChanceMeteoros, ceuChanceEclipse, ceuChanceAurora, malChanceMordida;
     public final double gueTesouroVencedor;
 
@@ -256,6 +258,8 @@ public final class Settings {
         invernoMudaBlocos = c.getBoolean("mundo-vivo.neve-e-gelo-no-inverno", true);
         invernoNeveMax = Math.max(0, c.getInt("mundo-vivo.blocos-de-neve-no-maximo", 4000));
         coletasAtivas = c.getBoolean("mundo-vivo.coletas", true);
+        plantasMurcham = c.getBoolean("mundo-vivo.plantas-murcham-fora-de-epoca", true);
+        colheitasGigantes = c.getBoolean("mundo-vivo.colheitas-gigantes", true);
         coletasPorJogador = Math.max(0, c.getInt("mundo-vivo.coletas-por-jogador", 4));
         cliChanceEvento = c.getDouble("mundo-vivo.chance-evento-de-clima", 0.08);
         ceuChanceSangue = c.getDouble("mundo-vivo.chance-lua-de-sangue", 0.2);

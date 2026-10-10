@@ -143,6 +143,8 @@ mundo-vivo:
   blocos-de-neve-no-maximo: 4000      # quantos blocos a estação pode ter posto ao mesmo tempo
   coletas: true                       # coisas para colher aparecem pelo mundo conforme a estação
   coletas-por-jogador: 4              # quantas ao mesmo tempo perto de cada jogador (raio de 32 blocos)
+  plantas-murcham-fora-de-epoca: true # plantações da estação murcham quando a estação delas acaba (na estufa, com teto de vidro, não)
+  colheitas-gigantes: true            # 9 couves-flores, melões ou abóboras-morangas maduras em 3x3 podem virar uma gigante
   chance-evento-de-clima: 0.08        # a cada 2,5 min: nevasca, neblina, ventania, tempestade elétrica, onda de calor
   chance-lua-de-sangue: 0.2           # em noite de lua cheia
   chance-chuva-de-meteoros: 0.06      # por noite

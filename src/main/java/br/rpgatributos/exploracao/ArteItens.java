@@ -2029,6 +2029,63 @@ final class ArteItens {
             "................"};
 
     /** As 4 fases de uma planta (o chão fica na última linha). */
+    /** Fruto redondo com cabinho (tomate, cebola, rabanete...). */
+    private static final String[] REDONDO = {
+            "................",
+            "................",
+            "......kgkg......",
+            ".......gk.......",
+            ".....oogkoo.....",
+            "....ohhmmmmo....",
+            "...ohhmmmmmdo...",
+            "...ohmmmmmmdo...",
+            "...ommmmmmmdo...",
+            "...ommmmmmmdo...",
+            "...ommmmmmddo...",
+            "....ommmmddo....",
+            ".....oooooo.....",
+            "................",
+            "................",
+            "................"};
+
+    /** Espiga de milho na palha. */
+    private static final String[] ESPIGA = {
+            "................",
+            "........o.......",
+            ".......ohm......",
+            "......ohmmo.....",
+            "......ohmdo.....",
+            ".....gohmmog....",
+            ".....gomdmog....",
+            "....kgohmmogk...",
+            "....kgomdmogk...",
+            "....kgohmmogk...",
+            ".....kgommogk...",
+            "......kgoogk....",
+            ".......kggk.....",
+            "........kk......",
+            "................",
+            "................"};
+
+    /** Vagem (feijão-verde, berinjela comprida). */
+    private static final String[] VAGEM = {
+            "................",
+            "............kg..",
+            "...........ok...",
+            "..........ohmo..",
+            ".........ohmdo..",
+            "........ohmdo...",
+            ".......ohmmo....",
+            "......ohmdo.....",
+            ".....ohmmo......",
+            "....ohmdo.......",
+            "...ohmmo........",
+            "...omdo.........",
+            "....oo..........",
+            "................",
+            "................",
+            "................"};
+
     private static final String[][] FASES = {
             {"................", "................", "................", "................", "................", "................",
                     "................", "................", "................", "................", "................", "................",
@@ -2091,7 +2148,20 @@ final class ArteItens {
                 {"uva", BAGAS, 0x7B1FA2, 0xFFFFFFFF, 0xFFF3E5F5},
                 {"abobora_moranga", GOMOS, 0xEF6C00, 0xFFFFFFFF, 0xFFFFE0B2},
                 {"couve_gelada", FOLHOSA, 0x5E9C7A, 0xFFFFFFFF, 0xFFE0F2F1},
-                {"nabo_de_neve", BULBO, 0xEDE7F6, 0xFFFFFFFF, 0xFFFFFFFF}};
+                {"nabo_de_neve", BULBO, 0xEDE7F6, 0xFFFFFFFF, 0xFFFFFFFF},
+                // 2.33: mais 12 (5 por estação)
+                {"pastinaca", RAIZ_INVERNO, 0xF3E5AB, 0xFFFFFFFF, 0xFFFFFFFF},
+                {"alho", BULBO, 0xF8F4E8, 0xFFFFFFFF, 0xFFFFFFFF},
+                {"feijao_verde", VAGEM, 0x7CB342, 0xFFFFFFFF, 0xFFDCEDC8},
+                {"tomate", REDONDO, 0xE53935, 0xFFFFFFFF, 0xFFFFCDD2},
+                {"milho", ESPIGA, 0xFBC02D, 0xFFFFFFFF, 0xFFFFF59D},
+                {"melao", GOMOS, 0x8BC34A, 0xFFFFFFFF, 0xFFF1F8E9},
+                {"berinjela", VAGEM, 0x6A1B9A, 0xFFFFFFFF, 0xFFE1BEE7},
+                {"inhame", RAIZ_INVERNO, 0x8D6E63, 0xFFFFFFFF, 0xFFFFFFFF},
+                {"oxicoco", BAGAS, 0xB71C1C, 0xFFFFFFFF, 0xFFFFCDD2},
+                {"cebola", REDONDO, 0xAD5A8C, 0xFFFFFFFF, 0xFFF8BBD0},
+                {"rabanete_gelado", REDONDO, 0xEF5350, 0xFFFFFFFF, 0xFFFFFFFF},
+                {"alho_poro", BROTO, 0xC5E1A5, 0xFFFFFFFF, 0xFFFFFFFF}};
         for (Object[] cv : cultivos) {
             String id = (String) cv[0];
             int cor = (int) cv[2], destaque = (int) cv[3], botao = (int) cv[4];
@@ -2107,5 +2177,8 @@ final class ArteItens {
                     'm', mCor, 'd', escurecer(mCor, 0.7), 'a', clarear(mCor, 0.45));
             for (int f = 0; f < 4; f++) l.add(new Arte("short_grass", "planta_" + id + "_" + f, FASES[f], fase));
         }
+        // A planta murcha (fora de época): a fase 2 em tons de palha seca.
+        l.add(new Arte("dead_bush", "planta_murcha", FASES[2], c('k', 0xFF5A4022, 'g', 0xFF8A6A3A, 'h', 0xFFB89A5E, 'b', 0xFF6A5030,
+                'm', 0xFF7A5A30, 'd', 0xFF4A3218, 'a', 0xFFA08050)));
     }
 }

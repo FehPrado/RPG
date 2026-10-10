@@ -83,7 +83,7 @@ public final class MercadorItinerante implements Listener {
         // Sementes das plantações desta estação, um óleo de lâmina e peles para o curtume.
         var estacao = plugin.estacoes().atual();
         List<Cultivo> daEstacao = new java.util.ArrayList<>();
-        for (Cultivo c : Cultivo.values()) if (c.estacao() == estacao) daEstacao.add(c);
+        for (Cultivo c : Cultivo.values()) if (c.cresceEm(estacao)) daEstacao.add(c);
         if (!daEstacao.isEmpty()) l.add(new Oferta(() -> daEstacao.get(rnd().nextInt(daEstacao.size())).semente(4), 4, 0, 4));
         l.add(new Oferta(() -> {
             List<br.rpgatributos.alquimia.Reagente> oleos = new java.util.ArrayList<>();

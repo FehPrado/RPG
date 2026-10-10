@@ -335,7 +335,7 @@ public final class Barris extends Estacao {
     private static boolean frutaDeLicor(ItemStack s) {
         if (Fruta.de(s) != null) return true;
         Cultivo c = Cultivo.daColheita(s);
-        if (c == Cultivo.MORANGO || c == Cultivo.MIRTILO || c == Cultivo.UVA) return true;
+        if (c == Cultivo.MORANGO || c == Cultivo.MIRTILO || c == Cultivo.UVA || c == Cultivo.OXICOCO || c == Cultivo.MELAO) return true;
         Coleta k = Coleta.de(s);
         return k == Coleta.AMORA_SILVESTRE || k == Coleta.GROSELHA || k == Coleta.FRUTO_DE_ZIMBRO;
     }

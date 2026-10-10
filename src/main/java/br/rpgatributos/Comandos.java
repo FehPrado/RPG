@@ -125,7 +125,7 @@ public final class Comandos implements TabExecutor {
                 var agora = plugin.estacoes().atual();
                 java.util.List<String> coletas = new java.util.ArrayList<>(), plantas = new java.util.ArrayList<>();
                 for (var c : br.rpgatributos.vida.Coleta.values()) if (c.estacao() == agora) coletas.add(c.nome());
-                for (var c : br.rpgatributos.vida.Cultivo.values()) if (c.estacao() == agora) plantas.add(c.nome());
+                for (var c : br.rpgatributos.vida.Cultivo.values()) if (c.cresceEm(agora)) plantas.add(c.nome());
                 p.sendMessage(Component.text("   🍄 Para colher pelo mundo: " + String.join(", ", coletas), NamedTextColor.GREEN));
                 p.sendMessage(Component.text("   🌱 Plantações da estação: " + String.join(", ", plantas) + " (sementes saem do mato)", NamedTextColor.GREEN));
                 p.sendMessage(Component.text("☾ " + plugin.ceu().resumo(), NamedTextColor.LIGHT_PURPLE));

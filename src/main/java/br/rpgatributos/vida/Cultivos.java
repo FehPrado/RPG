@@ -54,14 +54,23 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class Cultivos implements Listener {
 
     private static final NamespacedKey K_ENT = new NamespacedKey("rpgatributos", "cultivo_ponto");
-    /** Chance de passar de fase a cada minuto (em média ~12 min por fase). */
-    private static final double CHANCE_FASE = 1 / 12.0;
+    /** Chance, a cada minuto, de 9 maduras em 3×3 virarem uma gigante. */
+    private static final double CHANCE_GIGANTE = 0.02;
 
     private static final class Planta {
         String mundo;
         int x, y, z;
         Cultivo tipo;
         int fase;
+        /** Murchou fora de época (só sai arrancando). */
+        boolean murcha;
+        /** É o centro de uma colheita gigante 3×3. */
+        boolean gigante;
+        /** A estação em que a planta foi vista por último (para murchar quando ela troca). */
+        Estacao vista;
+
+        /** O que está aparecendo (troca o modelo quando muda). */
+        int visual() { return gigante ? 100 : murcha ? 50 : fase; }
     }
 
     private final RPGAtributos plugin;
@@ -88,7 +97,7 @@ public final class Cultivos implements Listener {
         if (!arquivo.exists()) return;
         for (String linha : YamlConfiguration.loadConfiguration(arquivo).getStringList("plantas")) {
             String[] a = linha.split(",");
-            if (a.length != 6) continue;
+            if (a.length < 6) continue;
             try {
                 Planta p = new Planta();
                 p.mundo = a[0];
@@ -97,6 +106,10 @@ public final class Cultivos implements Listener {
                 p.z = Integer.parseInt(a[3]);
                 p.tipo = Cultivo.valueOf(a[4]);
                 p.fase = Integer.parseInt(a[5]);
+                if (a.length > 6) {
+                    p.murcha = a[6].contains("M");
+                    p.gigante = a[6].contains("G");
+                }
                 plantas.put(chave(p.mundo, p.x, p.y, p.z), p);
             } catch (RuntimeException ignorado) {
                 // linha inválida
@@ -107,7 +120,10 @@ public final class Cultivos implements Listener {
     public void salvar() {
         if (!sujo) return;
         List<String> l = new ArrayList<>();
-        for (Planta p : plantas.values()) l.add(chave(p.mundo, p.x, p.y, p.z) + "," + p.tipo.name() + "," + p.fase);
+        for (Planta p : plantas.values()) {
+            String marcas = (p.murcha ? "M" : "") + (p.gigante ? "G" : "");
+            l.add(chave(p.mundo, p.x, p.y, p.z) + "," + p.tipo.name() + "," + p.fase + (marcas.isEmpty() ? "" : "," + marcas));
+        }
         YamlConfiguration y = new YamlConfiguration();
         y.set("plantas", l);
         try {
@@ -146,6 +162,13 @@ public final class Cultivos implements Listener {
         }
         String k = chave(terra.getWorld().getName(), terra.getX(), terra.getY(), terra.getZ());
         if (plantas.containsKey(k)) return;
+        // Debaixo de uma gigante não dá.
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                Planta vizinha = plantas.get(chave(terra.getWorld().getName(), terra.getX() + dx, terra.getY(), terra.getZ() + dz));
+                if (vizinha != null && vizinha.gigante) return;
+            }
+        }
         Planta pl = new Planta();
         pl.mundo = terra.getWorld().getName();
         pl.x = terra.getX();
@@ -158,8 +181,11 @@ public final class Cultivos implements Listener {
         terra.getWorld().playSound(terra.getLocation().add(0.5, 1, 0.5), Sound.ITEM_CROP_PLANT, 1f, 1f);
         mostrar(terra.getWorld(), k, pl);
         Estacao agora = plugin.estacoes().atual();
+        pl.vista = agora;
+        boolean cresce = c.cresceEm(agora) || estufa(terra);
         p.sendActionBar(Component.text(c.estacao().icone() + " " + c.nome() + " plantado"
-                + (agora == c.estacao() ? ". Mantenha a terra molhada." : ". Ele só cresce na " + c.estacao().nome().toLowerCase(java.util.Locale.ROOT) + "."), c.cor()));
+                + (cresce ? ". Mantenha a terra molhada." : ". Ele só cresce " + c.quando() + " (ou numa estufa).")
+                + (!cresce && plugin.settings().plantasMurcham ? " Fora de época, murcha quando a estação trocar!" : ""), c.cor()));
     }
 
     // =====================================================================
@@ -181,15 +207,29 @@ public final class Cultivos implements Listener {
                 esconder(en.getKey());
                 it.remove();
                 sujo = true;
-                w.dropItemNaturally(terra.getLocation().add(0.5, 1.2, 0.5), pl.tipo.semente(1));
+                if (!pl.murcha) w.dropItemNaturally(terra.getLocation().add(0.5, 1.2, 0.5), pl.tipo.semente(1));
                 continue;
             }
-            if (minuto && pl.fase < 3 && pl.tipo.estacao() == estacao && terra.getBlockData() instanceof Farmland f && f.getMoisture() > 0) {
-                double chance = CHANCE_FASE * (w.hasStorm() ? 1.5 : 1);
+            // Troca de estação: quem não é desta estação (e não está na estufa) murcha.
+            if (pl.vista == null) pl.vista = estacao;
+            if (pl.vista != estacao) {
+                pl.vista = estacao;
+                if (!pl.murcha && !pl.gigante && !pl.tipo.cresceEm(estacao) && plugin.settings().plantasMurcham && !estufa(terra)) {
+                    pl.murcha = true;
+                    sujo = true;
+                }
+            }
+            if (minuto && !pl.murcha && !pl.gigante && pl.fase < 3 && (pl.tipo.cresceEm(estacao) || estufa(terra))
+                    && terra.getBlockData() instanceof Farmland f && f.getMoisture() > 0) {
+                double chance = (1.0 / pl.tipo.minutosPorFase()) * (w.hasStorm() ? 1.5 : 1);
                 if (rnd().nextDouble() < chance) {
                     pl.fase++;
                     sujo = true;
                 }
+            }
+            if (minuto && pl.fase >= 3 && !pl.murcha && !pl.gigante && pl.tipo.gigante() && plugin.settings().colheitasGigantes
+                    && rnd().nextDouble() < CHANCE_GIGANTE) {
+                gigantes.add(en.getKey());
             }
             boolean perto = false;
             for (Player p : w.getPlayers()) {
@@ -198,35 +238,91 @@ public final class Cultivos implements Listener {
             }
             if (perto) mostrar(w, en.getKey(), pl);
         }
+        for (String k : gigantes) formarGigante(k);
+        gigantes.clear();
         if (sujo && ciclos % 6 == 0) salvar();
+    }
+
+    private final List<String> gigantes = new ArrayList<>();
+
+    /** Estufa: o primeiro bloco acima da planta (até 12 de altura) é de vidro. Lá dentro, cresce em qualquer estação. */
+    public static boolean estufa(Block terra) {
+        for (int dy = 2; dy <= 12; dy++) {
+            Material m = terra.getRelative(0, dy, 0).getType();
+            if (m.isAir()) continue;
+            return m.name().contains("GLASS");
+        }
+        return false;
+    }
+
+    /** Se as 9 em volta (3×3, esta no meio) são do mesmo tipo e estão maduras, viram uma gigante no meio. */
+    private void formarGigante(String k) {
+        Planta meio = plantas.get(k);
+        if (meio == null || meio.gigante || meio.murcha) return;
+        List<String> partes = new ArrayList<>();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                String kk = chave(meio.mundo, meio.x + dx, meio.y, meio.z + dz);
+                Planta p = plantas.get(kk);
+                if (p == null || p.tipo != meio.tipo || p.fase < 3 || p.murcha || p.gigante) return;
+                if (dx != 0 || dz != 0) partes.add(kk);
+            }
+        }
+        for (String kk : partes) {
+            plantas.remove(kk);
+            esconder(kk);
+        }
+        meio.gigante = true;
+        sujo = true;
+        World w = Bukkit.getWorld(meio.mundo);
+        if (w == null) return;
+        Location l = new Location(w, meio.x + 0.5, meio.y + 1.5, meio.z + 0.5);
+        w.spawnParticle(Particle.HAPPY_VILLAGER, l, 60, 1.2, 0.8, 1.2, 0);
+        w.playSound(l, Sound.BLOCK_GROWING_PLANT_CROP, 1f, 0.6f);
+        mostrar(w, k, meio);
+        for (Player p : w.getPlayers()) {
+            if (p.getLocation().distanceSquared(l) < 48 * 48) {
+                p.sendMessage(Component.text("✿ Uma " + meio.tipo.nome() + " GIGANTE cresceu na plantação!", meio.tipo.cor()));
+            }
+        }
     }
 
     private void mostrar(World w, String k, Planta pl) {
         UUID[] ids = visiveis.get(k);
         if (ids != null && Bukkit.getEntity(ids[0]) instanceof ItemDisplay d && d.isValid()) {
-            if (faseVisivel.getOrDefault(k, -1) == pl.fase) return;
-            d.setItemStack(pl.tipo.fase(pl.fase));
-            faseVisivel.put(k, pl.fase);
-            return;
+            if (faseVisivel.getOrDefault(k, -1) == pl.visual()) return;
+            // Virou gigante: o tamanho muda, então cria de novo.
+            if (!pl.gigante) {
+                d.setItemStack(modelo(pl));
+                faseVisivel.put(k, pl.visual());
+                return;
+            }
         }
         esconder(k);
-        Location l = new Location(w, pl.x + 0.5, pl.y + 1.4375, pl.z + 0.5);
+        float escala = pl.gigante ? 3f : 1f;
+        Location l = new Location(w, pl.x + 0.5, pl.y + (pl.gigante ? 2.5 : 1.4375), pl.z + 0.5);
         ItemDisplay d = w.spawn(l, ItemDisplay.class, x -> {
-            x.setItemStack(pl.tipo.fase(pl.fase));
+            x.setItemStack(modelo(pl));
             x.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
             x.setBillboard(Display.Billboard.FIXED);
-            x.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(1f, 1f, 1f), new AxisAngle4f()));
+            x.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(escala, escala, escala), new AxisAngle4f()));
             x.setPersistent(false);
             x.getPersistentDataContainer().set(K_ENT, PersistentDataType.STRING, k);
         });
-        Interaction i = w.spawn(new Location(w, pl.x + 0.5, pl.y + 0.9375, pl.z + 0.5), Interaction.class, x -> {
-            x.setInteractionWidth(0.9f);
-            x.setInteractionHeight(0.9f);
+        Interaction i = w.spawn(new Location(w, pl.x + 0.5, pl.y + (pl.gigante ? 1.0 : 0.9375), pl.z + 0.5), Interaction.class, x -> {
+            x.setInteractionWidth(pl.gigante ? 2.9f : 0.9f);
+            x.setInteractionHeight(pl.gigante ? 2.6f : 0.9f);
             x.setPersistent(false);
             x.getPersistentDataContainer().set(K_ENT, PersistentDataType.STRING, k);
         });
         visiveis.put(k, new UUID[]{d.getUniqueId(), i.getUniqueId()});
-        faseVisivel.put(k, pl.fase);
+        faseVisivel.put(k, pl.visual());
+    }
+
+    private static ItemStack modelo(Planta pl) {
+        if (pl.gigante) return pl.tipo.colheita(1);
+        if (pl.murcha) return Cultivo.murcha();
+        return pl.tipo.fase(pl.fase);
     }
 
     private void esconder(String k) {
@@ -263,7 +359,11 @@ public final class Cultivos implements Listener {
             p.sendActionBar(Component.text("✖ Essa plantação é do território de outra pessoa.", NamedTextColor.RED));
             return;
         }
-        if (pl.fase >= 3) {
+        if (pl.murcha) {
+            arrancarMurcha(p, i, k, pl);
+            return;
+        }
+        if (pl.fase >= 3 || pl.gigante) {
             colher(p, i, k, pl);
             return;
         }
@@ -296,11 +396,15 @@ public final class Cultivos implements Listener {
         World w = i.getWorld();
         Location l = i.getLocation().add(0, 0.6, 0);
         ItemStack mao = p.getInventory().getItemInMainHand();
-        boolean naEstacao = pl.tipo.estacao() == plugin.estacoes().atual();
-        if (pl.fase < 3) {
+        if (pl.murcha) {
+            arrancarMurcha(p, i, k, pl);
+            return;
+        }
+        boolean naEstacao = pl.tipo.cresceEm(plugin.estacoes().atual()) || estufa(w.getBlockAt(pl.x, pl.y, pl.z));
+        if (pl.fase < 3 && !pl.gigante) {
             if (mao.getType() == Material.BONE_MEAL && mao.getPersistentDataContainer().getKeys().isEmpty()) {
                 if (!naEstacao) {
-                    p.sendActionBar(Component.text("✖ Fora de época: " + pl.tipo.nome() + " só cresce na " + pl.tipo.estacao().nome().toLowerCase(java.util.Locale.ROOT) + ".", NamedTextColor.RED));
+                    p.sendActionBar(Component.text("✖ Fora de época: " + pl.tipo.nome() + " só cresce " + pl.tipo.quando() + " (ou numa estufa).", NamedTextColor.RED));
                     return;
                 }
                 if (p.getGameMode() != GameMode.CREATIVE) mao.setAmount(mao.getAmount() - 1);
@@ -312,7 +416,7 @@ public final class Cultivos implements Listener {
                 return;
             }
             p.sendActionBar(Component.text(pl.tipo.estacao().icone() + " " + pl.tipo.nome() + ": fase " + (pl.fase + 1) + " de 4"
-                    + (naEstacao ? " (cresce com a terra molhada)" : " — fora de época, só cresce na " + pl.tipo.estacao().nome().toLowerCase(java.util.Locale.ROOT)), pl.tipo.cor()));
+                    + (naEstacao ? " (cresce com a terra molhada)" : " — fora de época, só cresce " + pl.tipo.quando()), pl.tipo.cor()));
             return;
         }
         colher(p, i, k, pl);
@@ -323,10 +427,26 @@ public final class Cultivos implements Listener {
         Location l = i.getLocation().add(0, 0.6, 0);
         int nivel = plugin.stats().getNivel(p, Skill.AGRICULTURA);
         double fracao = Math.min(1, nivel / (double) plugin.settings().nivelMaximo);
-        int qtd = 1 + rnd().nextInt(2) + (rnd().nextDouble() < fracao * 0.5 ? 1 : 0);
-        ItemStack colheita = pl.tipo.colheita(qtd);
-        Qualidade.sortear(fracao).aplicar(colheita);
-        w.dropItemNaturally(l, colheita);
+        int qtd = pl.gigante ? 15 + rnd().nextInt(7) : 1 + rnd().nextInt(2) + (rnd().nextDouble() < fracao * 0.5 ? 1 : 0);
+        // Cada unidade com a sua qualidade (a gigante sai em várias pilhas).
+        Map<Qualidade, Integer> porQualidade = new java.util.EnumMap<>(Qualidade.class);
+        for (int n = 0; n < (pl.gigante ? qtd : 1); n++) porQualidade.merge(Qualidade.sortear(fracao), pl.gigante ? 1 : qtd, Integer::sum);
+        for (Map.Entry<Qualidade, Integer> en : porQualidade.entrySet()) {
+            ItemStack colheita = pl.tipo.colheita(en.getValue());
+            en.getKey().aplicar(colheita);
+            w.dropItemNaturally(l, colheita);
+        }
+        if (pl.gigante) {
+            w.dropItemNaturally(l, pl.tipo.semente(2 + rnd().nextInt(3)));
+            w.spawnParticle(Particle.ITEM, l, 40, 1, 0.6, 1, 0.1, pl.tipo.colheita(1));
+            w.playSound(l, Sound.BLOCK_WOOD_BREAK, 1f, 0.6f);
+            if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) plugin.stats().darXp(p, Skill.AGRICULTURA, 40);
+            plugin.diario().marco(p, "gigante_" + pl.tipo.id(), "Colheu uma " + pl.tipo.nome() + " gigante");
+            plantas.remove(k);
+            esconder(k);
+            sujo = true;
+            return;
+        }
         w.playSound(l, Sound.BLOCK_CROP_BREAK, 1f, 1.1f);
         w.spawnParticle(Particle.ITEM, l, 10, 0.2, 0.2, 0.2, 0.05, pl.tipo.colheita(1));
         if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) plugin.stats().darXp(p, Skill.AGRICULTURA, 5);
@@ -344,6 +464,18 @@ public final class Cultivos implements Listener {
         }
     }
 
+    /** A planta murcha só sai arrancando (não devolve nada: ela morreu). */
+    private void arrancarMurcha(Player p, Interaction i, String k, Planta pl) {
+        plantas.remove(k);
+        esconder(k);
+        sujo = true;
+        Location l = i.getLocation().add(0, 0.6, 0);
+        l.getWorld().playSound(l, Sound.BLOCK_GRASS_BREAK, 1f, 0.8f);
+        l.getWorld().spawnParticle(Particle.BLOCK, l, 12, 0.2, 0.2, 0.2, Material.DEAD_BUSH.createBlockData());
+        p.sendActionBar(Component.text("🥀 " + pl.tipo.nome() + " murchou fora de época. Plante na estação certa " + "(" + pl.tipo.quando() + ") ou numa estufa.",
+                NamedTextColor.GRAY));
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void aoQuebrar(BlockBreakEvent e) {
         Block b = e.getBlock();
@@ -354,7 +486,7 @@ public final class Cultivos implements Listener {
             if (pl != null) {
                 esconder(k);
                 sujo = true;
-                b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 1, 0.5), pl.tipo.semente(1));
+                if (!pl.murcha) b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 1, 0.5), pl.tipo.semente(1));
             }
             return;
         }
@@ -365,7 +497,7 @@ public final class Cultivos implements Listener {
         if (rnd().nextDouble() >= 0.04) return;
         Estacao estacao = plugin.estacoes().atual();
         List<Cultivo> daEstacao = new ArrayList<>();
-        for (Cultivo c : Cultivo.values()) if (c.estacao() == estacao) daEstacao.add(c);
+        for (Cultivo c : Cultivo.values()) if (c.cresceEm(estacao)) daEstacao.add(c);
         if (daEstacao.isEmpty()) return;
         b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 0.3, 0.5), daEstacao.get(rnd().nextInt(daEstacao.size())).semente(1));
     }
@@ -380,7 +512,7 @@ public final class Cultivos implements Listener {
             if (l.size() >= maximo) break;
             Planta pl = en.getValue();
             World w = Bukkit.getWorld(pl.mundo);
-            if (pl.fase < 3 || w == null || !area.test(new Location(w, pl.x, pl.y, pl.z))) continue;
+            if (pl.fase < 3 || pl.murcha || pl.gigante || w == null || !area.test(new Location(w, pl.x, pl.y, pl.z))) continue;
             l.add(pl.tipo.colheita(1 + rnd().nextInt(2)));
             pl.fase = pl.tipo.rebrota() ? 1 : 0;
             sujo = true;
