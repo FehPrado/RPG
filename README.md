@@ -267,8 +267,45 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 | Caldo Quente do Pescador | 15 | Resistência ao fogo por 8 min (protege do frio) e Regeneração (Truta-do-Gelo) |
 | Sorvete de Cristal | 50 | Velocidade II e Pressa II (Enguia de Cristal) |
 | Caviar Ancestral | 80 | Força, Resistência, Vida extra II e Sorte (Esturjão Ancestral) |
+| Pão com Geleia | 5 | Velocidade e Pressa (pão + geleia) |
+| Salada da Primavera | 10 | Regeneração e Velocidade (pastinaca, alho, feijão-verde) |
+| Milho Assado com Mel | 15 | Pressa e saciedade (milho + mel) |
+| Omelete de Queijo | 20 | Absorção e Pressa (ovos, queijo, alho-poró) |
+| Torta de Morango | 25 | Velocidade II e Sorte |
+| Creme de Abóbora-Moranga | 30 | Absorção II e Resistência (abóbora-moranga, cebola) |
+| Sorvete de Melão | 30 | Velocidade e Resistência ao fogo |
+| Pizza da Roça | 35 | Força e Absorção (tomate, queijo, trigo) |
+| Sopa de Inverno | 40 | Resistência ao fogo (esquenta) e Regeneração (as 4 do inverno) |
+| Ratatouille | 50 | Força, Regeneração e Resistência (berinjela, tomate, pimenta, cebola) |
+| Bolo de Oxicoco | 55 | Vida extra e Regeneração |
+| Risoto de Trufa | 70 | Sorte II, Visão noturna e Regeneração II (trufa, queijo) |
+| Banquete da Fazenda | 85 | Força, Resistência, Regeneração e Pressa **para todos a até 10 blocos** (queijo de cabra, trufa, uva, milho, ovos) |
+
+O livro de receitas tem páginas (setas embaixo).
 
 **Qualidade do prato:** sorteada pelo nível de Culinária. Se a maioria dos ingredientes for Ótima ou melhor, o prato sobe uma qualidade; todos Perfeitos = prato Perfeito. Qualidade aumenta a duração (até +50%), e o nível de Culinária soma mais até +50%.
+
+## Criação de animais
+
+Como em Harvest Moon e Stardew Valley. **Agachado + clique com a mão vazia** numa galinha, vaca, vaca-cogumelo, cabra, ovelha, porco ou coelho adulto: ele passa a ser **da sua fazenda** (até 40), ganha um nome e mostra os **corações** em cima da cabeça. `/animais` lista todos.
+- **Todo dia** (dia do jogo): **carinho** (clique com a mão vazia) e **comida**: a ração dele na mão (trigo, sementes, cenoura...), **pasto** (de dia, ao ar livre, em cima da grama, menos no inverno) ou um **fardo de feno** a até 6 blocos (cada fardo dá 9 porções e acaba).
+- **Afeto** de 0 a 5 corações: sobe com carinho e comida; cai se ele ficar sem carinho, com fome ou passar a **noite de inverno ao ar livre** (deixe num celeiro com teto).
+- **Produtos** (com qualidade pelo afeto e pela Doma): **ovo** todo dia (2 com 4 corações), **leite** e **leite de cabra** (balde vazio, uma vez por dia), **lã** de qualidade na tosquia (+1 com 3 corações), **trufas** que o porco fuça ao ar livre (menos no inverno), **pele e pé de coelho**.
+- **Filhotes:** dois animais seus que cruzam têm o filhote já na fazenda; na primavera, às vezes **gêmeos**.
+- Ninguém de fora machuca seus animais. Nome novo: use uma etiqueta com nome. Dá XP de Doma.
+
+## Tacho do Artesão
+
+**Ritual:** jogue **4 garrafas de vidro** e **1 açúcar** em cima de um **vaso decorado**. Clique com o ingrediente na mão (até 8 iguais de uma vez) e espere; clique de novo para pegar. O produto guarda a qualidade do ingrediente e dá efeitos ao comer.
+
+| Ingrediente | Vira | Tempo |
+|---|---|---|
+| Leite (o balde volta) | Queijo | 20 min |
+| Leite de cabra | Queijo de Cabra | 25 min |
+| Ovo | Maionese | 5 min |
+| Frutas (morango, mirtilo, uva, oxicoco, melão, do pomar, maçã, bagas) | Geleia de... | 15 min |
+| Legumes (as outras plantações da estação, cenoura, batata, beterraba) | Conserva de... | 15 min |
+| Trufa | Óleo de Trufa | 10 min |
 
 ## Party
 
@@ -553,16 +590,21 @@ Cada estação espalha **3 coisas** pelo mundo, aos poucos, perto de quem explor
 
 ### Plantações da estação
 
-**8 plantas**, 2 por estação, com visual próprio crescendo em 4 fases em cima da terra. Plante clicando com as sementes na **terra arada**. Só crescem **na estação delas** e com a **terra molhada** (água perto ou chuva; na chuva crescem mais rápido), mais ou menos 12 minutos por fase. **Farinha de osso** adianta uma fase. Clique na planta madura para colher; bater numa planta ainda crescendo arranca ela (a semente volta). As sementes saem do **mato quebrado** (4%) na estação certa, e às vezes voltam na colheita.
+**20 plantas**, 5 por estação (algumas em duas estações), com visual próprio crescendo em 4 fases em cima da terra. Plante clicando com as sementes na **terra arada**. Só crescem **na estação delas** e com a **terra molhada** (água perto ou chuva; na chuva crescem mais rápido), mais ou menos 12 minutos por fase. **Farinha de osso** adianta uma fase. Clique na planta madura para colher; bater numa planta ainda crescendo arranca ela (a semente volta). As sementes saem do **mato quebrado** (4%) na estação certa, e às vezes voltam na colheita.
 
 | Estação | Plantas |
 |---|---|
-| ✿ Primavera | Morango (rebrota, velocidade), Couve-Flor (regeneração) |
-| ☀ Verão | Mirtilo (rebrota, visão noturna), Pimenta (força) |
-| ☘ Outono | Uva (rebrota, sorte), Abóbora-Moranga (absorção) |
-| ❄ Inverno | Couve Gelada (resistência), Nabo-de-Neve (esquenta) |
+| ✿ Primavera | Morango (rebrota, velocidade), Couve-Flor (gigante, regeneração), Pastinaca (rápida, sacia), Alho (resistência), Feijão-Verde (rebrota, pressa) |
+| ☀ Verão | Mirtilo (rebrota, visão noturna), Pimenta (força), Tomate (rebrota, regeneração), **Milho** (verão e outono, rebrota, sacia), Melão (gigante, refresca) |
+| ☘ Outono | Uva (rebrota, sorte), Abóbora-Moranga (gigante, absorção), Berinjela (rebrota, força), Inhame (absorção), Oxicoco (rebrota, sorte) |
+| ❄ Inverno | Couve Gelada (resistência), Nabo-de-Neve (esquenta), **Cebola** (inverno e primavera, visão noturna), Rabanete-Gelado (rápido, velocidade), Alho-Poró (regeneração) |
 
-A colheita sai com qualidade ★ (pelo nível de Agricultura) e dá XP de Agricultura. Fora de época, a planta para de crescer, mas não morre. Pisar e desfazer a terra arada perde a planta (a semente volta).
+- **Tempo:** cada planta tem o seu (a pastinaca e o rabanete são rápidos, o milho e o melão demoram).
+- **Estufa:** com **teto de vidro** em cima da planta (o primeiro bloco acima dela, até 12 de altura), ela cresce em **qualquer estação** e não murcha.
+- **Murchar:** quando a estação troca, a planta que não é da estação nova **murcha** (como em Stardew Valley; só sai arrancando). Desliga com `mundo-vivo.plantas-murcham-fora-de-epoca`.
+- **Gigantes:** 9 couves-flores, melões ou abóboras-morangas maduras num quadrado 3×3 podem virar **uma gigante** (rende 15 a 21 de uma vez e sementes).
+
+A colheita sai com qualidade ★ (pelo nível de Agricultura) e dá XP de Agricultura. Fora de época (sem estufa), a planta para de crescer e murcha na troca de estação. Pisar e desfazer a terra arada perde a planta (a semente volta).
 
 **Festivais:** no 4º dia de cada estação (Festa das Flores, Festival do Sol, Festa da Colheita, Festival do Gelo) há +25% de XP nos atributos do tema, e cada jogador ganha uma **lembrança**, um enfeite de cabeça para o guarda-roupa.
 

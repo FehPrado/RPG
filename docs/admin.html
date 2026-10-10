@@ -105,6 +105,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <a href="#instalar">📦 Instalar e atualizar</a>
   <a href="#arquivos">🗂 Arquivos de dados</a>
   <a href="#config">⚙ Configuração</a>
+  <a href="#plantas">📐 Projetos da colônia</a>
   <a href="#permissoes">🔑 Permissões</a>
   <div class="grupo">Comandos</div>
   <a href="#cmd-geral">🧰 Atributos e geral</a>
@@ -162,6 +163,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>parties.yml</code>, <code>territorios.yml</code></td><td>Parties e territórios</td></tr>
       <tr><td><code>companheiros.yml</code></td><td>Companheiros (os dados também ficam na criatura)</td></tr>
       <tr><td><code>colonias.yml</code></td><td>Colônias: moradores (jeito, pedido, humor, casa), obras em andamento e construções prontas (nível, placa, camas). Os moradores são aldeões salvos no mundo</td></tr>
+      <tr><td><code>criacao.yml</code></td><td>Animais da fazenda de cada jogador (afeto, cuidados do dia) e fardos de feno em uso</td></tr>
       <tr><td><code>plantas/*.yml</code></td><td>Projetos de construção da colônia (um arquivo por projeto). Os 16 que vêm com o plugin são copiados na primeira vez; edite ou crie outros e use <span class="cmd">/rpgadmin reload</span></td></tr>
       <tr><td><code>reinos.yml</code></td><td>Reinos, cargos, tesouro e guerras marcadas</td></tr>
       <tr><td><code>lendas.yml</code>, <code>classes_lendarias.yml</code></td><td>Donos das lendas e das classes lendárias</td></tr>
@@ -227,6 +229,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>territorio.expansoes-maximo</code> / <code>niveis-por-expansao</code> / <code>chunks-por-expansao</code></td><td>2 / 300 / 9</td><td>Marcos de Expansão: quantos, a cada quantos níveis somados e quantos chunks cada um dá</td></tr>
         <tr><td><code>territorio.mundos-bloqueados</code></td><td>[]</td><td>Mundos sem territórios</td></tr>
         <tr><td><code>territorio.raio-torre-de-vigia</code></td><td>1</td><td>Chunks em volta de cada Torre de Vigia da colônia (1 = 3×3); cada nível da torre soma +1 (até 3). Fica fora do limite normal e sai junto se a torre for desfeita</td></tr>
+        <tr><td><code>mundo-vivo.plantas-murcham-fora-de-epoca</code></td><td>true</td><td>Plantações da estação murcham quando a estação delas acaba (na estufa, com teto de vidro, não)</td></tr>
+        <tr><td><code>mundo-vivo.colheitas-gigantes</code></td><td>true</td><td>9 couves-flores, melões ou abóboras-morangas maduras em 3×3 podem virar uma gigante</td></tr>
         <tr><td><code>colonia.trabalho-nas-construcoes</code></td><td>true</td><td>Cada profissão só conta o posto dentro da sua construção pronta (Fazenda, Mina, Ferraria...); o Construtor tem 1 vaga de graça e +1 por nível da Oficina. <code>false</code> = posto em qualquer lugar do território</td></tr>
         <tr><td><code>colonia.moradia-nas-casas</code></td><td>true</td><td>Cada morador mora numa Casa e dorme na cama dela; sem casa fica triste e produz 15% a menos, e só chega morador novo com vaga nas casas. <code>false</code> = qualquer cama serve</td></tr>
         <tr><td><code>reino.esmeraldas-para-fundar</code></td><td>32</td><td>Custo do reino</td></tr>
@@ -532,7 +536,11 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td><td>Lista as mais perto · tira a mais perto do registro (os blocos ficam)</td></tr>
       <tr><td><span class="cmd">/rpgadmin mercador</span></td><td>O Mercador Itinerante aparece perto de você</td></tr>
       <tr><td><span class="cmd">/rpgadmin encontro [carroca|bandidos|viajante|estrela]</span></td><td>Começa um encontro perto de você</td></tr>
-    </tbody></table></div></div>
+            <tr><td><span class="cmd">/rpgadmin tacho</span></td><td>Cria o Tacho do Artesão no vaso decorado que você olha</td></tr>
+        <tr><td><span class="cmd">/rpgadmin artesanato &lt;tipo&gt; [qtd]</span></td><td>Dá queijo, queijo_de_cabra, maionese, geleia, conserva ou oleo_de_trufa</td></tr>
+        <tr><td><span class="cmd">/rpgadmin trufa [qtd]</span></td><td>Dá trufas</td></tr>
+        <tr><td><span class="cmd">/rpgadmin semente &lt;planta&gt; [qtd]</span></td><td>Sementes das 20 plantações da estação</td></tr>
+</tbody></table></div></div>
   </div>
 </section>
 
