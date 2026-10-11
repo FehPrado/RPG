@@ -6,7 +6,7 @@
 
     <groupId>br.rpgatributos</groupId>
     <artifactId>RPGAtributos</artifactId>
-    <version>2.40.1</version>
+    <version>2.41.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -44,6 +44,17 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>modelos/**</exclude>
+                </excludes>
+            </resource>
+            <!-- Modelos e texturas binárias: copiados sem filtro, para não estragar os PNGs. -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>modelos/**</include>
+                </includes>
             </resource>
         </resources>
         <plugins>

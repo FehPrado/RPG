@@ -1,0 +1,56 @@
+{
+  "textureSize": [
+    512,
+    512
+  ],
+  "models": [
+    {
+      "part": "body",
+      "id": "hide_body",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "head",
+      "id": "hide_head",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "leg1",
+      "id": "hide_leg1",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "leg2",
+      "id": "hide_leg2",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "leg3",
+      "id": "hide_leg3",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "leg4",
+      "id": "hide_leg4",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "tail",
+      "id": "hide_tail",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "mane",
+      "id": "hide_mane",
+      "attach": false,
+      "boxes": []
+    }
+  ]
+}

@@ -531,7 +531,7 @@ Três profissões de guerra na colônia: **Soldado** (espada, liberado no nível
 
 Os Guardiões ficam numa bússola no menu: Qilin no centro, Fenghuang ao sul, Longma a leste, Baihu a oeste e Xuanwu ao norte. Se um deles (menos o Fenghuang) morre ou é libertado, volta a estar livre para uma nova fusão, de qualquer jogador. O Xuanwu não ganha pele nova (a tartaruga do jogo não aceita), só o tamanho e a aura escura.
 
-**Modelos 3D com os mods EMF + ETF (opcional):** quem joga com **Entity Model Features** e **Entity Texture Features** (Fabric ou NeoForge) vê o **Qilin** com um modelo próprio: chifres dourados, bigodes, crista e tufo de chama, escamas nas costas e chamas nos tornozelos (as pernas, a cabeça e a cauda continuam animadas). Quem não tem os mods continua vendo a pele normal; o mesmo pacote serve para os dois. O modelo é escolhido pelo nome, por isso o nome de uma lendária não muda (etiqueta não funciona nela). Os outros Guardiões ganham modelo depois.
+**Modelos 3D com os mods EMF + ETF (opcional):** quem joga com **Entity Model Features** e **Entity Texture Features** (Fabric ou NeoForge) vê os **cinco Guardiões** com modelos próprios feitos no Blockbench: o **Qilin** de jade e ouro com chifres, o **Fenghuang** como uma ave de penas de fogo (bate as asas mais forte no ar), o **Longma** azul com chifres de dragão, o **Baihu** como um tigre branco listrado e o **Xuanwu** como uma tartaruga com uma serpente sobre o casco. Pernas, cabeça e cauda andam e olham junto com a criatura. Quem não tem os mods continua vendo a pele normal; o mesmo pacote serve para os dois. O modelo é escolhido pelo nome, por isso o nome de uma lendária não muda (etiqueta não funciona nela). A sela, a coleira e a pele não aparecem por cima do modelo.
 
 - Componentes precisam do item **inteiro** (sem desgaste). Tirar devolve o item; se o companheiro morrer, componentes e alforje caem no chão.
 - A vida, a armadura e o dano dos companheiros crescem com a Doma do dono. Ninguém da party (nem outros jogadores, onde não há PvP) fere os seus companheiros.
@@ -1494,9 +1494,9 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.40.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.41.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.40.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.40.0 && git push origin v2.40.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.41.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.41.0 && git push origin v2.41.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 

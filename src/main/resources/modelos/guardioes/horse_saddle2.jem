@@ -1,0 +1,122 @@
+{
+  "textureSize": [
+    512,
+    512
+  ],
+  "models": [
+    {
+      "part": "body",
+      "id": "hide_body",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "neck",
+      "id": "hide_neck",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "back_right_leg",
+      "id": "hide_back_right_leg",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "back_left_leg",
+      "id": "hide_back_left_leg",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "front_right_leg",
+      "id": "hide_front_right_leg",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "front_left_leg",
+      "id": "hide_front_left_leg",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "tail",
+      "id": "hide_tail",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "head",
+      "id": "hide_head",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "mane",
+      "id": "hide_mane",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "mouth",
+      "id": "hide_mouth",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "left_ear",
+      "id": "hide_left_ear",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "right_ear",
+      "id": "hide_right_ear",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "saddle",
+      "id": "hide_saddle",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "left_saddle_mouth",
+      "id": "hide_left_saddle_mouth",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "right_saddle_mouth",
+      "id": "hide_right_saddle_mouth",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "left_saddle_line",
+      "id": "hide_left_saddle_line",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "right_saddle_line",
+      "id": "hide_right_saddle_line",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "head_saddle",
+      "id": "hide_head_saddle",
+      "attach": false,
+      "boxes": []
+    },
+    {
+      "part": "mouth_saddle_wrap",
+      "id": "hide_mouth_saddle_wrap",
+      "attach": false,
+      "boxes": []
+    }
+  ]
+}
