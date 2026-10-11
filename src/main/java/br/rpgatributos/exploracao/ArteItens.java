@@ -1812,6 +1812,33 @@ final class ArteItens {
         l.add(new Arte("azure_bluet", "erva_flor_de_cristal", FLOR,
                 c('p', 0xFFF8BBD0, 'h', BRANCO, 'c', 0xFFEC407A, 'a', 0xFFF48FB1, 's', 0xFF26A69A, 'l', 0xFF4DB6AC, 'k', 0xFFB2DFDB)));
     }
+    /** Ovo Lendário (montarias lendárias): casca com escamas ou chamas. */
+    private static final String[] OVO_LENDARIO = {
+            "................",
+            "......oooo......",
+            ".....ohhmmo.....",
+            "....ohhmamdo....",
+            "...ohmmmmmddo...",
+            "...ohmamamado...",
+            "..ohmmmmmmmddo..",
+            "..ohamamamamdo..",
+            "..ommmmmmmmddo..",
+            "..omamamamaddo..",
+            "..ommmmmmmdddo..",
+            "...odmamamddo...",
+            "...oddmmmdddo...",
+            "....oddddddo....",
+            ".....oooooo.....",
+            "................"};
+
+    private static void ovosLendarios(List<Arte> l) {
+        l.add(new Arte("dragon_egg", "ovo_qilin", OVO_LENDARIO, c('o', 0xFF0F3A26, 'd', 0xFF1F6B4A, 'm', 0xFF4FB286, 'h', 0xFFB9F5D6, 'a', 0xFFE2B53C)));
+        l.add(new Arte("dragon_egg", "ovo_fenghuang", OVO_LENDARIO, c('o', 0xFF4A0A04, 'd', 0xFFB3260E, 'm', 0xFFF57C00, 'h', 0xFFFFE082, 'a', 0xFFFFEB3B)));
+        l.add(new Arte("dragon_egg", "ovo_longma", OVO_LENDARIO, c('o', 0xFF0A2A4A, 'd', 0xFF1565C0, 'm', 0xFF42A5F5, 'h', 0xFFE3F2FD, 'a', 0xFF80DEEA)));
+        l.add(new Arte("dragon_egg", "ovo_baihu", OVO_LENDARIO, c('o', 0xFF1B1B1B, 'd', 0xFFB0B8C4, 'm', 0xFFE8EEF5, 'h', 0xFFFFFFFF, 'a', 0xFF1E1E1E)));
+        l.add(new Arte("dragon_egg", "ovo_xuanwu", OVO_LENDARIO, c('o', 0xFF0A0F0A, 'd', 0xFF1E261E, 'm', 0xFF3E4A3D, 'h', 0xFF6B7A69, 'a', 0xFF8BC34A)));
+    }
+
     static List<Arte> todas() {
         List<Arte> l = new ArrayList<>();
         peixes(l);
@@ -1827,6 +1854,7 @@ final class ArteItens {
         frutas(l);
         oficios(l);
         estacoesVivas(l);
+        ovosLendarios(l);
         ArteNomeadas.registrar(l);
         return l;
     }

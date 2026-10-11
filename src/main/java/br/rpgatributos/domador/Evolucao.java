@@ -93,7 +93,12 @@ public final class Evolucao implements Listener {
     }
 
     public static int nivel(Entity e) {
-        int x = xp(e), n = 1;
+        return nivelDoXp(xp(e));
+    }
+
+    /** O nível de um XP total (o ovo da fênix guarda o XP para renascer no mesmo nível). */
+    public static int nivelDoXp(int x) {
+        int n = 1;
         while (n < NIVEL_MAX && x >= xpParaProximo(n)) {
             x -= xpParaProximo(n);
             n++;
@@ -140,7 +145,8 @@ public final class Evolucao implements Listener {
         if (inst == null) return;
         inst.removeModifier(mEscala);
         int est = plugin.settings().evoAtivada ? estagio(e) : 1;
-        double escala = est == 3 ? 0.25 : est == 2 ? 0.12 : 0;
+        Lendaria lend = Lendaria.de(e);
+        double escala = (est == 3 ? 0.25 : est == 2 ? 0.12 : 0) + (lend != null ? lend.escala() : 0);
         if (escala > 0) inst.addModifier(new AttributeModifier(mEscala, escala, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlotGroup.ANY));
     }
 

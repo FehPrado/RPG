@@ -56,6 +56,27 @@ public enum Nomeada {
             'o', 0xFF2A1A0A, 'h', 0xFFFFE0B2, 'm', 0xFFBCAAA4, 'd', 0xFF795548, 'w', 0xFF5D4037, 'p', 0xFFFFC107, 'a', 0xFFFFD54F),
     CORACAO_ROUBADO("Coração Roubado", Categoria.MACA, "maca", "Arrancada do Coração da Penumbra. Bate devagar, como se estivesse viva.",
             'o', 0xFF0A0614, 'h', 0xFFB39DDB, 'm', 0xFF5E35B1, 'd', 0xFF311B92, 'w', 0xFF1A1226, 'p', 0xFFE040FB, 'a', 0xFF7C4DFF),
+    // ---------- lanças e tridentes ----------
+    LANCA_DA_SENTINELA("Lança da Sentinela", Categoria.LANCA, "lanca", "A sentinela da muralha a apoiava no ombro a noite inteira. Nunca dormiu em serviço.",
+            'o', 0xFF1A1A1A, 'h', 0xFFECEFF1, 'm', 0xFF90A4AE, 'd', 0xFF546E7A, 'w', 0xFF6D4C41, 'g', 0xFF37474F, 'p', 0xFF455A64, 'a', 0xFF1565C0),
+    CHIFRE_DO_QILIN("Chifre do Qilin", Categoria.LANCA, "lanca", "Dizem que é o chifre de um Qilin que ninguém viu. Esquenta na mão de quem mente.",
+            'o', 0xFF2A1A00, 'h', 0xFFFFF8E1, 'm', 0xFFFFD54F, 'd', 0xFFC9A227, 'w', 0xFF2E7D32, 'g', 0xFFC9A227, 'p', 0xFF1B5E20, 'a', 0xFFD32F2F),
+    AGULHA_DOS_VENTOS("Agulha dos Ventos", Categoria.LANCA, "lanca", "Os guardas das ilhas do céu a usavam para afastar as nuvens. Pelo menos é o que contam.",
+            'o', 0xFF1A2A3A, 'h', 0xFFFFFFFF, 'm', 0xFFE3F2FD, 'd', 0xFF90CAF9, 'w', 0xFFD9DEE8, 'g', 0xFFE2B53C, 'p', 0xFF90A4AE, 'a', 0xFF81D4FA),
+    PIQUE_DO_CAVALEIRO_ERRANTE("Pique do Cavaleiro Errante", Categoria.LANCA, "lanca", "Ele cavalgou de vila em vila e nunca baixou a lança, nem para comer.",
+            'o', 0xFF1A0A0A, 'h', 0xFFE0E0E0, 'm', 0xFF9E9E9E, 'd', 0xFF616161, 'w', 0xFF8D2A2A, 'g', 0xFFC9A227, 'p', 0xFF5D1A1A, 'a', 0xFFFFFFFF),
+    CRESCENTE_VERDE("Lâmina do Crescente Verde", Categoria.LANCA, "crescente", "Uma meia-lua num cabo comprido. Chegou do leste numa caravana e ninguém quis vendê-la de volta.",
+            'o', 0xFF0A1A0A, 'h', 0xFFE8F5E9, 'm', 0xFFA5D6A7, 'd', 0xFF388E3C, 'w', 0xFF4E342E, 'g', 0xFFC9A227, 'p', 0xFF3E2723, 'a', 0xFFD32F2F),
+    ESPETO_DO_BASTIAO("Espeto do Bastião", Categoria.LANCA, "crescente", "Os piglins o tomaram de um guerreiro que caiu na lava. Ainda está quente.",
+            'o', 0xFF1A0A00, 'h', 0xFFFFE082, 'm', 0xFF5D4037, 'd', 0xFF3E2723, 'w', 0xFF212121, 'g', 0xFFFFC107, 'p', 0xFF4E342E, 'a', 0xFFFF6F00),
+    TRIDENTE_DE_MARIS("Tridente de Maris", Categoria.LANCA, "tridente", "O sacerdote de Maris o erguia e o mar recuava três passos.",
+            'o', 0xFF0A1A3A, 'h', 0xFFE1F5FE, 'm', 0xFF4FC3F7, 'd', 0xFF0277BD, 'w', 0xFF1565C0, 'g', 0xFFFFD54F, 'p', 0xFF0D47A1, 'a', 0xFFFFE082),
+    GARFO_DO_AFOGADO_REI("Garfo do Afogado-Rei", Categoria.LANCA, "tridente", "O Afogado-Rei da cidade submersa nunca o soltou. Até agora.",
+            'o', 0xFF001A1A, 'h', 0xFFB2DFDB, 'm', 0xFF4DB6AC, 'd', 0xFF00695C, 'w', 0xFF263238, 'g', 0xFF8D6E63, 'p', 0xFF37474F, 'a', 0xFF76FF03),
+    TRIDENTE_DO_PESCADOR_DE_PEROLAS("Tridente do Pescador de Pérolas", Categoria.LANCA, "tridente", "Abria ostras no recife e espantava tubarão quando precisava.",
+            'o', 0xFF2A1A1A, 'h', 0xFFFFFFFF, 'm', 0xFFF8BBD0, 'd', 0xFFE57373, 'w', 0xFFBCAAA4, 'g', 0xFFFF8A65, 'p', 0xFF8D6E63, 'a', 0xFFFFFDE7),
+    TRIDENTE_DA_TEMPESTADE("Tridente da Tempestade", Categoria.LANCA, "tridente", "Chama o raio mesmo sem chuva. Quase sempre.",
+            'o', 0xFF0A0A1A, 'h', 0xFFFFFDE7, 'm', 0xFFFFF176, 'd', 0xFF9E9D24, 'w', 0xFF37474F, 'g', 0xFF7E57C2, 'p', 0xFF263238, 'a', 0xFF7C4DFF),
     // ---------- arcos e bestas ----------
     ARCO_DO_CACADOR_SILENCIOSO("Arco do Caçador Silencioso", Categoria.ARCO, "arco", "Nunca rangeu. Os cervos nem viam de onde vinha.",
             'w', 0xFF2E4A1E, 'h', 0xFF6B8E23, 'a', 0xFF1B2A10),
@@ -120,11 +141,15 @@ public enum Nomeada {
     /** O id da textura e da marca no item. */
     public String visual() { return "nomeada_" + id(); }
 
+    /** Tridente (na Forja ele conta como lança, mas tem nomes e desenhos próprios). */
+    public boolean tridente() { return molde.equals("tridente"); }
+
     /** Uma nomeada ao acaso para esse tipo de item (null se a categoria não tem nenhuma). */
     public static Nomeada sortear(Material tipo) {
         Categoria c = Categoria.de(tipo);
+        boolean tridente = tipo == Material.TRIDENT;
         List<Nomeada> l = new ArrayList<>();
-        for (Nomeada n : values()) if (n.categoria == c) l.add(n);
+        for (Nomeada n : values()) if (n.categoria == c && n.tridente() == tridente) l.add(n);
         return l.isEmpty() ? null : l.get(ThreadLocalRandom.current().nextInt(l.size()));
     }
 
@@ -168,6 +193,7 @@ public enum Nomeada {
             case PICARETA -> "_PICKAXE";
             case PA -> "_SHOVEL";
             case ENXADA -> "_HOE";
+            case LANCA -> tridente() ? null : "_SPEAR";
             case MACA -> null;
             case ARCO -> null;
             case BESTA -> null;
@@ -178,6 +204,7 @@ public enum Nomeada {
                 case MACA -> Material.MACE;
                 case ARCO -> Material.BOW;
                 case BESTA -> Material.CROSSBOW;
+                case LANCA -> Material.TRIDENT;
                 default -> Material.FISHING_ROD;
             };
         }

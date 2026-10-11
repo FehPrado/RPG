@@ -174,7 +174,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 <main id="inicio">
   <section class="wrap abertura">
     <div>
-      <p class="rotulo">Manual do jogador · versão 2.35</p>
+      <p class="rotulo">Manual do jogador · versão 2.39</p>
       <h1>Um mundo inteiro <em>dentro</em> do seu Minecraft.</h1>
       <p class="lead">Atributos que sobem com o uso, classes, magia, deuses, forja com raridades, colônias com moradores de verdade, reinos em guerra, cidades no fundo do mar. Tudo o que o RPGAtributos tem, num lugar só.</p>
       <div class="numeros">
@@ -280,7 +280,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 <footer>
   <div class="wrap">
-    <span>RPGAtributos 2.35 · plugin para servidores Paper 26.3</span>
+    <span>RPGAtributos 2.39 · plugin para servidores Paper 26.3</span>
     <span>Dúvidas no jogo: <code>/guia</code> e <code>/rpg</code></span>
   </div>
 </footer>
@@ -305,10 +305,10 @@ const AREAS = [
     "6 deuses com devoção, fé de 1 a 5, preces e milagres",
     "Astronomia com 12 constelações, Transmutação e 10 runas"], cmds: ["/grimorio", "/deus", "/estrelas"] },
   { ico: "⚒", nome: "Ofícios", itens: [
-    "Forja do Ferreiro: raridades de Comum a Mítico, refino, gemas engastadas, o Reforjar e 25 armas com nome (3D na mão)",
+    "Forja do Ferreiro: raridades de Comum a Mítico, refino, gemas engastadas, o Reforjar (até de tridentes) e 47 armas com nome (3D na mão, com lanças e tridentes)",
     "Alquimia: elixires, componentes, óleos, 18 gemas e 19 acessórios",
     "Cozinha com 32 pratos, plantações com qualidade ★, 20 plantações da estação com estufa e colheitas gigantes, pomar, barril, colmeia e ervas",
-    "Criação de animais com corações e produtos diários, e o Tacho do Artesão (queijo, geleia, conserva, maionese, óleo de trufa)",
+    "Criação de animais com corações e produtos diários, o Comedouro que alimenta a fazenda sozinho e o Tacho do Artesão (queijo, geleia, conserva, maionese, óleo de trufa)",
     "Pesca com 17 peixes raros (5 só no buraco no gelo), tesouros e criaturas marinhas",
     "Curtume e tecelagem: 6 conjuntos de armadura leve"], cmds: ["/forja", "/alquimia", "/receitas", "/peixes"] },
   { ico: "🌍", nome: "Mundo", itens: [
@@ -323,7 +323,7 @@ const AREAS = [
     "Territórios protegidos, com regras e expansões",
     "Colônias estilo MineColonies: 15 profissões, 16 construções com 3 níveis, casa para cada morador, traços e pedidos dos moradores, exército com cavaleiros",
     "Reinos com cargos, tesouro, leis, províncias e guerras marcadas",
-    "Domador: companheiros com componentes que aparecem no corpo (asas, alforjes, armaduras) e evoluem até o estágio III, com auréola"], cmds: ["/party", "/territorio", "/colonia", "/reino", "/pets"] }
+    "Domador: companheiros com armaduras próprias em cavalos e lobos, evolução até o estágio III e os 5 Guardiões, montarias lendárias únicas no servidor que nascem de um ovo (Qilin, Fenghuang, Longma, Baihu e Xuanwu)"], cmds: ["/party", "/territorio", "/colonia", "/reino", "/pets"] }
 ];
 
 const CATS = { personagem: "Personagem", combate: "Combate", magia: "Magia e fé", oficios: "Ofícios", mundo: "Mundo", comunidade: "Comunidade" };
@@ -353,6 +353,7 @@ const ESTACOES = [
   { id: "pedra_viagem", nome: "Pedra de Viagem", cat: "mundo", bloco: "Ardósia entalhada", itens: ["2 pérolas do ender", "4 fragmentos de ametista"], uso: "Clique para descobrir; depois viaje entre as pedras que você conhece. Custa XP pela distância." },
   { id: "fogueira", nome: "Fogueira de Acampamento", cat: "mundo", bloco: "Fogueira acesa", itens: ["1 lã", "1 tronco"], uso: "Sentado perto dela, você fica Descansado: +5% de XP." },
   { id: "bebedouro", nome: "Bebedouro", cat: "mundo", bloco: "Caldeirão com água", itens: ["1 fardo de feno"], uso: "Filhotes a até 8 blocos crescem bem mais rápido, os adultos cruzam antes e os companheiros se curam." },
+  { id: "comedouro", nome: "Comedouro", cat: "mundo", bloco: "Baú", itens: ["1 fardo de feno", "1 tigela"], uso: "Guarde a comida dentro (funil também enche): na virada do dia, os animais da fazenda a até 12 blocos que não comeram comem daqui. Fardo de feno vira 9 trigos." },
   { id: "trofeus", nome: "Estante de Troféus", cat: "mundo", bloco: "Pilar de quartzo", itens: ["1 núcleo de chefe"], uso: "Expõe o núcleo de um chefe. Cada troféu diferente no seu território dá +1% de XP." },
   { id: "marco", nome: "Marco do Território", cat: "comunidade", bloco: "Magnetita", itens: ["1 estandarte", "4 esmeraldas"], uso: "Protege 3×3 chunks, que crescem com o seu nível. Em outro lugar, com 1 bloco de esmeralda a mais: uma expansão.", cmd: "/territorio" },
   { id: "prefeitura", nome: "Prefeitura da Colônia", cat: "comunidade", bloco: "Sino (no seu território)", itens: ["1 bloco de esmeralda", "1 cama"], uso: "Moradores de verdade trabalham para você e guardam a produção nos baús de depósito.", cmd: "/colonia" },
@@ -377,6 +378,7 @@ const GRUPOS = [
   ["mel", "Méis", "Os méis especiais da Colmeia do Apicultor."],
   ["erva", "Ervas", "As ervas do Canteiro, que mudam com o lugar."],
   ["nomeada", "Armas com nome", "Nascem assim na Forja (mais nas raridades altas), em baús e com os chefes. Na mão viram 3D."],
+  ["lendaria", "Ovos dos Guardiões", "Saem da Fusão Lendária no Altar do Domador e chocam no lugar certo: Qilin, Fenghuang, Longma, Baihu e Xuanwu. Só existe um de cada no servidor."],
   ["ceu", "Céu e profundezas","O Balão de Cristal para descer das Ilhas do Céu, o que o Guardião dos Ventos deixa e as Sementes Brilhantes das Raízes de Luz."]
 ];
 
@@ -398,7 +400,8 @@ const ITENS = {
   mel: [["mel_silvestre","Mel Silvestre"],["mel_dourado","Mel Dourado"],["mel_gelado","Mel Gelado"],["mel_noturno","Mel Noturno"],["mel_floral","Mel Floral"]],
   erva: [["erva_salvia","Sálvia"],["erva_erva_de_sol","Erva-de-Sol"],["erva_musgo_lunar","Musgo Lunar"],["erva_folha_gelida","Folha Gélida"],["erva_raiz_abissal","Raiz Abissal"],["erva_flor_de_cristal","Flor-de-Cristal"]],
   ceu: [["balao_de_cristal","Balão de Cristal"],["amuleto_ventos","Amuleto dos Ventos"],["raro_fragmento_celeste","Fragmento Celeste"],["ceu_fruta_celeste","Fruta Celeste"],["ceu_semente_brilhante","Semente Brilhante"]],
-  nomeada: [["nomeada_presa_do_inverno","Presa do Inverno"],["nomeada_lamina_de_thalassa","Lâmina de Thalassa"],["nomeada_aurora_de_aerilia","Aurora de Aerília"],["nomeada_juramento_do_fortim","Juramento do Fortim"],["nomeada_brasa_dos_anoes","Brasa dos Anões"],["nomeada_sussurro_da_penumbra","Sussurro da Penumbra"],["nomeada_talha_raizes","Talha-Raízes"],["nomeada_furia_do_saqueador","Fúria do Saqueador"],["nomeada_machado_do_faroleiro","Machado do Faroleiro"],["nomeada_sino_de_maris","Sino de Maris"],["nomeada_martelo_do_eremita","Martelo do Eremita"],["nomeada_arco_do_cacador_silencioso","Arco do Caçador Silencioso"],["nomeada_asa_de_zefira","Asa de Zéfira"],["nomeada_arco_das_brasas","Arco das Brasas"],["nomeada_besta_do_capitao","Besta do Capitão"],["nomeada_besta_glacial","Besta Glacial"],["nomeada_picareta_do_mineiro_perdido","Picareta do Mineiro Perdido"],["nomeada_quebra_cristais","Quebra-Cristais"],["nomeada_picareta_das_profundezas","Picareta das Profundezas"],["nomeada_pa_do_coveiro","Pá do Coveiro"],["nomeada_pa_do_arqueologo","Pá do Arqueólogo"],["nomeada_enxada_da_colheita_dourada","Enxada da Colheita Dourada"],["nomeada_enxada_do_jardim_suspenso","Enxada do Jardim Suspenso"],["nomeada_vara_do_pescador_do_gelo","Vara do Pescador do Gelo"],["nomeada_vara_de_coral","Vara de Coral"]]
+  nomeada: [["nomeada_presa_do_inverno","Presa do Inverno"],["nomeada_lamina_de_thalassa","Lâmina de Thalassa"],["nomeada_aurora_de_aerilia","Aurora de Aerília"],["nomeada_juramento_do_fortim","Juramento do Fortim"],["nomeada_brasa_dos_anoes","Brasa dos Anões"],["nomeada_sussurro_da_penumbra","Sussurro da Penumbra"],["nomeada_talha_raizes","Talha-Raízes"],["nomeada_furia_do_saqueador","Fúria do Saqueador"],["nomeada_machado_do_faroleiro","Machado do Faroleiro"],["nomeada_sino_de_maris","Sino de Maris"],["nomeada_martelo_do_eremita","Martelo do Eremita"],["nomeada_arco_do_cacador_silencioso","Arco do Caçador Silencioso"],["nomeada_asa_de_zefira","Asa de Zéfira"],["nomeada_arco_das_brasas","Arco das Brasas"],["nomeada_besta_do_capitao","Besta do Capitão"],["nomeada_besta_glacial","Besta Glacial"],["nomeada_picareta_do_mineiro_perdido","Picareta do Mineiro Perdido"],["nomeada_quebra_cristais","Quebra-Cristais"],["nomeada_picareta_das_profundezas","Picareta das Profundezas"],["nomeada_pa_do_coveiro","Pá do Coveiro"],["nomeada_pa_do_arqueologo","Pá do Arqueólogo"],["nomeada_enxada_da_colheita_dourada","Enxada da Colheita Dourada"],["nomeada_enxada_do_jardim_suspenso","Enxada do Jardim Suspenso"],["nomeada_vara_do_pescador_do_gelo","Vara do Pescador do Gelo"],["nomeada_vara_de_coral","Vara de Coral"],["nomeada_lamina_da_raiz_de_luz","Lâmina da Raiz de Luz"],["nomeada_fio_do_guardiao","Fio do Guardião dos Ventos"],["nomeada_promessa_do_primeiro_colono","Promessa do Primeiro Colono"],["nomeada_lamina_do_eclipse","Lâmina do Eclipse"],["nomeada_machado_do_velho_lenhador","Machado do Velho Lenhador"],["nomeada_mordida_da_geada","Mordida da Geada"],["nomeada_martelo_do_mestre_de_obras","Martelo do Mestre de Obras"],["nomeada_coracao_roubado","Coração Roubado"],["nomeada_lanca_da_sentinela","Lança da Sentinela"],["nomeada_chifre_do_qilin","Chifre do Qilin"],["nomeada_agulha_dos_ventos","Agulha dos Ventos"],["nomeada_pique_do_cavaleiro_errante","Pique do Cavaleiro Errante"],["nomeada_crescente_verde","Lâmina do Crescente Verde"],["nomeada_espeto_do_bastiao","Espeto do Bastião"],["nomeada_tridente_de_maris","Tridente de Maris"],["nomeada_garfo_do_afogado_rei","Garfo do Afogado-Rei"],["nomeada_tridente_do_pescador_de_perolas","Tridente do Pescador de Pérolas"],["nomeada_tridente_da_tempestade","Tridente da Tempestade"],["nomeada_arco_das_folhas_caidas","Arco das Folhas Caídas"],["nomeada_besta_da_torre_de_vigia","Besta da Torre de Vigia"],["nomeada_picareta_do_poco_fundo","Picareta do Poço Fundo"],["nomeada_enxada_das_quatro_estacoes","Enxada das Quatro Estações"]],
+  lendaria: [["ovo_qilin","Ovo do Qilin"],["ovo_fenghuang","Ovo do Fenghuang"],["ovo_longma","Ovo do Longma"],["ovo_baihu","Ovo do Baihu"],["ovo_xuanwu","Ovo do Xuanwu"]]
 };
 
 function el(tag, attrs, ...filhos) {

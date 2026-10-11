@@ -471,7 +471,7 @@ public final class Criacao implements Listener, CommandExecutor {
         Estacao estacao = plugin.estacoes().atual();
         for (Animal a : new ArrayList<>(animais.values())) {
             if (!a.mundo.equals(w.getName()) || !(Bukkit.getEntity(a.id) instanceof LivingEntity e) || !e.isValid()) continue;
-            boolean comeu = a.comida == ontem || a.pasto == ontem || comerFeno(e);
+            boolean comeu = a.comida == ontem || a.pasto == ontem || plugin.comedouros().alimentar(e, a.especie.comida) || comerFeno(e);
             boolean carinho = a.carinho == ontem;
             int delta = (carinho ? 0 : -10) + (comeu ? 0 : -40);
             boolean frio = estacao == Estacao.INVERNO && e.getLocation().getBlock().getLightFromSky() >= 14;
@@ -486,6 +486,22 @@ public final class Criacao implements Listener, CommandExecutor {
             }
         }
         sujo = true;
+    }
+
+    /** Algum animal da fazenda come isso? (para o Comedouro contar as porções) */
+    static boolean comidaDeAlguem(Material m) {
+        for (Especie e : Especie.values()) if (e.comida.contains(m)) return true;
+        return false;
+    }
+
+    /** Animais da fazenda (de qualquer dono) a até {@code raio} blocos. */
+    int animaisPerto(Location l, double raio) {
+        int n = 0;
+        for (Animal a : animais.values()) {
+            if (Bukkit.getEntity(a.id) instanceof LivingEntity e && e.isValid() && e.getWorld().equals(l.getWorld())
+                    && e.getLocation().distanceSquared(l) <= raio * raio) n++;
+        }
+        return n;
     }
 
     /** Um fardo de feno a até 6 blocos dá uma porção (cada fardo tem 9 e depois acaba). */

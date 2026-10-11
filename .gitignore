@@ -6,3 +6,6 @@ target/
 # Pacote de referência (direitos do autor, não vai para o git)
 NewDefault*.zip
 
+
+# Pasta gerada para abrir os modelos no Blockbench
+blockbench/

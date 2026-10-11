@@ -182,8 +182,16 @@ public final class Companheiros implements Listener {
         return s;
     }
 
+    /** Componentes postos e os de nascença (das lendárias). */
+    public Set<Componente> poderes(Entity e) {
+        Set<Componente> s = componentes(e);
+        Lendaria l = Lendaria.de(e);
+        if (l != null) s.addAll(l.poderes());
+        return s;
+    }
+
     public boolean tem(Entity e, Componente c) {
-        return componentes(e).contains(c);
+        return poderes(e).contains(c);
     }
 
     void gravarComponentes(LivingEntity e, Set<Componente> comp) {
@@ -245,8 +253,8 @@ public final class Companheiros implements Listener {
     /** Vida, armadura, velocidade e dano conforme os componentes e o nível de Doma do dono. */
     public void aplicarAtributos(LivingEntity e) {
         int nivel = nivelDono(e);
-        Set<Componente> c = componentes(e);
-        double evo = plugin.evolucao().bonus(e);
+        Set<Componente> c = poderes(e);
+        double evo = plugin.evolucao().bonus(e) + (Lendaria.de(e) != null ? 0.5 : 0); // lendárias: +50% de vida e dano
         modificar(e, Attribute.MAX_HEALTH, M_VIDA, nivel * cfg().domaVida + evo + (c.contains(Componente.COURACA) ? 0.25 : 0),
                 AttributeModifier.Operation.ADD_SCALAR);
         modificar(e, Attribute.ARMOR, M_ARMADURA, (c.contains(Componente.COURACA) ? 8 : 0) + (c.contains(Componente.NETHERITE) ? 6 : 0),
@@ -309,9 +317,14 @@ public final class Companheiros implements Listener {
 
     /** @return o motivo de não ter dado certo, ou null. */
     public String vincular(Player p, LivingEntity e) {
+        return vincular(p, e, false);
+    }
+
+    /** {@code semLimite}: a lendária que nasce do ovo entra mesmo com o limite cheio. */
+    public String vincular(Player p, LivingEntity e, boolean semLimite) {
         if (!vinculavel(e)) return "Essa criatura não pode virar companheiro.";
         int limite = limite(p);
-        if (de(p.getUniqueId()).size() >= limite) {
+        if (!semLimite && de(p.getUniqueId()).size() >= limite) {
             return "Você já tem " + limite + " companheiro(s). Suba a Doma para ter mais (ou liberte um).";
         }
         PersistentDataContainer pdc = e.getPersistentDataContainer();
@@ -383,6 +396,7 @@ public final class Companheiros implements Listener {
         ativos.remove(e.getUniqueId());
         sujo = true;
         salvar();
+        plugin.lendarias().aoLibertar(e);
     }
 
     // =====================================================================
@@ -619,7 +633,7 @@ public final class Companheiros implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void aoSofrer(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof LivingEntity comp) || !eh(comp)) return;
-        Set<Componente> c = componentes(comp);
+        Set<Componente> c = poderes(comp);
         switch (e.getCause()) {
             case FALL -> {
                 if (c.contains(Componente.ASAS) || !comp.getPassengers().isEmpty()) {
@@ -645,8 +659,9 @@ public final class Companheiros implements Listener {
         // Segunda Vida: escapa da morte uma vez.
         if (c.contains(Componente.TOTEM) && e.getFinalDamage() >= comp.getHealth()) {
             e.setCancelled(true);
-            c.remove(Componente.TOTEM);
-            gravarComponentes(comp, c);
+            Set<Componente> proprios = componentes(comp);
+            proprios.remove(Componente.TOTEM);
+            gravarComponentes(comp, proprios);
             AttributeInstance max = comp.getAttribute(Attribute.MAX_HEALTH);
             comp.setHealth(Math.max(1, (max == null ? 20 : max.getValue()) * 0.5));
             comp.setFireTicks(0);

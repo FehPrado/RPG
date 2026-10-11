@@ -28,7 +28,7 @@ public final class ArteNomeadas3D {
     /** Que tipos ganham modelo 3D. */
     public static boolean tem3D(Categoria c) {
         return switch (c) {
-            case ESPADA, MACHADO, MACA, PICARETA, PA, ENXADA, VARA -> true;
+            case ESPADA, MACHADO, MACA, PICARETA, PA, ENXADA, VARA, LANCA -> true;
             default -> false;
         };
     }
@@ -126,6 +126,49 @@ public final class ArteNomeadas3D {
                 l.add(new Peca(3.5, 5, -1.9, -0.6, -0.7, 0.7, 'a'));     // molinete
                 l.add(new Peca(20.5, 21.5, -0.5, 0.5, -0.5, 0.5, 'a'));  // ponteira
             }
+            // Lanças e tridentes: o cabo começa atrás da mão (t negativo), assim a pegada fica no meio da haste.
+            case "lanca" -> {
+                l.add(new Peca(-10, -8.8, -0.8, 0.8, -0.8, 0.8, 'p'));   // ponteira
+                l.add(new Peca(-8.8, 17, -0.55, 0.55, -0.55, 0.55, 'w'));
+                l.add(new Peca(14.6, 15.5, -0.95, 0.95, -0.95, 0.95, 'a')); // borla
+                l.add(new Peca(15.5, 17.2, -0.8, 0.8, -0.8, 0.8, 'g'));    // amarração
+                l.add(new Peca(17.2, 18.4, -0.7, 0.7, -0.7, 0.7, 'd'));    // encaixe
+                l.add(new Peca(18.4, 22, -2.1, 2.1, -0.3, 0.3, 'm'));      // folha
+                l.add(new Peca(22, 25, -1.4, 1.4, -0.3, 0.3, 'm'));
+                l.add(new Peca(25, 27.5, -0.6, 0.6, -0.25, 0.25, 'h'));    // ponta
+                l.add(new Peca(18.4, 25.5, -0.3, 0.3, -0.45, 0.45, 'h'));  // nervura
+                l.add(new Peca(18.4, 22, 1.6, 2.1, -0.35, 0.35, 'h'));     // fio claro
+            }
+            case "crescente" -> {
+                l.add(new Peca(-10, -8.6, -0.7, 0.7, -0.7, 0.7, 'p'));
+                l.add(new Peca(-8.6, 15.8, -0.55, 0.55, -0.55, 0.55, 'w'));
+                l.add(new Peca(13.6, 14.5, -1, 1, -1, 1, 'a'));            // borla
+                l.add(new Peca(14.5, 15.8, -0.8, 0.8, -0.8, 0.8, 'g'));
+                l.add(new Peca(15.8, 17.2, -1, 1.4, -0.5, 0.5, 'd'));       // base da lâmina
+                l.add(new Peca(17.2, 20, -0.6, 3.4, -0.3, 0.3, 'm'));       // lâmina larga para um lado
+                l.add(new Peca(20, 23, -0.5, 4.0, -0.3, 0.3, 'm'));
+                l.add(new Peca(23, 25.5, 0, 3.4, -0.3, 0.3, 'm'));
+                l.add(new Peca(25.5, 27.5, 0.6, 2.4, -0.25, 0.25, 'h'));    // ponta
+                l.add(new Peca(17.2, 20, 3.4, 4.0, -0.35, 0.35, 'h'));       // fio curvo
+                l.add(new Peca(20, 23, 4.0, 4.7, -0.35, 0.35, 'h'));
+                l.add(new Peca(23, 25.5, 3.4, 4.0, -0.35, 0.35, 'h'));
+                l.add(new Peca(17.6, 19, -2.2, -0.6, -0.4, 0.4, 'd'));       // esporão do outro lado
+                l.add(new Peca(16.1, 16.9, -0.3, 0.3, -0.65, 0.65, 'a'));    // gema
+            }
+            case "tridente" -> {
+                l.add(new Peca(-10, -8.8, -0.8, 0.8, -0.8, 0.8, 'p'));
+                l.add(new Peca(-8.8, 15.5, -0.55, 0.55, -0.55, 0.55, 'w'));
+                l.add(new Peca(14.8, 15.5, -0.7, 0.7, -0.7, 0.7, 'a'));
+                l.add(new Peca(15.5, 16.5, -0.75, 0.75, -0.75, 0.75, 'g'));
+                l.add(new Peca(16.5, 17.5, -3, 3, -0.5, 0.5, 'd'));          // travessa
+                l.add(new Peca(17.5, 24, -0.45, 0.45, -0.45, 0.45, 'm'));    // dente do meio
+                l.add(new Peca(24, 25.5, -0.25, 0.25, -0.3, 0.3, 'h'));
+                for (int s : new int[]{-1, 1}) {
+                    l.add(new Peca(17.5, 22.5, s > 0 ? 2.1 : -2.9, s > 0 ? 2.9 : -2.1, -0.4, 0.4, 'm')); // dentes dos lados
+                    l.add(new Peca(22.5, 23.6, s > 0 ? 2.3 : -2.7, s > 0 ? 2.7 : -2.3, -0.25, 0.25, 'h'));
+                    l.add(new Peca(21.4, 22.2, s > 0 ? 1.6 : -2.1, s > 0 ? 2.1 : -1.6, -0.25, 0.25, 'h')); // farpa
+                }
+            }
             default -> { }
         }
         return l;
@@ -192,6 +235,18 @@ public final class ArteNomeadas3D {
               "fixed": { "rotation": [0, 180, 0], "scale": [1, 1, 1] }
             }""";
 
+    /** Lança e tridente: a mesma pegada da espada, mas menores no chão e na moldura (são compridos). */
+    private static final String DISPLAY_LANCA = """
+            "display": {
+              "thirdperson_righthand": { "rotation": [0, -90, 55], "translation": [0, 4.0, 0.5], "scale": [0.85, 0.85, 0.85] },
+              "thirdperson_lefthand": { "rotation": [0, 90, -55], "translation": [0, 4.0, 0.5], "scale": [0.85, 0.85, 0.85] },
+              "firstperson_righthand": { "rotation": [0, -90, 25], "translation": [1.13, 3.2, 1.13], "scale": [0.68, 0.68, 0.68] },
+              "firstperson_lefthand": { "rotation": [0, 90, -25], "translation": [1.13, 3.2, 1.13], "scale": [0.68, 0.68, 0.68] },
+              "ground": { "rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [0.35, 0.35, 0.35] },
+              "head": { "rotation": [0, 180, 0], "translation": [0, 13, 7], "scale": [1, 1, 1] },
+              "fixed": { "rotation": [0, 180, 0], "scale": [0.45, 0.45, 0.45] }
+            }""";
+
     /** O modelo 3D (textura: rpgatributos:item/{visual}_cores). */
     public static String modelo(Nomeada n, boolean lancada) {
         String tex = "rpgatributos:item/" + n.visual() + "_cores";
@@ -213,7 +268,7 @@ public final class ArteNomeadas3D {
             }
             sb.append(" } }").append(i < els.size() - 1 ? ",\n" : "\n");
         }
-        sb.append("  ],\n  ").append(n.categoria() == Categoria.VARA ? DISPLAY_VARA : DISPLAY).append("\n}\n");
+        sb.append("  ],\n  ").append(n.categoria() == Categoria.VARA ? DISPLAY_VARA : n.categoria() == Categoria.LANCA ? DISPLAY_LANCA : DISPLAY).append("\n}\n");
         return sb.toString();
     }
 

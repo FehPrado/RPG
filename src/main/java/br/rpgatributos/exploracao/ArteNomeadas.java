@@ -234,6 +234,9 @@ public final class ArteNomeadas {
             case "pa" -> PA;
             case "enxada" -> ENXADA;
             case "vara" -> VARA;
+            case "lanca" -> lanca();
+            case "crescente" -> crescente();
+            case "tridente" -> tridente();
             default -> ESPADA;
         };
     }
@@ -380,6 +383,88 @@ public final class ArteNomeadas {
     }
 
     // =====================================================================
+    //  Lanças e tridentes (por código, na diagonal: cabo embaixo à esquerda, ponta em cima à direita)
+    // =====================================================================
+
+    /** Quanto o ponto anda ao longo da diagonal (0 no canto de baixo, 15 no de cima). */
+    private static double ao(int x, int y) { return (x - y + 15) / 2.0; }
+
+    /** Quanto o ponto sai da diagonal (negativo: para cima e à esquerda). */
+    private static double lado(int x, int y) { return (x + y - 15) / 2.0; }
+
+    /** Cabo, ponteira e amarração até {@code ate} na diagonal. */
+    private static char[][] haste(int ate) {
+        char[][] g = vazio();
+        linha(g, 1, 14, ate, 15 - ate, 'w');
+        pix(g, 0, 15, 'p');
+        pix(g, 1, 14, 'p');
+        pix(g, ate, 15 - ate, 'g');
+        pix(g, ate - 1, 16 - ate, 'g');
+        return g;
+    }
+
+    /** Lança: ponta em folha e uma borla pendurada na amarração. */
+    private static String[] lanca() {
+        char[][] g = haste(10);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                double a = ao(x, y), l = lado(x, y);
+                if (a < 11 || a > 15.6) continue;
+                double larg = a < 12.6 ? 0.5 + (a - 11) * 0.65 : 1.55 * (15.6 - a) / 3.0;
+                if (Math.abs(l) > larg) continue;
+                pix(g, x, y, l < -0.3 ? 'h' : l > 0.3 ? 'd' : 'm');
+            }
+        }
+        pix(g, 11, 6, 'a');
+        pix(g, 11, 7, 'a');
+        pix(g, 12, 8, 'a');
+        contornar(g, "whmdgpa");
+        return texto(g);
+    }
+
+    /** Lâmina em meia-lua (como a guandao): a lâmina curva sai para um lado, um esporão para o outro. */
+    private static String[] crescente() {
+        char[][] g = haste(9);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                double a = ao(x, y), l = lado(x, y);
+                if (a < 9.5 || a > 15.6) continue;
+                double t = (a - 9.5) / 6.1;
+                double fora = -0.4 - 2.6 * Math.sin(Math.PI * Math.min(1, t * 1.15)) * (1 - 0.35 * t); // o fio, curvo
+                boolean lamina = l <= 0.6 && l >= fora;
+                boolean esporao = a >= 10 && a <= 11.5 && l > 0.6 && l <= 1.6;
+                if (lamina) pix(g, x, y, l < fora + 0.8 ? 'h' : l > 0 ? 'd' : 'm');
+                else if (esporao) pix(g, x, y, 'd');
+            }
+        }
+        pix(g, 10, 6, 'a');
+        pix(g, 10, 7, 'a');
+        contornar(g, "whmdgpa");
+        return texto(g);
+    }
+
+    /** Tridente: travessa e três dentes paralelos à diagonal. */
+    private static String[] tridente() {
+        char[][] g = haste(9);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                double a = ao(x, y), l = lado(x, y);
+                // Cada dente é uma linha de 2 pixels na diagonal (x + y fixo), com 2 de folga entre eles.
+                int s = x + y;
+                boolean travessa = a >= 9.6 && a <= 10.6 && Math.abs(l) <= 3;
+                boolean meio = a > 10.6 && a <= 15.6 && (s == 15 || s == 16);
+                boolean dentes = a > 10.6 && a <= 14 && (s == 11 || s == 12 || s == 19 || s == 20);
+                if (travessa) pix(g, x, y, 'd');
+                else if (meio) pix(g, x, y, a > 14.4 ? 'h' : s == 15 ? 'h' : 'm');
+                else if (dentes) pix(g, x, y, a > 13 ? 'h' : (s == 11 || s == 19) ? 'm' : 'd');
+            }
+        }
+        pix(g, 9, 6, 'a');
+        contornar(g, "whmdgpa");
+        return texto(g);
+    }
+
+    // =====================================================================
     //  Tudo
     // =====================================================================
 
@@ -432,9 +517,12 @@ public final class ArteNomeadas {
         return l;
     }
 
-    /** Arcos, bestas e varas têm definição própria no pacote (fases da corda, vara lançada). */
+    /**
+     * Arcos, bestas e varas têm definição própria no pacote (fases da corda, vara lançada); lanças
+     * e tridentes também (o jogo usa outro modelo na mão).
+     */
     public static boolean especial(Categoria c) {
-        return c == Categoria.ARCO || c == Categoria.BESTA || c == Categoria.VARA;
+        return c == Categoria.ARCO || c == Categoria.BESTA || c == Categoria.VARA || c == Categoria.LANCA;
     }
 
     /** Espadas, machados, maça e ferramentas entram como os outros visuais (com as posturas, nas armas). */

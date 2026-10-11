@@ -7,10 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,9 +21,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.components.EquippableComponent;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.util.Transformation;
-import org.joml.AxisAngle4f;
-import org.joml.Vector3f;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -36,7 +30,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -58,23 +51,16 @@ public final class VisualDomador implements Listener {
 
     /** As armaduras desenhadas (uma textura para o cavalo, 64x64, e outra para o lobo, 64x32). */
     enum Armadura {
-        COURACA, NETHERITE, CHAMAS, MARE, CELESTE, SOMBRAS;
+        COURACA, NETHERITE, CHAMAS, MARE, CELESTE, SOMBRAS,
+        /** Peles das lendárias: cobrem o cavalo inteiro (cabeça, crina, cauda e cascos). */
+        QILIN, FENGHUANG, LONGMA, BAIHU;
+
+        boolean pele() { return ordinal() >= QILIN.ordinal(); }
 
         String id() { return "domador_" + name().toLowerCase(Locale.ROOT); }
     }
 
-    /** As peças 3D (modelos do pacote) que seguem o companheiro. */
-    enum Peca {
-        SELA("domador_sela"), ALFORJE("domador_alforje"), FAROL(null), ASAS("domador_asas"), AUREOLA("domador_aureola");
-
-        final String modelo;
-
-        Peca(String modelo) { this.modelo = modelo; }
-    }
-
     private final RPGAtributos plugin;
-    private final Map<UUID, Map<Peca, UUID>> pecas = new HashMap<>();
-    private int ciclo;
 
     public VisualDomador(RPGAtributos plugin) {
         this.plugin = plugin;
@@ -83,107 +69,16 @@ public final class VisualDomador implements Listener {
     private Companheiros comp() { return plugin.companheiros(); }
 
     // =====================================================================
-    //  A cada 2 ticks: as peças seguem o bicho (o teleporte suave do display cobre o meio);
-    //  a cada 2 s: armadura e partículas
+    //  A cada 2 s: armadura e partículas (sem peças 3D seguindo o bicho: pesavam no jogo)
     // =====================================================================
 
     public void tick() {
-        ciclo++;
-        Set<UUID> ativos = comp().ativos();
-        // Peças de quem sumiu, morreu ou deixou de ser companheiro.
-        for (var it = pecas.entrySet().iterator(); it.hasNext(); ) {
-            var en = it.next();
-            if (ativos.contains(en.getKey()) && Bukkit.getEntity(en.getKey()) instanceof LivingEntity le && le.isValid()) continue;
-            for (UUID d : en.getValue().values()) {
-                Entity x = Bukkit.getEntity(d);
-                if (x != null) x.remove();
-            }
-            it.remove();
-        }
-        for (UUID id : List.copyOf(ativos)) {
+        for (UUID id : List.copyOf(comp().ativos())) {
             if (!(Bukkit.getEntity(id) instanceof LivingEntity c) || !c.isValid()) continue;
             Set<Componente> comps = comp().componentes(c);
             int est = plugin.settings().evoAtivada ? Evolucao.estagio(c) : 1;
-            EnumMap<Peca, Boolean> quer = new EnumMap<>(Peca.class);
-            quer.put(Peca.SELA, comps.contains(Componente.SELA) && !temSelaDoJogo(c));
-            quer.put(Peca.ALFORJE, comps.contains(Componente.ALFORJE));
-            quer.put(Peca.FAROL, comps.contains(Componente.FAROL));
-            quer.put(Peca.ASAS, comps.contains(Componente.ASAS));
-            quer.put(Peca.AUREOLA, est >= 3);
-            Map<Peca, UUID> minhas = pecas.computeIfAbsent(id, k -> new EnumMap<>(Peca.class));
-            for (Peca p : Peca.values()) {
-                UUID did = minhas.get(p);
-                ItemDisplay d = did != null && Bukkit.getEntity(did) instanceof ItemDisplay x && x.isValid() ? x : null;
-                if (!quer.get(p)) {
-                    if (d != null) d.remove();
-                    minhas.remove(p);
-                    continue;
-                }
-                if (d == null) {
-                    d = criar(c, p);
-                    minhas.put(p, d.getUniqueId());
-                }
-                posicionar(c, p, d);
-            }
-            if (ciclo % 20 == 0) {
-                armadura(c, comps, est);
-                particulas(c, comps, est);
-            }
-        }
-    }
-
-    /** Sela de verdade do jogo (cavalo, porco, camelo...) já aparece: não precisa da nossa. */
-    private static boolean temSelaDoJogo(LivingEntity c) {
-        EntityEquipment eq = c.getEquipment();
-        return eq != null && c.canUseEquipmentSlot(EquipmentSlot.SADDLE) && !eq.getItem(EquipmentSlot.SADDLE).isEmpty();
-    }
-
-    private static ItemStack itemDaPeca(Peca p, boolean asasBaixas) {
-        if (p == Peca.FAROL) return new ItemStack(Material.LANTERN);
-        ItemStack i = new ItemStack(Material.PAPER);
-        i.editMeta(m -> m.setItemModel(new NamespacedKey("rpgatributos", p == Peca.ASAS && asasBaixas ? "domador_asas_baixas" : p.modelo)));
-        return i;
-    }
-
-    private ItemDisplay criar(LivingEntity c, Peca p) {
-        return c.getWorld().spawn(c.getLocation(), ItemDisplay.class, d -> {
-            d.setPersistent(false);
-            d.setItemStack(itemDaPeca(p, false));
-            d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
-            d.setTeleportDuration(2);
-            d.setInterpolationDuration(4);
-            d.setViewRange(0.6f);
-            d.getPersistentDataContainer().set(K_VISUAL, PersistentDataType.STRING, "peca");
-            if (p == Peca.AUREOLA || p == Peca.FAROL) d.setBrightness(new Display.Brightness(15, 15));
-        });
-    }
-
-    /** Onde cada peça fica, conforme o tamanho do bicho (já com o tamanho do estágio). */
-    private void posicionar(LivingEntity c, Peca p, ItemDisplay d) {
-        double h = c.getHeight(), w = c.getWidth();
-        double y;
-        float s;
-        float yaw = c.getBodyYaw();
-        switch (p) {
-            case SELA -> { y = h * 0.86; s = (float) (w * 0.85); }
-            case ALFORJE -> { y = h * 0.6; s = (float) (w * 0.9); }
-            case FAROL -> { y = h * 1.02; s = 0.45f; }
-            case ASAS -> { y = h * 0.82; s = (float) (w * 1.25); }
-            default -> { y = h + 0.3; s = (float) (w * 0.75); yaw += (ciclo * 6) % 360; } // a auréola gira devagar
-        }
-        Location l = c.getLocation().add(0, y, 0);
-        l.setYaw(yaw);
-        l.setPitch(0);
-        d.teleport(l);
-        Transformation t = d.getTransformation();
-        if (Math.abs(t.getScale().x - s) > 0.01) {
-            d.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(s, s, s), new AxisAngle4f()));
-        }
-        // Asas: batem quando ele está no ar (montado e voando) ou correndo.
-        if (p == Peca.ASAS && ciclo % 2 == 0) {
-            boolean noAr = !c.isOnGround();
-            boolean baixas = noAr && (ciclo / 2) % 2 == 0;
-            d.setItemStack(itemDaPeca(p, baixas));
+            armadura(c, comps, est);
+            particulas(c, comps, est);
         }
     }
 
@@ -208,7 +103,8 @@ public final class VisualDomador implements Listener {
         ItemStack atual = eq.getItem(EquipmentSlot.BODY);
         String nossa = atual.isEmpty() ? null : atual.getPersistentDataContainer().get(K_VISUAL, PersistentDataType.STRING);
         if (!atual.isEmpty() && nossa == null) return; // armadura de verdade que o jogador pôs: fica
-        Armadura a = armaduraDe(c.getType(), comps, est);
+        Lendaria lend = Lendaria.de(c);
+        Armadura a = lend != null ? lend.pele() : armaduraDe(c.getType(), comps, est);
         if (a == null) {
             if (nossa != null) eq.setItem(EquipmentSlot.BODY, null);
             return;
@@ -246,6 +142,32 @@ public final class VisualDomador implements Listener {
 
     private void particulas(LivingEntity c, Set<Componente> comps, int est) {
         Location meio = c.getLocation().add(0, c.getHeight() * 0.6, 0);
+        Lendaria lend = Lendaria.de(c);
+        if (lend == Lendaria.QILIN) {
+            c.getWorld().spawnParticle(Particle.DUST, meio, 4, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0x7FD8A6), 1.2f));
+            c.getWorld().spawnParticle(Particle.CHERRY_LEAVES, meio, 2, c.getWidth() * 0.4, 0.3, c.getWidth() * 0.4, 0);
+            return;
+        }
+        if (lend == Lendaria.LONGMA) {
+            c.getWorld().spawnParticle(Particle.DUST, meio, 4, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0x4FA3E0), 1.2f));
+            c.getWorld().spawnParticle(Particle.DRIPPING_WATER, meio, 3, c.getWidth() * 0.4, 0.3, c.getWidth() * 0.4, 0);
+            return;
+        }
+        if (lend == Lendaria.BAIHU) {
+            c.getWorld().spawnParticle(Particle.SNOWFLAKE, meio, 3, c.getWidth() * 0.4, 0.3, c.getWidth() * 0.4, 0.01);
+            c.getWorld().spawnParticle(Particle.DUST, meio, 3, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0xFFD54F), 1f));
+            return;
+        }
+        if (lend == Lendaria.XUANWU) {
+            c.getWorld().spawnParticle(Particle.DUST, meio, 6, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0x2E3B2E), 1.6f));
+            c.getWorld().spawnParticle(Particle.SQUID_INK, meio, 1, c.getWidth() * 0.3, 0.2, c.getWidth() * 0.3, 0.01);
+            return;
+        }
+        if (lend == Lendaria.FENGHUANG) {
+            c.getWorld().spawnParticle(Particle.FLAME, meio, 5, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0.01);
+            c.getWorld().spawnParticle(Particle.DUST, meio, 3, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0xFFC107), 1.2f));
+            return;
+        }
         if (comps.contains(Componente.CHAMAS)) c.getWorld().spawnParticle(Particle.FLAME, meio, 4, c.getWidth() * 0.4, 0.3, c.getWidth() * 0.4, 0.01);
         if (comps.contains(Componente.MARE)) c.getWorld().spawnParticle(Particle.DRIPPING_WATER, meio, 4, c.getWidth() * 0.4, 0.3, c.getWidth() * 0.4, 0);
         if (est == 2) {
@@ -286,17 +208,6 @@ public final class VisualDomador implements Listener {
         if (mao.getType() == Material.SHEARS && visual(le.getEquipment().getItem(EquipmentSlot.BODY))) e.setCancelled(true);
     }
 
-    /** Ao desligar: as peças somem (elas não são salvas no mundo). */
-    public void parar() {
-        for (Map<Peca, UUID> m : pecas.values()) {
-            for (UUID d : m.values()) {
-                Entity x = Bukkit.getEntity(d);
-                if (x != null) x.remove();
-            }
-        }
-        pecas.clear();
-    }
-
     // =====================================================================
     //  Pacote de recursos: armaduras, modelos 3D e as texturas deles
     // =====================================================================
@@ -305,6 +216,7 @@ public final class VisualDomador implements Listener {
     public static Map<String, byte[]> arquivosDoPacote() throws IOException {
         Map<String, byte[]> f = new HashMap<>();
         boolean[][] cavalo = mascara("/mascaras/cavalo.txt"), lobo = mascara("/mascaras/lobo.txt");
+        char[][] pele = mapa("/mascaras/cavalo_pele.txt"), peleLobo = mapa("/mascaras/lobo_pele.txt");
         for (Armadura a : Armadura.values()) {
             f.put("assets/rpgatributos/equipment/" + a.id() + ".json", texto("""
                     { "layers": {
@@ -312,8 +224,8 @@ public final class VisualDomador implements Listener {
                         "wolf_body": [ { "texture": "rpgatributos:%1$s" } ]
                     } }
                     """.formatted(a.id())));
-            f.put("assets/rpgatributos/textures/entity/equipment/horse_body/" + a.id() + ".png", png(pintar(a, cavalo)));
-            f.put("assets/rpgatributos/textures/entity/equipment/wolf_body/" + a.id() + ".png", png(pintar(a, lobo)));
+            f.put("assets/rpgatributos/textures/entity/equipment/horse_body/" + a.id() + ".png", png(a.pele() ? pintarPele(a, pele, false) : pintar(a, cavalo)));
+            f.put("assets/rpgatributos/textures/entity/equipment/wolf_body/" + a.id() + ".png", png(a.pele() ? pintarPele(a, peleLobo, true) : pintar(a, lobo)));
         }
         modelo(f, "domador_sela", SELA_JSON, textura(0xFF5D3A1E, 0xFF7A4E2A, 0xFF3A2412, 0xFFC9A227));
         modelo(f, "domador_alforje", ALFORJE_JSON, textura(0xFF6B4A2B, 0xFF8D6440, 0xFF3E2A18, 0xFFB0B0B0));
@@ -375,11 +287,133 @@ public final class VisualDomador implements Listener {
                     }
                     case CELESTE -> borda ? 0xFFE2B53C : r < 0.06 ? 0xFFAEE3FF : r < 0.35 ? 0xFFFFFFFF : 0xFFE8ECF6;
                     case SOMBRAS -> borda ? 0xFF120B1C : r < 0.08 ? 0xFF9575CD : r < 0.4 ? 0xFF3A2952 : 0xFF2A1F3A;
+                    case QILIN -> borda ? 0xFF1F6B4A : r < 0.06 ? 0xFFE2B53C : r < 0.4 ? 0xFF8FE3B8 : 0xFF4FB286;
+                    case FENGHUANG -> borda ? 0xFF7A1408 : r < 0.06 ? 0xFFFFEB3B : r < 0.4 ? 0xFFFF7043 : 0xFFD84315;
+                    case LONGMA -> borda ? 0xFF0D3B66 : r < 0.4 ? 0xFF64B5F6 : 0xFF1E88E5;
+                    case BAIHU -> borda ? 0xFF1B1B1B : r < 0.4 ? 0xFFFFFFFF : 0xFFE8E8E8;
                 };
                 im.setRGB(x, y, cor);
             }
         }
         return im;
+    }
+
+    /** Mapa da textura do cavalo: '#' pele, 'e' escuro (pupila, narina, casco), 'w' brilho do olho, '.' vazio. */
+    static char[][] mapa(String recurso) throws IOException {
+        try (InputStream in = VisualDomador.class.getResourceAsStream(recurso)) {
+            if (in == null) throw new IOException("faltou " + recurso);
+            List<String> l = new ArrayList<>();
+            try (BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+                for (String s; (s = r.readLine()) != null; ) if (!s.isBlank()) l.add(s.trim());
+            }
+            char[][] m = new char[l.size()][];
+            for (int y = 0; y < m.length; y++) m[y] = l.get(y).toCharArray();
+            return m;
+        }
+    }
+
+    /**
+     * Pele das lendárias na disposição da textura do cavalo (64x64) ou do lobo (64x32): olhos,
+     * focinho, cascos, crina e cauda com cor própria; o corpo em escamas (Qilin, Longma), penas
+     * (Fenghuang) ou pelo listrado (Baihu).
+     */
+    static BufferedImage pintarPele(Armadura a, char[][] m, boolean lobo) {
+        int h = m.length, w = m[0].length;
+        BufferedImage im = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                char ch = m[y][x];
+                if (ch == '.') continue;
+                double r = hash(x, y, a.ordinal() + 7);
+                Parte p = lobo ? parteDoLobo(x, y, ch) : parteDoCavalo(x, y, ch);
+                im.setRGB(x, y, corDaPele(a, p, x, y, r));
+            }
+        }
+        return im;
+    }
+
+    private enum Parte { OLHO_CLARO, OLHO_ESCURO, ESCURO, CASCO, CASCO_TOPO, CRINA, CAUDA, PONTA_CAUDA, CABECA, CORPO }
+
+    /** Partes da textura do cavalo (vistas no AbstractEquineModel: cabeça em 0,13, crina em 56,36, cauda em 42,36, pernas em 48,21). */
+    private static Parte parteDoCavalo(int x, int y, char ch) {
+        boolean olho = y >= 20 && y <= 22 && x < 20;
+        if (olho && ch == 'w') return Parte.OLHO_CLARO;
+        if (olho && ch == 'e') return Parte.OLHO_ESCURO;
+        if (x >= 48 && y >= 33 && y <= 36) return y == 33 ? Parte.CASCO_TOPO : Parte.CASCO;
+        if (ch == 'e') return Parte.ESCURO;
+        if (x >= 56 && y >= 36 && y < 54) return Parte.CRINA;
+        if (x >= 42 && x < 56 && y >= 36 && y < 54) return y >= 50 ? Parte.PONTA_CAUDA : Parte.CAUDA;
+        return y < 35 && x < 26 ? Parte.CABECA : Parte.CORPO;
+    }
+
+    /** Partes da textura do lobo (cabeça em 0,0, focinho em 0,10, juba em 21,0, corpo em 18,14, pernas em 0,18, cauda em 9,18). */
+    private static Parte parteDoLobo(int x, int y, char ch) {
+        if (y == 6 && x < 12 && ch == 'w') return Parte.OLHO_CLARO;
+        if (y == 6 && x < 12 && ch == 'e') return Parte.OLHO_ESCURO;
+        if (ch == 'e') return Parte.ESCURO;
+        if (x >= 9 && x < 17 && y >= 18 && y < 28) return y >= 25 ? Parte.PONTA_CAUDA : Parte.CAUDA;
+        if (x >= 21 && y < 13) return Parte.CRINA;
+        if (x < 8 && y >= 26) return Parte.CASCO;
+        return y < 17 && x < 22 ? Parte.CABECA : Parte.CORPO;
+    }
+
+    private static int corDaPele(Armadura a, Parte p, int x, int y, double r) {
+        // Chama, espuma ou pelo da crina e da cauda: mais claro na ponta.
+        double t = Math.min(1, Math.max(0, (y % 18) / 18.0 + r * 0.35));
+        return switch (a) {
+            case QILIN -> switch (p) {
+                case OLHO_CLARO -> 0xFFFFE082;
+                case OLHO_ESCURO -> 0xFF10301F;
+                case ESCURO -> 0xFF1F4B36;
+                case CASCO_TOPO -> 0xFF8D6E1A;
+                case CASCO -> r < 0.3 ? 0xFFFFE082 : 0xFFE2B53C;
+                case CRINA, CAUDA, PONTA_CAUDA -> t > 0.95 ? 0xFFE8F5C8 : t > 0.6 ? 0xFF9CF0C0 : t > 0.3 ? 0xFF4FB286 : 0xFF2E7D32;
+                default -> escama(x, y, r, p == Parte.CABECA, 0xFFE2B53C, 0xFF1F6B4A, 0xFF2E8B60, 0xFF8FE3B8, 0xFF4FB286, 0xFF6CCB9C);
+            };
+            case FENGHUANG -> switch (p) {
+                case OLHO_CLARO -> 0xFFFFF59D;
+                case OLHO_ESCURO -> 0xFF3E0A00;
+                case ESCURO -> 0xFF5A1206;
+                case CASCO_TOPO -> 0xFF8D6E1A;
+                case CASCO -> r < 0.3 ? 0xFFFFE082 : 0xFFE2B53C;
+                case CRINA, CAUDA, PONTA_CAUDA -> t > 0.95 ? 0xFFFFF59D : t > 0.6 ? 0xFFFFC107 : t > 0.3 ? 0xFFFF7043 : 0xFFC62828;
+                default -> {
+                    // Penas: cada fileira termina numa ponta escura; dourado no alto, vermelho embaixo.
+                    boolean ponta = y % 4 == 3 && (x + y / 4) % 3 != 0;
+                    boolean alto = p == Parte.CABECA || y < 44;
+                    yield r < 0.05 ? 0xFFFFEB3B : ponta ? 0xFF7A1408 : alto ? (r < 0.4 ? 0xFFFFC107 : 0xFFFF8F00) : (r < 0.4 ? 0xFFFF7043 : 0xFFD84315);
+                }
+            };
+            case LONGMA -> switch (p) {
+                case OLHO_CLARO -> 0xFFFFF59D;
+                case OLHO_ESCURO -> 0xFF0A1A2A;
+                case ESCURO -> 0xFF0D3B66;
+                case CASCO_TOPO -> 0xFF607D8B;
+                case CASCO -> r < 0.3 ? 0xFFFFFFFF : 0xFFCFD8DC;
+                case CRINA, CAUDA, PONTA_CAUDA -> t > 0.95 ? 0xFFFFFFFF : t > 0.6 ? 0xFFE0F7FA : t > 0.3 ? 0xFF80DEEA : 0xFF26C6DA;
+                default -> escama(x, y, r, p == Parte.CABECA, 0xFFE3F2FD, 0xFF0D3B66, 0xFF1565C0, 0xFF90CAF9, 0xFF1E88E5, 0xFF42A5F5);
+            };
+            case BAIHU -> switch (p) {
+                case OLHO_CLARO -> 0xFFFFD54F;
+                case OLHO_ESCURO -> 0xFF1B1B1B;
+                case ESCURO -> 0xFF2B2B2B;
+                case PONTA_CAUDA -> 0xFF1B1B1B;
+                default -> {
+                    // Pelo branco com listras pretas (mais espaçadas na cabeça).
+                    int k = x * 2 + y;
+                    boolean listra = p == Parte.CABECA ? (x + y * 2) % 9 == 0 : (k % 7 == 0 || k % 7 == 1);
+                    yield listra ? 0xFF1E1E1E : r < 0.3 ? 0xFFFFFFFF : r < 0.6 ? 0xFFF2F2F2 : 0xFFE3E7EC;
+                }
+            };
+            default -> 0xFFFFFFFF;
+        };
+    }
+
+    /** Escamas em fileiras desencontradas, com uns pontos de brilho. */
+    private static int escama(int x, int y, double r, boolean cabeca, int brilho, int borda, int bordaCabeca, int claro, int base, int baseCabeca) {
+        int cel = (x + ((y / 3) % 2) * 2) % 4;
+        boolean b = cel == 0 || y % 3 == 2;
+        return r < 0.04 ? brilho : b ? (cabeca ? bordaCabeca : borda) : r < 0.35 ? claro : (cabeca ? baseCabeca : base);
     }
 
     private static boolean dentro(boolean[][] m, int x, int y) {
@@ -465,7 +499,7 @@ public final class VisualDomador implements Listener {
         return s.getBytes(StandardCharsets.UTF_8);
     }
 
-    private static byte[] png(BufferedImage im) throws IOException {
+    static byte[] png(BufferedImage im) throws IOException {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         javax.imageio.ImageIO.write(im, "png", b);
         return b.toByteArray();

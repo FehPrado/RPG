@@ -98,7 +98,7 @@ Até +5, falhar só gasta o material. De +6 a +8, o item perde 1 nível. No +9 e
 **Conjuntos:** vestindo as 4 peças de armadura forjadas, a raridade mais baixa entre elas dá um bônus extra. Vai de +1 de armadura (Comum) até +5 de armadura, +4 corações, +10% de velocidade, Regeneração e Resistência (Mítico).
 
 **Mesa de ferraria:** subir um item forjado para Netherite mantém a raridade, em qualquer mesa. Item achado no mundo é forjado ao ser melhorado numa mesa a até 6 blocos de uma Forja do Ferreiro.
-**Armas com nome:** às vezes a peça já nasce com **nome, história e visual próprios**: 2% das Comuns forjadas, 5% das Raras, 10% das Épicas, 18% das Únicas, 30% das Lendárias e 45% das Míticas (`forja.armas-com-nome`). Elas também aparecem em **5% dos baús** de estruturas (do plugin e do jogo) e com os chefes (Altar, Sumo-Sacerdote, Guardião dos Ventos e Coração da Penumbra), já forjadas. São 37: **espadas** (Presa do Inverno, Lâmina de Thalassa, Aurora de Aerília, Juramento do Fortim, Brasa dos Anões, Sussurro da Penumbra, Lâmina da Raiz de Luz, Fio do Guardião dos Ventos, Promessa do Primeiro Colono, Lâmina do Eclipse), **machados e maças** (Talha-Raízes, Fúria do Saqueador, Machado do Faroleiro, Machado do Velho Lenhador, Mordida da Geada, Sino de Maris, Martelo do Eremita, Martelo do Mestre de Obras, Coração Roubado), **arcos e bestas** (Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Arco das Folhas Caídas, Besta do Capitão, Besta Glacial, Besta da Torre de Vigia) e **ferramentas** (Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Picareta do Poço Fundo, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada das Quatro Estações, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral). **Só muda a aparência:** a força continua sendo a da raridade. Com o pacote de recursos, no inventário aparece o desenho delas e na mão, no chão, no suporte e na moldura um **modelo 3D** (espadas, machados, maças e ferramentas; os arcos e as bestas mudam de desenho conforme a corda é puxada). O nome e a história ficam ao refinar e reforjar.
+**Armas com nome:** às vezes a peça já nasce com **nome, história e visual próprios**: 2% das Comuns forjadas, 5% das Raras, 10% das Épicas, 18% das Únicas, 30% das Lendárias e 45% das Míticas (`forja.armas-com-nome`). Elas também aparecem em **5% dos baús** de estruturas (do plugin e do jogo) e com os chefes (Altar, Sumo-Sacerdote, Guardião dos Ventos e Coração da Penumbra), já forjadas. São 47: **espadas** (Presa do Inverno, Lâmina de Thalassa, Aurora de Aerília, Juramento do Fortim, Brasa dos Anões, Sussurro da Penumbra, Lâmina da Raiz de Luz, Fio do Guardião dos Ventos, Promessa do Primeiro Colono, Lâmina do Eclipse), **machados e maças** (Talha-Raízes, Fúria do Saqueador, Machado do Faroleiro, Machado do Velho Lenhador, Mordida da Geada, Sino de Maris, Martelo do Eremita, Martelo do Mestre de Obras, Coração Roubado), **arcos e bestas** (Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Arco das Folhas Caídas, Besta do Capitão, Besta Glacial, Besta da Torre de Vigia) e **ferramentas** (Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Picareta do Poço Fundo, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada das Quatro Estações, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral) e **lanças e tridentes** (Lança da Sentinela, Chifre do Qilin, Agulha dos Ventos, Pique do Cavaleiro Errante, Lâmina do Crescente Verde, Espeto do Bastião; Tridente de Maris, Garfo do Afogado-Rei, Tridente do Pescador de Pérolas, Tridente da Tempestade). **Só muda a aparência:** a força continua sendo a da raridade. Com o pacote de recursos, no inventário aparece o desenho delas e na mão, no chão, no suporte e na moldura um **modelo 3D** (espadas, machados, maças, ferramentas, lanças e tridentes; o tridente arremessado continua com a cara do jogo; os arcos e as bestas mudam de desenho conforme a corda é puxada). O nome e a história ficam ao refinar e reforjar.
 
 **Trajes (armaduras com nome):** a armadura forjada também pode nascer com nome (mesmas chances; 30% das armas com nome de baús e chefes são peças de Traje). São **8 Trajes** de 4 peças, cada um com história, ícone próprio e **textura própria no corpo de quem veste**, pintada pelo plugin: **da Penumbra** (escamas roxas), **dos Ventos** (placas brancas e douradas), **de Thalassa** (escamas verde-mar e coral), **do Fortim** (placas de aço e vermelho), **dos Anões** (bronze), **da Geada** (gelo), **da Colheita** (tecido de palha) e **da Raiz de Luz** (tecido de raiz com veios âmbar). As peças se chamam Elmo/Peitoral/Grevas/Botas (placas), Elmo/Cota/Grevas/Botas (escamas) ou Capuz/Gibão/Calças/Botas (tecido), por exemplo **Elmo da Penumbra** e **Gibão da Colheita**. Só aparência, como as armas; funcionam com o Guarda-roupa e continuam ao virar Netherite.
 
@@ -292,6 +292,7 @@ O livro de receitas tem páginas (setas embaixo).
 
 Como em Harvest Moon e Stardew Valley. **Agachado + clique com a mão vazia** numa galinha, vaca, vaca-cogumelo, cabra, ovelha, porco ou coelho adulto: ele passa a ser **da sua fazenda** (até 40), ganha um nome e mostra os **corações** em cima da cabeça. `/animais` lista todos.
 - **Todo dia** (dia do jogo): **carinho** (clique com a mão vazia) e **comida**: a ração dele na mão (trigo, sementes, cenoura...), **pasto** (de dia, ao ar livre, em cima da grama, menos no inverno) ou um **fardo de feno** a até 6 blocos (cada fardo dá 9 porções e acaba).
+- **Comedouro:** jogue **1 fardo de feno e 1 tigela** em cima de um **baú**. Guarde a comida dentro (ou encha com um funil): na virada do dia, cada animal seu a até 12 blocos que não comeu come uma porção do que é dele (galinha: sementes; vaca, cabra e ovelha: trigo; porco: cenoura, batata ou beterraba; coelho: cenoura ou dente-de-leão). Um **fardo de feno** vira 9 trigos. Clique para abrir; agachado + clique mostra quantas porções tem e para quantos dias dá.
 - **Afeto** de 0 a 5 corações: sobe com carinho e comida; cai se ele ficar sem carinho, com fome ou passar a **noite de inverno ao ar livre** (deixe num celeiro com teto).
 - **Produtos** (com qualidade pelo afeto e pela Doma): **ovo** todo dia (2 com 4 corações), **leite** e **leite de cabra** (balde vazio, uma vez por dia), **lã** de qualidade na tosquia (+1 com 3 corações), **trufas** que o porco fuça ao ar livre (menos no inverno), **pele e pé de coelho**.
 - **Filhotes:** dois animais seus que cruzam têm o filhote já na fazenda; na primavera, às vezes **gêmeos**.
@@ -514,10 +515,23 @@ Três profissões de guerra na colônia: **Soldado** (espada, liberado no nível
 
 **Exemplo:** vaca de cogumelo + Sela + Asas = montaria voadora (Doma 50). Patrulhar + Coletor = um ajudante que recolhe os itens de uma fazenda.
 
-**Visual (com o pacote de recursos):** os componentes aparecem no bicho.
-- **Peças 3D que acompanham o companheiro:** Sela (quando ele não tem a sela do próprio jogo), Alforje (bolsas dos dois lados), Farol (uma lanterna acesa no lombo) e **Asas** (abertas nas costas, batendo quando ele está no ar).
+**Visual (com o pacote de recursos):** armaduras e partículas. As peças 3D que seguiam o bicho (sela, alforje, lanterna, asas e auréola) saíram na 2.36.1 porque pesavam no jogo; os componentes continuam funcionando igual.
 - **Armaduras próprias em cavalos e lobos:** Couraça (aço com rebites), Pele de Netherite (escura com brilho roxo), Chamas (fogo) e Coração do Mar (ondas turquesa). Vale a do componente mais forte. É só aparência: a proteção continua vindo do componente, ela não se gasta, não cai quando o bicho morre e não sai com tesoura nem pelo inventário do cavalo. Se você puser uma armadura de verdade no cavalo ou no lobo, a sua fica no lugar.
 - Chamas soltam faíscas de fogo e o Coração do Mar pinga água.
+
+**Montarias lendárias (os Guardiões):** cada uma é **única no servidor**. No Altar do Domador, o botão **✦ Fusão Lendária** funde dois companheiros seus no **estágio III** (perto do altar) e alguns itens num **Ovo Lendário**. Os componentes e o alforje dos dois caem no chão. Coloque o ovo no chão, no lugar certo: ele choca em 10 minutos (`doma.lendarias`) e nasce quando você está por perto. Clique no ovo para ver quanto falta; agache e bata nele para pegar de volta. A lendária nasce no nível 1, evolui como os outros companheiros, tem +50% de vida e dano e uma **pele própria** (com o pacote de recursos). Os poderes já vêm de nascença e não ocupam espaço de componente.
+
+| Lendária | Fusão | Onde choca | Poderes |
+|---|---|---|---|
+| **Qilin** 麒麟 | Cavalo III + Raposa III + 1 Essência Primordial + 2 blocos de esmeralda + 1 maçã dourada | Num campo de flores (8 flores perto), de dia | Anda sobre a água e a lava, imune a fogo (quem monta não se queima), flores brotam onde passa, Bênção: você e a party perto se curam devagar |
+| **Fenghuang** 凤凰 | Cavalo III + Papagaio III + 1 Fragmento Celeste + 8 varas de blaze + 1 maçã dourada | Perto de fogo, lava, fogueira acesa ou magma | Voa, imune a fogo, ataques incendeiam, rastro de brasas; **Renascer**: ao morrer vira um ovo em chamas que renasce no mesmo nível |
+| **Longma** 龙马 | Cavalo III + Tatu III + 1 coração do mar + 16 cristais de prismarinho + 1 maçã dourada | Na beira da água (6 blocos de água perto) | Galopa por cima da água, nada rápido e quem monta respira debaixo d'água; **Onda**: montado, empurra para longe os monstros em volta |
+| **Baihu** 白虎 | Lobo III + Gato III + 1 chifre de cabra + 16 ossos + 1 maçã dourada | Na neve (lugar frio ou 6 blocos de neve perto) | Um **tigre branco que dá para montar** (maior que um lobo): rápido, pula longe, luta (Garras); **Rugido**: monstros perto ficam fracos e lentos |
+| **Xuanwu** 玄武 | Urso Polar III + Tatu III + 8 escamas de tartaruga + 1 concha de náutilo + 1 maçã dourada | Na areia, à noite (6 blocos de areia perto) | Uma **tartaruga gigante**: lenta em terra, rápida na água, muita armadura e imune a fogo; **Escudo**: você e a party perto recebem menos dano |
+
+Os Guardiões ficam numa bússola no menu: Qilin no centro, Fenghuang ao sul, Longma a leste, Baihu a oeste e Xuanwu ao norte. Se um deles (menos o Fenghuang) morre ou é libertado, volta a estar livre para uma nova fusão, de qualquer jogador. O Xuanwu não ganha pele nova (a tartaruga do jogo não aceita), só o tamanho e a aura escura.
+
+**Modelos 3D com os mods EMF + ETF (opcional):** quem joga com **Entity Model Features** e **Entity Texture Features** (Fabric ou NeoForge) vê o **Qilin** com um modelo próprio: chifres dourados, bigodes, crista e tufo de chama, escamas nas costas e chamas nos tornozelos (as pernas, a cabeça e a cauda continuam animadas). Quem não tem os mods continua vendo a pele normal; o mesmo pacote serve para os dois. O modelo é escolhido pelo nome, por isso o nome de uma lendária não muda (etiqueta não funciona nela). Os outros Guardiões ganham modelo depois.
 
 - Componentes precisam do item **inteiro** (sem desgaste). Tirar devolve o item; se o companheiro morrer, componentes e alforje caem no chão.
 - A vida, a armadura e o dano dos companheiros crescem com a Doma do dono. Ninguém da party (nem outros jogadores, onde não há PvP) fere os seus companheiros.
@@ -1086,7 +1100,7 @@ Os companheiros ganham XP lutando (5 por monstro, 20 por Elite, 60 por chefe), a
 
 Quem não tem nome dado pelo jogador ganha o nome do estágio: Lobo Alfa → **Lobo das Sombras**, Cavalo → Corcel de Guerra → **Corcel Celeste**, Golem de Ferro → Golem de Guerra → **Colosso de Ferro**, Gato → Gato Selvagem → **Pantera Sombria**... (as outras criaturas viram "Veterano" e "Ancestral"). O nível e o estágio aparecem no `/pets`. Libertar o companheiro zera a evolução.
 
-**Evolução visível:** no estágio II o companheiro solta um pó prateado; no III, pó dourado, uma **auréola** dourada girando sobre a cabeça e partículas da própria criatura (fumaça no Lobo das Sombras, chamas azuis na Raposa Espiritual, flocos no Urso do Inverno Eterno, faíscas na Ave do Trovão...). O **Corcel Celeste** ganha uma armadura branca e dourada e o **Lobo das Sombras** uma roxa-escura (se não tiverem a de um componente).
+**Evolução visível:** no estágio II o companheiro solta um pó prateado; no III, pó dourado e partículas da própria criatura (fumaça no Lobo das Sombras, chamas azuis na Raposa Espiritual, flocos no Urso do Inverno Eterno, faíscas na Ave do Trovão...). O **Corcel Celeste** ganha uma armadura branca e dourada e o **Lobo das Sombras** uma roxa-escura (se não tiverem a de um componente).
 ## Detalhes do dia a dia
 
 ### Mais coisas na Forja
@@ -1101,7 +1115,7 @@ Na Forja do Ferreiro, estes itens também saem **forjados** (com raridade, bônu
 | **Élitro** | Fogos de artifício dão mais impulso, além de armadura e vida |
 | **Armadura de cavalo** | Velocidade, pulo, vida, armadura e resistência **para a montaria** |
 
-**Reforjar:** élitro, armaduras de cavalo de ferro, ouro e diamante e qualquer equipamento achado no mundo não têm receita. Jogue o item e **1 Fragmento de Forja** em cima da Forja do Ferreiro: ele vira um item forjado.
+**Reforjar:** élitro, armaduras de cavalo de ferro, ouro e diamante e qualquer equipamento achado no mundo não têm receita. Jogue o item e **1 Fragmento de Forja** em cima da Forja do Ferreiro: ele vira um item forjado. O **tridente** também (ele conta como lança na Forja): sai com raridade e bônus e pode nascer com nome.
 
 **Ferradura** (bancada: 5 lingotes de ferro em U): clique num companheiro seu (cavalo, burro, camelo...) para dar **+15% de velocidade e +10% de pulo**, sem gastar espaço de componente. Ela cai de volta se ele for libertado ou morrer.
 
@@ -1452,7 +1466,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin talentopontos <jogador> <qtd>` | Pontos de talento a mais (negativo tira) |
 | `/rpgadmin renascer <jogador> <0-5>` | Define quantas vezes o jogador renasceu (não mexe nos atributos) |
 | `/rpgadmin companheironivel <1-30>` | Define o nível do companheiro que você olha |
-| `/rpgadmin boneco`, `pedraamolar`, `fogueira`, `bebedouro`, `cartografo` | Cria a estação olhando para o bloco dela |
+| `/rpgadmin boneco`, `pedraamolar`, `fogueira`, `bebedouro`, `comedouro`, `cartografo` | Cria a estação olhando para o bloco dela |
 | `/rpgadmin ferradura [qtd]`, `/rpgadmin ninhopassaro [qtd]` | Dá ferraduras ou ninhos de pássaro |
 | `/rpgadmin animalraro [ouro\|neve]` | O animal que você olha vira raro |
 | `/rpgadmin barril`, `colmeia`, `canteiro` | Cria a estação olhando para o bloco dela |
@@ -1465,6 +1479,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin estrutura <tipo>` | Constrói a estrutura à sua frente (pelo console: `<tipo> <mundo> <x> <z>`) |
 | `/rpgadmin estruturas` | Lista as estruturas mais perto de você |
 | `/rpgadmin nomeada <arma ou aleatoria> [raridade]` | Uma arma com nome já forjada (padrão: Épica) |
+| `/rpgadmin lendaria <qilin, fenghuang, longma, baihu ou xuanwu> <ovo, nascer, livre ou estado>` | Montarias lendárias: dá o ovo, faz nascer aqui, volta ao começo ou mostra onde está |
 | `/rpgadmin traje <traje ou aleatorio> [capacete/peitoral/calca/botas/todas] [raridade]` | Peças de um Traje (armadura com nome) já forjadas |
 | `/rpgadmin raiz` | Planta uma Raiz de Luz no chão embaixo de você (precisa de 5 blocos de ar em cima) |
 | `/rpgadmin coracaopenumbra` | O Coração da Penumbra aparece à sua frente |
@@ -1479,9 +1494,9 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.36.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.40.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.36.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.36.0 && git push origin v2.36.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.40.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.40.0 && git push origin v2.40.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 
@@ -1503,6 +1518,7 @@ Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtri
 - As estações e a neve do inverno ficam em `estacoes.yml`. A estação conta a partir da data em que o plugin foi instalado.
 - As colônias ficam em `colonias.yml` (os moradores são aldeões salvos no próprio mundo).
 - Lendas, classes lendárias, Pedras de Viagem e Locais Ocultos ficam em `lendas.yml`, `classes_lendarias.yml`, `pedras.yml` e `locais.yml`. Para sortear novos Locais Ocultos, apague o `locais.yml` (os já construídos continuam no mundo como ruínas).
+- As montarias lendárias (quem tem cada uma, onde está o ovo e quanto já chocou) ficam em `lendarias.yml`. Para começar de novo, use `/rpgadmin lendaria <nome> livre`.
 - O mundo `rpg_masmorras` é **apagado e recriado vazio** sempre que o servidor liga (as masmorras são temporárias). Não construa nada nele. O Cofre das Almas fica em `cofre.yml` e não se perde.
 - Se você já usa outro plugin de proteção (WorldGuard, GriefPrevention...), os dois funcionam juntos: basta um deles bloquear para a ação ser bloqueada.
 - A tag usa um time de scoreboard; se usar outro plugin de nametag (ex.: TAB), desative a parte de nametag de um deles.

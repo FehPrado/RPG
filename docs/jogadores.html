@@ -135,7 +135,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.35</small></a>
+  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.39</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -186,7 +186,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <main id="conteudo">
 <div class="hero">
   <div>
-    <p class="rotulo">Guia do Jogador · versão 2.35</p>
+    <p class="rotulo">Guia do Jogador · versão 2.39</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -266,6 +266,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     <figure><img src="site/img/estacoes/pedra_viagem.png" alt="Pedra de Viagem" loading="lazy" width="150" height="150"><figcaption>Pedra de Viagem</figcaption></figure>
     <figure><img src="site/img/estacoes/fogueira.png" alt="Fogueira de Acampamento" loading="lazy" width="150" height="150"><figcaption>Fogueira de Acampamento</figcaption></figure>
     <figure><img src="site/img/estacoes/bebedouro.png" alt="Bebedouro" loading="lazy" width="150" height="150"><figcaption>Bebedouro</figcaption></figure>
+    <figure><img src="site/img/estacoes/comedouro.png" alt="Comedouro" loading="lazy" width="150" height="150"><figcaption>Comedouro</figcaption></figure>
     <figure><img src="site/img/estacoes/trofeus.png" alt="Estante de Troféus" loading="lazy" width="150" height="150"><figcaption>Estante de Troféus</figcaption></figure>
     <figure><img src="site/img/estacoes/marco.png" alt="Marco do Território" loading="lazy" width="150" height="150"><figcaption>Marco do Território</figcaption></figure>
     <figure><img src="site/img/estacoes/prefeitura.png" alt="Prefeitura da Colônia" loading="lazy" width="150" height="150"><figcaption>Prefeitura da Colônia</figcaption></figure>
@@ -482,12 +483,13 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     </div>
     <div class="card largo"><h3>Armas com nome</h3>
       <p>Às vezes a peça já nasce com <b>nome, história e visual próprios</b>: quanto mais rara, maior a chance (2% nas Comuns até 45% nas Míticas). Também aparecem em baús de estruturas e com os chefes. É só aparência: a força é a da raridade.</p>
-      <p>No inventário aparece o desenho dela; <b>na mão, no chão, no suporte e na moldura vira 3D</b> (espadas, machados, maças e ferramentas).</p>
+      <p>No inventário aparece o desenho dela; <b>na mão, no chão, no suporte e na moldura vira 3D</b> (espadas, machados, maças, ferramentas, lanças e tridentes).</p>
       <div class="tabela"><table><thead><tr><th>Tipo</th><th>Armas</th></tr></thead><tbody>
         <tr><td>Espadas</td><td>Presa do Inverno, Lâmina de Thalassa, Aurora de Aerília, Juramento do Fortim, Brasa dos Anões, Sussurro da Penumbra, Lâmina da Raiz de Luz, Fio do Guardião dos Ventos, Promessa do Primeiro Colono, Lâmina do Eclipse</td></tr>
         <tr><td>Machados e maças</td><td>Talha-Raízes, Fúria do Saqueador, Machado do Faroleiro, Machado do Velho Lenhador, Mordida da Geada, Sino de Maris, Martelo do Eremita, Martelo do Mestre de Obras, Coração Roubado</td></tr>
         <tr><td>Arcos e bestas</td><td>Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Arco das Folhas Caídas, Besta do Capitão, Besta Glacial, Besta da Torre de Vigia</td></tr>
         <tr><td>Ferramentas</td><td>Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Picareta do Poço Fundo, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada das Quatro Estações, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral</td></tr>
+        <tr><td>Lanças e tridentes</td><td>Lança da Sentinela, Chifre do Qilin, Agulha dos Ventos, Pique do Cavaleiro Errante, Lâmina do Crescente Verde, Espeto do Bastião, Tridente de Maris, Garfo do Afogado-Rei, Tridente do Pescador de Pérolas, Tridente da Tempestade</td></tr>
       </tbody></table></div>
     </div>
     <div class="card largo"><h3>Trajes (armaduras com nome)</h3>
@@ -880,7 +882,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Vara de pescar:</b> isca mais rápida e mais peixe raro.</li>
         <li><b>Élitro:</b> mais impulso dos fogos.</li>
         <li><b>Armadura de cavalo:</b> velocidade, pulo e vida para a montaria.</li>
-        <li><b>Reforjar:</b> item achado no mundo + 1 Fragmento de Forja jogados na Forja.</li>
+        <li><b>Reforjar:</b> item achado no mundo + 1 Fragmento de Forja jogados na Forja. Vale para o <b>tridente</b>: ele sai forjado e pode nascer com nome.</li>
         <li><b>Ferradura</b> (5 ferros em U): +15% de velocidade num companheiro, sem gastar componente.</li>
       </ul>
     </div>
@@ -899,6 +901,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>⚔ Pedra de Amolar</td><td>Rebolo ou pedra lisa + 2 pederneiras + 1 ferro</td><td>Arma +10% de dano por 100 golpes (custa 1 pederneira)</td></tr>
         <tr><td>♨ Fogueira de Acampamento</td><td>Fogueira acesa + 1 lã + 1 tronco</td><td>Sentado perto: Regeneração e Descansado (+5% de XP por 20 min); assa comida jogada do lado</td></tr>
         <tr><td>☘ Bebedouro</td><td>Caldeirão com água + 1 fardo de feno</td><td>Filhotes crescem mais rápido; companheiros se curam</td></tr>
+        <tr><td>🌾 Comedouro</td><td>Baú + 1 fardo de feno + 1 tigela</td><td>Guarda a comida; os animais da fazenda a até 12 blocos comem daqui na virada do dia</td></tr>
         <tr><td>🏆 Estante de Troféus</td><td>Pilar de quartzo + núcleo de um chefe</td><td>Mostra o troféu; +1% de XP por troféu diferente no seu território</td></tr>
         <tr><td>🧭 Mesa do Cartógrafo</td><td>Mesa de cartografia + bússola + 3 papéis</td><td>Com um mapa do tesouro: direção e distância do X</td></tr>
       </tbody></table></div>
@@ -1019,18 +1022,28 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <p class="nota">Ideia: vaca de cogumelo + Sela + Asas = montaria voadora.</p>
     </div>
     <div class="card"><h3>Visual dos companheiros</h3>
-      <p>Com o pacote de recursos, os componentes aparecem no bicho:</p>
+      <p>Com o pacote de recursos:</p>
       <ul>
-        <li><b>Sela, Alforje, Farol e Asas</b> viram peças 3D que acompanham o companheiro. As asas batem quando ele está no ar.</li>
         <li>Cavalos e lobos ganham <b>armadura própria</b>: Couraça, Pele de Netherite, Chamas ou Coração do Mar. É só aparência e não sai com tesoura.</li>
       </ul>
     </div>
     <div class="card"><h3>Evolução visível</h3>
       <ul>
         <li><b>Estágio II</b>: maior e com pó prateado.</li>
-        <li><b>Estágio III</b>: pó dourado, <b>auréola</b> girando sobre a cabeça e partículas da criatura (fumaça, chamas azuis, flocos de neve, faíscas...).</li>
+        <li><b>Estágio III</b>: pó dourado e partículas da criatura (fumaça, chamas azuis, flocos de neve, faíscas...).</li>
         <li>O <b>Corcel Celeste</b> ganha armadura branca e dourada; o <b>Lobo das Sombras</b>, roxa-escura.</li>
       </ul>
+    </div>
+    <div class="card largo"><h3>Montarias lendárias (os Guardiões)</h3>
+      <p>Cada uma é <b>única no servidor</b>. No Altar do Domador, clique em <b>✦ Fusão Lendária</b>: dois companheiros seus no <b>estágio III</b>, perto do altar, e alguns itens viram um <b>Ovo Lendário</b> (os componentes e o alforje dos dois caem no chão). Coloque o ovo no lugar certo: ele choca em cerca de 10 minutos e nasce quando você está por perto. Clique no ovo para ver quanto falta; agache e bata nele para pegar de volta.</p>
+      <div class="tabela"><table><thead><tr><th>Lendária</th><th>Fusão</th><th>Onde choca</th><th>Poderes</th></tr></thead><tbody>
+        <tr><td><b>Qilin</b> 麒麟</td><td>Cavalo III + Raposa III + Essência Primordial + 2 blocos de esmeralda + maçã dourada</td><td>Campo de flores (8 perto), de dia</td><td>Anda sobre água e lava, imune a fogo, flores onde passa, cura você e a party perto</td></tr>
+        <tr><td><b>Fenghuang</b> 凤凰</td><td>Cavalo III + Papagaio III + Fragmento Celeste + 8 varas de blaze + maçã dourada</td><td>Perto de fogo, lava, fogueira ou magma</td><td>Voa, imune a fogo, ataques incendeiam; ao morrer vira ovo e renasce no mesmo nível</td></tr>
+        <tr><td><b>Longma</b> 龙马</td><td>Cavalo III + Tatu III + coração do mar + 16 cristais de prismarinho + maçã dourada</td><td>Beira da água (6 blocos de água perto)</td><td>Galopa sobre a água, nada rápido, respira debaixo d'água; Onda que empurra os monstros</td></tr>
+        <tr><td><b>Baihu</b> 白虎</td><td>Lobo III + Gato III + chifre de cabra + 16 ossos + maçã dourada</td><td>Na neve (lugar frio ou 6 de neve perto)</td><td>Tigre branco montável: rápido, pula longe, luta; Rugido enfraquece os monstros</td></tr>
+        <tr><td><b>Xuanwu</b> 玄武</td><td>Urso Polar III + Tatu III + 8 escamas de tartaruga + concha de náutilo + maçã dourada</td><td>Na areia, à noite (6 de areia perto)</td><td>Tartaruga gigante: lenta em terra, rápida na água, muita armadura; Escudo para você e a party</td></tr>
+      </tbody></table></div>
+      <p class="nota">Elas têm +50% de vida e dano, pele própria e evoluem como os outros companheiros. Os poderes vêm de nascença e não ocupam espaço de componente.</p>
     </div>
   </div>
 </section>
@@ -1064,7 +1077,8 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     <div class="card"><h3>Criação de animais</h3>
       <ul>
         <li><b>Agachado + clique com a mão vazia</b> num animal da fazenda: ele vira seu e mostra os corações. <span class="cmd">/animais</span> lista todos.</li>
-        <li>Todo dia: <b>carinho</b> (mão vazia) e <b>comida</b> (na mão, pasto na grama ou um fardo de feno perto).</li>
+        <li>Todo dia: <b>carinho</b> (mão vazia) e <b>comida</b> (na mão, pasto na grama, um fardo de feno perto ou o Comedouro).</li>
+        <li><b>Comedouro:</b> 1 fardo de feno + 1 tigela jogados em cima de um baú. Guarde a comida dentro (funil também enche): na virada do dia, os animais a até 12 blocos que não comeram comem daqui. Fardo de feno vira 9 trigos. Agachado + clique mostra para quantos dias dá.</li>
         <li>Mais corações = produtos melhores: ovos, leite (balde), lã, trufas do porco, pele de coelho.</li>
         <li>No inverno, deixe num celeiro com teto. Filhotes nascem já seus (gêmeos na primavera).</li>
       </ul>
@@ -1503,7 +1517,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.35 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.39 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

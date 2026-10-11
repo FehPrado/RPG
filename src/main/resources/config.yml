@@ -333,6 +333,9 @@ doma:
   companheiros-no-maximo: 5           # 1 companheiro no nível 0, até 5 no máximo
   componentes-no-maximo: 6            # 1 componente por criatura no nível 0, até 6 no máximo
   evolucao-dos-companheiros: true     # companheiros sobem de nível lutando e evoluem no 10 e no 25
+  lendarias:                          # montarias lendárias (Qilin, Fenghuang, Longma, Baihu, Xuanwu): fusão no Altar do Domador, ovo e criatura única
+    ativadas: true
+    minutos-para-chocar: 10           # tempo do ovo no lugar certo (flores para o Qilin, fogo para o Fenghuang)
 
 # ==========================================================
 #  Classes

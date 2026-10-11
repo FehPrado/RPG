@@ -206,6 +206,7 @@ public final class RPGAtributos extends JavaPlugin {
     private BonecosTreino bonecos;
     private PedrasDeAmolar pedrasAmolar;
     private Bebedouros bebedouros;
+    private br.rpgatributos.vida.Comedouros comedouros;
     private br.rpgatributos.pesca.CabanasPesca cabanasPesca;
     private br.rpgatributos.oficio.Oficios oficios;
     private br.rpgatributos.oficio.Ateliers ateliers;
@@ -235,6 +236,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Estruturas estruturas;
     private br.rpgatributos.mundo.Profundezas profundezas;
     private br.rpgatributos.domador.VisualDomador visualDomador;
+    private br.rpgatributos.domador.Lendarias lendarias;
     private br.rpgatributos.forja.NomeadasNoMundo nomeadas;
     private Ajuda ajuda;
 
@@ -358,6 +360,7 @@ public final class RPGAtributos extends JavaPlugin {
         bonecos = new BonecosTreino(this);
         pedrasAmolar = new PedrasDeAmolar(this);
         bebedouros = new Bebedouros(this);
+        comedouros = new br.rpgatributos.vida.Comedouros(this);
         cabanasPesca = new br.rpgatributos.pesca.CabanasPesca(this);
         oficios = new br.rpgatributos.oficio.Oficios(this);
         ateliers = new br.rpgatributos.oficio.Ateliers(this, oficios);
@@ -390,6 +393,7 @@ public final class RPGAtributos extends JavaPlugin {
         profundezas = new br.rpgatributos.mundo.Profundezas(this);
         profundezas.carregar();
         visualDomador = new br.rpgatributos.domador.VisualDomador(this);
+        lendarias = new br.rpgatributos.domador.Lendarias(this);
         nomeadas = new br.rpgatributos.forja.NomeadasNoMundo(this);
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
@@ -399,9 +403,9 @@ public final class RPGAtributos extends JavaPlugin {
                 classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, colonias.obras(), prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
                 estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), combos.posturas(), combos.ligacoes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista,
                 talentos, evolucao,
-                forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
+                forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, nomeadas, ajuda);
+                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -412,6 +416,7 @@ public final class RPGAtributos extends JavaPlugin {
         frascos.registrarReceitas();
         pacote.iniciar();
         companheiros.carregar();
+        lendarias.carregar();
         agricultura.registrarReceitas();
 
         Comandos comandos = new Comandos(this);
@@ -572,7 +577,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, talentos::tick, 40L, 40L);
         agenda.runTaskTimer(this, evolucao::tick, 40L, 40L);
         // Detalhes: forjados especiais, estações pequenas, natureza, túmulos e recordes.
-        for (Estacao e : List.of(fogueiras, bonecos, pedrasAmolar, bebedouros, cabanasPesca, ateliers, trofeus, mesasCartografo, canteiros, colmeias, barris, tachos)) {
+        for (Estacao e : List.of(fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, ateliers, trofeus, mesasCartografo, canteiros, colmeias, barris, tachos)) {
             e.iniciar();
             agenda.runTaskTimer(this, e::tick, 5L, 5L);
         }
@@ -593,7 +598,8 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, criacao::tick, 40L, 20L);
         agenda.runTaskTimer(this, estruturas::tick, 40L, 40L);
         agenda.runTaskTimer(this, profundezas::tick, 50L, 40L);
-        agenda.runTaskTimer(this, visualDomador::tick, 20L, 2L); // a cada 2 ticks (o display anda suave entre um e outro)
+        agenda.runTaskTimer(this, visualDomador::tick, 40L, 40L); // a cada 2 s: armadura e partículas
+        agenda.runTaskTimer(this, lendarias::tick, 45L, 40L); // a cada 2 s: ovos chocando e poderes das lendárias
         agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
@@ -637,6 +643,7 @@ public final class RPGAtributos extends JavaPlugin {
         if (arcano != null) arcano.parar();
         if (comportamento != null) comportamento.parar();
         if (companheiros != null) companheiros.desligar();
+        if (lendarias != null) lendarias.salvar();
         if (combos != null) combos.parar();
         if (pacote != null) pacote.parar();
         if (lapides != null) lapides.salvar();
@@ -649,7 +656,6 @@ public final class RPGAtributos extends JavaPlugin {
         if (criacao != null) criacao.salvar();
         if (estruturas != null) estruturas.salvar();
         if (profundezas != null) profundezas.parar();
-        if (visualDomador != null) visualDomador.parar();
         if (recordes != null) recordes.salvar();
         if (sombras != null) sombras.recolherTodas();
         if (torre != null) torre.encerrarTodas();
@@ -738,6 +744,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Marcos marcos() { return marcos; }
     public MenuTerritorio menusTerritorio() { return menusTerritorio; }
     public Companheiros companheiros() { return companheiros; }
+    public br.rpgatributos.domador.Lendarias lendarias() { return lendarias; }
     public AltaresDomador altaresDomador() { return altaresDomador; }
     public MenusDomador menusDomador() { return menusDomador; }
     public Masmorras masmorras() { return masmorras; }
@@ -795,6 +802,7 @@ public final class RPGAtributos extends JavaPlugin {
     public BonecosTreino bonecos() { return bonecos; }
     public PedrasDeAmolar pedrasAmolar() { return pedrasAmolar; }
     public Bebedouros bebedouros() { return bebedouros; }
+    public br.rpgatributos.vida.Comedouros comedouros() { return comedouros; }
     public br.rpgatributos.pesca.CabanasPesca cabanasPesca() { return cabanasPesca; }
     public br.rpgatributos.oficio.Oficios oficios() { return oficios; }
     public br.rpgatributos.oficio.Ateliers ateliers() { return ateliers; }
@@ -831,7 +839,7 @@ public final class RPGAtributos extends JavaPlugin {
         return forjas.eh(b) || arcano.infusores().eh(b) || altares.eh(b) || cozinha.eh(b) || reciclagem.eh(b) || marcos.eh(b)
                 || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b) || alquimia.eh(b) || prefeituras.eh(b) || obeliscos.eh(b)
                 || santuariosDivinos.eh(b) || transmutacao.eh(b) || mesasRunicas.eh(b)
-                || fogueiras.eh(b) || bonecos.eh(b) || pedrasAmolar.eh(b) || bebedouros.eh(b) || trofeus.eh(b) || mesasCartografo.eh(b)
+                || fogueiras.eh(b) || bonecos.eh(b) || pedrasAmolar.eh(b) || bebedouros.eh(b) || comedouros.eh(b) || trofeus.eh(b) || mesasCartografo.eh(b)
                 || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || tachos.eh(b) || cabanasPesca.eh(b) || ateliers.eh(b);
     }
 

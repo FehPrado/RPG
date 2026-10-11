@@ -165,7 +165,7 @@ public final class Comportamento implements Listener {
                 it.remove();
                 continue;
             }
-            Set<Componente> c = comp().componentes(e);
+            Set<Componente> c = comp().poderes(e);
             if (!c.contains(Componente.SELA) || controleNativo(e, p)) continue;
             guiar(e, p, c);
         }
@@ -206,6 +206,7 @@ public final class Comportamento implements Listener {
                 * (in.isSprint() ? 1.25 : 1);
         boolean naAgua = e.isInWater();
         if (naAgua) vel *= c.contains(Componente.MARE) ? 1.4 : 0.45;
+        else if (Lendaria.de(e) == Lendaria.XUANWU) vel *= 0.7; // a tartaruga é lenta em terra
         boolean voando = c.contains(Componente.ASAS) && !naAgua && (!e.isOnGround() || in.isJump());
         if (voando) vel *= 1.5;
         if (mov.lengthSquared() > 0) mov.normalize().multiply(vel);
@@ -220,8 +221,13 @@ public final class Comportamento implements Listener {
         } else {
             e.setGravity(true);
             y = e.getVelocity().getY();
-            if (in.isJump() && e.isOnGround()) y = 0.55;
+            if (in.isJump() && e.isOnGround()) y = Lendaria.de(e) == Lendaria.BAIHU ? 0.95 : 0.55; // o tigre pula longe
             else if (in.isJump() && naAgua) y = 0.2;
+            if (Lendarias.andaSobreLiquido(e)) {
+                // Qilin: anda por cima da água e da lava.
+                e.setGravity(false);
+                y = e.getLocation().add(0, 0.9, 0).getBlock().isLiquid() ? 0.25 : 0;
+            }
         }
         e.getPathfinder().stopPathfinding();
         e.setVelocity(new Vector(mov.getX(), y, mov.getZ()));
@@ -236,7 +242,7 @@ public final class Comportamento implements Listener {
         ciclo++;
         for (UUID id : new ArrayList<>(comp().ativos())) {
             if (!(Bukkit.getEntity(id) instanceof Mob e) || !e.isValid()) continue;
-            Set<Componente> c = comp().componentes(e);
+            Set<Componente> c = comp().poderes(e);
             Player montado = montador(e);
             if (montado != null) {
                 montado(e, montado, c);

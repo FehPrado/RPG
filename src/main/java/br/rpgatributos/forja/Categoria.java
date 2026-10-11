@@ -77,6 +77,8 @@ public enum Categoria {
     public static Categoria de(Material m) {
         if (m == null || m.isAir()) return null;
         if (m == Material.MACE) return MACA;
+        // O tridente não se fabrica: vira forjado pelo Reforjar (tridente + Fragmento de Forja na Forja).
+        if (m == Material.TRIDENT) return LANCA;
         if (m == Material.BOW) return ARCO;
         if (m == Material.CROSSBOW) return BESTA;
         if (m == Material.SHIELD) return ESCUDO;

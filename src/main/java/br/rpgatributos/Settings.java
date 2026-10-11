@@ -74,7 +74,8 @@ public final class Settings {
     public final int pacPorta;
 
     // progressão extra: talentos, renascer e evolução dos companheiros
-    public final boolean talAtivado, renAtivado, evoAtivada;
+    public final boolean talAtivado, renAtivado, evoAtivada, domaLendarias;
+    public final int domaLendariasMinutos;
     public final int talNiveisPorPonto, talCustoRefazer, renNivel, renMaximo, renPontosTalento;
     public final double renXp, renVida, renDano, renMana;
 
@@ -329,6 +330,8 @@ public final class Settings {
         renDano = Math.max(0, c.getDouble("renascer.dano-extra", 0.02));
         renMana = Math.max(0, c.getDouble("renascer.mana-extra", 10));
         evoAtivada = c.getBoolean("doma.evolucao-dos-companheiros", true);
+        domaLendarias = c.getBoolean("doma.lendarias.ativadas", true);
+        domaLendariasMinutos = Math.max(1, c.getInt("doma.lendarias.minutos-para-chocar", 10));
 
         detSentar = c.getBoolean("detalhes.sentar", true);
         golpesEmQualquerCriatura = c.getBoolean("combate.golpes-em-qualquer-criatura", true);

@@ -359,6 +359,10 @@ public final class PacoteRecursos implements Listener {
             if (n.categoria() == br.rpgatributos.forja.Categoria.VARA) {
                 f.put("assets/rpgatributos/models/item/" + v + "_cast_3d.json", texto(ArteNomeadas3D.modelo(n, true)));
             }
+            if (n.categoria() == br.rpgatributos.forja.Categoria.LANCA) {
+                f.put("assets/rpgatributos/models/item/" + v + ".json", texto(itemGerado("rpgatributos:item/" + v)));
+                continue; // lança e tridente não têm posturas
+            }
             for (String pg : List.of("ofensiva", "defensiva", "agil", "duelista", "carrasco", "colosso")) {
                 if (PEGADAS.containsKey(pg)) {
                     f.put("assets/rpgatributos/models/item/postura/" + v + "_3d_" + pg + ".json", texto(modeloPegada("rpgatributos:item/" + v + "_3d", pg)));
@@ -366,6 +370,13 @@ public final class PacoteRecursos implements Listener {
             }
         }
         // Arcos, bestas e varas com nome: modelos do jogo (mesma posição na mão), textura própria em cada fase.
+        // Lanças e tridente com nome: no inventário o desenho, na mão o 3D; sem nome, igual ao jogo.
+        for (Material m : Material.values()) {
+            if (m.isLegacy() || !m.isItem() || !m.name().endsWith("_SPEAR")) continue;
+            String vanilla = m.name().toLowerCase(java.util.Locale.ROOT);
+            f.put("assets/minecraft/items/" + vanilla + ".json", texto(lancas(false, LANCA_DO_JOGO.formatted(vanilla, vanilla), ", \"swap_animation_scale\": 1.95")));
+        }
+        f.put("assets/minecraft/items/trident.json", texto(lancas(true, TRIDENTE_DO_JOGO, "")));
         f.put("assets/minecraft/items/bow.json", texto(arcos()));
         f.put("assets/minecraft/items/crossbow.json", texto(bestas()));
         for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
@@ -433,6 +444,8 @@ public final class PacoteRecursos implements Listener {
         f.put("assets/rpgatributos/font/menus.json", texto(fonteMenus()));
         // Domador: armaduras próprias de cavalo e lobo e as peças 3D dos companheiros.
         f.putAll(br.rpgatributos.domador.VisualDomador.arquivosDoPacote());
+        // Modelos 3D das lendárias para quem tem os mods EMF + ETF (quem não tem vê a pele normal).
+        f.putAll(br.rpgatributos.domador.ModelosLendarios.arquivosDoPacote());
         // Trajes (armaduras com nome): a textura no corpo de quem veste.
         f.putAll(ArteTrajes.arquivosDoPacote());
 
@@ -465,7 +478,7 @@ public final class PacoteRecursos implements Listener {
     }
 
     /** Itens do jogo cujo modelo normal é o do bloco. */
-    private static final Map<String, String> BLOCOS = Map.of("lodestone", "minecraft:block/lodestone");
+    private static final Map<String, String> BLOCOS = Map.of("lodestone", "minecraft:block/lodestone", "dragon_egg", "minecraft:block/dragon_egg");
 
     private static void caso(Map<String, List<String>> casos, String vanilla, String id) {
         casos.computeIfAbsent(vanilla, k -> new java.util.ArrayList<>()).add(id);
@@ -543,12 +556,12 @@ public final class PacoteRecursos implements Listener {
      * {terceira pessoa: rot x,y,z, pos x,y,z; primeira pessoa: rot x,y,z, pos x,y,z}
      */
     private static final Map<String, double[]> PEGADAS = Map.of(
-            "ofensiva", new double[]{5, 5, -23, 1, 1.75, 2, 0, -90, 0, 1.13, 4.2, 1.13},
-            "defensiva", new double[]{-24.13, 26.67, 60.62, -2.5, 0.5, 2.5, 0, -150, 75, 0, 3.2, 0},
-            "agil", new double[]{-171.04, 19, 2.93, 0.25, -5, 1, 0, -90, -160, 1.13, 2.5, 1.13},
-            "duelista", new double[]{-142.19, -53.63, -87.98, 2.75, 0.25, -0.25, 0, -90, 80, 1.13, 3.6, 1.13},
-            "carrasco", new double[]{-32.5, 5, 1, 0, 0.25, 1, 0, -90, 15, 1.13, 4.4, 1.13},
-            "colosso", new double[]{15, 40, -141, 2.25, -3, -0.25, 0, -90, -30, 1.13, 4.0, 1.13});
+            "ofensiva", new double[]{102.55, 0.12, -29.97, 6, -2.75, 3, 0, -90, 0, 1.13, 4.2, 1.13},
+            "defensiva", new double[]{-111.92, 21.48, 171.27, -5, 1.75, 4, 0, -150, 75, 0, 3.2, 0},
+            "agil", new double[]{-170.87, 51.3, 30.23, 0.75, -8, 2.25, 0, -90, -160, 1.13, 2.5, 1.13},
+            "duelista", new double[]{144.56, -53.63, -87.98, 2.75, -1, -3.5, 0, -90, 80, 1.13, 3.6, 1.13},
+            "carrasco", new double[]{-8.4, 31.66, -157.95, -3, -8.5, 5.25, 0, -90, 15, 1.13, 4.4, 1.13},
+            "colosso", new double[]{117.99, 86.39, 111.12, 0, -8.25, 1.25, 0, -90, -30, 1.13, 4.0, 1.13});
 
     /** Tamanho da arma na mão em terceira pessoa (x, y, z) em cada postura. */
     private static final Map<String, double[]> ESCALAS_3P = Map.of(
@@ -606,6 +619,30 @@ public final class PacoteRecursos implements Listener {
                 + "\"entries\": [ { \"threshold\": 0.65, \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_1\" } }, "
                 + "{ \"threshold\": 0.9, \"model\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_2\" } } ], "
                 + "\"fallback\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "_pulling_0\" } } }";
+    }
+
+    /** A lança do jogo: o desenho pequeno no inventário, no chão e na moldura; o comprido na mão. */
+    private static final String LANCA_DO_JOGO = "{ \"type\": \"minecraft:select\", \"property\": \"minecraft:display_context\", \"cases\": [ "
+            + "{ \"when\": [ \"gui\", \"ground\", \"fixed\", \"on_shelf\" ], \"model\": { \"type\": \"minecraft:model\", \"model\": \"minecraft:item/%s\" } } ], "
+            + "\"fallback\": { \"type\": \"minecraft:model\", \"model\": \"minecraft:item/%s_in_hand\" } }";
+
+    /** O tridente do jogo: na mão ele é desenhado pelo próprio jogo (e muda ao preparar o arremesso). */
+    private static final String TRIDENTE_DO_JOGO = "{ \"type\": \"minecraft:select\", \"property\": \"minecraft:display_context\", \"cases\": [ "
+            + "{ \"when\": [ \"gui\", \"ground\", \"fixed\", \"on_shelf\" ], \"model\": { \"type\": \"minecraft:model\", \"model\": \"minecraft:item/trident\" } } ], "
+            + "\"fallback\": { \"type\": \"minecraft:condition\", \"property\": \"minecraft:using_item\", "
+            + "\"on_false\": { \"type\": \"minecraft:special\", \"base\": \"minecraft:item/trident_in_hand\", \"model\": { \"type\": \"minecraft:trident\" } }, "
+            + "\"on_true\": { \"type\": \"minecraft:special\", \"base\": \"minecraft:item/trident_throwing\", \"model\": { \"type\": \"minecraft:trident\" } }, "
+            + "\"transformation\": { \"left_rotation\": [0, 0, 0, 1], \"right_rotation\": [0, 0, 0, 1], \"scale\": [1, -1, -1], \"translation\": [0, 0, 0] } } }";
+
+    private static String lancas(boolean tridente, String doJogo, String extra) {
+        StringBuilder casos = new StringBuilder();
+        for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
+            if (n.categoria() != br.rpgatributos.forja.Categoria.LANCA || n.tridente() != tridente) continue;
+            casos.append(casos.isEmpty() ? "" : ", ").append("{ \"when\": \"rpgatributos:").append(n.visual()).append("\", \"model\": ")
+                    .append(contexto("rpgatributos:item/" + n.visual(), "rpgatributos:item/" + n.visual() + "_3d")).append(" }");
+        }
+        return "{ \"model\": { \"type\": \"minecraft:select\", \"property\": \"minecraft:custom_model_data\", \"cases\": [ " + casos
+                + " ], \"fallback\": " + doJogo + " }" + extra + " }";
     }
 
     private static String arcos() {

@@ -37,7 +37,7 @@ import java.util.UUID;
 /** Menus do domador: Altar (vincular e invocar), companheiro (ordens e componentes), /pets. */
 public final class MenusDomador implements Listener {
 
-    private enum Tipo { ALTAR, COMPANHEIRO, LISTA, COMPONENTES }
+    private enum Tipo { ALTAR, COMPANHEIRO, LISTA, COMPONENTES, LENDARIAS }
 
     private static final class Tela implements InventoryHolder {
         final Tipo tipo;
@@ -46,6 +46,7 @@ public final class MenusDomador implements Listener {
         UUID companheiro;
         final Map<Integer, UUID> entidades = new HashMap<>();
         final Map<Integer, Invocavel> invocaveis = new HashMap<>();
+        final Map<Integer, Lendaria> lendarias = new HashMap<>();
 
         Tela(Tipo tipo) { this.tipo = tipo; }
 
@@ -57,7 +58,9 @@ public final class MenusDomador implements Listener {
     private static final double RAIO_ALTAR = 10;
 
     // altar
-    private static final int A_INFO = 4, A_CRIATURAS = 9, A_INVOCAR = 18, A_FECHAR = 49;
+    private static final int A_INFO = 4, A_CRIATURAS = 9, A_INVOCAR = 18, A_FECHAR = 49, A_LENDARIAS = 51;
+    /** Os Guardiões numa bússola: Qilin no centro, Fenghuang ao sul, Longma a leste, Baihu a oeste, Xuanwu ao norte. */
+    private static final int[] L_SLOTS = {22, 31, 24, 20, 13};
     private static final int[] A_SLOTS_CRIATURAS = {10, 11, 12, 13, 14, 15, 16, 17};
     private static final int[] A_SLOTS_INVOCAR = {19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44};
     // companheiro
@@ -158,12 +161,21 @@ public final class MenusDomador implements Listener {
                     Component.text(invoc.nome(), liberado ? Companheiros.COR : NamedTextColor.DARK_GRAY, TextDecoration.BOLD), lore), liberado && temTudo));
             t.invocaveis.put(A_SLOTS_INVOCAR[k], invoc);
         }
+        if (cfg().domaLendarias) {
+            inv.setItem(A_LENDARIAS, brilhar(item(Material.DRAGON_EGG, Component.text("✦ Fusão Lendária", NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+                    Component.text("Funda dois companheiros no estágio III", NamedTextColor.GRAY),
+                    Component.text("num Ovo Lendário. Cada lendária é", NamedTextColor.GRAY),
+                    Component.text("única no servidor.", NamedTextColor.GRAY),
+                    Component.empty(),
+                    Component.text("» Clique para ver", NamedTextColor.YELLOW))), true));
+        }
         inv.setItem(A_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of()));
         preencher(inv);
     }
 
     private void clicarAltar(Player p, Tela t, int slot) {
         if (slot == A_FECHAR) { p.closeInventory(); return; }
+        if (slot == A_LENDARIAS && cfg().domaLendarias) { clique(p); abrirLendarias(p, t.altar); return; }
         if (!plugin.altaresDomador().eh(t.altar.getBlock())) {
             erro(p, "O Altar do Domador não existe mais.");
             p.closeInventory();
@@ -203,6 +215,78 @@ public final class MenusDomador implements Listener {
     //  Companheiro
     // =====================================================================
 
+    // ---------- Fusão Lendária ----------
+
+    private void abrirLendarias(Player p, Location altar) {
+        Tela t = new Tela(Tipo.LENDARIAS);
+        t.altar = altar;
+        t.inventario = Bukkit.createInventory(t, 54, Component.text("✦ Fusão Lendária"));
+        Inventory inv = t.inventario;
+        inv.setItem(4, item(Material.NETHER_STAR, Component.text("✦ Os Guardiões", NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+                Component.text("Traga até o altar os dois companheiros", NamedTextColor.GRAY),
+                Component.text("pedidos, os dois no estágio III, e os", NamedTextColor.GRAY),
+                Component.text("itens no inventário. Eles se fundem num", NamedTextColor.GRAY),
+                Component.text("Ovo Lendário, que choca no lugar certo.", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("Cada lendária é única no servidor.", NamedTextColor.YELLOW),
+                Component.text("Componentes e alforje dos dois caem no chão.", NamedTextColor.DARK_GRAY))));
+        Location centro = altar.clone().add(0.5, 1, 0.5);
+        Lendaria[] todas = Lendaria.values();
+        for (int k = 0; k < todas.length && k < L_SLOTS.length; k++) {
+            Lendaria l = todas[k];
+            Lendarias.Estado est = plugin.lendarias().estado(l);
+            boolean livre = est.fase == Lendarias.Fase.LIVRE;
+            LivingEntity[] dupla = livre ? plugin.lendarias().ingredientes(p, l, centro) : null;
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text("“" + l.historia() + "”", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, true));
+            lore.add(Component.empty());
+            for (String d : l.descricao()) lore.add(Component.text("• " + d, NamedTextColor.WHITE));
+            lore.add(Component.empty());
+            lore.add(Component.text("Fusão:", NamedTextColor.GOLD));
+            boolean temA = dupla != null, temTudo = temA;
+            lore.add(Component.text((temA ? " ✔ " : " ✖ ") + Companheiros.nomeTipo(l.base()) + " no estágio III (perto do altar)", temA ? NamedTextColor.GREEN : NamedTextColor.RED));
+            lore.add(Component.text((temA ? " ✔ " : " ✖ ") + Companheiros.nomeTipo(l.segunda()) + " no estágio III (perto do altar)", temA ? NamedTextColor.GREEN : NamedTextColor.RED));
+            for (Map.Entry<Object, Integer> en : l.itens().entrySet()) {
+                boolean tem = Lendarias.contar(p.getInventory(), en.getKey()) >= en.getValue();
+                temTudo &= tem;
+                NamedTextColor c = tem ? NamedTextColor.GREEN : NamedTextColor.RED;
+                Component nomeItem = en.getKey() instanceof br.rpgatributos.aventura.Raro r ? Component.text(r.nome(), c)
+                        : Component.translatable(((Material) en.getKey()).translationKey(), c);
+                lore.add(Component.text((tem ? " ✔ " : " ✖ ") + en.getValue() + "x ", c).append(nomeItem));
+            }
+            lore.add(Component.text(l.chocar(), NamedTextColor.DARK_GRAY));
+            lore.add(Component.empty());
+            if (!livre) lore.add(Component.text(plugin.lendarias().situacao(l) + ".", NamedTextColor.YELLOW));
+            else if (temTudo) lore.add(Component.text("» Clique para fundir", NamedTextColor.YELLOW));
+            else lore.add(Component.text("Ainda falta algo.", NamedTextColor.DARK_GRAY));
+            ItemStack icone = plugin.lendarias().ovo(l, 0, 0);
+            boolean brilha = livre && temTudo;
+            icone.editMeta(m -> {
+                m.itemName(Component.text(l.nome() + " " + l.hanzi(), net.kyori.adventure.text.format.TextColor.color(l.cor()), TextDecoration.BOLD));
+                m.lore(lore.stream().map(c -> c.decoration(TextDecoration.ITALIC, c.hasDecoration(TextDecoration.ITALIC))).toList());
+                m.setEnchantmentGlintOverride(brilha);
+                m.addItemFlags(ItemFlag.values());
+            });
+            inv.setItem(L_SLOTS[k], icone);
+            t.lendarias.put(L_SLOTS[k], l);
+        }
+        inv.setItem(49, item(Material.ARROW, Component.text("« Altar", NamedTextColor.YELLOW), List.of()));
+        preencher(inv);
+        p.openInventory(inv);
+    }
+
+    private void clicarLendarias(Player p, Tela t, int slot) {
+        if (slot == 49) { clique(p); abrirAltar(p, t.altar); return; }
+        Lendaria l = t.lendarias.get(slot);
+        if (l == null) return;
+        if (!plugin.altaresDomador().eh(t.altar.getBlock())) {
+            erro(p, "O Altar do Domador não existe mais.");
+            p.closeInventory();
+            return;
+        }
+        if (resultado(p, plugin.lendarias().fundir(p, l, t.altar))) p.closeInventory();
+    }
+
     public void abrirCompanheiro(Player p, LivingEntity e) {
         Tela t = new Tela(Tipo.COMPANHEIRO);
         t.companheiro = e.getUniqueId();
@@ -238,6 +322,12 @@ public final class MenusDomador implements Listener {
         if (!comps.isEmpty()) {
             info.add(Component.empty());
             for (Componente c : comps) info.add(Component.text(" ✦ " + c.nome(), Companheiros.COR));
+        }
+        Lendaria lend = Lendaria.de(e);
+        if (lend != null) {
+            info.add(Component.empty());
+            info.add(Component.text("✦ Lendária: " + lend.nome() + " " + lend.hanzi(), net.kyori.adventure.text.format.TextColor.color(lend.cor()), TextDecoration.BOLD));
+            for (String d : lend.descricao()) info.add(Component.text(" • " + d, NamedTextColor.WHITE));
         }
         info.add(Component.empty());
         info.add(Component.text("Para mudar o nome, use uma etiqueta de nome.", NamedTextColor.DARK_GRAY));
@@ -393,9 +483,11 @@ public final class MenusDomador implements Listener {
         int nivel = nivel(p);
         int precisa = c.nivelNecessario(cfg().nivelMaximo);
         if (nivel < precisa) return "Precisa de Doma nível " + precisa + " para " + c.nome() + ".";
+        Lendaria lend = Lendaria.de(e);
+        if (lend != null && lend.poderes().contains(c)) return Companheiros.nome(e) + " já nasceu com " + c.nome() + ".";
         Set<Componente> comps = comp().componentes(e);
         if (comps.contains(c)) return "Ele já tem " + c.nome() + ".";
-        if (c.precisa() != null && !comps.contains(c.precisa())) return c.nome() + " precisa de " + c.precisa().nome() + " antes.";
+        if (c.precisa() != null && !comp().poderes(e).contains(c.precisa())) return c.nome() + " precisa de " + c.precisa().nome() + " antes.";
         if (comps.size() >= comp().espacos(p)) return "Sem espaço: suba a Doma para colocar mais componentes.";
         comps.add(c);
         comp().gravarComponentes(e, comps);
@@ -540,6 +632,7 @@ public final class MenusDomador implements Listener {
             case ALTAR -> { if (noMenu) clicarAltar(p, t, e.getSlot()); }
             case COMPANHEIRO -> clicarCompanheiro(p, t, e);
             case LISTA -> { if (noMenu) clicarLista(p, t, e); }
+            case LENDARIAS -> { if (noMenu) clicarLendarias(p, t, e.getSlot()); }
             case COMPONENTES -> {
                 if (noMenu && e.getSlot() == C_VOLTAR && Bukkit.getEntity(t.companheiro) instanceof LivingEntity le && le.isValid()) {
                     clique(p);
