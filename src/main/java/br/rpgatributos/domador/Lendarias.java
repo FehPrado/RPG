@@ -72,7 +72,8 @@ public final class Lendarias implements Listener {
     /** O dono precisa estar a essa distância do ovo pronto para ele chocar. */
     private static final double RAIO_DONO = 48;
 
-    public enum Fase { LIVRE, OVO, VIVA }
+    /** ERRANDO: a Besta Errante está solta no mundo agora (não é salva: some ao reiniciar). */
+    public enum Fase { LIVRE, OVO, VIVA, ERRANDO }
 
     /** Onde está cada lendária agora. */
     public static final class Estado {
@@ -121,6 +122,10 @@ public final class Lendarias implements Listener {
             }
             e.dono = uuid(s.getString("dono"));
             e.entidade = uuid(s.getString("entidade"));
+            if (e.fase == Fase.ERRANDO) { // a besta solta não é salva com o mundo
+                e.fase = Fase.LIVRE;
+                e.entidade = null;
+            }
             e.progresso = s.getInt("progresso");
             e.xp = s.getInt("xp");
             String ovo = s.getString("ovo");
@@ -169,7 +174,8 @@ public final class Lendarias implements Listener {
     public String situacao(Lendaria l) {
         Estado e = estados.get(l);
         return switch (e.fase) {
-            case LIVRE -> "Ainda não existe no mundo";
+            case LIVRE -> l.errante() ? "Ninguém a viu por agora" : "Ainda não existe no mundo";
+            case ERRANDO -> "Vaga pelo mundo neste momento";
             case OVO -> "O ovo está com " + nomeJogador(e.dono);
             case VIVA -> "Vive com " + nomeJogador(e.dono);
         };
@@ -221,6 +227,7 @@ public final class Lendarias implements Listener {
     /** Funde os dois companheiros num Ovo Lendário. @return o motivo de não ter dado certo, ou null. */
     public String fundir(Player p, Lendaria l, Location altar) {
         if (!plugin.settings().domaLendarias) return "As montarias lendárias estão desligadas neste servidor.";
+        if (l.errante()) return "O " + l.nome() + " não nasce de fusão: ele vaga pelo mundo e é conquistado.";
         Estado est = estados.get(l);
         if (est.fase != Fase.LIVRE) return "Só existe um " + l.nome() + " no mundo. " + situacao(l) + ".";
         LivingEntity[] dupla = ingredientes(p, l, altar);
@@ -468,6 +475,7 @@ public final class Lendarias implements Listener {
                 long t = ovo.getWorld().getTime();
                 yield t > 12500 && t < 23500 && contarPerto(ovo, 2, 1, m -> m == Material.SAND || m == Material.RED_SAND) >= 6;
             }
+            case PIXIU, BAIZE, KUNPENG -> false; // Bestas Errantes não têm ovo
         };
     }
 
@@ -540,11 +548,7 @@ public final class Lendarias implements Listener {
         World w = onde.getWorld();
         LivingEntity e = (LivingEntity) w.spawnEntity(onde, l.base(), org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.CUSTOM, x -> {
             if (x instanceof org.bukkit.entity.Ageable a) a.setAdult();
-            if (x instanceof Horse h) {
-                h.setColor(l == Lendaria.FENGHUANG ? Horse.Color.CHESTNUT : l == Lendaria.LONGMA ? Horse.Color.GRAY : Horse.Color.WHITE);
-                h.setStyle(Horse.Style.NONE);
-            }
-            if (x instanceof org.bukkit.entity.Wolf lobo) lobo.setVariant(org.bukkit.entity.Wolf.Variant.SNOWY);
+            preparar(l, x);
             x.getPersistentDataContainer().set(Lendaria.CHAVE, PersistentDataType.STRING, l.name());
             if (est.xp > 0) x.getPersistentDataContainer().set(Evolucao.K_XP, PersistentDataType.INTEGER, est.xp);
             x.customName(Component.text(l.nome() + " " + l.hanzi(), TextColor.color(l.cor()), TextDecoration.BOLD));
@@ -559,6 +563,19 @@ public final class Lendarias implements Listener {
         est.progresso = 0;
         est.xp = 0;
         salvar();
+        if (l.errante()) {
+            w.spawnParticle(Particle.END_ROD, onde, 80, 1.2, 1.2, 1.2, 0.06);
+            w.spawnParticle(Particle.TOTEM_OF_UNDYING, onde, 60, 1, 1, 1, 0.3);
+            w.playSound(onde, Sound.ENTITY_ENDER_DRAGON_GROWL, 0.5f, 1.6f);
+            w.playSound(onde, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
+            TextColor cor = TextColor.color(l.cor());
+            plugin.getServer().broadcast(Component.text("✦ " + dono.getName() + " conquistou o " + l.nome() + " " + l.hanzi() + "! ", cor, TextDecoration.BOLD)
+                    .append(Component.text("A besta errante agora caminha ao lado dele.", cor).decoration(TextDecoration.BOLD, false)));
+            for (String linha : l.descricao()) dono.sendMessage(Component.text("  • " + linha, NamedTextColor.GRAY));
+            plugin.diario().marco(dono, "lendaria_" + l.id(), "Conquistou o " + l.nome());
+            plugin.titulos().registrar(dono, "besta_errante", 1);
+            return e;
+        }
         if (l == Lendaria.FENGHUANG) {
             w.spawnParticle(Particle.FLAME, onde, 120, 0.8, 1, 0.8, 0.15);
             w.spawnParticle(Particle.LAVA, onde, 20, 0.6, 0.6, 0.6, 0);
@@ -578,6 +595,23 @@ public final class Lendarias implements Listener {
         return e;
     }
 
+    /** Cor, pelagem e arreio de cada lendária (vale para a nascida e para a besta solta no mundo). */
+    static void preparar(Lendaria l, Entity x) {
+        if (x instanceof org.bukkit.entity.Ageable a) a.setAdult();
+        if (x instanceof Horse h) {
+            h.setColor(l == Lendaria.FENGHUANG ? Horse.Color.CHESTNUT : l == Lendaria.LONGMA ? Horse.Color.GRAY : Horse.Color.WHITE);
+            h.setStyle(Horse.Style.NONE);
+        }
+        if (x instanceof org.bukkit.entity.Wolf lobo) {
+            lobo.setVariant(l == Lendaria.PIXIU ? org.bukkit.entity.Wolf.Variant.RUSTY : org.bukkit.entity.Wolf.Variant.SNOWY);
+        }
+        // Kunpeng: o arreio do jogo deixa montar e guiar (até quatro pessoas).
+        if (l == Lendaria.KUNPENG && x instanceof LivingEntity le && le.getEquipment() != null) {
+            le.getEquipment().setItem(org.bukkit.inventory.EquipmentSlot.BODY, new ItemStack(Material.LIGHT_BLUE_HARNESS));
+            le.getEquipment().setDropChance(org.bukkit.inventory.EquipmentSlot.BODY, 0f);
+        }
+    }
+
     // =====================================================================
     //  Morte, liberdade e poderes
     // =====================================================================
@@ -588,6 +622,12 @@ public final class Lendarias implements Listener {
         if (l == null) return;
         Estado est = estados.get(l);
         if (!e.getEntity().getUniqueId().equals(est.entidade)) return;
+        if (est.fase == Fase.ERRANDO) { // a besta solta não morre de verdade: só some
+            e.getDrops().clear();
+            estados.put(l, new Estado());
+            salvar();
+            return;
+        }
         TextColor cor = TextColor.color(l.cor());
         Location onde = e.getEntity().getLocation();
         if (l == Lendaria.FENGHUANG) {
@@ -605,7 +645,9 @@ public final class Lendarias implements Listener {
             est.fase = Fase.LIVRE;
             est.dono = null;
             est.entidade = null;
-            plugin.getServer().broadcast(Component.text("☠ O " + l.nome() + " morreu. Ele só volta com uma nova fusão no Altar do Domador.", cor));
+            plugin.getServer().broadcast(Component.text(l.errante()
+                    ? "☠ O " + l.nome() + " caiu. Um dia ele volta a vagar pelo mundo, à espera de quem o conquiste de novo."
+                    : "☠ O " + l.nome() + " morreu. Ele só volta com uma nova fusão no Altar do Domador.", cor));
         }
         salvar();
     }
@@ -630,7 +672,7 @@ public final class Lendarias implements Listener {
     public void reiniciar(Lendaria l) {
         Estado est = estados.get(l);
         if (est.entidade != null && Bukkit.getEntity(est.entidade) instanceof LivingEntity e) {
-            comp().libertar(e);
+            if (est.fase != Fase.ERRANDO) comp().libertar(e);
             e.remove();
         }
         if (est.ovo != null && est.ovo.isChunkLoaded() && est.ovo.getBlock().getType() == Material.DRAGON_EGG) est.ovo.getBlock().setType(Material.AIR);
@@ -716,8 +758,37 @@ public final class Lendarias implements Listener {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 60, 0, true, false, true));
                 }
             }
+            case PIXIU -> {
+                // Moedas caindo de vez em quando; a Fortuna fica no BestasErrantes (ao quebrar minério).
+                if (ciclo % 3 == 0) w.spawnParticle(Particle.WAX_ON, pe.clone().add(0, 0.6, 0), 6, 0.4, 0.3, 0.4, 0);
+            }
+            case BAIZE -> {
+                // Sabedoria: monstros perto do dono ficam marcados; o dono vê a vida do que mira.
+                if (dono == null || !dono.getWorld().equals(w) || dono.getLocation().distanceSquared(pe) > 48 * 48) return;
+                for (LivingEntity m : w.getNearbyLivingEntities(dono.getLocation(), 24)) {
+                    if (!(m instanceof org.bukkit.entity.Enemy) || Companheiros.eh(m)) continue;
+                    m.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 50, 0, true, false, false));
+                }
+                if (dono.getTargetEntity(24) instanceof LivingEntity alvo && alvo instanceof org.bukkit.entity.Enemy) {
+                    var max = alvo.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+                    dono.sendActionBar(Component.text("👁 ", TextColor.color(l.cor())).append(alvo.customName() != null ? alvo.customName()
+                            : Component.translatable(alvo.getType().translationKey())).append(Component.text(String.format(java.util.Locale.ROOT,
+                            "  ❤ %.0f/%.0f", alvo.getHealth(), max == null ? alvo.getHealth() : max.getValue()), NamedTextColor.RED)));
+                }
+            }
+            case KUNPENG -> {
+                // Vento: voa mais rápido que um ghast feliz comum.
+                var voo = e.getAttribute(org.bukkit.attribute.Attribute.FLYING_SPEED);
+                if (voo != null && voo.getModifier(K_VENTO) == null) {
+                    voo.addModifier(new org.bukkit.attribute.AttributeModifier(K_VENTO, 0.6,
+                            org.bukkit.attribute.AttributeModifier.Operation.ADD_SCALAR, org.bukkit.inventory.EquipmentSlotGroup.ANY));
+                }
+                if (!e.getPassengers().isEmpty()) w.spawnParticle(Particle.CLOUD, pe.clone().add(0, 0.5, 0), 6, 1.5, 0.3, 1.5, 0.01);
+            }
         }
     }
+
+    private static final NamespacedKey K_VENTO = new NamespacedKey("rpgatributos", "kunpeng_vento");
 
     private static Particle particulaDoOvo(Lendaria l) {
         return switch (l) {
@@ -726,6 +797,9 @@ public final class Lendarias implements Listener {
             case LONGMA -> Particle.SPLASH;
             case BAIHU -> Particle.SNOWFLAKE;
             case XUANWU -> Particle.SQUID_INK;
+            case PIXIU -> Particle.WAX_ON;
+            case BAIZE -> Particle.ENCHANT;
+            case KUNPENG -> Particle.CLOUD;
         };
     }
 

@@ -61,6 +61,8 @@ public final class MenusDomador implements Listener {
     private static final int A_INFO = 4, A_CRIATURAS = 9, A_INVOCAR = 18, A_FECHAR = 49, A_LENDARIAS = 51;
     /** Os Guardiões numa bússola: Qilin no centro, Fenghuang ao sul, Longma a leste, Baihu a oeste, Xuanwu ao norte. */
     private static final int[] L_SLOTS = {22, 31, 24, 20, 13};
+    /** As Bestas Errantes ficam embaixo da bússola (só para ler: não há fusão). */
+    private static final int[] E_SLOTS = {38, 40, 42};
     private static final int[] A_SLOTS_CRIATURAS = {10, 11, 12, 13, 14, 15, 16, 17};
     private static final int[] A_SLOTS_INVOCAR = {19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44};
     // companheiro
@@ -229,9 +231,16 @@ public final class MenusDomador implements Listener {
                 Component.text("Ovo Lendário, que choca no lugar certo.", NamedTextColor.GRAY),
                 Component.empty(),
                 Component.text("Cada lendária é única no servidor.", NamedTextColor.YELLOW),
-                Component.text("Componentes e alforje dos dois caem no chão.", NamedTextColor.DARK_GRAY))));
+                Component.text("Componentes e alforje dos dois caem no chão.", NamedTextColor.DARK_GRAY),
+                Component.empty(),
+                Component.text("Embaixo, as Bestas Errantes: não nascem", NamedTextColor.DARK_AQUA),
+                Component.text("de fusão; vagam pelo mundo e são conquistadas.", NamedTextColor.DARK_AQUA))));
         Location centro = altar.clone().add(0.5, 1, 0.5);
-        Lendaria[] todas = Lendaria.values();
+        Lendaria[] todas = java.util.Arrays.stream(Lendaria.values()).filter(x -> !x.errante()).toArray(Lendaria[]::new);
+        int e = 0;
+        for (Lendaria l : Lendaria.values()) {
+            if (l.errante() && e < E_SLOTS.length) inv.setItem(E_SLOTS[e++], iconeErrante(l));
+        }
         for (int k = 0; k < todas.length && k < L_SLOTS.length; k++) {
             Lendaria l = todas[k];
             Lendarias.Estado est = plugin.lendarias().estado(l);
@@ -273,6 +282,26 @@ public final class MenusDomador implements Listener {
         inv.setItem(49, item(Material.ARROW, Component.text("« Altar", NamedTextColor.YELLOW), List.of()));
         preencher(inv);
         p.openInventory(inv);
+    }
+
+    /** Ícone de leitura de uma Besta Errante: história, por onde vaga, a prova e onde ela está agora. */
+    private ItemStack iconeErrante(Lendaria l) {
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text("Besta Errante", NamedTextColor.DARK_AQUA));
+        lore.add(Component.text("“" + l.historia() + "”", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, true));
+        lore.add(Component.empty());
+        for (String d : l.descricao()) lore.add(Component.text("• " + d, NamedTextColor.WHITE));
+        lore.add(Component.empty());
+        lore.add(Component.text("Onde vaga: ", NamedTextColor.GOLD).append(Component.text(l.onde(), NamedTextColor.GRAY)));
+        lore.add(Component.text("A prova: ", NamedTextColor.GOLD).append(Component.text(l.prova(), NamedTextColor.GRAY)));
+        lore.add(Component.empty());
+        lore.add(Component.text(plugin.lendarias().situacao(l) + ".", NamedTextColor.YELLOW));
+        Material m = switch (l) {
+            case PIXIU -> Material.GOLD_BLOCK;
+            case BAIZE -> Material.WRITABLE_BOOK;
+            default -> Material.SNOWBALL;
+        };
+        return item(m, Component.text(l.nome() + " " + l.hanzi(), net.kyori.adventure.text.format.TextColor.color(l.cor()), TextDecoration.BOLD), lore);
     }
 
     private void clicarLendarias(Player p, Tela t, int slot) {

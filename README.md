@@ -533,6 +533,31 @@ Os Guardiões ficam numa bússola no menu: Qilin no centro, Fenghuang ao sul, Lo
 
 **Modelos 3D com os mods EMF + ETF (opcional):** quem joga com **Entity Model Features** e **Entity Texture Features** (Fabric ou NeoForge) vê os **cinco Guardiões** com modelos próprios feitos no Blockbench: o **Qilin** de jade e ouro com chifres, o **Fenghuang** como uma ave de penas de fogo (bate as asas mais forte no ar), o **Longma** azul com chifres de dragão, o **Baihu** como um tigre branco listrado e o **Xuanwu** como uma tartaruga com uma serpente sobre o casco. Pernas, cabeça e cauda andam e olham junto com a criatura. Quem não tem os mods continua vendo a pele normal; o mesmo pacote serve para os dois. O modelo é escolhido pelo nome, por isso o nome de uma lendária não muda (etiqueta não funciona nela). A sela, a coleira e a pele não aparecem por cima do modelo.
 
+**Bestas Errantes:** três lendárias que não nascem de fusão. De vez em quando (a cada 5 minutos, 12% de chance para cada uma que esteja livre) uma delas aparece a uns 30 blocos de um jogador com **Doma 40%** do máximo, no lugar por onde ela vaga, e fica lá uns 15 minutos (`doma.lendarias.errantes`). Quem está perto recebe o aviso, sem coordenadas: é preciso procurar pelas partículas e pelo som. Solta, ela não se fere, não aceita laço, sela nem osso, e some se ninguém estiver perto ou quando o servidor reinicia. Quem cumprir a **prova** a conquista: ela vira companheira, única no servidor como os Guardiões. Se morrer, volta a vagar um dia.
+
+| Besta | Criatura | Onde vaga | A prova | Poderes |
+|---|---|---|---|---|
+| **Pixiu** 貔貅 | lobo dourado (1,3x) | Nas badlands, de dia, ou nas cavernas abaixo do y 0 | Alimentar com **64 lingotes de ouro** (bloco vale 9). Foge de quem chega de mãos vazias; se ele for embora, o ouro dado fica com ele | Garras, Alforje e Coletor de nascença; **Fortuna**: minério quebrado pelo dono a até 16 blocos rende em dobro (25%); pepita ou lingote cura ele |
+| **Baize** 白泽 | cavalo branco com olhos azuis pelo corpo | Florestas, taigas e campos, à noite, sem chuva | Responder a **3 perguntas** sobre o mundo (Guardiões, Profundezas, céu, criaturas). Errou: ele some na névoa e você espera 30 min | Montaria com Farol; **Sabedoria**: monstros perto do dono brilham através das paredes e o dono vê a vida do que mira |
+| **Kunpeng** 鲲鹏 | ghast feliz com arreio azul | Sobre o oceano ou perto das Ilhas do Céu (acima do y 140) | Dar **16 bolas de neve** e por fim **1 Fragmento Celeste** | Montaria voadora do jogo para até 4 pessoas (o arreio já vem), voa 60% mais rápido; quem desce no ar cai devagar |
+
+No menu da Fusão Lendária, as três aparecem embaixo da bússola, com a história, por onde vagam, a prova e onde estão agora. Conquistar uma dá o título **Domador de Lendas**.
+
+**Combate montado:** montado num companheiro, aperte **F** (sem agachar; agachar + F continua sendo a habilidade de classe) para o **golpe da montaria**. O dano cresce com a sua Doma (até o dobro) e só acerta monstros.
+
+| Montaria | Golpe | Recarga | O que faz |
+|---|---|---|---|
+| Qualquer uma (e o Pixiu) | Investida | 8 s | Dispara para a frente e derruba os monstros no caminho |
+| Qilin | Chama de Jade | 15 s | Cone de fogo verde à frente; você e a party perto se curam |
+| Fenghuang | Mergulho de Fogo | 15 s | No ar, mergulha e explode em fogo onde toca o chão; no chão, uma explosão menor |
+| Longma | Maremoto | 12 s | Uma onda em linha reta que arrasta os monstros e apaga o fogo da party |
+| Baihu | Bote do Tigre | 10 s | Salta sobre o monstro que você mira: dano alto e deixa lento |
+| Xuanwu | Casco Inabalável | 18 s | Empurra todos em volta; você e a party ganham Resistência II |
+| Baize | Olhar da Verdade | 12 s | Monstros à frente ficam visíveis (até invisíveis), marcados e fracos |
+| Kunpeng | Rajada do Céu | 12 s | Uma ventania que joga longe os monstros em volta |
+
+Correndo montado (com a tecla de correr), a montaria também **atropela** os monstros que encontra no caminho.
+
 - Componentes precisam do item **inteiro** (sem desgaste). Tirar devolve o item; se o companheiro morrer, componentes e alforje caem no chão.
 - A vida, a armadura e o dano dos companheiros crescem com a Doma do dono. Ninguém da party (nem outros jogadores, onde não há PvP) fere os seus companheiros.
 - `/pets` mostra todos, com vida, ordem e distância (ou a última posição, se estiverem longe). Shift + clique chama de volta (andando).
@@ -666,6 +691,7 @@ A colheita sai com qualidade ★ (pelo nível de Agricultura) e dá XP de Agricu
 - **Chuva de meteoros:** meteoritos caem pelo mundo; quebre para pegar minério, diamante e Fragmentos.
 - **Eclipse** (raro, ao meio-dia): fica escuro por 2,5 minutos; magias +30% e mais Elites.
 - **Aurora** (noites de inverno): mana extra para quem está ao ar livre.
+- **O Nian** 年 (noites de inverno, 25% por noite, `perigo.chance-nian-por-noite`): a fera do fim do ano desce das montanhas perto de alguém a céu aberto. Ele é enorme e bate forte, e **arma nenhuma o derruba** (só 20% do dano entra e ele nunca morre). Ele só **foge com medo**: fogos de artifício estourando perto dele (com ou sem estrela), fogo e lava, explosões e o som dos **chifres de cabra**. A barra mostra a coragem dele. Espantado, ele deixa 1 Essência Primordial, 2 blocos de ouro, 12 esmeraldas e 16 fogos; quem ajudou ganha o título **Espanta-Nian** e uma página no diário. Se amanhecer antes, ele volta sozinho para as montanhas.
 
 **Temperatura** (leve, dá para desligar no config):
 - **Frio:** na nevasca, em biomas gelados à noite e nas noites de inverno, ao ar livre. Dá lentidão. Protegem 2 peças de couro, uma fogueira ou fornalha perto, ou resistência ao fogo.
@@ -1306,7 +1332,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 92 títulos com requisitos (em páginas), por exemplo Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 94 títulos com requisitos (em páginas), por exemplo Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1479,7 +1505,8 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin estrutura <tipo>` | Constrói a estrutura à sua frente (pelo console: `<tipo> <mundo> <x> <z>`) |
 | `/rpgadmin estruturas` | Lista as estruturas mais perto de você |
 | `/rpgadmin nomeada <arma ou aleatoria> [raridade]` | Uma arma com nome já forjada (padrão: Épica) |
-| `/rpgadmin lendaria <qilin, fenghuang, longma, baihu ou xuanwu> <ovo, nascer, livre ou estado>` | Montarias lendárias: dá o ovo, faz nascer aqui, volta ao começo ou mostra onde está |
+| `/rpgadmin lendaria <qilin, fenghuang, longma, baihu, xuanwu, pixiu, baize ou kunpeng> <ovo, nascer, livre, estado ou aparecer>` | Lendárias: dá o ovo (Guardiões), faz nascer aqui como seu companheiro, volta ao começo, mostra onde está ou solta a Besta Errante aqui perto (para testar a prova) |
+| `/rpgadmin nian [estado ou embora]` | Faz o Nian descer aqui perto (ou mostra onde está, ou manda embora) |
 | `/rpgadmin traje <traje ou aleatorio> [capacete/peitoral/calca/botas/todas] [raridade]` | Peças de um Traje (armadura com nome) já forjadas |
 | `/rpgadmin raiz` | Planta uma Raiz de Luz no chão embaixo de você (precisa de 5 blocos de ar em cima) |
 | `/rpgadmin coracaopenumbra` | O Coração da Penumbra aparece à sua frente |
@@ -1494,9 +1521,9 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.41.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.42.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.41.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.41.0 && git push origin v2.41.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.42.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.42.0 && git push origin v2.42.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 
@@ -1518,7 +1545,7 @@ Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtri
 - As estações e a neve do inverno ficam em `estacoes.yml`. A estação conta a partir da data em que o plugin foi instalado.
 - As colônias ficam em `colonias.yml` (os moradores são aldeões salvos no próprio mundo).
 - Lendas, classes lendárias, Pedras de Viagem e Locais Ocultos ficam em `lendas.yml`, `classes_lendarias.yml`, `pedras.yml` e `locais.yml`. Para sortear novos Locais Ocultos, apague o `locais.yml` (os já construídos continuam no mundo como ruínas).
-- As montarias lendárias (quem tem cada uma, onde está o ovo e quanto já chocou) ficam em `lendarias.yml`. Para começar de novo, use `/rpgadmin lendaria <nome> livre`.
+- As lendárias (quem tem cada uma, onde está o ovo e quanto já chocou) ficam em `lendarias.yml`. As Bestas Errantes soltas não são salvas: ao reiniciar elas voltam a estar livres. Para começar de novo, use `/rpgadmin lendaria <nome> livre`.
 - O mundo `rpg_masmorras` é **apagado e recriado vazio** sempre que o servidor liga (as masmorras são temporárias). Não construa nada nele. O Cofre das Almas fica em `cofre.yml` e não se perde.
 - Se você já usa outro plugin de proteção (WorldGuard, GriefPrevention...), os dois funcionam juntos: basta um deles bloquear para a ação ser bloqueada.
 - A tag usa um time de scoreboard; se usar outro plugin de nametag (ex.: TAB), desative a parte de nametag de um deles.

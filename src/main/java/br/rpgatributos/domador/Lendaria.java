@@ -14,10 +14,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Montarias lendárias (os Guardiões). Cada uma é única no servidor: nasce de um Ovo Lendário,
- * que sai da fusão de dois companheiros no estágio III com itens raros no Altar do Domador, e
- * choca num lugar que combina com ela. Já nascem com alguns poderes (como componentes que não
- * ocupam espaço nem caem quando ela morre).
+ * As lendárias. Os Guardiões nascem de um Ovo Lendário, que sai da fusão de dois companheiros no
+ * estágio III com itens raros no Altar do Domador, e choca num lugar que combina com ele. As Bestas
+ * Errantes vagam pelo mundo e são conquistadas por uma prova (veja BestasErrantes). Todas são únicas
+ * no servidor e já nascem com alguns poderes (como componentes que não ocupam espaço nem caem
+ * quando ela morre).
  */
 public enum Lendaria {
     QILIN("Qilin", "麒麟", 0x7FD8A6, VisualDomador.Armadura.QILIN,
@@ -70,7 +71,36 @@ public enum Lendaria {
             new String[]{
                     "Uma tartaruga gigante: lenta em terra, rápida na água",
                     "Casco: muita armadura, quase não é empurrado, imune a fogo",
-                    "Escudo: você e a party perto recebem menos dano"});
+                    "Escudo: você e a party perto recebem menos dano"}),
+
+    // ---------------- Bestas Errantes: não nascem de fusão; vagam pelo mundo e são conquistadas ----------------
+    PIXIU("Pixiu", "貔貅", 0xE0B84A, VisualDomador.Armadura.PIXIU, EntityType.WOLF,
+            EnumSet.of(Componente.GARRAS, Componente.ALFORJE, Componente.COLETOR),
+            "A fera que devora ouro e nunca o devolve. Dizem que traz fortuna a quem a alimenta, e ruína a quem a engana.",
+            "Vaga pelas terras áridas (badlands), de dia, ou pelas cavernas fundas (abaixo do y 0).",
+            "Alimente-o com ouro: 64 lingotes (um bloco vale 9). Ele foge de quem chega de mãos vazias.",
+            new String[]{
+                    "Luta (Garras), carrega itens (Alforje) e recolhe o que cai (Coletor)",
+                    "Fortuna: minérios quebrados perto dele às vezes rendem em dobro",
+                    "Come ouro: pepita ou lingote na mão cura o Pixiu"}),
+    BAIZE("Baize", "白泽", 0xBFE3FF, VisualDomador.Armadura.BAIZE, EntityType.HORSE,
+            EnumSet.of(Componente.SELA, Componente.FAROL),
+            "A besta branca que fala a língua dos homens e conhece todas as criaturas do mundo. Só segue quem sabe responder.",
+            "Aparece nas florestas, taigas e campos, à noite e sem chuva.",
+            "Clique nele e responda a três perguntas sobre o mundo. Errou, ele some na névoa.",
+            new String[]{
+                    "Montaria que brilha (Farol): visão noturna a quem monta",
+                    "Sabedoria: os monstros perto do dono ficam marcados (brilham através das paredes)",
+                    "Conhece as criaturas: o dono vê a vida do monstro que mira"}),
+    KUNPENG("Kunpeng", "鲲鹏", 0x5FB8E6, null, EntityType.HAPPY_GHAST,
+            EnumSet.of(Componente.MARE),
+            "Era um peixe tão grande que ninguém via onde terminava; virou um pássaro cujas asas cobrem o céu.",
+            "Paira sobre o oceano ou perto das Ilhas do Céu (acima do y 140).",
+            "Dê a ele 16 bolas de neve e, por fim, um Fragmento Celeste.",
+            new String[]{
+                    "Uma montaria do céu para até quatro pessoas (com o arreio do jogo)",
+                    "Vento: voa 60% mais rápido que um ghast feliz comum",
+                    "Quem desce dele no ar cai devagar"});
 
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "lendaria");
 
@@ -82,6 +112,8 @@ public enum Lendaria {
     private final Set<Componente> poderes;
     private final String historia, chocar;
     private final String[] descricao;
+    /** Só das Bestas Errantes: a prova para conquistá-la (null nos Guardiões). */
+    private final String prova;
 
     Lendaria(String nome, String hanzi, int cor, VisualDomador.Armadura pele, EntityType base, EntityType segunda, Object[] itens,
              Set<Componente> poderes, String historia, String chocar, String[] descricao) {
@@ -96,7 +128,30 @@ public enum Lendaria {
         this.historia = historia;
         this.chocar = chocar;
         this.descricao = descricao;
+        this.prova = null;
     }
+
+    /** Besta Errante: "onde" é por onde ela vaga; "prova" é como conquistá-la. */
+    Lendaria(String nome, String hanzi, int cor, VisualDomador.Armadura pele, EntityType base, Set<Componente> poderes,
+             String historia, String onde, String prova, String[] descricao) {
+        this.nome = nome;
+        this.hanzi = hanzi;
+        this.cor = cor;
+        this.pele = pele;
+        this.base = base;
+        this.segunda = null;
+        this.poderes = poderes;
+        this.historia = historia;
+        this.chocar = onde;
+        this.descricao = descricao;
+        this.prova = prova;
+    }
+
+    /** Besta Errante (vaga pelo mundo e é conquistada) em vez de Guardião (fusão e ovo). */
+    public boolean errante() { return prova != null; }
+    public String prova() { return prova; }
+    /** Por onde a Besta Errante vaga (o mesmo texto do "onde choca" dos Guardiões). */
+    public String onde() { return chocar; }
 
     public String nome() { return nome; }
     public String hanzi() { return hanzi; }
@@ -108,12 +163,13 @@ public enum Lendaria {
         return switch (this) {
             case BAIHU -> 0.6;
             case XUANWU -> 1.6;
+            case PIXIU -> 0.3;
             default -> 0;
         };
     }
     /** A criatura que ela é (e o primeiro companheiro da fusão). */
     public EntityType base() { return base; }
-    /** O segundo companheiro da fusão. */
+    /** O segundo companheiro da fusão (null nas Bestas Errantes). */
     public EntityType segunda() { return segunda; }
     /** Itens da fusão: Raro ou Material → quantidade. */
     public Map<Object, Integer> itens() { return itens; }

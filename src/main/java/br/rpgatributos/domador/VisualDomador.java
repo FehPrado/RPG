@@ -53,7 +53,7 @@ public final class VisualDomador implements Listener {
     enum Armadura {
         COURACA, NETHERITE, CHAMAS, MARE, CELESTE, SOMBRAS,
         /** Peles das lendárias: cobrem o cavalo inteiro (cabeça, crina, cauda e cascos). */
-        QILIN, FENGHUANG, LONGMA, BAIHU;
+        QILIN, FENGHUANG, LONGMA, BAIHU, PIXIU, BAIZE;
 
         boolean pele() { return ordinal() >= QILIN.ordinal(); }
 
@@ -110,6 +110,13 @@ public final class VisualDomador implements Listener {
             return;
         }
         if (a.id().equals(nossa)) return;
+        vestir(c, a);
+    }
+
+    /** Põe a armadura (ou pele) só de visual no corpo do cavalo ou do lobo. */
+    static void vestir(LivingEntity c, Armadura a) {
+        EntityEquipment eq = c.getEquipment();
+        if (eq == null) return;
         ItemStack i = new ItemStack(Material.PAPER);
         i.editMeta(m -> {
             EquippableComponent e = m.getEquippable();
@@ -140,7 +147,7 @@ public final class VisualDomador implements Listener {
             Map.entry(EntityType.CAMEL, Particle.WHITE_ASH),
             Map.entry(EntityType.IRON_GOLEM, Particle.CRIT));
 
-    private void particulas(LivingEntity c, Set<Componente> comps, int est) {
+    static void particulas(LivingEntity c, Set<Componente> comps, int est) {
         Location meio = c.getLocation().add(0, c.getHeight() * 0.6, 0);
         Lendaria lend = Lendaria.de(c);
         if (lend == Lendaria.QILIN) {
@@ -166,6 +173,21 @@ public final class VisualDomador implements Listener {
         if (lend == Lendaria.FENGHUANG) {
             c.getWorld().spawnParticle(Particle.FLAME, meio, 5, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0.01);
             c.getWorld().spawnParticle(Particle.DUST, meio, 3, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0xFFC107), 1.2f));
+            return;
+        }
+        if (lend == Lendaria.PIXIU) {
+            c.getWorld().spawnParticle(Particle.DUST, meio, 4, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0xFFD54F), 1.1f));
+            c.getWorld().spawnParticle(Particle.WAX_ON, meio, 1, c.getWidth() * 0.4, 0.3, c.getWidth() * 0.4, 0);
+            return;
+        }
+        if (lend == Lendaria.BAIZE) {
+            c.getWorld().spawnParticle(Particle.DUST, meio, 4, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0xBFE3FF), 1.2f));
+            c.getWorld().spawnParticle(Particle.ENCHANT, meio, 4, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0.3);
+            return;
+        }
+        if (lend == Lendaria.KUNPENG) {
+            c.getWorld().spawnParticle(Particle.CLOUD, meio, 3, c.getWidth() * 0.4, 0.3, c.getWidth() * 0.4, 0.01);
+            c.getWorld().spawnParticle(Particle.DUST, meio, 4, c.getWidth() * 0.4, 0.4, c.getWidth() * 0.4, 0, new Particle.DustOptions(Color.fromRGB(0x5FB8E6), 1.6f));
             return;
         }
         if (comps.contains(Componente.CHAMAS)) c.getWorld().spawnParticle(Particle.FLAME, meio, 4, c.getWidth() * 0.4, 0.3, c.getWidth() * 0.4, 0.01);
@@ -291,6 +313,8 @@ public final class VisualDomador implements Listener {
                     case FENGHUANG -> borda ? 0xFF7A1408 : r < 0.06 ? 0xFFFFEB3B : r < 0.4 ? 0xFFFF7043 : 0xFFD84315;
                     case LONGMA -> borda ? 0xFF0D3B66 : r < 0.4 ? 0xFF64B5F6 : 0xFF1E88E5;
                     case BAIHU -> borda ? 0xFF1B1B1B : r < 0.4 ? 0xFFFFFFFF : 0xFFE8E8E8;
+                    case PIXIU -> borda ? 0xFF6D4C00 : r < 0.06 ? 0xFFD32F2F : r < 0.4 ? 0xFFFFE082 : 0xFFE0B84A;
+                    case BAIZE -> borda ? 0xFF5C8DB8 : r < 0.06 ? 0xFF7FC8FF : r < 0.4 ? 0xFFFFFFFF : 0xFFEAF4FB;
                 };
                 im.setRGB(x, y, cor);
             }
@@ -403,6 +427,33 @@ public final class VisualDomador implements Listener {
                     int k = x * 2 + y;
                     boolean listra = p == Parte.CABECA ? (x + y * 2) % 9 == 0 : (k % 7 == 0 || k % 7 == 1);
                     yield listra ? 0xFF1E1E1E : r < 0.3 ? 0xFFFFFFFF : r < 0.6 ? 0xFFF2F2F2 : 0xFFE3E7EC;
+                }
+            };
+            case PIXIU -> switch (p) {
+                case OLHO_CLARO -> 0xFFFF5252;
+                case OLHO_ESCURO -> 0xFF3E2000;
+                case ESCURO -> 0xFF6D4C00;
+                case CASCO -> 0xFF8E1B1B;
+                // Juba e cauda vermelhas, como as fitas do Ano-Novo.
+                case CRINA, CAUDA, PONTA_CAUDA -> t > 0.9 ? 0xFFFFCDD2 : t > 0.55 ? 0xFFEF5350 : t > 0.25 ? 0xFFD32F2F : 0xFF8E1B1B;
+                default -> {
+                    // Escamas de ouro com moedas (anéis) de vez em quando.
+                    boolean moeda = (x % 6 == 2 && y % 5 == 2);
+                    yield moeda ? 0xFFFFF59D : escama(x, y, r, p == Parte.CABECA, 0xFFFFF8E1, 0xFF8D6E00, 0xFF9E7A00, 0xFFFFE082, 0xFFE0B84A, 0xFFF0C95A);
+                }
+            };
+            case BAIZE -> switch (p) {
+                case OLHO_CLARO -> 0xFF7FC8FF;
+                case OLHO_ESCURO -> 0xFF0D2A40;
+                case ESCURO -> 0xFF5C8DB8;
+                case CASCO_TOPO -> 0xFF5C8DB8;
+                case CASCO -> r < 0.3 ? 0xFFCFE8FF : 0xFF9CC7EA;
+                case CRINA, CAUDA, PONTA_CAUDA -> t > 0.9 ? 0xFFFFFFFF : t > 0.55 ? 0xFFE3F2FD : t > 0.25 ? 0xFFBFE3FF : 0xFF7FB2DA;
+                default -> {
+                    // Pelo branco com "olhos" azuis no corpo: o Baize tem olhos pelo flanco.
+                    boolean olho = p == Parte.CORPO && (x % 10 == 4 || x % 10 == 5) && (y % 7 == 3);
+                    boolean contorno = p == Parte.CORPO && !olho && (x % 10 >= 3 && x % 10 <= 6) && (y % 7 >= 2 && y % 7 <= 4);
+                    yield olho ? 0xFF1E88E5 : contorno ? 0xFF9CC7EA : r < 0.3 ? 0xFFFFFFFF : r < 0.6 ? 0xFFF4F9FD : 0xFFE6F0F8;
                 }
             };
             default -> 0xFFFFFFFF;

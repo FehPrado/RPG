@@ -129,6 +129,7 @@ perigo:
   chance-ninho: 0.12                  # a cada 10 min, chance de surgir um Ninho de monstros perto de cada jogador
   ninhos-no-maximo: 8
   chance-horda-por-noite: 0.2         # chance de uma colônia ser atacada numa noite (com alguém dela por perto)
+  chance-nian-por-noite: 0.25         # no inverno: chance por noite de o Nian aparecer perto de alguém (espante com fogos, fogo e chifres de cabra)
   chefes-mundiais-por-semana: 2
   chefe-mundial-minimo-de-jogadores: 2  # só aparece com pelo menos esse tanto de gente online
 
@@ -333,9 +334,13 @@ doma:
   companheiros-no-maximo: 5           # 1 companheiro no nível 0, até 5 no máximo
   componentes-no-maximo: 6            # 1 componente por criatura no nível 0, até 6 no máximo
   evolucao-dos-companheiros: true     # companheiros sobem de nível lutando e evoluem no 10 e no 25
-  lendarias:                          # montarias lendárias (Qilin, Fenghuang, Longma, Baihu, Xuanwu): fusão no Altar do Domador, ovo e criatura única
+  lendarias:                          # lendárias únicas: Guardiões (Qilin, Fenghuang, Longma, Baihu, Xuanwu: fusão e ovo) e Bestas Errantes
     ativadas: true
     minutos-para-chocar: 10           # tempo do ovo no lugar certo (flores para o Qilin, fogo para o Fenghuang)
+    errantes:                         # Bestas Errantes (Pixiu, Baize, Kunpeng): vagam pelo mundo e são conquistadas
+      chance: 0.12                    # a cada 5 min, chance de cada besta livre aparecer perto de alguém no lugar certo
+      minutos-no-mundo: 15            # quanto tempo ela fica antes de sumir de novo
+      doma-minima: 0.4                # fração do nível máximo de Doma para ela aparecer perto do jogador
 
 # ==========================================================
 #  Classes

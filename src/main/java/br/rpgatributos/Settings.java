@@ -38,7 +38,7 @@ public final class Settings {
     public final java.time.DayOfWeek gueDia;
 
     // mundo perigoso
-    public final double perEliteChance, perEliteChanceSemana, perAumentoSemana, perAumentoMax, perNinhoChance, perHordaChance;
+    public final double perEliteChance, perEliteChanceSemana, perAumentoSemana, perAumentoMax, perNinhoChance, perHordaChance, perNianChance;
     public final int perNinhoMax, perChefePorSemana, perChefeMinJogadores;
 
     // mundo vivo
@@ -75,7 +75,8 @@ public final class Settings {
 
     // progressão extra: talentos, renascer e evolução dos companheiros
     public final boolean talAtivado, renAtivado, evoAtivada, domaLendarias;
-    public final int domaLendariasMinutos;
+    public final int domaLendariasMinutos, domaErrantesMinutos;
+    public final double domaErrantesChance, domaErrantesDoma;
     public final int talNiveisPorPonto, talCustoRefazer, renNivel, renMaximo, renPontosTalento;
     public final double renXp, renVida, renDano, renMana;
 
@@ -261,6 +262,7 @@ public final class Settings {
         perNinhoChance = c.getDouble("perigo.chance-ninho", 0.12);
         perNinhoMax = Math.max(0, c.getInt("perigo.ninhos-no-maximo", 8));
         perHordaChance = c.getDouble("perigo.chance-horda-por-noite", 0.2);
+        perNianChance = Math.max(0, c.getDouble("perigo.chance-nian-por-noite", 0.25));
         perChefePorSemana = Math.max(0, c.getInt("perigo.chefes-mundiais-por-semana", 2));
         perChefeMinJogadores = Math.max(1, c.getInt("perigo.chefe-mundial-minimo-de-jogadores", 2));
 
@@ -332,6 +334,9 @@ public final class Settings {
         evoAtivada = c.getBoolean("doma.evolucao-dos-companheiros", true);
         domaLendarias = c.getBoolean("doma.lendarias.ativadas", true);
         domaLendariasMinutos = Math.max(1, c.getInt("doma.lendarias.minutos-para-chocar", 10));
+        domaErrantesChance = Math.max(0, c.getDouble("doma.lendarias.errantes.chance", 0.12));
+        domaErrantesMinutos = Math.max(1, c.getInt("doma.lendarias.errantes.minutos-no-mundo", 15));
+        domaErrantesDoma = Math.max(0, Math.min(1, c.getDouble("doma.lendarias.errantes.doma-minima", 0.4)));
 
         detSentar = c.getBoolean("detalhes.sentar", true);
         golpesEmQualquerCriatura = c.getBoolean("combate.golpes-em-qualquer-criatura", true);

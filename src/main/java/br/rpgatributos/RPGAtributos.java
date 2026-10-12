@@ -237,6 +237,9 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.mundo.Profundezas profundezas;
     private br.rpgatributos.domador.VisualDomador visualDomador;
     private br.rpgatributos.domador.Lendarias lendarias;
+    private br.rpgatributos.domador.BestasErrantes bestas;
+    private br.rpgatributos.mundo.Nian nian;
+    private br.rpgatributos.domador.CombateMontado combateMontado;
     private br.rpgatributos.forja.NomeadasNoMundo nomeadas;
     private Ajuda ajuda;
 
@@ -394,6 +397,9 @@ public final class RPGAtributos extends JavaPlugin {
         profundezas.carregar();
         visualDomador = new br.rpgatributos.domador.VisualDomador(this);
         lendarias = new br.rpgatributos.domador.Lendarias(this);
+        bestas = new br.rpgatributos.domador.BestasErrantes(this);
+        nian = new br.rpgatributos.mundo.Nian(this);
+        combateMontado = new br.rpgatributos.domador.CombateMontado(this);
         nomeadas = new br.rpgatributos.forja.NomeadasNoMundo(this);
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
@@ -405,7 +411,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, nomeadas, ajuda);
+                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -600,6 +606,9 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, profundezas::tick, 50L, 40L);
         agenda.runTaskTimer(this, visualDomador::tick, 40L, 40L); // a cada 2 s: armadura e partículas
         agenda.runTaskTimer(this, lendarias::tick, 45L, 40L); // a cada 2 s: ovos chocando e poderes das lendárias
+        agenda.runTaskTimer(this, bestas::tick, 47L, 40L); // a cada 2 s: Bestas Errantes vagando (e, de 5 em 5 min, aparecendo)
+        agenda.runTaskTimer(this, nian::tick, 49L, 40L); // a cada 2 s: o Nian (noites de inverno)
+        agenda.runTaskTimer(this, combateMontado::tick, 20L, 1L); // a cada tick: golpes da montaria em curso e atropelar
         agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
@@ -644,6 +653,7 @@ public final class RPGAtributos extends JavaPlugin {
         if (comportamento != null) comportamento.parar();
         if (companheiros != null) companheiros.desligar();
         if (lendarias != null) lendarias.salvar();
+        if (nian != null) nian.parar();
         if (combos != null) combos.parar();
         if (pacote != null) pacote.parar();
         if (lapides != null) lapides.salvar();
@@ -745,6 +755,9 @@ public final class RPGAtributos extends JavaPlugin {
     public MenuTerritorio menusTerritorio() { return menusTerritorio; }
     public Companheiros companheiros() { return companheiros; }
     public br.rpgatributos.domador.Lendarias lendarias() { return lendarias; }
+    public br.rpgatributos.domador.BestasErrantes bestas() { return bestas; }
+    public br.rpgatributos.mundo.Nian nian() { return nian; }
+    public br.rpgatributos.domador.CombateMontado combateMontado() { return combateMontado; }
     public AltaresDomador altaresDomador() { return altaresDomador; }
     public MenusDomador menusDomador() { return menusDomador; }
     public Masmorras masmorras() { return masmorras; }

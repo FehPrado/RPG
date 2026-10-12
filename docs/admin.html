@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.39</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.42</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.39.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.42.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -309,6 +309,10 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>doma.evolucao-dos-companheiros</code></td><td>true</td><td>Companheiros sobem de nível e evoluem no 10 e no 25</td></tr>
         <tr><td><code>doma.lendarias.ativadas</code></td><td>true</td><td>Montarias lendárias (os 5 Guardiões): fusão no Altar, ovo e criatura única (2.38)</td></tr>
         <tr><td><code>doma.lendarias.minutos-para-chocar</code></td><td>10</td><td>Tempo do ovo no lugar certo</td></tr>
+        <tr><td><code>doma.lendarias.errantes.chance</code></td><td>0.12</td><td>Bestas Errantes (2.42): a cada 5 min, chance de cada besta livre aparecer perto de alguém no lugar certo</td></tr>
+        <tr><td><code>doma.lendarias.errantes.minutos-no-mundo</code></td><td>15</td><td>Quanto tempo ela fica antes de sumir</td></tr>
+        <tr><td><code>doma.lendarias.errantes.doma-minima</code></td><td>0.4</td><td>Fração do nível máximo de Doma para ela aparecer perto do jogador</td></tr>
+        <tr><td><code>perigo.chance-nian-por-noite</code></td><td>0.25</td><td>O Nian (2.42): chance por noite de inverno</td></tr>
       </tbody></table></div>
     </div>
     <div class="card"><h3>Detalhes (2.20)</h3>
@@ -555,7 +559,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin muda|fruta &lt;fruta&gt; [qtd]</span></td><td>Mudas e frutas do pomar</td></tr>
       <tr><td><span class="cmd">/rpgadmin estrutura &lt;tipo&gt;</span></td><td>Constrói a estrutura à sua frente (console: &lt;tipo&gt; &lt;mundo&gt; &lt;x&gt; &lt;z&gt;)</td></tr>
       <tr><td><span class="cmd">/rpgadmin nomeada &lt;arma|aleatoria&gt; [raridade]</span></td><td>Uma arma com nome já forjada (padrão: Épica)</td></tr>
-      <tr><td><span class="cmd">/rpgadmin lendaria &lt;qilin|fenghuang|longma|baihu|xuanwu&gt; &lt;ovo|nascer|livre|estado&gt;</span></td><td>Montarias lendárias: dá o ovo, faz nascer aqui, volta ao começo ou mostra onde está</td></tr>
+      <tr><td><span class="cmd">/rpgadmin lendaria &lt;qilin|fenghuang|longma|baihu|xuanwu|pixiu|baize|kunpeng&gt; &lt;ovo|nascer|livre|estado|aparecer&gt;</span></td><td>Lendárias: dá o ovo (Guardiões), faz nascer aqui, volta ao começo, mostra onde está ou solta a Besta Errante aqui perto</td></tr>
+      <tr><td><span class="cmd">/rpgadmin nian [estado|embora]</span></td><td>Faz o Nian descer aqui perto, mostra onde está ou manda embora</td></tr>
       <tr><td><span class="cmd">/rpgadmin traje &lt;traje|aleatorio&gt; [capacete|peitoral|calca|botas|todas] [raridade]</span></td><td>Peças de um Traje (armadura com nome) já forjadas</td></tr>
       <tr><td><span class="cmd">/rpgadmin raiz</span> · <span class="cmd">coracaopenumbra</span> · <span class="cmd">penumbra</span></td><td>Planta uma Raiz de Luz no chão embaixo de você · acorda o Coração da Penumbra · zera a sua Penumbra</td></tr>
       <tr><td><span class="cmd">/rpgadmin itemceu       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>lt;fruta_celeste|semente_brilhante      <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>gt; [qtd]</span></td><td>Fruta Celeste ou Semente Brilhante (o Fragmento Celeste vem com <span class="cmd">/rpgadmin raro fragmento_celeste</span>)</td></tr>
@@ -654,6 +659,18 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Só com um fardo de feno no baú: a vaca come e o fardo vira 8 trigos.</li>
       </ol>
     </div>
+    <div class="card"><h3>Bestas Errantes, Nian e combate montado (2.42)</h3>
+      <ol>
+        <li>Suba o pacote novo (peles do Pixiu e do Baize).</li>
+        <li><span class="cmd">/rpgadmin lendaria pixiu aparecer</span>: o Pixiu surge a uns 30 blocos, com aviso no chat. Bata nele: nada acontece (invulnerável). Chegue de mãos vazias: ele foge. Clique com ouro na mão até 64 lingotes: ele vira seu companheiro e todos veem o aviso.</li>
+        <li>Com o Pixiu conquistado, quebre minérios perto dele: às vezes cai em dobro (aviso na barra). Pepita ou lingote na mão cura ele.</li>
+        <li><span class="cmd">/rpgadmin lendaria baize aparecer</span> e clique nele com a mão vazia: três perguntas. Erre uma de propósito: ele some e você espera 30 min (outro jogador pode tentar). <span class="cmd">aparecer</span> de novo e acerte as três.</li>
+        <li><span class="cmd">/rpgadmin lendaria kunpeng aparecer</span>: dê 16 bolas de neve e depois um Fragmento Celeste (<span class="cmd">/rpgadmin raro fragmento_celeste</span>). Conquistado, ele vem com arreio: clique com a mão vazia para montar (até 4 pessoas) e desça no ar para ver a queda lenta.</li>
+        <li>Montado em qualquer companheiro, aperte F (sem agachar): o golpe da montaria aparece na barra. Teste a Investida num cavalo comum, o Bote do Tigre no Baihu (mire num zumbi) e o Mergulho do Fenghuang no ar. Corra montado contra monstros para atropelar.</li>
+        <li>Nian: <span class="cmd">/time set night</span> e <span class="cmd">/rpgadmin nian</span>. Bata com espada: quase não tira vida. Solte fogos de artifício perto dele, ponha fogo e toque um chifre de cabra: a barra de coragem cai até ele fugir e deixar o prêmio. <span class="cmd">/rpgadmin nian estado</span> mostra a coragem.</li>
+        <li>Para as bestas aparecerem sozinhas mais rápido, ponha <code>doma.lendarias.errantes.chance: 1</code> e espere 5 min no lugar certo.</li>
+      </ol>
+    </div>
     <div class="card"><h3>Montarias lendárias (2.38 e 2.39)</h3>
       <ol>
         <li>Suba o pacote novo.</li>
@@ -692,7 +709,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Numa colônia com a Mina no nível 3, use <span class="cmd">/rpgadmin raiz</span> numa caverna abaixo do território e acenda. A placa da Mina mostra <b>Poço das Profundezas aberto</b>; rode <span class="cmd">/rpgadmin turnocolonia</span> e veja ametista e mitrilo no depósito.</li>
         <li><span class="cmd">/rpgadmin traje penumbra todas</span>: vista as 4 peças e olhe em terceira pessoa (F5): a textura própria aparece no corpo. Teste o Guarda-roupa e a mesa de ferraria (Netherite).</li>
         <li>Reinicie o servidor com o Coração da Penumbra vivo: a barra de chefe volta quando ele carrega.</li>
-        <li>Jars: o de cada versão fica na raiz do repositório no GitHub (e também no artefato do GitHub Actions); uma tag <code>v2.39.0</code> vira Release com o jar.</li>
+        <li>Jars: o de cada versão fica na raiz do repositório no GitHub (e também no artefato do GitHub Actions); uma tag <code>v2.42.0</code> vira Release com o jar.</li>
       </ol>
     </div>
     <div class="card"><h3>Jeito, pedidos e Cavaleiro (2.32)</h3>
@@ -962,7 +979,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.39 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<footer>RPGAtributos 2.42 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

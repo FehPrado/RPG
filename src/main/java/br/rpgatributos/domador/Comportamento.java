@@ -100,7 +100,7 @@ public final class Comportamento implements Listener {
         // Com algo na mão, vale o normal do jogo (dar comida, tosquiar, ordenhar...).
         if (!p.getInventory().getItemInMainHand().isEmpty()) return;
         // Cavalo e outros que o jogo já deixa montar (sem a Sela do Domador): monta do jeito normal.
-        if (!p.isSneaking() && !comp().tem(le, Componente.SELA) && (le instanceof AbstractHorse || selado(le))) return;
+        if (!p.isSneaking() && !comp().tem(le, Componente.SELA) && (le instanceof AbstractHorse || selado(le) || arreado(le))) return;
         e.setCancelled(true);
         if (!p.isSneaking() && comp().tem(le, Componente.SELA) && le.getPassengers().isEmpty()) {
             le.addPassenger(p);
@@ -166,7 +166,7 @@ public final class Comportamento implements Listener {
                 continue;
             }
             Set<Componente> c = comp().poderes(e);
-            if (!c.contains(Componente.SELA) || controleNativo(e, p)) continue;
+            if (!c.contains(Componente.SELA) || controleNativo(e, p) || plugin.combateMontado().ocupada(e)) continue;
             guiar(e, p, c);
         }
     }
@@ -175,6 +175,11 @@ public final class Comportamento implements Listener {
     private static boolean selado(LivingEntity e) {
         EntityEquipment eq = e.getEquipment();
         return eq != null && e.canUseEquipmentSlot(EquipmentSlot.SADDLE) && !eq.getItem(EquipmentSlot.SADDLE).isEmpty();
+    }
+
+    /** Ghast feliz com arreio (como o Kunpeng): monta e voa pelo controle do próprio jogo. */
+    private static boolean arreado(LivingEntity e) {
+        return e.getType() == EntityType.HAPPY_GHAST && e.getEquipment() != null && !e.getEquipment().getItem(EquipmentSlot.BODY).isEmpty();
     }
 
     /** Cavalo com sela comum, porco com cenoura no palito...: o próprio jogo controla. */
