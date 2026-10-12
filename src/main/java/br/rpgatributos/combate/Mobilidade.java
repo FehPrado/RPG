@@ -192,6 +192,12 @@ public final class Mobilidade implements Listener {
         }
     }
 
+    /** Tecla do mod de apoio: esquiva para o lado que o jogador aperta (para trás se nenhum). */
+    public void esquivarPorTecla(Player p) {
+        Input in = p.getCurrentInput();
+        esquivar(p, in.isLeft() && !in.isRight() ? ESQUERDA : in.isRight() && !in.isLeft() ? DIREITA : TRAS);
+    }
+
     private void esquivar(Player p, int direcao) {
         if (!cfg().mobEsquivaAtiva || p.isSneaking() || p.isInsideVehicle() || p.isGliding() || p.isFlying()
                 || planando.contains(p.getUniqueId()) || p.getGameMode() == GameMode.SPECTATOR) return;

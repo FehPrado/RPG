@@ -143,6 +143,11 @@ public final class Comportamento implements Listener {
             }
             return;
         }
+        // Coração do Mar: o jogo derruba quem monta quando afunda; aqui só desce quem agacha.
+        if (e.isCancellable() && p.isOnline() && !p.isDead() && !p.isSneaking() && comp().tem(montaria, Componente.MARE) && montaria.isInWater()) {
+            e.setCancelled(true);
+            return;
+        }
         montaria.setGravity(true);
         montados.remove(montaria.getUniqueId());
         ultimaPosicao.remove(montaria.getUniqueId());
@@ -228,7 +233,16 @@ public final class Comportamento implements Listener {
             y = e.getVelocity().getY();
             if (in.isJump() && e.isOnGround()) y = Lendaria.de(e) == Lendaria.BAIHU ? 0.95 : 0.55; // o tigre pula longe
             else if (in.isJump() && naAgua) y = 0.2;
-            if (Lendarias.andaSobreLiquido(e)) {
+            // Coração do Mar: andando para a frente, olhar para baixo mergulha e olhar para cima sobe;
+            // debaixo d'água, sem apertar nada, fica na mesma altura (espaço sobe).
+            boolean nada = naAgua && c.contains(Componente.MARE);
+            boolean mergulhando = nada && in.isForward() && p.getPitch() > 20;
+            if (mergulhando || (nada && e.isUnderWater() && !Lendarias.andaSobreLiquido(e))) {
+                e.setGravity(false);
+                if (in.isJump()) y = 0.3;
+                else if (in.isForward()) y = -Math.sin(Math.toRadians(p.getPitch())) * vel * 0.9;
+                else y = 0;
+            } else if (Lendarias.andaSobreLiquido(e)) {
                 // Qilin: anda por cima da água e da lava.
                 e.setGravity(false);
                 y = e.getLocation().add(0, 0.9, 0).getBlock().isLiquid() ? 0.25 : 0;

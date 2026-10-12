@@ -127,6 +127,20 @@ public final class CombateMontado implements Listener {
         LivingEntity m = montaria(p);
         if (m == null) return;
         e.setCancelled(true);
+        golpe(p, m);
+    }
+
+    /** Tecla do mod de apoio: o golpe da montaria (avisa se não estiver montado). */
+    public void golpePorTecla(Player p) {
+        LivingEntity m = montaria(p);
+        if (m == null) {
+            p.sendActionBar(Component.text("✖ Monte num companheiro para usar o golpe da montaria.", NamedTextColor.RED));
+            return;
+        }
+        golpe(p, m);
+    }
+
+    private void golpe(Player p, LivingEntity m) {
         GolpeMontado g = GolpeMontado.de(m);
         long falta = recargas.getOrDefault(m.getUniqueId(), 0L) - System.currentTimeMillis();
         TextColor cor = Lendaria.de(m) != null ? TextColor.color(Lendaria.de(m).cor()) : Companheiros.COR;

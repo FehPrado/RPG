@@ -240,6 +240,7 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.domador.BestasErrantes bestas;
     private br.rpgatributos.mundo.Nian nian;
     private br.rpgatributos.domador.CombateMontado combateMontado;
+    private br.rpgatributos.apoio.CanalApoio canalApoio;
     private br.rpgatributos.forja.NomeadasNoMundo nomeadas;
     private Ajuda ajuda;
 
@@ -400,6 +401,7 @@ public final class RPGAtributos extends JavaPlugin {
         bestas = new br.rpgatributos.domador.BestasErrantes(this);
         nian = new br.rpgatributos.mundo.Nian(this);
         combateMontado = new br.rpgatributos.domador.CombateMontado(this);
+        canalApoio = new br.rpgatributos.apoio.CanalApoio(this);
         nomeadas = new br.rpgatributos.forja.NomeadasNoMundo(this);
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
@@ -411,7 +413,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, nomeadas, ajuda);
+                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -609,6 +611,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, bestas::tick, 47L, 40L); // a cada 2 s: Bestas Errantes vagando (e, de 5 em 5 min, aparecendo)
         agenda.runTaskTimer(this, nian::tick, 49L, 40L); // a cada 2 s: o Nian (noites de inverno)
         agenda.runTaskTimer(this, combateMontado::tick, 20L, 1L); // a cada tick: golpes da montaria em curso e atropelar
+        canalApoio.iniciar(); // teclas do mod de apoio (opcional, no cliente)
         agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
@@ -654,6 +657,7 @@ public final class RPGAtributos extends JavaPlugin {
         if (companheiros != null) companheiros.desligar();
         if (lendarias != null) lendarias.salvar();
         if (nian != null) nian.parar();
+        if (canalApoio != null) canalApoio.parar();
         if (combos != null) combos.parar();
         if (pacote != null) pacote.parar();
         if (lapides != null) lapides.salvar();
@@ -758,6 +762,7 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.domador.BestasErrantes bestas() { return bestas; }
     public br.rpgatributos.mundo.Nian nian() { return nian; }
     public br.rpgatributos.domador.CombateMontado combateMontado() { return combateMontado; }
+    public br.rpgatributos.apoio.CanalApoio canalApoio() { return canalApoio; }
     public AltaresDomador altaresDomador() { return altaresDomador; }
     public MenusDomador menusDomador() { return menusDomador; }
     public Masmorras masmorras() { return masmorras; }

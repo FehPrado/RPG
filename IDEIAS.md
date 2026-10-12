@@ -173,7 +173,57 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 23c. Feito na 2.38 (Montarias lendárias, os Guardiões — referência chinesa): **Qilin** e **Fenghuang**, cada um único no servidor. Fusão no Altar do Domador (dois companheiros no estágio III + itens raros) → Ovo Lendário (bloco de ovo de dragão que não cai nem teleporta) → choca no lugar certo (flores de dia / perto de fogo) com o dono por perto. Poderes de nascença (componentes que não ocupam espaço), +50% de vida e dano, pele própria pintada na camada de armadura do cavalo (sem modelos que sigam o bicho). Fenghuang renasce do ovo no mesmo nível. **Próximo:** Longma (dragão-cavalo, leste), Baihu (tigre branco no lobo, oeste) e Xuanwu (tartaruga negra, norte); depois as Bestas Errantes (Kunpeng no ghast feliz, Pixiu, Baize, Nian) e a Fusão de armas; modelo 3D das lendárias fica para depois (com 2-3 poses de passo).
 23d. Feito na 2.39 (pedido do usuário): **Comedouro** para os animais da fazenda (1 fardo de feno + 1 tigela em cima de um baú; o baú guarda a comida, funil enche; na virada do dia cada animal a até 12 blocos que não comeu come uma porção; fardo vira 9 trigos) e os outros três Guardiões: **Longma** (cavalo de escamas azuis, galope na água, Onda), **Baihu** (tigre branco no lobo, montável, 1,6x, pulo longo, Rugido) e **Xuanwu** (tartaruga gigante 2,6x, sem pele nova porque a tartaruga não aceita, Escudo). Menu da fusão em bússola. **Próximo:** Bestas Errantes (Kunpeng no ghast feliz, Pixiu, Baize, Nian), Fusão de armas e modelo 3D das lendárias (2-3 poses de passo).
 23e. Feito na 2.40-2.42: modelos 3D dos cinco Guardiões para quem usa EMF + ETF (feitos pelo dono do servidor no Blockbench; o Baihu e o Xuanwu encolhem para o jogador sentar nas costas), pegadas das posturas refeitas no Blockbench e, na 2.42, **Bestas Errantes** (Pixiu, Baize e Kunpeng: aparecem perto de quem tem Doma alta, no lugar delas, e são conquistadas por uma prova: ouro, três enigmas, neve e Fragmento Celeste), o **Nian** (fera das noites de inverno que só foge com fogos, fogo e chifres de cabra) e o **combate montado** (F montado solta o golpe da montaria; correndo, ela atropela). **Próximo:** Fusão de armas, poses de passo nos modelos 3D, modelos EMF para as Bestas Errantes.
+23f. Feito na 2.43 (com o mod de apoio 0.1.0): **mod de apoio opcional** para NeoForge 26.3, só no cliente (pasta `mod-apoio/`). Teclas próprias em Opções > Controles (R golpe da montaria, V habilidade, B trocar habilidade, Alt esquiva, N postura, J menu) mandadas pelo canal `rpgatributos:tecla` que o plugin escuta. Os atalhos sem mod continuam. **Próximo no mod:** interface na tela (vigor, mana, recargas, coragem do Nian), depois modelos e menus próprios.
 24. **Colônia, depois:** Entregador e Armazém (logística), Construtor subindo o nível com o projeto 2 e 3, necessidades dos moradores (escola, pesquisa, doença).
 25. **Para depois:** mestres de armas com técnicas secretas, caçadas a criaturas lendárias com rastros, editor de pegadas no jogo, duelos e torneios, maestria de postura, combate montado, táticas do exército, fraquezas por criatura, clima × combate, pragas e corvos, cosméticos.
 
 *Decisão (03/10/2026): o foco é conteúdo que dá profundidade e história ao mundo. O que é mais de "servidor para muita gente" fica no backlog: raides, Masmorra Hardcore, aparar, Fase E (Reinos 2.0), Fase H (Social), Fase J (Visual) e o resto da Fase K.*
+
+---
+
+## Roadmap de referências (12/10/2026)
+
+Ideias de jogos, mangás e manhwas, adaptadas ao que já existe. Página completa: `docs/roadmap-referencias.html`. Já usamos: Zelda TotK (céu e profundezas), Stardew/Harvest Moon (fazenda), MineColonies (colônia), Solo Leveling (portais, sombras, torre), mitologia chinesa (Guardiões, Bestas Errantes, Nian), DMC/Sekiro (estilo e equilíbrio).
+
+**Horizonte 1 — aproveitam o que já existe**
+
+| Ideia | Referência | O que é | Impacto | Esforço |
+|---|---|---|---|---|
+| Paredes de Palavras e Gritos | Skyrim | Murais em ruínas ensinam palavras; 3 palavras = um Grito (Empurrão, Sopro de Gelo, Tempestade, Passo Etéreo) | ★★★ | M |
+| Partes que quebram nos chefes | Monster Hunter | Chifre, cauda e asas quebráveis dão materiais diferentes | ★★ | M |
+| Frutas Proibidas | One Piece | Fruta única no servidor dá um poder para sempre; quem come afunda na água | ★★★ | M |
+| Armas que despertam | Bleach | Arma com nome muito usada desperta (visual + habilidade) e tem uma forma liberada | ★★★ | M |
+| Ferreiro Lendário (Fusão de armas) | Overgeared | Duas armas com nome + material raro = uma terceira com história própria | ★★ | M |
+| Cozinhar monstros | Dungeon Meshi | Partes de monstros viram pratos com efeitos estranhos e úteis | ★★ | P |
+| Ecos dos que caíram | Dark Souls / Elden Ring | Mancha de morte com fantasma e inscrições de frases prontas avaliadas pelos outros | ★★ | M |
+| Pergaminhos de pistas | RuneScape | Tesouro em várias etapas com enigmas e gestos em lugares | ★★ | M |
+| Natureza dos companheiros | Pokémon | Companheiro nasce com natureza e talento escondido | ★★ | P |
+
+**Horizonte 2 — mundo e história**
+
+| Ideia | Referência | O que é | Impacto | Esforço |
+|---|---|---|---|---|
+| As Sete Esferas do Dragão | Dragon Ball | 7 esferas caem pelo mundo (feixe no céu só na noite da queda, depois pistas); juntas chamam o Long para um desejo | ★★★ | M |
+| Constelações que assistem | Omniscient Reader's Viewpoint | Deuses comentam feitos dramáticos e dão moedas de patrocínio por bênçãos | ★★★ | M |
+| Maldição do Abismo | Made in Abyss | Subir rápido de muito fundo nas Profundezas cobra um preço por camada | ★★ | P |
+| Monstros Únicos | Shangri-La Frontier | Criatura única por bioma; o primeiro a vencer fica registrado | ★★ | M |
+| Magias da Era Antiga | Frieren | Grimórios com magias pequenas e charmosas para colecionar | ★★ | P |
+| Contratos de monstro | The Witcher | Quadro na vila com investigação antes da luta | ★★ | M |
+| Laços com moradores | Persona / Fire Emblem | História pessoal em capítulos e um ensinamento único no fim | ★★ | M |
+| Museu do Curador | Animal Crossing | Doações por ala contam a história do mundo | ★★ | M |
+| Santuários de enigma | Zelda BotW | Salas com quebra-cabeça; 4 Bênçãos = mais vigor | ★★ | M |
+
+**Horizonte 3 — grandes sistemas**
+
+| Ideia | Referência | O que é | Impacto | Esforço |
+|---|---|---|---|---|
+| Respirações | Demon Slayer | Estilos elementais com formas que viram golpes de combo; Marca ao dominar | ★★★ | G |
+| Cultivo e seitas | Return of the Mount Hua Sect / The Beginning After the End | Núcleo em estágios aumenta mana e vigor; seitas com artes próprias | ★★★ | G |
+| Votos e restrições | Hunter x Hunter / Jujutsu Kaisen | Restrição jurada dá bônus; quebrar cobra caro | ★★ | P |
+| Expansão de Domínio | Jujutsu Kaisen | Golpe máximo da classe fecha uma arena onde os golpes não erram | ★★ | M |
+| Torre de provas | Tower of God | Andares com provas diferentes e funções na party | ★★ | G |
+| Desafio dos Deuses | Hades | Masmorra em salas com bênçãos dos deuses | ★★ | G |
+| Poderes dos chefes | Valheim | Troféu no santuário dá um poder temporário | ★ | P |
+| Navios e tripulação | Sea of Thieves | Navio conduzido pela party contra monstros do mar | ★★★ | G |
+
+**Sugestão de começo:** sessão de teste da 2.38–2.42, depois Paredes de Palavras, Esferas do Dragão e Frutas Proibidas.

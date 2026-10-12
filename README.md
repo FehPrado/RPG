@@ -507,7 +507,7 @@ Três profissões de guerra na colônia: **Soldado** (espada, liberado no nível
 | Couraça | peitoral de ferro | 15 | +8 armadura e +25% vida |
 | Garras | espada de ferro | 20 | Luta contra monstros (até uma vaca!) e bate +50% |
 | Coletor | funil | 25 | Pega os itens do chão e guarda no Alforje (pede Alforje) |
-| Coração do Mar | coração do mar | 30 | Não se afoga, nada rápido; quem monta respira debaixo d'água |
+| Coração do Mar | coração do mar | 30 | Não se afoga, nada rápido; quem monta respira debaixo d'água e **mergulha** junto (andando para a frente, olhe para baixo para descer e para cima para subir; parado, fica na mesma altura; espaço sobe; agache para desmontar) |
 | Chamas | vara de blaze | 35 | Imune a fogo; os ataques incendeiam |
 | Segunda Vida | totem da imortalidade | 40 | Escapa da morte uma vez |
 | Asas | élitro | 50 | **Voa** montado: espaço sobe, agachar desce (pede Sela) |
@@ -1517,13 +1517,30 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outros`, `rpg.chapeu`, `rpg.tag`, `rpg.tag.cores`, `rpg.forja`, `rpg.arcano`, `rpg.guia`, `rpg.titulos`, `rpg.missoes`, `rpg.receitas`, `rpg.party`, `rpg.territorio`, `rpg.pets`, `rpg.masmorra`, `rpg.classe`, `rpg.lendas`, `rpg.locais`, `rpg.pesca`, `rpg.alquimia`, `rpg.colonia`, `rpg.reino`, `rpg.bestiario`, `rpg.calendario`, `rpg.portais`, `rpg.torre`, `rpg.combos`, `rpg.mochila`, `rpg.fe`, `rpg.exploracao`, `rpg.progressao`, `rpg.detalhes`, `rpg.vida`. A permissão `rpg.admin` é só para OP.
 
+## Mod de apoio (opcional, no cliente)
+
+O servidor **não precisa** de nada além do plugin. O **mod de apoio** (`rpgapoio-0.1.0.jar`, para **NeoForge 26.3**) vai só no jogo de quem quiser, por exemplo no modpack. Ele cria teclas próprias em **Opções > Controles > RPGAtributos**, que dá para trocar como qualquer tecla do jogo:
+
+| Tecla (padrão) | Ação | Sem o mod |
+|---|---|---|
+| **R** | Golpe da montaria | F montado |
+| **V** | Habilidade de classe | Agachar + F |
+| **B** | Trocar de habilidade | Agachar + clique esquerdo no ar |
+| **Alt esquerdo** | Esquiva (para o lado que você aperta, ou para trás) | Dois toques em A, D ou S |
+| **N** | Próxima postura | `/postura` |
+| **J** | Menu do RPG | `/rpg` |
+
+Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jeitos funcionam. Ao entrar, aparece "Mod de apoio conectado" na barra. Em servidores sem o RPGAtributos, as teclas não fazem nada (e o jogo avisa uma vez).
+
+**Como funciona:** o mod manda o nome da tecla pelo canal `rpgatributos:tecla`, que o plugin escuta. O código fica em `mod-apoio/` (compile com `gradlew build`, Java 25; o jar sai em `mod-apoio/build/libs/`).
+
 ## Como gerar o .jar
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.42.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.43.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.42.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.42.0 && git push origin v2.42.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.43.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.43.0 && git push origin v2.43.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 

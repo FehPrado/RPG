@@ -22,7 +22,7 @@ public enum Componente {
     COLETOR("Coletor", Material.HOPPER, 0.25, ALFORJE,
             "Pega os itens do chão por perto e guarda no Alforje."),
     MARE("Coração do Mar", Material.HEART_OF_THE_SEA, 0.30, null,
-            "Não se afoga e nada rápido; quem monta respira debaixo d'água."),
+            "Não se afoga e nada rápido; montado, olhe para baixo para mergulhar e quem monta respira debaixo d'água."),
     CHAMAS("Chamas", Material.BLAZE_ROD, 0.35, null,
             "Imune a fogo e lava; os ataques põem fogo no alvo."),
     TOTEM("Segunda Vida", Material.TOTEM_OF_UNDYING, 0.40, null,

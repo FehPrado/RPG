@@ -602,8 +602,23 @@ public final class Classes implements Listener {
     public void aoClicarNoAr(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (e.getAction() != Action.LEFT_CLICK_AIR || e.getHand() != EquipmentSlot.HAND || !p.isSneaking()) return;
+        if (plugin.arcano().ehGrimorio(e.getItem())) return;
+        trocarHabilidade(p);
+    }
+
+    /** Tecla do mod de apoio: usa a habilidade selecionada (o mesmo que agachar + F). */
+    public void usarPorTecla(Player p) {
+        if (ativa(p) == null) {
+            p.sendActionBar(Component.text("✖ Você ainda não tem uma classe ativa (/classe).", NamedTextColor.RED));
+            return;
+        }
+        usar(p);
+    }
+
+    /** Passa para a próxima habilidade da classe (agachar + clique esquerdo no ar, ou a tecla do mod). */
+    public void trocarHabilidade(Player p) {
         Classe c = ativa(p);
-        if (c == null || c.habilidades().size() < 2 || plugin.arcano().ehGrimorio(e.getItem())) return;
+        if (c == null || c.habilidades().size() < 2) return;
         PerfilClasse pf = perfil(p);
         pf.selecionada = (pf.selecionada + 1) % c.habilidades().size();
         pf.salvar(p);

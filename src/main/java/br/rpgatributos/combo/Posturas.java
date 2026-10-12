@@ -121,6 +121,13 @@ public final class Posturas implements Listener, CommandExecutor {
         pegada(p);
     }
 
+    /** Tecla do mod de apoio: passa para a próxima postura (na ordem do menu). */
+    public void proxima(Player p) {
+        Postura[] todas = Postura.values();
+        Postura atual = escolhida(p);
+        escolher(p, todas[(atual == null ? 0 : atual.ordinal() + 1) % todas.length]);
+    }
+
     /** Nome curto para a barra de vigor: "▲ Ofensiva". */
     String rotulo(Player p) {
         Postura ps = ativa(p);

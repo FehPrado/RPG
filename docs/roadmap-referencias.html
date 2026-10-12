@@ -1,0 +1,358 @@
+<title>Mapa de Referências</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: cabeçalho curto, legenda e filtros; três horizontes empilhados, cada um com uma grade de cartões de ideia. */
+:root {
+  --bg: #F3F5F4;
+  --surface: #FFFFFF;
+  --ink: #17201D;
+  --muted: #56635E;
+  --line: #D6DDDA;
+  --jogo: #1F7A5C;      /* jade: jogos */
+  --manga: #B8432F;     /* cinábrio: mangás */
+  --manhwa: #4E4AA8;    /* índigo: manhwas e novels */
+  --jogo-bg: #E2F1EA;
+  --manga-bg: #F7E6E2;
+  --manhwa-bg: #E8E7F7;
+  --star: #C08A12;
+  --f-display: "Unbounded", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111816; --surface: #18211E; --ink: #E6EEEA; --muted: #9AAAA4; --line: #2A3733;
+  --jogo: #5CC79E; --manga: #EE8A73; --manhwa: #A9A5F2;
+  --jogo-bg: #16302A; --manga-bg: #36201B; --manhwa-bg: #23223F; --star: #E7B84A; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111816; --surface: #18211E; --ink: #E6EEEA; --muted: #9AAAA4; --line: #2A3733;
+  --jogo: #5CC79E; --manga: #EE8A73; --manhwa: #A9A5F2;
+  --jogo-bg: #16302A; --manga-bg: #36201B; --manhwa-bg: #23223F; --star: #E7B84A; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.55; }
+.pagina { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: grid; gap: 40px; }
+
+header { display: grid; gap: 14px; max-width: 720px; }
+.sobre { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(28px, 5vw, 44px); line-height: 1.1; margin: 0; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); max-width: 65ch; }
+
+.painel { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: flex-start; justify-content: space-between; border-block: 1px solid var(--line); padding-block: 16px; }
+.legenda { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--muted); }
+.legenda b { color: var(--ink); font-weight: 600; }
+.filtros { display: flex; flex-wrap: wrap; gap: 8px; }
+.filtros button { font: 500 13px var(--f-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.filtros button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.filtros button:focus-visible { outline: 2px solid var(--jogo); outline-offset: 2px; }
+
+.ja-temos { display: grid; gap: 10px; }
+.ja-temos h2, .horizonte h2 { font-family: var(--f-display); font-weight: 500; font-size: 20px; margin: 0; }
+.ja-temos ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.ja-temos li { font-size: 13px; border: 1px dashed var(--line); border-radius: 6px; padding: 4px 10px; color: var(--muted); }
+.ja-temos li b { color: var(--ink); font-weight: 600; }
+
+.horizonte { display: grid; gap: 16px; }
+.horizonte > .cab { display: grid; gap: 4px; }
+.horizonte > .cab p { margin: 0; color: var(--muted); font-size: 14px; max-width: 70ch; }
+.etapa { font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
+.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 14px; }
+
+.ideia { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.ideia h3 { font-size: 16px; font-weight: 600; margin: 0; text-wrap: balance; }
+.fontes { display: flex; flex-wrap: wrap; gap: 6px; }
+.fonte { font-size: 12px; font-weight: 500; border-radius: 4px; padding: 2px 8px; }
+.fonte.jogo { color: var(--jogo); background: var(--jogo-bg); }
+.fonte.manga { color: var(--manga); background: var(--manga-bg); }
+.fonte.manhwa { color: var(--manhwa); background: var(--manhwa-bg); }
+.ideia p { margin: 0; font-size: 14px; }
+.usa { font-size: 13px; color: var(--muted); }
+.usa b { font-weight: 600; color: var(--ink); }
+.medida { display: flex; gap: 14px; font-family: var(--f-mono); font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
+.medida .imp { color: var(--star); letter-spacing: .1em; }
+
+.comeco { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px 22px; display: grid; gap: 10px; max-width: 760px; }
+.comeco h2 { font-family: var(--f-display); font-weight: 500; font-size: 20px; margin: 0; }
+.comeco ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.comeco p { margin: 0; color: var(--muted); font-size: 14px; }
+.vazio { color: var(--muted); font-size: 14px; }
+
+@media (prefers-reduced-motion: no-preference) { .ideia { transition: border-color .15s; } .ideia:hover { border-color: var(--muted); } }
+</style>
+
+<div class="pagina">
+  <header>
+    <span class="sobre">RPGAtributos · ideias para as próximas versões</span>
+    <h1>Mapa de Referências</h1>
+    <p>Ideias tiradas de jogos, mangás e manhwas, adaptadas ao que o servidor já tem. Cada cartão diz de onde vem a ideia, como ela ficaria aqui e quais sistemas do plugin ela aproveita. Nada aqui depende de troca entre jogadores, de cortar árvore ou veio inteiro, nem de marcar pontos no mapa.</p>
+  </header>
+
+  <div class="painel">
+    <div class="legenda">
+      <span><b>Impacto</b> ★ legal · ★★ muito legal · ★★★ muda o servidor</span>
+      <span><b>Esforço</b> P pequeno · M médio · G grande</span>
+    </div>
+    <div class="filtros" role="group" aria-label="Filtrar por origem">
+      <button type="button" id="f-todos" data-filtro="todos" aria-pressed="true">Tudo</button>
+      <button type="button" id="f-jogo" data-filtro="jogo" aria-pressed="false">Jogos</button>
+      <button type="button" id="f-manga" data-filtro="manga" aria-pressed="false">Mangás</button>
+      <button type="button" id="f-manhwa" data-filtro="manhwa" aria-pressed="false">Manhwas e novels</button>
+    </div>
+  </div>
+
+  <section class="ja-temos">
+    <h2>Referências que já usamos</h2>
+    <ul>
+      <li><b>Zelda: Tears of the Kingdom</b> · Ilhas do Céu e Profundezas</li>
+      <li><b>Stardew Valley / Harvest Moon</b> · fazenda, estações e criação</li>
+      <li><b>MineColonies</b> · colônia, obras e moradores</li>
+      <li><b>Solo Leveling</b> · portais, sombras e Torre Infinita</li>
+      <li><b>Mitologia chinesa</b> · os cinco Guardiões, as Bestas Errantes e o Nian</li>
+      <li><b>Devil May Cry / Sekiro</b> · estilo D→S e equilíbrio</li>
+    </ul>
+  </section>
+
+  <section class="horizonte">
+    <div class="cab">
+      <span class="etapa">Horizonte 1 · próximas versões</span>
+      <h2>Aproveitam o que já existe</h2>
+      <p>Encaixam em sistemas prontos (estruturas, chefes, Forja, pomar, combos) e dão história ao mundo sem precisar de base nova.</p>
+    </div>
+    <div class="grade">
+      <article class="ideia" data-tipos="jogo">
+        <h3>Paredes de Palavras e Gritos</h3>
+        <div class="fontes"><span class="fonte jogo">Skyrim</span></div>
+        <p>Murais de runas nas ruínas ensinam palavras de poder. Três palavras formam um Grito: Empurrão, Sopro de Gelo, Chamado da Tempestade, Passo Etéreo. Cada mural traz um trecho da história do mundo.</p>
+        <p class="usa"><b>Aproveita:</b> estruturas, runas, Livro das Lendas, diário</p>
+        <div class="medida"><span class="imp">★★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Partes que quebram nos chefes</h3>
+        <div class="fontes"><span class="fonte jogo">Monster Hunter</span></div>
+        <p>Chifre, cauda e asas dos chefes podem ser quebrados durante a luta. Cada parte dá um material diferente, e a caçada ganha objetivo: hoje eu vou atrás do chifre.</p>
+        <p class="usa"><b>Aproveita:</b> chefes, Forja, armas com nome</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="manga">
+        <h3>Frutas Proibidas</h3>
+        <div class="fontes"><span class="fonte manga">One Piece</span></div>
+        <p>Frutas raríssimas, uma de cada no servidor, que dão um poder para sempre: corpo de borracha, chamas, gelo, areia. Em troca, quem come afunda na água como pedra. Só dá para ter uma.</p>
+        <p class="usa"><b>Aproveita:</b> pomar, frutas raras, regra de "único no servidor" das lendas</p>
+        <div class="medida"><span class="imp">★★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="manga">
+        <h3>Armas que despertam</h3>
+        <div class="fontes"><span class="fonte manga">Bleach</span></div>
+        <p>Uma arma com nome usada por muito tempo "revela o próprio nome": o primeiro despertar muda o visual e dá uma habilidade; o segundo é uma forma liberada por alguns segundos.</p>
+        <p class="usa"><b>Aproveita:</b> armas com nome, proficiência, modelos 3D</p>
+        <div class="medida"><span class="imp">★★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="manhwa">
+        <h3>Ferreiro Lendário</h3>
+        <div class="fontes"><span class="fonte manhwa">Overgeared</span></div>
+        <p>A Fusão de armas: duas armas com nome e um material raro viram uma terceira, com nome e história nascidos das duas. Um caminho de longo prazo para quem vive na Forja.</p>
+        <p class="usa"><b>Aproveita:</b> Forja, armas com nome, partes de chefe</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="manga">
+        <h3>Cozinhar monstros</h3>
+        <div class="fontes"><span class="fonte manga">Dungeon Meshi</span></div>
+        <p>Partes de monstros viram pratos com efeitos estranhos e úteis: omelete de ovo de aranha que deixa subir paredes por alguns segundos, ensopado de slime que amortece a queda.</p>
+        <p class="usa"><b>Aproveita:</b> cozinha, pratos, drops de monstros</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço P</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Ecos dos que caíram</h3>
+        <div class="fontes"><span class="fonte jogo">Dark Souls</span><span class="fonte jogo">Elden Ring</span></div>
+        <p>Onde alguém morre fica uma mancha: tocando, um fantasma repete os últimos segundos. Jogadores deixam inscrições no chão a partir de frases prontas ("cuidado: armadilha"), e os outros avaliam.</p>
+        <p class="usa"><b>Aproveita:</b> lápides, estruturas, Profundezas</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Pergaminhos de pistas</h3>
+        <div class="fontes"><span class="fonte jogo">RuneScape</span></div>
+        <p>Um tesouro em várias etapas: enigmas sobre lugares, um gesto ao lado do farol, falar com o eremita levando certo item. A última etapa guarda cosméticos e armas com nome exclusivas.</p>
+        <p class="usa"><b>Aproveita:</b> mapas do tesouro, estruturas, moradores</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Natureza dos companheiros</h3>
+        <div class="fontes"><span class="fonte jogo">Pokémon</span></div>
+        <p>Cada companheiro nasce com uma natureza (Valente: +10% de dano e −10% de velocidade) e um talento escondido. Os domadores passam a buscar o companheiro perfeito.</p>
+        <p class="usa"><b>Aproveita:</b> Domador, evolução, criação</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço P</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="horizonte">
+    <div class="cab">
+      <span class="etapa">Horizonte 2 · mundo e história</span>
+      <h2>O servidor ganha mistério e memória</h2>
+      <p>Eventos e coleções que fazem o mundo parecer antigo e vivo, com pistas para seguir e conquistas que todos veem.</p>
+    </div>
+    <div class="grade">
+      <article class="ideia" data-tipos="manga">
+        <h3>As Sete Esferas do Dragão</h3>
+        <div class="fontes"><span class="fonte manga">Dragon Ball</span></div>
+        <p>Sete esferas caem pelo mundo: céu, profundezas, chefes e ruínas. Na noite da queda, um feixe de luz cruza o céu; depois só restam pistas. Juntas, chamam o Long para um desejo, e então viram pedra por uma semana.</p>
+        <p class="usa"><b>Aproveita:</b> Guardiões, céu, chefes, sonhos com pistas</p>
+        <div class="medida"><span class="imp">★★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="manhwa">
+        <h3>Constelações que assistem</h3>
+        <div class="fontes"><span class="fonte manhwa">Omniscient Reader's Viewpoint</span></div>
+        <p>Os deuses do servidor acompanham os feitos: vencer um chefe com meio coração, salvar a party. Mensagens das constelações aparecem e rendem moedas de patrocínio, trocadas por bênçãos.</p>
+        <p class="usa"><b>Aproveita:</b> deuses, devoção, estilo D→S</p>
+        <div class="medida"><span class="imp">★★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="manga">
+        <h3>A Maldição do Abismo</h3>
+        <div class="fontes"><span class="fonte manga">Made in Abyss</span></div>
+        <p>Nas Profundezas, subir rápido demais de muito fundo cobra um preço por camada: náusea, fraqueza, perda de corações. Elixires e equipamentos certos protegem.</p>
+        <p class="usa"><b>Aproveita:</b> Profundezas, Penumbra, alquimia</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço P</span></div>
+      </article>
+      <article class="ideia" data-tipos="manga">
+        <h3>Monstros Únicos</h3>
+        <div class="fontes"><span class="fonte manga">Shangri-La Frontier</span></div>
+        <p>Uma criatura única em certos biomas, com história contada em camadas. Quem a vence primeiro fica registrado para sempre no mundo, e ela nunca mais volta igual.</p>
+        <p class="usa"><b>Aproveita:</b> chefes mundiais, recordes, Crônicas</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="manga">
+        <h3>Magias da Era Antiga</h3>
+        <div class="fontes"><span class="fonte manga">Frieren</span></div>
+        <p>Grimórios esquecidos com magias pequenas e charmosas (fazer flores brotarem, tirar ferrugem, achar o que caiu na água) e algumas poderosas. Colecioná-las vira uma jornada.</p>
+        <p class="usa"><b>Aproveita:</b> Arcano, grimórios, estruturas</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço P</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Contratos de monstro</h3>
+        <div class="fontes"><span class="fonte jogo">The Witcher</span></div>
+        <p>Um quadro na vila com pedidos que exigem investigar antes de lutar: rastros, testemunhas, descobrir qual criatura é. Porta de entrada para as Caçadas lendárias.</p>
+        <p class="usa"><b>Aproveita:</b> colônia, moradores, óleos, Baize</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Laços com moradores</h3>
+        <div class="fontes"><span class="fonte jogo">Persona</span><span class="fonte jogo">Fire Emblem</span></div>
+        <p>Ajudar sempre o mesmo morador abre a história dele em capítulos. No último, ele ensina algo que só ele sabe.</p>
+        <p class="usa"><b>Aproveita:</b> colônia, traços e pedidos dos moradores</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Museu do Curador</h3>
+        <div class="fontes"><span class="fonte jogo">Animal Crossing</span></div>
+        <p>Doar peixes raros, fósseis, relíquias e insetos a um curador. Cada ala completa conta um pedaço da história do mundo e dá um título.</p>
+        <p class="usa"><b>Aproveita:</b> pesca, arqueologia, relíquias, álbum</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Santuários de enigma</h3>
+        <div class="fontes"><span class="fonte jogo">Zelda: Breath of the Wild</span></div>
+        <p>Pequenas salas escondidas com um quebra-cabeça de alavancas, pesos e luz. Quem resolve ganha uma Bênção; quatro Bênçãos aumentam o vigor.</p>
+        <p class="usa"><b>Aproveita:</b> estruturas, vigor, Locais Ocultos</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="horizonte">
+    <div class="cab">
+      <span class="etapa">Horizonte 3 · grandes sistemas</span>
+      <h2>Mudam o jeito de progredir e lutar</h2>
+      <p>Pedem base nova e equilíbrio cuidadoso. Valem uma versão inteira cada.</p>
+    </div>
+    <div class="grade">
+      <article class="ideia" data-tipos="manga">
+        <h3>Respirações</h3>
+        <div class="fontes"><span class="fonte manga">Demon Slayer</span></div>
+        <p>Mestres escondidos ensinam estilos de combate elementais (Água, Chama, Trovão, Névoa, Fera), cada um com formas numeradas que viram golpes de combo. Dominar um estilo desperta a Marca.</p>
+        <p class="usa"><b>Aproveita:</b> combos, posturas, mestres de armas, Locais Ocultos</p>
+        <div class="medida"><span class="imp">★★★</span><span>esforço G</span></div>
+      </article>
+      <article class="ideia" data-tipos="manhwa">
+        <h3>Cultivo e seitas</h3>
+        <div class="fontes"><span class="fonte manhwa">Return of the Mount Hua Sect</span><span class="fonte manhwa">The Beginning After the End</span></div>
+        <p>Meditar refina o núcleo em estágios (Fundação, Núcleo de Bronze, de Prata, de Ouro), cada um aumentando mana e vigor. Seitas espalhadas pelo mundo ensinam artes próprias. Combina com o tema chinês dos Guardiões.</p>
+        <p class="usa"><b>Aproveita:</b> mana, vigor, renascer, Guardiões</p>
+        <div class="medida"><span class="imp">★★★</span><span>esforço G</span></div>
+      </article>
+      <article class="ideia" data-tipos="manga">
+        <h3>Votos e restrições</h3>
+        <div class="fontes"><span class="fonte manga">Hunter x Hunter</span><span class="fonte manga">Jujutsu Kaisen</span></div>
+        <p>O jogador jura uma restrição ("só luto com machado", "nunca uso armadura") e recebe um bônus do tamanho do sacrifício. Quebrar o voto cobra caro.</p>
+        <p class="usa"><b>Aproveita:</b> classes, talentos, títulos</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço P</span></div>
+      </article>
+      <article class="ideia" data-tipos="manga">
+        <h3>Expansão de Domínio</h3>
+        <div class="fontes"><span class="fonte manga">Jujutsu Kaisen</span></div>
+        <p>O golpe máximo de cada classe avançada fecha uma arena por alguns segundos, onde os golpes dela nunca erram e o terreno muda (gelo, fogo, sombras).</p>
+        <p class="usa"><b>Aproveita:</b> classes avançadas, habilidades, partículas</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço M</span></div>
+      </article>
+      <article class="ideia" data-tipos="manhwa">
+        <h3>Torre de provas</h3>
+        <div class="fontes"><span class="fonte manhwa">Tower of God</span></div>
+        <p>Andares com provas diferentes: enigma, corrida, escolta, defender um ponto. Em party, cada um assume uma função (Lanceiro, Pescador, Farol) com regras próprias.</p>
+        <p class="usa"><b>Aproveita:</b> Torre Infinita, party, classes</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço G</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Desafio dos Deuses</h3>
+        <div class="fontes"><span class="fonte jogo">Hades</span></div>
+        <p>Uma masmorra em salas. A cada sala, uma bênção de um dos deuses do servidor; cada tentativa sai diferente, e as bênçãos se combinam.</p>
+        <p class="usa"><b>Aproveita:</b> masmorras, deuses, portais</p>
+        <div class="medida"><span class="imp">★★</span><span>esforço G</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Poderes dos chefes</h3>
+        <div class="fontes"><span class="fonte jogo">Valheim</span></div>
+        <p>O troféu de um chefe vencido, posto no santuário, dá um poder por um tempo: fôlego longo, carregar mais, correr sem cansar. Um de cada vez.</p>
+        <p class="usa"><b>Aproveita:</b> troféus, santuários, chefes</p>
+        <div class="medida"><span class="imp">★</span><span>esforço P</span></div>
+      </article>
+      <article class="ideia" data-tipos="jogo">
+        <h3>Navios e tripulação</h3>
+        <div class="fontes"><span class="fonte jogo">Sea of Thieves</span></div>
+        <p>Um navio que a party monta e conduz junto: um no leme, outro nas velas, outros nos canhões contra monstros do mar e naufrágios assombrados.</p>
+        <p class="usa"><b>Aproveita:</b> naufrágios, cidades submersas, Kunpeng</p>
+        <div class="medida"><span class="imp">★★★</span><span>esforço G</span></div>
+      </article>
+    </div>
+    <p class="vazio" id="vazio" hidden>Nenhuma ideia desta origem neste horizonte.</p>
+  </section>
+
+  <section class="comeco">
+    <h2>Por onde eu começaria</h2>
+    <ol>
+      <li><b>Paredes de Palavras e Gritos</b>: muita história, aproveita as estruturas e é diferente de tudo o que existe hoje.</li>
+      <li><b>As Sete Esferas do Dragão</b>: um evento do servidor inteiro que combina com o tema chinês.</li>
+      <li><b>Frutas Proibidas</b>: poderes únicos e cobiçados, com um preço que muda o jeito de jogar.</li>
+    </ol>
+    <p>Antes de tudo, vale uma sessão de teste guiada das versões 2.38 a 2.42, para não acumular problemas embaixo de conteúdo novo.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  var botoes = document.querySelectorAll('.filtros button');
+  var ideias = document.querySelectorAll('.ideia');
+  function aplicar(f) {
+    botoes.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.filtro === f)); });
+    ideias.forEach(function (c) { c.hidden = f !== 'todos' && c.dataset.tipos.split(' ').indexOf(f) < 0; });
+    document.querySelectorAll('.horizonte').forEach(function (h) {
+      var algum = Array.prototype.some.call(h.querySelectorAll('.ideia'), function (c) { return !c.hidden; });
+      h.hidden = !algum;
+    });
+    try { localStorage.setItem('mapa-filtro', f); } catch (e) {}
+  }
+  botoes.forEach(function (b) { b.addEventListener('click', function () { aplicar(b.dataset.filtro); }); });
+  var salvo = null;
+  try { salvo = localStorage.getItem('mapa-filtro'); } catch (e) {}
+  if (salvo && document.querySelector('[data-filtro="' + salvo + '"]')) aplicar(salvo);
+})();
+</script>
