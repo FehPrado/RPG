@@ -574,6 +574,7 @@ public final class Lendarias implements Listener {
             for (String linha : l.descricao()) dono.sendMessage(Component.text("  • " + linha, NamedTextColor.GRAY));
             plugin.diario().marco(dono, "lendaria_" + l.id(), "Conquistou o " + l.nome());
             plugin.titulos().registrar(dono, "besta_errante", 1);
+            plugin.album().darCarta(dono, br.rpgatributos.vida.Carta.valueOf(l.name()), true);
             return e;
         }
         if (l == Lendaria.FENGHUANG) {
@@ -592,6 +593,7 @@ public final class Lendarias implements Listener {
                 .append(Component.text("Ele agora vive com " + dono.getName() + ".", cor).decoration(TextDecoration.BOLD, false)));
         for (String linha : l.descricao()) dono.sendMessage(Component.text("  • " + linha, NamedTextColor.GRAY));
         plugin.diario().marco(dono, "lendaria_" + l.id(), "Chocou o " + l.nome());
+        plugin.album().darCarta(dono, br.rpgatributos.vida.Carta.valueOf(l.name()), true);
         return e;
     }
 

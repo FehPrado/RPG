@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.46</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.47</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.46.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.47.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -561,6 +561,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
       <tr><td><span class="cmd">/rpgadmin barril</span>, <span class="cmd">colmeia</span>, <span class="cmd">canteiro</span></td><td>Cria a estação olhando para o bloco (barril vazio, colmeia, bloco de musgo)</td></tr>
       <tr><td><span class="cmd">/rpgadmin carta &lt;carta&gt; [brilhante]</span></td><td>Dá uma carta do álbum</td></tr>
+      <tr><td><span class="cmd">/rpgadmin pacotecartas [n]</span></td><td>Dá Pacotes de Cartas</td></tr>
+      <tr><td><span class="cmd">/rpgadmin pocarta [n]</span></td><td>Dá Pó de Carta (padrão 100; negativo tira)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin duelonpc &lt;morador&gt;</span></td><td>Começa um Duelo de Cartas contra o baralho de um morador (MESTRE, VELHO_PESCADOR...), sem precisar ir à vila</td></tr>
       <tr><td><span class="cmd">/rpgadmin flecha|frasco|erva|mel &lt;tipo&gt; [qtd]</span></td><td>Dá flechas especiais, frascos, ervas ou méis</td></tr>
       <tr><td><span class="cmd">/rpgadmin bebida &lt;tipo&gt; [grau 0-3]</span></td><td>Dá uma bebida do barril (3 = Lendária)</td></tr>
       <tr><td><span class="cmd">/rpgadmin muda|fruta &lt;fruta&gt; [qtd]</span></td><td>Mudas e frutas do pomar</td></tr>
@@ -666,6 +669,19 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Ponha trigo e cenoura no baú. Agachado + clique: mostra as porções e para quantos dias dá.</li>
         <li>Não dê comida na mão e prenda os animais longe da grama. Pule a noite (durma): na virada do dia eles comem do baú e não perdem afeto.</li>
         <li>Só com um fardo de feno no baú: a vaca come e o fardo vira 8 trigos.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Duelo de Cartas e álbum (2.47)</h3>
+      <ol>
+        <li>Suba o pacote novo (moldura de cada carta e a arte do Pacote de Cartas).</li>
+        <li><span class="cmd">/rpgadmin pacotecartas 3</span>: clique com o pacote na mão; saem 3 cartas (nunca Lendas nem Moradores). Guarde-as.</li>
+        <li><span class="cmd">/album</span> → <b>Baralho</b>: clique nas cartas de cima para pôr no baralho (até 2 de cada) e nas do meio para tirar.</li>
+        <li><span class="cmd">/rpgadmin duelonpc MENINA_DO_CAIS</span> (fácil) ou <code>MESTRE</code> (difícil): escolha uma carta da mão, clique numa trilha sua e em <b>Passar o turno</b>. Vencendo: esmeraldas e, na primeira vitória do dia contra aquele morador, um Pacote.</li>
+        <li>Nas vilas, o menu de cada morador tem o botão <b>Duelo de Cartas</b> (embaixo, no meio).</li>
+        <li>Com dois jogadores: <span class="cmd">/duelo &lt;nome&gt;</span> e o outro clica em [Aceitar]. Se alguém sair, o outro vence.</li>
+        <li><span class="cmd">/rpgadmin pocarta 300</span>, depois <span class="cmd">/album</span> → <b>Criar carta</b>. <b>Moer repetidas</b> deixa 2 de cada.</li>
+        <li>Ponha uma carta numa moldura de item na parede: aparece o desenho do bicho.</li>
+        <li>Cartas novas: a lendária dá a dela ao nascer (brilhante), o Nian ao ser espantado, o capítulo 5 do Laço com um morador dá a do morador e os chefes das estruturas têm 30% de deixar a deles.</li>
       </ol>
     </div>
     <div class="card"><h3>Mineração e biomas (2.46)</h3>

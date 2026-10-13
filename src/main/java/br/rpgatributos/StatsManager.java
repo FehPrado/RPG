@@ -102,7 +102,8 @@ public final class StatsManager {
 
         double ganho = quantidade * cfg().multiplicadorXp * plugin.titulos().multiplicadorXp(p, s) * plugin.acessorios().multiplicadorXp(p)
                 * plugin.estacoes().multiplicadorXp(s) * plugin.astronomia().multiplicadorXp(p, s) * plugin.enciclopedia().multiplicadorXp(p)
-                * plugin.talentos().multiplicadorXp(p) * plugin.fogueiras().multiplicadorXp(p) * plugin.trofeus().multiplicadorXp(p);
+                * plugin.talentos().multiplicadorXp(p) * plugin.fogueiras().multiplicadorXp(p) * plugin.trofeus().multiplicadorXp(p)
+                * plugin.album().multiplicadorXp(p);
         setXp(p, s, getXp(p, s) + ganho);
         int depois = getNivel(p, s);
 

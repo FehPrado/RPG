@@ -627,6 +627,7 @@ public final class Profundezas implements Listener {
         if (quem != null) {
             plugin.diario().marco(quem, "coracao_penumbra", "Derrotou o Coração da Penumbra");
             curar(quem);
+            plugin.album().soltarChefeMundo(e.getEntity(), br.rpgatributos.vida.Carta.CORACAO_PENUMBRA);
         }
     }
 

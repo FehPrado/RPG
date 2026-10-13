@@ -70,7 +70,42 @@ public enum Carta {
     SALMAO_REI(Pagina.PEIXES, "Salmão-Rei", "SALMAO_REI", Material.SALMON),
     PEIXE_FANTASMA(Pagina.PEIXES, "Peixe-Fantasma", "PEIXE_FANTASMA", Material.SALMON),
     PEIXE_ABISSAL(Pagina.PEIXES, "Peixe Abissal", "PEIXE_ABISSAL", Material.COD),
-    PEIXE_DRAGAO(Pagina.PEIXES, "Peixe-Dragão", "PEIXE_DRAGAO", Material.TROPICAL_FISH);
+    PEIXE_DRAGAO(Pagina.PEIXES, "Peixe-Dragão", "PEIXE_DRAGAO", Material.TROPICAL_FISH),
+    // 2.47: Lendas (vêm a quem chocar, conquistar ou espantar)
+    QILIN(Pagina.LENDAS, "Qilin", "lenda:qilin", Material.EMERALD),
+    FENGHUANG(Pagina.LENDAS, "Fenghuang", "lenda:fenghuang", Material.FIRE_CHARGE),
+    LONGMA(Pagina.LENDAS, "Longma", "lenda:longma", Material.HEART_OF_THE_SEA),
+    BAIHU(Pagina.LENDAS, "Baihu", "lenda:baihu", Material.SNOWBALL),
+    XUANWU(Pagina.LENDAS, "Xuanwu", "lenda:xuanwu", Material.TURTLE_SCUTE),
+    PIXIU(Pagina.LENDAS, "Pixiu", "lenda:pixiu", Material.GOLD_INGOT),
+    BAIZE(Pagina.LENDAS, "Baize", "lenda:baize", Material.BOOK),
+    KUNPENG(Pagina.LENDAS, "Kunpeng", "lenda:kunpeng", Material.FEATHER),
+    NIAN(Pagina.LENDAS, "Nian", "lenda:nian", Material.FIREWORK_ROCKET),
+    // 2.47: Mundo (os chefes das estruturas, das Profundezas e do céu)
+    CORACAO_PENUMBRA(Pagina.MUNDO, "Coração da Penumbra", "mundo:penumbra", Material.WITHER_ROSE),
+    GUARDIAO_VENTOS(Pagina.MUNDO, "Guardião dos Ventos", "mundo:ventos", Material.WIND_CHARGE),
+    SUMO_SACERDOTE(Pagina.MUNDO, "Sumo-Sacerdote", "mundo:sacerdote", Material.PRISMARINE_CRYSTALS),
+    CAPITAO_ESQUECIDO(Pagina.MUNDO, "Capitão Esquecido", "mundo:capitao", Material.IRON_SWORD),
+    CHEFE_BANDIDOS(Pagina.MUNDO, "Chefe dos Bandidos", "mundo:chefe", Material.EMERALD),
+    APRENDIZ_CORROMPIDO(Pagina.MUNDO, "Aprendiz Corrompido", "mundo:aprendiz", Material.ENCHANTED_BOOK),
+    GUARDIAO_ANCESTRAL(Pagina.MUNDO, "Guardião Ancestral", "mundo:guardiao", Material.AMETHYST_SHARD),
+    // 2.47: Moradores das vilas (vêm no fim do laço com cada um)
+    VELHO_PESCADOR(Pagina.MORADORES, "Velho Pescador", "morador:VELHO_PESCADOR", Material.FISHING_ROD),
+    PEIXEIRA(Pagina.MORADORES, "Peixeira", "morador:PEIXEIRA", Material.COD),
+    CARPINTEIRO_NAVAL(Pagina.MORADORES, "Carpinteiro Naval", "morador:CARPINTEIRO_NAVAL", Material.OAK_BOAT),
+    MENINA_DO_CAIS(Pagina.MORADORES, "Menina do Cais", "morador:MENINA_DO_CAIS", Material.COOKIE),
+    MESTRE(Pagina.MORADORES, "Mestre do Mosteiro", "morador:MESTRE", Material.BAMBOO),
+    HERBALISTA(Pagina.MORADORES, "Monge Herbalista", "morador:HERBALISTA", Material.SWEET_BERRIES),
+    GUARDIAO_DO_SINO(Pagina.MORADORES, "Guardião do Sino", "morador:GUARDIAO_DO_SINO", Material.BELL),
+    PEREGRINO(Pagina.MORADORES, "Peregrino", "morador:PEREGRINO", Material.MAP),
+    MESTRE_MINEIRO(Pagina.MORADORES, "Mestre Mineiro", "morador:MESTRE_MINEIRO", Material.IRON_PICKAXE),
+    JOALHEIRO(Pagina.MORADORES, "Joalheiro", "morador:JOALHEIRO", Material.DIAMOND),
+    FERREIRO_ANAO(Pagina.MORADORES, "Ferreiro Anão", "morador:FERREIRO_ANAO", Material.IRON_INGOT),
+    TAVERNEIRO(Pagina.MORADORES, "Taverneiro", "morador:TAVERNEIRO", Material.HONEY_BOTTLE),
+    DRUIDA(Pagina.MORADORES, "Druida", "morador:DRUIDA", Material.OAK_SAPLING),
+    ARQUEIRA(Pagina.MORADORES, "Arqueira", "morador:ARQUEIRA", Material.BOW),
+    CURANDEIRA(Pagina.MORADORES, "Curandeira", "morador:CURANDEIRA", Material.GOLDEN_APPLE),
+    TECELA(Pagina.MORADORES, "Tecelã", "morador:TECELA", Material.STRING);
 
     /** As páginas do álbum e o bônus de cada uma. */
     public enum Pagina {
@@ -81,7 +116,10 @@ public enum Carta {
         ESTRANHOS("Estranhos", Material.SCULK, "+5% de dano em creepers, slimes, guardiões e afins"),
         FIM("Fim", Material.END_STONE, "+5% de dano nas criaturas do End"),
         CHEFES("Chefes", Material.WITHER_ROSE, "+5% de dano em chefes"),
-        PEIXES("Peixes raros", Material.TROPICAL_FISH, "+2% de chance de peixe raro");
+        PEIXES("Peixes raros", Material.TROPICAL_FISH, "+2% de chance de peixe raro"),
+        LENDAS("Lendas", Material.DRAGON_EGG, "+3% de dano em tudo"),
+        MUNDO("Mundo", Material.COMPASS, "+5% de dano em Elites"),
+        MORADORES("Moradores", Material.EMERALD, "+5% de XP em todos os atributos");
 
         private final String nome, bonus;
         private final Material icone;
@@ -135,6 +173,8 @@ public enum Carta {
 
     /** Raridade da carta: comum (monstros), rara (peixes, Fim, chefes de masmorra) ou épica (chefes do Altar e o Dragão). */
     public int raridade() {
+        if (pagina == Pagina.LENDAS || pagina == Pagina.MUNDO && this != CHEFE_BANDIDOS && this != APRENDIZ_CORROMPIDO) return 2;
+        if (pagina == Pagina.MORADORES || pagina == Pagina.MUNDO) return 1;
         if (pagina == Pagina.CHEFES || this == DRAGAO || this == WARDEN || this == GUARDIAO_ANCIAO) return 2;
         if (pagina == Pagina.PEIXES || pagina == Pagina.FIM || this == INVOCADOR || this == DEVASTADOR || this == BREEZE) return 1;
         return 0;

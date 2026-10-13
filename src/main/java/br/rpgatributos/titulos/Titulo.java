@@ -117,6 +117,12 @@ public enum Titulo {
     GEOLOGO("Geólogo", 0xD8B46A, Requisito.contador("minerais_bioma", 50, "Minerar 50 minerais de bioma (âmbar, jade, pérola, cristal de gelo, pedra-sangue)"), Bonus.xpSkill(Skill.MINERACAO, 0.15)),
     CORACAO_DE_CRISTAL("Coração de Cristal", 0xB66BFF, Requisito.contador("geodos", 10, "Lapidar 10 cristais de geodo com o Cinzel"), Bonus.xpSkill(Skill.MINERACAO, 0.1)),
     GARIMPEIRO_DO_RIO("Garimpeiro do Rio", 0xFFD23F, Requisito.contador("garimpos", 100, "Garimpar 100 vezes com a Bateia"), Bonus.xpTudo(0.03)),
+    // ---------- 2.47: Duelo de Cartas e o álbum ----------
+    DUELISTA("Duelista", 0xF2C14E, Requisito.contador("duelos_vencidos", 10, "Vencer 10 Duelos de Cartas"), Bonus.xpTudo(0.03)),
+    CAMPEAO_DAS_VILAS("Campeão das Vilas", 0xE0A030, Requisito.contador("duelos_dificeis", 10, "Vencer 10 duelos contra moradores difíceis (Mestre, Taverneiro, Ferreiro Anão)"), new Bonus().comDano(1).comVida(2)),
+    RIVAL_DE_MESA("Rival de Mesa", 0xFFB74D, Requisito.contador("duelos_pvp", 5, "Vencer 5 Duelos de Cartas contra jogadores"), Bonus.velocidade(0.02)),
+    ABRIDOR_DE_PACOTES("Abridor de Pacotes", 0x4FC3F7, Requisito.contador("pacotes_abertos", 25, "Abrir 25 Pacotes de Cartas"), Bonus.vida(2)),
+    CURADOR_DO_ALBUM("Curador do Álbum", 0x9575CD, Requisito.contador("album_marcos", 4, "Alcançar os 4 marcos do álbum (80 cartas diferentes)"), Bonus.xpTudo(0.04)),
     RENASCIDO("Renascido", 0xFFD54F, Requisito.contador("renascimentos", 1, "Renascer uma vez"), new Bonus().comVida(2).comDano(1)),
     ETERNO("Eterno", 0xFFF59D, Requisito.contador("renascimentos", 5, "Renascer 5 vezes"), new Bonus().comDano(2).comVida(6).comVelocidade(0.05)),
 

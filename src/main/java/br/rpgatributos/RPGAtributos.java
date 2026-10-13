@@ -223,6 +223,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Barris barris;
     private br.rpgatributos.vida.Tachos tachos;
     private Album album;
+    private br.rpgatributos.vida.Duelos duelos;
     private MercadorItinerante mercador;
     private Encontros encontros;
     private Flechas flechas;
@@ -277,6 +278,7 @@ public final class RPGAtributos extends JavaPlugin {
         recordes.carregar();
         segredos = new Segredos(this);
         album = new Album(this);
+        duelos = new br.rpgatributos.vida.Duelos(this);
         tags = new TagManager(this);
         skillListener = new SkillListener(this);
         menus = new MenuManager(this);
@@ -422,7 +424,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda);
+                canteiros, colmeias, barris, tachos, album, duelos, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -487,6 +489,8 @@ public final class RPGAtributos extends JavaPlugin {
         if (cpl != null) cpl.setExecutor(placar);
         PluginCommand cal = getCommand("album");
         if (cal != null) cal.setExecutor(album);
+        PluginCommand cdu = getCommand("duelo");
+        if (cdu != null) cdu.setExecutor(duelos);
         PluginCommand csg = getCommand("segredos");
         if (csg != null) csg.setExecutor(segredos);
         PluginCommand cto = getCommand("torre");
@@ -530,6 +534,7 @@ public final class RPGAtributos extends JavaPlugin {
         marcos.iniciar();
         agenda.runTaskTimer(this, marcos::tick, 5L, 5L);
         agenda.runTaskTimer(this, parties::limparConvites, 1200L, 1200L);
+        agenda.runTaskTimer(this, duelos::tick, 100L, 100L);
         // Domador: altar, ordens dos companheiros (meio segundo), montaria (todo tick) e registro (30 s).
         altaresDomador.iniciar();
         // Masmorras: obras (todo tick), portais (5 ticks), salas e ondas (10 ticks).
@@ -854,6 +859,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Barris barris() { return barris; }
     public br.rpgatributos.vida.Tachos tachos() { return tachos; }
     public Album album() { return album; }
+    public br.rpgatributos.vida.Duelos duelos() { return duelos; }
     public MercadorItinerante mercador() { return mercador; }
     public Encontros encontros() { return encontros; }
     public Flechas flechas() { return flechas; }

@@ -164,6 +164,11 @@ commands:
     usage: /album
     aliases: [cartas]
     permission: rpg.vida
+  duelo:
+    description: Duelo de Cartas entre jogadores.
+    usage: /duelo <jogador|aceitar|abrir|desistir>
+    aliases: [duelocartas]
+    permission: rpg.vida
   segredos:
     description: Conquistas secretas.
     usage: /segredos

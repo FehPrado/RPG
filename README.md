@@ -20,7 +20,7 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **exploração**: **Ilhas do Céu** (lançado por uma Plataforma de Vento) e as **Profundezas** escuras com Raízes de Luz e a Penumbra, Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
 - **progressão extra**: **talentos** em 4 árvores, **renascer** com bônus permanente (até ★★★★★) e **evolução dos companheiros** (Lobo → Lobo Alfa → Lobo das Sombras);
 - **detalhes do dia a dia**: barco, carrinho, vara, élitro e armadura de cavalo forjados, Boneco de Treino, Pedra de Amolar, Fogueira de Acampamento (sentar e descansar), Bebedouro, troféus de chefe, túmulo ao morrer, animais raros, ninhos, recordes e o Diário de Viagem;
-- **vida no mundo**: Barril de Envelhecimento, apicultura, Canteiro de Ervas, Álbum de Cartas, Mercador Itinerante, encontros na estrada, segredos, flechas especiais e frascos de arremesso;
+- **vida no mundo**: Barril de Envelhecimento, apicultura, Canteiro de Ervas, Álbum de Cartas com Duelo de Cartas (contra moradores e jogadores), Mercador Itinerante, encontros na estrada, segredos, flechas especiais e frascos de arremesso;
 - **conforto**: menu central `/rpg` e placar lateral opcional;
 - **títulos** e **missões de aldeões**.
 
@@ -1309,9 +1309,44 @@ Mudas especiais crescem como árvores do jogo, mas na estação certa as **fruta
 - **Colônia:** o Lenhador não derruba árvores de verdade (a produção dele é do depósito), e o **Fazendeiro colhe as frutas maduras e as plantações da estação** do território e guarda no depósito.
 - **Barril:** o **Licor de Frutas** leva 6 frutas (do pomar, morango, mirtilo, uva, amora, groselha ou zimbro) e 1 garrafa de mel.
 - O `/calendario` mostra as frutas da estação. Árvores em território alheio só o dono (e membros) colhem.
-### Álbum de Cartas (`/album`)
+### Álbum de Cartas (`/album`) e Duelo de Cartas (2.47)
 
-Monstros, chefes e peixes raros às vezes deixam uma **carta** (5% delas são **brilhantes**). Clique com ela na mão para guardar. São **54 cartas em 8 páginas** (Mortos-vivos, Artrópodes, Nether, Illagers, Estranhos, Fim, Chefes e Peixes raros), e completar uma página dá um bônus para sempre: +5% de dano naquele grupo (ou +2% de peixe raro). **5 cartas repetidas** trocam por uma que falta.
+Monstros, chefes e peixes raros às vezes deixam uma **carta** (5% delas são **brilhantes**). Clique com ela na mão para guardar. São **86 cartas em 11 páginas**, e completar uma página dá um bônus para sempre:
+
+| Página | Como se consegue | Bônus da página completa |
+|---|---|---|
+| Mortos-vivos, Artrópodes, Nether, Illagers, Estranhos, Fim | Monstros (e Pacotes) | +5% de dano naquele grupo |
+| Chefes | Chefes do Altar | +5% de dano em chefes |
+| Peixes raros | Pescando | +2% de chance de peixe raro |
+| **Lendas** (9) | Chocar ou conquistar uma lendária (vem brilhante) e espantar o Nian | +3% de dano em tudo |
+| **Mundo** (7) | Chefes das estruturas: Chefe dos Bandidos, Aprendiz Corrompido, Capitão Esquecido, Guardião Ancestral, Sumo-Sacerdote, Guardião dos Ventos e Coração da Penumbra (30%) | +5% de dano em Elites |
+| **Moradores** (16) | Capítulo 5 do Laço com cada morador das vilas | +5% de XP em todos os atributos |
+
+- **Pacote de Cartas:** 3 cartas sorteadas (chance de rara, épica e brilhante; Lendas e Moradores não saem em pacote). Vende no Peregrino e no Taverneiro (8 esmeraldas), cai de Elites (3%), dos marcos do álbum e dos duelos.
+- **Pó de Carta:** o botão **Moer repetidas** transforma da 3ª cópia em diante em pó (comum 5, rara 15, épica 40); ficam sempre 2 de cada, para o baralho. Em **Criar carta** o pó vira a carta que falta, ou a 2ª cópia (comum 40, rara 100, épica 300). Lendas e Moradores não se criam.
+- **Marcos:** 10, 25, 50 e 80 cartas diferentes dão Pacotes, esmeraldas, pó e uma carta brilhante.
+- **Na parede:** a carta numa moldura de item mostra o ícone do bicho desenhado nela (com o pacote de recursos).
+
+**Duelo de Cartas.** Cada carta tem custo (⚡), força (⚔), vida (❤) e às vezes um **dom**. As brilhantes têm +1/+1. A mesa tem **3 trilhas**; cada lado começa com 20 de vida e a energia cresce 1 por turno (até 6). Na sua vez você compra 1 carta, baixa as que couberem na energia e **passa o turno**: cada carta sua ataca a da frente, e se a trilha da frente estiver vazia o golpe vai direto no adversário. Carta que acabou de entrar só ataca no turno seguinte (a não ser que seja Rápida).
+
+| Dom | Efeito |
+|---|---|
+| Voo | Só é bloqueada por quem também voa: senão ataca direto |
+| Veneno | Quem leva dano dela perde 1 de vida por turno (2 turnos) |
+| Escudo | Ignora o primeiro dano |
+| Roubo de vida | Cura o dono no tanto de dano que causar |
+| Explosão | Ao cair, causa 2 de dano na carta da frente |
+| Rápida | Ataca no turno em que entra |
+| Invocar | Ao entrar, cria um Lacaio 1/1 numa trilha livre |
+| Teimosa | Na primeira vez que cai, volta com 1 de vida |
+| Cura | No fim do seu turno, cura 1 de cada carta sua |
+| Fúria | +1 de força cada vez que leva dano |
+| Muralha | Não ataca, mas segura a trilha |
+
+- **Baralho:** no `/album` → **Baralho**, escolha 12 cartas do seu álbum (até 2 de cada). Faltando cartas, o duelo completa com cartas de treino.
+- **Contra moradores:** todo morador das vilas tem o botão **🃏 Duelo de Cartas**, com um baralho temático (o Velho Pescador joga com peixes, o Ferreiro Anão com o Nether...) e uma dificuldade: Fácil, Médio ou Difícil (Mestre, Taverneiro e Ferreiro Anão, que ainda começam com 24 de vida). Vencer dá esmeraldas (mais nos difíceis) e 30% de chance de um Pacote. A **primeira vitória do dia contra cada morador** dá um Pacote garantido.
+- **Contra jogadores:** `/duelo <jogador>` desafia; o outro clica em **[Aceitar]** ou usa `/duelo aceitar` (vale 60 s). `/duelo abrir` reabre a mesa e `/duelo desistir` entrega. Cada um tem 90 s por turno (depois passa sozinho) e quem sai do jogo perde. É só pela glória: ninguém perde nem troca cartas.
+- Títulos: **Duelista** (10 vitórias), **Campeão das Vilas** (10 vitórias contra moradores difíceis), **Rival de Mesa** (5 vitórias contra jogadores), **Abridor de Pacotes** (25 pacotes) e **Curador do Álbum** (os 4 marcos).
 
 ### No mundo
 
@@ -1444,7 +1479,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 98 títulos com requisitos (em páginas), por exemplo Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 103 títulos com requisitos (em páginas), por exemplo Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1501,7 +1536,8 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/guia [palavra\|livro]` | todos | Guia interativo e busca; `livro` dá o livro |
 | `/jornada` | todos | Jornada do Aventureiro (12 primeiros passos) |
 | `/placar` | todos | Liga ou desliga o placar lateral |
-| `/album` | todos | Álbum de Cartas |
+| `/album` | todos | Álbum de Cartas: páginas, pacotes, pó, marcos e baralho |
+| `/duelo <jogador\|aceitar\|abrir\|desistir>` | todos | Duelo de Cartas entre jogadores |
 | `/segredos` | todos | Segredos descobertos e dicas dos outros |
 | `/territorio` | todos | Menu do território (`mapa`, `bordas`, `info`, `reivindicar`, `liberar`, `adicionar`, `remover`, `abandonar confirmar`) |
 | `/cosmeticos`, `/chapeu`, `/tag` | todos | Item na cabeça e tag personalizada |
@@ -1653,9 +1689,9 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.46.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.47.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.46.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.46.0 && git push origin v2.46.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.47.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.47.0 && git push origin v2.47.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 

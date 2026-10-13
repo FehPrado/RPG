@@ -894,6 +894,16 @@ public final class Estruturas implements Listener {
         if (v == null || !v.contains(":")) return;
         ThreadLocalRandom r = ThreadLocalRandom.current();
         Player quem = e.getEntity().getKiller();
+        br.rpgatributos.vida.Carta carta = switch (v.substring(v.indexOf(':') + 1)) {
+            case "chefe" -> br.rpgatributos.vida.Carta.CHEFE_BANDIDOS;
+            case "aprendiz" -> br.rpgatributos.vida.Carta.APRENDIZ_CORROMPIDO;
+            case "capitao" -> br.rpgatributos.vida.Carta.CAPITAO_ESQUECIDO;
+            case "sacerdote" -> br.rpgatributos.vida.Carta.SUMO_SACERDOTE;
+            case "ventos" -> br.rpgatributos.vida.Carta.GUARDIAO_VENTOS;
+            case "guardiao" -> br.rpgatributos.vida.Carta.GUARDIAO_ANCESTRAL;
+            default -> null;
+        };
+        if (carta != null && quem != null) plugin.album().soltarChefeMundo(e.getEntity(), carta);
         switch (v.substring(v.indexOf(':') + 1)) {
             case "chefe" -> {
                 e.getDrops().add(new ItemStack(Material.EMERALD, 5 + r.nextInt(8)));

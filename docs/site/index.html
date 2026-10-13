@@ -166,6 +166,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <a href="#mecanicas">Mecânicas</a>
       <a href="#estacoes">Estações</a>
       <a href="#destaques">Posturas e conjuntos</a>
+      <a href="#duelo">Duelo de Cartas</a>
       <a href="#colecao">Coleção</a>
     </div>
   </div>
@@ -174,7 +175,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 <main id="inicio">
   <section class="wrap abertura">
     <div>
-      <p class="rotulo">Manual do jogador · versão 2.46</p>
+      <p class="rotulo">Manual do jogador · versão 2.47</p>
       <h1>Um mundo inteiro <em>dentro</em> do seu Minecraft.</h1>
       <p class="lead">Atributos que sobem com o uso, classes, magia, deuses, forja com raridades, colônias com moradores de verdade, reinos em guerra, cidades no fundo do mar. Tudo o que o RPGAtributos tem, num lugar só.</p>
       <div class="numeros">
@@ -265,6 +266,49 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     </div>
   </section>
 
+  <section class="secao" id="duelo">
+    <div class="wrap">
+      <header>
+        <div><p class="rotulo">Álbum de Cartas · 2.47</p><h2>Duelo de Cartas</h2></div>
+        <p>Monte um baralho de 12 cartas no <code>/album</code> e duele com os moradores das vilas (cada um com seu baralho e dificuldade) ou com outro jogador (<code>/duelo</code>). Três trilhas, 20 de vida e energia que cresce até 6: ao passar o turno, cada carta ataca a da frente; trilha vazia é golpe direto.</p>
+      </header>
+      <div class="tabelas">
+        <div class="tabela">
+          <h3>Dons das cartas</h3>
+          <div class="rolar"><table>
+            <thead><tr><th>Dom</th><th>Efeito</th></tr></thead>
+            <tbody>
+              <tr><td><b>Voo</b></td><td>Só quem voa bloqueia; senão, ataca direto</td></tr>
+              <tr><td><b>Veneno</b></td><td>Quem leva dano perde 1 de vida por turno</td></tr>
+              <tr><td><b>Escudo</b></td><td>Ignora o primeiro dano</td></tr>
+              <tr><td><b>Roubo de vida</b></td><td>Cura o dono no tanto de dano</td></tr>
+              <tr><td><b>Explosão</b></td><td>Ao cair, 2 de dano na carta da frente</td></tr>
+              <tr><td><b>Rápida</b></td><td>Ataca no turno em que entra</td></tr>
+              <tr><td><b>Invocar</b></td><td>Cria um Lacaio 1/1</td></tr>
+              <tr><td><b>Teimosa</b></td><td>Volta uma vez com 1 de vida</td></tr>
+              <tr><td><b>Cura</b></td><td>Cura 1 de cada carta sua por turno</td></tr>
+              <tr><td><b>Fúria</b></td><td>+1 de força a cada dano levado</td></tr>
+              <tr><td><b>Muralha</b></td><td>Não ataca, mas segura a trilha</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="tabela">
+          <h3>O álbum agora</h3>
+          <div class="rolar"><table>
+            <thead><tr><th>O quê</th><th>Como funciona</th></tr></thead>
+            <tbody>
+              <tr><td><b>11 páginas</b></td><td>86 cartas. Novas: Lendas (lendárias e o Nian), Mundo (chefes das estruturas) e Moradores (laços nas vilas)</td></tr>
+              <tr><td><b>Pacote de Cartas</b></td><td>3 cartas; no Peregrino e no Taverneiro, de Elites e dos duelos (um garantido por dia por morador vencido)</td></tr>
+              <tr><td><b>Pó de Carta</b></td><td>Da 3ª cópia em diante vira pó; o pó cria a carta que falta</td></tr>
+              <tr><td><b>Marcos</b></td><td>10, 25, 50 e 80 cartas diferentes dão prêmios</td></tr>
+              <tr><td><b>Na parede</b></td><td>Numa moldura de item, a carta mostra o bicho</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="secao" id="colecao">
     <div class="wrap">
       <header>
@@ -280,7 +324,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 <footer>
   <div class="wrap">
-    <span>RPGAtributos 2.46 · plugin para servidores Paper 26.3</span>
+    <span>RPGAtributos 2.47 · plugin para servidores Paper 26.3</span>
     <span>Dúvidas no jogo: <code>/guia</code> e <code>/rpg</code></span>
   </div>
 </footer>
@@ -317,7 +361,7 @@ const AREAS = [
     "Masmorras, portais, Soberano das Sombras e a Torre Infinita",
     "Mineração por bioma (âmbar, jade, pérolas, cristal de gelo, pedra-sangue, turfa), geodos lapidados com cinzel, bateia nos rios, 23 estruturas (até naufrágios, cidades submersas, Ilhas do Céu e 4 vilas com moradores que têm loja, serviço e laço: pescadores, mosteiro, anões e elfos), 7 Locais Ocultos e 12 Lendas",
     "Profundezas escuras abaixo do y 0: Raízes de Luz para acender e a Penumbra, que rouba corações",
-    "Mapas do tesouro, arqueologia, campanha de 8 capítulos, sonhos e Álbum de 54 cartas"], cmds: ["/calendario", "/bestiario", "/lendas", "/album"] },
+    "Mapas do tesouro, arqueologia, campanha de 8 capítulos, sonhos, Álbum de 86 cartas e Duelo de Cartas"], cmds: ["/calendario", "/bestiario", "/lendas", "/album", "/duelo"] },
   { ico: "🏰", nome: "Comunidade", itens: [
     "Party com XP dividido e chat próprio",
     "Territórios protegidos, com regras e expansões",
@@ -373,6 +417,7 @@ const GRUPOS = [
   ["oficio", "Peles, couros e tecidos", "O caminho do curtume: a pele crua, o couro curtido e os tecidos do tear."],
   ["acessorio", "Acessórios", "Anéis, amuletos, cintos e itens de bolso para os espaços do /acessorios."],
   ["mineral", "Minerais e ferramentas", "Os minerais de cada bioma, a turfa, o Cinzel do Lapidador e a Bateia (2.46)."],
+  ["carta", "Cartas", "As molduras das cartas por raridade e o Pacote de Cartas (2.47). Numa moldura de item na parede, a carta mostra o desenho do bicho."],
   ["lenda", "Lendas", "Itens únicos no servidor. Estes têm visual próprio; o arco, o escudo e as armaduras mantêm o do jogo."],
   ["fruta", "Frutas do pomar", "As 5 frutas que nascem penduradas nas árvores do pomar."],
   ["bebida", "Bebidas do barril", "Bebidas que envelhecem com os dias reais."],
@@ -396,6 +441,7 @@ const ITENS = {
   oficio: [["oficio_pele_de_lobo","Pele de Lobo"],["oficio_pele_de_urso","Pele de Urso Polar"],["oficio_pele_de_raposa","Pele de Raposa"],["oficio_escama_de_guardiao","Escama de Guardião"],["oficio_couro_de_hoglin","Couro de Hoglin"],["oficio_couro_lobo","Couro de Lobo Curtido"],["oficio_couro_urso","Couro de Urso Curtido"],["oficio_couro_raposa","Couro de Raposa Curtido"],["oficio_couro_escamas","Couro de Escamas"],["oficio_couro_brasa","Couro de Brasa"],["oficio_couro_noturno","Couro Noturno"],["oficio_tecido","Tecido de Linha"],["oficio_feltro","Feltro"],["oficio_tecido_de_alga","Tecido de Alga"]],
   mineral: [["raro_ambar","Âmbar"],["raro_jade","Jade"],["raro_perola","Pérola do Mar"],["raro_cristal_de_gelo","Cristal de Gelo"],["raro_pedra_sangue","Pedra-Sangue"],["turfa","Turfa"],["cinzel","Cinzel do Lapidador"],["bateia","Bateia"]],
   acessorio: [["anel_jade","Anel de Jade"],["anel_gelo","Anel do Gelo Eterno"],["pingente_ambar","Pingente de Âmbar"],["colar_perolas","Colar de Pérolas"],["amuleto_sangue","Amuleto de Sangue"],["anel_vigor","Anel do Vigor"],["anel_forca","Anel da Força"],["anel_vento","Anel do Vento"],["anel_mares","Anel das Marés"],["anel_brasas","Anel das Brasas"],["anel_minerador","Anel do Minerador"],["anel_fortuna","Anel da Fortuna"],["anel_sabio","Anel do Sábio"],["amuleto_mana","Amuleto de Mana"],["amuleto_guardiao","Amuleto do Guardião"],["amuleto_vida","Amuleto da Vida"],["amuleto_fenix","Amuleto da Fênix"],["cinto_atleta","Cinto do Atleta"],["cinto_andarilho","Cinto do Andarilho"],["cinto_tita","Cinto do Titã"],["lanterna_bolso","Lanterna de Bolso"],["ima_bolso","Ímã de Bolso"],["relogio_bolso","Relógio de Bolso"],["capa_planadora","Capa Planadora"]],
+  carta: [["carta_comum","Carta comum"],["carta_rara","Carta rara"],["carta_epica","Carta épica"],["carta_brilhante","Carta brilhante"],["pacote_cartas","Pacote de Cartas"]],
   lenda: [["lenda_lamina_do_exorcista","Lâmina do Exorcista"],["lenda_presa_da_tecela","Presa da Tecelã"],["lenda_machado_do_lenhador","Machado do Lenhador Eterno"],["lenda_picareta_do_abismo","Picareta do Abismo"],["lenda_lamina_do_carrasco","Lâmina do Carrasco"],["lenda_martelo_do_forjador","Martelo do Forjador Lendário"],["lenda_lamina_do_arquimago","Lâmina do Arquimago"]],
   fruta: [["fruta_laranja","Laranja"],["fruta_pessego","Pêssego"],["fruta_cereja","Cereja"],["fruta_limao","Limão"],["fruta_maca_dourada","Maçã Dourada do Pomar"]],
   bebida: [["bebida_hidromel","Hidromel"],["bebida_cidra","Cidra"],["bebida_vinho","Vinho de Frutas"],["bebida_cerveja","Cerveja de Trigo"],["bebida_licor_arcano","Licor Arcano"],["bebida_licor_de_ervas","Licor de Ervas"],["bebida_licor_de_frutas","Licor de Frutas"]],

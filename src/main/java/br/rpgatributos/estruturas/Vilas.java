@@ -79,7 +79,7 @@ public final class Vilas implements Listener {
     //  Os papéis (16 NPCs, 4 por vila)
     // =====================================================================
 
-    enum Papel {
+    public enum Papel {
         VELHO_PESCADOR(Estrutura.VILA_PESCADORES, "Velho Pescador", new String[]{"Tião", "Joca", "Seu Bento", "Dito"},
                 Villager.Profession.FISHERMAN, Villager.Type.PLAINS, 1, new int[]{-4, 2, -3},
                 "Vende varas e iscas e conta as lendas do mar.", null,
@@ -391,7 +391,7 @@ public final class Vilas implements Listener {
             case PEREGRINO -> {
                 l.add(vende(plugin.mapas().criar(MapasDoTesouro.Tipo.COMUM, onde), 16, 1));
                 l.add(vende(Raro.MAPA_RASGADO.criar(1), 14, 1));
-                l.add(vende(Album.carta(Carta.values()[r.nextInt(Carta.values().length)], false), 5, 3));
+                l.add(vende(Album.pacote(1), 8, 2));
                 l.add(vende(new ItemStack(Material.COMPASS), 4, 2));
                 l.add(vende(new ItemStack(Material.BREAD, 6), 1, 4));
             }
@@ -425,6 +425,7 @@ public final class Vilas implements Listener {
                 l.add(vende(b[r.nextInt(b.length)].criar(1), 6, 3));
                 l.add(vende(b[r.nextInt(b.length)].criar(1), 6, 3));
                 l.add(vende(new ItemStack(Material.COOKED_BEEF, 6), 2, 4));
+                l.add(vende(Album.pacote(1), 8, 2));
                 l.add(vende(new ItemStack(Material.BREAD, 8), 1, 4));
                 l.add(compra(Material.WHEAT, 20, 1, 8));
             }
@@ -483,7 +484,7 @@ public final class Vilas implements Listener {
         @Override public Inventory getInventory() { return inv; }
     }
 
-    private static final int M_INFO = 4, M_LACO = 11, M_LOJA = 13, M_SERVICO = 15;
+    private static final int M_INFO = 4, M_LACO = 11, M_LOJA = 13, M_SERVICO = 15, M_DUELO = 22;
 
     @EventHandler(priority = EventPriority.HIGH)
     public void aoClicar(PlayerInteractEntityEvent e) {
@@ -504,7 +505,11 @@ public final class Vilas implements Listener {
     }
 
     private Lacos.Alvo alvo(Player p, Sitio s, Papel papel, Entity npc) {
-        return new Lacos.Alvo(npc.getUniqueId(), papel.nome(s), papel.historia, null, () -> presente(papel, p.getLocation()));
+        return new Lacos.Alvo(npc.getUniqueId(), papel.nome(s), papel.historia, null, () -> {
+            // O capítulo 5 também dá a carta do morador (só se ganha assim).
+            plugin.album().darCarta(p, Carta.valueOf(papel.name()), false);
+            return presente(papel, p.getLocation());
+        });
     }
 
     /** O serviço só pode ser usado uma vez por dia (o conserto e a cura são pagos e não têm limite). */
@@ -541,6 +546,12 @@ public final class Vilas implements Listener {
                     Component.empty(),
                     Component.text(usado ? "Já usado hoje. Volte amanhã." : "» Clique para usar", usado ? NamedTextColor.DARK_GRAY : NamedTextColor.YELLOW))));
         }
+        t.inv.setItem(M_DUELO, item(Material.PAPER, Component.text("🃏 Duelo de Cartas", TextColor.color(0xF2C14E), TextDecoration.BOLD), List.of(
+                Component.text("Dificuldade: " + br.rpgatributos.vida.Duelos.nomeDificuldade(papel.name()), NamedTextColor.WHITE),
+                Component.text("Vença para ganhar esmeraldas e Pacotes", NamedTextColor.GRAY),
+                Component.text("de Cartas (um garantido por dia).", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("» Clique para duelar", NamedTextColor.YELLOW))));
         p.openInventory(t.inv);
         p.playSound(npc.getLocation(), Sound.ENTITY_VILLAGER_AMBIENT, 1f, papel.escala < 1 ? 0.8f : 1.1f);
     }
@@ -592,6 +603,7 @@ public final class Vilas implements Listener {
                 }
                 p.closeInventory();
             }
+            case M_DUELO -> plugin.duelos().contraNpc(p, t.papel.name(), t.papel.nome(t.sitio));
             default -> { }
         }
     }
@@ -752,7 +764,7 @@ public final class Vilas implements Listener {
             case DRUIDA -> Fruta.sortear(new Random()).muda(2);
             case ARQUEIRA -> plugin.forja().criarNomeada(Nomeada.ARCO_DAS_FOLHAS_CAIDAS, Raridade.EPICO);
             case CURANDEIRA -> new ItemStack(Material.GOLDEN_APPLE, 2);
-            case TECELA -> Album.carta(Carta.values()[r.nextInt(Carta.values().length)], true);
+            case TECELA -> Album.carta(Album.sortear(r, true), true);
         };
     }
 

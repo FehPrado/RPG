@@ -1658,6 +1658,25 @@ final class ArteItens {
             "................",
             "................"};
 
+    /** Pacote de Cartas: envelope dourado com a aba fechada e a estrela no meio. */
+    private static final String[] PACOTE_CARTAS = {
+            "................",
+            "..oooooooooooo..",
+            "..ozzzzzzzzzzo..",
+            "..ogggggggggdo..",
+            "..ogllllllllgo..",
+            "..oggllllllggo..",
+            "..ogggllllgggo..",
+            "..oggggssggggo..",
+            "..ogggswwsgggo..",
+            "..oggsswwssggo..",
+            "..ogggswwsgggo..",
+            "..oggggssggggo..",
+            "..ogggggggggdo..",
+            "..ozzzzzzzzzzo..",
+            "..oooooooooooo..",
+            "................"};
+
     private static final String[] CARTA = {
             "................",
             "...oooooooooo...",
@@ -1844,6 +1863,7 @@ final class ArteItens {
         l.add(new Arte("paper", "carta_rara", CARTA, com(papel, 'b', 0xFF1E88E5, 'f', 0xFFBBDEFB, 'a', 0xFF42A5F5, 'c', BRANCO)));
         l.add(new Arte("paper", "carta_epica", CARTA, com(papel, 'b', 0xFF8E24AA, 'f', 0xFFE1BEE7, 'a', 0xFFAB47BC, 'c', 0xFFFFD54F)));
         l.add(new Arte("paper", "carta_brilhante", CARTA, com(papel, 'b', 0xFFFFB300, 'f', 0xFFFFF59D, 'a', 0xFFFFCA28, 'c', BRANCO)));
+        l.add(new Arte("paper", "pacote_cartas", PACOTE_CARTAS, c('o', 0xFF3E2723, 'z', 0xFFB71C1C, 'g', 0xFFF2C14E, 'd', 0xFFC79A2E, 'l', 0xFFFFE08A, 's', 0xFF8E24AA, 'w', BRANCO)));
         l.add(new Arte("snowball", "frasco_fumaca", GARRAFA, com(VIDRO, 'c', 0xFFEEEEEE, 'l', 0xFF9E9E9E, 'd', 0xFF616161, 'a', 0xFFE0E0E0)));
         l.add(new Arte("snowball", "frasco_cola", GARRAFA, com(VIDRO, 'c', 0xFF8D6E63, 'l', 0xFF9CCC65, 'd', 0xFF558B2F, 'a', 0xFFDCEDC8)));
         l.add(new Arte("snowball", "frasco_fogo_grego", GARRAFA, com(VIDRO, 'c', 0xFFE0E0E0, 'l', 0xFFFF7043, 'd', 0xFFBF360C, 'a', 0xFFFFEB3B)));

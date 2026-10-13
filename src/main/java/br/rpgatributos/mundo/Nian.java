@@ -277,6 +277,7 @@ public final class Nian implements Listener {
             nomes.add(p.getName());
             plugin.titulos().registrar(p, "nian_espantado", 1);
             plugin.diario().marco(p, "nian", "Espantou o Nian numa noite de inverno");
+            plugin.album().darCarta(p, br.rpgatributos.vida.Carta.NIAN, ThreadLocalRandom.current().nextDouble() < 0.1);
         }
         plugin.getServer().broadcast(Component.text("🎆 O Nian fugiu de volta para as montanhas! ", COR, TextDecoration.BOLD)
                 .append(Component.text(nomes.isEmpty() ? "O inverno segue em paz." : "Espantado por " + String.join(", ", nomes) + ".", NamedTextColor.GOLD)
