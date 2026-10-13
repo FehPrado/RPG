@@ -374,6 +374,7 @@ public final class Comandos implements TabExecutor {
             case "nomeada" -> { adminNomeada(sender, args); return; }
             case "lendaria" -> { adminLendaria(sender, args); return; }
             case "nian" -> { adminNian(sender, args); return; }
+            case "constelacao" -> { adminConstelacao(sender, args); return; }
             case "traje" -> { adminTraje(sender, args); return; }
             case "guerra" -> {
                 if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
@@ -509,6 +510,19 @@ public final class Comandos implements TabExecutor {
             }
             default -> erro(sender, uso);
         }
+    }
+
+    private void adminConstelacao(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        if (args.length >= 3 && args[1].equalsIgnoreCase("moedas")) {
+            int n;
+            try { n = Integer.parseInt(args[2]); } catch (NumberFormatException ex) { erro(sender, "Número inválido."); return; }
+            plugin.constelacoes().darMoedasAdmin(p, n);
+            ok(sender, "Agora você tem " + plugin.constelacoes().moedas(p) + " Moedas Estelares.");
+            return;
+        }
+        if (args.length >= 2 && args[1].equalsIgnoreCase("testar")) { plugin.constelacoes().testar(p); return; }
+        erro(sender, "Use: /rpgadmin constelacao <moedas N|testar>");
     }
 
     private void adminNian(CommandSender sender, String[] args) {
@@ -1711,7 +1725,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "constelacao", "reload"));
                 } else if (args.length == 2 && List.of("carta", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

@@ -153,6 +153,12 @@ public final class Evolucao implements Listener {
     /** Soma XP e cuida de subir de nível e evoluir. */
     public void darXp(LivingEntity e, int qtd) {
         if (!plugin.settings().evoAtivada || qtd <= 0 || !Companheiros.eh(e)) return;
+        // Naturezas Leal e Curioso evoluem mais rápido (a fração vira chance de +1).
+        double comNatureza = qtd * Natureza.de(e).xp();
+        // Ensinamento do Tratador (laço completo com um Tratador da colônia): +20%.
+        java.util.UUID idDono = Companheiros.dono(e);
+        if (idDono != null && plugin.lacos().sabe(org.bukkit.Bukkit.getPlayer(idDono), br.rpgatributos.colonia.Profissao.TRATADOR)) comNatureza *= 1.2;
+        qtd = (int) comNatureza + (java.util.concurrent.ThreadLocalRandom.current().nextDouble() < comNatureza - (int) comNatureza ? 1 : 0);
         int nivelAntes = nivel(e), estAntes = estagio(e);
         if (nivelAntes >= NIVEL_MAX) return;
         e.getPersistentDataContainer().set(K_XP, PersistentDataType.INTEGER, xp(e) + qtd);

@@ -91,6 +91,8 @@ public final class Colonias implements Listener {
         final Colonia colonia;
         Inventory inventario;
         UUID cidadao;
+        /** Quem abriu a tela (para mostrar o laço dele com o morador). */
+        Player quem;
 
         Tela(Tipo tipo, Colonia colonia) {
             this.tipo = tipo;
@@ -116,6 +118,7 @@ public final class Colonias implements Listener {
     private static final int C_VOLTAR = 36;
     private static final int C_PEDIDO = 40;
     private static final int C_DISPENSAR = 44;
+    private static final int C_LACO = 38;
     /** Chance por turno de um morador sem pedido fazer um (no máximo 2 pedidos abertos por colônia). */
     private static final double CHANCE_PEDIDO = 0.02;
 
@@ -778,6 +781,7 @@ public final class Colonias implements Listener {
         ci.pedido = null;
         ci.humor = 1;
         ci.humorTurnos = Pedido.CONTENTE;
+        plugin.lacos().somar(p, ci, 2);
         alterarFelicidade(c, 8);
         ganharXp(c, ci, 15);
         renomear(c, ci);
@@ -1346,6 +1350,7 @@ public final class Colonias implements Listener {
     private void abrirCidadao(Player p, Colonia c, Colonia.Cidadao ci) {
         Tela t = new Tela(Tipo.CIDADAO, c);
         t.cidadao = ci.entidade;
+        t.quem = p;
         t.inventario = Bukkit.createInventory(t, 45, Component.text("⌂ " + ci.nome));
         desenharCidadao(t, ci);
         p.openInventory(t.inventario);
@@ -1409,6 +1414,10 @@ public final class Colonias implements Listener {
                     Component.text(p.nome(), liberada ? p.cor() : NamedTextColor.DARK_GRAY, TextDecoration.BOLD), lore, p == ci.profissao));
         }
         inv.setItem(C_VOLTAR, item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of(), false));
+        if (t.quem != null) {
+            inv.setItem(C_LACO, item(Material.POPPY, Component.text("♥ Laço com " + ci.nome, net.kyori.adventure.text.format.TextColor.color(0xFF8FA8),
+                    TextDecoration.BOLD), plugin.lacos().descricao(t.quem, ci), false));
+        }
         inv.setItem(C_DISPENSAR, item(Material.RED_DYE, Component.text("Dispensar morador", NamedTextColor.RED), List.of(
                 Component.text("Ele vira um aldeão comum e sai da colônia.", NamedTextColor.GRAY),
                 Component.text("Shift + clique para confirmar.", NamedTextColor.DARK_GRAY)), false));
@@ -1469,6 +1478,12 @@ public final class Colonias implements Listener {
             if (ci.pedido == null) return;
             if (!daColonia(p, c)) { erro(p, "Só quem é da colônia pode atender os pedidos."); return; }
             entregarPedido(p, c, ci);
+            desenharCidadao(t, ci);
+            return;
+        }
+        if (slot == C_LACO) {
+            if (!daColonia(p, c)) { erro(p, "Só quem é da colônia faz laço com os moradores."); return; }
+            plugin.lacos().interagir(p, ci);
             desenharCidadao(t, ci);
             return;
         }

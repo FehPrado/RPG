@@ -140,6 +140,7 @@ public final class Estruturas implements Listener {
     private final Projetos projetos;
     final CidadesSubmersas cidades;
     final IlhasDoCeu ilhas;
+    private final Vilas vilas;
     private final File arquivo;
     private final NamespacedKey kChunk, kPoco, kAltar;
     final List<Sitio> sitios = new ArrayList<>();
@@ -155,6 +156,7 @@ public final class Estruturas implements Listener {
         this.projetos = new Projetos(plugin);
         this.cidades = new CidadesSubmersas(plugin, this, projetos);
         this.ilhas = new IlhasDoCeu(plugin, this, projetos);
+        this.vilas = new Vilas(plugin, this);
         this.arquivo = new File(plugin.getDataFolder(), "estruturas.yml");
         this.kChunk = new NamespacedKey(plugin, "estrutura_v1");
         this.kPoco = new NamespacedKey(plugin, "poco_desejo_dia");
@@ -163,6 +165,17 @@ public final class Estruturas implements Listener {
 
     private static long hoje() {
         return LocalDate.now().toEpochDay();
+    }
+
+    /** As vilas com vários moradores (o listener dos NPCs). */
+    public Vilas vilas() {
+        return vilas;
+    }
+
+    /** A estrutura pelo id (ou null). */
+    Sitio sitio(String id) {
+        for (Sitio s : sitios) if (s.id.equals(id)) return s;
+        return null;
     }
 
     // =====================================================================
@@ -552,6 +565,7 @@ public final class Estruturas implements Listener {
                     double dy = l.getY() - s.y;
                     if (d2 <= achar * achar && Math.abs(dy) <= 30 && s.visitantes.add(p.getUniqueId())) descobrir(p, s);
                     if (s.tipo.temMorador() && d2 <= 40 * 40) garantirMorador(s, w);
+                    if (s.tipo.vila() && d2 <= 40 * 40) vilas.garantir(s, w);
                     boolean perto20 = jogando && !s.guardas && d2 <= 20 * 20 && Math.abs(dy) <= 24;
                     switch (s.tipo) {
                         case TORRE_DE_VIGIA, ACAMPAMENTO, EXPEDICAO, VILA_SAQUEADA, FORTIM -> { if (perto20) soltarGuardas(s, w); }

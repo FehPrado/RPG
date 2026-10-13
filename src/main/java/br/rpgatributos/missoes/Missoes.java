@@ -269,7 +269,8 @@ public final class Missoes implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void aoClicarAldeao(PlayerInteractEntityEvent e) {
         if (!(e.getRightClicked() instanceof Villager v) || !e.getPlayer().isSneaking()) return;
-        if (v.getPersistentDataContainer().has(Mercadores.CHAVE_NPC) || modelos(v.getProfession()).isEmpty()) return;
+        if (v.getPersistentDataContainer().has(Mercadores.CHAVE_NPC) || v.getPersistentDataContainer().has(br.rpgatributos.estruturas.Vilas.K_NPC)
+                || modelos(v.getProfession()).isEmpty()) return;
         e.setCancelled(true);
         if (e.getHand() == EquipmentSlot.HAND) abrir(e.getPlayer(), v);
     }

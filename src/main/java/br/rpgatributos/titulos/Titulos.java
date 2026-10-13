@@ -127,6 +127,7 @@ public final class Titulos implements Listener {
         salvarContadores(p, m);
         contou(p, id, m.get(id));
         verificar(p);
+        if (quantidade > 0 && plugin.constelacoes() != null) plugin.constelacoes().feito(p, id);
     }
 
     /** O contador passa a ser pelo menos {@code valor} (ex.: quantas magias secretas já descobriu). */

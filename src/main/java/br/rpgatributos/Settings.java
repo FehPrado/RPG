@@ -102,8 +102,8 @@ public final class Settings {
     public final boolean ilhaAtivada;
     public final int ilhaRegiao, ilhaDistanciaSpawn;
     public final double ilhaChance;
-    public final boolean profAtivadas, profEscuridao;
-    public final int profAltura, profPenumbraMaxima, profLuzQueProtege;
+    public final boolean profAtivadas, constelacoesAtivadas;
+    public final int profAltura, profPenumbraMaxima;
     public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
     /** Chance, por Minerador e turno, de algo da Penumbra subir pelo poço da Mina. */
     public final double colPocoChancePenumbra;
@@ -375,10 +375,9 @@ public final class Settings {
         ilhaChance = Math.max(0, Math.min(1, c.getDouble("estruturas.ilha-do-ceu.chance", 0.03)));
         ilhaDistanciaSpawn = Math.max(0, c.getInt("estruturas.ilha-do-ceu.distancia-do-spawn", 500));
         profAtivadas = c.getBoolean("profundezas.ativadas", true);
-        profEscuridao = c.getBoolean("profundezas.escuridao", true);
+        constelacoesAtivadas = c.getBoolean("constelacoes.ativadas", true);
         profAltura = c.getInt("profundezas.abaixo-de-y", 0);
         profPenumbraMaxima = Math.max(1, Math.min(9, c.getInt("profundezas.penumbra-maxima", 5)));
-        profLuzQueProtege = Math.max(1, Math.min(16, c.getInt("profundezas.luz-que-protege", 10)));
         profChanceRaiz = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-raiz-por-chunk", 0.1)));
         profChancePenumbra = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-penumbra", 0.3)));
         profChanceCoracao = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-do-coracao", 0.15)));

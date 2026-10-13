@@ -247,7 +247,7 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 - **Agachado + clique:** o defumador normal (continua funcionando).
 - `/receitas` mostra o livro de receitas em qualquer lugar.
 
-**16 pratos**, liberados pelo nível de Culinária. Comer dá buffs (a duração fica gravada no prato):
+**42 pratos**, liberados pelo nível de Culinária. Comer dá buffs (a duração fica gravada no prato):
 
 | Prato | Nível | Efeito |
 |---|---|---|
@@ -283,6 +283,21 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 | Bolo de Oxicoco | 55 | Vida extra e Regeneração |
 | Risoto de Trufa | 70 | Sorte II, Visão noturna e Regeneração II (trufa, queijo) |
 | Banquete da Fazenda | 85 | Força, Resistência, Regeneração e Pressa **para todos a até 10 blocos** (queijo de cabra, trufa, uva, milho, ovos) |
+
+**Pratos de monstro** (2.44, referência: Dungeon Meshi): o que os monstros deixam também vai para a panela, e cada um tem um efeito estranho e útil, além dos buffs.
+
+| Prato | Nível | Ingredientes | Efeito |
+|---|---|---|---|
+| Ensopado do Necromante | 10 | 4 carnes podres, batata, cogumelo marrom, tigela | Sacia e, por 5 min, fome e veneno não pegam em você |
+| Omelete de Olho de Aranha | 15 | 2 olhos de aranha, 2 ovos | Visão noturna e, por 45 s, **sobe paredes** andando contra elas |
+| Gelatina de Slime | 20 | 3 bolas de slime, açúcar, tigela | Pulo II e 2 min **sem dano de queda** |
+| Caldo de Ossos | 25 | 4 ossos, cenoura, tigela | Resistência e, por 3 min, quase não é empurrado |
+| Crocante de Phantom | 30 | 2 membranas de phantom, mel, trigo | Queda lenta e os phantoms esquecem você (como se tivesse dormido) |
+| Caldo do Guardião | 40 | 2 cristais e 1 fragmento de prismarinho, bacalhau, tigela | Poder do conduíte por 4 min |
+| Espetinho de Blaze | 45 | pó de blaze, creme de magma, bife | Resistência ao fogo e, por 2 min, **seus golpes põem fogo** |
+| Sashimi de Brisa | 50 | vara de brisa, salmão, alga | Pulo III, queda lenta e sem dano de queda |
+| Pudim do Fim | 55 | pérola do ender, fruta do coro, ovo, açúcar | Velocidade e, por 90 s, ao levar um golpe às vezes **some e reaparece atrás de quem bateu** |
+| Lágrima de Ghast Caramelizada | 60 | lágrima de ghast, 2 açúcares, bagas brilhantes | Regeneração II e Absorção |
 
 O livro de receitas tem páginas (setas embaixo).
 
@@ -385,6 +400,35 @@ Cada morador chega com **1 ou 2 traços** (o "jeito" dele, no menu do morador), 
 **Pedidos pessoais:** de vez em quando um morador pede alguma coisa e um **❗** aparece sobre a cabeça dele (no máximo 2 pedidos abertos por colônia). Metade das vezes é algo da profissão dele (enxada de ferro para o Fazendeiro, vara de pescar para o Pescador, 16 carvões para o Ferreiro, escudo para o Soldado, maçãs para o cavalo do Cavaleiro...), e na outra metade algo de qualquer um: um prato da Cozinha, flores, frutas do pomar, uma coleta da estação, mel, uma bebida do barril, uma lanterna, um livro. Clique no morador e no botão do pedido para entregar (sai do seu inventário; qualquer jogador da colônia pode atender).
 - **Atendido:** a colônia ganha **+8% de felicidade** e o morador fica **contente** (+15% de produção por 20 turnos).
 - **Esquecido** (o prazo é de 30 turnos, ~30 min com a colônia carregada): **-5% de felicidade** e o morador fica **chateado** (-10% por 10 turnos).
+
+### Laços com os moradores
+
+Cada morador tem uma história (referência: Persona e Fire Emblem). No menu dele, o botão **♥ Laço** mostra o quanto vocês são próximos:
+- **Conversar:** +1 ponto, uma vez por dia (dia do jogo).
+- **Presente favorito** (cada profissão gosta de 2 coisas, listadas no botão): segure na mão e clique, +3 por dia.
+- **Atender um pedido dele:** +2.
+
+São **5 capítulos** (3, 8, 14, 21 e 30 pontos). Em cada um ele conta um pedaço da vida dele: de onde veio, do que tem medo, com o que sonha e um segredo. No **5º capítulo** ele te **ensina algo para sempre**, um por profissão:
+
+| Profissão | Ensinamento |
+|---|---|
+| Fazendeiro | Mão na Terra: 10% de chance de colheita em dobro |
+| Lenhador | Corte Limpo: machados se gastam pela metade |
+| Pescador | Paciência do Rio: os peixes mordem mais rápido |
+| Minerador | Faro de Veio: 8% de chance de minério em dobro |
+| Cozinheiro | Tempero de Casa: comer cura 1 coração a mais |
+| Ferreiro | Ouvido do Ferro: armas, ferramentas e armaduras se gastam 25% menos |
+| Tratador | Voz Mansa: seus companheiros evoluem 20% mais rápido |
+| Alquimista | Gota a Mais: poções duram 25% mais |
+| Mercador | Olho para o Valor: 5% de chance de esmeralda ao derrotar monstros |
+| Bibliotecário | Leitura Atenta: +25% de experiência |
+| Construtor | Mãos Firmes: quedas tiram 3 de vida a menos |
+| Soldado | Postura de Guarda: +1 de armadura |
+| Arqueiro | Olho Firme: +10% de dano com flechas |
+| Cavaleiro | Rédeas Firmes: +10% de dano montado |
+| Sem profissão | Tempo Livre: +5% de velocidade |
+
+Qualquer pessoa da colônia pode criar laços; cada jogador tem o seu com cada morador. Completar um laço dá o título **Confidente**. Os laços ficam em `lacos.yml`.
 
 ### Construções (projetos)
 
@@ -942,6 +986,18 @@ A oitava classe lendária, **☾ Soberano das Sombras**, não tem Local Oculto: 
 | ✦ Arcanus, Deus da Magia | +mana máxima e mana por segundo | Maré Arcana: mana cheia e +5 de mana/s por 60 s | Arcano, Alquimia |
 | ☠ Mortis, Deusa da Morte | roubo de vida; mortos-vivos te ignoram na fé 5 | Segunda Chance: a próxima morte em 10 min é evitada | derrotar mortos-vivos e chefes |
 
+### Constelações que assistem
+
+Os seis deuses **acompanham os seus feitos** (referência: Omniscient Reader's Viewpoint). Quando algo marcante acontece, um deles comenta no chat, como "[Bellum, o Deus da Guerra] aplaude o seu golpe.", e manda **Moedas Estelares**. Feitos com a **vida baixa** (30% ou menos) chamam o dobro de atenção.
+- **Bellum:** chefes, Elites, masmorras, hordas, guerras, golpes perfeitos, espantar o Nian, matar um monstro forte com a vida baixa.
+- **Ferrum:** núcleos de chefe, gemas perfeitas, mitrilo, meteoritos.
+- **Sylva:** animais raros, mutações, colheitas da estação, Raízes de Luz, Bestas Errantes, companheiros no estágio III.
+- **Maris:** peixes novos, criaturas marinhas, tesouros enterrados, cidades submersas.
+- **Arcanus:** magias novas, reações, runas, transmutação, segredos, sonhos.
+- **Mortis:** sobreviver por um fio, sacerdotes, selos, lendas, classes lendárias, renascer, Locais Ocultos.
+
+`/constelacoes` mostra as moedas e troca por **bênçãos**: Fúria do Espetáculo (Bellum, Força por 5 min, 10), Mãos da Forja (Ferrum, Pressa II por 10 min, 8), Bênção do Bosque (Sylva, Regeneração por 3 min, 10), Graça das Marés (Maris, respirar e nadar rápido por 10 min, 6), Céu Estrelado (Arcanus, +80 de mana, 6) e Segunda Chance (Mortis, o próximo golpe mortal te deixa com meio coração, 25). O deus que mais te acompanha cobra **30% menos**. Desligue em `constelacoes.ativadas`.
+
 ### Astronomia
 
 À noite, com o céu aberto em cima de você, olhe para cima pela **luneta** por 5 segundos. Cada noite mostra uma das **12 constelações** (O Ferreiro, O Pescador, A Coruja, O Lobo, O Viajante, A Fênix, O Sábio, A Âncora, O Mago, A Coroa, A Serpente e O Gigante). Ela entra no seu diário (`/estrelas`) e dá uma **bênção até o amanhecer** (XP extra, Sorte, Visão noturna, Força, Velocidade, Regeneração, mana, devoção em dobro...). Uma observação por noite.
@@ -1019,7 +1075,7 @@ O **Cronista** é um aldeão bibliotecário que o admin coloca no spawn (`/rpgad
 
 ### Estruturas pelo mundo
 
-Dezesseis estruturas prontas surgem sozinhas em **terra nunca visitada** (chunks novos), longe de territórios, longe umas das outras (160 blocos) e das estruturas do próprio Minecraft, e só onde o chão é firme e quase plano. Cada uma cabe dentro de um chunk e o terreno é nivelado com cuidado (árvores no caminho são derrubadas inteiras). Ao chegar perto aparece o nome dela, entra no Diário e conta para o título **Andarilho das Ruínas** (12 estruturas).
+Vinte estruturas prontas (as dezesseis abaixo e as quatro vilas com moradores) surgem sozinhas em **terra nunca visitada** (chunks novos), longe de territórios, longe umas das outras (160 blocos) e das estruturas do próprio Minecraft, e só onde o chão é firme e quase plano. Cada uma cabe dentro de um chunk e o terreno é nivelado com cuidado (árvores no caminho são derrubadas inteiras). Ao chegar perto aparece o nome dela, entra no Diário e conta para o título **Andarilho das Ruínas** (12 estruturas).
 
 | Estrutura | Onde | O que tem |
 |---|---|---|
@@ -1041,6 +1097,22 @@ Dezesseis estruturas prontas surgem sozinhas em **terra nunca visitada** (chunks
 | 🏰 **Fortim em Ruínas** | Planícies, florestas, savanas | Muralha com torres, pátio e a torre de menagem. **Soldados Esquecidos** e o **Capitão Esquecido** (deixa Fragmento e às vezes Pedra de Proteção). Bom para party |
 
 Os guardas aparecem só uma vez. Configure em `estruturas:` no config (chance, distância e se vale só para chunks novos).
+
+### Vilas com moradores (2.45)
+
+Quatro tipos de vila surgem do mesmo jeito que as estruturas acima. Cada uma tem **4 moradores** com papel próprio. Clique num deles para abrir o menu dele:
+- **♥ Laço:** os mesmos 5 capítulos dos moradores da colônia (conversar, presente favorito e usar o serviço sobem o laço). No capítulo 5, em vez de um ensinamento, ele te dá um **presente único**.
+- **Loja:** 5 ofertas que mudam a cada dia. Alguns **compram** coisas suas por esmeraldas.
+- **✦ Serviço:** o que só ele faz (alguns uma vez por dia, outros pagos).
+
+| Vila | Onde | Moradores |
+|---|---|---|
+| 🎣 **Vila de Pescadores** | Praias e rios (sobre estacas) | **Velho Pescador** (varas encantadas, mapa; presente: Vara de Coral), **Peixeira** (compra bacalhau, salmão, baiacu, peixe tropical e tinta), **Carpinteiro Naval** (barcos, lunetas; serviço: barco com baú novo por 3 esmeraldas), **Menina do Cais** (serviço: um pedido por dia, como 5 bacalhaus, e ela retribui com esmeraldas e às vezes uma carta) |
+| 🔔 **Mosteiro da Montanha** | Prados, bosques de cerejeira, encostas e montanhas | **Mestre** (serviço: treino diário, XP de Combate e Força por 5 min; presente: Agulha dos Ventos), **Monge Herbalista** (ervas, elixires, chás, mudas), **Guardião do Sino** (serviço: o sino dá Resistência e Regeneração por 3 min a você e à party, uma vez por dia), **Peregrino** (mapas, cartas; serviço: uma história por dia, às vezes uma Página do Livro das Lendas) |
+| ⛏ **Aldeia dos Anões** | Montanhas, picos, encostas pedregosas e badlands | **Mestre Mineiro** (tochas, lanternas, TNT, picareta encantada; presente: Picareta do Poço Fundo), **Joalheiro** (gemas; compra diamante, ametista e lápis), **Ferreiro Anão** (serviço: conserta o item da mão, de 2 a 20 esmeraldas), **Taverneiro** (bebidas, comida; compra trigo). Os anões são menores |
+| 🌳 **Vila Élfica do Bosque** | Florestas, bosques de bétula, floresta escura e floresta antiga | **Druida** (mudas, farinha de osso; serviço: bênção diária com saciedade e Regeneração), **Arqueira** (flechas de fogo, gelo, rastreadoras...; presente: Arco das Folhas Caídas), **Curandeira** (serviço: vida cheia, tira venenos e a **Penumbra** por 5 esmeraldas), **Tecelã** (lãs, estandartes, linha) |
+
+Os moradores das vilas não se ferem, voltam se sumirem e não entram nos pedidos de aldeões.
 
 ### No fundo do mar
 
@@ -1075,7 +1147,7 @@ Configure em `estruturas.ilha-do-ceu` (região, chance e distância do spawn).
 
 ### Profundezas
 
-Abaixo do **y 0** o mundo fica escuro de verdade: longe de uma Raiz de Luz acesa, você fica com **Escuridão** (a Visão Noturna resolve). **Bases e minas iluminadas** (luz de tocha ou lanterna 10 ou mais) e o **seu território** (ou de quem te deu permissão) ficam claros.
+Abaixo do **y 0** ficam as Profundezas. Desde a 2.44 elas não escurecem mais a tela; as **Raízes de Luz** continuam sendo a luz das cavernas fundas e o que afasta a Penumbra.
 - **Raízes de Luz:** nascem adormecidas nas cavernas fundas (um tronco de raízes de mangue com um bulbo marrom em cima, que brilha de leve quando você chega perto). **Clique no bulbo:** ela acende para sempre, para todos, e ilumina a caverna em volta (cerca de 20 blocos); até 40 blocos dela não há escuridão nem Penumbra. Quem acende ganha XP e **Sementes Brilhantes**.
 - **Semente Brilhante:** arremesse (como bola de neve) e o lugar onde ela cai fica iluminado por 2 minutos.
 - **Penumbra:** parte dos monstros que nascem no escuro das profundezas é **da Penumbra** (nome roxo). Cada golpe deles **rouba 1 coração máximo** (até 5, `profundezas.penumbra-maxima`). Os corações voltam **ao sol** (1 a cada 10 s), **perto de uma raiz acesa**, ao acender uma raiz, ao morrer ou com o **Elixir da Purificação**.
@@ -1083,7 +1155,7 @@ Abaixo do **y 0** o mundo fica escuro de verdade: longe de uma Raiz de Luz acesa
 
 - **Poço das Profundezas (colônia):** com a **Mina no nível 3** e uma **Raiz de Luz acesa debaixo do território** da colônia, o Minerador desce ao fundo: traz ardósia, ferro, ouro, redstone, lápis, **ametista**, mais diamante, **mitrilo bruto**, **Sementes Brilhantes**, às vezes **fragmento de eco** e, bem raro, uma arma com nome perdida lá embaixo. Mas às vezes (3% por Minerador e turno) **algo da Penumbra sobe pelo poço** e aparece na Mina. A placa da Mina mostra se o poço está aberto.
 
-Configure em `profundezas` (ligar, escuridão, altura, luz que protege, máximo da Penumbra, chance de raiz por chunk, de Penumbra, do Coração e do poço da colônia).
+Configure em `profundezas` (ligar, altura, máximo da Penumbra, chance de raiz por chunk, de Penumbra, do Coração e do poço da colônia).
 
 ### Pacote de recursos do servidor
 
@@ -1127,6 +1199,23 @@ Os companheiros ganham XP lutando (5 por monstro, 20 por Elite, 60 por chefe), a
 Quem não tem nome dado pelo jogador ganha o nome do estágio: Lobo Alfa → **Lobo das Sombras**, Cavalo → Corcel de Guerra → **Corcel Celeste**, Golem de Ferro → Golem de Guerra → **Colosso de Ferro**, Gato → Gato Selvagem → **Pantera Sombria**... (as outras criaturas viram "Veterano" e "Ancestral"). O nível e o estágio aparecem no `/pets`. Libertar o companheiro zera a evolução.
 
 **Evolução visível:** no estágio II o companheiro solta um pó prateado; no III, pó dourado e partículas da própria criatura (fumaça no Lobo das Sombras, chamas azuis na Raposa Espiritual, flocos no Urso do Inverno Eterno, faíscas na Ave do Trovão...). O **Corcel Celeste** ganha uma armadura branca e dourada e o **Lobo das Sombras** uma roxa-escura (se não tiverem a de um componente).
+
+**Natureza e potencial** (2.44, referência: Pokémon): cada companheiro nasce com uma **natureza**, um ponto forte e um fraco, sorteada quando ele vira companheiro (os antigos ganham a deles na hora). Ela aparece no menu dele.
+
+| Natureza | Efeito |
+|---|---|
+| Valente | +10% de dano, −10% de velocidade |
+| Robusto | +12% de vida, −8% de dano |
+| Ligeiro | +12% de velocidade, −10% de vida |
+| Teimoso | +3 de armadura, −8% de velocidade |
+| Feroz | +15% de dano, −2 de armadura |
+| Calmo | +8% de vida e +4% de velocidade, −8% de dano |
+| Leal | Evolui 25% mais rápido |
+| Curioso | Evolui 15% mais rápido, −5% de dano |
+| Medroso | +18% de velocidade, −12% de dano |
+| Equilibrado | Sem ponto forte nem fraco |
+
+Junto vem o **potencial**, de ★ a ★★★★★ (+4% de vida e dano por estrela acima da primeira; 5 estrelas é raro). Ele fica **escondido até o estágio II**; quem tem o **Baize** vê na hora.
 ## Detalhes do dia a dia
 
 ### Mais coisas na Forja
@@ -1332,7 +1421,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 94 títulos com requisitos (em páginas), por exemplo Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 95 títulos com requisitos (em páginas), por exemplo Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1356,6 +1445,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/party` | todos | Menu da party (`convidar`, `aceitar`, `recusar`, `sair`, `expulsar`, `lider`, `desfazer`, `chat`, `fogoamigo`) |
 | `/pc <mensagem>` | todos | Chat da party (sem mensagem: liga/desliga o modo chat) |
 | `/pets` | todos | Seus companheiros (domador) |
+| `/constelacoes` | todos | Moedas Estelares e bênçãos dos deuses que assistem aos seus feitos |
 | `/masmorra [sair]` | todos | Informações da masmorra / sair dela |
 | `/classe` | todos | Árvore de classes, caminho, tarefas e habilidades |
 | `/lendas` | todos | Livro das Lendas: enigmas, donos e Forja Lendária |
@@ -1507,6 +1597,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin nomeada <arma ou aleatoria> [raridade]` | Uma arma com nome já forjada (padrão: Épica) |
 | `/rpgadmin lendaria <qilin, fenghuang, longma, baihu, xuanwu, pixiu, baize ou kunpeng> <ovo, nascer, livre, estado ou aparecer>` | Lendárias: dá o ovo (Guardiões), faz nascer aqui como seu companheiro, volta ao começo, mostra onde está ou solta a Besta Errante aqui perto (para testar a prova) |
 | `/rpgadmin nian [estado ou embora]` | Faz o Nian descer aqui perto (ou mostra onde está, ou manda embora) |
+| `/rpgadmin constelacao <moedas N ou testar>` | Dá Moedas Estelares ou faz uma constelação comentar (para testar) |
 | `/rpgadmin traje <traje ou aleatorio> [capacete/peitoral/calca/botas/todas] [raridade]` | Peças de um Traje (armadura com nome) já forjadas |
 | `/rpgadmin raiz` | Planta uma Raiz de Luz no chão embaixo de você (precisa de 5 blocos de ar em cima) |
 | `/rpgadmin coracaopenumbra` | O Coração da Penumbra aparece à sua frente |
@@ -1538,9 +1629,9 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.43.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.45.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.43.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.43.0 && git push origin v2.43.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.45.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.45.0 && git push origin v2.45.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 

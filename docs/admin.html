@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.43</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.45</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.43.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.45.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -358,13 +358,12 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>estruturas.ilha-do-ceu.chance</code></td><td>0.03</td><td>Chance de cada chunk novo de terra firme tentar receber uma</td></tr>
         <tr><td><code>estruturas.ilha-do-ceu.distancia-do-spawn</code></td><td>500</td><td>Nenhuma ilha mais perto do spawn que isso</td></tr>
         <tr><td><code>profundezas.ativadas</code></td><td>true</td><td>Raízes de Luz, Penumbra e Coração da Penumbra (2.33)</td></tr>
-        <tr><td><code>profundezas.escuridao</code></td><td>true</td><td>Escuridão abaixo do y das profundezas, longe de uma raiz acesa (Visão Noturna resolve)</td></tr>
+        <tr><td><code>constelacoes.ativadas</code></td><td>true</td><td>Os deuses comentam os feitos e dão Moedas Estelares; bênçãos no <code>/constelacoes</code> (2.44). As Profundezas não escurecem mais a tela desde a 2.44.</td></tr>
         <tr><td><code>profundezas.abaixo-de-y</code></td><td>0</td><td>Onde começam as profundezas</td></tr>
         <tr><td><code>profundezas.chance-de-raiz-por-chunk</code></td><td>0.1</td><td>Chance de um chunk novo ganhar uma Raiz de Luz numa caverna funda</td></tr>
         <tr><td><code>profundezas.chance-de-penumbra</code></td><td>0.3</td><td>Chance de um monstro nascido no escuro ser da Penumbra (rouba 1 coração máximo por golpe, até 5)</td></tr>
         <tr><td><code>profundezas.chance-do-coracao</code></td><td>0.15</td><td>Chance de acender uma raiz acordar o Coração da Penumbra</td></tr>
         <tr><td><code>profundezas.penumbra-maxima</code></td><td>5</td><td>Quantos corações máximos a Penumbra pode roubar (1 a 9)</td></tr>
-        <tr><td><code>profundezas.luz-que-protege</code></td><td>10</td><td>Luz de tocha/lanterna a partir da qual não há escuridão (bases e minas iluminadas); o território amigo também fica claro</td></tr>
         <tr><td><code>profundezas.poco-da-colonia.chance-de-penumbra</code></td><td>0.03</td><td>Mina nível 3 + raiz acesa debaixo do território: chance, por Minerador e turno, de algo da Penumbra subir pelo poço</td></tr>
         <tr><td><code>backup.dias</code></td><td>7</td><td>Ao ligar, copia os .yml do plugin para <code>backups/AAAA-MM-DD</code> (1 vez por dia) e guarda os últimos dias (0 desliga)</td></tr>
       </tbody></table></div>
@@ -569,6 +568,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin nomeada &lt;arma|aleatoria&gt; [raridade]</span></td><td>Uma arma com nome já forjada (padrão: Épica)</td></tr>
       <tr><td><span class="cmd">/rpgadmin lendaria &lt;qilin|fenghuang|longma|baihu|xuanwu|pixiu|baize|kunpeng&gt; &lt;ovo|nascer|livre|estado|aparecer&gt;</span></td><td>Lendárias: dá o ovo (Guardiões), faz nascer aqui, volta ao começo, mostra onde está ou solta a Besta Errante aqui perto</td></tr>
       <tr><td><span class="cmd">/rpgadmin nian [estado|embora]</span></td><td>Faz o Nian descer aqui perto, mostra onde está ou manda embora</td></tr>
+      <tr><td><span class="cmd">/rpgadmin constelacao &lt;moedas N|testar&gt;</span></td><td>Dá Moedas Estelares ou faz uma constelação comentar (para testar)</td></tr>
       <tr><td><span class="cmd">/rpgadmin traje &lt;traje|aleatorio&gt; [capacete|peitoral|calca|botas|todas] [raridade]</span></td><td>Peças de um Traje (armadura com nome) já forjadas</td></tr>
       <tr><td><span class="cmd">/rpgadmin raiz</span> · <span class="cmd">coracaopenumbra</span> · <span class="cmd">penumbra</span></td><td>Planta uma Raiz de Luz no chão embaixo de você · acorda o Coração da Penumbra · zera a sua Penumbra</td></tr>
       <tr><td><span class="cmd">/rpgadmin itemceu       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>lt;fruta_celeste|semente_brilhante      <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>gt; [qtd]</span></td><td>Fruta Celeste ou Semente Brilhante (o Fragmento Celeste vem com <span class="cmd">/rpgadmin raro fragmento_celeste</span>)</td></tr>
@@ -667,6 +667,25 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Só com um fardo de feno no baú: a vaca come e o fardo vira 8 trigos.</li>
       </ol>
     </div>
+    <div class="card"><h3>Vilas com moradores (2.45)</h3>
+      <ol>
+        <li>Num lugar aberto, <span class="cmd">/rpgadmin estrutura vila_pescadores</span> (ou <code>mosteiro</code>, <code>aldeia_anoes</code>, <code>vila_elfica</code>). Chegando perto, os 4 moradores aparecem.</li>
+        <li>Clique num morador: menu com <b>♥ Laço</b>, <b>Loja</b> e <b>✦ Serviço</b>. As ofertas mudam a cada dia.</li>
+        <li>Serviços para testar: Guardião do Sino (Resistência e Regeneração para a party), Ferreiro Anão (segure uma picareta gasta), Curandeira (5 esmeraldas: tira venenos e a Penumbra), Menina do Cais (ela diz o que quer no chat).</li>
+        <li>Laço: converse (+1), dê o presente favorito com ele na mão (+3), use o serviço (+1). <span class="cmd">/time add 24000</span> passa o dia. No capítulo 5 o morador dá um presente único (armas com nome em 4 deles).</li>
+        <li>Agachar e clicar num morador de vila <b>não</b> abre os pedidos de aldeão (só o menu dele).</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Cozinhar monstros, naturezas, constelações e laços (2.44)</h3>
+      <ol>
+        <li>Suba o pacote novo (10 texturas de pratos).</li>
+        <li>Profundezas: desça abaixo do y 0 longe de raízes. A tela não escurece mais; as raízes continuam acendendo e afastando a Penumbra.</li>
+        <li>Cozinha: com 2 olhos de aranha e 2 ovos, faça a Omelete de Olho de Aranha, coma e ande contra uma parede: você sobe. Gelatina de Slime: pule de um lugar alto sem dano. Espetinho de Blaze: bata num zumbi e ele pega fogo.</li>
+        <li>Natureza: <span class="cmd">/rpgadmin invocar lobo</span> e veja a natureza no chat e no menu dele. O potencial aparece como "???" até o estágio II (<span class="cmd">/rpgadmin companheironivel 10</span> olhando para ele).</li>
+        <li>Constelações: <span class="cmd">/rpgadmin constelacao testar</span> faz um deus comentar; <span class="cmd">/rpgadmin constelacao moedas 30</span> e <span class="cmd">/constelacoes</span> para comprar bênçãos. Derrote uma Elite com pouca vida para ver o comentário dobrado.</li>
+        <li>Laços: abra um morador da colônia, clique em <b>♥ Laço</b> (conversa, +1 por dia). Com o presente favorito na mão, +3. <span class="cmd">/time add 24000</span> passa o dia para conversar de novo. No 5º capítulo, o ensinamento fica no jogador para sempre.</li>
+      </ol>
+    </div>
     <div class="card"><h3>Bestas Errantes, Nian e combate montado (2.42)</h3>
       <ol>
         <li>Suba o pacote novo (peles do Pixiu e do Baize).</li>
@@ -717,7 +736,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Numa colônia com a Mina no nível 3, use <span class="cmd">/rpgadmin raiz</span> numa caverna abaixo do território e acenda. A placa da Mina mostra <b>Poço das Profundezas aberto</b>; rode <span class="cmd">/rpgadmin turnocolonia</span> e veja ametista e mitrilo no depósito.</li>
         <li><span class="cmd">/rpgadmin traje penumbra todas</span>: vista as 4 peças e olhe em terceira pessoa (F5): a textura própria aparece no corpo. Teste o Guarda-roupa e a mesa de ferraria (Netherite).</li>
         <li>Reinicie o servidor com o Coração da Penumbra vivo: a barra de chefe volta quando ele carrega.</li>
-        <li>Jars: o de cada versão fica na raiz do repositório no GitHub (e também no artefato do GitHub Actions); uma tag <code>v2.43.0</code> vira Release com o jar.</li>
+        <li>Jars: o de cada versão fica na raiz do repositório no GitHub (e também no artefato do GitHub Actions); uma tag <code>v2.45.0</code> vira Release com o jar.</li>
       </ol>
     </div>
     <div class="card"><h3>Jeito, pedidos e Cavaleiro (2.32)</h3>
@@ -987,7 +1006,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.43 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<footer>RPGAtributos 2.45 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

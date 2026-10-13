@@ -109,6 +109,11 @@ commands:
     usage: /postura [neutra|ofensiva|defensiva|agil|mestra]
     aliases: [posturas, estilo]
     permission: rpg.combos
+  constelacoes:
+    description: As Constelações que assistem aos seus feitos (Moedas Estelares e bênçãos).
+    usage: /constelacoes
+    aliases: [constelacao, patrocinio]
+    permission: rpg.fe
   mochila:
     description: Sua mochila — um baú pessoal que cresce com o nível total.
     usage: /mochila

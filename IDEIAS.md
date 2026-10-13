@@ -174,6 +174,8 @@ Tudo o que foi pensado para depois da versão 2.11 (Reinos, Exército e Guerra),
 23d. Feito na 2.39 (pedido do usuário): **Comedouro** para os animais da fazenda (1 fardo de feno + 1 tigela em cima de um baú; o baú guarda a comida, funil enche; na virada do dia cada animal a até 12 blocos que não comeu come uma porção; fardo vira 9 trigos) e os outros três Guardiões: **Longma** (cavalo de escamas azuis, galope na água, Onda), **Baihu** (tigre branco no lobo, montável, 1,6x, pulo longo, Rugido) e **Xuanwu** (tartaruga gigante 2,6x, sem pele nova porque a tartaruga não aceita, Escudo). Menu da fusão em bússola. **Próximo:** Bestas Errantes (Kunpeng no ghast feliz, Pixiu, Baize, Nian), Fusão de armas e modelo 3D das lendárias (2-3 poses de passo).
 23e. Feito na 2.40-2.42: modelos 3D dos cinco Guardiões para quem usa EMF + ETF (feitos pelo dono do servidor no Blockbench; o Baihu e o Xuanwu encolhem para o jogador sentar nas costas), pegadas das posturas refeitas no Blockbench e, na 2.42, **Bestas Errantes** (Pixiu, Baize e Kunpeng: aparecem perto de quem tem Doma alta, no lugar delas, e são conquistadas por uma prova: ouro, três enigmas, neve e Fragmento Celeste), o **Nian** (fera das noites de inverno que só foge com fogos, fogo e chifres de cabra) e o **combate montado** (F montado solta o golpe da montaria; correndo, ela atropela). **Próximo:** Fusão de armas, poses de passo nos modelos 3D, modelos EMF para as Bestas Errantes.
 23f. Feito na 2.43 (com o mod de apoio 0.1.0): **mod de apoio opcional** para NeoForge 26.3, só no cliente (pasta `mod-apoio/`). Teclas próprias em Opções > Controles (R golpe da montaria, V habilidade, B trocar habilidade, Alt esquiva, N postura, J menu) mandadas pelo canal `rpgatributos:tecla` que o plugin escuta. Os atalhos sem mod continuam. **Próximo no mod:** interface na tela (vigor, mana, recargas, coragem do Nian), depois modelos e menus próprios.
+23g. Feito na 2.44 (pedido do usuário, do roadmap de referências): as Profundezas **não escurecem mais** (as Raízes de Luz continuam como luz e contra a Penumbra); **pratos de monstro** (Dungeon Meshi: 10 pratos com efeitos estranhos — subir paredes, sem dano de queda, golpes de fogo, sumir no vazio); **natureza e potencial dos companheiros** (Pokémon: 10 naturezas e ★ a ★★★★★ escondido até o estágio II); **Constelações que assistem** (ORV: os 6 deuses comentam feitos e dão Moedas Estelares, bênçãos no /constelacoes); **Laços com os moradores** (Persona: 5 capítulos de história e um ensinamento permanente por profissão). **Próximo:** mais tipos de vilas com NPCs variados (2.45).
+23h. Feito na 2.45 (pedido do usuário): **quatro vilas com moradores** — Vila de Pescadores (praia/rio, sobre estacas), Mosteiro da Montanha, Aldeia dos Anões e Vila Élfica do Bosque — com 16 NPCs (4 por vila), cada um com **loja** diária (alguns compram itens), **serviço** (treino, sino, conserto, cura da Penumbra, pedido diário da menina...) e **Laço** de 5 capítulos que termina num presente único (armas com nome em 4 deles). Os Laços viraram genéricos (Lacos.Alvo) para servir colônia e vilas. **Próximo:** testar no jogo; depois Paredes de Palavras, Esferas do Dragão ou Frutas Proibidas.
 24. **Colônia, depois:** Entregador e Armazém (logística), Construtor subindo o nível com o projeto 2 e 3, necessidades dos moradores (escola, pesquisa, doença).
 25. **Para depois:** mestres de armas com técnicas secretas, caçadas a criaturas lendárias com rastros, editor de pegadas no jogo, duelos e torneios, maestria de postura, combate montado, táticas do exército, fraquezas por criatura, clima × combate, pragas e corvos, cosméticos.
 
@@ -194,22 +196,22 @@ Ideias de jogos, mangás e manhwas, adaptadas ao que já existe. Página complet
 | Frutas Proibidas | One Piece | Fruta única no servidor dá um poder para sempre; quem come afunda na água | ★★★ | M |
 | Armas que despertam | Bleach | Arma com nome muito usada desperta (visual + habilidade) e tem uma forma liberada | ★★★ | M |
 | Ferreiro Lendário (Fusão de armas) | Overgeared | Duas armas com nome + material raro = uma terceira com história própria | ★★ | M |
-| Cozinhar monstros | Dungeon Meshi | Partes de monstros viram pratos com efeitos estranhos e úteis | ★★ | P |
+| Cozinhar monstros ✅ 2.44 | Dungeon Meshi | Partes de monstros viram pratos com efeitos estranhos e úteis | ★★ | P |
 | Ecos dos que caíram | Dark Souls / Elden Ring | Mancha de morte com fantasma e inscrições de frases prontas avaliadas pelos outros | ★★ | M |
 | Pergaminhos de pistas | RuneScape | Tesouro em várias etapas com enigmas e gestos em lugares | ★★ | M |
-| Natureza dos companheiros | Pokémon | Companheiro nasce com natureza e talento escondido | ★★ | P |
+| Natureza dos companheiros ✅ 2.44 | Pokémon | Companheiro nasce com natureza e talento escondido | ★★ | P |
 
 **Horizonte 2 — mundo e história**
 
 | Ideia | Referência | O que é | Impacto | Esforço |
 |---|---|---|---|---|
 | As Sete Esferas do Dragão | Dragon Ball | 7 esferas caem pelo mundo (feixe no céu só na noite da queda, depois pistas); juntas chamam o Long para um desejo | ★★★ | M |
-| Constelações que assistem | Omniscient Reader's Viewpoint | Deuses comentam feitos dramáticos e dão moedas de patrocínio por bênçãos | ★★★ | M |
+| Constelações que assistem ✅ 2.44 | Omniscient Reader's Viewpoint | Deuses comentam feitos dramáticos e dão moedas de patrocínio por bênçãos | ★★★ | M |
 | Maldição do Abismo | Made in Abyss | Subir rápido de muito fundo nas Profundezas cobra um preço por camada | ★★ | P |
 | Monstros Únicos | Shangri-La Frontier | Criatura única por bioma; o primeiro a vencer fica registrado | ★★ | M |
 | Magias da Era Antiga | Frieren | Grimórios com magias pequenas e charmosas para colecionar | ★★ | P |
 | Contratos de monstro | The Witcher | Quadro na vila com investigação antes da luta | ★★ | M |
-| Laços com moradores | Persona / Fire Emblem | História pessoal em capítulos e um ensinamento único no fim | ★★ | M |
+| Laços com moradores ✅ 2.44 | Persona / Fire Emblem | História pessoal em capítulos e um ensinamento único no fim | ★★ | M |
 | Museu do Curador | Animal Crossing | Doações por ala contam a história do mundo | ★★ | M |
 | Santuários de enigma | Zelda BotW | Salas com quebra-cabeça; 4 Bênçãos = mais vigor | ★★ | M |
 

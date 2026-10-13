@@ -57,6 +57,15 @@ public enum Estrutura {
     CIDADE_SUBMERSA("Cidade Submersa", "a", 0x26C6DA, "Ela adorava Maris. Um dia, o mar a levou de volta.",
             0, 36, 12, 24, b -> b.contains("ocean")),
     // ---------- 2.33: o céu ----------
+    // ---------------- 2.45: vilas com vários moradores (veja Vilas) ----------------
+    VILA_PESCADORES("Vila de Pescadores", "a", 0x4FC3F7, "Redes secando, cheiro de mar e alguém sempre contando uma história de pescador.",
+            3, 7, 2, 9, b -> b.contains("beach") || b.contains("river")),
+    MOSTEIRO("Mosteiro da Montanha", "o", 0xE57373, "O sino toca três vezes ao dia. Ninguém aqui tem pressa.",
+            3, 7, 2, 12, b -> b.contains("meadow") || b.contains("grove") || b.contains("cherry") || b.contains("windswept") || b.contains("snowy_slopes")),
+    ALDEIA_ANOES("Aldeia dos Anões", "a", 0xFFB74D, "Martelos, cerveja forte e uma mina que desce até onde ninguém sabe.",
+            3, 7, 4, 10, b -> b.contains("windswept") || b.contains("stony") || b.contains("badlands") || b.contains("grove") || b.contains("jagged")),
+    VILA_ELFICA("Vila Élfica do Bosque", "a", 0x81C784, "As árvores aqui têm nome, e os moradores lembram de todos.",
+            3, 7, 2, 14, b -> b.contains("dark_forest") || b.contains("birch") || b.contains("old_growth") || b.contains("flower_forest") || b.equals("forest")),
     /** Não é sorteada por chunk: a {@link IlhasDoCeu} escolhe o lugar (uma por região, em terra firme, lá no alto). */
     ILHA_DO_CEU("Ilha do Céu", "a", 0x90CAF9, "Lá em cima, o vento ainda lembra de quem morou entre as nuvens.",
             0, 30, 99, 0, b -> !b.contains("ocean") && !b.contains("river"));
@@ -98,7 +107,7 @@ public enum Estrutura {
     }
 
     public boolean aceita(String bioma) {
-        if (this == FAROL || submersa()) return this.bioma.test(bioma); // o farol é justamente na praia; os do mar, no mar
+        if (this == FAROL || this == VILA_PESCADORES || submersa()) return this.bioma.test(bioma); // o farol e a vila de pescadores são na praia; os do mar, no mar
         return !agua(bioma) && this.bioma.test(bioma);
     }
 
@@ -109,10 +118,15 @@ public enum Estrutura {
 
     /** Construída sobre palafitas: aceita água rasa no chão e não aterra nada. */
     public boolean palafita() {
-        return this == CABANA_DA_BRUXA;
+        return this == CABANA_DA_BRUXA || this == VILA_PESCADORES;
     }
 
     /** Tem um morador (NPC) que negocia. */
+    /** Vila com vários moradores (NPCs com loja, serviço e laço; veja Vilas). */
+    public boolean vila() {
+        return this == VILA_PESCADORES || this == MOSTEIRO || this == ALDEIA_ANOES || this == VILA_ELFICA;
+    }
+
     public boolean temMorador() {
         return this == CABANA_DO_EREMITA || this == OASIS || this == CABANA_DA_BRUXA;
     }

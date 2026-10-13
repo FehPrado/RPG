@@ -284,6 +284,12 @@ public final class MenusDomador implements Listener {
         p.openInventory(inv);
     }
 
+    /** O Baize conhece todas as criaturas: o dono dele vê o potencial escondido dos companheiros. */
+    private boolean temBaize(Player p) {
+        Lendarias.Estado est = plugin.lendarias().estado(Lendaria.BAIZE);
+        return est.fase == Lendarias.Fase.VIVA && p.getUniqueId().equals(est.dono);
+    }
+
     /** Ícone de leitura de uma Besta Errante: história, por onde vaga, a prova e onde ela está agora. */
     private ItemStack iconeErrante(Lendaria l) {
         List<Component> lore = new ArrayList<>();
@@ -352,6 +358,14 @@ public final class MenusDomador implements Listener {
             info.add(Component.empty());
             for (Componente c : comps) info.add(Component.text(" ✦ " + c.nome(), Companheiros.COR));
         }
+        Natureza nat = Natureza.de(e);
+        info.add(Component.empty());
+        info.add(Component.text("Natureza: ", NamedTextColor.GOLD).append(Component.text(nat.nome(), NamedTextColor.WHITE))
+                .append(Component.text(" (" + nat.descricao() + ")", NamedTextColor.GRAY)));
+        boolean vePotencial = (plugin.settings().evoAtivada && Evolucao.estagio(e) >= 2) || temBaize(p);
+        info.add(Component.text("Potencial: ", NamedTextColor.GOLD).append(vePotencial
+                ? Component.text(Natureza.estrelas(Natureza.potencial(e)), NamedTextColor.YELLOW)
+                : Component.text("??? (aparece no estágio II)", NamedTextColor.DARK_GRAY)));
         Lendaria lend = Lendaria.de(e);
         if (lend != null) {
             info.add(Component.empty());

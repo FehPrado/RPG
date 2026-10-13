@@ -255,14 +255,16 @@ public final class Companheiros implements Listener {
         int nivel = nivelDono(e);
         Set<Componente> c = poderes(e);
         double evo = plugin.evolucao().bonus(e) + (Lendaria.de(e) != null ? 0.5 : 0); // lendárias: +50% de vida e dano
-        modificar(e, Attribute.MAX_HEALTH, M_VIDA, nivel * cfg().domaVida + evo + (c.contains(Componente.COURACA) ? 0.25 : 0),
+        Natureza nat = Natureza.de(e);
+        double pot = Natureza.bonusPotencial(e);
+        modificar(e, Attribute.MAX_HEALTH, M_VIDA, nivel * cfg().domaVida + evo + pot + nat.vida() + (c.contains(Componente.COURACA) ? 0.25 : 0),
                 AttributeModifier.Operation.ADD_SCALAR);
-        modificar(e, Attribute.ARMOR, M_ARMADURA, (c.contains(Componente.COURACA) ? 8 : 0) + (c.contains(Componente.NETHERITE) ? 6 : 0),
+        modificar(e, Attribute.ARMOR, M_ARMADURA, (c.contains(Componente.COURACA) ? 8 : 0) + (c.contains(Componente.NETHERITE) ? 6 : 0) + nat.armadura(),
                 AttributeModifier.Operation.ADD_NUMBER);
         modificar(e, Attribute.ARMOR_TOUGHNESS, M_RESISTENCIA, c.contains(Componente.NETHERITE) ? 4 : 0, AttributeModifier.Operation.ADD_NUMBER);
         modificar(e, Attribute.KNOCKBACK_RESISTANCE, M_EMPURRAO, c.contains(Componente.NETHERITE) ? 0.6 : 0, AttributeModifier.Operation.ADD_NUMBER);
-        modificar(e, Attribute.MOVEMENT_SPEED, M_VELOCIDADE, c.contains(Componente.AGILIDADE) ? 0.3 : 0, AttributeModifier.Operation.ADD_SCALAR);
-        modificar(e, Attribute.ATTACK_DAMAGE, M_DANO, nivel * cfg().domaDano + evo + (c.contains(Componente.GARRAS) ? 0.5 : 0),
+        modificar(e, Attribute.MOVEMENT_SPEED, M_VELOCIDADE, (c.contains(Componente.AGILIDADE) ? 0.3 : 0) + nat.velocidade(), AttributeModifier.Operation.ADD_SCALAR);
+        modificar(e, Attribute.ATTACK_DAMAGE, M_DANO, nivel * cfg().domaDano + evo + pot + nat.dano() + (c.contains(Componente.GARRAS) ? 0.5 : 0),
                 AttributeModifier.Operation.ADD_SCALAR);
         e.setGlowing(c.contains(Componente.FAROL));
         plugin.evolucao().aplicar(e);
@@ -279,7 +281,7 @@ public final class Companheiros implements Listener {
     /** Dano de um ataque do companheiro (os que não atacam sozinhos usam isso). */
     public double danoAtaque(LivingEntity e) {
         double base = tem(e, Componente.GARRAS) ? 7 : 3;
-        return base * (1 + nivelDono(e) * cfg().domaDano + plugin.evolucao().bonus(e));
+        return base * Math.max(0.2, 1 + nivelDono(e) * cfg().domaDano + plugin.evolucao().bonus(e) + Natureza.bonusPotencial(e) + Natureza.de(e).dano());
     }
 
     // =====================================================================
@@ -350,6 +352,8 @@ public final class Companheiros implements Listener {
         w.spawnParticle(Particle.HEART, e.getLocation().add(0, e.getHeight() + 0.3, 0), 10, 0.4, 0.3, 0.4);
         w.playSound(e.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8f, 1.4f);
         p.sendMessage(Component.text("♞ " + nome(e) + " agora é seu companheiro! Clique nele com a mão vazia (ou /pets).", COR));
+        Natureza nat = Natureza.de(e);
+        p.sendMessage(Component.text("  Natureza: " + nat.nome() + " (" + nat.descricao() + "). O potencial dele aparece no estágio II.", NamedTextColor.GRAY));
         return null;
     }
 

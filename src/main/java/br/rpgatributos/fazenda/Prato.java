@@ -121,7 +121,39 @@ public enum Prato {
     BANQUETE_FAZENDA("Banquete da Fazenda", Material.SUSPICIOUS_STEW, 0.85, 90, 12,
             List.of(a(Artesanato.QUEIJO_DE_CABRA, 1), t(1), c(Cultivo.UVA, 2), c(Cultivo.MILHO, 1), m(Material.EGG, 2), m(Material.BOWL, 1)),
             List.of(e(PotionEffectType.STRENGTH, 300, 0), e(PotionEffectType.RESISTANCE, 300, 0),
-                    e(PotionEffectType.REGENERATION, 300, 0), e(PotionEffectType.HASTE, 300, 0)), Especial.BANQUETE);
+                    e(PotionEffectType.REGENERATION, 300, 0), e(PotionEffectType.HASTE, 300, 0)), Especial.BANQUETE),
+
+    // ---------------- 2.44: cozinhar monstros (o que eles deixam vira prato, com efeitos estranhos) ----------------
+    ENSOPADO_DO_NECROMANTE("Ensopado do Necromante", Material.RABBIT_STEW, 0.1, 15, 6,
+            List.of(m(Material.ROTTEN_FLESH, 4), m(Material.POTATO, 1), m(Material.BROWN_MUSHROOM, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.SATURATION, 1, 1)), Especial.ESTOMAGO_DE_FERRO),
+    OMELETE_DE_ARANHA("Omelete de Olho de Aranha", Material.BAKED_POTATO, 0.15, 20, 5,
+            List.of(m(Material.SPIDER_EYE, 2), m(Material.EGG, 2)),
+            List.of(e(PotionEffectType.NIGHT_VISION, 90, 0)), Especial.ESCALAR),
+    GELATINA_DE_SLIME("Gelatina de Slime", Material.BEETROOT_SOUP, 0.2, 20, 4,
+            List.of(m(Material.SLIME_BALL, 3), m(Material.SUGAR, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.JUMP_BOOST, 120, 1)), Especial.AMORTECER),
+    CALDO_DE_OSSOS("Caldo de Ossos", Material.MUSHROOM_STEW, 0.25, 25, 6,
+            List.of(m(Material.BONE, 4), m(Material.CARROT, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.RESISTANCE, 120, 0)), Especial.FIRME),
+    CROCANTE_DE_PHANTOM("Crocante de Phantom", Material.COOKIE, 0.3, 30, 3,
+            List.of(m(Material.PHANTOM_MEMBRANE, 2), m(Material.HONEY_BOTTLE, 1), m(Material.WHEAT, 1)),
+            List.of(e(PotionEffectType.SLOW_FALLING, 180, 0)), Especial.SEM_SONO),
+    CALDO_DO_GUARDIAO("Caldo do Guardião", Material.MUSHROOM_STEW, 0.4, 35, 6,
+            List.of(m(Material.PRISMARINE_CRYSTALS, 2), m(Material.PRISMARINE_SHARD, 1), m(Material.COD, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.CONDUIT_POWER, 240, 0)), null),
+    ESPETINHO_DE_BLAZE("Espetinho de Blaze", Material.COOKED_BEEF, 0.45, 40, 8,
+            List.of(m(Material.BLAZE_POWDER, 1), m(Material.MAGMA_CREAM, 1), m(Material.COOKED_BEEF, 1)),
+            List.of(e(PotionEffectType.FIRE_RESISTANCE, 300, 0)), Especial.PUNHOS_DE_FOGO),
+    SASHIMI_DE_BRISA("Sashimi de Brisa", Material.COOKED_SALMON, 0.5, 45, 6,
+            List.of(m(Material.BREEZE_ROD, 1), m(Material.SALMON, 1), m(Material.KELP, 1)),
+            List.of(e(PotionEffectType.JUMP_BOOST, 120, 2), e(PotionEffectType.SLOW_FALLING, 120, 0)), Especial.AMORTECER),
+    PUDIM_DO_FIM("Pudim do Fim", Material.PUMPKIN_PIE, 0.55, 50, 6,
+            List.of(m(Material.ENDER_PEARL, 1), m(Material.CHORUS_FRUIT, 1), m(Material.EGG, 1), m(Material.SUGAR, 1)),
+            List.of(e(PotionEffectType.SPEED, 90, 0)), Especial.PASSO_DO_VAZIO),
+    LAGRIMA_CARAMELIZADA("Lágrima de Ghast Caramelizada", Material.COOKIE, 0.6, 55, 4,
+            List.of(m(Material.GHAST_TEAR, 1), m(Material.SUGAR, 2), m(Material.GLOW_BERRIES, 1)),
+            List.of(e(PotionEffectType.REGENERATION, 30, 1), e(PotionEffectType.ABSORPTION, 120, 0)), null);
 
     /** Ingrediente: um material comum, uma variedade mutante, um peixe raro OU outro item do plugin. */
     public record Ingrediente(Material material, Variedade variedade, PeixeRaro peixe, Extra extra, int qtd) {}
@@ -135,9 +167,31 @@ public enum Prato {
     /** Algo além dos efeitos de poção. */
     public enum Especial {
         /** Recupera 60 de mana. */
-        MANA,
+        MANA("Recupera 60 de mana", 0),
         /** Os efeitos valem para todos os jogadores a até 10 blocos. */
-        BANQUETE
+        BANQUETE("Vale para todos a até 10 blocos!", 0),
+        // Pratos de monstro (veja IguariasMonstro): duração base em segundos.
+        ESTOMAGO_DE_FERRO("Estômago de ferro: fome e veneno não pegam em você", 300),
+        ESCALAR("Patas de aranha: andando contra uma parede, você sobe", 45),
+        AMORTECER("Corpo de gelatina: sem dano de queda", 120),
+        FIRME("Ossos de pedra: quase não é empurrado", 180),
+        SEM_SONO("Os phantoms esquecem você (como se tivesse dormido)", 0),
+        PUNHOS_DE_FOGO("Seus golpes põem fogo no alvo", 120),
+        PASSO_DO_VAZIO("Ao levar um golpe, às vezes some e reaparece atrás de quem bateu", 90);
+
+        private final String descricao;
+        private final int segundos;
+
+        Especial(String descricao, int segundos) {
+            this.descricao = descricao;
+            this.segundos = segundos;
+        }
+
+        public String descricao() { return descricao; }
+        /** Quanto dura (0 = acontece na hora). */
+        public int segundos() { return segundos; }
+        /** Efeito de prato de monstro (os dois primeiros são da Cozinha comum). */
+        public boolean deMonstro() { return ordinal() >= ESTOMAGO_DE_FERRO.ordinal(); }
     }
 
     private final String nome;

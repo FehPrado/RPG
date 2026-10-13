@@ -75,6 +75,10 @@ final class Projetos {
             case FORTIM -> ruinas.fortim(o);
             case NAUFRAGIO -> mar.naufragio(o, Mar.Navio.values()[Math.floorMod(s.fundo, Mar.Navio.values().length)], s.nome, s.pista);
             case CIDADE_SUBMERSA -> { } // feita por etapas na CidadesSubmersas
+            case VILA_PESCADORES -> Vilas.pescadores(o);
+            case MOSTEIRO -> Vilas.mosteiro(o);
+            case ALDEIA_ANOES -> Vilas.anoes(o);
+            case VILA_ELFICA -> Vilas.elfica(o);
         }
         o.conectar();
     }

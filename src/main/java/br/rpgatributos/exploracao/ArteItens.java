@@ -503,6 +503,23 @@ final class ArteItens {
                 com(TIGELA_MADEIRA, 'c', 0xFFF5F0E0, 'a', 0xFF5D4037, 'b', 0xFFD4A017)));
         l.add(new Arte("suspicious_stew", "prato_banquete_fazenda", TIGELA,
                 com(TIGELA_MADEIRA, 'c', 0xFFF5F0E0, 'a', 0xFF7B1FA2, 'b', 0xFFFBC02D)));
+        // 2.44: cozinhar monstros.
+        l.add(new Arte("rabbit_stew", "prato_ensopado_do_necromante", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFF6D7F3A, 'a', 0xFF8D4A3A, 'b', 0xFFC5D86D)));
+        l.add(new Arte("baked_potato", "prato_omelete_de_aranha", BATATA_RECHEADA, com(MASSA, 'm', 0xFFFFE082, 'a', 0xFFB71C1C, 'b', 0xFF4A148C)));
+        l.add(new Arte("beetroot_soup", "prato_gelatina_de_slime", TIGELA_FRIA,
+                com(TIGELA_MADEIRA, 'c', 0xFF7CC75A, 'a', 0xFFB9F09A, 'b', 0xFF4E9A2E)));
+        l.add(new Arte("mushroom_stew", "prato_caldo_de_ossos", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFEDE6D6, 'a', BRANCO, 'b', 0xFFFF8C1A)));
+        l.add(new Arte("cookie", "prato_crocante_de_phantom", BISCOITO, com(MASSA, 'm', 0xFF6F7FB0, 'h', 0xFFB8C6E8, 'a', 0xFFFFB300)));
+        l.add(new Arte("mushroom_stew", "prato_caldo_do_guardiao", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFF5FB8A8, 'a', 0xFFBFF0E6, 'b', 0xFFFF8C5A)));
+        l.add(new Arte("cooked_beef", "prato_espetinho_de_blaze", CARNE,
+                c('o', 0xFF3A1A0A, 'd', 0xFF8A3A0A, 'm', 0xFFE07A1A, 'h', 0xFFFFC93C, 'a', 0xFF5A2A10, 'w', 0xFFFFF59D)));
+        l.add(new Arte("cooked_salmon", "prato_sashimi_de_brisa", SUSHI,
+                c('o', 0xFF2A3A4A, 'm', 0xFFA8D8F0, 'h', 0xFFE0F4FF, 'k', 0xFF1E3A1E, 'w', 0xFFF8F8F0, 'a', 0xFF7FD6FF)));
+        l.add(new Arte("pumpkin_pie", "prato_pudim_do_fim", TORTA, com(CROSTA, 'c', 0xFF7B3FA0, 'a', 0xFFE8D8FF)));
+        l.add(new Arte("cookie", "prato_lagrima_caramelizada", BISCOITO, com(MASSA, 'm', 0xFFE0A050, 'h', 0xFFF8F0E0, 'a', 0xFFBFE9FF)));
     }
 
     // =====================================================================

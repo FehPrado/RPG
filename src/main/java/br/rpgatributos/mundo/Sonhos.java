@@ -133,6 +133,10 @@ public final class Sonhos implements Listener {
                     + (nome == null ? "a cidade" : nome) + ".";
             case ILHA_DO_CEU -> "Uma ilha flutuando acima das nuvens, e no chão uma pedra que soprava o vento para o alto: "
                     + (nome == null ? "a ilha" : nome) + ".";
+            case VILA_PESCADORES -> "Casas sobre estacas, um píer com duas lanternas e uma menina acenando da ponta.";
+            case MOSTEIRO -> "Um sino tocando entre as montanhas, e um velho de olhos fechados te chamando para treinar.";
+            case ALDEIA_ANOES -> "Um salão de pedra cheio de risadas graves, cerveja e o som de um martelo na bigorna.";
+            case VILA_ELFICA -> "Duas árvores enormes, uma rosa e uma verde, e alguém tecendo debaixo delas.";
         };
     }
 

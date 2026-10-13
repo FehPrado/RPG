@@ -241,6 +241,9 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.mundo.Nian nian;
     private br.rpgatributos.domador.CombateMontado combateMontado;
     private br.rpgatributos.apoio.CanalApoio canalApoio;
+    private br.rpgatributos.fazenda.IguariasMonstro iguarias;
+    private br.rpgatributos.fe.Constelacoes constelacoes;
+    private br.rpgatributos.colonia.Lacos lacos;
     private br.rpgatributos.forja.NomeadasNoMundo nomeadas;
     private Ajuda ajuda;
 
@@ -402,6 +405,10 @@ public final class RPGAtributos extends JavaPlugin {
         nian = new br.rpgatributos.mundo.Nian(this);
         combateMontado = new br.rpgatributos.domador.CombateMontado(this);
         canalApoio = new br.rpgatributos.apoio.CanalApoio(this);
+        iguarias = new br.rpgatributos.fazenda.IguariasMonstro(this);
+        constelacoes = new br.rpgatributos.fe.Constelacoes(this);
+        lacos = new br.rpgatributos.colonia.Lacos(this);
+        lacos.carregar();
         nomeadas = new br.rpgatributos.forja.NomeadasNoMundo(this);
 
         registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
@@ -413,7 +420,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, nomeadas, ajuda);
+                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -449,6 +456,8 @@ public final class RPGAtributos extends JavaPlugin {
         if (can != null) can.setExecutor(criacao);
         PluginCommand cmo = getCommand("mochila");
         if (cmo != null) cmo.setExecutor(mochila);
+        PluginCommand cct = getCommand("constelacoes");
+        if (cct != null) cct.setExecutor(constelacoes);
         PluginCommand cde = getCommand("deus");
         if (cde != null) cde.setExecutor(deuses);
         PluginCommand ces = getCommand("estrelas");
@@ -612,6 +621,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, nian::tick, 49L, 40L); // a cada 2 s: o Nian (noites de inverno)
         agenda.runTaskTimer(this, combateMontado::tick, 20L, 1L); // a cada tick: golpes da montaria em curso e atropelar
         canalApoio.iniciar(); // teclas do mod de apoio (opcional, no cliente)
+        agenda.runTaskTimer(this, iguarias::tick, 21L, 1L); // a cada tick: efeitos dos pratos de monstro (subir paredes)
         agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
         agenda.runTaskTimer(this, obeliscos::tick, 5L, 5L);
@@ -658,6 +668,7 @@ public final class RPGAtributos extends JavaPlugin {
         if (lendarias != null) lendarias.salvar();
         if (nian != null) nian.parar();
         if (canalApoio != null) canalApoio.parar();
+        if (lacos != null) lacos.salvar();
         if (combos != null) combos.parar();
         if (pacote != null) pacote.parar();
         if (lapides != null) lapides.salvar();
@@ -763,6 +774,9 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.mundo.Nian nian() { return nian; }
     public br.rpgatributos.domador.CombateMontado combateMontado() { return combateMontado; }
     public br.rpgatributos.apoio.CanalApoio canalApoio() { return canalApoio; }
+    public br.rpgatributos.fazenda.IguariasMonstro iguarias() { return iguarias; }
+    public br.rpgatributos.fe.Constelacoes constelacoes() { return constelacoes; }
+    public br.rpgatributos.colonia.Lacos lacos() { return lacos; }
     public AltaresDomador altaresDomador() { return altaresDomador; }
     public MenusDomador menusDomador() { return menusDomador; }
     public Masmorras masmorras() { return masmorras; }

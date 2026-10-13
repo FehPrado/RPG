@@ -68,8 +68,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 /**
- * As Profundezas: abaixo do y 0 o mundo fica escuro de verdade. Raízes de Luz adormecidas
- * nascem nas cavernas fundas; um clique as acende e ilumina a área para sempre (e para todos).
+ * As Profundezas: abaixo do y 0. Raízes de Luz adormecidas nascem nas cavernas fundas; um
+ * clique as acende e ilumina a área para sempre (e para todos), e perto delas a Penumbra não vem.
  * No escuro aparecem criaturas da Penumbra, que roubam corações máximos: eles só voltam ao sol,
  * perto de uma raiz acesa ou com o Elixir da Purificação. Às vezes, acender uma raiz acorda o
  * Coração da Penumbra.
@@ -312,14 +312,6 @@ public final class Profundezas implements Listener {
         return false;
     }
 
-    /** Luz de tocha/lanterna forte ou dentro de um território amigo: a escuridão não entra. */
-    private boolean protegido(Player p, Location l) {
-        int luz = Math.max(l.getBlock().getLightFromBlocks(), p.getEyeLocation().getBlock().getLightFromBlocks());
-        if (luz >= cfg().profLuzQueProtege) return true;
-        var t = plugin.territorios().em(l);
-        return t != null && plugin.territorios().amigo(t, p.getUniqueId());
-    }
-
     // ---------- para a colônia ----------
 
     /** Há uma Raiz de Luz acesa num lugar que passa no filtro (ex.: debaixo do território de uma colônia)? */
@@ -406,13 +398,9 @@ public final class Profundezas implements Listener {
         if (!cfg().profAtivadas) return;
         for (Player p : Bukkit.getOnlinePlayers()) {
             Location l = p.getLocation();
-            boolean jogando = p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE;
             int pen = penumbra(p);
             if (fundo(l)) {
                 boolean luz = pertoDeLuz(l);
-                if (cfg().profEscuridao && jogando && !luz && !p.hasPotionEffect(PotionEffectType.NIGHT_VISION) && !protegido(p, l)) {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 60, 0, true, false, false));
-                }
                 if (luz && pen > 0) mudarPenumbra(p, -1);
                 // Raízes adormecidas por perto brilham de leve, para serem achadas.
                 for (Raiz r : raizesPerto(l, 28)) {
@@ -474,6 +462,11 @@ public final class Profundezas implements Listener {
 
     public int penumbra(Player p) {
         return p.getPersistentDataContainer().getOrDefault(kStacks, PersistentDataType.INTEGER, 0);
+    }
+
+    /** Tira toda a Penumbra do jogador (a Curandeira da Vila Élfica faz isso). */
+    public void curarPenumbra(Player p) {
+        mudarPenumbra(p, -penumbra(p));
     }
 
     private void mudarPenumbra(Player p, int delta) {

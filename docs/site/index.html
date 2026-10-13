@@ -174,14 +174,14 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 <main id="inicio">
   <section class="wrap abertura">
     <div>
-      <p class="rotulo">Manual do jogador · versão 2.43</p>
+      <p class="rotulo">Manual do jogador · versão 2.45</p>
       <h1>Um mundo inteiro <em>dentro</em> do seu Minecraft.</h1>
       <p class="lead">Atributos que sobem com o uso, classes, magia, deuses, forja com raridades, colônias com moradores de verdade, reinos em guerra, cidades no fundo do mar. Tudo o que o RPGAtributos tem, num lugar só.</p>
       <div class="numeros">
         <div><b>13</b><span>atributos</span></div>
         <div><b>24</b><span>classes</span></div>
         <div><b>28</b><span>estações</span></div>
-        <div><b>19</b><span>estruturas</span></div>
+        <div><b>23</b><span>estruturas</span></div>
         <div><b>6</b><span>deuses</span></div>
         <div><b>17</b><span>peixes raros</span></div>
       </div>
@@ -280,7 +280,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 <footer>
   <div class="wrap">
-    <span>RPGAtributos 2.43 · plugin para servidores Paper 26.3</span>
+    <span>RPGAtributos 2.45 · plugin para servidores Paper 26.3</span>
     <span>Dúvidas no jogo: <code>/guia</code> e <code>/rpg</code></span>
   </div>
 </footer>
@@ -307,7 +307,7 @@ const AREAS = [
   { ico: "⚒", nome: "Ofícios", itens: [
     "Forja do Ferreiro: raridades de Comum a Mítico, refino, gemas engastadas, o Reforjar (até de tridentes) e 47 armas com nome (3D na mão, com lanças e tridentes)",
     "Alquimia: elixires, componentes, óleos, 18 gemas e 19 acessórios",
-    "Cozinha com 32 pratos, plantações com qualidade ★, 20 plantações da estação com estufa e colheitas gigantes, pomar, barril, colmeia e ervas",
+    "Cozinha com 42 pratos (10 deles feitos com o que os monstros deixam), plantações com qualidade ★, 20 plantações da estação com estufa e colheitas gigantes, pomar, barril, colmeia e ervas",
     "Criação de animais com corações e produtos diários, o Comedouro que alimenta a fazenda sozinho e o Tacho do Artesão (queijo, geleia, conserva, maionese, óleo de trufa)",
     "Pesca com 17 peixes raros (5 só no buraco no gelo), tesouros e criaturas marinhas",
     "Curtume e tecelagem: 6 conjuntos de armadura leve"], cmds: ["/forja", "/alquimia", "/receitas", "/peixes"] },
@@ -315,7 +315,7 @@ const AREAS = [
     "Estações de verdade (1 semana cada): o chão muda (flores, vaga-lumes, folhas secas, neve), 12 coisas para colher, festival, luas e clima",
     "Mundo perigoso: elites com afixos, hordas, ninhos, chefe mundial e bestiário",
     "Masmorras, portais, Soberano das Sombras e a Torre Infinita",
-    "19 estruturas (até naufrágios, cidades submersas e Ilhas do Céu), 7 Locais Ocultos e 12 Lendas",
+    "23 estruturas (até naufrágios, cidades submersas, Ilhas do Céu e 4 vilas com moradores que têm loja, serviço e laço: pescadores, mosteiro, anões e elfos), 7 Locais Ocultos e 12 Lendas",
     "Profundezas escuras abaixo do y 0: Raízes de Luz para acender e a Penumbra, que rouba corações",
     "Mapas do tesouro, arqueologia, campanha de 8 capítulos, sonhos e Álbum de 54 cartas"], cmds: ["/calendario", "/bestiario", "/lendas", "/album"] },
   { ico: "🏰", nome: "Comunidade", itens: [
@@ -323,7 +323,7 @@ const AREAS = [
     "Territórios protegidos, com regras e expansões",
     "Colônias estilo MineColonies: 15 profissões, 16 construções com 3 níveis, casa para cada morador, traços e pedidos dos moradores, exército com cavaleiros",
     "Reinos com cargos, tesouro, leis, províncias e guerras marcadas",
-    "Domador: companheiros com armaduras próprias em cavalos e lobos, evolução até o estágio III, os 5 Guardiões, montarias lendárias únicas no servidor que nascem de um ovo (Qilin, Fenghuang, Longma, Baihu e Xuanwu), as Bestas Errantes que vagam pelo mundo e são conquistadas por uma prova (Pixiu, Baize e Kunpeng) e golpes montados na tecla F"], cmds: ["/party", "/territorio", "/colonia", "/reino", "/pets"] }
+    "Domador: companheiros com armaduras próprias em cavalos e lobos, natureza e potencial de cada um, evolução até o estágio III, os 5 Guardiões, montarias lendárias únicas no servidor que nascem de um ovo (Qilin, Fenghuang, Longma, Baihu e Xuanwu), as Bestas Errantes que vagam pelo mundo e são conquistadas por uma prova (Pixiu, Baize e Kunpeng) e golpes montados na tecla F"], cmds: ["/party", "/territorio", "/colonia", "/reino", "/pets"] }
 ];
 
 const CATS = { personagem: "Personagem", combate: "Combate", magia: "Magia e fé", oficios: "Ofícios", mundo: "Mundo", comunidade: "Comunidade" };
@@ -338,11 +338,11 @@ const ESTACOES = [
   { id: "infusor", nome: "Infusor Corpóreo", cat: "magia", bloco: "Caldeirão com água", itens: ["1 mesa de encantamento", "1 bigorna"], uso: "Infunda itens no corpo para ganhar mana e bônus, e pegue o grimório onde ficam as suas magias.", cmd: "/grimorio" },
   { id: "mesa_runica", nome: "Mesa Rúnica", cat: "magia", bloco: "Tufo entalhado", itens: ["4 fragmentos de ametista", "1 bloco de lápis"], uso: "Grave uma das 10 runas num equipamento: explosão, gelo, tempestade, salto duplo, vampirismo e outras." },
   { id: "transmutacao", nome: "Círculo de Transmutação", cat: "magia", bloco: "Bloco de ametista", itens: ["1 Mercúrio Vivo", "1 lingote de ouro"], uso: "Transforme materiais em outros mais raros, com risco. A Pedra Filosofal melhora todas as chances." },
-  { id: "santuario_deuses", nome: "Santuário dos Deuses", cat: "magia", bloco: "Quartzo entalhado", itens: ["1 maçã dourada", "1 vela"], uso: "Escolha um dos 6 deuses, jogue oferendas e reze todo dia. A fé sobe de 1 a 5 e libera milagres.", cmd: "/deus" },
+  { id: "santuario_deuses", nome: "Santuário dos Deuses", cat: "magia", bloco: "Quartzo entalhado", itens: ["1 maçã dourada", "1 vela"], uso: "Escolha um dos 6 deuses, jogue oferendas e reze todo dia. Os deuses também assistem aos seus feitos e mandam Moedas Estelares (/constelacoes). A fé sobe de 1 a 5 e libera milagres.", cmd: "/deus" },
   { id: "forja", nome: "Forja do Ferreiro", cat: "oficios", bloco: "Bigorna", itens: ["2 blocos de ferro", "1 balde de lava"], uso: "Itens feitos perto saem forjados, de Comum a Mítico. Agachado + clique: refino. Jogue um equipamento e 1 Fragmento de Forja: Reforjar.", cmd: "/forja" },
   { id: "reciclagem", nome: "Bancada de Reciclagem", cat: "oficios", bloco: "Rebolo", itens: ["1 funil", "1 tesoura"], uso: "Desmanche armas, ferramentas e armaduras e recupere de 50% a 75% do material. Gemas voltam inteiras." },
   { id: "alquimia", nome: "Bancada Alquímica", cat: "oficios", bloco: "Suporte de poções", itens: ["2 garrafas de vidro", "1 pó de blaze"], uso: "Elixires, componentes, óleos de lâmina, gemas, acessórios e engastes. Agachado + clique: o suporte normal.", cmd: "/alquimia" },
-  { id: "cozinha", nome: "Cozinha", cat: "oficios", bloco: "Defumador", itens: ["1 caldeirão", "1 balde de água"], uso: "19 pratos com bônus fortes. Ingredientes com qualidade ★ deixam o prato melhor.", cmd: "/receitas" },
+  { id: "cozinha", nome: "Cozinha", cat: "oficios", bloco: "Defumador", itens: ["1 caldeirão", "1 balde de água"], uso: "42 pratos com bônus fortes, inclusive pratos de monstro com efeitos estranhos (subir paredes, golpes de fogo). Ingredientes com qualidade ★ deixam o prato melhor.", cmd: "/receitas" },
   { id: "cabana_pesca", nome: "Cabana de Pesca", cat: "oficios", bloco: "Fogueira", itens: ["1 vara de pescar", "1 bacalhau", "4 tábuas de abeto"], uso: "A até 12 blocos: isca 30% mais rápida, +4% de peixe raro e ninguém sente frio. Feita para pescar no gelo.", cmd: "/peixes" },
   { id: "atelie", nome: "Ateliê do Curtidor", cat: "oficios", bloco: "Tear", itens: ["1 tesoura", "4 couros", "2 linhas"], uso: "Curta as peles, teça tecidos e costure os 6 conjuntos de armadura leve. Agachado + clique: o tear normal." },
   { id: "barril", nome: "Barril de Envelhecimento", cat: "oficios", bloco: "Barril", itens: ["2 lingotes de ferro", "1 favo de mel"], uso: "Bebidas que melhoram com os dias reais: Nova, Envelhecida, Reserva e Lendária." },
@@ -365,7 +365,7 @@ const GRUPOS = [
   ["colheita", "Plantações da estação", "As 20 colheitas: 5 por estação (o milho vai do verão ao outono e a cebola do inverno à primavera). Numa estufa com teto de vidro, crescem o ano todo."],
   ["semente", "Sementes", "Saem do mato quebrado na estação certa."],
   ["peixe", "Peixes raros", "17 peixes que só mordem em certos biomas, horários ou climas. Os 5 últimos saem só num buraco no gelo."],
-  ["prato", "Pratos", "Os 32 pratos da Cozinha, do Pão Caseiro ao Banquete da Fazenda."],
+  ["prato", "Pratos", "Os 42 pratos da Cozinha, do Pão Caseiro aos pratos de monstro, como a Omelete de Olho de Aranha que faz subir paredes."],
   ["artesao", "Artesanato e trufas", "O que sai do Tacho do Artesão (com a qualidade do ingrediente) e a trufa que o porco feliz acha."],
   ["elixir", "Elixires", "Os 12 elixires da Bancada Alquímica, cada um no seu frasco."],
   ["gema", "Gemas", "As 6 gemas (aqui, lapidadas). Engastadas em itens forjados, cada uma dá um bônus."],
@@ -387,7 +387,7 @@ const ITENS = {
   colheita: [["colheita_morango","Morango"],["colheita_couve_flor","Couve-Flor"],["colheita_pastinaca","Pastinaca"],["colheita_alho","Alho"],["colheita_feijao_verde","Feijão-Verde"],["colheita_mirtilo","Mirtilo"],["colheita_pimenta","Pimenta"],["colheita_tomate","Tomate"],["colheita_milho","Milho"],["colheita_melao","Melão"],["colheita_uva","Uva"],["colheita_abobora_moranga","Abóbora-Moranga"],["colheita_berinjela","Berinjela"],["colheita_inhame","Inhame"],["colheita_oxicoco","Oxicoco"],["colheita_couve_gelada","Couve Gelada"],["colheita_nabo_de_neve","Nabo-de-Neve"],["colheita_cebola","Cebola"],["colheita_rabanete_gelado","Rabanete-Gelado"],["colheita_alho_poro","Alho-Poró"]],
   semente: [["semente_morango","Sementes de Morango"],["semente_couve_flor","Sementes de Couve-Flor"],["semente_pastinaca","Sementes de Pastinaca"],["semente_alho","Sementes de Alho"],["semente_feijao_verde","Sementes de Feijão-Verde"],["semente_mirtilo","Sementes de Mirtilo"],["semente_pimenta","Sementes de Pimenta"],["semente_tomate","Sementes de Tomate"],["semente_milho","Sementes de Milho"],["semente_melao","Sementes de Melão"],["semente_uva","Sementes de Uva"],["semente_abobora_moranga","Sementes de Abóbora-Moranga"],["semente_berinjela","Sementes de Berinjela"],["semente_inhame","Sementes de Inhame"],["semente_oxicoco","Sementes de Oxicoco"],["semente_couve_gelada","Sementes de Couve Gelada"],["semente_nabo_de_neve","Sementes de Nabo-de-Neve"],["semente_cebola","Sementes de Cebola"],["semente_rabanete_gelado","Sementes de Rabanete-Gelado"],["semente_alho_poro","Sementes de Alho-Poró"]],
   peixe: [["peixe_carpa_dourada","Carpa Dourada"],["peixe_truta_arco_iris","Truta Arco-Íris"],["peixe_peixe_lua","Peixe-Lua"],["peixe_peixe_pedra","Peixe-Pedra"],["peixe_enguia_eletrica","Enguia Elétrica"],["peixe_peixe_gelo","Peixe-Gelo"],["peixe_koi_celeste","Koi Celeste"],["peixe_baiacu_rei","Baiacu-Rei"],["peixe_salmao_rei","Salmão-Rei"],["peixe_peixe_fantasma","Peixe-Fantasma"],["peixe_peixe_abissal","Peixe Abissal"],["peixe_peixe_dragao","Peixe-Dragão"],["peixe_truta_do_gelo","Truta-do-Gelo"],["peixe_lucio_polar","Lúcio Polar"],["peixe_peixe_lanterna","Peixe-Lanterna Glacial"],["peixe_enguia_de_cristal","Enguia de Cristal"],["peixe_esturjao_ancestral","Esturjão Ancestral"]],
-  prato: [["prato_pao_caseiro","Pão Caseiro"],["prato_ensopado_legumes","Ensopado de Legumes"],["prato_torta_abobora","Torta de Abóbora da Vovó"],["prato_peixe_ervas","Salmão com Ervas"],["prato_batata_recheada","Batata Recheada"],["prato_biscoito_mel","Biscoito de Mel"],["prato_ensopado_cacador","Ensopado do Caçador"],["prato_salada_arcana","Salada Arcana"],["prato_banquete_guerreiro","Banquete do Guerreiro"],["prato_pao_dourado","Pão Dourado"],["prato_sopa_cristalina","Sopa Cristalina"],["prato_torta_rubi","Torta Rubi"],["prato_sopa_pescador","Sopa do Pescador"],["prato_sushi_real","Sushi Real"],["prato_caldeirada_abissal","Caldeirada Abissal"],["prato_caldo_quente","Caldo Quente do Pescador"],["prato_sorvete_cristal","Sorvete de Cristal"],["prato_caviar_ancestral","Caviar Ancestral"],["prato_banquete_lendario","Banquete Lendário"],["prato_pao_com_geleia","Pão com Geleia"],["prato_salada_primavera","Salada da Primavera"],["prato_milho_assado","Milho Assado com Mel"],["prato_omelete_queijo","Omelete de Queijo"],["prato_torta_morango","Torta de Morango"],["prato_creme_abobora","Creme de Abóbora-Moranga"],["prato_sorvete_melao","Sorvete de Melão"],["prato_pizza_da_roca","Pizza da Roça"],["prato_sopa_de_inverno","Sopa de Inverno"],["prato_ratatouille","Ratatouille"],["prato_bolo_oxicoco","Bolo de Oxicoco"],["prato_risoto_trufa","Risoto de Trufa"],["prato_banquete_fazenda","Banquete da Fazenda"]],
+  prato: [["prato_pao_caseiro","Pão Caseiro"],["prato_ensopado_legumes","Ensopado de Legumes"],["prato_torta_abobora","Torta de Abóbora da Vovó"],["prato_peixe_ervas","Salmão com Ervas"],["prato_batata_recheada","Batata Recheada"],["prato_biscoito_mel","Biscoito de Mel"],["prato_ensopado_cacador","Ensopado do Caçador"],["prato_salada_arcana","Salada Arcana"],["prato_banquete_guerreiro","Banquete do Guerreiro"],["prato_pao_dourado","Pão Dourado"],["prato_sopa_cristalina","Sopa Cristalina"],["prato_torta_rubi","Torta Rubi"],["prato_sopa_pescador","Sopa do Pescador"],["prato_sushi_real","Sushi Real"],["prato_caldeirada_abissal","Caldeirada Abissal"],["prato_caldo_quente","Caldo Quente do Pescador"],["prato_sorvete_cristal","Sorvete de Cristal"],["prato_caviar_ancestral","Caviar Ancestral"],["prato_banquete_lendario","Banquete Lendário"],["prato_pao_com_geleia","Pão com Geleia"],["prato_salada_primavera","Salada da Primavera"],["prato_milho_assado","Milho Assado com Mel"],["prato_omelete_queijo","Omelete de Queijo"],["prato_torta_morango","Torta de Morango"],["prato_creme_abobora","Creme de Abóbora-Moranga"],["prato_sorvete_melao","Sorvete de Melão"],["prato_pizza_da_roca","Pizza da Roça"],["prato_sopa_de_inverno","Sopa de Inverno"],["prato_ratatouille","Ratatouille"],["prato_bolo_oxicoco","Bolo de Oxicoco"],["prato_risoto_trufa","Risoto de Trufa"],["prato_banquete_fazenda","Banquete da Fazenda"],["prato_ensopado_do_necromante","Ensopado do Necromante"],["prato_omelete_de_aranha","Omelete de Olho de Aranha"],["prato_gelatina_de_slime","Gelatina de Slime"],["prato_caldo_de_ossos","Caldo de Ossos"],["prato_crocante_de_phantom","Crocante de Phantom"],["prato_caldo_do_guardiao","Caldo do Guardião"],["prato_espetinho_de_blaze","Espetinho de Blaze"],["prato_sashimi_de_brisa","Sashimi de Brisa"],["prato_pudim_do_fim","Pudim do Fim"],["prato_lagrima_caramelizada","Lágrima de Ghast Caramelizada"]],
   artesao: [["artesao_queijo","Queijo"],["artesao_queijo_de_cabra","Queijo de Cabra"],["artesao_maionese","Maionese"],["artesao_geleia","Geleia"],["artesao_conserva","Conserva"],["artesao_oleo_de_trufa","Óleo de Trufa"],["produto_trufa","Trufa"]],
   gema: [["gema_rubi_2","Rubi"],["gema_safira_2","Safira"],["gema_esmeralda_2","Esmeralda"],["gema_topazio_2","Topázio"],["gema_ametista_2","Ametista"],["gema_onix_2","Ônix"]],
   elixir: [["elixir_cura","Elixir de Cura"],["elixir_rapidez","Elixir da Rapidez"],["elixir_minerador","Elixir do Minerador"],["elixir_mergulhador","Elixir do Mergulhador"],["elixir_sorte","Elixir da Sorte"],["elixir_pedra","Elixir de Pedra"],["elixir_sombras","Elixir das Sombras"],["elixir_mana","Elixir de Mana"],["elixir_gigante","Elixir do Gigante"],["elixir_fenix","Elixir da Fênix"],["elixir_tita","Elixir do Titã"],["elixir_purificacao","Elixir da Purificação"]],

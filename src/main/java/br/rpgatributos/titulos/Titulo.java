@@ -113,6 +113,7 @@ public enum Titulo {
     VINCULO_ETERNO("Vínculo Eterno", 0xC9955C, Requisito.contador("companheiro_lendario", 1, "Evoluir um companheiro ao estágio III"), Bonus.xpSkill(Skill.DOMA, 0.15)),
     DOMADOR_DE_LENDAS("Domador de Lendas", 0x5FB8E6, Requisito.contador("besta_errante", 1, "Conquistar uma Besta Errante"), Bonus.xpSkill(Skill.DOMA, 0.2)),
     ESPANTA_NIAN("Espanta-Nian", 0xD83A2E, Requisito.contador("nian_espantado", 1, "Ajudar a espantar o Nian numa noite de inverno"), Bonus.vida(2)),
+    CONFIDENTE("Confidente", 0xFF8FA8, Requisito.contador("lacos_completos", 1, "Completar o laço com um morador"), Bonus.xpTudo(0.03)),
     RENASCIDO("Renascido", 0xFFD54F, Requisito.contador("renascimentos", 1, "Renascer uma vez"), new Bonus().comVida(2).comDano(1)),
     ETERNO("Eterno", 0xFFF59D, Requisito.contador("renascimentos", 5, "Renascer 5 vezes"), new Bonus().comDano(2).comVida(6).comVelocidade(0.05)),
 

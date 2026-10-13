@@ -255,6 +255,10 @@ public final class Cozinha extends Estacao {
         }
         if (pr.especial() == Prato.Especial.MANA) l.add(Component.text(" ✧ Recupera 60 de mana", NamedTextColor.LIGHT_PURPLE));
         if (pr.especial() == Prato.Especial.BANQUETE) l.add(Component.text(" ✧ Vale para todos a até 10 blocos!", NamedTextColor.GOLD));
+        if (pr.especial() != null && pr.especial().deMonstro()) {
+            Prato.Especial es = pr.especial();
+            l.add(Component.text(" ✧ " + es.descricao() + (es.segundos() > 0 ? " (" + es.segundos() + " s)" : ""), NamedTextColor.DARK_GREEN));
+        }
         return l;
     }
 
@@ -416,6 +420,7 @@ public final class Cozinha extends Estacao {
                 if (alvo != p) alvo.sendMessage(Component.text("♨ " + p.getName() + " serviu um " + pr.nome() + " para você!", COR));
             }
             if (pr.especial() == Prato.Especial.MANA) plugin.arcano().darMana(p, 60);
+            if (pr.especial() != null && pr.especial().deMonstro()) plugin.iguarias().aplicar(p, pr.especial(), fator);
             p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.8f, 1.1f);
         });
     }
