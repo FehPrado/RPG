@@ -39,7 +39,19 @@ public enum Acessorio {
     ANEL_SABIO("Anel do Sábio", Tipo.ANEL, "prismarine_crystals", 0x7FD7FF, "+5% de XP em todos os atributos",
             List.of(), null, Especial.XP),
 
+    // 2.46: anéis dos minerais de bioma
+    ANEL_JADE("Anel de Jade", Tipo.ANEL, "raw_copper", 0x4CAF7D, "+1 ❤ de vida máxima e +1 de armadura",
+            List.of(m(Attribute.MAX_HEALTH, 2, Operation.ADD_NUMBER), m(Attribute.ARMOR, 1, Operation.ADD_NUMBER)), null, Especial.NENHUM),
+    ANEL_GELO("Anel do Gelo Eterno", Tipo.ANEL, "prismarine_crystals", 0xA8E4FF, "+2 de eficiência de mineração e +15% de mineração debaixo d'água",
+            List.of(m(Attribute.MINING_EFFICIENCY, 2, Operation.ADD_NUMBER), m(Attribute.SUBMERGED_MINING_SPEED, 0.15, Operation.ADD_NUMBER)), null, Especial.NENHUM),
+
     // ---------- amuletos ----------
+    PINGENTE_AMBAR("Pingente de Âmbar", Tipo.AMULETO, "raw_gold", 0xF2A33A, "+5% de XP em todos os atributos e +1 de sorte",
+            List.of(m(Attribute.LUCK, 1, Operation.ADD_NUMBER)), null, Especial.XP),
+    COLAR_PEROLAS("Colar de Pérolas", Tipo.AMULETO, "quartz", 0xF3E9F0, "Fôlego muito maior e +60% de mineração debaixo d'água",
+            List.of(m(Attribute.OXYGEN_BONUS, 2, Operation.ADD_NUMBER), m(Attribute.SUBMERGED_MINING_SPEED, 0.6, Operation.ADD_NUMBER)), null, Especial.NENHUM),
+    AMULETO_SANGUE("Amuleto de Sangue", Tipo.AMULETO, "nether_brick", 0xB0102A, "+2 de dano, mas -1 ❤ de vida máxima",
+            List.of(m(Attribute.ATTACK_DAMAGE, 2, Operation.ADD_NUMBER), m(Attribute.MAX_HEALTH, -2, Operation.ADD_NUMBER)), null, Especial.NENHUM),
     AMULETO_MANA("Amuleto de Mana", Tipo.AMULETO, "heart_of_the_sea", 0x7F8CFF, "+40 de mana máxima e +1 de mana por segundo",
             List.of(), null, Especial.MANA),
     AMULETO_GUARDIAO("Amuleto do Guardião", Tipo.AMULETO, "prismarine_shard", 0x3D6BFF, "+2 de armadura e +1 de resistência",

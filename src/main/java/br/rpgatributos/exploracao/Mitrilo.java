@@ -242,6 +242,24 @@ public final class Mitrilo implements Listener {
         minerios.put(chave(c), l);
     }
 
+    /** Distância até o mitrilo mais perto (no chunk e nos vizinhos), ou -1 se não houver a até {@code raio}. */
+    public double distanciaMaisPerto(Location l, double raio) {
+        double melhor = -1;
+        int cx = l.getBlockX() >> 4, cz = l.getBlockZ() >> 4;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                List<Location> lista = minerios.get(((long) (cx + dx) << 32) ^ ((cz + dz) & 0xffffffffL) ^ ((long) l.getWorld().getName().hashCode() << 48));
+                if (lista == null) continue;
+                for (Location x : lista) {
+                    if (!x.getWorld().equals(l.getWorld())) continue;
+                    double d = x.distance(l);
+                    if (d <= raio && (melhor < 0 || d < melhor)) melhor = d;
+                }
+            }
+        }
+        return melhor;
+    }
+
     @EventHandler
     public void aoDescarregarChunk(ChunkUnloadEvent e) {
         minerios.remove(chave(e.getChunk()));

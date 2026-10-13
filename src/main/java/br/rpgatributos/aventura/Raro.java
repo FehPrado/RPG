@@ -48,7 +48,19 @@ public enum Raro {
 
     // 2.33: o céu
     FRAGMENTO_CELESTE("Fragmento Celeste", Material.FEATHER, 0x9FD8F5,
-            "Uma lasca de céu que o vento esqueceu de levar.", "Na Bancada Alquímica: Amuleto dos Ventos.");
+            "Uma lasca de céu que o vento esqueceu de levar.", "Na Bancada Alquímica: Amuleto dos Ventos."),
+
+    // 2.46: minerais de bioma (cada um só nasce num tipo de lugar)
+    AMBAR("Âmbar", Material.RAW_GOLD, 0xF2A33A,
+            "Resina de árvores que o deserto engoliu. Às vezes guarda algo dentro.", "Bancada Alquímica: Pingente de Âmbar. O Joalheiro compra."),
+    JADE("Jade", Material.RAW_COPPER, 0x4CAF7D,
+            "A pedra que protege, dizem os mais velhos da selva.", "Bancada Alquímica: Anel de Jade. O Joalheiro compra."),
+    PEROLA("Pérola do Mar", Material.QUARTZ, 0xF3E9F0,
+            "Uma ostra levou anos fazendo isso.", "Bancada Alquímica: Colar de Pérolas. O Joalheiro compra."),
+    CRISTAL_DE_GELO("Cristal de Gelo", Material.PRISMARINE_CRYSTALS, 0xA8E4FF,
+            "Não derrete nem na mão de quem o segura.", "Bancada Alquímica: Anel do Gelo Eterno."),
+    PEDRA_SANGUE("Pedra-Sangue", Material.NETHER_BRICK, 0xB0102A,
+            "Pulsa devagar, como se tivesse um coração.", "Bancada Alquímica: Amuleto de Sangue.");
 
     /** Chave fixa (namespace do plugin) para não depender da instância do plugin. */
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "raro");

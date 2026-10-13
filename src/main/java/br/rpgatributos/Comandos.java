@@ -375,6 +375,7 @@ public final class Comandos implements TabExecutor {
             case "lendaria" -> { adminLendaria(sender, args); return; }
             case "nian" -> { adminNian(sender, args); return; }
             case "constelacao" -> { adminConstelacao(sender, args); return; }
+            case "mineral" -> { adminMineral(sender, args); return; }
             case "traje" -> { adminTraje(sender, args); return; }
             case "guerra" -> {
                 if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
@@ -510,6 +511,30 @@ public final class Comandos implements TabExecutor {
             }
             default -> erro(sender, uso);
         }
+    }
+
+    private void adminMineral(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        String uso = "Use: /rpgadmin mineral <ambar|jade|perola|cristal_de_gelo|pedra_sangue|turfa|cristal_bruto|geodo|cinzel|bateia>";
+        if (args.length < 2) { erro(sender, uso); return; }
+        String a = args[1].toLowerCase(Locale.ROOT);
+        switch (a) {
+            case "cinzel" -> { p.getInventory().addItem(br.rpgatributos.exploracao.Mineracao.cinzel()); ok(sender, "Cinzel do Lapidador no inventário."); return; }
+            case "bateia" -> { p.getInventory().addItem(br.rpgatributos.exploracao.Mineracao.bateia()); ok(sender, "Bateia no inventário."); return; }
+            case "geodo" -> {
+                plugin.mineracao().geodoAqui(p.getLocation().getBlock().getRelative(0, -20, 0));
+                ok(sender, "Tentei abrir um geodo neste chunk (precisa de rocha maciça entre o y -48 e 24).");
+                return;
+            }
+            default -> { }
+        }
+        br.rpgatributos.exploracao.Mineracao.Tipo t = null;
+        for (var x : br.rpgatributos.exploracao.Mineracao.Tipo.values()) if (x.id().equals(a)) t = x;
+        if (t == null) { erro(sender, uso); return; }
+        org.bukkit.block.Block b = p.getTargetBlockExact(6);
+        if (b == null || b.getType().isAir()) { erro(sender, "Olhe para um bloco (até 6 de distância)."); return; }
+        plugin.mineracao().colocar(b, t);
+        ok(sender, "Mineral colocado no bloco que você olha.");
     }
 
     private void adminConstelacao(CommandSender sender, String[] args) {
@@ -1725,7 +1750,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "constelacao", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "constelacao", "mineral", "reload"));
                 } else if (args.length == 2 && List.of("carta", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

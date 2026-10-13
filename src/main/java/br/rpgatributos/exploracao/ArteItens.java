@@ -988,6 +988,25 @@ final class ArteItens {
     //  Materiais raros e núcleos dos chefes
     // =====================================================================
 
+    /** Cinzel do Lapidador: lâmina de aço com ponta de ametista e cabo de madeira, na diagonal. */
+    private static final String[] CINZEL = {
+            "................",
+            "............oo..",
+            "...........oaho.",
+            "..........ohmao.",
+            ".........ohmdo..",
+            "........ohmdo...",
+            ".......ohmdo....",
+            "......oomdo.....",
+            ".....okcoo......",
+            "....okco........",
+            "...okco.........",
+            "..okco..........",
+            ".okco...........",
+            ".oco............",
+            "..o.............",
+            "................"};
+
     private static final String[] FRAGMENTO = {
             "................",
             "................",
@@ -1211,6 +1230,23 @@ final class ArteItens {
                 c('o', 0xFF2A1A3A, 'g', 0xFFFFC107, 'a', 0xFFC77DFF, 'p', 0xFF7C4DFF, 'b', 0xFF40C4FF)));
         l.add(new Arte("feather", "raro_fragmento_celeste", CELESTE,
                 c('o', 0xFF2E5C7A, 'w', BRANCO, 'h', 0xFFD9F3FF, 'c', 0xFF9FD8F5, 'd', 0xFF5FA8D3)));
+        // 2.46: minerais de bioma, a turfa e as ferramentas do minerador.
+        l.add(new Arte("raw_gold", "raro_ambar", GEMA_LAPIDADA,
+                c('o', 0xFF5A2E06, 'd', 0xFFB0600E, 'm', 0xFFF2A33A, 'h', 0xFFFFD27F, 'w', 0xFFFFF4D6)));
+        l.add(new Arte("raw_copper", "raro_jade", GEMA_BRUTA,
+                com(PEDRA, 'o', 0xFF14402A, 'd', 0xFF2E7D50, 'm', 0xFF4CAF7D, 'h', 0xFF9FE3BE, 'a', 0xFFE0FFF0)));
+        l.add(new Arte("quartz", "raro_perola", PEROLA,
+                c('o', 0xFF8A7A88, 'd', 0xFFD3C3CF, 'm', 0xFFF3E9F0, 'h', 0xFFFFFFFF, 'w', BRANCO)));
+        l.add(new Arte("prismarine_crystals", "raro_cristal_de_gelo", CRISTAL,
+                c('o', 0xFF2E6E94, 'd', 0xFF6FB6DE, 'm', 0xFFA8E4FF, 'h', 0xFFE6F7FF, 'w', BRANCO, 'a', 0xFFE6F7FF)));
+        l.add(new Arte("nether_brick", "raro_pedra_sangue", GEMA_BRUTA,
+                c('p', 0xFF6E2A2A, 'q', 0xFF3E1414, 'w', 0xFFFF9AA8, 'o', 0xFF3A0008, 'd', 0xFF7A0A1E, 'm', 0xFFB0102A, 'h', 0xFFFF4D6A, 'a', 0xFFFFD0D8)));
+        l.add(new Arte("coal", "turfa", FRAGMENTO,
+                c('o', 0xFF1E140C, 'd', 0xFF3A2816, 'm', 0xFF5A4026, 'h', 0xFF7A5A36, 'a', 0xFF6B8E3A)));
+        l.add(new Arte("brush", "cinzel", CINZEL,
+                c('o', 0xFF2A2A30, 'm', 0xFFB8BCC8, 'h', 0xFFE8ECF4, 'd', 0xFF6E7280, 'c', 0xFF6B4423, 'k', 0xFF9C6B3A, 'a', 0xFFB66BFF)));
+        l.add(new Arte("bowl", "bateia", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFD8C08A, 'a', 0xFFFFD23F, 'b', 0xFF8A8A8A, 's', 0x00000000)));
         l.add(new Arte("apple", "ceu_fruta_celeste", FRUTA_CEU,
                 c('o', 0xFF3A2A5A, 'w', BRANCO, 'h', 0xFFE8E0FF, 'p', 0xFFB39DDB, 'd', 0xFF7E57C2, 'g', 0xFF66BB6A, 'k', 0xFF5D4037)));
         l.add(new Arte("snowball", "ceu_semente_brilhante", SEMENTE_LUZ,
@@ -1414,6 +1450,11 @@ final class ArteItens {
         amuleto(l, "amuleto_vida", "golden_apple", 0xFFFF4D6D, 0xFFFFB0C0);
         amuleto(l, "amuleto_fenix", "totem_of_undying", 0xFFFF7A1A, 0xFFFFF04D);
         amuleto(l, "amuleto_ventos", "feather", 0xFF9FD8F5, 0xFFE1F5FE);
+        anel(l, "anel_jade", "raw_copper", OURO, 0xFF2E8B57, 0xFF8FE3B8);
+        anel(l, "anel_gelo", "prismarine_crystals", FERRO, 0xFF7FC8F0, 0xFFE6F7FF);
+        amuleto(l, "pingente_ambar", "raw_gold", 0xFFE08A1E, 0xFFFFD27F);
+        amuleto(l, "colar_perolas", "quartz", 0xFFE8DCE6, 0xFFFFFFFF);
+        amuleto(l, "amuleto_sangue", "nether_brick", 0xFF8E0A1E, 0xFFE0405A);
         cinto(l, "cinto_atleta", "lead", 0xFF43A047, 0xFFA5D6A7);
         cinto(l, "cinto_andarilho", "leather", 0xFF8D6E63, 0xFFD7CCC8);
         cinto(l, "cinto_tita", "iron_ingot", 0xFF616161, 0xFFBDBDBD);

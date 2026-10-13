@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.45</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.46</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.45.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.46.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -569,6 +569,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin lendaria &lt;qilin|fenghuang|longma|baihu|xuanwu|pixiu|baize|kunpeng&gt; &lt;ovo|nascer|livre|estado|aparecer&gt;</span></td><td>Lendárias: dá o ovo (Guardiões), faz nascer aqui, volta ao começo, mostra onde está ou solta a Besta Errante aqui perto</td></tr>
       <tr><td><span class="cmd">/rpgadmin nian [estado|embora]</span></td><td>Faz o Nian descer aqui perto, mostra onde está ou manda embora</td></tr>
       <tr><td><span class="cmd">/rpgadmin constelacao &lt;moedas N|testar&gt;</span></td><td>Dá Moedas Estelares ou faz uma constelação comentar (para testar)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin mineral &lt;tipo|geodo|cinzel|bateia&gt;</span></td><td>Põe um mineral de bioma no bloco que você olha, abre um geodo no chunk ou dá o Cinzel/Bateia</td></tr>
       <tr><td><span class="cmd">/rpgadmin traje &lt;traje|aleatorio&gt; [capacete|peitoral|calca|botas|todas] [raridade]</span></td><td>Peças de um Traje (armadura com nome) já forjadas</td></tr>
       <tr><td><span class="cmd">/rpgadmin raiz</span> · <span class="cmd">coracaopenumbra</span> · <span class="cmd">penumbra</span></td><td>Planta uma Raiz de Luz no chão embaixo de você · acorda o Coração da Penumbra · zera a sua Penumbra</td></tr>
       <tr><td><span class="cmd">/rpgadmin itemceu       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>lt;fruta_celeste|semente_brilhante      <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td>gt; [qtd]</span></td><td>Fruta Celeste ou Semente Brilhante (o Fragmento Celeste vem com <span class="cmd">/rpgadmin raro fragmento_celeste</span>)</td></tr>
@@ -667,6 +668,17 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Só com um fardo de feno no baú: a vaca come e o fardo vira 8 trigos.</li>
       </ol>
     </div>
+    <div class="card"><h3>Mineração e biomas (2.46)</h3>
+      <ol>
+        <li>Suba o pacote novo (7 blocos de mineral e 13 itens).</li>
+        <li>Olhando para um bloco: <span class="cmd">/rpgadmin mineral ambar</span> (ou <code>jade</code>, <code>perola</code>, <code>cristal_de_gelo</code>, <code>pedra_sangue</code>, <code>turfa</code>, <code>cristal_bruto</code>). Quebre com picareta de pedra ou melhor: sai o mineral e XP de Mineração. Sem picareta, avisa e não quebra.</li>
+        <li><span class="cmd">/rpgadmin mineral cinzel</span> e um <code>cristal_bruto</code>: clique 4 vezes devagar = gema; rápido demais pode rachar.</li>
+        <li><span class="cmd">/rpgadmin mineral bateia</span>: entre num rio raso (areia no fundo), clique e fique parado 3 s.</li>
+        <li>Com Mineração 20% do máximo, quebre pedra perto de um mineral: ouve-se o "canto" (tom mais agudo = mais perto).</li>
+        <li>Turfa na fornalha queima 2,5 vezes mais que carvão. Os acessórios novos estão na Bancada Alquímica (aba Acessórios).</li>
+        <li>A geração vale para todo chunk que carregar pela primeira vez com a 2.46 (também nas áreas antigas), longe de territórios e sem mexer em blocos construídos.</li>
+      </ol>
+    </div>
     <div class="card"><h3>Vilas com moradores (2.45)</h3>
       <ol>
         <li>Num lugar aberto, <span class="cmd">/rpgadmin estrutura vila_pescadores</span> (ou <code>mosteiro</code>, <code>aldeia_anoes</code>, <code>vila_elfica</code>). Chegando perto, os 4 moradores aparecem.</li>
@@ -736,7 +748,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Numa colônia com a Mina no nível 3, use <span class="cmd">/rpgadmin raiz</span> numa caverna abaixo do território e acenda. A placa da Mina mostra <b>Poço das Profundezas aberto</b>; rode <span class="cmd">/rpgadmin turnocolonia</span> e veja ametista e mitrilo no depósito.</li>
         <li><span class="cmd">/rpgadmin traje penumbra todas</span>: vista as 4 peças e olhe em terceira pessoa (F5): a textura própria aparece no corpo. Teste o Guarda-roupa e a mesa de ferraria (Netherite).</li>
         <li>Reinicie o servidor com o Coração da Penumbra vivo: a barra de chefe volta quando ele carrega.</li>
-        <li>Jars: o de cada versão fica na raiz do repositório no GitHub (e também no artefato do GitHub Actions); uma tag <code>v2.45.0</code> vira Release com o jar.</li>
+        <li>Jars: o de cada versão fica na raiz do repositório no GitHub (e também no artefato do GitHub Actions); uma tag <code>v2.46.0</code> vira Release com o jar.</li>
       </ol>
     </div>
     <div class="card"><h3>Jeito, pedidos e Cavaleiro (2.32)</h3>
@@ -1006,7 +1018,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.45 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
+<footer>RPGAtributos 2.46 · Painel do Admin · Guia dos jogadores: <a href="jogadores.html">jogadores.html</a></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

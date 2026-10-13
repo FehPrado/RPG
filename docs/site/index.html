@@ -174,7 +174,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 <main id="inicio">
   <section class="wrap abertura">
     <div>
-      <p class="rotulo">Manual do jogador · versão 2.45</p>
+      <p class="rotulo">Manual do jogador · versão 2.46</p>
       <h1>Um mundo inteiro <em>dentro</em> do seu Minecraft.</h1>
       <p class="lead">Atributos que sobem com o uso, classes, magia, deuses, forja com raridades, colônias com moradores de verdade, reinos em guerra, cidades no fundo do mar. Tudo o que o RPGAtributos tem, num lugar só.</p>
       <div class="numeros">
@@ -280,7 +280,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 <footer>
   <div class="wrap">
-    <span>RPGAtributos 2.45 · plugin para servidores Paper 26.3</span>
+    <span>RPGAtributos 2.46 · plugin para servidores Paper 26.3</span>
     <span>Dúvidas no jogo: <code>/guia</code> e <code>/rpg</code></span>
   </div>
 </footer>
@@ -315,7 +315,7 @@ const AREAS = [
     "Estações de verdade (1 semana cada): o chão muda (flores, vaga-lumes, folhas secas, neve), 12 coisas para colher, festival, luas e clima",
     "Mundo perigoso: elites com afixos, hordas, ninhos, chefe mundial e bestiário",
     "Masmorras, portais, Soberano das Sombras e a Torre Infinita",
-    "23 estruturas (até naufrágios, cidades submersas, Ilhas do Céu e 4 vilas com moradores que têm loja, serviço e laço: pescadores, mosteiro, anões e elfos), 7 Locais Ocultos e 12 Lendas",
+    "Mineração por bioma (âmbar, jade, pérolas, cristal de gelo, pedra-sangue, turfa), geodos lapidados com cinzel, bateia nos rios, 23 estruturas (até naufrágios, cidades submersas, Ilhas do Céu e 4 vilas com moradores que têm loja, serviço e laço: pescadores, mosteiro, anões e elfos), 7 Locais Ocultos e 12 Lendas",
     "Profundezas escuras abaixo do y 0: Raízes de Luz para acender e a Penumbra, que rouba corações",
     "Mapas do tesouro, arqueologia, campanha de 8 capítulos, sonhos e Álbum de 54 cartas"], cmds: ["/calendario", "/bestiario", "/lendas", "/album"] },
   { ico: "🏰", nome: "Comunidade", itens: [
@@ -372,6 +372,7 @@ const GRUPOS = [
   ["componente", "Componentes e óleos", "Componentes da alquimia e os 5 óleos de lâmina."],
   ["oficio", "Peles, couros e tecidos", "O caminho do curtume: a pele crua, o couro curtido e os tecidos do tear."],
   ["acessorio", "Acessórios", "Anéis, amuletos, cintos e itens de bolso para os espaços do /acessorios."],
+  ["mineral", "Minerais e ferramentas", "Os minerais de cada bioma, a turfa, o Cinzel do Lapidador e a Bateia (2.46)."],
   ["lenda", "Lendas", "Itens únicos no servidor. Estes têm visual próprio; o arco, o escudo e as armaduras mantêm o do jogo."],
   ["fruta", "Frutas do pomar", "As 5 frutas que nascem penduradas nas árvores do pomar."],
   ["bebida", "Bebidas do barril", "Bebidas que envelhecem com os dias reais."],
@@ -393,7 +394,8 @@ const ITENS = {
   elixir: [["elixir_cura","Elixir de Cura"],["elixir_rapidez","Elixir da Rapidez"],["elixir_minerador","Elixir do Minerador"],["elixir_mergulhador","Elixir do Mergulhador"],["elixir_sorte","Elixir da Sorte"],["elixir_pedra","Elixir de Pedra"],["elixir_sombras","Elixir das Sombras"],["elixir_mana","Elixir de Mana"],["elixir_gigante","Elixir do Gigante"],["elixir_fenix","Elixir da Fênix"],["elixir_tita","Elixir do Titã"],["elixir_purificacao","Elixir da Purificação"]],
   componente: [["componente_po_arcano","Pó Arcano"],["componente_oleo_de_peixe","Óleo de Peixe"],["componente_tintura_vital","Tintura Vital"],["componente_sal_lunar","Sal Lunar"],["componente_mercurio_vivo","Mercúrio Vivo"],["componente_cristal_de_mana","Cristal de Mana"],["componente_solvente","Solvente Alquímico"],["componente_perola_negra","Pérola Negra"],["componente_escama_do_abismo","Escama do Abismo"],["componente_oleo_de_fogo","Óleo de Fogo"],["componente_oleo_gelido","Óleo Gélido"],["componente_oleo_trovejante","Óleo Trovejante"],["componente_oleo_venenoso","Óleo Venenoso"],["componente_oleo_de_prata","Óleo de Prata"]],
   oficio: [["oficio_pele_de_lobo","Pele de Lobo"],["oficio_pele_de_urso","Pele de Urso Polar"],["oficio_pele_de_raposa","Pele de Raposa"],["oficio_escama_de_guardiao","Escama de Guardião"],["oficio_couro_de_hoglin","Couro de Hoglin"],["oficio_couro_lobo","Couro de Lobo Curtido"],["oficio_couro_urso","Couro de Urso Curtido"],["oficio_couro_raposa","Couro de Raposa Curtido"],["oficio_couro_escamas","Couro de Escamas"],["oficio_couro_brasa","Couro de Brasa"],["oficio_couro_noturno","Couro Noturno"],["oficio_tecido","Tecido de Linha"],["oficio_feltro","Feltro"],["oficio_tecido_de_alga","Tecido de Alga"]],
-  acessorio: [["anel_vigor","Anel do Vigor"],["anel_forca","Anel da Força"],["anel_vento","Anel do Vento"],["anel_mares","Anel das Marés"],["anel_brasas","Anel das Brasas"],["anel_minerador","Anel do Minerador"],["anel_fortuna","Anel da Fortuna"],["anel_sabio","Anel do Sábio"],["amuleto_mana","Amuleto de Mana"],["amuleto_guardiao","Amuleto do Guardião"],["amuleto_vida","Amuleto da Vida"],["amuleto_fenix","Amuleto da Fênix"],["cinto_atleta","Cinto do Atleta"],["cinto_andarilho","Cinto do Andarilho"],["cinto_tita","Cinto do Titã"],["lanterna_bolso","Lanterna de Bolso"],["ima_bolso","Ímã de Bolso"],["relogio_bolso","Relógio de Bolso"],["capa_planadora","Capa Planadora"]],
+  mineral: [["raro_ambar","Âmbar"],["raro_jade","Jade"],["raro_perola","Pérola do Mar"],["raro_cristal_de_gelo","Cristal de Gelo"],["raro_pedra_sangue","Pedra-Sangue"],["turfa","Turfa"],["cinzel","Cinzel do Lapidador"],["bateia","Bateia"]],
+  acessorio: [["anel_jade","Anel de Jade"],["anel_gelo","Anel do Gelo Eterno"],["pingente_ambar","Pingente de Âmbar"],["colar_perolas","Colar de Pérolas"],["amuleto_sangue","Amuleto de Sangue"],["anel_vigor","Anel do Vigor"],["anel_forca","Anel da Força"],["anel_vento","Anel do Vento"],["anel_mares","Anel das Marés"],["anel_brasas","Anel das Brasas"],["anel_minerador","Anel do Minerador"],["anel_fortuna","Anel da Fortuna"],["anel_sabio","Anel do Sábio"],["amuleto_mana","Amuleto de Mana"],["amuleto_guardiao","Amuleto do Guardião"],["amuleto_vida","Amuleto da Vida"],["amuleto_fenix","Amuleto da Fênix"],["cinto_atleta","Cinto do Atleta"],["cinto_andarilho","Cinto do Andarilho"],["cinto_tita","Cinto do Titã"],["lanterna_bolso","Lanterna de Bolso"],["ima_bolso","Ímã de Bolso"],["relogio_bolso","Relógio de Bolso"],["capa_planadora","Capa Planadora"]],
   lenda: [["lenda_lamina_do_exorcista","Lâmina do Exorcista"],["lenda_presa_da_tecela","Presa da Tecelã"],["lenda_machado_do_lenhador","Machado do Lenhador Eterno"],["lenda_picareta_do_abismo","Picareta do Abismo"],["lenda_lamina_do_carrasco","Lâmina do Carrasco"],["lenda_martelo_do_forjador","Martelo do Forjador Lendário"],["lenda_lamina_do_arquimago","Lâmina do Arquimago"]],
   fruta: [["fruta_laranja","Laranja"],["fruta_pessego","Pêssego"],["fruta_cereja","Cereja"],["fruta_limao","Limão"],["fruta_maca_dourada","Maçã Dourada do Pomar"]],
   bebida: [["bebida_hidromel","Hidromel"],["bebida_cidra","Cidra"],["bebida_vinho","Vinho de Frutas"],["bebida_cerveja","Cerveja de Trigo"],["bebida_licor_arcano","Licor Arcano"],["bebida_licor_de_ervas","Licor de Ervas"],["bebida_licor_de_frutas","Licor de Frutas"]],

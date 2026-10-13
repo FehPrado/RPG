@@ -408,6 +408,10 @@ public final class Vilas implements Listener {
                 l.add(compra(Material.DIAMOND, 1, 3, 6));
                 l.add(compra(Material.AMETHYST_SHARD, 8, 1, 6));
                 l.add(compra(Material.LAPIS_LAZULI, 16, 1, 6));
+                // 2.46: os minerais de bioma.
+                l.add(new Oferta(new ItemStack(Material.EMERALD, 2), Raro.AMBAR.criar(2), 6));
+                l.add(new Oferta(new ItemStack(Material.EMERALD, 2), Raro.JADE.criar(2), 6));
+                l.add(new Oferta(new ItemStack(Material.EMERALD, 3), Raro.PEROLA.criar(2), 6));
             }
             case FERREIRO_ANAO -> {
                 l.add(vende(Raro.FRAGMENTO_DE_FORJA.criar(1), 20, 1));

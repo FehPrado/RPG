@@ -114,6 +114,9 @@ public enum Titulo {
     DOMADOR_DE_LENDAS("Domador de Lendas", 0x5FB8E6, Requisito.contador("besta_errante", 1, "Conquistar uma Besta Errante"), Bonus.xpSkill(Skill.DOMA, 0.2)),
     ESPANTA_NIAN("Espanta-Nian", 0xD83A2E, Requisito.contador("nian_espantado", 1, "Ajudar a espantar o Nian numa noite de inverno"), Bonus.vida(2)),
     CONFIDENTE("Confidente", 0xFF8FA8, Requisito.contador("lacos_completos", 1, "Completar o laço com um morador"), Bonus.xpTudo(0.03)),
+    GEOLOGO("Geólogo", 0xD8B46A, Requisito.contador("minerais_bioma", 50, "Minerar 50 minerais de bioma (âmbar, jade, pérola, cristal de gelo, pedra-sangue)"), Bonus.xpSkill(Skill.MINERACAO, 0.15)),
+    CORACAO_DE_CRISTAL("Coração de Cristal", 0xB66BFF, Requisito.contador("geodos", 10, "Lapidar 10 cristais de geodo com o Cinzel"), Bonus.xpSkill(Skill.MINERACAO, 0.1)),
+    GARIMPEIRO_DO_RIO("Garimpeiro do Rio", 0xFFD23F, Requisito.contador("garimpos", 100, "Garimpar 100 vezes com a Bateia"), Bonus.xpTudo(0.03)),
     RENASCIDO("Renascido", 0xFFD54F, Requisito.contador("renascimentos", 1, "Renascer uma vez"), new Bonus().comVida(2).comDano(1)),
     ETERNO("Eterno", 0xFFF59D, Requisito.contador("renascimentos", 5, "Renascer 5 vezes"), new Bonus().comDano(2).comVida(6).comVelocidade(0.05)),
 

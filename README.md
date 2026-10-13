@@ -1048,6 +1048,29 @@ Um minério novo que só aparece **no fundo do mundo** (Y -58 a -24), trocando a
 - **Mitrilo Bruto** no forno (ou alto-forno) vira **Lingote de Mitrilo**.
 - Na **mesa de ferraria**: **molde de melhoria de netherita + peça de netherita + lingote de mitrilo** = peça **✦ Mitrilo**: 50% mais durabilidade e um bônus extra (arma: +1,5 de dano; armadura: +1 de armadura e +1 de resistência; ferramenta: +20% de velocidade). Funciona em itens forjados também.
 
+### Mineração e biomas (2.46)
+
+Cada bioma tem um **mineral próprio**, que só nasce lá. Eles aparecem até nas áreas já exploradas (na primeira vez que o chunk carrega com esta versão), longe de territórios, sem mexer em nada construído.
+
+| Mineral | Onde | Como sai | Para que serve |
+|---|---|---|---|
+| **Âmbar** | Deserto e badlands (arenito e terracota, y 30–75) | Picareta de pedra ou melhor. 4% de chance de vir uma **relíquia presa dentro** | Pingente de Âmbar; o Joalheiro compra |
+| **Jade** | Selva e bambuzal (pedra, y 0–60) | Picareta de pedra ou melhor | Anel de Jade; o Joalheiro compra |
+| **Ostra com Pérola** | Fundo do mar (areia, cascalho ou argila) | Qualquer ferramenta. 60% tem pérola | Colar de Pérolas; o Joalheiro compra |
+| **Cristal de Gelo** | Montanhas e biomas gelados (pedra e gelo compacto, y 40–140) | Picareta de pedra ou melhor | Anel do Gelo Eterno |
+| **Pedra-Sangue** | Nether (netherrack) | Picareta de pedra ou melhor | Amuleto de Sangue |
+| **Turfa** | Pântano e mangue (lama ou terra, logo abaixo do chão) | Pá ou mão | **Combustível**: queima 2,5 vezes mais que o carvão |
+
+Os minerais dão XP de Mineração e não são levados por explosões nem empurrados por pistões.
+
+**Geodos de Cristal:** bolsões ocos nas cavernas (y −48 a 24), com casca de basalto e calcita e forrados de **Cristal Bruto**. Na picareta, o cristal estilhaça em fragmentos de ametista. Com o **Cinzel do Lapidador** (bancada: fragmento de ametista, lingote de ferro e graveto na diagonal), clique 4 vezes **com calma** para lapidar: sai uma **gema** de grau 1 a 3. A chance de grau alto cresce com a Mineração. Clicar rápido demais pode rachar o cristal.
+
+**Bateia:** na bancada, 2 pepitas de ferro e uma tigela. **Em pé na água rasa**, com areia, cascalho ou argila no fundo, clique e fique parado 3 segundos: sai pepita de ouro ou ferro, pederneira, argila, ouro bruto e, mais raro, uma gema, um âmbar (deserto e badlands), uma pérola (mar e praia) ou uma relíquia. **Nas badlands rende mais ouro.**
+
+**Eco da pedra** (Mineração 20% do máximo): minerando pedra perto (6 blocos) de um mineral raro ou de mitrilo, você ouve a pedra **cantar**. Quanto mais agudo, mais perto. Não mostra a direção: é preciso procurar.
+
+Títulos: **Geólogo** (50 minerais de bioma), **Coração de Cristal** (10 cristais lapidados) e **Garimpeiro do Rio** (100 garimpos).
+
 ### Mapas do Tesouro
 
 Mapas de verdade, com um **X vermelho** no lugar do tesouro. Caem de **elites** (4%), da **pesca** (raro), dos baús de **chefes e masmorras** (15%), dos **sítios de arqueologia** e do **Cronista**. Há três tipos: **comum**, **raro** e **lendário**.
@@ -1407,8 +1430,8 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 | Tipo | Acessórios |
 |---|---|
-| Anéis | Vigor (+2 ❤), Força (+1 dano), Vento (+5% velocidade), Marés (respiração aquática), Brasas (resistência ao fogo), Minerador (Pressa), Fortuna (+sorte), Sábio (+5% XP em tudo) |
-| Amuletos | Mana (+40 mana, +1/s), Guardião (+2 armadura, +1 resistência), Vida (Regeneração), **Fênix** (escapa da morte a cada 10 minutos), **Ventos** (+6 de queda segura e +8% de velocidade; 2 Fragmentos Celestes) |
+| Anéis | Vigor (+2 ❤), Força (+1 dano), Vento (+5% velocidade), Marés (respiração aquática), Brasas (resistência ao fogo), Minerador (Pressa), Fortuna (+sorte), Sábio (+5% XP em tudo), **Jade** (+1 ❤ e +1 armadura; 3 Jades), **Gelo Eterno** (+2 de eficiência de mineração e mais rápido debaixo d'água; 3 Cristais de Gelo) |
+| Amuletos | Mana (+40 mana, +1/s), Guardião (+2 armadura, +1 resistência), Vida (Regeneração), **Fênix** (escapa da morte a cada 10 minutos), **Ventos** (+6 de queda segura e +8% de velocidade; 2 Fragmentos Celestes), **Pingente de Âmbar** (+5% XP e +1 sorte; 3 Âmbares), **Colar de Pérolas** (fôlego e mineração debaixo d'água; 4 Pérolas), **Sangue** (+2 de dano, −1 ❤; 3 Pedras-Sangue) |
 | Cintos | Atleta (pulo e queda segura), Andarilho (sobe blocos sem pular), Titã (+2 ❤ e resistência a repulsão) |
 | Bolso | **Lanterna de Bolso** (ilumina em volta, sem colocar blocos), Ímã (puxa itens do chão), Relógio (agachado: hora, coordenadas e bioma), **Capa Planadora** (no ar, pule para planar), **Balão de Cristal** (4 lãs brancas + 4 linhas: plana mais devagar e estoura em 5 usos) |
 
@@ -1421,7 +1444,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 95 títulos com requisitos (em páginas), por exemplo Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 98 títulos com requisitos (em páginas), por exemplo Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1573,6 +1596,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin pedrafilosofal` | Dá uma Pedra Filosofal |
 | `/rpgadmin runa <runa>` | Grava a runa no item da sua mão, sem custo |
 | `/rpgadmin mitrilo [minerio\|bruto\|lingote] [qtd]` | Põe um minério de mitrilo no bloco que você olha, ou dá os itens |
+| `/rpgadmin mineral <ambar, jade, perola, cristal_de_gelo, pedra_sangue, turfa, cristal_bruto, geodo, cinzel ou bateia>` | Põe um mineral no bloco que você olha, tenta abrir um geodo no chunk, ou dá o Cinzel ou a Bateia |
 | `/rpgadmin mapatesouro [comum\|raro\|lendario]` | Dá um mapa do tesouro |
 | `/rpgadmin sitio` | Cria um sítio de arqueologia à sua frente |
 | `/rpgadmin reliquia [relíquia]` | Dá uma relíquia |
@@ -1629,9 +1653,9 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.45.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.46.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.45.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.45.0 && git push origin v2.45.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.46.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.46.0 && git push origin v2.46.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 

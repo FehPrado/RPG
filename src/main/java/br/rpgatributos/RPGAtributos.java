@@ -191,6 +191,7 @@ public final class RPGAtributos extends JavaPlugin {
     private MesasRunicas mesasRunicas;
     private PacoteRecursos pacote;
     private Mitrilo mitrilo;
+    private br.rpgatributos.exploracao.Mineracao mineracao;
     private MapasDoTesouro mapas;
     private Arqueologia arqueologia;
     private Enciclopedia enciclopedia;
@@ -355,6 +356,7 @@ public final class RPGAtributos extends JavaPlugin {
         mesasRunicas = new MesasRunicas(this);
         pacote = new PacoteRecursos(this);
         mitrilo = new Mitrilo(this);
+        mineracao = new br.rpgatributos.exploracao.Mineracao(this);
         mapas = new MapasDoTesouro(this);
         arqueologia = new Arqueologia(this);
         enciclopedia = new Enciclopedia(this);
@@ -420,12 +422,13 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), nomeadas, ajuda);
+                canteiros, colmeias, barris, tachos, album, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
         mobilidade.registrarReceita();
         mitrilo.registrarReceitas();
+        mineracao.registrarReceitas();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
         frascos.registrarReceitas();
@@ -819,6 +822,7 @@ public final class RPGAtributos extends JavaPlugin {
     public MesasRunicas mesasRunicas() { return mesasRunicas; }
     public PacoteRecursos pacote() { return pacote; }
     public Mitrilo mitrilo() { return mitrilo; }
+    public br.rpgatributos.exploracao.Mineracao mineracao() { return mineracao; }
     public MapasDoTesouro mapas() { return mapas; }
     public Arqueologia arqueologia() { return arqueologia; }
     public Enciclopedia enciclopedia() { return enciclopedia; }

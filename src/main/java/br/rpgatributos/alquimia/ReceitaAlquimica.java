@@ -141,6 +141,12 @@ public record ReceitaAlquimica(Aba aba, Elixir elixir, Reagente reagente, int qt
         l.add(acess(Acessorio.CINTO_TITA, 0.5, 70, g(Gema.ONIX, 2, 1), m(Material.LEATHER, 3), m(Material.IRON_BLOCK, 1)));
         l.add(acess(Acessorio.AMULETO_VENTOS, 0.35, 45, raro(Raro.FRAGMENTO_CELESTE, 2), m(Material.FEATHER, 6), m(Material.GOLD_INGOT, 2)));
         l.add(acess(Acessorio.AMULETO_VIDA, 0.6, 90, g(Gema.RUBI, 2, 1), r(Reagente.TINTURA_VITAL, 2), m(Material.GOLDEN_APPLE, 1)));
+        // 2.46: com os minerais de bioma
+        l.add(acess(Acessorio.ANEL_JADE, 0.2, 35, raro(Raro.JADE, 3), m(Material.GOLD_INGOT, 2)));
+        l.add(acess(Acessorio.ANEL_GELO, 0.3, 45, raro(Raro.CRISTAL_DE_GELO, 3), m(Material.IRON_INGOT, 2), g(Gema.SAFIRA, 1, 1)));
+        l.add(acess(Acessorio.PINGENTE_AMBAR, 0.3, 45, raro(Raro.AMBAR, 3), m(Material.GOLD_INGOT, 1), m(Material.STRING, 2)));
+        l.add(acess(Acessorio.COLAR_PEROLAS, 0.35, 50, raro(Raro.PEROLA, 4), m(Material.STRING, 2), r(Reagente.ESCAMA_DO_ABISMO, 1)));
+        l.add(acess(Acessorio.AMULETO_SANGUE, 0.45, 60, raro(Raro.PEDRA_SANGUE, 3), m(Material.GOLD_INGOT, 2), m(Material.MAGMA_CREAM, 2)));
         l.add(acess(Acessorio.AMULETO_FENIX, 0.85, 200, p(PeixeRaro.PEIXE_DRAGAO, 1), r(Reagente.PEROLA_NEGRA, 1), g(Gema.RUBI, 3, 1),
                 m(Material.TOTEM_OF_UNDYING, 1)));
         return List.copyOf(l);

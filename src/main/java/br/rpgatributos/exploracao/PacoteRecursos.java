@@ -300,12 +300,21 @@ public final class PacoteRecursos implements Listener {
         // Minério de Mitrilo: um estado do bloco de cogumelo marrom que a natureza não gera.
         StringBuilder estados = new StringBuilder("{\n  \"variants\": {\n");
         String[] faces = {"down", "east", "north", "south", "up", "west"};
+        Map<Integer, String> minerais = Mineracao.modelos(); // 2.46: âmbar, jade, pérola, cristal de gelo, pedra-sangue, turfa, cristal do geodo
         for (int bits = 0; bits < 64; bits++) {
             StringBuilder chave = new StringBuilder();
             for (int i = 0; i < 6; i++) chave.append(i == 0 ? "" : ",").append(faces[i]).append('=').append((bits >> i & 1) == 1);
-            String modelo = bits == Mitrilo.ESTADO_MINERIO ? "rpgatributos:block/minerio_mitrilo" : "rpgatributos:block/cogumelo/c" + bits;
+            String modelo = bits == Mitrilo.ESTADO_MINERIO ? "rpgatributos:block/minerio_mitrilo"
+                    : minerais.getOrDefault(bits, "rpgatributos:block/cogumelo/c" + bits);
             estados.append("    \"").append(chave).append("\": { \"model\": \"").append(modelo).append("\" }").append(bits < 63 ? ",\n" : "\n");
-            if (bits != Mitrilo.ESTADO_MINERIO) f.put("assets/rpgatributos/models/block/cogumelo/c" + bits + ".json", texto(modeloCogumelo(bits, faces)));
+            if (bits != Mitrilo.ESTADO_MINERIO && !minerais.containsKey(bits)) {
+                f.put("assets/rpgatributos/models/block/cogumelo/c" + bits + ".json", texto(modeloCogumelo(bits, faces)));
+            }
+        }
+        for (String m : minerais.values()) {
+            String nome = m.substring(m.indexOf(':') + 1);
+            f.put("assets/rpgatributos/models/" + nome + ".json",
+                    texto("{ \"parent\": \"minecraft:block/cube_all\", \"textures\": { \"all\": \"rpgatributos:" + nome + "\" } }"));
         }
         estados.append("  }\n}\n");
         f.put("assets/minecraft/blockstates/brown_mushroom_block.json", texto(estados.toString()));
@@ -407,6 +416,7 @@ public final class PacoteRecursos implements Listener {
         // Fundos desenhados dos menus (/rpg, Guia, Jornada): entram como letras da fonte rpgatributos:menus.
         for (br.rpgatributos.ajuda.Fundo fu : br.rpgatributos.ajuda.Fundo.values()) texturas.put("gui/menu_" + fu.id(), fu.desenhar());
         texturas.put("block/minerio_mitrilo", minerio());
+        texturas.putAll(Mineracao.texturas());
         texturas.put("item/mitrilo_bruto", desenho(BRUTO, MITRILO));
         texturas.put("item/lingote_mitrilo", desenho(LINGOTE, MITRILO));
         texturas.put("item/cajado_arcano", desenho(CAJADO, CORES_CAJADO));
