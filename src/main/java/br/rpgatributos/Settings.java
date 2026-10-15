@@ -103,6 +103,8 @@ public final class Settings {
     public final int ilhaRegiao, ilhaDistanciaSpawn;
     public final double ilhaChance;
     public final boolean profAtivadas, constelacoesAtivadas;
+    public final boolean vanillaMudas, vanillaGalhos, vanillaCabecas, vanillaPlacaBau, vanillaPeixes, vanillaGeloFino;
+    public final double vanillaCabecaChance;
     public final int profAltura, profPenumbraMaxima;
     public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
     /** Chance, por Minerador e turno, de algo da Penumbra subir pelo poço da Mina. */
@@ -376,6 +378,13 @@ public final class Settings {
         ilhaDistanciaSpawn = Math.max(0, c.getInt("estruturas.ilha-do-ceu.distancia-do-spawn", 500));
         profAtivadas = c.getBoolean("profundezas.ativadas", true);
         constelacoesAtivadas = c.getBoolean("constelacoes.ativadas", true);
+        vanillaMudas = c.getBoolean("vanilla-mais.mudas-criam-raiz", true);
+        vanillaGalhos = c.getBoolean("vanilla-mais.folhas-soltam-gravetos", true);
+        vanillaCabecas = c.getBoolean("vanilla-mais.cabecas-de-monstro", true);
+        vanillaCabecaChance = Math.max(0, c.getDouble("vanilla-mais.chance-de-cabeca", 0.01));
+        vanillaPlacaBau = c.getBoolean("vanilla-mais.placa-mostra-bau", true);
+        vanillaPeixes = c.getBoolean("vanilla-mais.peixes-pulando", true);
+        vanillaGeloFino = c.getBoolean("vanilla-mais.gelo-fino", true);
         profAltura = c.getInt("profundezas.abaixo-de-y", 0);
         profPenumbraMaxima = Math.max(1, Math.min(9, c.getInt("profundezas.penumbra-maxima", 5)));
         profChanceRaiz = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-raiz-por-chunk", 0.1)));

@@ -638,7 +638,7 @@ public final class Conjuracao {
                 }
                 Block chao = rt.getHitBlock();
                 Block onde = chao.getRelative(BlockFace.UP);
-                if (!(Tag.DIRT.isTagged(chao.getType())) || !arcano().temporarios().podeConstruir(p, onde)) {
+                if (!(Tag.DIRT.isTagged(chao.getType()) || chao.getType() == Material.GRASS_BLOCK) || !arcano().temporarios().podeConstruir(p, onde)) {
                     falhar(p, "Precisa ser terra ou grama em área livre.");
                     return false;
                 }
@@ -884,7 +884,8 @@ public final class Conjuracao {
                 int criados = 0;
                 for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++) {
                     Block b = centro.getRelative(dx, 0, dz);
-                    if (Tag.DIRT.isTagged(b.getRelative(BlockFace.DOWN).getType())
+                    Material baixo = b.getRelative(BlockFace.DOWN).getType();
+                    if ((Tag.DIRT.isTagged(baixo) || baixo == Material.GRASS_BLOCK)
                             && arcano().temporarios().colocar(p, b, arbusto, 400)) criados++;
                 }
                 if (criados == 0) {

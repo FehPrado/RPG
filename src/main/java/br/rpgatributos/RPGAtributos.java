@@ -224,6 +224,7 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.vida.Tachos tachos;
     private Album album;
     private br.rpgatributos.vida.Duelos duelos;
+    private br.rpgatributos.detalhes.VanillaMais vanillaMais;
     private MercadorItinerante mercador;
     private Encontros encontros;
     private Flechas flechas;
@@ -279,6 +280,7 @@ public final class RPGAtributos extends JavaPlugin {
         segredos = new Segredos(this);
         album = new Album(this);
         duelos = new br.rpgatributos.vida.Duelos(this);
+        vanillaMais = new br.rpgatributos.detalhes.VanillaMais(this);
         tags = new TagManager(this);
         skillListener = new SkillListener(this);
         menus = new MenuManager(this);
@@ -424,7 +426,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, duelos, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda);
+                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -535,6 +537,10 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, marcos::tick, 5L, 5L);
         agenda.runTaskTimer(this, parties::limparConvites, 1200L, 1200L);
         agenda.runTaskTimer(this, duelos::tick, 100L, 100L);
+        agenda.runTaskTimer(this, vanillaMais::tickMudas, 100L, 100L);
+        agenda.runTaskTimer(this, vanillaMais::tickPlacas, 10L, 10L);
+        agenda.runTaskTimer(this, vanillaMais::tickPeixes, 40L, 40L);
+        agenda.runTaskTimer(this, vanillaMais::tickGelo, 10L, 10L);
         // Domador: altar, ordens dos companheiros (meio segundo), montaria (todo tick) e registro (30 s).
         altaresDomador.iniciar();
         // Masmorras: obras (todo tick), portais (5 ticks), salas e ondas (10 ticks).

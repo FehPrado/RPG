@@ -1348,6 +1348,17 @@ Monstros, chefes e peixes raros às vezes deixam uma **carta** (5% delas são **
 - **Contra jogadores:** `/duelo <jogador>` desafia; o outro clica em **[Aceitar]** ou usa `/duelo aceitar` (vale 60 s). `/duelo abrir` reabre a mesa e `/duelo desistir` entrega. Cada um tem 90 s por turno (depois passa sozinho) e quem sai do jogo perde. É só pela glória: ninguém perde nem troca cartas.
 - Títulos: **Duelista** (10 vitórias), **Campeão das Vilas** (10 vitórias contra moradores difíceis), **Rival de Mesa** (5 vitórias contra jogadores), **Abridor de Pacotes** (25 pacotes) e **Curador do Álbum** (os 4 marcos).
 
+### Vanilla+ (2.48)
+
+Pequenas melhorias com cara de jogo normal, sem item nem textura nova (cada uma pode ser desligada em `vanilla-mais` no config):
+
+- **Mudas criam raiz:** uma muda que fica no chão por uns 40 s (fora de territórios) se planta sozinha, se o chão servir e não houver outra muda ou tronco colado. As florestas se refazem sozinhas.
+- **Folhas soltam gravetos:** folha que cai sozinha às vezes deixa um graveto (8%); a de carvalho ainda tem +1% de maçã.
+- **Cabeças de monstro:** zumbi, esqueleto, creeper e piglin têm 1% de deixar a cabeça (cada nível de Pilhagem soma metade disso).
+- **Placa mostra o baú:** olhando para um baú ou barril com uma placa pregada nele, a barra mostra o nome da placa e o que tem dentro (os 4 itens com mais quantidade). Em território alheio, só se os baús estiverem liberados para visitantes.
+- **Peixes pulando:** em rios, lagos e no mar, peixes pulam fora d'água perto de você (salmão no rio e no frio, bacalhau no mar, peixe tropical nas águas quentes). Pescar ali até 40 s depois tem 30% de chance de vir um peixe a mais.
+- **Gelo fino:** ficar parado em cima de gelo sobre a água faz ele rachar (som e lascas) e quebrar em 3 s. Agachado, o gelo aguenta. Não vale dentro de territórios.
+
 ### No mundo
 
 - **Mercador Itinerante:** de tempos em tempos (cerca de 1h30) ele arma a tenda perto de alguém por 20 minutos, com 6 ofertas raras (entre elas, às vezes, sementes da estação, um óleo de lâmina ou peles para o curtume): Fragmento de Forja, Pedra de Proteção, gemas, elixires, mapas, cartas, bebidas e às vezes Essência Primordial. O servidor é avisado de onde ele está.
@@ -1689,9 +1700,9 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.47.1.jar`.
+3. O plugin fica em `target/RPGAtributos-2.48.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.47.1.jar`). Para publicar uma versão, crie uma tag (`git tag v2.47.1 && git push origin v2.47.1`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.48.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.48.0 && git push origin v2.48.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 

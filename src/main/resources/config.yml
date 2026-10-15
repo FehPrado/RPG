@@ -499,6 +499,15 @@ arcano:
 constelacoes:
   ativadas: true                      # os deuses comentam os feitos no chat e dão Moedas Estelares (bênçãos no /constelacoes)
 
+vanilla-mais:
+  mudas-criam-raiz: true              # muda caída no chão (fora de territórios) se planta sozinha depois de uns 40 s
+  folhas-soltam-gravetos: true        # folha que cai sozinha: 8% graveto, carvalho +1% maçã
+  cabecas-de-monstro: true            # zumbi, esqueleto, creeper e piglin podem deixar a cabeça
+  chance-de-cabeca: 0.01              # 1% (cada nível de Pilhagem soma metade)
+  placa-mostra-bau: true              # baú ou barril com placa: olhando, a barra mostra o que tem dentro
+  peixes-pulando: true                # peixes pulam fora d'água; pescar ali pode dar peixe a mais
+  gelo-fino: true                     # parado no gelo sobre a água, ele racha e quebra (agachado aguenta; fora de territórios)
+
 guia:
   # Dá o livro "Guia do Aventureiro" na primeira vez que o jogador entra (/guia pega outro).
   dar-ao-entrar-pela-primeira-vez: true
