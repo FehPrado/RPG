@@ -607,9 +607,20 @@ public final class Duelos implements Listener, CommandExecutor {
         if (c.nova && c.dom != Dom.RAPIDO && !naMao) lore.add(Component.text("Acabou de entrar: ataca no próximo turno.", NamedTextColor.DARK_GRAY));
         if (naMao) lore.add(Component.text(selecionada ? "● Escolhida: clique numa trilha sua vazia" : "» Clique para escolher", selecionada ? NamedTextColor.GREEN : NamedTextColor.YELLOW));
         ItemStack i = item(c.icone, Component.text((c.brilhante ? "✦ " : "") + c.nome + "  ⚔" + c.forca + " ❤" + c.vida,
-                c.brilhante ? NamedTextColor.GOLD : NamedTextColor.WHITE, TextDecoration.BOLD), lore, selecionada || c.brilhante);
+                c.brilhante ? NamedTextColor.GOLD : NamedTextColor.WHITE, TextDecoration.BOLD), lore, selecionada);
+        if (c.carta != null) i = comoCarta(i, c.carta, c.brilhante);
         i.setAmount(Math.max(1, Math.min(64, c.vida)));
         return i;
+    }
+
+    /**
+     * Mostra o ícone como a própria carta (com o pacote de recursos: a moldura da raridade e o
+     * desenho do bicho). Sem o pacote, aparece como papel.
+     */
+    private static ItemStack comoCarta(ItemStack i, Carta c, boolean brilhante) {
+        ItemStack r = i.withType(Material.PAPER);
+        r.editMeta(m -> br.rpgatributos.exploracao.PacoteRecursos.marcar(m, Album.visual(c, brilhante)));
+        return r;
     }
 
     private static ItemStack item(Material m, Component nome, List<Component> lore, boolean brilho) {
@@ -791,7 +802,7 @@ public final class Duelos implements Listener, CommandExecutor {
                     Component.text("No baralho: " + noBaralho + "/" + max, noBaralho > 0 ? NamedTextColor.GREEN : NamedTextColor.GRAY)));
             if (s.dom() != Dom.NENHUM) lore.add(Component.text(s.dom().descricao, NamedTextColor.DARK_GRAY));
             lore.add(Component.text(noBaralho < max && baralho.size() < TAMANHO_BARALHO ? "» Clique para pôr no baralho" : "Limite atingido", NamedTextColor.YELLOW));
-            t.inv.setItem(i, item(c.icone(), Component.text(c.nome(), Album.CORES[c.raridade()], TextDecoration.BOLD), lore, noBaralho > 0));
+            t.inv.setItem(i, comoCarta(item(c.icone(), Component.text(c.nome(), Album.CORES[c.raridade()], TextDecoration.BOLD), lore, noBaralho > 0), c, false));
             t.colecao.put(i, c);
         }
         ItemStack vidro = item(Material.LIGHT_BLUE_STAINED_GLASS_PANE, Component.text(" "), List.of(), false);
@@ -799,9 +810,9 @@ public final class Duelos implements Listener, CommandExecutor {
         for (int i = 0; i < B_BARALHO.length; i++) {
             if (i < baralho.size()) {
                 Carta c = baralho.get(i);
-                t.inv.setItem(B_BARALHO[i], item(c.icone(), Component.text(c.nome(), Album.CORES[c.raridade()]), List.of(
+                t.inv.setItem(B_BARALHO[i], comoCarta(item(c.icone(), Component.text(c.nome(), Album.CORES[c.raridade()]), List.of(
                         Component.text(CartasDuelo.resumo(c, false), NamedTextColor.WHITE),
-                        Component.text("» Clique para tirar", NamedTextColor.YELLOW)), false));
+                        Component.text("» Clique para tirar", NamedTextColor.YELLOW)), false), c, false));
             } else {
                 t.inv.setItem(B_BARALHO[i], item(Material.GRAY_STAINED_GLASS_PANE, Component.text("Espaço vazio", NamedTextColor.DARK_GRAY), List.of(), false));
             }

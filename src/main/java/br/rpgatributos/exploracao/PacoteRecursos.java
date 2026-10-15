@@ -618,34 +618,48 @@ public final class PacoteRecursos implements Listener {
         return "rpgatributos:item/" + (brilhante ? "carta_brilhante" : "carta_" + new String[]{"comum", "rara", "epica"}[c.raridade()]);
     }
 
-    /** Na moldura de item, o quadro com o ícone; no resto, só a moldura da raridade. */
+    /** Nas telas (inventário, duelo, baralho) e na moldura de item, a carta com o ícone; na mão e no chão, só a moldura da raridade. */
     private static String quadroCarta(String id) {
         boolean b = id.startsWith("cartab_");
         String nome = id.substring(b ? 7 : 6);
         br.rpgatributos.vida.Carta c = br.rpgatributos.vida.Carta.porId(nome);
         String moldura = c == null ? "rpgatributos:item/carta_comum" : molduraCarta(c, b);
         return "{ \"type\": \"minecraft:select\", \"property\": \"minecraft:display_context\", \"cases\": [ "
-                + "{ \"when\": \"fixed\", \"model\": { \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/quadro/" + (b ? "b_" : "") + nome + "\" } } ], "
+                + "{ \"when\": [\"gui\", \"fixed\"], \"model\": { \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/quadro/" + (b ? "b_" : "") + nome + "\" } } ], "
                 + "\"fallback\": { \"type\": \"minecraft:model\", \"model\": \"" + moldura + "\" } }";
     }
 
-    /** A textura do jogo para o ícone da carta (conferida no jogo 26.3: estes ficam em block/ ou não têm textura própria). */
+    /**
+     * A textura do jogo para o ícone da carta. No 26.3 os itens têm um atlas próprio, separado do
+     * dos blocos, e um modelo não pode misturar os dois: o ícone tem que ser textura de item (item/),
+     * como a moldura. Os ícones que no jogo são bloco (ou cabeça) ganham um item parecido.
+     */
     private static String texturaIcone(Material m) {
-        return switch (m) {
-            case CROSSBOW -> "minecraft:item/crossbow_standby";
-            case DRAGON_HEAD -> "minecraft:block/dragon_egg";
-            case SKELETON_SKULL -> "minecraft:item/bone";
-            case WITHER_SKELETON_SKULL -> "minecraft:item/coal";
-            case BROWN_MUSHROOM, COBWEB, ICE, IRON_BLOCK, OAK_SAPLING, PALE_OAK_LOG, SAND, SCULK, SPONGE, STONE_BRICKS, WITHER_ROSE ->
-                    "minecraft:block/" + m.name().toLowerCase(java.util.Locale.ROOT);
-            default -> "minecraft:item/" + m.name().toLowerCase(java.util.Locale.ROOT);
+        String item = switch (m) {
+            case CROSSBOW -> "crossbow_standby";
+            case DRAGON_HEAD -> "dragon_breath";
+            case SKELETON_SKULL -> "bone";
+            case WITHER_SKELETON_SKULL -> "coal";
+            case SAND -> "rabbit_hide";
+            case ICE -> "snowball";
+            case BROWN_MUSHROOM -> "mushroom_stew";
+            case COBWEB -> "string";
+            case STONE_BRICKS -> "flint";
+            case SPONGE -> "prismarine_crystals";
+            case SCULK -> "echo_shard";
+            case PALE_OAK_LOG -> "resin_clump";
+            case IRON_BLOCK -> "iron_ingot";
+            case WITHER_ROSE -> "black_dye";
+            case OAK_SAPLING -> "apple";
+            default -> m.name().toLowerCase(java.util.Locale.ROOT);
         };
+        return "minecraft:item/" + item;
     }
 
     /** A carta em pé: a moldura (16×16) e, na janela dela, o ícone, dos dois lados. */
     private static String modeloQuadro(String moldura, String icone) {
         String cartaFaces = "\"north\": { \"uv\": [16, 0, 0, 16], \"texture\": \"#carta\" }, \"south\": { \"uv\": [0, 0, 16, 16], \"texture\": \"#carta\" }";
-        return "{ \"textures\": { \"carta\": \"" + moldura + "\", \"icone\": \"" + icone + "\", \"particle\": \"" + moldura + "\" }, "
+        return "{ \"gui_light\": \"front\", \"textures\": { \"carta\": \"" + moldura + "\", \"icone\": \"" + icone + "\", \"particle\": \"" + moldura + "\" }, "
                 + "\"elements\": [ "
                 + "{ \"from\": [0, 0, 8], \"to\": [16, 16, 8], \"faces\": { " + cartaFaces + " } }, "
                 + "{ \"from\": [4.75, 6.75, 8.01], \"to\": [11.25, 13.25, 8.01], \"faces\": { \"south\": { \"uv\": [0, 0, 16, 16], \"texture\": \"#icone\" } } }, "
