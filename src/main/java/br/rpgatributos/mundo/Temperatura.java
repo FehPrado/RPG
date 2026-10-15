@@ -26,6 +26,8 @@ public final class Temperatura {
 
     private final RPGAtributos plugin;
     private final Map<UUID, Integer> frio = new HashMap<>();
+    /** Cantil: até quando o jogador fica refrescado (sem calor). */
+    private final Map<UUID, Long> refrescado = new HashMap<>();
 
     public Temperatura(RPGAtributos plugin) {
         this.plugin = plugin;
@@ -53,6 +55,11 @@ public final class Temperatura {
         }
     }
 
+    /** Um gole do Cantil: sem calor por {@code segundos}. */
+    public void refrescar(Player p, int segundos) {
+        refrescado.put(p.getUniqueId(), System.currentTimeMillis() + segundos * 1000L);
+    }
+
     private boolean comFrio(Player p) {
         World w = p.getWorld();
         if (w.getEnvironment() != World.Environment.NORMAL || p.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) return false;
@@ -69,6 +76,7 @@ public final class Temperatura {
     private boolean comCalor(Player p) {
         World w = p.getWorld();
         if (p.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE) || p.isInWater() || plugin.oficios().semCalor(p)) return false;
+        if (refrescado.getOrDefault(p.getUniqueId(), 0L) > System.currentTimeMillis()) return false;
         if (w.getEnvironment() == World.Environment.NETHER) return true;
         if (w.getEnvironment() != World.Environment.NORMAL || Ceu.noite(w) || w.hasStorm()) return false;
         Block b = p.getLocation().getBlock();

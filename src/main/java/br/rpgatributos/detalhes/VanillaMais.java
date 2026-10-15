@@ -379,6 +379,164 @@ public final class VanillaMais implements Listener {
         }
     }
 
+    // =====================================================================
+    //  2.49: ovelhas de cores misturadas
+    // =====================================================================
+
+    /** Filhote de pais de cores diferentes que o jogo não mistura: 30% de sair a cor "do meio". */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void aoCruzar(org.bukkit.event.entity.EntityBreedEvent e) {
+        if (!plugin.settings().vanillaOvelhas || !(e.getEntity() instanceof org.bukkit.entity.Sheep filhote)
+                || !(e.getMother() instanceof org.bukkit.entity.Sheep mae) || !(e.getFather() instanceof org.bukkit.entity.Sheep pai)) return;
+        org.bukkit.DyeColor a = mae.getColor(), b = pai.getColor();
+        if (a == null || b == null || a == b) return;
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            if (!filhote.isValid() || (filhote.getColor() != a && filhote.getColor() != b) || rnd().nextDouble() > 0.3) return;
+            org.bukkit.Color ca = a.getColor(), cb = b.getColor();
+            int r = (ca.getRed() + cb.getRed()) / 2, g = (ca.getGreen() + cb.getGreen()) / 2, bl = (ca.getBlue() + cb.getBlue()) / 2;
+            org.bukkit.DyeColor melhor = null;
+            double dist = Double.MAX_VALUE;
+            for (org.bukkit.DyeColor d : org.bukkit.DyeColor.values()) {
+                if (d == a || d == b) continue;
+                org.bukkit.Color c = d.getColor();
+                double x = Math.pow(c.getRed() - r, 2) + Math.pow(c.getGreen() - g, 2) + Math.pow(c.getBlue() - bl, 2);
+                if (x < dist) {
+                    dist = x;
+                    melhor = d;
+                }
+            }
+            if (melhor != null) filhote.setColor(melhor);
+        });
+    }
+
+    // =====================================================================
+    //  2.49: animais seguem a comida de mais longe
+    // =====================================================================
+
+    private void atrair(org.bukkit.entity.Entity en) {
+        if (!(en instanceof org.bukkit.entity.Animals a)) return;
+        org.bukkit.attribute.AttributeInstance at = a.getAttribute(org.bukkit.attribute.Attribute.TEMPT_RANGE);
+        if (at != null && at.getBaseValue() < 16) at.setBaseValue(16);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void aoNascerAnimal(org.bukkit.event.entity.CreatureSpawnEvent e) {
+        if (plugin.settings().vanillaFila) atrair(e.getEntity());
+    }
+
+    @EventHandler
+    public void aoCarregarAnimais(org.bukkit.event.world.EntitiesLoadEvent e) {
+        if (!plugin.settings().vanillaFila) return;
+        for (org.bukkit.entity.Entity en : e.getEntities()) atrair(en);
+    }
+
+    // =====================================================================
+    //  2.49: suporte de armadura com braços
+    // =====================================================================
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void aoColocarSuporte(org.bukkit.event.entity.EntityPlaceEvent e) {
+        if (plugin.settings().vanillaSuporte && e.getEntity() instanceof org.bukkit.entity.ArmorStand a) a.setArms(true);
+    }
+
+    /** Agachado, com um graveto na mão: liga e desliga os braços do suporte. */
+    @EventHandler(ignoreCancelled = true)
+    public void aoMexerSuporte(org.bukkit.event.player.PlayerInteractAtEntityEvent e) {
+        if (!plugin.settings().vanillaSuporte || !(e.getRightClicked() instanceof org.bukkit.entity.ArmorStand a)) return;
+        Player p = e.getPlayer();
+        if (!p.isSneaking() || e.getHand() != org.bukkit.inventory.EquipmentSlot.HAND || p.getInventory().getItemInMainHand().getType() != Material.STICK) return;
+        e.setCancelled(true);
+        if (!plugin.territorios().podeConstruir(p, a.getLocation())) return;
+        a.setArms(!a.hasArms());
+        p.playSound(a.getLocation(), Sound.ENTITY_ARMOR_STAND_HIT, 0.8f, 1.2f);
+    }
+
+    // =====================================================================
+    //  2.49: escadas de mão mais rápidas
+    // =====================================================================
+
+    /** Todo tick: subindo a escada (para a frente ou pulando), sobe mais rápido. Agachado, fica parado como no jogo. */
+    public void tickEscadas() {
+        if (!plugin.settings().vanillaEscadas) return;
+        for (Player p : plugin.getServer().getOnlinePlayers()) {
+            if (p.isFlying() || p.isSneaking() || p.isInsideVehicle()) continue;
+            if (p.getLocation().getBlock().getType() != Material.LADDER) continue;
+            org.bukkit.Input in = p.getCurrentInput();
+            if (!in.isForward() && !in.isJump()) continue;
+            org.bukkit.util.Vector v = p.getVelocity();
+            if (v.getY() < 0.3) {
+                v.setY(0.3);
+                p.setVelocity(v);
+            }
+        }
+    }
+
+    // =====================================================================
+    //  2.49: lanternas rangendo na chuva
+    // =====================================================================
+
+    /** A cada 3 s, na chuva: lanternas penduradas ao ar livre perto de você rangem e balançam com o vento. */
+    public void tickLanternas() {
+        if (!plugin.settings().vanillaLanternas) return;
+        for (Player p : plugin.getServer().getOnlinePlayers()) {
+            World w = p.getWorld();
+            if (w.getEnvironment() != World.Environment.NORMAL || !w.hasStorm()) continue;
+            Block c = p.getLocation().getBlock();
+            int tocou = 0;
+            for (int x = -6; x <= 6 && tocou < 3; x++) for (int y = -2; y <= 4 && tocou < 3; y++) for (int z = -6; z <= 6 && tocou < 3; z++) {
+                Block b = c.getRelative(x, y, z);
+                if (b.getType() != Material.LANTERN && b.getType() != Material.SOUL_LANTERN) continue;
+                if (!(b.getBlockData() instanceof org.bukkit.block.data.Hangable h) || !h.isHanging() || b.getLightFromSky() < 12) continue;
+                if (rnd().nextDouble() > 0.45) continue;
+                tocou++;
+                Location l = b.getLocation().add(0.5, 0.4, 0.5);
+                w.playSound(l, Sound.BLOCK_CHAIN_STEP, 0.35f, 0.6f + (float) rnd().nextDouble(0.3));
+                w.spawnParticle(Particle.FALLING_WATER, l.clone().add(rnd().nextDouble(-0.2, 0.2), 0.3, rnd().nextDouble(-0.2, 0.2)), 2, 0.1, 0, 0.1, 0);
+            }
+        }
+    }
+
+    // =====================================================================
+    //  2.49: raio queima árvore
+    // =====================================================================
+
+    /** Raio de tempestade numa árvore: as folhas pegam fogo e sobra carvão vegetal no pé dela. */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void aoCairRaio(org.bukkit.event.weather.LightningStrikeEvent e) {
+        if (!plugin.settings().vanillaRaio || e.getCause() != org.bukkit.event.weather.LightningStrikeEvent.Cause.WEATHER) return;
+        Location l = e.getLightning().getLocation();
+        Block centro = l.getBlock();
+        Block tronco = null;
+        for (int y = 1; y >= -4 && tronco == null; y--) for (int x = -1; x <= 1 && tronco == null; x++) for (int z = -1; z <= 1 && tronco == null; z++) {
+            Block b = centro.getRelative(x, y, z);
+            if (Tag.LOGS.isTagged(b.getType())) tronco = b;
+        }
+        if (tronco == null) return;
+        boolean fogo = plugin.territorios().flagAqui(l, Flag.FOGO);
+        if (fogo) {
+            int acesos = 0;
+            for (int x = -2; x <= 2 && acesos < 3; x++) for (int y = -1; y <= 3 && acesos < 3; y++) for (int z = -2; z <= 2 && acesos < 3; z++) {
+                Block b = tronco.getRelative(x, y, z);
+                if (Tag.LEAVES.isTagged(b.getType()) && b.getRelative(BlockFace.UP).getType().isAir() && rnd().nextDouble() < 0.5) {
+                    b.getRelative(BlockFace.UP).setType(Material.FIRE);
+                    acesos++;
+                }
+            }
+        }
+        Block pe = tronco;
+        while (Tag.LOGS.isTagged(pe.getRelative(BlockFace.DOWN).getType()) && pe.getY() > pe.getWorld().getMinHeight()) pe = pe.getRelative(BlockFace.DOWN);
+        Location chao = pe.getLocation().add(0.5, 0.2, 0.5);
+        for (int i = 0; i < 4; i++) {
+            Block lado = pe.getRelative(new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}[i]);
+            if (lado.isPassable()) {
+                chao = lado.getLocation().add(0.5, 0.2, 0.5);
+                break;
+            }
+        }
+        pe.getWorld().dropItemNaturally(chao, new ItemStack(Material.CHARCOAL, 1 + rnd().nextInt(3)));
+        pe.getWorld().spawnParticle(Particle.LARGE_SMOKE, tronco.getLocation().add(0.5, 1, 0.5), 20, 0.4, 0.6, 0.4, 0.02);
+    }
+
     @EventHandler
     public void aoSair(PlayerQuitEvent e) {
         noGelo.remove(e.getPlayer().getUniqueId());

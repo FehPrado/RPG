@@ -507,6 +507,12 @@ vanilla-mais:
   placa-mostra-bau: true              # baú ou barril com placa: olhando, a barra mostra o que tem dentro
   peixes-pulando: true                # peixes pulam fora d'água; pescar ali pode dar peixe a mais
   gelo-fino: true                     # parado no gelo sobre a água, ele racha e quebra (agachado aguenta; fora de territórios)
+  ovelhas-misturam-cores: true        # filhote de pais de cores que o jogo não mistura: 30% de sair a cor do meio
+  animais-seguem-de-longe: true       # animais de fazenda veem a comida na sua mão de 16 blocos (no jogo, 10)
+  suporte-com-bracos: true            # suporte de armadura já vem com braços; agachado + graveto liga e desliga
+  escadas-mais-rapidas: true          # sobe a escada de mão mais rápido
+  lanternas-rangem-na-chuva: true     # na chuva, lanternas penduradas ao ar livre rangem com o vento
+  raio-queima-arvore: true            # raio em árvore põe fogo nas folhas (se o fogo for permitido ali) e deixa carvão vegetal
 
 guia:
   # Dá o livro "Guia do Aventureiro" na primeira vez que o jogador entra (/guia pega outro).

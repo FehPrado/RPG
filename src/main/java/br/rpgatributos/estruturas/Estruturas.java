@@ -1109,6 +1109,17 @@ public final class Estruturas implements Listener {
     }
 
     /** Uma estrutura que pode aparecer num sonho. */
+    /** Distância (no plano) até a estrutura mais perto que o jogador ainda não descobriu, até {@code raio}, ou -1. Usada pelo Pêndulo do Rabdomante. */
+    public double naoDescobertaMaisPerto(Player p, Location daqui, double raio) {
+        double d = -1;
+        for (Sitio s : sitios) {
+            if (!s.mundo.equals(daqui.getWorld().getName()) || s.visitantes.contains(p.getUniqueId())) continue;
+            double dx = s.x - daqui.getX(), dz = s.z - daqui.getZ(), dist = Math.sqrt(dx * dx + dz * dz);
+            if (dist <= raio && (d < 0 || dist < d)) d = dist;
+        }
+        return d;
+    }
+
     public record PistaSonho(String id, Estrutura tipo, String nome, int x, int z) { }
 
     /** A estrutura mais perto (até 3000 blocos) que o jogador nunca visitou nem sonhou. */

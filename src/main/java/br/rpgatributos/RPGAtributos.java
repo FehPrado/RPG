@@ -225,6 +225,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Album album;
     private br.rpgatributos.vida.Duelos duelos;
     private br.rpgatributos.detalhes.VanillaMais vanillaMais;
+    private br.rpgatributos.exploracao.Artefatos artefatos;
     private MercadorItinerante mercador;
     private Encontros encontros;
     private Flechas flechas;
@@ -281,6 +282,7 @@ public final class RPGAtributos extends JavaPlugin {
         album = new Album(this);
         duelos = new br.rpgatributos.vida.Duelos(this);
         vanillaMais = new br.rpgatributos.detalhes.VanillaMais(this);
+        artefatos = new br.rpgatributos.exploracao.Artefatos(this);
         tags = new TagManager(this);
         skillListener = new SkillListener(this);
         menus = new MenuManager(this);
@@ -426,13 +428,14 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda);
+                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
         mobilidade.registrarReceita();
         mitrilo.registrarReceitas();
         mineracao.registrarReceitas();
+        artefatos.registrarReceitas();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
         frascos.registrarReceitas();
@@ -541,6 +544,10 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, vanillaMais::tickPlacas, 10L, 10L);
         agenda.runTaskTimer(this, vanillaMais::tickPeixes, 40L, 40L);
         agenda.runTaskTimer(this, vanillaMais::tickGelo, 10L, 10L);
+        agenda.runTaskTimer(this, vanillaMais::tickEscadas, 1L, 1L);
+        agenda.runTaskTimer(this, vanillaMais::tickLanternas, 60L, 60L);
+        agenda.runTaskTimer(this, artefatos::tick, 1L, 1L);
+        agenda.runTaskTimer(this, artefatos::tickPendulo, 20L, 20L);
         // Domador: altar, ordens dos companheiros (meio segundo), montaria (todo tick) e registro (30 s).
         altaresDomador.iniciar();
         // Masmorras: obras (todo tick), portais (5 ticks), salas e ondas (10 ticks).
@@ -822,6 +829,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Torre torre() { return torre; }
     public ObeliscoTorre obeliscos() { return obeliscos; }
     public Combos combos() { return combos; }
+    public Temperatura temperatura() { return temperatura; }
     public Mobilidade mobilidade() { return mobilidade; }
     public Mochila mochila() { return mochila; }
     public Controle controle() { return controle; }

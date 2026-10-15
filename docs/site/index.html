@@ -175,7 +175,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 <main id="inicio">
   <section class="wrap abertura">
     <div>
-      <p class="rotulo">Manual do jogador · versão 2.48</p>
+      <p class="rotulo">Manual do jogador · versão 2.49</p>
       <h1>Um mundo inteiro <em>dentro</em> do seu Minecraft.</h1>
       <p class="lead">Atributos que sobem com o uso, classes, magia, deuses, forja com raridades, colônias com moradores de verdade, reinos em guerra, cidades no fundo do mar. Tudo o que o RPGAtributos tem, num lugar só.</p>
       <div class="numeros">
@@ -324,7 +324,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 <footer>
   <div class="wrap">
-    <span>RPGAtributos 2.48 · plugin para servidores Paper 26.3</span>
+    <span>RPGAtributos 2.49 · plugin para servidores Paper 26.3</span>
     <span>Dúvidas no jogo: <code>/guia</code> e <code>/rpg</code></span>
   </div>
 </footer>
@@ -417,6 +417,7 @@ const GRUPOS = [
   ["oficio", "Peles, couros e tecidos", "O caminho do curtume: a pele crua, o couro curtido e os tecidos do tear."],
   ["acessorio", "Acessórios", "Anéis, amuletos, cintos e itens de bolso para os espaços do /acessorios."],
   ["mineral", "Minerais e ferramentas", "Os minerais de cada bioma, a turfa, o Cinzel do Lapidador e a Bateia (2.46)."],
+  ["artefato", "Artefatos de utilidade", "Garras de Escalada, Corda de Rapel, Pêndulo do Rabdomante, Cantil e Bolsa de Sementes, feitos na bancada (2.49)."],
   ["carta", "Cartas", "As molduras das cartas por raridade e o Pacote de Cartas (2.47). Numa moldura de item na parede, a carta mostra o desenho do bicho."],
   ["lenda", "Lendas", "Itens únicos no servidor. Estes têm visual próprio; o arco, o escudo e as armaduras mantêm o do jogo."],
   ["fruta", "Frutas do pomar", "As 5 frutas que nascem penduradas nas árvores do pomar."],
@@ -441,6 +442,7 @@ const ITENS = {
   oficio: [["oficio_pele_de_lobo","Pele de Lobo"],["oficio_pele_de_urso","Pele de Urso Polar"],["oficio_pele_de_raposa","Pele de Raposa"],["oficio_escama_de_guardiao","Escama de Guardião"],["oficio_couro_de_hoglin","Couro de Hoglin"],["oficio_couro_lobo","Couro de Lobo Curtido"],["oficio_couro_urso","Couro de Urso Curtido"],["oficio_couro_raposa","Couro de Raposa Curtido"],["oficio_couro_escamas","Couro de Escamas"],["oficio_couro_brasa","Couro de Brasa"],["oficio_couro_noturno","Couro Noturno"],["oficio_tecido","Tecido de Linha"],["oficio_feltro","Feltro"],["oficio_tecido_de_alga","Tecido de Alga"]],
   mineral: [["raro_ambar","Âmbar"],["raro_jade","Jade"],["raro_perola","Pérola do Mar"],["raro_cristal_de_gelo","Cristal de Gelo"],["raro_pedra_sangue","Pedra-Sangue"],["turfa","Turfa"],["cinzel","Cinzel do Lapidador"],["bateia","Bateia"]],
   acessorio: [["anel_jade","Anel de Jade"],["anel_gelo","Anel do Gelo Eterno"],["pingente_ambar","Pingente de Âmbar"],["colar_perolas","Colar de Pérolas"],["amuleto_sangue","Amuleto de Sangue"],["anel_vigor","Anel do Vigor"],["anel_forca","Anel da Força"],["anel_vento","Anel do Vento"],["anel_mares","Anel das Marés"],["anel_brasas","Anel das Brasas"],["anel_minerador","Anel do Minerador"],["anel_fortuna","Anel da Fortuna"],["anel_sabio","Anel do Sábio"],["amuleto_mana","Amuleto de Mana"],["amuleto_guardiao","Amuleto do Guardião"],["amuleto_vida","Amuleto da Vida"],["amuleto_fenix","Amuleto da Fênix"],["cinto_atleta","Cinto do Atleta"],["cinto_andarilho","Cinto do Andarilho"],["cinto_tita","Cinto do Titã"],["lanterna_bolso","Lanterna de Bolso"],["ima_bolso","Ímã de Bolso"],["relogio_bolso","Relógio de Bolso"],["capa_planadora","Capa Planadora"]],
+  artefato: [["garras_escalada","Garras de Escalada"],["corda_rapel","Corda de Rapel"],["pendulo_rabdomante","Pêndulo do Rabdomante"],["cantil","Cantil"],["bolsa_sementes","Bolsa de Sementes"]],
   carta: [["carta_comum","Carta comum"],["carta_rara","Carta rara"],["carta_epica","Carta épica"],["carta_brilhante","Carta brilhante"],["pacote_cartas","Pacote de Cartas"]],
   lenda: [["lenda_lamina_do_exorcista","Lâmina do Exorcista"],["lenda_presa_da_tecela","Presa da Tecelã"],["lenda_machado_do_lenhador","Machado do Lenhador Eterno"],["lenda_picareta_do_abismo","Picareta do Abismo"],["lenda_lamina_do_carrasco","Lâmina do Carrasco"],["lenda_martelo_do_forjador","Martelo do Forjador Lendário"],["lenda_lamina_do_arquimago","Lâmina do Arquimago"]],
   fruta: [["fruta_laranja","Laranja"],["fruta_pessego","Pêssego"],["fruta_cereja","Cereja"],["fruta_limao","Limão"],["fruta_maca_dourada","Maçã Dourada do Pomar"]],

@@ -598,6 +598,27 @@ public final class Mineracao implements Listener {
 
     private static final double RAIO_ECO = 6;
 
+    /** Distância até o mineral de bioma ou mitrilo mais perto (até {@code raio}), ou -1. Usada pelo Eco e pelo Pêndulo. */
+    public double distanciaMaisPerto(Location l, double raio) {
+        double d = -1;
+        int alcance = (int) Math.ceil(raio / 16);
+        for (int dx = -alcance; dx <= alcance; dx++) {
+            for (int dz = -alcance; dz <= alcance; dz++) {
+                Map<Integer, Tipo> m = marcados.get(chave(l.getWorld(), (l.getBlockX() >> 4) + dx, (l.getBlockZ() >> 4) + dz));
+                if (m == null) continue;
+                int baseX = ((l.getBlockX() >> 4) + dx) * 16, baseZ = ((l.getBlockZ() >> 4) + dz) * 16;
+                for (int k : m.keySet()) {
+                    double ox = baseX + (k & 15) + 0.5, oz = baseZ + ((k >> 4) & 15) + 0.5, oy = (k >> 8) - 2048 + 0.5;
+                    double dist = Math.sqrt((ox - l.getX()) * (ox - l.getX()) + (oy - l.getY()) * (oy - l.getY()) + (oz - l.getZ()) * (oz - l.getZ()));
+                    if (dist <= raio && (d < 0 || dist < d)) d = dist;
+                }
+            }
+        }
+        double mit = plugin.mitrilo().distanciaMaisPerto(l, raio);
+        if (mit >= 0 && (d < 0 || mit < d)) d = mit;
+        return d;
+    }
+
     private void eco(Player p, Block b) {
         if (!pedra(b.getType()) && b.getType() != Material.NETHERRACK && b.getType() != Material.SANDSTONE) return;
         int minimo = (int) Math.ceil(0.2 * plugin.settings().nivelMaximo);
@@ -605,21 +626,7 @@ public final class Mineracao implements Listener {
         long agora = System.currentTimeMillis();
         if (agora - ultimoEco.getOrDefault(p.getUniqueId(), 0L) < 4000) return;
         Location l = b.getLocation().add(0.5, 0.5, 0.5);
-        double d = -1;
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                Map<Integer, Tipo> m = marcados.get(chave(b.getWorld(), (b.getX() >> 4) + dx, (b.getZ() >> 4) + dz));
-                if (m == null) continue;
-                int baseX = ((b.getX() >> 4) + dx) * 16, baseZ = ((b.getZ() >> 4) + dz) * 16;
-                for (int k : m.keySet()) {
-                    double ox = baseX + (k & 15) + 0.5, oz = baseZ + ((k >> 4) & 15) + 0.5, oy = (k >> 8) - 2048 + 0.5;
-                    double dist = Math.sqrt((ox - l.getX()) * (ox - l.getX()) + (oy - l.getY()) * (oy - l.getY()) + (oz - l.getZ()) * (oz - l.getZ()));
-                    if (dist <= RAIO_ECO && (d < 0 || dist < d)) d = dist;
-                }
-            }
-        }
-        double mit = plugin.mitrilo().distanciaMaisPerto(l, RAIO_ECO);
-        if (mit >= 0 && (d < 0 || mit < d)) d = mit;
+        double d = distanciaMaisPerto(l, RAIO_ECO);
         if (d < 0) return;
         ultimoEco.put(p.getUniqueId(), agora);
         float tom = (float) (0.6 + (1 - d / RAIO_ECO) * 1.2);

@@ -1358,6 +1358,20 @@ Pequenas melhorias com cara de jogo normal, sem item nem textura nova (cada uma 
 - **Placa mostra o baú:** olhando para um baú ou barril com uma placa pregada nele, a barra mostra o nome da placa e o que tem dentro (os 4 itens com mais quantidade). Em território alheio, só se os baús estiverem liberados para visitantes.
 - **Peixes pulando:** em rios, lagos e no mar, peixes pulam fora d'água perto de você (salmão no rio e no frio, bacalhau no mar, peixe tropical nas águas quentes). Pescar ali até 40 s depois tem 30% de chance de vir um peixe a mais.
 - **Gelo fino:** ficar parado em cima de gelo sobre a água faz ele rachar (som e lascas) e quebrar em 3 s. Agachado, o gelo aguenta. Não vale dentro de territórios.
+- **2.49:** **ovelhas de cores misturadas** (pais de cores que o jogo não mistura: 30% de o filhote sair a cor do meio); **animais seguem de longe** (veem a comida na sua mão a 16 blocos, no jogo são 10); **suporte de armadura com braços** (agachado + graveto liga e desliga); **escadas de mão mais rápidas**; **lanternas rangem na chuva** quando penduradas ao ar livre; **raio queima árvore** (folhas pegam fogo, se o fogo for permitido ali, e sobra carvão vegetal no pé).
+
+### Artefatos de utilidade (2.49)
+
+Feitos na bancada; as Garras, a Corda e a Bolsa gastam **Vigor**.
+
+| Artefato | Receita | Uso |
+|---|---|---|
+| Garras de Escalada | 2 pederneiras, 2 ferros e 1 couro (`F F` / `ILI`) | Na mão (qualquer uma), de frente para a parede: segure pular para subir; agachado no ar fica pendurado. Vidro, gelo, slime e mel escorregam. Sem Vigor, escorrega. |
+| Corda de Rapel | 8 linhas em volta de um gancho | Em pé na beira de um barranco (4+ blocos de queda), clique: desce devagar pela corda (até 40 blocos). Agachado segura, pular sobe, clique de novo solta. Sem dano de queda. 30 descidas. |
+| Pêndulo do Rabdomante | linha, pepita de ouro e fragmento de ametista (em coluna) | Na mão, diz se uma estrutura ainda não descoberta (até 160 blocos) e um mineral raro (até 24) estão frios, mornos, quentes ou "fervendo". |
+| Cantil | linha, 4 couros e uma garrafa | Olhando para a água, clique para encher (3 goles). Um gole tira o calor por 5 minutos, apaga o fogo e cura um pouco. |
+| Bolsa de Sementes | 2 linhas, 5 couros e uma semente | Clique na terra arada: planta 3×3 com as sementes do inventário. Agachado troca a semente. |
+
 
 ### No mundo
 
@@ -1700,9 +1714,9 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.48.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.49.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.48.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.48.0 && git push origin v2.48.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.49.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.49.0 && git push origin v2.49.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 

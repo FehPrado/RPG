@@ -104,6 +104,7 @@ public final class Settings {
     public final double ilhaChance;
     public final boolean profAtivadas, constelacoesAtivadas;
     public final boolean vanillaMudas, vanillaGalhos, vanillaCabecas, vanillaPlacaBau, vanillaPeixes, vanillaGeloFino;
+    public final boolean vanillaOvelhas, vanillaFila, vanillaSuporte, vanillaEscadas, vanillaLanternas, vanillaRaio;
     public final double vanillaCabecaChance;
     public final int profAltura, profPenumbraMaxima;
     public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
@@ -385,6 +386,12 @@ public final class Settings {
         vanillaPlacaBau = c.getBoolean("vanilla-mais.placa-mostra-bau", true);
         vanillaPeixes = c.getBoolean("vanilla-mais.peixes-pulando", true);
         vanillaGeloFino = c.getBoolean("vanilla-mais.gelo-fino", true);
+        vanillaOvelhas = c.getBoolean("vanilla-mais.ovelhas-misturam-cores", true);
+        vanillaFila = c.getBoolean("vanilla-mais.animais-seguem-de-longe", true);
+        vanillaSuporte = c.getBoolean("vanilla-mais.suporte-com-bracos", true);
+        vanillaEscadas = c.getBoolean("vanilla-mais.escadas-mais-rapidas", true);
+        vanillaLanternas = c.getBoolean("vanilla-mais.lanternas-rangem-na-chuva", true);
+        vanillaRaio = c.getBoolean("vanilla-mais.raio-queima-arvore", true);
         profAltura = c.getInt("profundezas.abaixo-de-y", 0);
         profPenumbraMaxima = Math.max(1, Math.min(9, c.getInt("profundezas.penumbra-maxima", 5)));
         profChanceRaiz = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-raiz-por-chunk", 0.1)));

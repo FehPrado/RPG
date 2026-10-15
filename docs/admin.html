@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.48</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.49</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.48.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.49.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -563,6 +563,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin carta &lt;carta&gt; [brilhante]</span></td><td>Dá uma carta do álbum</td></tr>
       <tr><td><span class="cmd">/rpgadmin pacotecartas [n]</span></td><td>Dá Pacotes de Cartas</td></tr>
       <tr><td><span class="cmd">/rpgadmin pocarta [n]</span></td><td>Dá Pó de Carta (padrão 100; negativo tira)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin artefato &lt;tipo|todos&gt;</span></td><td>Dá os artefatos de utilidade (garras, corda, pendulo, cantil, bolsa)</td></tr>
       <tr><td><span class="cmd">/rpgadmin duelonpc &lt;morador&gt;</span></td><td>Começa um Duelo de Cartas contra o baralho de um morador (MESTRE, VELHO_PESCADOR...), sem precisar ir à vila</td></tr>
       <tr><td><span class="cmd">/rpgadmin flecha|frasco|erva|mel &lt;tipo&gt; [qtd]</span></td><td>Dá flechas especiais, frascos, ervas ou méis</td></tr>
       <tr><td><span class="cmd">/rpgadmin bebida &lt;tipo&gt; [grau 0-3]</span></td><td>Dá uma bebida do barril (3 = Lendária)</td></tr>
@@ -669,6 +670,17 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Ponha trigo e cenoura no baú. Agachado + clique: mostra as porções e para quantos dias dá.</li>
         <li>Não dê comida na mão e prenda os animais longe da grama. Pule a noite (durma): na virada do dia eles comem do baú e não perdem afeto.</li>
         <li>Só com um fardo de feno no baú: a vaca come e o fardo vira 8 trigos.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Artefatos e Vanilla+ 2 (2.49)</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin artefato todos</span> (ou <code>garras</code>, <code>corda</code>, <code>pendulo</code>, <code>cantil</code>, <code>bolsa</code>). Suba o pacote novo para ver as artes.</li>
+        <li>Garras na mão, de frente para uma parede de pedra: segure espaço e suba; agache no ar para ficar pendurado. Veja a barra de Vigor descer.</li>
+        <li>Corda: fique na beira de um barranco alto e clique. Agache para parar, pule para subir.</li>
+        <li>Pêndulo na mão perto de uma estrutura que você ainda não visitou: "quente"/"fervendo".</li>
+        <li>Cantil: olhe para a água e clique; no deserto no verão, beba e o calor some por 5 min.</li>
+        <li>Bolsa: com sementes no inventário, clique numa terra arada.</li>
+        <li>Vanilla+ 2: suporte de armadura colocado já vem com braços; escada sobe mais rápido; o resto (ovelhas, animais de longe, lanternas, raio) se desliga em <code>vanilla-mais</code>.</li>
       </ol>
     </div>
     <div class="card"><h3>Vanilla+ (2.48)</h3>

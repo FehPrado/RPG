@@ -1658,6 +1658,93 @@ final class ArteItens {
             "................",
             "................"};
 
+    // ---------- 2.49: artefatos de utilidade ----------
+    private static final String[] GARRAS = {
+            "................",
+            ".....a..a..a....",
+            ".....a..a..a....",
+            "....ia.ia.ia....",
+            "....ii.ii.ii....",
+            "....ii.ii.ii....",
+            "....iiiiiiii....",
+            "....illllllI....",
+            "....llllllll....",
+            "....lddddddl....",
+            "....llllllll....",
+            ".....llllll.....",
+            ".....ll..ll.....",
+            ".....ll..ll.....",
+            "................",
+            "................"};
+    private static final String[] CORDA = {
+            "................",
+            ".....rrrrrr.....",
+            "....rddddddr....",
+            "...rd.rrrr.dr...",
+            "...rdr....rdr...",
+            "...rdr.mm.rdr...",
+            "...rdr.mm.rdr...",
+            "...rdr....rdr...",
+            "...rd.rrrr.dr...",
+            "....rddddddr....",
+            ".....rrrrrr.....",
+            "..........r.....",
+            "..........r.....",
+            ".........mmm....",
+            ".........m.m....",
+            "................"};
+    private static final String[] PENDULO = {
+            "................",
+            ".......s........",
+            ".......s........",
+            ".......s........",
+            ".......s........",
+            ".......s........",
+            "......ggg.......",
+            ".......g........",
+            "......pAp.......",
+            ".....pAAAp......",
+            ".....pAaAp......",
+            ".....pAAAp......",
+            "......pAp.......",
+            ".......p........",
+            "................",
+            "................"};
+    private static final String[] CANTIL = {
+            "................",
+            ".......cc.......",
+            ".......cc.......",
+            "......ommo......",
+            ".....ollllo.....",
+            "....ollllllo....",
+            "...ollllllllo...",
+            "...olhhhhhhlo...",
+            "...ollllllllo...",
+            "...ollllllllo...",
+            "...ollllllllo...",
+            "....ollllllo....",
+            ".....oooooo.....",
+            "................",
+            "................",
+            "................"};
+    private static final String[] BOLSA = {
+            "................",
+            "......s..s......",
+            ".......ss.......",
+            "......oooo......",
+            ".......oo.......",
+            ".....ollllo.....",
+            "....ollllllo....",
+            "...ollllllllo...",
+            "...ollgyglllo...",
+            "...olllgllllo...",
+            "...ollllllllo...",
+            "....ollllllo....",
+            ".....oooooo.....",
+            "................",
+            "................",
+            "................"};
+
     /** Pacote de Cartas: envelope dourado com a aba fechada e a estrela no meio. */
     private static final String[] PACOTE_CARTAS = {
             "................",
@@ -1864,6 +1951,11 @@ final class ArteItens {
         l.add(new Arte("paper", "carta_epica", CARTA, com(papel, 'b', 0xFF8E24AA, 'f', 0xFFE1BEE7, 'a', 0xFFAB47BC, 'c', 0xFFFFD54F)));
         l.add(new Arte("paper", "carta_brilhante", CARTA, com(papel, 'b', 0xFFFFB300, 'f', 0xFFFFF59D, 'a', 0xFFFFCA28, 'c', BRANCO)));
         l.add(new Arte("paper", "pacote_cartas", PACOTE_CARTAS, c('o', 0xFF3E2723, 'z', 0xFFB71C1C, 'g', 0xFFF2C14E, 'd', 0xFFC79A2E, 'l', 0xFFFFE08A, 's', 0xFF8E24AA, 'w', BRANCO)));
+        l.add(new Arte("iron_nugget", "garras_escalada", GARRAS, c('a', 0xFFECEFF1, 'i', 0xFF9E9E9E, 'I', 0xFF9E9E9E, 'l', 0xFF8D5A2B, 'd', 0xFF5D3A1A)));
+        l.add(new Arte("string", "corda_rapel", CORDA, c('r', 0xFFC9A26B, 'd', 0xFF8B6B3E, 'm', 0xFF9E9E9E)));
+        l.add(new Arte("flint", "pendulo_rabdomante", PENDULO, c('s', 0xFFEEEEEE, 'g', 0xFFFFD54F, 'p', 0xFF6A3FA0, 'A', 0xFFA77BDB, 'a', 0xFFE9D5FF)));
+        l.add(new Arte("rabbit_hide", "cantil", CANTIL, c('o', 0xFF4E342E, 'l', 0xFFA1683A, 'h', 0xFF6D4C2F, 'm', 0xFF8D6E63, 'c', 0xFFD7B98E)));
+        l.add(new Arte("leather", "bolsa_sementes", BOLSA, c('o', 0xFF4E342E, 'l', 0xFF8D6E4A, 's', 0xFFEEEEEE, 'g', 0xFF7CB342, 'y', 0xFFD4A017)));
         l.add(new Arte("snowball", "frasco_fumaca", GARRAFA, com(VIDRO, 'c', 0xFFEEEEEE, 'l', 0xFF9E9E9E, 'd', 0xFF616161, 'a', 0xFFE0E0E0)));
         l.add(new Arte("snowball", "frasco_cola", GARRAFA, com(VIDRO, 'c', 0xFF8D6E63, 'l', 0xFF9CCC65, 'd', 0xFF558B2F, 'a', 0xFFDCEDC8)));
         l.add(new Arte("snowball", "frasco_fogo_grego", GARRAFA, com(VIDRO, 'c', 0xFFE0E0E0, 'l', 0xFFFF7043, 'd', 0xFFBF360C, 'a', 0xFFFFEB3B)));
