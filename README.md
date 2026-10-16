@@ -834,7 +834,32 @@ Golpes (nível de proficiência 1, 3, 5, 8, 12, 16 e 20):
 - **Bastão:** Varredura Baixa, Estocada do Bastão, Salto com Vara, Moinho, Bastão Sísmico, Defesa do Monge, Pilar Celeste.
 - **Chicote:** Chicotada, Laço, Desarmar, Estalo, Balanço (puxa você até um bloco), Chicote de Fogo, Serpente.
 
-Títulos: **Sombra das Lâminas** (Lâminas Duplas no 20), **Ceifador** (foice no 20) e **Mestre do Arsenal** (as 12 armas no 20).
+Títulos: **Sombra das Lâminas** (Lâminas Duplas no 20), **Ceifador** (foice no 20) e **Mestre do Arsenal** (12 armas no 20).
+
+### As armas dos minérios (ajustes da 2.51)
+
+Sete armas feitas com os minerais do mundo, cada uma com **mecânica própria, 7 golpes e Postura Mestra**. Têm **uma receita só** (com o mineral do plugin), nome e base fixos, e entram na **Forja do Ferreiro** como as outras (raridade, status, gemas, runas, refino). O Montante (base de diamante) ainda vira Netherite na mesa de ferraria. `/rpgadmin arma <tipo> [forjar]` dá uma pronta.
+
+| Arma | Receita | Jeito | Postura Mestra |
+|---|---|---|---|
+| **Montante de Mitrilo** | 2 Lingotes de Mitrilo em pé, embaixo diamante, graveto e diamante | +4 de dano, lento (0,8 golpe/s). **Duas mãos:** varre quem está perto do alvo (40% do golpe); com algo na outra mão, -40% de dano | **Titã**: +20% de dano e a varredura vai a 70% |
+| **Bumerangue de Âmbar** | Tábua e Âmbar em cima, tábua embaixo à direita | **Clique direito arremessa:** vai até 11 blocos (ou até bater), volta para a mão e acerta na ida e na volta | **Vento que Volta**: +30% de dano e a volta acerta com o dobro |
+| **Leques de Guerra de Jade** | Jade, papel e Jade; graveto embaixo | Rápidos (2 golpes/s), +0,5 de alcance; às vezes uma **rajada de vento** afasta quem está em volta | **Garça de Jade**: +10% de dano, +15% de velocidade e a rajada sai em todo golpe |
+| **Arpão de Pérola** | Pérola, lingote de ferro e graveto na diagonal | +1 de alcance. **Clique direito arpoa:** acertando alguém, puxa até você; acertando um bloco, puxa **você**. Na água, dano x1,5 | **Baleeiro**: arpão +30% de dano e puxa com o dobro da força |
+| **Mangual de Gelo** | Cristal de Gelo, corrente e graveto na diagonal | +2 de dano; cada golpe deixa lento e às vezes **congela** | **Avalanche**: +10% de dano e lentidão forte em todo golpe |
+| **Garras de Pedra-Sangue** | 2 Pedras-Sangue em cima, 3 lingotes de ferro embaixo | Muito rápidas (2,6 golpes/s); **cada golpe rouba 10% do dano em vida** | **Fera Sangrenta**: +10% de dano e o dobro de roubo de vida |
+| **Clava Fumegante** | Turfa, tronco e graveto em pé | +2 de dano e empurrão. Com **Turfa** no inventário os golpes queimam (1 Turfa a cada 8 queimas) | **Fornalha**: +10% de dano e sempre queima, sem gastar Turfa |
+
+Golpes (nível de proficiência 1, 3, 5, 8, 12, 16 e 20):
+- **Montante:** Golpe Pesado, Varredura do Titã, Investida do Montante, Lâmina Erguida, Corte do Horizonte, Fúria do Gigante, Queda da Montanha.
+- **Bumerangue:** Arco de Âmbar, Duplo Retorno, Pancada Atordoante, Órbita, Sol do Deserto, Ricochete de Âmbar, Tempestade de Areia.
+- **Leques:** Corte do Leque, Rajada de Vento, Dança da Garça, Pétalas de Jade (cura), Vendaval, Leque Espelho, Furacão de Jade.
+- **Arpão:** Arpoar, Estocada do Arpão, Corrente Marinha, Mergulho do Tubarão, Arpão Triplo, Onda Quebrando, Fúria do Leviatã (mais fortes na água).
+- **Mangual:** Golpe Gelado, Giro da Corrente, Quebra-Gelo, Corrente que Prende, Nevasca, Prisão de Gelo, Avalanche.
+- **Garras:** Rasgar, Salto da Fera, Sangria, Frenesi, Garras Cruzadas, Predador (marca o alvo), Banquete de Sangue.
+- **Clava:** Pancada em Brasa, Fumaça Sufocante, Brasas Espalhadas, Golpe Sísmico, Chama do Pântano, Fornalha Viva, Erupção.
+
+Bumerangue e Arpão começam os combos com o **esquerdo** (o direito arremessa); as outras, com o direito.
 ### Posturas, estilo e equilíbrio
 
 **Posturas** (`/postura` ou o botão no `/combos`): valem enquanto você segura uma arma de combo.
