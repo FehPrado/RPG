@@ -132,6 +132,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Forjas forjas;
     private Refinaria refinaria;
     private br.rpgatributos.forja.Incrustacoes incrustacoes;
+    private br.rpgatributos.raca.Racas racas;
     private Guia guia;
     private Titulos titulos;
     private Chefes chefes;
@@ -297,6 +298,7 @@ public final class RPGAtributos extends JavaPlugin {
         forjas = new Forjas(this);
         refinaria = new Refinaria(this);
         incrustacoes = new br.rpgatributos.forja.Incrustacoes(this);
+        racas = new br.rpgatributos.raca.Racas(this);
         efeitos = new EfeitosListener(this);
         arcano = new Arcano(this);
         guia = new Guia(this);
@@ -436,7 +438,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas());
+                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -466,6 +468,11 @@ public final class RPGAtributos extends JavaPlugin {
         }
         ComandoParty cmdParty = new ComandoParty(this);
         ComandoTerritorio cmdTerritorio = new ComandoTerritorio(this);
+        PluginCommand craca = getCommand("raca");
+        if (craca != null) {
+            craca.setExecutor(racas);
+            craca.setTabCompleter(racas);
+        }
         PluginCommand cpo = getCommand("portais");
         if (cpo != null) cpo.setExecutor(portais);
         PluginCommand cso = getCommand("sombras");
@@ -557,6 +564,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, vanillaMais::tickEscadas, 1L, 1L);
         agenda.runTaskTimer(this, vanillaMais::tickLanternas, 60L, 60L);
         agenda.runTaskTimer(this, artefatos::tick, 1L, 1L);
+        agenda.runTaskTimer(this, racas::tick, 1L, 1L);
         agenda.runTaskTimer(this, artefatos::tickPendulo, 20L, 20L);
         // Domador: altar, ordens dos companheiros (meio segundo), montaria (todo tick) e registro (30 s).
         altaresDomador.iniciar();
@@ -687,6 +695,7 @@ public final class RPGAtributos extends JavaPlugin {
     public void onDisable() {
         if (menus != null) menus.fecharTodos();
         if (guardaRoupa != null) guardaRoupa.desfazerTodos();
+        if (racas != null) racas.asas().fecharTodas();
         if (acessorios != null) acessorios.apagarTodas();
         if (tags != null) tags.removerTodos();
         if (efeitos != null) efeitos.removerTodos();
@@ -785,6 +794,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Forjas forjas() { return forjas; }
     public Refinaria refinaria() { return refinaria; }
     public br.rpgatributos.forja.Incrustacoes incrustacoes() { return incrustacoes; }
+    public br.rpgatributos.raca.Racas racas() { return racas; }
     public Guia guia() { return guia; }
     public Titulos titulos() { return titulos; }
     public Chefes chefes() { return chefes; }

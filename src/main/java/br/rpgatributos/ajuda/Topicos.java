@@ -78,6 +78,12 @@ public final class Topicos {
                         "Cada nível dá um bônus. No nível 100 o bônus é o máximo.")
                 .dica("Faça um pouco de tudo no começo: vários sistemas pedem nível somado.")
                 .cmd("atributos").ligados("talentos", "classes", "titulos").palavras("nivel xp mineracao combate corrida pulo").pronto();
+        t("racas", PERSONAGEM, "Raças", Material.FEATHER)
+                .texto("Escolha uma raça no /raca: Anão (65%), Elfo (110%), Pequenino (50%), Povo-Pássaro (90%), Povo do Mar ou Humano. O tamanho muda de verdade e todos veem.",
+                        "Cada raça tem uma fraqueza e 5 estágios de Despertar. A Essência vem do XP dos atributos da raça (minerar para o Anão, nadar para o Povo do Mar...).",
+                        "Com a Essência cheia, abra o /raca e faça a oferenda do estágio. O Povo-Pássaro plana no II, ganha asas no III e voa no V.")
+                .dica("Trocar de raça custa 30 níveis e volta ao estágio I. O Humano escolhe uma Herança de outra raça no V.")
+                .cmd("raca").ligados("atributos", "classes", "mobilidade").palavras("raca anao elfo pequenino passaro asas voar mar guelras humano despertar essencia tamanho").pronto();
         t("talentos", PERSONAGEM, "Talentos", Material.EXPERIENCE_BOTTLE)
                 .texto("A cada 25 níveis somados você ganha 1 ponto de talento.",
                         "São 4 árvores (Guerreiro, Arcano, Artesão e Andarilho) com talentos que liberam em degraus.")

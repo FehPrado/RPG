@@ -816,6 +816,21 @@ Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direi
 **Lança:** o clique esquerdo da lança é a estocada dela, que não é um balanço normal do braço; o plugin percebe a estocada pela força do ataque e conta como `E` normalmente.
 
 
+### Raças (2.52)
+
+Use **`/raca`** para escolher: **Anão** (65% do tamanho), **Elfo** (110%), **Pequenino** (50%), **Povo-Pássaro** (90%), **Povo do Mar** ou **Humano**. O tamanho muda de verdade (todos veem, sem mod). Cada raça tem uma fraqueza e **5 estágios de Despertar**: a **Essência** vem do XP dos atributos da raça (cheia nos dela, 20% nos outros) e cada estágio pede uma oferenda. A primeira escolha é de graça; trocar custa 30 níveis e volta ao estágio I.
+
+| Raça | Essência de | Fraqueza | I → V |
+|---|---|---|---|
+| **Humano** | todo XP (metade) | nenhuma | +10% XP → +10 Vigor → +20% XP → +2 ❤ → Herança (dom de outra raça) |
+| **Anão** | Mineração, Ferraria | -8% velocidade | +2 ❤ e minera 10% mais rápido → visão nas cavernas → minera 25% mais rápido e resiste a empurrão → +2 ❤ e minério dobrado (8%) → Pressa nas cavernas e 20% dobrado |
+| **Elfo** | Madeira, Corrida, Arcano | -2 ❤ | 6% mais rápido → +15% com flechas → Sentidos Élficos (agache 2 s: monstros brilham) → pulo e 12% de velocidade → cura nas florestas e +30% com flechas |
+| **Pequenino** | Agricultura, Culinária, Pesca | -4 ❤ | sorte → comida enche mais → agachado, monstros longe não notam → 10% mais rápido e sorte 3 → 12% de desviar |
+| **Povo-Pássaro** | Pulo, Corrida | -2 ❤; armadura pesada no peito prende as asas | sem dano de queda até 8 blocos → **planar** (pule no ar) → **asas** (pule planando para bater, gasta Vigor) → mais rápido → **voo** (segure o pulo planando) |
+| **Povo do Mar** | Natação, Pesca | fraco no Nether e nos desertos | fôlego e nado → visão debaixo d'água → Graça do Golfinho → respira debaixo d'água → +25% de dano na água ou na chuva |
+
+As asas do Povo-Pássaro aparecem do estágio III em diante, enquanto ele plana ou voa: com o pacote de recursos são **asas de verdade** que batem; sem o pacote, asas desenhadas com **partículas**.
+
 ### O arsenal novo (2.51)
 
 Seis armas novas, cada uma com **proficiência, 7 golpes e uma Postura Mestra**. Todas usam a base de espada do jogo (madeira, pedra, cobre, ferro, ouro, diamante e netherite pela mesa de ferraria), são feitas na **bancada** e entram na **Forja do Ferreiro** como as outras armas (raridade, status, gemas, runas, refino). `/rpgadmin arma <tipo> [material] [forjar]` dá uma pronta.
@@ -1610,6 +1625,8 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/bestiario` | todos | Monstros derrotados, marcos e a idade do mundo |
 | `/calendario` | todos | Estação, dia, fase da lua, clima e eventos do céu |
 | `/maldicao [transformar]` | todos | Sua maldição; o lobisomem se transforma à noite |
+| `/raca` | todos | Escolher a raça, ver os estágios e despertar o próximo |
+| `/raca definir <jogador> <raça\|nenhuma> [estágio]` | admin | Muda a raça de alguém (testes) |
 | `/portais` | todos | Portais abertos: onde estão e quanto falta para transbordarem |
 | `/sombras` | Soberano | O exército das sombras |
 | `/torre [ranking\|sair]` | todos | Torre Infinita: recordes, ranking e sair da subida |
@@ -1782,7 +1799,7 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.51.1.jar`.
+3. O plugin fica em `target/RPGAtributos-2.52.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

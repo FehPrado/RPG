@@ -94,6 +94,11 @@ commands:
     usage: /calendario
     aliases: [estacao, clima, lua]
     permission: rpg.calendario
+  raca:
+    description: Sua raça (Anão, Elfo, Pequenino, Povo-Pássaro, Povo do Mar ou Humano) e os 5 estágios de Despertar.
+    usage: /raca
+    aliases: [racas, raça]
+    permission: rpg.raca
   maldicao:
     description: Sua maldição (lobisomem ou vampiro) — e transformar-se à noite.
     usage: /maldicao [transformar]
@@ -308,6 +313,8 @@ permissions:
   rpg.bestiario:
     default: true
   rpg.calendario:
+    default: true
+  rpg.raca:
     default: true
   rpg.portais:
     default: true

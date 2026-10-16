@@ -1907,6 +1907,24 @@ final class ArteItens {
             "................",
             "................"};
 
+    private static final String[] ASA_PASSARO = {
+            "................",
+            "..............bb",
+            "...........bbbab",
+            ".........bbaaaab",
+            ".......bbaaaaabc",
+            ".....bbaaaaaabcc",
+            "...bbaaaaaaabccd",
+            ".bbaaaaaaaabbcdd",
+            "baaaaaaaabbccdd.",
+            "baaaabbbccbcdd..",
+            ".bbbbcccdccdd...",
+            "..cccdddcddd....",
+            "...dd.ddd.dd....",
+            "......dd..d.....",
+            "................",
+            "................"};
+
     private static final String[] GARRAS = {
             "................",
             ".....a..a..a....",
@@ -2204,6 +2222,7 @@ final class ArteItens {
         l.add(new Arte("flint", "pendulo_rabdomante", PENDULO, c('s', 0xFFEEEEEE, 'g', 0xFFFFD54F, 'p', 0xFF6A3FA0, 'A', 0xFFA77BDB, 'a', 0xFFE9D5FF)));
         l.add(new Arte("rabbit_hide", "cantil", CANTIL, c('o', 0xFF4E342E, 'l', 0xFFA1683A, 'h', 0xFF6D4C2F, 'm', 0xFF8D6E63, 'c', 0xFFD7B98E)));
         l.add(new Arte("leather", "bolsa_sementes", BOLSA, c('o', 0xFF4E342E, 'l', 0xFF8D6E4A, 's', 0xFFEEEEEE, 'g', 0xFF7CB342, 'y', 0xFFD4A017)));
+        l.add(new Arte("feather", "asa_passaro", ASA_PASSARO, c('a', 0xFFFAFAFA, 'b', 0xFFCFD8DC, 'c', 0xFF90A4AE, 'd', 0xFF546E7A)));
         l.add(new Arte("book", "livro_criador", LIVRO_CRIADOR, c('b', 0xFF3E2723, 'c', 0xFF8D5A2B, 'f', 0xFFB0BEC5, 'n', 0xFF607D8B, 'p', 0xFFEDE0C8, 'w', 0xFFD7C9AA)));
         Map<Character, Integer> lamina = c('a', 0xFFE8EAED, 'b', 0xFF9AA0A6, 'g', 0xFF8D6E63, 'h', 0xFF6D4C41, 'k', 0xFF3E2723);
         l.add(new Arte("iron_sword", "arma_adaga", ADAGA, lamina, true));

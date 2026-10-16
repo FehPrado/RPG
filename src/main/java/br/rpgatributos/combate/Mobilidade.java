@@ -229,22 +229,32 @@ public final class Mobilidade implements Listener {
 
     /** Capa Planadora ou Balão de Cristal no bolso. */
     public boolean temPlanador(Player p) {
-        return plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR) || plugin.acessorios().tem(p, Acessorio.Especial.BALAO);
+        return plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR) || plugin.acessorios().tem(p, Acessorio.Especial.BALAO)
+                || plugin.racas().plana(p);
+    }
+
+    /** Está planando agora (capa, balão ou as asas do Povo-Pássaro)? */
+    public boolean planando(Player p) {
+        return planando.contains(p.getUniqueId());
     }
 
     private void pular(Player p) {
         if (!temPlanador(p)) return;
         if (plugin.runas().saltoDisponivel(p)) return; // o pulo duplo da Runa do Salto vem antes de planar
         if (planando.contains(p.getUniqueId())) {
+            // O Povo-Pássaro bate as asas em vez de soltar (agachar solta).
+            if (!deBalao.contains(p.getUniqueId()) && plugin.racas().baterAsas(p)) return;
             soltar(p, true);
             return;
         }
         if (p.isOnGround() || p.isInWater() || p.isGliding() || p.isFlying() || p.isInsideVehicle()) return;
         if (p.getVelocity().getY() > 0.1) return; // ainda subindo do pulo
-        if (plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR)) {
+        if (plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR) || plugin.racas().plana(p)) {
             planando.add(p.getUniqueId());
             p.getWorld().playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_ELYTRA, 0.8f, 1.2f);
-            p.sendActionBar(Component.text("≋ Planando (pule ou agache para soltar)", COR));
+            boolean asas = !plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR);
+            p.sendActionBar(Component.text(asas && plugin.racas().estagio(p) >= 3 ? "🪶 Planando (pule para bater as asas, agache para soltar)"
+                    : "≋ Planando (pule ou agache para soltar)", COR));
             return;
         }
         // Só o Balão: cada vez que abre gasta um uso; no último, estoura quando o voo acabar.
@@ -264,7 +274,8 @@ public final class Mobilidade implements Listener {
         planando.remove(id);
         boolean balao = deBalao.remove(id);
         if (estourar.remove(id)) plugin.acessorios().estourarBalao(p);
-        else if (avisar) p.sendActionBar(Component.text(balao ? "◌ Você fechou o balão" : "≋ Você soltou a capa", NamedTextColor.GRAY));
+        else if (avisar) p.sendActionBar(Component.text(balao ? "◌ Você fechou o balão"
+                : plugin.acessorios().tem(p, Acessorio.Especial.PLANADOR) ? "≋ Você soltou a capa" : "🪶 Você fechou as asas", NamedTextColor.GRAY));
     }
 
     /** A cada tick: quem está planando desce devagar e vai para onde olha. */
@@ -287,7 +298,7 @@ public final class Mobilidade implements Listener {
             boolean balao = deBalao.contains(id);
             Vector olhar = p.getLocation().getDirection().setY(0);
             if (olhar.lengthSquared() < 1e-4) olhar = new Vector(0, 0, 0);
-            else olhar.normalize().multiply(balao ? 0.3 : 0.62);
+            else olhar.normalize().multiply(balao ? 0.3 : plugin.racas().velocidadePlanar(p, 0.62));
             Vector atual = p.getVelocity();
             Vector nova = atual.clone().multiply(0.5).add(olhar.multiply(0.5));
             nova.setY(atual.getY() > 0 ? atual.getY() * 0.9 : Math.max(atual.getY(), balao ? -0.07 : -0.11));

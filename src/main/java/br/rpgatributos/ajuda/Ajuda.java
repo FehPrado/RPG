@@ -533,6 +533,10 @@ public final class Ajuda implements Listener {
     private record Novidade(Material icone, String nome, String texto, String topico) { }
 
     private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.FEATHER, "Raças!",
+                    "Anão, Elfo, Pequenino, Povo-Pássaro, Povo do Mar e Humano, com tamanho próprio e 5 estágios de Despertar. Use /raca.", "racas"),
+            new Novidade(Material.ELYTRA, "Asas do Povo-Pássaro",
+                    "Plana no estágio II, asas no III (com o pacote, asas de verdade; sem ele, de partículas) e voo no V.", "racas"),
             new Novidade(Material.DIAMOND_SWORD, "Armas dos minérios",
                     "Montante, Bumerangue, Leques, Arpão, Mangual, Garras e Clava, feitos com os minerais do mundo.", "armas_minerios"),
             new Novidade(Material.GOLDEN_SWORD, "Arsenal forjado",

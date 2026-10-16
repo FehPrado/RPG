@@ -259,7 +259,7 @@ public final class Combos implements Listener, CommandExecutor {
     // =====================================================================
 
     public double vigorMaximo(Player p) {
-        return cfg().comVigorMaximo + 0.5 * plugin.stats().getNivel(p, Skill.COMBATE) + plugin.talentos().bonusVigor(p);
+        return cfg().comVigorMaximo + 0.5 * plugin.stats().getNivel(p, Skill.COMBATE) + plugin.talentos().bonusVigor(p) + plugin.racas().bonusVigor(p);
     }
 
     public double vigor(Player p) {

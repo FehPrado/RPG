@@ -97,13 +97,14 @@ public final class StatsManager {
         // O XP dos atributos da classe também sobe o nível da classe (mesmo com o atributo no máximo).
         plugin.classes().aoGanharXp(p, s, quantidade);
         plugin.deuses().aoGanharXp(p, s, quantidade);
+        plugin.racas().aoGanharXp(p, s, quantidade);
         int antes = getNivel(p, s);
         if (antes >= cfg().nivelMaximo) return;
 
         double ganho = quantidade * cfg().multiplicadorXp * plugin.titulos().multiplicadorXp(p, s) * plugin.acessorios().multiplicadorXp(p)
                 * plugin.estacoes().multiplicadorXp(s) * plugin.astronomia().multiplicadorXp(p, s) * plugin.enciclopedia().multiplicadorXp(p)
                 * plugin.talentos().multiplicadorXp(p) * plugin.fogueiras().multiplicadorXp(p) * plugin.trofeus().multiplicadorXp(p)
-                * plugin.album().multiplicadorXp(p);
+                * plugin.album().multiplicadorXp(p) * plugin.racas().multiplicadorXp(p);
         setXp(p, s, getXp(p, s) + ganho);
         int depois = getNivel(p, s);
 
