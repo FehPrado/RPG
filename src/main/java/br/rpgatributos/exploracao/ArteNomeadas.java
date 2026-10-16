@@ -237,6 +237,12 @@ public final class ArteNomeadas {
             case "lanca" -> lanca();
             case "crescente" -> crescente();
             case "tridente" -> tridente();
+            case "adaga" -> encurtar(ESPADA, 4);
+            case "faca" -> encurtar(ESPADA, 7);
+            case "machadinha" -> machadinha();
+            case "foice" -> foice();
+            case "bastao" -> bastao();
+            case "chicote" -> chicote();
             default -> ESPADA;
         };
     }
@@ -296,6 +302,87 @@ public final class ArteNomeadas {
         String[] l = new String[16];
         for (int y = 0; y < 16; y++) l[y] = new String(g[y]);
         return l;
+    }
+
+    // =====================================================================
+    //  Arsenal (2.51): adaga, faca, machadinha, foice, bastão e chicote
+    // =====================================================================
+
+    /** A espada com a lâmina cortada em {@code corte} linhas (a ponta desce junto): adaga e faca. */
+    private static String[] encurtar(String[] base, int corte) {
+        String[] l = new String[16];
+        String vazia = ".".repeat(16);
+        for (int y = 0; y < corte; y++) l[y] = vazia;
+        l[corte] = base[0].substring(corte) + ".".repeat(corte);
+        l[corte + 1] = base[1].substring(corte) + ".".repeat(corte);
+        for (int y = corte + 2; y < 16; y++) l[y] = base[y];
+        return l;
+    }
+
+    /** Machadinha: um machado pequeno, de cabo curto. */
+    private static String[] machadinha() {
+        char[][] g = vazio();
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                double dx = (x - 9.5) / 3.6, dy = (y - 5) / 2.8;
+                if (dx * dx + dy * dy > 1 || x + y > 15) continue;
+                int dist = 15 - (x + y);
+                pix(g, x, y, dist >= 6 ? 'h' : dist >= 3 ? 'm' : 'd');
+            }
+        }
+        linha(g, 2, 13, 12, 3, 'w');
+        pix(g, 1, 14, 'p');
+        pix(g, 10, 5, 'a');
+        contornar(g, "whmdap");
+        return texto(g);
+    }
+
+    /** Foice: cabo comprido na diagonal e a lâmina curva lá em cima, voltada para trás. */
+    private static String[] foice() {
+        char[][] g = vazio();
+        linha(g, 1, 14, 11, 4, 'w');
+        linha(g, 2, 14, 12, 4, 'd');
+        pix(g, 1, 15, 'p');
+        pix(g, 0, 15, 'p');
+        pix(g, 11, 3, 'a');
+        pix(g, 12, 3, 'a');
+        curva(g, 12, 2, 7, -1, 1, 4, 'm', 'h');
+        curva(g, 12, 3, 7, 1, 2, 5, 'm', (char) 0);
+        pix(g, 1, 5, 'h');
+        pix(g, 0, 6, 'h');
+        contornar(g, "whmdpa");
+        return texto(g);
+    }
+
+    /** Bastão: uma haste de ponta a ponta, com ponteiras de metal e a faixa da pegada no meio. */
+    private static String[] bastao() {
+        char[][] g = vazio();
+        linha(g, 1, 14, 14, 1, 'w');
+        linha(g, 2, 14, 14, 2, 'h');
+        linha(g, 1, 13, 13, 1, 'd');
+        for (int[] p : new int[][]{{1, 14}, {2, 14}, {1, 13}, {14, 1}, {14, 2}, {13, 1}, {0, 15}, {15, 0}}) pix(g, p[0], p[1], 'a');
+        for (int[] p : new int[][]{{7, 8}, {8, 7}, {7, 7}, {8, 8}, {6, 9}, {9, 6}}) pix(g, p[0], p[1], 'g');
+        contornar(g, "whdag");
+        return texto(g);
+    }
+
+    /** Chicote: cabo curto e a tira de couro fazendo uma volta no ar. */
+    private static String[] chicote() {
+        char[][] g = vazio();
+        linha(g, 1, 14, 5, 10, 'w');
+        linha(g, 2, 14, 5, 11, 'd');
+        pix(g, 0, 15, 'p');
+        pix(g, 1, 15, 'p');
+        pix(g, 0, 14, 'p');
+        pix(g, 5, 10, 'g');
+        pix(g, 6, 10, 'g');
+        pix(g, 5, 9, 'g');
+        curva(g, 6, 9, 15, 12, 11, 2, 'm', (char) 0);
+        curva(g, 11, 2, 9, -1, 5, 2, 'm', (char) 0);
+        pix(g, 4, 3, 'a');
+        pix(g, 5, 3, 'a');
+        contornar(g, "wdpgma");
+        return texto(g);
     }
 
     /** Arco: madeira curvada para cima e à esquerda, corda na diagonal. {@code fase}: -1 parado, 0 a 2 puxando. */

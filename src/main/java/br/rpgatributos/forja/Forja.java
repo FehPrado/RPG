@@ -284,9 +284,9 @@ public final class Forja {
         item.setAmount(1);
         construir(item, d);
         // Às vezes a peça já nasce com nome (mais chance nas raridades altas).
-        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && Traje.de(item) == null && !br.rpgatributos.lenda.Lendas.marcado(item) && br.rpgatributos.combo.Arsenal.de(item) == null
+        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && Traje.de(item) == null && !br.rpgatributos.lenda.Lendas.marcado(item)
                 && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < Nomeada.chance(r) * plugin.settings().nomeadasChance) {
-            Nomeada n = Nomeada.sortear(item.getType());
+            Nomeada n = Nomeada.sortear(item); // arma do arsenal: só as nomeadas dela
             if (n == null && Traje.aceita(item)) {
                 // Armadura: vira peça de um Traje (armadura com nome).
                 Traje t = Traje.sortear();
@@ -318,7 +318,9 @@ public final class Forja {
 
     /** Uma arma com nome pronta (forjada na raridade dada), para baús e chefes. */
     public ItemStack criarNomeada(Nomeada n, Raridade r) {
-        ItemStack item = forjar(null, new ItemStack(n.sortearMaterial()), r);
+        // Arma do arsenal (adaga, foice...): começa da própria arma, não da espada comum.
+        ItemStack base = n.arma() != null ? br.rpgatributos.combo.Arsenal.criar(n.arma(), n.sortearMaterial()) : new ItemStack(n.sortearMaterial());
+        ItemStack item = forjar(null, base, r);
         if (Nomeada.de(item) != n) nomear(item, n);
         return item;
     }

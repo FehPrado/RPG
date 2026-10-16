@@ -169,6 +169,62 @@ public final class ArteNomeadas3D {
                     l.add(new Peca(21.4, 22.2, s > 0 ? 1.6 : -2.1, s > 0 ? 2.1 : -1.6, -0.25, 0.25, 'h')); // farpa
                 }
             }
+            // ---------- arsenal (2.51) ----------
+            case "adaga" -> {
+                l.add(new Peca(0, 1.3, -0.9, 0.9, -0.9, 0.9, 'p'));
+                l.add(new Peca(1.3, 4.6, -0.55, 0.55, -0.55, 0.55, 'w'));
+                l.add(new Peca(4.6, 5.6, -2.2, 2.2, -0.8, 0.8, 'g'));
+                l.add(new Peca(4.8, 5.4, -0.4, 0.4, -1.0, 1.0, 'a'));
+                l.add(new Peca(5.6, 11.5, -1.1, 1.1, -0.3, 0.3, 'm'));
+                l.add(new Peca(5.6, 11.5, 0.6, 1.1, -0.35, 0.35, 'h'));
+                l.add(new Peca(11.5, 12.8, -0.6, 0.6, -0.25, 0.25, 'h'));
+                l.add(new Peca(12.8, 13.6, -0.25, 0.25, -0.2, 0.2, 'h'));
+            }
+            case "faca" -> {
+                l.add(new Peca(0, 3.6, -0.45, 0.45, -0.45, 0.45, 'w'));
+                l.add(new Peca(0, 0.8, -0.7, 0.7, -0.7, 0.7, 'p'));
+                l.add(new Peca(3.6, 4.2, -0.8, 0.8, -0.6, 0.6, 'a'));
+                l.add(new Peca(4.2, 9.5, -0.9, 0.9, -0.25, 0.25, 'm'));
+                l.add(new Peca(4.2, 9.5, 0.45, 0.9, -0.3, 0.3, 'h'));
+                l.add(new Peca(9.5, 11, -0.45, 0.45, -0.2, 0.2, 'h'));
+            }
+            case "machadinha" -> {
+                l.add(new Peca(0, 13, -0.55, 0.55, -0.55, 0.55, 'w'));
+                l.add(new Peca(0, 1, -0.75, 0.75, -0.75, 0.75, 'p'));
+                l.add(new Peca(9, 13, 0.5, 3.4, -0.45, 0.45, 'm'));
+                l.add(new Peca(8.5, 13.5, 3.4, 4.2, -0.3, 0.3, 'h'));
+                l.add(new Peca(10, 12, -1.3, 0.5, -0.65, 0.65, 'd'));
+                l.add(new Peca(10.6, 11.4, -0.2, 0.2, -0.75, 0.75, 'a'));
+            }
+            case "foice" -> {
+                l.add(new Peca(0, 20, -0.55, 0.55, -0.55, 0.55, 'w'));
+                l.add(new Peca(0, 1.2, -0.8, 0.8, -0.8, 0.8, 'p'));
+                l.add(new Peca(18.5, 20, -1, 1, -0.8, 0.8, 'a'));      // encaixe
+                l.add(new Peca(18.5, 20.5, -7, -1, -0.3, 0.3, 'm'));   // lâmina para trás
+                l.add(new Peca(17.2, 18.5, -9, -5.5, -0.3, 0.3, 'm'));
+                l.add(new Peca(15.6, 17.2, -10, -8, -0.25, 0.25, 'h')); // ponta curvada para baixo
+                l.add(new Peca(18.2, 18.5, -7, -1, -0.35, 0.35, 'h'));  // fio
+                l.add(new Peca(16.9, 17.2, -9, -5.5, -0.3, 0.3, 'h'));
+            }
+            case "bastao" -> {
+                // Pegada no meio da haste, como a lança.
+                l.add(new Peca(-10, -9, -0.8, 0.8, -0.8, 0.8, 'a'));
+                l.add(new Peca(-9, 19, -0.6, 0.6, -0.6, 0.6, 'w'));
+                l.add(new Peca(-9, 19, 0.35, 0.6, -0.65, 0.65, 'h'));
+                l.add(new Peca(-1.5, 2.5, -0.75, 0.75, -0.75, 0.75, 'g'));
+                l.add(new Peca(19, 20, -0.8, 0.8, -0.8, 0.8, 'a'));
+            }
+            case "chicote" -> {
+                l.add(new Peca(0, 1, -0.8, 0.8, -0.8, 0.8, 'p'));
+                l.add(new Peca(1, 5, -0.55, 0.55, -0.55, 0.55, 'w'));
+                l.add(new Peca(5, 5.8, -0.7, 0.7, -0.7, 0.7, 'g'));
+                l.add(new Peca(5.8, 9, -0.35, 0.35, -0.35, 0.35, 'm'));  // a tira vai fazendo uma curva
+                l.add(new Peca(9, 12, 0.1, 0.75, -0.3, 0.3, 'm'));
+                l.add(new Peca(12, 15, 0.7, 1.3, -0.28, 0.28, 'm'));
+                l.add(new Peca(15, 18, 1.2, 1.7, -0.25, 0.25, 'd'));
+                l.add(new Peca(18, 20.5, 1.5, 1.9, -0.2, 0.2, 'd'));
+                l.add(new Peca(20.5, 21.3, 1.5, 2.0, -0.25, 0.25, 'a')); // ponta
+            }
             default -> { }
         }
         return l;

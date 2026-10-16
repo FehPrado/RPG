@@ -54,9 +54,37 @@ public final class BonecosTreino extends Estacao {
 
     private record Golpe(long quando, double dano) { }
 
+    /** O treino de um jogador com uma arma: total, golpes, maior, tempo batendo e o dano de cada golpe de combo. */
+    private static final class Treino {
+        double soma, maior;
+        int golpes;
+        long ativoMs, ultimo;
+        final Map<String, double[]> combos = new java.util.LinkedHashMap<>(); // nome → [soma, vezes]
+
+        void somar(long agora, double dano, String combo) {
+            // Só conta o tempo em que está batendo: uma pausa de mais de 2 s não derruba o dano por segundo.
+            if (golpes > 0) ativoMs += Math.min(2000, agora - ultimo);
+            ultimo = agora;
+            soma += dano;
+            golpes++;
+            maior = Math.max(maior, dano);
+            if (combo != null) {
+                double[] c = combos.computeIfAbsent(combo, k -> new double[2]);
+                c[0] += dano;
+                c[1]++;
+            }
+        }
+
+        double dps() {
+            return soma / Math.max(1, ativoMs / 1000.0);
+        }
+    }
+
     private final NamespacedKey kBoneco;
     private final Map<UUID, Deque<Golpe>> golpes = new HashMap<>();
     private final Map<UUID, Double> melhor = new HashMap<>();
+    /** Treino de cada jogador por arma (para comparar adaga, foice, espada...). */
+    private final Map<UUID, Map<String, Treino>> treinos = new HashMap<>();
     private final Map<UUID, double[]> xpHora = new HashMap<>(); // [início da hora, XP ganho]
     private final Map<UUID, Long> ultimoXp = new HashMap<>();
     /** Bonecos que levaram golpe há pouco (combos e habilidades empurram): voltam para o lugar. */
@@ -146,13 +174,48 @@ public final class BonecosTreino extends Estacao {
 
     @Override
     protected void abrir(Player p, Block b, boolean agachado) {
-        Deque<Golpe> g = golpes.get(p.getUniqueId());
-        if (g == null || g.isEmpty()) {
-            p.sendMessage(Component.text("🎯 Bata no boneco para medir o seu dano.", COR));
+        Map<String, Treino> porArma = treinos.get(p.getUniqueId());
+        if (agachado) {
+            treinos.remove(p.getUniqueId());
+            golpes.remove(p.getUniqueId());
+            melhor.remove(p.getUniqueId());
+            p.sendMessage(Component.text("🎯 Treino zerado. Bata no boneco para começar de novo.", COR));
             return;
         }
-        p.sendMessage(Component.text("🎯 Treino: maior golpe " + StatsManager.fmt(melhor.getOrDefault(p.getUniqueId(), 0.0))
-                + ", dano por segundo " + StatsManager.fmt(dps(g)) + " (últimos 5 s).", COR));
+        if (porArma == null || porArma.isEmpty()) {
+            p.sendMessage(Component.text("🎯 Bata no boneco para medir o seu dano (troque de arma para comparar).", COR));
+            return;
+        }
+        p.sendMessage(Component.text("🎯 Treino por arma", COR, net.kyori.adventure.text.format.TextDecoration.BOLD)
+                .append(Component.text("  (agachado + clique zera)", NamedTextColor.DARK_GRAY)));
+        List<Map.Entry<String, Treino>> lista = new java.util.ArrayList<>(porArma.entrySet());
+        lista.sort((x, y) -> Double.compare(y.getValue().dps(), x.getValue().dps()));
+        for (Map.Entry<String, Treino> en : lista) {
+            Treino t = en.getValue();
+            p.sendMessage(Component.text(" ⚔ " + en.getKey(), NamedTextColor.WHITE)
+                    .append(Component.text(": " + StatsManager.fmt(t.dps()) + "/s", NamedTextColor.YELLOW))
+                    .append(Component.text(" · " + t.golpes + " golpes · média " + StatsManager.fmt(t.soma / t.golpes)
+                            + " · maior " + StatsManager.fmt(t.maior), NamedTextColor.GRAY)));
+            List<Map.Entry<String, double[]>> combos = new java.util.ArrayList<>(t.combos.entrySet());
+            combos.sort((x, y) -> Double.compare(y.getValue()[0] / y.getValue()[1], x.getValue()[0] / x.getValue()[1]));
+            for (int i = 0; i < Math.min(3, combos.size()); i++) {
+                double[] c = combos.get(i).getValue();
+                p.sendMessage(Component.text("    ✦ " + combos.get(i).getKey() + ": " + StatsManager.fmt(c[0] / c[1]) + " por uso (" + (int) c[1] + "x)",
+                        NamedTextColor.GOLD));
+            }
+        }
+    }
+
+    /** Com o que o jogador está batendo: a arma do arsenal, o tipo de arma dos combos ou o item da mão. */
+    private static String armaDe(Player p) {
+        ItemStack mao = p.getInventory().getItemInMainHand();
+        br.rpgatributos.combo.Arsenal.Arma a = br.rpgatributos.combo.Arsenal.de(mao);
+        if (a != null) {
+            return TipoArma.de(p) == TipoArma.DUPLAS ? "Lâminas Duplas" : a.nome;
+        }
+        TipoArma t = TipoArma.de(p);
+        if (t != null) return t.nome();
+        return mao.isEmpty() ? "Mãos" : net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(mao.effectiveName());
     }
 
     /** O boneco (um suporte de armadura) está em cima do fardo? Se não, põe. */
@@ -226,9 +289,18 @@ public final class BonecosTreino extends Estacao {
         while (!g.isEmpty() && agora - g.peekFirst().quando() > 5000) g.removeFirst();
         double recorde = Math.max(melhor.getOrDefault(p.getUniqueId(), 0.0), dano);
         melhor.put(p.getUniqueId(), recorde);
-        p.sendActionBar(Component.text("🎯 " + StatsManager.fmt(dano) + " de dano", COR)
+        String arma = e.getDamager() instanceof Projectile && !(e.getDamager() instanceof org.bukkit.entity.Snowball) ? "Arco e besta" : armaDe(p);
+        br.rpgatributos.combo.Golpe combo = plugin.combos().golpeRecente(p, 1500);
+        treinos.computeIfAbsent(p.getUniqueId(), u -> new java.util.LinkedHashMap<>())
+                .computeIfAbsent(arma, k -> new Treino()).somar(agora, dano, combo == null ? null : combo.nome());
+        Component barra = Component.text("🎯 " + StatsManager.fmt(dano) + " de dano", COR)
+                .append(Component.text(combo != null ? " (" + combo.nome() + ")" : "", NamedTextColor.GOLD))
                 .append(Component.text("  ·  " + StatsManager.fmt(dps(g)) + "/s", NamedTextColor.YELLOW))
-                .append(Component.text("  ·  maior: " + StatsManager.fmt(recorde), NamedTextColor.GRAY)));
+                .append(Component.text("  ·  maior: " + StatsManager.fmt(recorde), NamedTextColor.GRAY))
+                .append(Component.text("  ·  " + arma, NamedTextColor.DARK_GRAY));
+        p.sendActionBar(barra);
+        // O combo escreve o nome dele na barra logo depois do golpe: a do boneco volta 1 tick depois.
+        if (combo != null) plugin.getServer().getScheduler().runTask(plugin, () -> p.sendActionBar(barra));
         Entity boneco = e.getEntity();
         ancorar.put(boneco.getUniqueId(), agora + 4000);
         plugin.getServer().getScheduler().runTask(plugin, () -> voltarAoLugar(boneco));
@@ -295,6 +367,7 @@ public final class BonecosTreino extends Estacao {
         if (++passos % 1200 != 0) return; // a cada 5 min limpa quem não treina mais
         long agora = System.currentTimeMillis();
         golpes.values().removeIf(g -> g.isEmpty() || agora - g.peekLast().quando() > 300_000);
+        treinos.values().removeIf(m -> m.values().stream().allMatch(t -> agora - t.ultimo > 1_800_000));
         ultimoXp.values().removeIf(t -> agora - t > 300_000);
     }
 }

@@ -97,6 +97,8 @@ public final class Combos implements Listener, CommandExecutor {
     private final Map<UUID, Double> vigor = new HashMap<>();
     private final Map<UUID, Long> emCombate = new HashMap<>();
     private final Map<UUID, Long> mostrarAte = new HashMap<>();
+    /** O último golpe de combo de cada jogador e quando (o Boneco de Treino mostra qual golpe deu o dano). */
+    private final Map<UUID, Object[]> ultimoGolpe = new HashMap<>();
     private final Map<UUID, BossBar> barras = new HashMap<>();
     private final Map<UUID, Map<Golpe, Long>> recargas = new HashMap<>();
     /** Finalizador carregado: até quando vale. */
@@ -433,6 +435,7 @@ public final class Combos implements Listener, CommandExecutor {
         boolean finaliza = carga != null && carga > t0;
         if (finaliza) forca *= 1.5;
         golpes.comecar(perfeito);
+        ultimoGolpe.put(p.getUniqueId(), new Object[]{g, t0});
         boolean usou;
         try {
             usou = golpes.usar(p, g, forca);
@@ -468,6 +471,12 @@ public final class Combos implements Listener, CommandExecutor {
         if (perfeito) barra = barra.append(Component.text("  ✦ Perfeito", NamedTextColor.GOLD, TextDecoration.BOLD));
         if (rank != Estilo.Rank.D) barra = barra.append(Component.text("   [" + rank.name() + "]", rank.cor(), TextDecoration.BOLD));
         p.sendActionBar(barra);
+    }
+
+    /** O golpe de combo que o jogador usou até {@code ms} atrás (null se nenhum). */
+    public Golpe golpeRecente(Player p, long ms) {
+        Object[] u = ultimoGolpe.get(p.getUniqueId());
+        return u != null && agora() - (long) u[1] <= ms ? (Golpe) u[0] : null;
     }
 
     /** Um "plim" baixinho quando a recarga do golpe acaba. */
@@ -643,6 +652,7 @@ public final class Combos implements Listener, CommandExecutor {
         barras.remove(id);
         semEsquerdo.remove(id);
         emCombate.remove(id);
+        ultimoGolpe.remove(id);
         mostrarAte.remove(id);
     }
 

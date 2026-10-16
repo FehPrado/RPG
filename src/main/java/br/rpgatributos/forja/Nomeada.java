@@ -92,6 +92,27 @@ public enum Nomeada {
             'w', 0xFF455A64, 'h', 0xFFB3E5FC, 'a', 0xFFE1F5FE),
     BESTA_DA_TORRE_DE_VIGIA("Besta da Torre de Vigia", Categoria.BESTA, "besta", "A sentinela da colônia nunca errou um tiro do alto da torre.",
             'w', 0xFF5D4037, 'h', 0xFFA1887F, 'a', 0xFF90A4AE),
+    // ---------- arsenal (2.51): adaga, faca, machadinha, foice, bastão e chicote ----------
+    PRESAS_GEMEAS("Presas Gêmeas", Categoria.ESPADA, "adaga", "Eram duas, forjadas juntas. Uma sempre sabe onde a outra está.",
+            'o', 0xFF101418, 'h', 0xFFFFFFFF, 'm', 0xFFB0BEC5, 'd', 0xFF607D8B, 'g', 0xFFC9A227, 'w', 0xFF3E2723, 'p', 0xFFB71C1C, 'a', 0xFFE53935),
+    BEIJO_DA_VIBORA("Beijo da Víbora", Categoria.ESPADA, "adaga", "O veneno secou há cem anos. O medo, não.",
+            'o', 0xFF0A1A0A, 'h', 0xFFDCEDC8, 'm', 0xFF7CB342, 'd', 0xFF33691E, 'g', 0xFF212121, 'w', 0xFF1B2A10, 'p', 0xFF558B2F, 'a', 0xFFAEEA00),
+    PENA_DO_CORVO("Pena do Corvo", Categoria.ESPADA, "faca", "Voa reto como o corvo e volta como ele: quando quer.",
+            'o', 0xFF0A0A10, 'h', 0xFFCFD8DC, 'm', 0xFF546E7A, 'd', 0xFF263238, 'g', 0xFF37474F, 'w', 0xFF1A1A1A, 'p', 0xFF311B92, 'a', 0xFF7E57C2),
+    MACHADINHA_DO_VELHO_ANAO("Machadinha do Velho Anão", Categoria.ESPADA, "machadinha", "Os anões a jogavam por cima da mesa para pedir o sal.",
+            'o', 0xFF2A1000, 'h', 0xFFFFE0B2, 'm', 0xFFFF8F00, 'd', 0xFFBF360C, 'g', 0xFF795548, 'w', 0xFF4E342E, 'p', 0xFFFFC107, 'a', 0xFFFF6F00),
+    FOICE_DO_CEIFADOR_DE_TRIGO("Foice do Ceifador de Trigo", Categoria.ESPADA, "foice", "Colheu o trigo de três vilas numa tarde. Depois, outras coisas.",
+            'o', 0xFF1A1205, 'h', 0xFFFFF8E1, 'm', 0xFFBDBDBD, 'd', 0xFF616161, 'g', 0xFFC9A227, 'w', 0xFF8D6E63, 'p', 0xFFFFD54F, 'a', 0xFFFFEB3B),
+    LUA_MINGUANTE("Lua Minguante", Categoria.ESPADA, "foice", "Brilha mais quando a lua some do céu.",
+            'o', 0xFF0A0A1A, 'h', 0xFFF3E5F5, 'm', 0xFF9FA8DA, 'd', 0xFF3949AB, 'g', 0xFF1A237E, 'w', 0xFF263238, 'p', 0xFF5C6BC0, 'a', 0xFFE1F5FE),
+    BASTAO_DO_MONGE_DA_MONTANHA("Bastão do Monge da Montanha", Categoria.ESPADA, "bastao", "Os monges do mosteiro treinam mil golpes com ele antes do café.",
+            'o', 0xFF2A1A0A, 'h', 0xFFD7A86E, 'm', 0xFF8D6E63, 'd', 0xFF5D4037, 'g', 0xFFC62828, 'w', 0xFF8D5A2B, 'p', 0xFFFFD54F, 'a', 0xFFFFC107),
+    BORDAO_DO_PEREGRINO("Bordão do Peregrino", Categoria.ESPADA, "bastao", "Andou todas as estradas do mundo e ainda está inteiro.",
+            'o', 0xFF1A1A10, 'h', 0xFFC5E1A5, 'm', 0xFF8D6E63, 'd', 0xFF4E342E, 'g', 0xFF33691E, 'w', 0xFF6D4C41, 'p', 0xFF7CB342, 'a', 0xFF90A4AE),
+    CHICOTE_DO_DOMADOR_DE_FERAS("Chicote do Domador de Feras", Categoria.ESPADA, "chicote", "Nunca bateu num bicho. Só estala, e eles obedecem.",
+            'o', 0xFF1A0E05, 'h', 0xFFD7A86E, 'm', 0xFF8D5A2B, 'd', 0xFF4E342E, 'g', 0xFFC9A227, 'w', 0xFF5D4037, 'p', 0xFFB71C1C, 'a', 0xFFFFD54F),
+    LINGUA_DE_BRASA("Língua de Brasa", Categoria.ESPADA, "chicote", "Trançado com couro de strider. Deixa um rastro de faísca.",
+            'o', 0xFF1A0500, 'h', 0xFFFFCC80, 'm', 0xFFE64A19, 'd', 0xFF8B1A1A, 'g', 0xFF212121, 'w', 0xFF3E2723, 'p', 0xFFFF6F00, 'a', 0xFFFFEB3B),
     // ---------- ferramentas ----------
     PICARETA_DO_MINEIRO_PERDIDO("Picareta do Mineiro Perdido", Categoria.PICARETA, "picareta", "Achada no fundo da mina abandonada, ao lado de um capacete.",
             'o', 0xFF2A1A0A, 'h', 0xFFD7A86E, 'm', 0xFFA0522D, 'd', 0xFF6D3A1A, 'w', 0xFF5D4037, 'a', 0xFFFFB74D),
@@ -144,12 +165,34 @@ public enum Nomeada {
     /** Tridente (na Forja ele conta como lança, mas tem nomes e desenhos próprios). */
     public boolean tridente() { return molde.equals("tridente"); }
 
+    /** A arma do arsenal que essa nomeada é (adaga, foice...), ou null se é uma arma comum. */
+    public br.rpgatributos.combo.Arsenal.Arma arma() {
+        return switch (molde) {
+            case "adaga" -> br.rpgatributos.combo.Arsenal.Arma.ADAGA;
+            case "faca" -> br.rpgatributos.combo.Arsenal.Arma.FACA;
+            case "machadinha" -> br.rpgatributos.combo.Arsenal.Arma.MACHADINHA;
+            case "foice" -> br.rpgatributos.combo.Arsenal.Arma.FOICE;
+            case "bastao" -> br.rpgatributos.combo.Arsenal.Arma.BASTAO;
+            case "chicote" -> br.rpgatributos.combo.Arsenal.Arma.CHICOTE;
+            default -> null;
+        };
+    }
+
     /** Uma nomeada ao acaso para esse tipo de item (null se a categoria não tem nenhuma). */
     public static Nomeada sortear(Material tipo) {
+        return sortear(tipo, null);
+    }
+
+    /** Para um item já pronto: uma arma do arsenal só sorteia nomeadas dela (e uma espada comum, nenhuma do arsenal). */
+    public static Nomeada sortear(ItemStack item) {
+        return sortear(item.getType(), br.rpgatributos.combo.Arsenal.de(item));
+    }
+
+    private static Nomeada sortear(Material tipo, br.rpgatributos.combo.Arsenal.Arma arma) {
         Categoria c = Categoria.de(tipo);
         boolean tridente = tipo == Material.TRIDENT;
         List<Nomeada> l = new ArrayList<>();
-        for (Nomeada n : values()) if (n.categoria == c && n.tridente() == tridente) l.add(n);
+        for (Nomeada n : values()) if (n.categoria == c && n.tridente() == tridente && n.arma() == arma) l.add(n);
         return l.isEmpty() ? null : l.get(ThreadLocalRandom.current().nextInt(l.size()));
     }
 

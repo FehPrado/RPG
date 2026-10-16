@@ -114,8 +114,35 @@ public final class Arsenal implements Listener {
     /** Golpe da segunda adaga em andamento (para não disparar de novo). */
     private final Set<UUID> segundaMao = new HashSet<>();
 
+    /** Dono e dano do arremesso gravados no projétil (para não perder a arma se o servidor reiniciar com ela no ar). */
+    private static final NamespacedKey K_DONO = new NamespacedKey("rpgatributos", "arremesso_dono");
+    private static final NamespacedKey K_DANO = new NamespacedKey("rpgatributos", "arremesso_dano");
+
     public Arsenal(RPGAtributos plugin) {
         this.plugin = plugin;
+        // Arma que caiu no vazio (nunca acerta nada): volta para o dono.
+        Bukkit.getScheduler().runTaskTimer(plugin, this::vigiarArremessos, 40L, 20L);
+    }
+
+    /** A receita da arma no material dessa espada (null se não houver). */
+    public static org.bukkit.inventory.Recipe receita(Arma a, Material espada) {
+        String tier = espada.name().toLowerCase(Locale.ROOT).replace("_sword", "");
+        return Bukkit.getRecipe(new NamespacedKey("rpgatributos", a.id + "_" + tier));
+    }
+
+    private void vigiarArremessos() {
+        for (var it = voando.entrySet().iterator(); it.hasNext(); ) {
+            var en = it.next();
+            if (!(Bukkit.getEntity(en.getKey()) instanceof Snowball s)) continue; // chunk descarregado: ela volta com o chunk
+            if (s.isValid() && s.getLocation().getY() >= s.getWorld().getMinHeight() - 8) continue;
+            it.remove();
+            ItemStack item = (ItemStack) en.getValue()[0];
+            Player p = Bukkit.getPlayer((UUID) en.getValue()[2]);
+            s.remove();
+            if (item.getType().isAir()) continue;
+            if (p != null) devolver(p, item);
+            else s.getWorld().dropItemNaturally(s.getWorld().getSpawnLocation(), item);
+        }
     }
 
     // =====================================================================
@@ -273,6 +300,8 @@ public final class Arsenal implements Listener {
         p.getInventory().setItemInMainHand(mao.getAmount() > 1 ? mao.asQuantity(mao.getAmount() - 1) : null);
         Snowball s = p.launchProjectile(Snowball.class, p.getEyeLocation().getDirection().multiply(a == Arma.MACHADINHA ? 1.4 : 1.8));
         s.setItem(voa);
+        s.getPersistentDataContainer().set(K_DONO, PersistentDataType.STRING, p.getUniqueId().toString());
+        s.getPersistentDataContainer().set(K_DANO, PersistentDataType.DOUBLE, dano);
         voando.put(s.getUniqueId(), new Object[]{voa, dano, p.getUniqueId()});
         p.getWorld().playSound(p.getLocation(), Sound.ITEM_TRIDENT_THROW, 0.8f, a == Arma.MACHADINHA ? 0.8f : 1.4f);
     }
@@ -293,6 +322,15 @@ public final class Arsenal implements Listener {
     @EventHandler
     public void aoAcertar(ProjectileHitEvent e) {
         Object[] v = voando.remove(e.getEntity().getUniqueId());
+        if (v == null && e.getEntity() instanceof Snowball s && s.getPersistentDataContainer().has(K_DONO)) {
+            // Arremessada antes do servidor reiniciar: os dados estão no próprio projétil.
+            try {
+                v = new Object[]{s.getItem(), s.getPersistentDataContainer().getOrDefault(K_DANO, PersistentDataType.DOUBLE, 1.0),
+                        UUID.fromString(s.getPersistentDataContainer().get(K_DONO, PersistentDataType.STRING))};
+            } catch (IllegalArgumentException ex) {
+                return;
+            }
+        }
         if (v == null) return;
         ItemStack item = (ItemStack) v[0];
         double dano = (double) v[1];

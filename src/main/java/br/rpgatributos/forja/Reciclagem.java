@@ -181,6 +181,16 @@ public final class Reciclagem extends Estacao {
         return null;
     }
 
+    /** A receita do item: a do arsenal para adaga, foice... (feitas com menos material que a espada); senão, a do jogo. */
+    private static Recipe receitaDe(ItemStack item) {
+        br.rpgatributos.combo.Arsenal.Arma a = br.rpgatributos.combo.Arsenal.de(item);
+        if (a != null) {
+            Recipe r = br.rpgatributos.combo.Arsenal.receita(a, base(item.getType()));
+            if (r != null) return r;
+        }
+        return receita(base(item.getType()));
+    }
+
     private static Material material(RecipeChoice c) {
         if (c instanceof RecipeChoice.MaterialChoice mc && !mc.getChoices().isEmpty()) return mc.getChoices().getFirst();
         if (c instanceof RecipeChoice.ExactChoice ec && !ec.getChoices().isEmpty()) return ec.getChoices().getFirst().getType();
@@ -191,7 +201,7 @@ public final class Reciclagem extends Estacao {
         if (item == null || item.isEmpty() || item.getMaxStackSize() > 1) return false;
         if (Raro.de(item) != null || item.getPersistentDataContainer().has(Cozinha.CHAVE_PRATO)) return false;
         if (plugin.arcano().ehGrimorio(item) || Lendas.marcado(item)) return false;
-        return receita(base(item.getType())) != null;
+        return receitaDe(item) != null;
     }
 
     /** Netherite é melhoria de diamante: recicla como diamante + sucata de netherite. */
@@ -206,7 +216,7 @@ public final class Reciclagem extends Estacao {
     /** Materiais devolvidos (sem os bônus aleatórios). */
     private Map<Material, Integer> materiais(Player p, ItemStack item) {
         Map<Material, Integer> m = new LinkedHashMap<>();
-        Recipe r = receita(base(item.getType()));
+        Recipe r = receitaDe(item);
         if (r == null) return m;
         Map<Material, Integer> usados = new LinkedHashMap<>();
         if (r instanceof ShapedRecipe s) {
