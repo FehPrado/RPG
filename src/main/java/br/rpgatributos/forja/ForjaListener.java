@@ -72,6 +72,8 @@ public final class ForjaListener implements Listener {
         if (resultado == null || resultado.isEmpty() || Categoria.de(resultado.getType()) == null) return false;
         if (forja().forjado(resultado)) return false;
         if (receita == null || receita instanceof ComplexRecipe) return false;
+        // Receitas do jogo, o Cajado Arcano e as armas do arsenal (2.51: adaga, foice, bastão...).
+        if (br.rpgatributos.combo.Arsenal.de(resultado) != null) return true;
         return receita instanceof Keyed k && (k.getKey().getNamespace().equals("minecraft") || k.getKey().getKey().equals("cajado_arcano"));
     }
 
@@ -121,7 +123,10 @@ public final class ForjaListener implements Listener {
         for (int i = 0; i < vezes; i++) {
             ItemStack atual = inv.getResult();
             if (atual == null || atual.getType() != tipo) break;
-            ItemStack item = forja().forjar(p, new ItemStack(tipo), null);
+            // Arma do arsenal: forja a partir dela (com a marca da arma), não da espada comum.
+            br.rpgatributos.combo.Arsenal.Arma arma = br.rpgatributos.combo.Arsenal.de(atual);
+            ItemStack base = arma != null ? br.rpgatributos.combo.Arsenal.criar(arma, tipo) : new ItemStack(tipo);
+            ItemStack item = forja().forjar(p, base, null);
             if (!entregar(p, item, clique, hotbar)) {
                 if (feitos.isEmpty()) semEspaco(p);
                 break;
