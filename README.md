@@ -62,6 +62,9 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 - **`/rpg`:** o menu central. No topo, **"Seu próximo passo"**: 3 sugestões que mudam conforme o progresso (o passo da Jornada, pontos de talento para gastar, colônia ou reino que já dá para fundar, deus para seguir...). Abaixo, **7 categorias** (Personagem, Combate, Magia e fé, Ofícios, Mundo e aventura, Comunidade, Coleções) e atalhos para os menus mais usados.
 - **Guia interativo:** cada assunto é uma tela curta com o **ritual desenhado em itens** (o bloco, os itens que você joga em cima e o que ele vira), uma dica, o botão para abrir o sistema e os assuntos ligados. Clique numa categoria do `/rpg` e depois num assunto.
 - **Busca:** `/guia <palavra>` (ex.: `/guia reciclar`, `/guia alquimia`) mostra os assuntos no chat, para clicar.
+- **Dicas na hora certa:** na primeira vez que você segura, pega ou encontra algo novo (uma arma do arsenal, um mineral, uma arma com nome, o Livro do Criador, uma semente da estação, uma pele, um cavalo, as Profundezas, o céu...), aparece uma dica curta no chat com **[ver como]**, que abre o assunto. Cada dica aparece uma vez só; `/guia dicas` desliga ou liga.
+- **O que é isso?:** com um item na mão, o botão no `/rpg` ou `/guia mão` abre o assunto daquele item.
+- **Novidades da versão:** botão no `/rpg` (ou `/guia novidades`) com o que entrou na última versão, cada coisa levando ao assunto dela. Depois de uma atualização, quem entra recebe um aviso clicável.
 - **Jornada do Aventureiro** (`/jornada`): 12 passos que ensinam o básico na ordem (subir um atributo, forjar, soltar combos, cozinhar, alquimia, classe, magias, território, fé, estrutura, masmorra e colônia). Cada passo se completa sozinho e dá uma recompensa.
 - **Visual:** com o pacote de recursos, os menus do `/rpg`, do Guia e da Jornada têm **fundo desenhado** (papel e madeira); sem o pacote, aparecem com vidros.
 - **Livro:** na primeira entrada o jogador ainda recebe o livro Guia do Aventureiro (80 páginas); `/guia livro` dá outro.
@@ -1623,7 +1626,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/recordes` | todos | Recordes do servidor |
 | `/sentar` | todos | Senta no chão (ou levanta) |
 | `/rpg` | todos | Menu central: próximos passos, categorias e atalhos |
-| `/guia [palavra\|livro]` | todos | Guia interativo e busca; `livro` dá o livro |
+| `/guia [palavra\|livro\|mão\|dicas\|novidades]` | todos | Guia interativo e busca; `livro` dá o livro, `mão` explica o item da mão, `dicas` liga/desliga as dicas, `novidades` mostra o que entrou na versão |
 | `/jornada` | todos | Jornada do Aventureiro (12 primeiros passos) |
 | `/placar` | todos | Liga ou desliga o placar lateral |
 | `/album` | todos | Álbum de Cartas: páginas, pacotes, pó, marcos e baralho |
