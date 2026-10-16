@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -41,7 +42,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Estábulo (2.50): um fardo de feno com uma sela e um laço jogados em cima. Guarda até 4 montarias
+ * Estábulo (2.50): um fardo de feno com uma sela e uma porteira (qualquer madeira) jogadas em cima
+ * (o laço com a sela é o Altar do Domador). Guarda até 4 montarias
  * (cavalo, burro, mula, lhama, camelo, porco ou lavagante selados, e companheiros do Domador): elas
  * saem do mundo e voltam iguais (nome, linhagem, componentes, alforje) quando você as chama, perto
  * do estábulo. Só quem guardou chama. Quebrar o estábulo solta todas ali mesmo.
@@ -76,7 +78,7 @@ public final class Estabulos extends Estacao {
 
     @Override
     protected boolean itemDoRitual(Material m) {
-        return m == Material.SADDLE || m == Material.LEAD;
+        return m == Material.SADDLE || Tag.FENCE_GATES.isTagged(m);
     }
 
     @Override
@@ -87,9 +89,12 @@ public final class Estabulos extends Estacao {
 
     @Override
     protected boolean consumirRitual(Block bloco, List<Item> itens) {
-        if (contar(itens, Material.SADDLE) < 1 || contar(itens, Material.LEAD) < 1) return false;
+        // Sela + porteira (laço + sela é o Altar do Domador, no mesmo fardo de feno).
+        Item porteira = null;
+        for (Item i : itens) if (i.isValid() && Tag.FENCE_GATES.isTagged(i.getItemStack().getType())) { porteira = i; break; }
+        if (porteira == null || contar(itens, Material.SADDLE) < 1) return false;
         tirar(itens, Material.SADDLE, 1);
-        tirar(itens, Material.LEAD, 1);
+        tirar(porteira, 1);
         return true;
     }
 
@@ -141,7 +146,7 @@ public final class Estabulos extends Estacao {
     @Override
     protected void devolver(Location centro) {
         centro.getWorld().dropItemNaturally(centro, new ItemStack(Material.SADDLE));
-        centro.getWorld().dropItemNaturally(centro, new ItemStack(Material.LEAD));
+        centro.getWorld().dropItemNaturally(centro, new ItemStack(Material.OAK_FENCE_GATE));
     }
 
     /** O estábulo deixou de existir: todas as montarias saem ali mesmo. */
