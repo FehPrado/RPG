@@ -136,10 +136,23 @@ public final class Topicos {
                         "Capa Planadora: acessório; no ar, aperte pular para planar.")
                 .ligados("combos", "acessorios").palavras("esquiva dash gancho escalada capa planar").pronto();
         t("boneco", COMBATE, "Boneco de Treino", Material.HAY_BLOCK)
-                .texto("Bata nele (com arma, combo, habilidade ou magia) para ver o dano de cada golpe e o dano por segundo.",
+                .texto("Bata nele (com arma, combo, habilidade ou magia) para ver o dano de cada golpe, o golpe de combo e o dano por segundo.",
+                        "Clique no fardo: o treino por arma (dano por segundo, média, maior e os melhores combos). Agachado + clique zera.",
                         "Dá um pouco de XP de Combate, com limite por hora.")
                 .ritual(Material.HAY_BLOCK, "Fardo de feno", Material.CARVED_PUMPKIN, 1, Material.ARMOR_STAND, 1)
                 .ligados("combos", "amolar").palavras("treino dps dano").pronto();
+        t("arsenal", COMBATE, "Arsenal: adaga, foice, bastão...", Material.GOLDEN_SWORD)
+                .texto("Seis armas novas feitas na bancada com o material da espada (madeira até diamante): Adaga, Faca e Machadinha de arremesso, Foice, Bastão e Chicote.",
+                        "Adaga nas duas mãos = Lâminas Duplas. Faca e machadinha: clique direito arremessa (depois recolha).",
+                        "Cada uma tem proficiência, 7 golpes de combo e uma Postura Mestra. Feitas na Forja do Ferreiro saem forjadas, com raridade.")
+                .dica("Adaga pelas costas dá +50%. O Chicote alcança 3 blocos mais longe. Compare as armas no Boneco de Treino.")
+                .cmd("combos").ligados("armas_minerios", "combos", "forja", "boneco", "nomeadas").palavras("adaga duplas faca machadinha foice bastao chicote arremesso").pronto();
+        t("armas_minerios", COMBATE, "Armas dos minérios", Material.DIAMOND_SWORD)
+                .texto("Sete armas feitas com os minerais do mundo, cada uma com mecânica própria, 7 golpes e Postura Mestra:",
+                        "Montante (Mitrilo, duas mãos e varredura), Bumerangue (Âmbar, vai e volta), Leques de Guerra (Jade, rajada de vento), Arpão (Pérola, puxa o alvo ou você), Mangual (Cristal de Gelo, deixa lento), Garras (Pedra-Sangue, roubam vida) e Clava Fumegante (Turfa, queima).",
+                        "Uma receita só cada uma, com o mineral. Na Forja saem forjadas.")
+                .dica("Bumerangue e Arpão: o clique direito arremessa, então os combos começam com o esquerdo.")
+                .cmd("combos").ligados("minerais", "arsenal", "incrustar", "mitrilo").palavras("montante bumerangue leques arpao mangual garras clava mitrilo ambar jade perola gelo sangue turfa").pronto();
         t("amolar", COMBATE, "Pedra de Amolar", Material.GRINDSTONE)
                 .texto("Clique com a arma: ela fica Afiada (+10% de dano) por 100 golpes. Gasta 1 pederneira.")
                 .ritual(Material.GRINDSTONE, "Rebolo (ou pedra lisa)", Material.FLINT, 2, Material.IRON_INGOT, 1)
@@ -245,6 +258,21 @@ public final class Topicos {
                 .texto("Mudas especiais viram árvores de laranja, pêssego, cereja, limão ou maçã dourada.",
                         "Na estação certa as frutas penduram nas folhas: clique para colher.")
                 .ligados("fazenda", "estacoes", "barril").palavras("fruta muda arvore laranja cereja limao").pronto();
+        t("criacao", OFICIOS, "Criação de animais", Material.WHEAT)
+                .texto("Agachado + clique com a mão vazia num animal adulto: ele vira da sua fazenda (até 40) e mostra os corações.",
+                        "Todo dia: carinho e comida (ração na mão, pasto ou fardo de feno). Com afeto alto ele dá mais: ovos, leite, lã, trufas.",
+                        "Inverno ao ar livre à noite derruba o afeto: deixe num celeiro com teto.")
+                .cmd("animais").ligados("comedouro", "tacho", "linhagens").palavras("animal fazenda afeto coracao leite ovo la trufa galinha vaca cabra ovelha porco coelho").pronto();
+        t("comedouro", OFICIOS, "Comedouro", Material.CHEST)
+                .texto("Guarde a comida dos animais no baú: na virada do dia, cada animal seu a até 12 blocos que não comeu come uma porção.",
+                        "Agachado + clique mostra para quantos dias a comida dá.")
+                .ritual(Material.CHEST, "Baú", Material.HAY_BLOCK, 1, Material.BOWL, 1)
+                .ligados("criacao").palavras("comida racao animais funil").pronto();
+        t("tacho", OFICIOS, "Tacho do Artesão", Material.DECORATED_POT)
+                .texto("Clique com o ingrediente na mão (até 8 iguais) e espere: leite vira queijo, fruta vira geleia, legume vira conserva, ovo vira maionese, trufa vira óleo.",
+                        "O produto guarda a qualidade e dá efeitos ao comer.")
+                .ritual(Material.DECORATED_POT, "Vaso decorado", Material.GLASS_BOTTLE, 4, Material.SUGAR, 1)
+                .ligados("criacao", "cozinha").palavras("queijo geleia conserva maionese oleo trufa artesanato").pronto();
         t("pesca", OFICIOS, "Pesca", Material.FISHING_ROD)
                 .texto("Peixes com qualidade, 17 peixes raros por bioma e clima (5 só no buraco no gelo), Tesouros do Mar e criaturas que lutam de volta.")
                 .cmd("peixes").ligados("pescagelo", "alquimia", "cozinha").palavras("peixe raro tesouro mar vara").pronto();
@@ -278,6 +306,17 @@ public final class Topicos {
         t("flechas", OFICIOS, "Flechas e frascos", Material.TIPPED_ARROW)
                 .texto("Na bancada: 4 flechas + pó de blaze, gelo, pérola ou TNT. Frascos de arremesso com ervas, pólvora ou slime.")
                 .ligados("canteiro", "combos").palavras("flecha fogo gelo explosiva frasco fumaca").pronto();
+        t("incrustar", OFICIOS, "Incrustar minério", Material.EMERALD)
+                .texto("Arma corpo a corpo na mão, um mineral na outra mão e clique na Forja do Ferreiro (custa 2 níveis de XP).",
+                        "Jade: +1 ❤. Âmbar: +1 de sorte. Pérola: +25% de dano na água ou na chuva. Cristal de Gelo: deixa lento. Pedra-Sangue: rouba vida. Turfa: às vezes queima.",
+                        "Uma incrustação por arma; uma nova troca a antiga. Ela fica ao refinar e reforjar.")
+                .ligados("forja", "minerais", "armas_minerios").palavras("incrustacao engaste mineral jade ambar perola gelo sangue turfa").pronto();
+        t("nomeadas", OFICIOS, "Armas com nome e Trajes", Material.DIAMOND_CHESTPLATE)
+                .texto("Às vezes a peça forjada já nasce com nome, história e visual próprios (mais chance nas raridades altas). Também aparecem em baús e com chefes.",
+                        "Armaduras viram peças de um Traje, com textura própria no corpo. As armas com nome ficam em 3D na mão.",
+                        "Só muda a aparência: a força é a da raridade.")
+                .dica("Uma adaga só vira adaga com nome, um Montante só vira Montante com nome, e assim por diante.")
+                .ligados("forja", "arsenal", "guardaroupa").palavras("nomeada traje nome historia lendaria visual 3d").pronto();
         t("mitrilo", OFICIOS, "Mitrilo", Material.RAW_IRON)
                 .texto("Minério raro no fundo do mundo (picareta de diamante ou netherita). Funda e use na mesa de ferraria para melhorar netherita.")
                 .ligados("forja", "mapas").palavras("minerio raro lingote").pronto();
@@ -300,6 +339,20 @@ public final class Topicos {
                         "4 fases; farinha de osso adianta uma. Morango, mirtilo e uva rebrotam depois de colher.")
                 .dica("As sementes saem do mato quebrado na estação certa.")
                 .cmd("calendario").ligados("coletas", "fazenda", "cozinha").palavras("plantar semente morango mirtilo uva pimenta couve abobora nabo").pronto();
+        t("minerais", MUNDO, "Minerais dos biomas", Material.RAW_GOLD)
+                .texto("Cada bioma tem um mineral: Âmbar (deserto), Jade (selva), Pérola (ostras no mar), Cristal de Gelo (montanhas geladas), Pedra-Sangue (Nether) e Turfa (pântano).",
+                        "Servem para acessórios, para as armas dos minérios e para incrustar na Forja. Nos geodos há cristais para lapidar com o Cinzel; nos rios, a Bateia garimpa.")
+                .dica("Minerando perto de algo raro a pedra \"canta\". O Pêndulo do Rabdomante diz se está quente ou frio.")
+                .ligados("armas_minerios", "incrustar", "acessorios", "mitrilo").palavras("ambar jade perola ostra cristal gelo pedra sangue turfa geodo cinzel bateia").pronto();
+        t("vilas", MUNDO, "Vilas e moradores", Material.OAK_DOOR)
+                .texto("Quatro tipos de vila surgem em terra nunca visitada, cada uma com 4 moradores.",
+                        "Clique num morador: Laço (5 capítulos; no último, um presente único), Loja (muda todo dia, alguns compram coisas suas) e Serviço (o que só ele faz).",
+                        "Os moradores também jogam Duelo de Cartas.")
+                .ligados("estruturas", "duelo", "colonia").palavras("vila morador loja servico laco pescadores mosteiro anoes elfica").pronto();
+        t("vanilla", MUNDO, "Vanilla+ e artefatos", Material.OAK_SAPLING)
+                .texto("Detalhes com cara de jogo normal: mudas que se plantam sozinhas, folhas que soltam graveto, cabeças de monstro, placa que mostra o baú, peixes pulando e gelo fino.",
+                        "Artefatos de bancada: Garras de Escalada, Corda de Rapel, Pêndulo do Rabdomante, Cantil e Bolsa de Sementes.")
+                .ligados("minerais", "coletas").palavras("garras escalada corda rapel pendulo rabdomante cantil bolsa sementes muda graveto gelo").pronto();
         t("estruturas", MUNDO, "Estruturas", Material.MOSSY_STONE_BRICKS)
                 .texto("18 tipos: 16 em terras novas (torres, minas, fortins, oásis, faróis, vilas saqueadas...) e 2 no mar (naufrágios e cidades submersas).",
                         "Alguns têm guardas, outros têm moradores que negociam.")
@@ -386,11 +439,30 @@ public final class Topicos {
                 .texto("Vincule animais ou invoque criaturas no Altar do Domador. Eles obedecem ordens, ganham componentes e evoluem.")
                 .ritual(Material.HAY_BLOCK, "Fardo de feno", Material.LEAD, 1, Material.SADDLE, 1)
                 .cmd("pets").ligados("descanso").palavras("pet domar montaria altar domador").pronto();
+        t("estabulo", COMUNIDADE, "Estábulo", Material.SADDLE)
+                .texto("Guarda até 4 montarias: elas saem do mundo e voltam iguais (nome, linhagem, sela, armadura e componentes).",
+                        "Clique: guardar a montaria em que você está (ou a sua mais perto) e chamar as guardadas. Shift + clique numa guardada mostra a ficha dela.")
+                .ritual(Material.HAY_BLOCK, "Fardo de feno", Material.SADDLE, 1, Material.OAK_FENCE_GATE, 1)
+                .dica("Laço + sela no fardo de feno é o Altar do Domador; sela + porteira é o Estábulo.")
+                .ligados("linhagens", "companheiros").palavras("estabulo cavalo montaria guardar chamar").pronto();
+        t("linhagens", COMUNIDADE, "Cavalos e linhagens", Material.GOLDEN_CARROT)
+                .texto("Cavalos, burros, mulas, lhamas e camelos guardam pai, mãe, avós e geração. O filhote às vezes sai melhor que os pais.",
+                        "Na 5ª geração a família ganha um nome de linhagem. O Livro do Criador (livro + cenoura dourada + couro) mostra a ficha e a árvore da família.")
+                .dica("No Livro, as setas ↑ ↓ dizem se o filhote ficou melhor que o melhor dos pais.")
+                .ligados("estabulo", "companheiros", "criacao").palavras("linhagem livro criador cavalo cruzar arvore familia pai mae avo").pronto();
+        t("guardioes", COMUNIDADE, "Montarias lendárias (Guardiões)", Material.DRAGON_EGG)
+                .texto("Qilin, Fenghuang, Longma, Baihu e Xuanwu: cada um é único no servidor.",
+                        "No Altar do Domador, a Fusão Lendária junta dois companheiros no estágio III e itens raros num Ovo Lendário, que choca no lugar certo.")
+                .ligados("companheiros", "linhagens").palavras("lendaria guardiao qilin fenghuang longma baihu xuanwu ovo fusao").pronto();
 
         // ===================== Coleções =====================
         t("album", COLECOES, "Álbum de Cartas", Material.FILLED_MAP)
                 .texto("Monstros, chefes e peixes raros às vezes deixam uma carta. Página completa = bônus para sempre.")
                 .cmd("album").ligados("bestiario").palavras("carta brilhante").pronto();
+        t("duelo", COLECOES, "Duelo de Cartas", Material.ITEM_FRAME)
+                .texto("Jogo de cartas com as cartas do álbum: 3 trilhas, 20 de vida para cada lado e energia que cresce até 6.",
+                        "Jogue contra os moradores das vilas (cada um com seu baralho; vitória dá esmeraldas e pacotes) ou contra jogadores com /duelo.")
+                .cmd("duelo").ligados("album", "vilas").palavras("cartas duelo baralho trilha energia").pronto();
         t("bestiario", COLECOES, "Bestiário", Material.ZOMBIE_HEAD)
                 .texto("Os monstros que você derrotou. Marcos de abates dão mais dano contra aquele tipo.")
                 .cmd("bestiario").ligados("album", "perigo").palavras("monstros abates").pronto();

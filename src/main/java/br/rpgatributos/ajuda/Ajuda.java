@@ -72,14 +72,19 @@ public final class Ajuda implements Listener {
 
     private final RPGAtributos plugin;
     private final Jornada jornada;
+    private final Dicas dicas;
+    private final org.bukkit.NamespacedKey kNovidades;
     private final Set<UUID> comPacote = new HashSet<>();
 
     public Ajuda(RPGAtributos plugin) {
         this.plugin = plugin;
         this.jornada = new Jornada(plugin);
+        this.dicas = new Dicas(plugin);
+        this.kNovidades = new org.bukkit.NamespacedKey(plugin, "novidades_vistas");
     }
 
     public Jornada jornada() { return jornada; }
+    public Dicas dicas() { return dicas; }
 
     // =====================================================================
     //  Pacote de recursos e título com fundo
@@ -193,6 +198,15 @@ public final class Ajuda implements Listener {
                 Component.text(feitos + " de " + Jornada.PASSOS.size() + " passos", NamedTextColor.WHITE),
                 barra(feitos / (double) Jornada.PASSOS.size()),
                 Component.empty(), Component.text("» Clique: ver os passos", NamedTextColor.YELLOW))), s -> abrirJornada(p));
+        botao(t, 46, item(Material.SPYGLASS, Component.text("❓ O que é isso?", NamedTextColor.AQUA, TextDecoration.BOLD), List.of(
+                Component.text("Abre o Guia no assunto do item", NamedTextColor.GRAY),
+                Component.text("que está na sua mão.", NamedTextColor.GRAY),
+                Component.text("Também: /guia mão", NamedTextColor.DARK_GRAY),
+                Component.empty(), Component.text("» Clique com o item na mão", NamedTextColor.YELLOW))), s -> oQueE(p));
+        botao(t, 52, item(Material.FIREWORK_ROCKET, Component.text("✦ Novidades da " + versao(), COR, TextDecoration.BOLD), List.of(
+                Component.text("O que entrou na última versão,", NamedTextColor.GRAY),
+                Component.text("com o caminho para cada coisa.", NamedTextColor.GRAY),
+                Component.empty(), Component.text("» Clique: ver as novidades", NamedTextColor.YELLOW))), s -> abrirNovidades(p));
         botao(t, 47, item(Material.OAK_SIGN, Component.text("Placar lateral", NamedTextColor.WHITE, TextDecoration.BOLD),
                 List.of(Component.text("Liga ou desliga o placar do lado da tela.", NamedTextColor.GRAY))), s -> comando(p, "placar"));
         botao(t, S_MEIO, item(Material.KNOWLEDGE_BOOK, Component.text("Guia do Aventureiro", TextColor.color(0x6A1B9A), TextDecoration.BOLD), List.of(
@@ -349,6 +363,7 @@ public final class Ajuda implements Listener {
     /** A cada 3 s: a Jornada confere os passos de quem está online. */
     public void tick() {
         for (Player p : Bukkit.getOnlinePlayers()) jornada.verificar(p);
+        dicas.tick();
     }
 
     // =====================================================================
@@ -430,6 +445,20 @@ public final class Ajuda implements Listener {
             plugin.guia().dar(p);
             return;
         }
+        if (args.length == 1 && (args[0].equalsIgnoreCase("mao") || args[0].equalsIgnoreCase("mão") || args[0].equalsIgnoreCase("isso"))) {
+            oQueE(p);
+            return;
+        }
+        if (args.length == 1 && args[0].equalsIgnoreCase("dicas")) {
+            boolean ligadas = dicas.alternar(p);
+            p.sendMessage(Component.text(ligadas ? "💡 Dicas ligadas: elas aparecem quando você encontra algo novo."
+                    : "💡 Dicas desligadas. /guia dicas liga de novo.", COR));
+            return;
+        }
+        if (args.length == 1 && args[0].equalsIgnoreCase("novidades")) {
+            abrirNovidades(p);
+            return;
+        }
         String busca = String.join(" ", args);
         Topico exato = Topicos.porId(Topicos.normalizar(busca));
         if (exato != null) {
@@ -459,10 +488,104 @@ public final class Ajuda implements Listener {
     public List<String> completarGuia(String parcial) {
         List<String> l = new ArrayList<>();
         l.add("livro");
+        l.add("mao");
+        l.add("dicas");
+        l.add("novidades");
         for (Topico t : Topicos.todos()) l.add(t.id());
         String p = parcial.toLowerCase();
         l.removeIf(s -> !s.startsWith(p));
         return l;
+    }
+
+    // =====================================================================
+    //  O que é isso? (o item da mão)
+    // =====================================================================
+
+    /** Abre o assunto do Guia do item que está na mão (ou procura pelo nome dele). */
+    public void oQueE(Player p) {
+        ItemStack mao = p.getInventory().getItemInMainHand();
+        if (mao.isEmpty()) {
+            p.sendMessage(Component.text("❓ Segure um item na mão e use /guia mão (ou o botão no /rpg).", NamedTextColor.GRAY));
+            return;
+        }
+        Dicas.Dica d = Dicas.doItem(mao);
+        Topico tp = d == null ? null : Topicos.porId(d.topico());
+        if (tp == null) {
+            // Sem assunto direto: procura pelo nome do item no Guia.
+            String nome = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(mao.effectiveName());
+            List<Topico> achados = Topicos.buscar(nome);
+            if (achados.isEmpty()) achados = Topicos.buscar(nome.split(" ")[0]);
+            tp = achados.isEmpty() ? null : achados.getFirst();
+        }
+        if (tp == null) {
+            p.closeInventory();
+            p.sendMessage(Component.text("❓ Esse item não tem um assunto no Guia (é um item normal do jogo). Tente /guia <palavra>.", NamedTextColor.GRAY));
+            return;
+        }
+        abrirTopico(p, tp, null);
+    }
+
+    // =====================================================================
+    //  Novidades da versão
+    // =====================================================================
+
+    /** Uma novidade: ícone, nome, uma linha e o assunto do Guia. */
+    private record Novidade(Material icone, String nome, String texto, String topico) { }
+
+    private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.DIAMOND_SWORD, "Armas dos minérios",
+                    "Montante, Bumerangue, Leques, Arpão, Mangual, Garras e Clava, feitos com os minerais do mundo.", "armas_minerios"),
+            new Novidade(Material.GOLDEN_SWORD, "Arsenal forjado",
+                    "Adaga, foice, bastão e as outras saem forjadas da Forja, com desenho por material.", "arsenal"),
+            new Novidade(Material.EMERALD, "Incrustar minério",
+                    "Arma na mão, mineral na outra e clique na Forja: vida, sorte, lentidão, roubo de vida...", "incrustar"),
+            new Novidade(Material.DIAMOND_CHESTPLATE, "19 armas com nome novas",
+                    "Para o arsenal e as armas dos minérios, em 3D na mão.", "nomeadas"),
+            new Novidade(Material.SADDLE, "Estábulo novo",
+                    "Agora é sela + porteira no fardo de feno (laço + sela continua sendo o Altar).", "estabulo"),
+            new Novidade(Material.GOLDEN_CARROT, "Árvore da família",
+                    "Pais e avós no Livro do Criador e no Estábulo, com setas de melhora.", "linhagens"),
+            new Novidade(Material.HAY_BLOCK, "Boneco compara as armas",
+                    "Clique no fardo: dano por segundo, média e melhores combos de cada arma.", "boneco"),
+            new Novidade(Material.SPYGLASS, "Guia mais esperto",
+                    "Dicas quando você encontra algo novo (/guia dicas desliga) e \"O que é isso?\" com /guia mão.", "combos"));
+
+    private String versao() {
+        return plugin.getPluginMeta().getVersion();
+    }
+
+    public void abrirNovidades(Player p) {
+        Tela t = nova(p, Fundo.CATEGORIA, "Novidades da " + versao());
+        t.voltar = () -> abrirRpg(p);
+        botao(t, S_PERFIL, item(Material.FIREWORK_ROCKET, Component.text("✦ Novidades da " + versao(), COR, TextDecoration.BOLD), List.of(
+                Component.text("Clique numa novidade para ver", NamedTextColor.GRAY),
+                Component.text("como funciona no Guia.", NamedTextColor.GRAY))), null);
+        for (int i = 0; i < NOVIDADES.size() && i < S_LISTA.length; i++) {
+            Novidade n = NOVIDADES.get(i);
+            List<Component> lore = new ArrayList<>();
+            for (String l : quebrar(n.texto(), 34)) lore.add(Component.text(l, NamedTextColor.GRAY));
+            lore.add(Component.empty());
+            lore.add(Component.text("» Clique: como funciona", NamedTextColor.YELLOW));
+            Topico tp = Topicos.porId(n.topico());
+            botao(t, S_LISTA[i], item(n.icone(), Component.text(n.nome(), COR, TextDecoration.BOLD), lore),
+                    s -> { if (tp != null) abrirTopico(p, tp, () -> abrirNovidades(p)); });
+        }
+        p.getPersistentDataContainer().set(kNovidades, org.bukkit.persistence.PersistentDataType.STRING, versao());
+        botoesBase(p, t);
+        mostrar(p, t);
+    }
+
+    /** Na entrada: se tem versão nova que o jogador ainda não viu, um aviso clicável. */
+    @EventHandler
+    public void aoEntrar(org.bukkit.event.player.PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        if (versao().equals(p.getPersistentDataContainer().get(kNovidades, org.bukkit.persistence.PersistentDataType.STRING))) return;
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline()) return;
+            p.sendMessage(Component.text("✦ O servidor foi atualizado para a " + versao() + "! ", COR, TextDecoration.BOLD)
+                    .append(Component.text("[ver as novidades]", NamedTextColor.YELLOW).decoration(TextDecoration.BOLD, false)
+                            .clickEvent(ClickEvent.runCommand("/guia novidades"))));
+        }, 100L);
     }
 
     // =====================================================================
