@@ -379,9 +379,11 @@ public final class Comandos implements TabExecutor {
             case "artefato" -> { adminArtefato(sender, args); return; }
             case "arma" -> {
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
-                ItemStack arma = args.length >= 2 ? br.rpgatributos.combo.Arsenal.admin(args[1], args.length >= 3 ? args[2] : null) : null;
-                if (arma == null) { erro(sender, "Use: /rpgadmin arma <adaga|faca_arremesso|machadinha|foice|bastao|chicote> [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]"); return; }
-                if (args.length >= 4 && args[3].equalsIgnoreCase("forjar")) arma = plugin.forja().forjar(p, arma, null);
+                boolean forjar = args.length >= 3 && args[args.length - 1].equalsIgnoreCase("forjar");
+                String material = args.length >= 3 && !args[2].equalsIgnoreCase("forjar") ? args[2] : null;
+                ItemStack arma = args.length >= 2 ? br.rpgatributos.combo.Arsenal.admin(args[1], material) : null;
+                if (arma == null) { erro(sender, "Use: /rpgadmin arma <adaga|faca_arremesso|machadinha|foice|bastao|chicote|montante|bumerangue|leques|arpao|mangual|garras|clava> [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]"); return; }
+                if (forjar) arma = plugin.forja().forjar(p, arma, null);
                 entregar(p, arma);
                 return;
             }

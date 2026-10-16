@@ -129,7 +129,7 @@ public enum Titulo {
     // ---------- 2.51: o arsenal novo ----------
     SOMBRA_DAS_LAMINAS("Sombra das Lâminas", 0xB0BEC5, Requisito.contador("proficiencia_duplas", 20, "Proficiência 20 com as Lâminas Duplas"), Bonus.velocidade(0.03)),
     CEIFADOR("Ceifador", 0x7E57C2, Requisito.contador("proficiencia_foice", 20, "Proficiência 20 com a foice"), Bonus.vida(2)),
-    MESTRE_DO_ARSENAL("Mestre do Arsenal", 0xFFD54F, Requisito.contador("armas_mestradas", 12, "Proficiência 20 em todas as 12 armas"), new Bonus().comDano(3).comVida(6)),
+    MESTRE_DO_ARSENAL("Mestre do Arsenal", 0xFFD54F, Requisito.contador("armas_mestradas", 12, "Proficiência 20 em 12 armas"), new Bonus().comDano(3).comVida(6)),
     RENASCIDO("Renascido", 0xFFD54F, Requisito.contador("renascimentos", 1, "Renascer uma vez"), new Bonus().comVida(2).comDano(1)),
     ETERNO("Eterno", 0xFFF59D, Requisito.contador("renascimentos", 5, "Renascer 5 vezes"), new Bonus().comDano(2).comVida(6).comVelocidade(0.05)),
 

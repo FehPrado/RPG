@@ -208,7 +208,9 @@ public final class Posturas implements Listener, CommandExecutor {
             case TRIDENTE -> naChuvaOuAgua(p) ? 1.30 : 1;
             case MACA -> 1.10;
             case ARCO -> System.currentTimeMillis() - ultimoPasso.getOrDefault(p.getUniqueId(), 0L) >= 1000 ? 1.35 : 1;
-            case ADAGA, FOICE, CHICOTE -> 1.10;
+            case ADAGA, FOICE, CHICOTE, LEQUES, MANGUAL, GARRAS, CLAVA -> 1.10;
+            case MONTANTE -> 1.20;
+            case BUMERANGUE, ARPAO -> 1;
             case DUPLAS -> 1.05;
             case ARREMESSO, BASTAO -> 1;
             case null -> 1;
@@ -267,6 +269,7 @@ public final class Posturas implements Listener, CommandExecutor {
         TipoArma t = arma(p);
         if (t == TipoArma.TRIDENTE) return naChuvaOuAgua(p) ? 0.20 : 0;
         if (t == TipoArma.ADAGA) return 0.10;
+        if (t == TipoArma.LEQUES) return 0.15;
         return t == TipoArma.MACA ? -0.05 : 0;
     }
 

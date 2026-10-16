@@ -24,7 +24,15 @@ public enum TipoArma {
     ARREMESSO("Arremesso", "➶", 0xA1887F, Material.FLINT, 'E'),
     FOICE("Foice", "☾", 0x7E57C2, Material.IRON_HOE, 'D'),
     BASTAO("Bastão", "‖", 0x8D6E63, Material.STICK, 'D'),
-    CHICOTE("Chicote", "∿", 0xD4A373, Material.LEAD, 'D');
+    CHICOTE("Chicote", "∿", 0xD4A373, Material.LEAD, 'D'),
+    // Armas dos minérios (ajustes da 2.51): cada uma feita com um mineral do mundo
+    MONTANTE("Montante", "⚔", 0x7FCFE0, Material.DIAMOND_SWORD, 'D'),
+    BUMERANGUE("Bumerangue", "↺", 0xF2A33A, Material.RAW_GOLD, 'E'),
+    LEQUES("Leques de Guerra", "❀", 0x4CAF7D, Material.RAW_COPPER, 'D'),
+    ARPAO("Arpão", "⥅", 0xF3E9F0, Material.QUARTZ, 'E'),
+    MANGUAL("Mangual", "❄", 0xA8E4FF, Material.PRISMARINE_CRYSTALS, 'D'),
+    GARRAS("Garras", "♠", 0xB0102A, Material.NETHER_BRICK, 'D'),
+    CLAVA("Clava Fumegante", "♨", 0xFF6F00, Material.COAL, 'D');
 
     private final String nome, simbolo;
     private final TextColor cor;

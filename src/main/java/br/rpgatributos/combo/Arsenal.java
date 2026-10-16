@@ -80,13 +80,35 @@ public final class Arsenal implements Listener {
         BASTAO("bastao", "Bastão", TipoArma.BASTAO, -1, 1.5, 1.0, 1.0,
                 "Mais alcance e empurrão. Bom para segurar a linha."),
         CHICOTE("chicote", "Chicote", TipoArma.CHICOTE, -2, 1.3, 3.0, 0,
-                "Alcança 3 blocos mais longe que as outras armas.");
+                "Alcança 3 blocos mais longe que as outras armas."),
+        // ---------- armas dos minérios: uma receita só, com o mineral (nome e base fixos) ----------
+        MONTANTE("montante", "Montante de Mitrilo", TipoArma.MONTANTE, 4, 0.8, 0.5, 0.8,
+                "Duas mãos: pesado e com varredura. Com algo na outra mão, -40% de dano.", Material.DIAMOND_SWORD),
+        BUMERANGUE("bumerangue", "Bumerangue de Âmbar", TipoArma.BUMERANGUE, -2, 1.6, 0, 0,
+                "Clique direito arremessa: ele vai, volta e acerta nas duas vezes.", Material.IRON_SWORD),
+        LEQUES("leques", "Leques de Guerra de Jade", TipoArma.LEQUES, -1, 2.0, 0.5, 0.5,
+                "Rápidos. Às vezes uma rajada de vento empurra quem está em volta.", Material.IRON_SWORD),
+        ARPAO("arpao", "Arpão de Pérola", TipoArma.ARPAO, 0, 1.1, 1.0, 0,
+                "Clique direito arpoa: puxa o alvo até você (ou você até o bloco). Na água, dano x1,5.", Material.IRON_SWORD),
+        MANGUAL("mangual", "Mangual de Gelo", TipoArma.MANGUAL, 2, 0.9, 0.5, 0.3,
+                "Cada golpe deixa o inimigo lento; às vezes congela.", Material.IRON_SWORD),
+        GARRAS("garras", "Garras de Pedra-Sangue", TipoArma.GARRAS, -2, 2.6, 0, 0,
+                "Muito rápidas. Cada golpe rouba 10% do dano em vida.", Material.IRON_SWORD),
+        CLAVA("clava", "Clava Fumegante", TipoArma.CLAVA, 2, 0.9, 0, 0.6,
+                "Com Turfa no inventário, os golpes queimam (1 Turfa a cada 8 queimas).", Material.STONE_SWORD);
 
         public final String id, nome, descricao;
         private final TipoArma tipo;
         final double dano, velocidade, alcance, empurrao;
+        /** Armas dos minérios: a espada de base é fixa (null = uma receita por material, como a adaga). */
+        public final Material base;
 
         Arma(String id, String nome, TipoArma tipo, double dano, double velocidade, double alcance, double empurrao, String descricao) {
+            this(id, nome, tipo, dano, velocidade, alcance, empurrao, descricao, null);
+        }
+
+        Arma(String id, String nome, TipoArma tipo, double dano, double velocidade, double alcance, double empurrao, String descricao, Material base) {
+            this.base = base;
             this.id = id;
             this.nome = nome;
             this.tipo = tipo;
@@ -100,6 +122,8 @@ public final class Arsenal implements Listener {
         public TipoArma tipo() { return tipo; }
         public String visual() { return "arma_" + id; }
         public boolean arremesso() { return tipo == TipoArma.ARREMESSO; }
+        /** Feita com um mineral (Montante, Bumerangue, Leques, Arpão, Mangual, Garras, Clava). */
+        public boolean deMinerio() { return base != null; }
 
         public static Arma porId(String s) {
             for (Arma a : values()) if (a.id.equalsIgnoreCase(s) || a.name().equalsIgnoreCase(s)) return a;
@@ -126,6 +150,7 @@ public final class Arsenal implements Listener {
 
     /** A receita da arma no material dessa espada (null se não houver). */
     public static org.bukkit.inventory.Recipe receita(Arma a, Material espada) {
+        if (a.deMinerio()) return Bukkit.getRecipe(new NamespacedKey("rpgatributos", a.id));
         String tier = espada.name().toLowerCase(Locale.ROOT).replace("_sword", "");
         return Bukkit.getRecipe(new NamespacedKey("rpgatributos", a.id + "_" + tier));
     }
@@ -173,6 +198,7 @@ public final class Arsenal implements Listener {
     }
 
     public static String nome(Arma a, Material m) {
+        if (a.deMinerio()) return a.nome;
         String mat = material(m);
         return mat.isEmpty() ? a.nome : a.nome + " de " + mat;
     }
@@ -245,6 +271,7 @@ public final class Arsenal implements Listener {
             if (espada == null) continue;
             String tier = en.getKey().toLowerCase(Locale.ROOT).replace("_sword", "");
             for (Arma a : Arma.values()) {
+                if (a.deMinerio()) continue;
                 ShapedRecipe r = new ShapedRecipe(new NamespacedKey(plugin, a.id + "_" + tier), criar(a, espada));
                 switch (a) {
                     case ADAGA -> r.shape(" M", "S ");
@@ -260,6 +287,61 @@ public final class Arsenal implements Listener {
                 if (a == Arma.CHICOTE) r.setIngredient('L', Material.LEATHER);
                 Bukkit.addRecipe(r);
             }
+        }
+        receitasDeMinerio();
+    }
+
+    /** As armas dos minérios: uma receita cada, com o mineral (o item do plugin, igualzinho). */
+    private void receitasDeMinerio() {
+        RecipeChoice sticks = new RecipeChoice.MaterialChoice(Material.STICK);
+        for (Arma a : Arma.values()) {
+            if (!a.deMinerio()) continue;
+            ShapedRecipe r = new ShapedRecipe(new NamespacedKey(plugin, a.id), criar(a, a.base));
+            switch (a) {
+                case MONTANTE -> {
+                    r.shape(" M ", " M ", "DSD");
+                    r.setIngredient('M', new RecipeChoice.ExactChoice(br.rpgatributos.exploracao.Mitrilo.lingote(1)));
+                    r.setIngredient('D', Material.DIAMOND);
+                    r.setIngredient('S', sticks);
+                }
+                case BUMERANGUE -> {
+                    r.shape("PA", " P");
+                    r.setIngredient('A', new RecipeChoice.ExactChoice(br.rpgatributos.aventura.Raro.AMBAR.criar(1)));
+                    r.setIngredient('P', new RecipeChoice.MaterialChoice(Tag.PLANKS));
+                }
+                case LEQUES -> {
+                    r.shape("JPJ", " S ");
+                    r.setIngredient('J', new RecipeChoice.ExactChoice(br.rpgatributos.aventura.Raro.JADE.criar(1)));
+                    r.setIngredient('P', Material.PAPER);
+                    r.setIngredient('S', sticks);
+                }
+                case ARPAO -> {
+                    r.shape("  P", " I ", "S  ");
+                    r.setIngredient('P', new RecipeChoice.ExactChoice(br.rpgatributos.aventura.Raro.PEROLA.criar(1)));
+                    r.setIngredient('I', Material.IRON_INGOT);
+                    r.setIngredient('S', sticks);
+                }
+                case MANGUAL -> {
+                    r.shape("  C", " N ", "S  ");
+                    r.setIngredient('C', new RecipeChoice.ExactChoice(br.rpgatributos.aventura.Raro.CRISTAL_DE_GELO.criar(1)));
+                    Material corrente = Material.matchMaterial("IRON_CHAIN");
+                    r.setIngredient('N', corrente != null ? corrente : Material.matchMaterial("CHAIN"));
+                    r.setIngredient('S', sticks);
+                }
+                case GARRAS -> {
+                    r.shape("B B", "III");
+                    r.setIngredient('B', new RecipeChoice.ExactChoice(br.rpgatributos.aventura.Raro.PEDRA_SANGUE.criar(1)));
+                    r.setIngredient('I', Material.IRON_INGOT);
+                }
+                case CLAVA -> {
+                    r.shape(" T ", " L ", " S ");
+                    r.setIngredient('T', new RecipeChoice.ExactChoice(br.rpgatributos.exploracao.Mineracao.turfa(1)));
+                    r.setIngredient('L', new RecipeChoice.MaterialChoice(Tag.LOGS));
+                    r.setIngredient('S', sticks);
+                }
+                default -> { continue; }
+            }
+            Bukkit.addRecipe(r);
         }
     }
 
@@ -285,11 +367,18 @@ public final class Arsenal implements Listener {
         if (e.getHand() != EquipmentSlot.HAND || (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK)) return;
         ItemStack mao = e.getItem();
         Arma a = de(mao);
-        if (a == null || !a.arremesso()) return;
+        if (a == null || !(a.arremesso() || a == Arma.BUMERANGUE || a == Arma.ARPAO)) return;
         Player p = e.getPlayer();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock() != null
                 && (e.getClickedBlock().getType().isInteractable() || plugin.ehEstacao(e.getClickedBlock()))) return;
         if (plugin.combos().emSequencia(p)) return; // o clique faz parte de um combo
+        if (a == Arma.BUMERANGUE || a == Arma.ARPAO) {
+            // Bumerangue e arpão não saem da mão: o que voa é a imagem deles (e voltam sozinhos).
+            e.setCancelled(true);
+            if (a == Arma.BUMERANGUE) lancarBumerangue(p, mao);
+            else arpoar(p, mao);
+            return;
+        }
         long agora = System.currentTimeMillis();
         if (agora - esperaArremesso.getOrDefault(p.getUniqueId(), 0L) < 600) return;
         esperaArremesso.put(p.getUniqueId(), agora);
@@ -399,6 +488,7 @@ public final class Arsenal implements Listener {
         if (!(e.getDamager() instanceof Player p) || e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
                 || !(e.getEntity() instanceof LivingEntity alvo)) return;
         TipoArma t = TipoArma.de(p);
+        aoBaterMinerio(e, p, alvo, t);
         if (t == TipoArma.ADAGA || t == TipoArma.DUPLAS) {
             Vector olhar = alvo.getLocation().getDirection().setY(0), deMim = p.getLocation().toVector().subtract(alvo.getLocation().toVector()).setY(0);
             if (olhar.lengthSquared() > 1e-4 && deMim.lengthSquared() > 1e-4 && olhar.normalize().dot(deMim.normalize()) < -0.4) {
@@ -430,6 +520,225 @@ public final class Arsenal implements Listener {
         }
     }
 
+    // =====================================================================
+    //  Armas dos minérios
+    // =====================================================================
+
+    /** Golpes de varredura do Montante em andamento (o dano da varredura não varre de novo). */
+    private final Set<UUID> varrendo = new HashSet<>();
+    /** Bumerangue ou arpão no ar (um de cada vez). */
+    private final Set<UUID> noAr = new HashSet<>();
+    /** Queimas da Clava desde a última Turfa gasta. */
+    private final Map<UUID, Integer> queimas = new HashMap<>();
+
+    private void aoBaterMinerio(EntityDamageByEntityEvent e, Player p, LivingEntity alvo, TipoArma t) {
+        if (t == null) return;
+        switch (t) {
+            case MONTANTE -> {
+                if (varrendo.contains(p.getUniqueId())) return;
+                ItemStack outra = p.getInventory().getItemInOffHand();
+                if (!outra.getType().isAir()) {
+                    e.setDamage(e.getDamage() * 0.6);
+                    if (java.util.concurrent.ThreadLocalRandom.current().nextDouble() < 0.2) {
+                        p.sendActionBar(Component.text("⚔ O Montante pede as duas mãos (-40% de dano).", NamedTextColor.GRAY));
+                    }
+                    return;
+                }
+                double parte = e.getDamage() * (mestra(p, TipoArma.MONTANTE, 2) > 1 ? 0.7 : 0.4);
+                varrendo.add(p.getUniqueId());
+                try {
+                    for (org.bukkit.entity.Entity o : alvo.getNearbyEntities(2.5, 1.5, 2.5)) {
+                        if (o instanceof LivingEntity le && le != p && plugin.alvos().inimigo(p, le)) plugin.alvos().ferir(p, le, parte);
+                    }
+                } finally {
+                    varrendo.remove(p.getUniqueId());
+                }
+                alvo.getWorld().spawnParticle(Particle.SWEEP_ATTACK, alvo.getLocation().add(0, 1, 0), 3, 0.8, 0.2, 0.8, 0);
+            }
+            case LEQUES -> {
+                boolean mestre = mestra(p, TipoArma.LEQUES, 2) > 1;
+                if (!mestre && java.util.concurrent.ThreadLocalRandom.current().nextDouble() >= 0.2) return;
+                for (org.bukkit.entity.Entity o : p.getNearbyEntities(3, 2, 3)) {
+                    if (!(o instanceof LivingEntity le) || le == alvo || !plugin.alvos().inimigo(p, le)) continue;
+                    Vector v = le.getLocation().toVector().subtract(p.getLocation().toVector()).setY(0);
+                    if (v.lengthSquared() > 1e-4) le.setVelocity(v.normalize().multiply(0.9).setY(0.3));
+                }
+                p.getWorld().spawnParticle(Particle.GUST, p.getLocation().add(0, 1, 0), 2, 0.6, 0.2, 0.6, 0);
+                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BREEZE_WIND_BURST, 0.5f, 1.5f);
+            }
+            case MANGUAL -> {
+                boolean mestre = mestra(p, TipoArma.MANGUAL, 2) > 1;
+                alvo.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 50, mestre ? 2 : 0, false, true, true));
+                if (java.util.concurrent.ThreadLocalRandom.current().nextDouble() < 0.1) {
+                    alvo.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 25, 5, false, true, true));
+                    alvo.setFreezeTicks(Math.max(alvo.getFreezeTicks(), 100));
+                    alvo.getWorld().spawnParticle(Particle.SNOWFLAKE, alvo.getLocation().add(0, 1, 0), 20, 0.3, 0.5, 0.3, 0.02);
+                    alvo.getWorld().playSound(alvo.getLocation(), Sound.BLOCK_GLASS_BREAK, 0.8f, 1.6f);
+                }
+            }
+            case GARRAS -> {
+                double cura = e.getDamage() * (mestra(p, TipoArma.GARRAS, 2) > 1 ? 0.2 : 0.1);
+                var max = p.getAttribute(Attribute.MAX_HEALTH);
+                if (max != null) p.setHealth(Math.min(max.getValue(), p.getHealth() + cura));
+                alvo.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, alvo.getLocation().add(0, 1, 0), 3, 0.2, 0.3, 0.2, 0.05);
+            }
+            case CLAVA -> {
+                boolean mestre = mestra(p, TipoArma.CLAVA, 2) > 1;
+                if (!mestre && !temTurfa(p)) return;
+                alvo.setFireTicks(Math.max(alvo.getFireTicks(), 60));
+                alvo.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, alvo.getLocation().add(0, 1, 0), 3, 0.2, 0.3, 0.2, 0.01);
+                if (mestre) return;
+                int n = queimas.merge(p.getUniqueId(), 1, Integer::sum);
+                if (n >= 8) {
+                    queimas.remove(p.getUniqueId());
+                    gastarTurfa(p);
+                }
+            }
+            default -> { }
+        }
+    }
+
+    private static boolean ehTurfa(ItemStack i) {
+        return i != null && !i.isEmpty() && i.getPersistentDataContainer().has(br.rpgatributos.exploracao.Mineracao.K_TURFA);
+    }
+
+    private static boolean temTurfa(Player p) {
+        for (ItemStack i : p.getInventory().getContents()) if (ehTurfa(i)) return true;
+        return false;
+    }
+
+    private static void gastarTurfa(Player p) {
+        for (ItemStack i : p.getInventory().getContents()) {
+            if (!ehTurfa(i)) continue;
+            i.setAmount(i.getAmount() - 1);
+            if (!temTurfa(p)) p.sendActionBar(Component.text("♨ A Clava apagou: acabou a Turfa.", NamedTextColor.GRAY));
+            return;
+        }
+    }
+
+    /** O bumerangue vai até 11 blocos (ou até bater) e volta para a mão, acertando na ida e na volta. */
+    private void lancarBumerangue(Player p, ItemStack item) {
+        if (!noAr.add(p.getUniqueId())) return;
+        double dano = danoDoItem(item) * mestra(p, TipoArma.BUMERANGUE, 1.3);
+        boolean mestre = mestra(p, TipoArma.BUMERANGUE, 2) > 1;
+        org.bukkit.World w = p.getWorld();
+        org.bukkit.Location pos = p.getEyeLocation().subtract(0, 0.3, 0);
+        Vector dir = p.getEyeLocation().getDirection().normalize();
+        ItemStack visual = item.asOne();
+        org.bukkit.entity.ItemDisplay d = w.spawn(pos, org.bukkit.entity.ItemDisplay.class, x -> {
+            x.setItemStack(visual);
+            x.setPersistent(false);
+            x.setTeleportDuration(1);
+        });
+        Set<UUID> ida = new HashSet<>(), volta = new HashSet<>();
+        int[] t = {0};
+        boolean[] voltando = {false};
+        org.bukkit.scheduler.BukkitTask[] ref = new org.bukkit.scheduler.BukkitTask[1];
+        Runnable fim = () -> {
+            ref[0].cancel();
+            if (d.isValid()) d.remove();
+            noAr.remove(p.getUniqueId());
+        };
+        w.playSound(p.getLocation(), Sound.ITEM_TRIDENT_THROW, 0.8f, 1.6f);
+        ref[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            t[0]++;
+            if (!p.isOnline() || !d.isValid() || t[0] > 70 || !p.getWorld().equals(w)) {
+                fim.run();
+                return;
+            }
+            if (t[0] > 10) voltando[0] = true;
+            Vector passo;
+            if (!voltando[0]) {
+                passo = dir.clone().multiply(1.1);
+                if (!pos.clone().add(passo).getBlock().isPassable()) {
+                    voltando[0] = true;
+                    return;
+                }
+            } else {
+                Vector para = p.getEyeLocation().subtract(0, 0.3, 0).toVector().subtract(pos.toVector());
+                if (para.lengthSquared() < 1.5) {
+                    fim.run();
+                    w.playSound(p.getLocation(), Sound.ITEM_TRIDENT_RETURN, 0.8f, 1.5f);
+                    return;
+                }
+                passo = para.normalize().multiply(1.3);
+            }
+            pos.add(passo);
+            d.teleport(pos);
+            d.setTransformation(new org.bukkit.util.Transformation(new org.joml.Vector3f(), new org.joml.AxisAngle4f(t[0] * 0.9f, 0, 1, 0),
+                    new org.joml.Vector3f(0.8f), new org.joml.AxisAngle4f()));
+            for (org.bukkit.entity.Entity o : w.getNearbyEntities(pos, 1.2, 1.2, 1.2)) {
+                if (!(o instanceof LivingEntity le) || !plugin.alvos().inimigo(p, le)) continue;
+                if (!(voltando[0] ? volta : ida).add(le.getUniqueId())) continue;
+                plugin.alvos().ferir(p, le, voltando[0] && mestre ? dano * 2 : dano);
+                w.spawnParticle(Particle.CRIT, le.getLocation().add(0, 1, 0), 8, 0.2, 0.4, 0.2, 0.1);
+                w.playSound(le.getLocation(), Sound.ITEM_TRIDENT_HIT, 0.8f, 1.4f);
+                plugin.combos().darXp(p, TipoArma.BUMERANGUE, plugin.settings().comXpAcerto);
+            }
+            if (t[0] % 4 == 0) w.playSound(pos, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.4f, 1.8f);
+        }, 1L, 1L);
+    }
+
+    /** O arpão voa até 18 blocos: acertando alguém, puxa até você; acertando um bloco, puxa você até ele. */
+    private void arpoar(Player p, ItemStack item) {
+        if (!noAr.add(p.getUniqueId())) return;
+        boolean mestre = mestra(p, TipoArma.ARPAO, 2) > 1;
+        double dano = danoDoItem(item) * mestra(p, TipoArma.ARPAO, 1.3) * (p.isInWater() ? 1.5 : 1);
+        org.bukkit.World w = p.getWorld();
+        org.bukkit.Location pos = p.getEyeLocation().subtract(0, 0.2, 0);
+        Vector passo = p.getEyeLocation().getDirection().normalize().multiply(1.6);
+        ItemStack visual = item.asOne();
+        org.bukkit.entity.ItemDisplay d = w.spawn(pos, org.bukkit.entity.ItemDisplay.class, x -> {
+            x.setItemStack(visual);
+            x.setPersistent(false);
+            x.setTeleportDuration(1);
+        });
+        int[] t = {0};
+        org.bukkit.scheduler.BukkitTask[] ref = new org.bukkit.scheduler.BukkitTask[1];
+        Runnable fim = () -> {
+            ref[0].cancel();
+            if (d.isValid()) d.remove();
+            noAr.remove(p.getUniqueId());
+        };
+        w.playSound(p.getLocation(), Sound.ITEM_TRIDENT_THROW, 1f, 0.9f);
+        ref[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            t[0]++;
+            if (!p.isOnline() || !d.isValid() || t[0] > 12 || !p.getWorld().equals(w)) {
+                fim.run();
+                return;
+            }
+            org.bukkit.Location prox = pos.clone().add(passo);
+            // A corda: partículas do jogador até a ponta.
+            Vector corda = pos.toVector().subtract(p.getEyeLocation().toVector());
+            for (double s2 = 0; s2 < corda.length(); s2 += 0.8) {
+                w.spawnParticle(Particle.CRIT, p.getEyeLocation().add(corda.clone().normalize().multiply(s2)), 1, 0, 0, 0, 0);
+            }
+            if (!prox.getBlock().isPassable()) {
+                // Bateu num bloco: puxa o jogador até lá.
+                Vector v = pos.toVector().subtract(p.getLocation().toVector());
+                p.setVelocity(v.multiply(0.16 * (mestre ? 1.4 : 1)).setY(Math.max(0.4, v.getY() * 0.18 + 0.4)));
+                w.playSound(pos, Sound.ITEM_TRIDENT_HIT_GROUND, 1f, 1f);
+                fim.run();
+                return;
+            }
+            pos.add(passo);
+            d.teleport(pos);
+            for (org.bukkit.entity.Entity o : w.getNearbyEntities(pos, 1.1, 1.1, 1.1)) {
+                if (!(o instanceof LivingEntity le) || !plugin.alvos().inimigo(p, le)) continue;
+                plugin.alvos().ferir(p, le, dano);
+                if (!br.rpgatributos.aventura.Chefes.ehChefe(le)) {
+                    Vector v = p.getLocation().toVector().subtract(le.getLocation().toVector());
+                    if (v.lengthSquared() > 1) le.setVelocity(v.normalize().multiply(mestre ? 2.2 : 1.3).setY(0.4));
+                }
+                w.spawnParticle(Particle.SPLASH, le.getLocation().add(0, 1, 0), 20, 0.3, 0.4, 0.3, 0.1);
+                w.playSound(le.getLocation(), Sound.ITEM_TRIDENT_HIT, 1f, 0.9f);
+                plugin.combos().darXp(p, TipoArma.ARPAO, plugin.settings().comXpAcerto);
+                fim.run();
+                return;
+            }
+        }, 1L, 1L);
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void aoCeifar(EntityDeathEvent e) {
         Player p = e.getEntity().getKiller();
@@ -445,6 +754,8 @@ public final class Arsenal implements Listener {
     public static ItemStack admin(String id, String material) {
         Arma a = Arma.porId(id);
         Material m = material == null ? Material.IRON_SWORD : Material.matchMaterial(material.toUpperCase(Locale.ROOT) + "_SWORD");
-        return a == null ? null : criar(a, m == null ? Material.IRON_SWORD : m);
+        if (a == null) return null;
+        if (a.deMinerio()) return criar(a, a.base);
+        return criar(a, m == null ? Material.IRON_SWORD : m);
     }
 }

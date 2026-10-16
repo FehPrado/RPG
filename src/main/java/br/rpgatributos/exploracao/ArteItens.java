@@ -1640,6 +1640,132 @@ final class ArteItens {
             ".....oooooo.....",
             "................"};
 
+    private static final String[] ARMA_MONTANTE = {
+            ".............kka",
+            "............kaak",
+            "...........kaabk",
+            "..........kaabk.",
+            ".........kaabk..",
+            "........kaabk...",
+            ".......kaabk....",
+            "......kaabk.....",
+            ".....kaabk......",
+            ".k..kaabk.......",
+            "kgkkaabk........",
+            ".kgkabk.........",
+            "..kxkk..........",
+            ".khhgk..........",
+            "khhkkgk.........",
+            "xhk..k.........."};
+
+    private static final String[] ARMA_BUMERANGUE = {
+            "................",
+            "................",
+            "...kk.........k.",
+            "..kygk.......kyk",
+            "...kxgk.....kxgk",
+            "....khgk...khgk.",
+            ".....khgk.khgk..",
+            "......khgkhgk...",
+            ".......kgxgk....",
+            ".......khhk.....",
+            "........kk......",
+            "................",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] ARMA_LEQUES = {
+            "..kkkk..........",
+            ".kyyyykk........",
+            ".khxxyyykk......",
+            ".khxxxhxyyk.....",
+            ".khxxxhxxyyk....",
+            ".khxxhxxxxhyk...",
+            ".khxxhxxxhxyyk..",
+            ".khxxxxxhxxxyk..",
+            ".khxhxxhxxxxxyk.",
+            ".khxxxhxxxxhhyk.",
+            ".khxxhxxxhhxxyyk",
+            "..kkhxxhxxxxxxyk",
+            ".khkkxxxxxxxxxyk",
+            ".kahkhhhhhhhhhyk",
+            "kakk.kkkkkkkkkk.",
+            "ak.............."};
+
+    private static final String[] ARMA_ARPAO = {
+            "...........kkkaa",
+            "..........kaaabk",
+            "...........kabk.",
+            "..........kabkak",
+            ".........kxxkkak",
+            ".........khxk.k.",
+            "........khgk....",
+            ".......khgk.....",
+            "......khgk......",
+            ".....khgk.......",
+            "....khgk........",
+            "...khgk.........",
+            "..krgkrk........",
+            ".khgrrk.........",
+            "khgkkk..........",
+            "hgk............."};
+
+    private static final String[] ARMA_MANGUAL = {
+            "..........kak...",
+            "..........kyxk..",
+            "........kkyaxykk",
+            ".......kayxxyxxa",
+            "........kxxyxxyk",
+            ".........kyxxyk.",
+            ".........kbxyk..",
+            ".......kkbkkak..",
+            "......kbbk..k...",
+            ".....kbkk.......",
+            "....kbk.........",
+            "...khk..........",
+            "..khgk..........",
+            ".khgk...........",
+            "khgk............",
+            "bkk............."};
+
+    private static final String[] ARMA_GARRAS = {
+            "................",
+            "................",
+            "............k...",
+            "...........kak..",
+            "..........kak...",
+            "..........kbk.k.",
+            ".........kbk.kak",
+            "........kabkkak.",
+            "..kkkkkkkbkaabk.",
+            ".kggggggabakbkkk",
+            ".khhhhhhbabbkkaa",
+            ".khhxxhhabkkaakk",
+            ".khhxxhhbkaakbbk",
+            ".khhhhhhaabbbkk.",
+            "..kkkkkkbbkkk...",
+            "........kk......"};
+
+    private static final String[] ARMA_CLAVA = {
+            "................",
+            ".........kkkkk..",
+            "........kgghgxk.",
+            ".......kgxggggk.",
+            ".......kgggghgk.",
+            ".......kgghgxgk.",
+            ".......khgggghk.",
+            ".......kyyxhgk..",
+            "......kyykkkk...",
+            ".....kyyk.......",
+            "....khgk........",
+            "...khgk.........",
+            "..khgk..........",
+            ".khgk...........",
+            "khgk............",
+            "yyk............."};
+
     private static final String[] CANECA = {
             "................",
             "................",
@@ -2086,6 +2212,14 @@ final class ArteItens {
         l.add(new Arte("iron_sword", "arma_foice", FOICE, com(lamina, 'a', 0xFFCFD8DC, 'b', 0xFF607D8B), true));
         l.add(new Arte("iron_sword", "arma_bastao", BASTAO, c('h', 0xFF8D6E4A, 'g', 0xFFB0BEC5, 'k', 0xFF3E2723), true));
         l.add(new Arte("iron_sword", "arma_chicote", CHICOTE, c('l', 0xFF8D5A2B, 'h', 0xFF4E342E, 'k', 0xFF3E2723), true));
+        // Armas dos minérios (ajustes da 2.51)
+        l.add(new Arte("iron_sword", "arma_montante", ARMA_MONTANTE, c('k', 0xFF212121, 'a', 0xFFE0F7FA, 'b', 0xFF7FCFE0, 'g', 0xFFC9A227, 'h', 0xFF4E342E, 'x', 0xFF4DD0E1), true));
+        l.add(new Arte("iron_sword", "arma_bumerangue", ARMA_BUMERANGUE, c('k', 0xFF3E2723, 'h', 0xFF8D6E4A, 'g', 0xFFBC9664, 'x', 0xFFF2A33A, 'y', 0xFFFFD54F), true));
+        l.add(new Arte("iron_sword", "arma_leques", ARMA_LEQUES, c('k', 0xFF1B2A10, 'h', 0xFF4E342E, 'x', 0xFF4CAF7D, 'y', 0xFF2E7D52, 'a', 0xFFC9A227), true));
+        l.add(new Arte("iron_sword", "arma_arpao", ARMA_ARPAO, c('k', 0xFF1E1E28, 'h', 0xFF5D4037, 'g', 0xFF8D6E63, 'x', 0xFFF3E9F0, 'a', 0xFFE0E0E0, 'b', 0xFF8C8C96, 'r', 0xFFC9A26B), true));
+        l.add(new Arte("iron_sword", "arma_mangual", ARMA_MANGUAL, c('k', 0xFF1E2832, 'h', 0xFF5D4037, 'g', 0xFF8D6E63, 'b', 0xFF8C8C96, 'x', 0xFFA8E4FF, 'y', 0xFF64B4E6, 'a', 0xFFF0FAFF), true));
+        l.add(new Arte("iron_sword", "arma_garras", ARMA_GARRAS, c('k', 0xFF1E0A0A, 'h', 0xFF4E342E, 'g', 0xFF8D5A2B, 'x', 0xFFB0102A, 'a', 0xFFECEFF1, 'b', 0xFF9696A0), true));
+        l.add(new Arte("iron_sword", "arma_clava", ARMA_CLAVA, c('k', 0xFF28190A, 'h', 0xFF4E342E, 'g', 0xFF7A5A36, 'x', 0xFFFF6F00, 'y', 0xFF3C2819), true));
         l.add(new Arte("snowball", "frasco_fumaca", GARRAFA, com(VIDRO, 'c', 0xFFEEEEEE, 'l', 0xFF9E9E9E, 'd', 0xFF616161, 'a', 0xFFE0E0E0)));
         l.add(new Arte("snowball", "frasco_cola", GARRAFA, com(VIDRO, 'c', 0xFF8D6E63, 'l', 0xFF9CCC65, 'd', 0xFF558B2F, 'a', 0xFFDCEDC8)));
         l.add(new Arte("snowball", "frasco_fogo_grego", GARRAFA, com(VIDRO, 'c', 0xFFE0E0E0, 'l', 0xFFFF7043, 'd', 0xFFBF360C, 'a', 0xFFFFEB3B)));

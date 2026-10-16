@@ -84,6 +84,13 @@ public enum Postura {
             case FOICE -> "Ceifador";
             case BASTAO -> "Monge";
             case CHICOTE -> "Domador de Feras";
+            case MONTANTE -> "Titã";
+            case BUMERANGUE -> "Vento que Volta";
+            case LEQUES -> "Garça de Jade";
+            case ARPAO -> "Baleeiro";
+            case MANGUAL -> "Avalanche";
+            case GARRAS -> "Fera Sangrenta";
+            case CLAVA -> "Fornalha";
         };
     }
 
@@ -101,6 +108,13 @@ public enum Postura {
             case FOICE -> "+10% de dano; cada inimigo derrotado cura 3 ❤ e dá Força por 5 s.";
             case BASTAO -> "-15% de dano recebido e os golpes desequilibram 50% mais.";
             case CHICOTE -> "+10% de dano e cada acerto deixa o inimigo lento.";
+            case MONTANTE -> "+20% de dano e a varredura acerta os outros com 70% do golpe.";
+            case BUMERANGUE -> "Bumerangue +30% de dano e a volta acerta com o dobro.";
+            case LEQUES -> "+10% de dano, +15% de velocidade e toda pancada solta a rajada de vento.";
+            case ARPAO -> "Arpão +30% de dano e puxa com o dobro da força.";
+            case MANGUAL -> "+10% de dano e todo golpe deixa o inimigo muito lento (Lentidão III).";
+            case GARRAS -> "+10% de dano e o dobro de roubo de vida.";
+            case CLAVA -> "+10% de dano e os golpes sempre queimam, sem gastar turfa.";
         };
     }
 

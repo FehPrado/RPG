@@ -393,6 +393,19 @@ public final class Golpes implements Listener {
         });
     }
 
+    /** Bumerangue: vai em linha atravessando todos e volta até você, acertando de novo na volta. */
+    private void vaiEVolta(Player p, Vector dir, double alcance, double danoIda, double danoVolta, Consumer<LivingEntity> extra) {
+        Location inicio = p.getEyeLocation().subtract(0, 0.3, 0);
+        lamina(p, inicio, dir, 1.0, alcance, true, visualLamina(p), (e, o) -> {
+            ferir(p, e, danoIda);
+            if (extra != null) extra.accept(e);
+        }, onde -> lamina(p, onde, p.getEyeLocation().toVector().subtract(onde.toVector()), 1.0,
+                Math.max(2, onde.distance(p.getEyeLocation())), true, visualLamina(p), (e, o2) -> {
+                    ferir(p, e, danoVolta);
+                    if (extra != null) extra.accept(e);
+                }, null));
+    }
+
     /** O que voa nos golpes de arremesso: a arma da mão (ou uma faca de ferro). */
     private static ItemStack visualLamina(Player p) {
         ItemStack m = p.getInventory().getItemInMainHand();
@@ -1486,6 +1499,516 @@ public final class Golpes implements Listener {
                     w.spawnParticle(Particle.CRIT, c.getX() + Math.cos(ang) * 6, c.getY() + 1, c.getZ() + Math.sin(ang) * 6, 1, 0, 0, 0, 0);
                 }
                 w.playSound(c, Sound.ENTITY_FISHING_BOBBER_RETRIEVE, 1f, 1.4f + i * 0.2f);
+            });
+
+            // ---------------- Montante (minério) ----------------
+            case GOLPE_PESADO -> {
+                LivingEntity a = alvo(p, 4.5);
+                if (a == null) return falhar(p, "Nenhum inimigo na sua frente");
+                ferir(p, a, 2.0 * d);
+                empurrar(a, l, 1.2, 0.35);
+                w.spawnParticle(Particle.CRIT, a.getLocation().add(0, 1, 0), 20, 0.3, 0.5, 0.3, 0.2);
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1f, 0.6f);
+            }
+            case VARREDURA_DO_TITA -> {
+                for (LivingEntity e : cone(p, 4.5, 200)) {
+                    ferir(p, e, 1.4 * d);
+                    empurrar(e, l, 0.6, 0.2);
+                }
+                Vector f = horizontal(p);
+                for (int k = -10; k <= 10; k++) {
+                    Vector v = f.clone().rotateAroundY(Math.toRadians(k * 10)).multiply(3.5);
+                    w.spawnParticle(Particle.SWEEP_ATTACK, l.clone().add(v).add(0, 1, 0), 1, 0, 0, 0, 0);
+                }
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 0.5f);
+            }
+            case INVESTIDA_DO_MONTANTE -> {
+                p.setVelocity(horizontal(p).multiply(1.6).setY(0.15));
+                semQueda.put(p.getUniqueId(), agora() + 3000);
+                Set<UUID> acertados = new HashSet<>();
+                repetir(1, 12, i -> {
+                    Location c = p.getLocation();
+                    w.spawnParticle(Particle.SWEEP_ATTACK, c.clone().add(0, 1, 0), 1, 0, 0, 0, 0);
+                    for (LivingEntity e : perto(p, c, 2.2)) {
+                        if (!acertados.add(e.getUniqueId())) continue;
+                        ferir(p, e, 1.3 * d);
+                        empurrar(e, c, 0.8, 0.3);
+                    }
+                });
+                w.playSound(l, Sound.ENTITY_RAVAGER_STEP, 1f, 1f);
+            }
+            case LAMINA_ERGUIDA -> {
+                for (LivingEntity e : perto(p, l, 3.5)) {
+                    ferir(p, e, 1.2 * d);
+                    e.setVelocity(new Vector(0, 1.0, 0));
+                }
+                anel(l.clone().add(0, 0.3, 0), 2.5, Particle.SWEEP_ATTACK, 10);
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1f, 0.6f);
+            }
+            case CORTE_DO_HORIZONTE -> {
+                Vector dir = horizontal(p);
+                Location de = l.clone().add(0, 1, 0);
+                for (LivingEntity e : linha(p, de, dir, 10, 1.5)) ferir(p, e, 1.8 * d);
+                for (double s = 0; s <= 10; s += 0.7) w.spawnParticle(Particle.SWEEP_ATTACK, de.clone().add(dir.clone().multiply(s)), 1, 0, 0, 0, 0);
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.2f, 0.4f);
+            }
+            case FURIA_DO_GIGANTE -> {
+                efeito(p, PotionEffectType.STRENGTH, 120, 1);
+                efeito(p, PotionEffectType.RESISTANCE, 120, 0);
+                for (LivingEntity e : perto(p, l, 3.5)) {
+                    ferir(p, e, 1.2 * d);
+                    empurrar(e, l, 1.0, 0.3);
+                }
+                anel(l.clone().add(0, 1, 0), 3, Particle.SWEEP_ATTACK, 12);
+                w.playSound(l, Sound.ENTITY_RAVAGER_ROAR, 0.8f, 1f);
+            }
+            case QUEDA_DA_MONTANHA -> saltar(p, horizontal(p).multiply(0.5).setY(1.1), 6, onde -> {
+                for (LivingEntity e : perto(p, onde, 6)) {
+                    ferir(p, e, 3.5 * d);
+                    efeito(e, PotionEffectType.SLOWNESS, 60, 2);
+                    empurrar(e, onde, 0.8, 0.4);
+                }
+                w.spawnParticle(Particle.BLOCK, onde, 120, 3, 0.2, 3, chao(onde));
+                w.spawnParticle(Particle.EXPLOSION, onde, 4, 1.5, 0.3, 1.5, 0);
+                w.playSound(onde, Sound.BLOCK_ANVIL_LAND, 1.2f, 0.5f);
+            });
+
+            // ---------------- Bumerangue (minério) ----------------
+            case ARCO_DE_AMBAR -> {
+                vaiEVolta(p, p.getEyeLocation().getDirection(), 12, 1.0 * d, 0.8 * d, null);
+                w.playSound(l, Sound.ITEM_TRIDENT_THROW, 1f, 1.6f);
+            }
+            case DUPLO_RETORNO -> {
+                Vector base = p.getEyeLocation().getDirection();
+                vaiEVolta(p, base.clone().rotateAroundY(Math.toRadians(20)), 11, 0.8 * d, 0.7 * d, null);
+                vaiEVolta(p, base.clone().rotateAroundY(Math.toRadians(-20)), 11, 0.8 * d, 0.7 * d, null);
+                w.playSound(l, Sound.ITEM_TRIDENT_THROW, 1f, 1.4f);
+            }
+            case PANCADA_ATORDOANTE -> {
+                lamina(p, p.getEyeLocation(), p.getEyeLocation().getDirection(), 1.2, 14, false, visualLamina(p), (e, onde) -> {
+                    ferir(p, e, 1.2 * d);
+                    efeito(e, PotionEffectType.SLOWNESS, 40, 4);
+                    efeito(e, PotionEffectType.BLINDNESS, 40, 0);
+                    w.playSound(onde, Sound.BLOCK_BELL_USE, 0.8f, 1.6f);
+                }, onde -> lamina(p, onde, p.getEyeLocation().toVector().subtract(onde.toVector()), 1.2,
+                        Math.max(2, onde.distance(p.getEyeLocation())), true, visualLamina(p), (e, o2) -> { }, null));
+                w.playSound(l, Sound.ITEM_TRIDENT_THROW, 1f, 1.2f);
+            }
+            case ORBITA -> {
+                ItemDisplay bum = display(l.clone().add(0, 1, 0), visualLamina(p), 1.0f);
+                repetir(1, 40, i -> {
+                    if (!bum.isValid() || !p.isOnline()) return;
+                    double ang = i * Math.PI * 2 / 20;
+                    Location c = p.getLocation().add(Math.cos(ang) * 2.6, 1, Math.sin(ang) * 2.6);
+                    bum.teleport(c);
+                    bum.setTransformation(new Transformation(new Vector3f(), new AxisAngle4f((float) (i * 0.9), 0, 1, 0), new Vector3f(1f), new AxisAngle4f()));
+                    for (LivingEntity e : perto(p, c, 1.4)) ferir(p, e, 0.5 * d);
+                    if (i % 5 == 0) w.playSound(c, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.5f, 1.7f);
+                    if (i == 39) tirar(bum);
+                });
+            }
+            case SOL_DO_DESERTO -> {
+                Location alvoChao = mira(p, 20);
+                for (double y = 0; y < 5; y += 0.5) w.spawnParticle(Particle.FLAME, l.clone().add(0, 2 + y, 0), 1, 0.05, 0, 0.05, 0);
+                w.playSound(l, Sound.ITEM_TRIDENT_THROW, 1f, 0.8f);
+                depois(15, () -> {
+                    for (LivingEntity e : perto(p, alvoChao, 4)) {
+                        ferir(p, e, 1.6 * d);
+                        e.setFireTicks(Math.max(e.getFireTicks(), 80));
+                    }
+                    w.spawnParticle(Particle.FLAME, alvoChao.clone().add(0, 0.5, 0), 60, 2, 0.3, 2, 0.05);
+                    w.spawnParticle(Particle.LAVA, alvoChao, 10, 1.5, 0.2, 1.5, 0);
+                    w.playSound(alvoChao, Sound.ITEM_FIRECHARGE_USE, 1f, 0.8f);
+                });
+            }
+            case RICOCHETE_DE_AMBAR -> {
+                LivingEntity a = alvo(p, 16);
+                if (a == null) return falhar(p, "Nenhum inimigo à vista");
+                Set<UUID> ja = new HashSet<>();
+                LivingEntity[] atual = {a};
+                Location[] de = {p.getEyeLocation()};
+                repetir(5, 5, i -> {
+                    LivingEntity e = atual[0];
+                    if (e == null || !e.isValid()) return;
+                    ja.add(e.getUniqueId());
+                    Location para = e.getLocation().add(0, e.getHeight() / 2, 0);
+                    Vector v = para.toVector().subtract(de[0].toVector());
+                    for (double s = 0; s < v.length(); s += 0.5) w.spawnParticle(Particle.WAX_ON, de[0].clone().add(v.clone().normalize().multiply(s)), 1, 0, 0, 0, 0);
+                    ferir(p, e, 1.2 * d);
+                    w.playSound(para, Sound.ITEM_TRIDENT_HIT, 0.8f, 1.5f + i * 0.1f);
+                    de[0] = para;
+                    LivingEntity prox = null;
+                    double melhor = 64;
+                    for (LivingEntity o : perto(p, para, 8)) {
+                        double dd = o.getLocation().distanceSquared(para);
+                        if (!ja.contains(o.getUniqueId()) && dd < melhor) {
+                            melhor = dd;
+                            prox = o;
+                        }
+                    }
+                    atual[0] = prox;
+                });
+            }
+            case TEMPESTADE_DE_AREIA -> {
+                for (int k = 0; k < 8; k++) {
+                    double ang = Math.PI * 2 * k / 8;
+                    vaiEVolta(p, new Vector(Math.cos(ang), 0, Math.sin(ang)), 9, 0.9 * d, 0.6 * d,
+                            e -> efeito(e, PotionEffectType.BLINDNESS, 40, 0));
+                }
+                w.spawnParticle(Particle.BLOCK, l.clone().add(0, 1, 0), 80, 3, 0.8, 3, Material.SAND.createBlockData());
+                w.playSound(l, Sound.ITEM_TRIDENT_THROW, 1f, 0.9f);
+            }
+
+            // ---------------- Leques de Guerra (minério) ----------------
+            case CORTE_DO_LEQUE -> {
+                for (LivingEntity e : cone(p, 4.5, 100)) ferir(p, e, 1.1 * d);
+                w.spawnParticle(Particle.CHERRY_LEAVES, p.getEyeLocation().add(horizontal(p).multiply(2)), 15, 1, 0.4, 1, 0);
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1.7f);
+            }
+            case RAJADA_DE_VENTO -> {
+                for (LivingEntity e : cone(p, 7, 60)) {
+                    ferir(p, e, 1.0 * d);
+                    empurrar(e, l, 1.6, 0.4);
+                }
+                w.spawnParticle(Particle.GUST, p.getEyeLocation().add(horizontal(p).multiply(2.5)), 3, 0.8, 0.3, 0.8, 0);
+                w.playSound(l, Sound.ENTITY_BREEZE_WIND_BURST, 1f, 1.1f);
+            }
+            case DANCA_DA_GARCA -> {
+                p.setVelocity(horizontal(p).multiply(-1.0).setY(0.5));
+                semQueda.put(p.getUniqueId(), agora() + 3000);
+                lamina(p, p.getEyeLocation(), p.getEyeLocation().getDirection(), 1.4, 14, true, visualLamina(p), (e, onde) -> ferir(p, e, 1.2 * d), null);
+                w.playSound(l, Sound.ENTITY_BREEZE_SHOOT, 1f, 1.4f);
+            }
+            case PETALAS_DE_JADE -> {
+                repetir(5, 4, i -> {
+                    Location c = p.getLocation();
+                    for (LivingEntity e : perto(p, c, 3)) ferir(p, e, 0.5 * d);
+                    anel(c.clone().add(0, 1, 0), 2.2, Particle.CHERRY_LEAVES, 12);
+                    w.playSound(c, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.6f, 1.5f + i * 0.1f);
+                });
+                curar(p, 4);
+            }
+            case VENDAVAL -> {
+                for (LivingEntity e : perto(p, l, 5)) {
+                    ferir(p, e, 1.3 * d);
+                    e.setVelocity(new Vector(0, 1.2, 0));
+                }
+                w.spawnParticle(Particle.GUST, l.clone().add(0, 0.5, 0), 8, 2.5, 0.3, 2.5, 0);
+                w.playSound(l, Sound.ENTITY_BREEZE_WIND_BURST, 1.2f, 0.7f);
+            }
+            case LEQUE_ESPELHO -> {
+                efeito(p, PotionEffectType.ABSORPTION, 120, 1);
+                repetir(5, 24, i -> {
+                    Location c = p.getLocation();
+                    for (LivingEntity e : perto(p, c, 2.4)) empurrar(e, c, 0.8, 0.2);
+                    if (i % 3 == 0) anel(c.clone().add(0, 1, 0), 1.4, Particle.CHERRY_LEAVES, 8);
+                });
+                w.playSound(l, Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1f, 1.2f);
+            }
+            case FURACAO_DE_JADE -> repetir(4, 10, i -> {
+                Location c = p.getLocation();
+                for (LivingEntity e : perto(p, c, 5)) {
+                    ferir(p, e, 0.6 * d);
+                    puxar(p, e, 0.4);
+                }
+                for (int k = 0; k < 16; k++) {
+                    double ang = Math.PI * 2 * k / 16 + i * 0.6;
+                    double r = 1.5 + (k % 4);
+                    w.spawnParticle(Particle.CHERRY_LEAVES, c.getX() + Math.cos(ang) * r, c.getY() + 0.5 + (k % 3), c.getZ() + Math.sin(ang) * r, 1, 0, 0, 0, 0);
+                }
+                if (i % 2 == 0) w.playSound(c, Sound.ENTITY_BREEZE_IDLE_GROUND, 1f, 1.2f);
+            });
+
+            // ---------------- Arpão (minério) ----------------
+            case ARPOAR -> {
+                double agua = p.isInWater() ? 1.5 : 1;
+                lamina(p, p.getEyeLocation(), p.getEyeLocation().getDirection(), 1.6, 18, false, visualLamina(p), (e, onde) -> {
+                    ferir(p, e, 1.2 * d * agua);
+                    puxar(p, e, 1.4);
+                }, null);
+                w.playSound(l, Sound.ITEM_TRIDENT_THROW, 1f, 0.9f);
+            }
+            case ESTOCADA_DO_ARPAO -> {
+                LivingEntity a = alvo(p, 5);
+                if (a == null) return falhar(p, "Nenhum inimigo na sua frente");
+                ferir(p, a, 1.4 * d);
+                sangrar(p, a, 0.15 * d, 4);
+                w.playSound(l, Sound.ITEM_TRIDENT_HIT, 1f, 0.8f);
+            }
+            case CORRENTE_MARINHA -> {
+                double agua = p.isInWater() ? 1.5 : 1;
+                Vector dir = horizontal(p);
+                Location de = l.clone().add(0, 1, 0);
+                for (LivingEntity e : linha(p, de, dir, 9, 1.4)) {
+                    ferir(p, e, 1.0 * d * agua);
+                    puxar(p, e, 1.2);
+                }
+                for (double s = 0; s <= 9; s += 0.4) w.spawnParticle(Particle.SPLASH, de.clone().add(dir.clone().multiply(s)), 3, 0.1, 0.1, 0.1, 0);
+                w.playSound(l, Sound.ENTITY_GENERIC_SPLASH, 1f, 1f);
+            }
+            case MERGULHO_DO_TUBARAO -> {
+                boolean agua = p.isInWater();
+                Vector dir = agua ? p.getEyeLocation().getDirection().normalize() : horizontal(p);
+                p.setVelocity(dir.multiply(agua ? 2.6 : 1.6).setY(agua ? dir.getY() : 0.15));
+                semQueda.put(p.getUniqueId(), agora() + 3000);
+                Set<UUID> acertados = new HashSet<>();
+                repetir(1, 10, i -> {
+                    Location c = p.getLocation();
+                    w.spawnParticle(Particle.BUBBLE_COLUMN_UP, c.clone().add(0, 1, 0), 4, 0.2, 0.2, 0.2, 0.05);
+                    for (LivingEntity e : perto(p, c, 2.0)) if (acertados.add(e.getUniqueId())) ferir(p, e, 1.3 * d * (agua ? 1.5 : 1));
+                });
+                w.playSound(l, Sound.ENTITY_DOLPHIN_JUMP, 1f, 1f);
+            }
+            case ARPAO_TRIPLO -> {
+                double agua = p.isInWater() ? 1.5 : 1;
+                Vector base = p.getEyeLocation().getDirection();
+                for (int k = -1; k <= 1; k++) {
+                    Vector dir = base.clone().rotateAroundY(Math.toRadians(15 * k));
+                    lamina(p, p.getEyeLocation(), dir, 1.5, 16, false, visualLamina(p), (e, onde) -> {
+                        ferir(p, e, 1.0 * d * agua);
+                        puxar(p, e, 1.0);
+                    }, null);
+                }
+                w.playSound(l, Sound.ITEM_TRIDENT_THROW, 1f, 0.8f);
+            }
+            case ONDA_DO_ARPAO -> {
+                double agua = p.isInWater() ? 1.5 : 1;
+                for (LivingEntity e : perto(p, l, 5)) {
+                    ferir(p, e, 1.4 * d * agua);
+                    empurrar(e, l, 1.2, 0.4);
+                    efeito(e, PotionEffectType.SLOWNESS, 60, 1);
+                }
+                for (double r = 1; r <= 5; r += 1) anel(l.clone().add(0, 0.3, 0), r, Particle.SPLASH, (int) (r * 10));
+                w.playSound(l, Sound.ENTITY_PLAYER_SPLASH_HIGH_SPEED, 1f, 0.8f);
+            }
+            case FURIA_DO_LEVIATA -> {
+                double agua = p.isInWater() ? 1.5 : 1;
+                lamina(p, p.getEyeLocation(), p.getEyeLocation().getDirection(), 1.8, 25, true, visualLamina(p), (e, onde) -> {
+                    ferir(p, e, 3.0 * d * agua);
+                    puxar(p, e, 1.0);
+                    w.spawnParticle(Particle.SPLASH, onde, 30, 0.5, 0.5, 0.5, 0.2);
+                }, null);
+                w.playSound(l, Sound.ENTITY_ELDER_GUARDIAN_CURSE, 0.6f, 1.4f);
+            }
+
+            // ---------------- Mangual (minério) ----------------
+            case GOLPE_GELADO -> {
+                LivingEntity a = alvo(p, 4.5);
+                if (a == null) return falhar(p, "Nenhum inimigo na sua frente");
+                ferir(p, a, 1.4 * d);
+                efeito(a, PotionEffectType.SLOWNESS, 60, 1);
+                w.spawnParticle(Particle.SNOWFLAKE, a.getLocation().add(0, 1, 0), 20, 0.3, 0.5, 0.3, 0.02);
+                w.playSound(l, Sound.BLOCK_GLASS_HIT, 1f, 0.8f);
+            }
+            case GIRO_DA_CORRENTE -> repetir(4, 4, i -> {
+                Location c = p.getLocation();
+                for (LivingEntity e : perto(p, c, 3.5)) {
+                    ferir(p, e, 0.6 * d);
+                    empurrar(e, c, 0.5, 0.2);
+                }
+                anel(c.clone().add(0, 1, 0), 2.8, Particle.SNOWFLAKE, 12);
+                w.playSound(c, Sound.BLOCK_METAL_HIT, 1f, 0.8f + i * 0.1f);
+            });
+            case QUEBRA_GELO -> {
+                for (LivingEntity e : perto(p, l, 3.5)) {
+                    ferir(p, e, 1.5 * d);
+                    efeito(e, PotionEffectType.SLOWNESS, 60, 2);
+                }
+                w.spawnParticle(Particle.BLOCK, l, 80, 2, 0.2, 2, Material.PACKED_ICE.createBlockData());
+                w.playSound(l, Sound.BLOCK_GLASS_BREAK, 1f, 0.6f);
+            }
+            case CORRENTE_QUE_PRENDE -> {
+                LivingEntity a = alvo(p, 7);
+                if (a == null) return falhar(p, "Nenhum inimigo ao alcance da corrente");
+                ferir(p, a, 0.8 * d);
+                puxar(p, a, 1.2);
+                efeito(a, PotionEffectType.SLOWNESS, 40, 4);
+                w.playSound(l, Sound.BLOCK_METAL_PLACE, 1f, 0.8f);
+            }
+            case NEVASCA -> repetir(6, 10, i -> {
+                Location c = p.getLocation();
+                for (LivingEntity e : perto(p, c, 5)) {
+                    ferir(p, e, 0.5 * d);
+                    efeito(e, PotionEffectType.SLOWNESS, 40, 1);
+                    e.setFreezeTicks(Math.min(300, e.getFreezeTicks() + 30));
+                }
+                w.spawnParticle(Particle.SNOWFLAKE, c.clone().add(0, 2, 0), 50, 4, 1.5, 4, 0.02);
+                if (i % 3 == 0) w.playSound(c, Sound.ITEM_ELYTRA_FLYING, 0.3f, 1.6f);
+            });
+            case PRISAO_DE_GELO -> {
+                LivingEntity a = alvo(p, 8);
+                if (a == null) return falhar(p, "Nenhum inimigo à vista");
+                ferir(p, a, 1.6 * d);
+                efeito(a, PotionEffectType.SLOWNESS, 60, 6);
+                a.setFreezeTicks(Math.max(a.getFreezeTicks(), 200));
+                w.spawnParticle(Particle.BLOCK, a.getLocation().add(0, 1, 0), 40, 0.4, 0.8, 0.4, Material.BLUE_ICE.createBlockData());
+                w.playSound(a.getLocation(), Sound.BLOCK_GLASS_PLACE, 1f, 0.6f);
+            }
+            case AVALANCHE -> {
+                Vector dir = horizontal(p);
+                repetir(5, 3, i -> {
+                    Location pt = l.clone().add(dir.clone().multiply(3 * (i + 1)));
+                    for (LivingEntity e : perto(p, pt, 2.6)) {
+                        ferir(p, e, 2.2 * d);
+                        efeito(e, PotionEffectType.SLOWNESS, 60, 2);
+                        empurrar(e, l, 1.0, 0.4);
+                    }
+                    w.spawnParticle(Particle.BLOCK, pt.clone().add(0, 0.5, 0), 60, 1.2, 0.5, 1.2, Material.SNOW_BLOCK.createBlockData());
+                    w.playSound(pt, Sound.BLOCK_SNOW_BREAK, 1.2f, 0.5f);
+                });
+            }
+
+            // ---------------- Garras (minério) ----------------
+            case RASGAR -> {
+                LivingEntity a = alvo(p, 3.8);
+                if (a == null) return falhar(p, "Nenhum inimigo na sua frente");
+                repetir(3, 4, i -> {
+                    if (!a.isValid() || a.isDead()) return;
+                    ferir(p, a, 0.6 * d);
+                    curar(p, 0.6 * d * 0.15);
+                    if (i % 2 == 1) p.swingOffHand();
+                    w.spawnParticle(Particle.DAMAGE_INDICATOR, a.getLocation().add(0, 1, 0), 4, 0.2, 0.3, 0.2, 0.05);
+                    w.playSound(a.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.6f, 1.6f + i * 0.1f);
+                });
+            }
+            case SALTO_DA_FERA -> {
+                LivingEntity a = alvo(p, 8);
+                if (a == null) return falhar(p, "Nenhum inimigo à vista");
+                Vector v = a.getLocation().toVector().subtract(l.toVector());
+                p.setVelocity(v.multiply(0.22).setY(0.45));
+                semQueda.put(p.getUniqueId(), agora() + 3000);
+                depois(8, () -> {
+                    if (!a.isValid() || a.isDead() || !p.isOnline()) return;
+                    if (a.getLocation().distanceSquared(p.getLocation()) > 16) return;
+                    ferir(p, a, 1.3 * d);
+                    w.spawnParticle(Particle.DAMAGE_INDICATOR, a.getLocation().add(0, 1, 0), 8, 0.2, 0.4, 0.2, 0.1);
+                    w.playSound(a.getLocation(), Sound.ENTITY_RAVAGER_ATTACK, 0.8f, 1.4f);
+                });
+            }
+            case SANGRIA -> {
+                LivingEntity a = alvo(p, 4);
+                if (a == null) return falhar(p, "Nenhum inimigo na sua frente");
+                ferir(p, a, 0.6 * d);
+                sangrar(p, a, 0.25 * d, 6);
+                w.spawnParticle(Particle.BLOCK, a.getLocation().add(0, 1, 0), 20, 0.3, 0.4, 0.3, Material.REDSTONE_BLOCK.createBlockData());
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1f, 0.8f);
+            }
+            case FRENESI -> {
+                efeito(p, PotionEffectType.HASTE, 160, 1);
+                efeito(p, PotionEffectType.SPEED, 160, 0);
+                efeito(p, PotionEffectType.STRENGTH, 160, 0);
+                w.spawnParticle(Particle.ANGRY_VILLAGER, l.clone().add(0, 2, 0), 6, 0.4, 0.3, 0.4, 0);
+                w.playSound(l, Sound.ENTITY_RAVAGER_ROAR, 0.6f, 1.6f);
+            }
+            case GARRAS_CRUZADAS -> {
+                for (LivingEntity e : cone(p, 4, 110)) {
+                    ferir(p, e, 1.3 * d);
+                    sangrar(p, e, 0.15 * d, 4);
+                }
+                p.swingOffHand();
+                Vector f = horizontal(p), lado = new Vector(-f.getZ(), 0, f.getX());
+                Location c = p.getEyeLocation().add(f.clone().multiply(2));
+                Particle.DustOptions corte = new Particle.DustOptions(Color.fromRGB(0xB0102A), 1f);
+                for (double s = -1.5; s <= 1.5; s += 0.15) {
+                    w.spawnParticle(Particle.DUST, c.clone().add(lado.clone().multiply(s)).add(0, s * 0.8, 0), 1, 0, 0, 0, 0, corte);
+                    w.spawnParticle(Particle.DUST, c.clone().add(lado.clone().multiply(s)).add(0, -s * 0.8, 0), 1, 0, 0, 0, 0, corte);
+                }
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1.3f);
+            }
+            case PREDADOR -> {
+                LivingEntity a = alvo(p, 12);
+                if (a == null) return falhar(p, "Nenhum inimigo à vista");
+                marcar(a, 8, 0.3);
+                efeito(p, PotionEffectType.INVISIBILITY, 60, 0);
+                for (LivingEntity e : perto(p, l, 16)) if (e instanceof Mob m && p.equals(m.getTarget())) m.setTarget(null);
+                w.spawnParticle(Particle.SMOKE, l.clone().add(0, 1, 0), 25, 0.3, 0.5, 0.3, 0.02);
+                w.playSound(l, Sound.ENTITY_ENDERMAN_TELEPORT, 0.6f, 0.6f);
+            }
+            case BANQUETE_DE_SANGUE -> repetir(5, 4, i -> {
+                Location c = p.getLocation();
+                double total = 0;
+                for (LivingEntity e : perto(p, c, 4)) {
+                    ferir(p, e, 0.6 * d);
+                    total += 0.6 * d;
+                }
+                curar(p, total * 0.25);
+                Particle.DustOptions verm = new Particle.DustOptions(Color.fromRGB(0xB0102A), 1.3f);
+                for (int k = 0; k < 10; k++) {
+                    double ang = i * 0.8 + k * Math.PI / 5;
+                    w.spawnParticle(Particle.DUST, c.getX() + Math.cos(ang) * 2.6, c.getY() + 1, c.getZ() + Math.sin(ang) * 2.6, 1, 0, 0, 0, 0, verm);
+                }
+                w.playSound(c, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.7f, 0.9f + i * 0.08f);
+            });
+
+            // ---------------- Clava Fumegante (minério) ----------------
+            case PANCADA_EM_BRASA -> {
+                LivingEntity a = alvo(p, 4.5);
+                if (a == null) return falhar(p, "Nenhum inimigo na sua frente");
+                ferir(p, a, 1.5 * d);
+                a.setFireTicks(Math.max(a.getFireTicks(), 80));
+                w.spawnParticle(Particle.FLAME, a.getLocation().add(0, 1, 0), 15, 0.3, 0.5, 0.3, 0.03);
+                w.playSound(l, Sound.ITEM_FIRECHARGE_USE, 0.8f, 1.2f);
+            }
+            case FUMACA_SUFOCANTE -> {
+                for (LivingEntity e : perto(p, l, 4)) {
+                    ferir(p, e, 0.4 * d);
+                    efeito(e, PotionEffectType.BLINDNESS, 60, 0);
+                    efeito(e, PotionEffectType.WEAKNESS, 100, 0);
+                }
+                w.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l.clone().add(0, 1, 0), 40, 2, 0.8, 2, 0.02);
+                w.playSound(l, Sound.BLOCK_FIRE_EXTINGUISH, 1f, 0.6f);
+            }
+            case BRASAS_ESPALHADAS -> {
+                for (LivingEntity e : cone(p, 5, 90)) {
+                    ferir(p, e, 1.0 * d);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 100));
+                }
+                w.spawnParticle(Particle.FLAME, p.getEyeLocation().add(horizontal(p).multiply(2.5)), 40, 1.2, 0.5, 1.2, 0.05);
+                w.playSound(l, Sound.ITEM_FIRECHARGE_USE, 1f, 0.8f);
+            }
+            case GOLPE_SISMICO -> {
+                for (LivingEntity e : perto(p, l, 4.5)) {
+                    ferir(p, e, 1.4 * d);
+                    e.setVelocity(new Vector(0, 0.8, 0));
+                }
+                w.spawnParticle(Particle.BLOCK, l, 80, 2.5, 0.2, 2.5, chao(l));
+                w.playSound(l, Sound.BLOCK_ANVIL_LAND, 0.8f, 0.6f);
+            }
+            case CHAMA_DO_PANTANO -> {
+                Vector dir = horizontal(p);
+                Location de = l.clone().add(0, 0.5, 0);
+                for (LivingEntity e : linha(p, de, dir, 9, 1.4)) {
+                    ferir(p, e, 1.5 * d);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 100));
+                }
+                for (double s = 0; s <= 9; s += 0.35) {
+                    w.spawnParticle(Particle.FLAME, de.clone().add(dir.clone().multiply(s)), 2, 0.1, 0.2, 0.1, 0.01);
+                    if (((int) (s * 3)) % 3 == 0) w.spawnParticle(Particle.SMOKE, de.clone().add(dir.clone().multiply(s)), 1, 0.1, 0.3, 0.1, 0.01);
+                }
+                w.playSound(l, Sound.ITEM_FIRECHARGE_USE, 1f, 0.6f);
+            }
+            case FORNALHA_VIVA -> {
+                efeito(p, PotionEffectType.FIRE_RESISTANCE, 120, 0);
+                repetir(10, 10, i -> {
+                    Location c = p.getLocation();
+                    for (LivingEntity e : perto(p, c, 3)) {
+                        ferir(p, e, 0.4 * d);
+                        e.setFireTicks(Math.max(e.getFireTicks(), 60));
+                    }
+                    anel(c.clone().add(0, 0.2, 0), 2.5, Particle.FLAME, 14);
+                });
+                w.playSound(l, Sound.BLOCK_BLASTFURNACE_FIRE_CRACKLE, 1f, 0.8f);
+            }
+            case ERUPCAO -> saltar(p, horizontal(p).multiply(0.3).setY(1.0), 6, onde -> {
+                for (LivingEntity e : perto(p, onde, 5)) {
+                    ferir(p, e, 3.0 * d);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 100));
+                    empurrar(e, onde, 1.0, 0.5);
+                }
+                w.spawnParticle(Particle.LAVA, onde, 30, 2, 0.5, 2, 0);
+                w.spawnParticle(Particle.FLAME, onde.clone().add(0, 0.5, 0), 80, 2.5, 0.6, 2.5, 0.05);
+                w.spawnParticle(Particle.EXPLOSION, onde, 3, 1, 0.3, 1, 0);
+                w.playSound(onde, Sound.ENTITY_GENERIC_EXPLODE, 1f, 0.7f);
             });
 
             // ---------------- Lendas ----------------
