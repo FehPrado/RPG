@@ -164,6 +164,8 @@ public final class Forjas extends Estacao {
             plugin.refinaria().abrir(p, b.getLocation());
             return;
         }
+        // Arma na mão e um mineral na outra: incrusta (ajustes da 2.51).
+        if (plugin.incrustacoes().tentar(p, b.getLocation())) return;
         InventoryView view = MenuType.CRAFTING.builder()
                 .title(Component.text("⚒ Forja do Ferreiro"))
                 .location(b.getLocation())

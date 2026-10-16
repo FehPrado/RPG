@@ -131,6 +131,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Arcano arcano;
     private Forjas forjas;
     private Refinaria refinaria;
+    private br.rpgatributos.forja.Incrustacoes incrustacoes;
     private Guia guia;
     private Titulos titulos;
     private Chefes chefes;
@@ -295,6 +296,7 @@ public final class RPGAtributos extends JavaPlugin {
         forja = new Forja(this);
         forjas = new Forjas(this);
         refinaria = new Refinaria(this);
+        incrustacoes = new br.rpgatributos.forja.Incrustacoes(this);
         efeitos = new EfeitosListener(this);
         arcano = new Arcano(this);
         guia = new Guia(this);
@@ -425,7 +427,7 @@ public final class RPGAtributos extends JavaPlugin {
         lacos.carregar();
         nomeadas = new br.rpgatributos.forja.NomeadasNoMundo(this);
 
-        registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, guia, titulos,
+        registrar(skillListener, tags, menus, new ForjaListener(this), efeitos, forjas, refinaria, incrustacoes, guia, titulos,
                 chefes, eventos, mercadores, altares, new MateriaisListener(), missoes, agricultura, cozinha, reciclagem,
                 parties, menuParty, territorios, marcos, menusTerritorio, new ProtecaoListener(this),
                 companheiros, comportamento, altaresDomador, menusDomador, masmorras, portaisMasmorra,
@@ -782,6 +784,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Arcano arcano() { return arcano; }
     public Forjas forjas() { return forjas; }
     public Refinaria refinaria() { return refinaria; }
+    public br.rpgatributos.forja.Incrustacoes incrustacoes() { return incrustacoes; }
     public Guia guia() { return guia; }
     public Titulos titulos() { return titulos; }
     public Chefes chefes() { return chefes; }

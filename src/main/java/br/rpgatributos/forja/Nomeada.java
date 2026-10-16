@@ -113,6 +113,25 @@ public enum Nomeada {
             'o', 0xFF1A0E05, 'h', 0xFFD7A86E, 'm', 0xFF8D5A2B, 'd', 0xFF4E342E, 'g', 0xFFC9A227, 'w', 0xFF5D4037, 'p', 0xFFB71C1C, 'a', 0xFFFFD54F),
     LINGUA_DE_BRASA("Língua de Brasa", Categoria.ESPADA, "chicote", "Trançado com couro de strider. Deixa um rastro de faísca.",
             'o', 0xFF1A0500, 'h', 0xFFFFCC80, 'm', 0xFFE64A19, 'd', 0xFF8B1A1A, 'g', 0xFF212121, 'w', 0xFF3E2723, 'p', 0xFFFF6F00, 'a', 0xFFFFEB3B),
+    // ---------- armas dos minérios ----------
+    CORACAO_DA_MONTANHA("Coração da Montanha", Categoria.ESPADA, "montante", "Os anões o forjaram com o mitrilo mais fundo que acharam. Pesa como uma promessa.",
+            'o', 0xFF0A1A2A, 'h', 0xFFE0F7FA, 'm', 0xFF7FCFE0, 'd', 0xFF37718A, 'g', 0xFFC9A227, 'w', 0xFF4E342E, 'p', 0xFFFFD54F, 'a', 0xFF4DD0E1),
+    LAMINA_DO_REI_GIGANTE("Lâmina do Rei Gigante", Categoria.ESPADA, "montante", "Só o Rei Gigante a erguia com uma mão. Você vai precisar das duas.",
+            'o', 0xFF1A1A1A, 'h', 0xFFFFFFFF, 'm', 0xFFB0BEC5, 'd', 0xFF607D8B, 'g', 0xFF8B1A1A, 'w', 0xFF3E2723, 'p', 0xFFC9A227, 'a', 0xFFE53935),
+    RETORNO_DO_ESCORPIAO("Retorno do Escorpião", Categoria.ESPADA, "bumerangue", "Do caçador do deserto que nunca errou. O âmbar ainda guarda um escorpião dentro.",
+            'o', 0xFF2A1A05, 'h', 0xFFFFE0B2, 'm', 0xFFD7A86E, 'd', 0xFF8D6E3F, 'g', 0xFF5D4037, 'w', 0xFF8D5A2B, 'p', 0xFF3E2723, 'a', 0xFFF2A33A),
+    ASAS_DE_JADE("Asas de Jade", Categoria.ESPADA, "leques", "Uma dançarina da selva lutava com eles sem nunca tocar o chão.",
+            'o', 0xFF0A2A1A, 'h', 0xFFE8F5E9, 'm', 0xFF66BB6A, 'd', 0xFF1B5E20, 'g', 0xFFC9A227, 'w', 0xFF3E2723, 'p', 0xFFFFD54F, 'a', 0xFFA5D6A7),
+    PRESA_DO_KRAKEN("Presa do Kraken", Categoria.ESPADA, "arpao", "Arrancada do kraken que afundou três galeões. A pérola no colar era o olho dele.",
+            'o', 0xFF0A1A2A, 'h', 0xFFE0F2F1, 'm', 0xFF4DB6AC, 'd', 0xFF00695C, 'g', 0xFF4A148C, 'w', 0xFF263238, 'p', 0xFF7E57C2, 'a', 0xFFF3E9F0),
+    ARPAO_DO_VELHO_BALEEIRO("Arpão do Velho Baleeiro", Categoria.ESPADA, "arpao", "Ele jurava que pegou uma baleia do tamanho de uma ilha. Ninguém acreditava, até ver o arpão.",
+            'o', 0xFF1A1A1A, 'h', 0xFFECEFF1, 'm', 0xFF90A4AE, 'd', 0xFF455A64, 'g', 0xFF8D6E63, 'w', 0xFF6D4C41, 'p', 0xFFC9A26B, 'a', 0xFFFFFFFF),
+    ESTRELA_DA_GEADA("Estrela da Geada", Categoria.ESPADA, "mangual", "Uma bola de gelo que nunca derrete, presa a uma corrente que nunca enferruja.",
+            'o', 0xFF0D2A3A, 'h', 0xFFFFFFFF, 'm', 0xFFB3E5FC, 'd', 0xFF4FC3F7, 'g', 0xFF37474F, 'w', 0xFF546E7A, 'p', 0xFFB0BEC5, 'a', 0xFFE1F5FE),
+    PRESAS_DO_LOBISOMEM("Presas do Lobisomem", Categoria.ESPADA, "garras", "Feitas das garras de um lobisomem que caiu numa lua cheia. Às vezes ainda uivam.",
+            'o', 0xFF1A0A0A, 'h', 0xFFE0E0E0, 'm', 0xFF9E9E9E, 'd', 0xFF424242, 'g', 0xFF5D4037, 'w', 0xFF3E2723, 'p', 0xFF8D6E63, 'a', 0xFFB0102A),
+    TOCHA_DO_PANTANO("Tocha do Pântano", Categoria.ESPADA, "clava", "O eremita do pântano espantava as feras com ela acesa. A turfa nunca apagou.",
+            'o', 0xFF1A1205, 'h', 0xFFFFCC80, 'm', 0xFF6D4C2F, 'd', 0xFF3E2A18, 'g', 0xFF33691E, 'w', 0xFF4E342E, 'p', 0xFF3C2819, 'a', 0xFFFF6F00),
     // ---------- ferramentas ----------
     PICARETA_DO_MINEIRO_PERDIDO("Picareta do Mineiro Perdido", Categoria.PICARETA, "picareta", "Achada no fundo da mina abandonada, ao lado de um capacete.",
             'o', 0xFF2A1A0A, 'h', 0xFFD7A86E, 'm', 0xFFA0522D, 'd', 0xFF6D3A1A, 'w', 0xFF5D4037, 'a', 0xFFFFB74D),
@@ -174,6 +193,13 @@ public enum Nomeada {
             case "foice" -> br.rpgatributos.combo.Arsenal.Arma.FOICE;
             case "bastao" -> br.rpgatributos.combo.Arsenal.Arma.BASTAO;
             case "chicote" -> br.rpgatributos.combo.Arsenal.Arma.CHICOTE;
+            case "montante" -> br.rpgatributos.combo.Arsenal.Arma.MONTANTE;
+            case "bumerangue" -> br.rpgatributos.combo.Arsenal.Arma.BUMERANGUE;
+            case "leques" -> br.rpgatributos.combo.Arsenal.Arma.LEQUES;
+            case "arpao" -> br.rpgatributos.combo.Arsenal.Arma.ARPAO;
+            case "mangual" -> br.rpgatributos.combo.Arsenal.Arma.MANGUAL;
+            case "garras" -> br.rpgatributos.combo.Arsenal.Arma.GARRAS;
+            case "clava" -> br.rpgatributos.combo.Arsenal.Arma.CLAVA;
             default -> null;
         };
     }

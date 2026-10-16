@@ -222,6 +222,133 @@ public final class ArteNomeadas {
             "................",
             "................"};
 
+    // Armas dos minérios (com nome): o mesmo desenho das armas da bancada, nas letras da paleta.
+    private static final String[] N_MONTANTE = {
+            ".............ooh",
+            "............ohho",
+            "...........ohhmo",
+            "..........ohhmo.",
+            ".........ohhmo..",
+            "........ohhmo...",
+            ".......ohhmo....",
+            "......ohhmo.....",
+            ".....ohhmo......",
+            ".o..ohhmo.......",
+            "ogoohhmo........",
+            ".ogohmo.........",
+            "..oaoo..........",
+            ".owwgo..........",
+            "owwoogo.........",
+            "awo..o.........."};
+
+    private static final String[] N_BUMERANGUE = {
+            "................",
+            "................",
+            "...oo.........o.",
+            "..opmo.......opo",
+            "...oamo.....oamo",
+            "....owmo...owmo.",
+            ".....owmo.owmo..",
+            "......owmowmo...",
+            ".......omamo....",
+            ".......owwo.....",
+            "........oo......",
+            "................",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] N_LEQUES = {
+            "..oooo..........",
+            ".oddddoo........",
+            ".owmmdddoo......",
+            ".owmmmwmddo.....",
+            ".owmmmwmmddo....",
+            ".owmmwmmmmwdo...",
+            ".owmmwmmmwmddo..",
+            ".owmmmmmwmmmdo..",
+            ".owmwmmwmmmmmdo.",
+            ".owmmmwmmmmwwdo.",
+            ".owmmwmmmwwmmddo",
+            "..oowmmwmmmmmmdo",
+            ".owoommmmmmmmmdo",
+            ".ogwowwwwwwwwwdo",
+            "ogoo.oooooooooo.",
+            "go.............."};
+
+    private static final String[] N_ARPAO = {
+            "...........ooohh",
+            "..........ohhhmo",
+            "...........ohmo.",
+            "..........ohmoho",
+            ".........oaaooho",
+            ".........owao.o.",
+            "........owgo....",
+            ".......owgo.....",
+            "......owgo......",
+            ".....owgo.......",
+            "....owgo........",
+            "...owgo.........",
+            "..opgopo........",
+            ".owgppo.........",
+            "owgooo..........",
+            "wgo............."};
+
+    private static final String[] N_MANGUAL = {
+            "..........oho...",
+            "..........odmo..",
+            "........oodhmdoo",
+            ".......ohdmmdmmh",
+            "........ommdmmdo",
+            ".........odmmdo.",
+            ".........opmdo..",
+            ".......oopooho..",
+            "......oppo..o...",
+            ".....opoo.......",
+            "....opo.........",
+            "...owo..........",
+            "..owgo..........",
+            ".owgo...........",
+            "owgo............",
+            "poo............."};
+
+    private static final String[] N_GARRAS = {
+            "................",
+            "................",
+            "............o...",
+            "...........oho..",
+            "..........oho...",
+            "..........omo.o.",
+            ".........omo.oho",
+            "........ohmooho.",
+            "..ooooooomohhmo.",
+            ".ogggggghmhomooo",
+            ".owwwwwwmhmmoohh",
+            ".owwaawwhmoohhoo",
+            ".owwaawwmohhommo",
+            ".owwwwwwhhmmmoo.",
+            "..oooooommooo...",
+            "........oo......"};
+
+    private static final String[] N_CLAVA = {
+            "................",
+            ".........ooooo..",
+            "........ommwmao.",
+            ".......omammmmo.",
+            ".......ommmmwmo.",
+            ".......ommwmamo.",
+            ".......owmmmmwo.",
+            ".......oppawmo..",
+            "......oppoooo...",
+            ".....oppo.......",
+            "....owmo........",
+            "...owmo.........",
+            "..owmo..........",
+            ".owmo...........",
+            "owmo............",
+            "ppo............."};
+
     private static String[] molde(String nome) {
         return switch (nome) {
             case "sabre" -> SABRE;
@@ -243,6 +370,13 @@ public final class ArteNomeadas {
             case "foice" -> foice();
             case "bastao" -> bastao();
             case "chicote" -> chicote();
+            case "montante" -> N_MONTANTE;
+            case "bumerangue" -> N_BUMERANGUE;
+            case "leques" -> N_LEQUES;
+            case "arpao" -> N_ARPAO;
+            case "mangual" -> N_MANGUAL;
+            case "garras" -> N_GARRAS;
+            case "clava" -> N_CLAVA;
             default -> ESPADA;
         };
     }
@@ -572,6 +706,27 @@ public final class ArteNomeadas {
             int r = (int) (((w >> 16) & 0xFF) * 0.6), g = (int) (((w >> 8) & 0xFF) * 0.6), b = (int) ((w & 0xFF) * 0.6);
             m.put('d', 0xFF000000 | (r << 16) | (g << 8) | b);
         }
+        return m;
+    }
+
+    /** A paleta das armas dos minérios sem nome (para o 3D na mão, nas mesmas letras das armas com nome). */
+    public static Map<Character, Integer> paletaArsenal(String molde) {
+        return switch (molde) {
+            case "montante" -> cores('o', 0xFF212121, 'h', 0xFFE0F7FA, 'm', 0xFF7FCFE0, 'd', 0xFF7FCFE0, 'g', 0xFFC9A227, 'w', 0xFF4E342E, 'p', 0xFF4E342E, 'a', 0xFF4DD0E1);
+            case "bumerangue" -> cores('o', 0xFF3E2723, 'h', 0xFFBC9664, 'm', 0xFFBC9664, 'd', 0xFFBC9664, 'g', 0xFF8D6E4A, 'w', 0xFF8D6E4A, 'p', 0xFFFFD54F, 'a', 0xFFF2A33A);
+            case "leques" -> cores('o', 0xFF1B2A10, 'h', 0xFF4CAF7D, 'm', 0xFF4CAF7D, 'd', 0xFF2E7D52, 'g', 0xFFC9A227, 'w', 0xFF4E342E, 'p', 0xFF4E342E, 'a', 0xFF4CAF7D);
+            case "arpao" -> cores('o', 0xFF1E1E28, 'h', 0xFFE0E0E0, 'm', 0xFF8C8C96, 'd', 0xFF8C8C96, 'g', 0xFF8D6E63, 'w', 0xFF5D4037, 'p', 0xFFC9A26B, 'a', 0xFFF3E9F0);
+            case "mangual" -> cores('o', 0xFF1E2832, 'h', 0xFFF0FAFF, 'm', 0xFFA8E4FF, 'd', 0xFF64B4E6, 'g', 0xFF8D6E63, 'w', 0xFF5D4037, 'p', 0xFF8C8C96, 'a', 0xFFF0FAFF);
+            case "garras" -> cores('o', 0xFF1E0A0A, 'h', 0xFFECEFF1, 'm', 0xFF9696A0, 'd', 0xFF9696A0, 'g', 0xFF8D5A2B, 'w', 0xFF4E342E, 'p', 0xFF4E342E, 'a', 0xFFB0102A);
+            case "clava" -> cores('o', 0xFF28190A, 'h', 0xFF7A5A36, 'm', 0xFF7A5A36, 'd', 0xFF7A5A36, 'g', 0xFF4E342E, 'w', 0xFF4E342E, 'p', 0xFF3C2819, 'a', 0xFFFF6F00);
+            default -> cores('o', 0xFF212121, 'h', 0xFFE0E0E0, 'm', 0xFF9E9E9E, 'd', 0xFF616161, 'g', 0xFF8D6E63, 'w', 0xFF5D4037, 'p', 0xFF8D6E63, 'a', 0xFFFFD54F);
+        };
+    }
+
+    private static Map<Character, Integer> cores(Object... kv) {
+        Map<Character, Integer> m = new HashMap<>();
+        for (int i = 0; i + 1 < kv.length; i += 2) m.put((Character) kv[i], (Integer) kv[i + 1]);
+        m.put('s', 0xFFE0E0E0);
         return m;
     }
 

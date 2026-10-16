@@ -40,11 +40,11 @@ public final class ArteNomeadas3D {
     //  As peças de cada tipo
     // =====================================================================
 
-    private static List<Peca> pecas(Nomeada n, boolean lancada) {
+    private static List<Peca> pecas(String molde, boolean lancada) {
         List<Peca> l = new ArrayList<>();
-        switch (n.molde()) {
+        switch (molde) {
             case "espada", "sabre", "larga" -> {
-                boolean larga = n.molde().equals("larga"), sabre = n.molde().equals("sabre");
+                boolean larga = molde.equals("larga"), sabre = molde.equals("sabre");
                 double lam = larga ? 3.2 : sabre ? 2.0 : 2.3;
                 l.add(new Peca(0, 1.8, -1, 1, -1, 1, 'p'));           // pomo
                 l.add(new Peca(1.8, 5.6, -0.6, 0.6, -0.6, 0.6, 'w')); // cabo
@@ -71,7 +71,7 @@ public final class ArteNomeadas3D {
                 l.add(new Peca(12.3, 19.7, 4.5, 5.6, -0.35, 0.35, 'h')); // fio
                 l.add(new Peca(14.5, 17.5, -1.8, 0.5, -0.7, 0.7, 'd'));  // contrapeso
                 l.add(new Peca(15.5, 16.5, -0.2, 0.2, -0.8, 0.8, 'a'));  // rebite
-                if (n.molde().equals("machado2")) {
+                if (molde.equals("machado2")) {
                     l.add(new Peca(10.5, 13, 1.5, 4.5, -0.45, 0.45, 'm')); // barba
                     l.add(new Peca(10, 12.3, 4.5, 5.4, -0.3, 0.3, 'h'));
                 }
@@ -225,6 +225,75 @@ public final class ArteNomeadas3D {
                 l.add(new Peca(18, 20.5, 1.5, 1.9, -0.2, 0.2, 'd'));
                 l.add(new Peca(20.5, 21.3, 1.5, 2.0, -0.25, 0.25, 'a')); // ponta
             }
+            // ---------- armas dos minérios ----------
+            case "montante" -> {
+                l.add(new Peca(0, 1.8, -1.1, 1.1, -1.1, 1.1, 'p'));
+                l.add(new Peca(1.8, 7, -0.65, 0.65, -0.65, 0.65, 'w'));
+                l.add(new Peca(7, 8.4, -4, 4, -1, 1, 'g'));                  // guarda larga
+                l.add(new Peca(7.3, 8.1, -0.6, 0.6, -1.2, 1.2, 'a'));        // gema de mitrilo
+                l.add(new Peca(8.4, 21, -1.9, 1.9, -0.4, 0.4, 'm'));         // lâmina larga e comprida
+                l.add(new Peca(8.4, 21, 1.4, 1.9, -0.45, 0.45, 'h'));        // fio
+                l.add(new Peca(9, 20, -0.3, 0.3, -0.5, 0.5, 'a'));           // veio de mitrilo
+                l.add(new Peca(21, 23, -1.2, 1.2, -0.35, 0.35, 'h'));
+                l.add(new Peca(23, 24, -0.4, 0.4, -0.3, 0.3, 'h'));
+            }
+            case "bumerangue" -> {
+                l.add(new Peca(2, 10, -0.8, 0.8, -0.35, 0.35, 'w'));          // braço que segura
+                l.add(new Peca(8.4, 10, 0.8, 8.5, -0.35, 0.35, 'w'));         // o outro braço, em ângulo
+                l.add(new Peca(2, 10, 0.5, 0.8, -0.4, 0.4, 'm'));             // borda clara
+                l.add(new Peca(8.4, 8.7, 0.8, 8.5, -0.4, 0.4, 'm'));
+                l.add(new Peca(4, 5, -0.4, 0.4, -0.45, 0.45, 'a'));           // âmbar
+                l.add(new Peca(8.8, 9.6, 5, 6, -0.45, 0.45, 'a'));
+                l.add(new Peca(1.4, 2, -0.6, 0.6, -0.3, 0.3, 'p'));           // pontas
+                l.add(new Peca(8.6, 9.8, 8.5, 9.1, -0.3, 0.3, 'p'));
+            }
+            case "leques" -> {
+                l.add(new Peca(0, 4, -0.5, 0.5, -0.5, 0.5, 'w'));             // cabo
+                l.add(new Peca(3.6, 4.6, -0.8, 0.8, -0.6, 0.6, 'g'));         // pino
+                l.add(new Peca(4.6, 12, -5, 5, -0.12, 0.12, 'm'));            // o pano de jade
+                for (double v = -4.5; v <= 4.6; v += 2.25) l.add(new Peca(4.6, 11.6, v - 0.2, v + 0.2, -0.22, 0.22, 'w')); // varetas
+                l.add(new Peca(11.6, 12.4, -5.2, 5.2, -0.18, 0.18, 'd'));     // borda
+            }
+            case "arpao" -> {
+                l.add(new Peca(-9, 15, -0.5, 0.5, -0.5, 0.5, 'w'));
+                l.add(new Peca(13.6, 15.2, -0.65, 0.65, -0.65, 0.65, 'g'));  // amarração
+                l.add(new Peca(15.2, 16.4, -0.8, 0.8, -0.8, 0.8, 'a'));      // pérola no colar
+                l.add(new Peca(16.4, 20.5, -1.1, 1.1, -0.3, 0.3, 'h'));      // ponta
+                l.add(new Peca(20.5, 22.5, -0.5, 0.5, -0.25, 0.25, 'h'));
+                l.add(new Peca(16.6, 18, -2.3, -1.1, -0.25, 0.25, 'm'));     // farpas
+                l.add(new Peca(16.6, 18, 1.1, 2.3, -0.25, 0.25, 'm'));
+                l.add(new Peca(4, 5, -0.7, 0.7, -0.7, 0.7, 'p'));            // corda enrolada
+            }
+            case "mangual" -> {
+                l.add(new Peca(0, 7, -0.55, 0.55, -0.55, 0.55, 'w'));
+                l.add(new Peca(0, 2, -0.7, 0.7, -0.7, 0.7, 'g'));
+                for (double t = 7.2; t < 13; t += 1.4) l.add(new Peca(t, t + 1, -0.35, 0.35, -0.35, 0.35, 'p')); // elos
+                l.add(new Peca(13, 17, -2, 2, -2, 2, 'm'));                  // a bola de gelo
+                l.add(new Peca(13.5, 16.5, -2.3, 2.3, -1.2, 1.2, 'd'));
+                l.add(new Peca(13.5, 16.5, -1.2, 1.2, -2.3, 2.3, 'd'));
+                l.add(new Peca(14.6, 15.4, -3, 3, -0.3, 0.3, 'h'));          // espetos
+                l.add(new Peca(14.6, 15.4, -0.3, 0.3, -3, 3, 'h'));
+                l.add(new Peca(17, 17.8, -0.3, 0.3, -0.3, 0.3, 'h'));
+            }
+            case "garras" -> {
+                l.add(new Peca(0, 4, -1.2, 1.2, -1.3, 1.3, 'w'));            // a luva
+                l.add(new Peca(3.2, 4.2, -1.4, 1.4, -1.5, 1.5, 'g'));
+                l.add(new Peca(1.4, 2.6, 1.2, 1.5, -0.5, 0.5, 'a'));         // pedra-sangue
+                for (double w = -0.9; w <= 0.95; w += 0.9) {
+                    l.add(new Peca(4.2, 11, 0, 0.6, w - 0.12, w + 0.12, 'h')); // três lâminas
+                    l.add(new Peca(11, 12.5, 0.3, 0.8, w - 0.1, w + 0.1, 'm'));
+                }
+            }
+            case "clava" -> {
+                l.add(new Peca(0, 9, -0.6, 0.6, -0.6, 0.6, 'w'));
+                l.add(new Peca(1, 3.2, -0.75, 0.75, -0.75, 0.75, 'p'));      // turfa enrolada
+                l.add(new Peca(9, 17, -2, 2, -2, 2, 'm'));                   // a cabeça
+                l.add(new Peca(17, 18.4, -1.4, 1.4, -1.4, 1.4, 'm'));
+                l.add(new Peca(11, 12, 1.9, 2.3, -0.5, 0.5, 'a'));           // brasas
+                l.add(new Peca(14, 15, -2.3, -1.9, -0.5, 0.5, 'a'));
+                l.add(new Peca(12.5, 13.5, -0.5, 0.5, 1.9, 2.3, 'a'));
+                l.add(new Peca(15.5, 16.5, -0.5, 0.5, -2.3, -1.9, 'a'));
+            }
             default -> { }
         }
         return l;
@@ -240,7 +309,7 @@ public final class ArteNomeadas3D {
     public static List<Elemento> elementos(Nomeada n, boolean lancada) {
         List<Elemento> l = new ArrayList<>();
         double bx = 1.2, by = 1.2;
-        for (Peca p : pecas(n, lancada)) {
+        for (Peca p : pecas(n.molde(), lancada)) {
             double tc = (p.t0() + p.t1()) / 2, vc = (p.v0() + p.v1()) / 2, wc = 8 + (p.w0() + p.w1()) / 2;
             double cx = bx + tc * R2 - vc * R2, cy = by + tc * R2 + vc * R2;
             double lt = (p.t1() - p.t0()) / 2, lv = (p.v1() - p.v0()) / 2, lw = (p.w1() - p.w0()) / 2;
@@ -303,11 +372,27 @@ public final class ArteNomeadas3D {
               "fixed": { "rotation": [0, 180, 0], "scale": [0.45, 0.45, 0.45] }
             }""";
 
+    /** As armas dos minérios sem nome: o mesmo 3D da molde (textura rpgatributos:item/{visual}_cores). */
+    public static String modeloArsenal(String molde, String visual) {
+        List<Elemento> els = new ArrayList<>();
+        double bx = 1.2, by = 1.2;
+        for (Peca p : pecas(molde, false)) {
+            double tc = (p.t0() + p.t1()) / 2, vc = (p.v0() + p.v1()) / 2, wc = 8 + (p.w0() + p.w1()) / 2;
+            double cx = bx + tc * R2 - vc * R2, cy = by + tc * R2 + vc * R2;
+            double lt = (p.t1() - p.t0()) / 2, lv = (p.v1() - p.v0()) / 2, lw = (p.w1() - p.w0()) / 2;
+            els.add(new Elemento(new double[]{cx - lt, cy - lv, wc - lw}, new double[]{cx + lt, cy + lv, wc + lw}, new double[]{cx, cy, wc}, p.cor()));
+        }
+        return json("rpgatributos:item/" + visual + "_cores", els, molde.equals("arpao") ? DISPLAY_LANCA : DISPLAY);
+    }
+
     /** O modelo 3D (textura: rpgatributos:item/{visual}_cores). */
     public static String modelo(Nomeada n, boolean lancada) {
-        String tex = "rpgatributos:item/" + n.visual() + "_cores";
+        return json("rpgatributos:item/" + n.visual() + "_cores", elementos(n, lancada),
+                n.categoria() == Categoria.VARA ? DISPLAY_VARA : n.categoria() == Categoria.LANCA || n.molde().equals("arpao") ? DISPLAY_LANCA : DISPLAY);
+    }
+
+    private static String json(String tex, List<Elemento> els, String display) {
         StringBuilder sb = new StringBuilder("{ \"textures\": { \"0\": \"" + tex + "\", \"particle\": \"" + tex + "\" },\n  \"elements\": [\n");
-        List<Elemento> els = elementos(n, lancada);
         for (int i = 0; i < els.size(); i++) {
             Elemento e = els.get(i);
             String uv = uv(e.cor());
@@ -324,7 +409,7 @@ public final class ArteNomeadas3D {
             }
             sb.append(" } }").append(i < els.size() - 1 ? ",\n" : "\n");
         }
-        sb.append("  ],\n  ").append(n.categoria() == Categoria.VARA ? DISPLAY_VARA : n.categoria() == Categoria.LANCA ? DISPLAY_LANCA : DISPLAY).append("\n}\n");
+        sb.append("  ],\n  ").append(display).append("\n}\n");
         return sb.toString();
     }
 

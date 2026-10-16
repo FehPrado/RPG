@@ -319,7 +319,9 @@ public final class Forja {
     /** Uma arma com nome pronta (forjada na raridade dada), para baús e chefes. */
     public ItemStack criarNomeada(Nomeada n, Raridade r) {
         // Arma do arsenal (adaga, foice...): começa da própria arma, não da espada comum.
-        ItemStack base = n.arma() != null ? br.rpgatributos.combo.Arsenal.criar(n.arma(), n.sortearMaterial()) : new ItemStack(n.sortearMaterial());
+        ItemStack base = n.arma() != null
+                ? br.rpgatributos.combo.Arsenal.criar(n.arma(), n.arma().deMinerio() ? n.arma().base : n.sortearMaterial())
+                : new ItemStack(n.sortearMaterial());
         ItemStack item = forjar(null, base, r);
         if (Nomeada.de(item) != n) nomear(item, n);
         return item;
@@ -387,7 +389,7 @@ public final class Forja {
             if (d.refino() > 0) nome = nome.append(Component.text(" +" + d.refino(), r.cor()));
             meta.itemName(nome);
             if (cat == Categoria.CAJADO) br.rpgatributos.exploracao.PacoteRecursos.marcar(meta, "cajado_arcano");
-            if (arma != null) br.rpgatributos.exploracao.PacoteRecursos.marcar(meta, arma.visual());
+            if (arma != null) br.rpgatributos.exploracao.PacoteRecursos.marcar(meta, br.rpgatributos.combo.Arsenal.visual(arma, tipo));
 
             // Ao definir atributos no item, os padrões somem; por isso eles são copiados junto
             // (sempre presos ao slot certo: peitoral na mão não pode dar armadura).
@@ -431,6 +433,7 @@ public final class Forja {
             plugin.oficios().decorar(meta, tipo); // peça de conjunto do Ateliê: nome, bônus e o +1 de armadura voltam
             br.rpgatributos.combo.Ligacoes.decorar(meta); // óleo de lâmina passado: a linha dele volta
             plugin.pedrasAmolar().decorar(meta); // arma afiada: a linha do fio volta
+            Incrustacoes.decorar(meta, tipo); // minério incrustado: a linha e o atributo voltam
         });
         Traje.vestir(item); // Traje: a textura dele no corpo de quem veste
     }

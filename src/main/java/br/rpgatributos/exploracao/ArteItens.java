@@ -2212,6 +2212,26 @@ final class ArteItens {
         l.add(new Arte("iron_sword", "arma_foice", FOICE, com(lamina, 'a', 0xFFCFD8DC, 'b', 0xFF607D8B), true));
         l.add(new Arte("iron_sword", "arma_bastao", BASTAO, c('h', 0xFF8D6E4A, 'g', 0xFFB0BEC5, 'k', 0xFF3E2723), true));
         l.add(new Arte("iron_sword", "arma_chicote", CHICOTE, c('l', 0xFF8D5A2B, 'h', 0xFF4E342E, 'k', 0xFF3E2723), true));
+        // Desenho por material (ajustes da 2.51): a lâmina (ou as ponteiras do bastão) pega a cor do material.
+        for (String t : br.rpgatributos.combo.Arsenal.MATERIAIS_VISUAIS) {
+            int[] cor = switch (t) {
+                case "wooden" -> new int[]{0xFFC8A270, 0xFF8A6A3A};
+                case "stone" -> new int[]{0xFFB4B4B4, 0xFF6E6E6E};
+                case "copper" -> new int[]{0xFFEBA884, 0xFFB4684A};
+                case "iron" -> new int[]{0xFFE8EAED, 0xFF9AA0A6};
+                case "golden" -> new int[]{0xFFFFF176, 0xFFE0A800};
+                case "diamond" -> new int[]{0xFFB2FFF8, 0xFF33D6C8};
+                case "netherite" -> new int[]{0xFF7A7073, 0xFF443C3E};
+                default -> new int[]{0xFFE8EAED, 0xFF9AA0A6};
+            };
+            String host = t + "_sword";
+            Map<Character, Integer> metal = com(lamina, 'a', cor[0], 'b', cor[1]);
+            l.add(new Arte(host, "arma_adaga_" + t, ADAGA, metal, true));
+            l.add(new Arte(host, "arma_faca_arremesso_" + t, FACA_ARREMESSO, metal, true));
+            l.add(new Arte(host, "arma_machadinha_" + t, MACHADINHA, metal, true));
+            l.add(new Arte(host, "arma_foice_" + t, FOICE, metal, true));
+            l.add(new Arte(host, "arma_bastao_" + t, BASTAO, c('h', 0xFF8D6E4A, 'g', cor[0], 'k', 0xFF3E2723), true));
+        }
         // Armas dos minérios (ajustes da 2.51)
         l.add(new Arte("iron_sword", "arma_montante", ARMA_MONTANTE, c('k', 0xFF212121, 'a', 0xFFE0F7FA, 'b', 0xFF7FCFE0, 'g', 0xFFC9A227, 'h', 0xFF4E342E, 'x', 0xFF4DD0E1), true));
         l.add(new Arte("iron_sword", "arma_bumerangue", ARMA_BUMERANGUE, c('k', 0xFF3E2723, 'h', 0xFF8D6E4A, 'g', 0xFFBC9664, 'x', 0xFFF2A33A, 'y', 0xFFFFD54F), true));

@@ -392,6 +392,17 @@ public final class PacoteRecursos implements Listener {
                 }
             }
         }
+        // Armas dos minérios (sem nome) também ficam em 3D na mão, com as pegadas das posturas.
+        for (br.rpgatributos.combo.Arsenal.Arma a : br.rpgatributos.combo.Arsenal.Arma.values()) {
+            if (!a.deMinerio()) continue;
+            String v = a.visual();
+            f.put("assets/rpgatributos/models/item/" + v + "_3d.json", texto(ArteNomeadas3D.modeloArsenal(a.id, v)));
+            for (String pg : List.of("ofensiva", "defensiva", "agil", "duelista", "carrasco", "colosso")) {
+                if (PEGADAS.containsKey(pg)) {
+                    f.put("assets/rpgatributos/models/item/postura/" + v + "_3d_" + pg + ".json", texto(modeloPegada("rpgatributos:item/" + v + "_3d", pg)));
+                }
+            }
+        }
         // Arcos, bestas e varas com nome: modelos do jogo (mesma posição na mão), textura própria em cada fase.
         // Lanças e tridente com nome: no inventário o desenho, na mão o 3D; sem nome, igual ao jogo.
         for (Material m : Material.values()) {
@@ -443,6 +454,9 @@ public final class PacoteRecursos implements Listener {
         for (ArteNomeadas.Desenho d : ArteNomeadas.desenhos()) texturas.putIfAbsent("item/" + d.id(), desenho(d.linhas(), d.cores()));
         for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
             if (ArteNomeadas3D.tem3D(n.categoria())) texturas.put("item/" + n.visual() + "_cores", ArteNomeadas3D.cores(ArteNomeadas.paleta(n)));
+        }
+        for (br.rpgatributos.combo.Arsenal.Arma a : br.rpgatributos.combo.Arsenal.Arma.values()) {
+            if (a.deMinerio()) texturas.put("item/" + a.visual() + "_cores", ArteNomeadas3D.cores(ArteNomeadas.paletaArsenal(a.id)));
         }
         File padrao = new File(pasta, "texturas-padrao"), proprias = new File(pasta, "texturas");
         if (!padrao.exists() && !padrao.mkdirs()) throw new IOException("não criei a pasta " + padrao);
@@ -566,6 +580,7 @@ public final class PacoteRecursos implements Listener {
         for (br.rpgatributos.forja.Nomeada n : br.rpgatributos.forja.Nomeada.values()) {
             if (ArteNomeadas3D.tem3D(n.categoria())) s.add(n.visual());
         }
+        for (br.rpgatributos.combo.Arsenal.Arma a : br.rpgatributos.combo.Arsenal.Arma.values()) if (a.deMinerio()) s.add(a.visual());
         return s;
     }
 

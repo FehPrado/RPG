@@ -197,6 +197,17 @@ public final class Arsenal implements Listener {
         return "";
     }
 
+    /** Os materiais que têm desenho próprio nas armas da bancada (a lâmina pega a cor do material). */
+    public static final String[] MATERIAIS_VISUAIS = {"wooden", "stone", "copper", "iron", "golden", "diamond", "netherite"};
+
+    /** O visual da arma nesse material ("arma_adaga_golden"); armas dos minérios e o chicote têm um só. */
+    public static String visual(Arma a, Material m) {
+        if (a.deMinerio() || a == Arma.CHICOTE || m == null) return a.visual();
+        String n = m.name().toLowerCase(Locale.ROOT);
+        for (String t : MATERIAIS_VISUAIS) if (n.startsWith(t + "_")) return a.visual() + "_" + t;
+        return a.visual();
+    }
+
     public static String nome(Arma a, Material m) {
         if (a.deMinerio()) return a.nome;
         String mat = material(m);
@@ -247,7 +258,7 @@ public final class Arsenal implements Listener {
         i.editMeta(m -> {
             m.getPersistentDataContainer().set(K_ARMA, PersistentDataType.STRING, a.id);
             m.itemName(Component.text(nome(a, espada)));
-            PacoteRecursos.marcar(m, a.visual());
+            PacoteRecursos.marcar(m, visual(a, espada));
             aplicarBase(m, a, espada);
         });
         return i;
@@ -354,6 +365,7 @@ public final class Arsenal implements Listener {
         r.editMeta(m -> {
             m.itemName(Component.text(nome(a, r.getType())));
             aplicarBase(m, a, r.getType());
+            PacoteRecursos.marcar(m, visual(a, r.getType()));
         });
         e.setResult(r);
     }
