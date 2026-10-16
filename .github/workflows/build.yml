@@ -3,6 +3,11 @@ name: Compilar plugin
 on:
   push:
   workflow_dispatch:
+    inputs:
+      subir_jar:
+        description: Subir o jar compilado para a raiz da branch
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -23,6 +28,15 @@ jobs:
         with:
           name: RPGAtributos
           path: target/RPGAtributos-*.jar
+      # Rodado à mão com "subir_jar": o jar vai para a raiz da branch (como os das versões anteriores).
+      - if: github.event_name == 'workflow_dispatch' && inputs.subir_jar
+        run: |
+          cp target/RPGAtributos-*.jar .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f RPGAtributos-*.jar
+          git diff --cached --quiet || git commit -m "Jar $(ls target/RPGAtributos-*.jar | xargs -n1 basename)"
+          git push
       # Tag "v2.36.0" (git tag v2.36.0 && git push origin v2.36.0): vira uma Release com o jar.
       - if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
