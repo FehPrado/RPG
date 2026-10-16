@@ -312,6 +312,8 @@ Como em Harvest Moon e Stardew Valley. **Agachado + clique com a mão vazia** nu
 - **Produtos** (com qualidade pelo afeto e pela Doma): **ovo** todo dia (2 com 4 corações), **leite** e **leite de cabra** (balde vazio, uma vez por dia), **lã** de qualidade na tosquia (+1 com 3 corações), **trufas** que o porco fuça ao ar livre (menos no inverno), **pele e pé de coelho**.
 - **Filhotes:** dois animais seus que cruzam têm o filhote já na fazenda; na primavera, às vezes **gêmeos**.
 - Ninguém de fora machuca seus animais. Nome novo: use uma etiqueta com nome. Dá XP de Doma.
+- **Linhagens de cavalo (2.50):** cavalos, burros, mulas, lhamas e camelos guardam **pai, mãe e geração**. O filhote herda dos pais (como no jogo) e cada atributo tem 25% de chance de **melhorar** 3% a 8% (sem passar do máximo do jogo; a lhama pode ganhar força de carga). Da **5ª geração** em diante a família ganha um **nome de linhagem** (ex.: "Linhagem do Vento"), que os descendentes carregam. O **Livro do Criador** (livro + cenoura dourada + couro, sem forma) mostra, clicando no animal: velocidade em blocos/s, altura do pulo, vida, geração, pais, linhagem e quem criou, com barras comparando com o máximo do jogo.
+- **Estábulo (2.50):** jogue **1 sela e 1 laço** em cima de um **fardo de feno**. Clique nele para **guardar** a montaria em que você está (ou a sua mais perto, até 10 blocos) e para **chamar** as guardadas: até **4 por estábulo**, só quem guardou chama. A montaria sai do mundo e volta igual (nome, linhagem, sela, armadura, componentes e alforje do Domador). Vale para cavalo, burro, mula, lhama, camelo e porco/lavagante selados; as lendárias não entram. Quebrar o estábulo solta todas ali mesmo.
 
 ## Tacho do Artesão
 
@@ -770,6 +772,7 @@ A colheita sai com qualidade ★ (pelo nível de Agricultura) e dá XP de Agricu
 Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direito, `E` = clique esquerdo). Cada clique tem até 0,9 s para o próximo; a barra de ação mostra o progresso (`D · E · ?`).
 - **Espada, machado, lança, tridente e maça** começam com o **direito** (o esquerdo continua sendo o ataque normal): `D D D`, `D E D`, `D D E` e `D E E`.
 - **Arco e besta** começam com o **esquerdo**, porque o direito puxa a flecha: `E E E`, `E D E`, `E E D` e `E D D`.
+- **Arsenal novo (2.51):** adaga, Lâminas Duplas (uma adaga em cada mão), foice, bastão e chicote começam com o direito; o **Arremesso** (faca e machadinha) começa com o esquerdo, porque o direito arremessa.
 - Agachado não solta combo (agachar continua sendo das habilidades de classe). Clicar com o direito em baú, porta ou estação não conta. Um clique só ainda levanta o escudo.
 - **Vigor:** cada golpe gasta vigor (barra amarela no topo). Ele volta sozinho, bem mais rápido fora de luta. O máximo é 100 + 0,5 por nível de Combate. Cada golpe também tem uma recarga curta.
 - **Proficiência:** cada tipo de arma tem um nível de 1 a 20, que sobe acertando e derrotando inimigos com ela (mobs de spawner dão menos). Cada nível dá +2% de dano nos golpes e libera golpes novos.
@@ -809,6 +812,29 @@ Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direi
 
 **Lança:** o clique esquerdo da lança é a estocada dela, que não é um balanço normal do braço; o plugin percebe a estocada pela força do ataque e conta como `E` normalmente.
 
+
+### O arsenal novo (2.51)
+
+Seis armas novas, cada uma com **proficiência, 7 golpes e uma Postura Mestra**. Todas usam a base de espada do jogo (madeira, pedra, cobre, ferro, ouro, diamante e netherite pela mesa de ferraria), são feitas na **bancada** e entram na **Forja do Ferreiro** como as outras armas (raridade, status, gemas, runas, refino). `/rpgadmin arma <tipo> [material] [forjar]` dá uma pronta.
+
+| Arma | Receita (M = material) | Jeito | Postura Mestra |
+|---|---|---|---|
+| **Adaga** | `M` e graveto na diagonal | Rápida (2,4 golpes/s), -2 de dano. **Pelas costas: +50%.** Uma em cada mão = **Lâminas Duplas**: às vezes a segunda adaga acerta junto | **Sombra**: +10% de dano e velocidade, pelas costas x1,8. Duplas: **Tempestade Gêmea** (a segunda adaga acerta sempre) |
+| **Faca de Arremesso** | `M` sobre pena | **Clique direito arremessa** (dano x1,3); a faca fica no chão brilhando e só você pega (volta sozinha em 1 min) | **Olho de Águia**: arremessos +25% e a arma volta para a mão |
+| **Machadinha** | `MM` / graveto e pena | Arremesso pesado (dano x1,7) | Olho de Águia |
+| **Foice** | `MMM` e 2 gravetos | Corte largo, +1 de dano, +0,5 de alcance; cada inimigo derrotado cura 1,5 ❤ | **Ceifador**: +10% de dano, cada abate cura 3 ❤ e dá Força |
+| **Bastão** | `M` e 2 gravetos na diagonal | +1 de alcance e mais empurrão | **Monge**: -15% de dano recebido e desequilibra 50% mais |
+| **Chicote** | `M`, couro e graveto | **+3 de alcance** | **Domador de Feras**: +10% de dano e cada acerto deixa lento |
+
+Golpes (nível de proficiência 1, 3, 5, 8, 12, 16 e 20):
+- **Adaga:** Punhalada (x2 pelas costas), Corte Venenoso, Rolamento, Nuvem de Fumaça, Dança das Lâminas, Sombra Assassina, Marca da Morte.
+- **Lâminas Duplas:** Corte Duplo, Redemoinho Gêmeo, X Cruzado, Investida Gêmea, Chuva de Aço, Dança do Vento, Ciclone Carmesim (rouba vida).
+- **Arremesso:** Leque de Facas, Ricochete, Lâmina que Prende, Machadinha Giratória, Chuva de Lâminas, Lâmina Explosiva, Tempestade de Aço.
+- **Foice:** Ceifar, Gancho da Foice, Colheita (cura), Foice Giratória, Ceifa das Almas, Passo do Ceifador, Colheita Final (executa quem tem menos de 20%).
+- **Bastão:** Varredura Baixa, Estocada do Bastão, Salto com Vara, Moinho, Bastão Sísmico, Defesa do Monge, Pilar Celeste.
+- **Chicote:** Chicotada, Laço, Desarmar, Estalo, Balanço (puxa você até um bloco), Chicote de Fogo, Serpente.
+
+Títulos: **Sombra das Lâminas** (Lâminas Duplas no 20), **Ceifador** (foice no 20) e **Mestre do Arsenal** (as 12 armas no 20).
 ### Posturas, estilo e equilíbrio
 
 **Posturas** (`/postura` ou o botão no `/combos`): valem enquanto você segura uma arma de combo.
@@ -819,7 +845,7 @@ Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direi
 | ▲ Ofensiva | +15% de dano e desequilibra +25%; leva +10% de dano e os golpes custam +10% de vigor |
 | ■ Defensiva | -20% de dano recebido, resiste a empurrões, cada golpe de combo cura ½ ❤; -10% de dano e 5% mais lento |
 | ≈ Ágil | +10% de velocidade, golpes recarregam 20% mais rápido, esquiva custa metade do vigor; -8% de dano |
-| ✦ Mestra | A da arma na mão, na proficiência 20: **Duelista** (espada: +15% de dano e janela maior do golpe perfeito), **Carrasco** (machado: +40% em quem tem menos de 35% da vida), **Falange** (lança: +10% de dano e -25% de dano de quem está na frente), **Maré** (tridente: na água ou chuva +30% de dano e +20% de velocidade), **Colosso** (maça: +10% de dano, desequilibra o dobro, resiste a empurrões), **Atirador Paciente** (arco: parado há 1 s, +35% de dano) |
+| ✦ Mestra | A da arma na mão, na proficiência 20: **Duelista** (espada: +15% de dano e janela maior do golpe perfeito), **Carrasco** (machado: +40% em quem tem menos de 35% da vida), **Falange** (lança: +10% de dano e -25% de dano de quem está na frente), **Maré** (tridente: na água ou chuva +30% de dano e +20% de velocidade), **Colosso** (maça: +10% de dano, desequilibra o dobro, resiste a empurrões), **Atirador Paciente** (arco: parado há 1 s, +35% de dano); as do arsenal novo estão na tabela acima |
 
 - **Visual:** aura de partículas na cor da postura. Com o pacote de recursos, **espada, machado e maça mudam o jeito de segurar** (erguida, em guarda, invertida e a pegada da Mestra). Lança, tridente e arco ficam com a pegada normal.
 - **Golpe no tempo certo:** depois do 2º clique, um "tim" com faíscas marca o momento do 3º. Acertando a janela, o golpe sai **perfeito**: +25% de dano, 30% menos vigor, mais estilo e mais equilíbrio.
@@ -1403,6 +1429,7 @@ Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir
 - **Peixes raros:** 12 espécies que só mordem em certos lugares, horários ou climas. `/peixes` abre o **Diário do Pescador**, com onde procurar cada um.
 - **Tesouros do Mar:** esmeraldas, ouro, diamantes, livros encantados, Pérolas Negras e, raramente, Mapa Rasgado ou Fragmento de Forja.
 - **Criaturas marinhas:** às vezes algo grande morde a isca e luta de volta (Afogado Faminto, Guardião das Ondas, Capitão Afogado e o gigante Senhor das Marés). Elas deixam Escamas do Abismo e Pérolas Negras.
+- **Peso dos peixes (2.50):** todo peixe vem com **peso** ("🎣 Salmão — 3,2 kg"), que depende da espécie, da qualidade ★ e do nível de Pesca (os raros pesam mais). O maior de cada espécie vira **recorde pessoal** e, se for o maior do servidor, entra nos `/recordes` (e é anunciado quando alguém toma o recorde). Para os peixes continuarem empilhando, só os **troféus** (novo recorde pessoal ou peixe enorme) levam o peso escrito no item. O Diário do Pescador mostra seus recordes e os do servidor.
 
 | Peixe | Onde/quando | Pesca |
 |---|---|---|
@@ -1504,7 +1531,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 103 títulos com requisitos (em páginas), por exemplo Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 108 títulos com requisitos (em páginas), por exemplo Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1714,9 +1741,9 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.49.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.51.0.jar`.
 
-Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.49.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.49.0 && git push origin v2.49.0`) e o jar aparece em **Releases**.
+Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 
 Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtributos/backups/` e guarda os últimos 7 dias (`backup.dias`).
 

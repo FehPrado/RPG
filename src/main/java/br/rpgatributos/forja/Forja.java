@@ -284,7 +284,7 @@ public final class Forja {
         item.setAmount(1);
         construir(item, d);
         // Às vezes a peça já nasce com nome (mais chance nas raridades altas).
-        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && Traje.de(item) == null && !br.rpgatributos.lenda.Lendas.marcado(item)
+        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && Traje.de(item) == null && !br.rpgatributos.lenda.Lendas.marcado(item) && br.rpgatributos.combo.Arsenal.de(item) == null
                 && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < Nomeada.chance(r) * plugin.settings().nomeadasChance) {
             Nomeada n = Nomeada.sortear(item.getType());
             if (n == null && Traje.aceita(item)) {
@@ -377,16 +377,23 @@ public final class Forja {
             if (d.gemas().isEmpty()) pdc.remove(kGemas);
             else pdc.set(kGemas, PersistentDataType.STRING, d.gemasTexto());
 
+            // 2.51: arma do arsenal novo (adaga, foice...): nome, visual e atributos dela.
+            br.rpgatributos.combo.Arsenal.Arma arma = br.rpgatributos.combo.Arsenal.de(meta);
             Component nome = cat == Categoria.CAJADO ? Component.text("Cajado Arcano", r.cor())
+                    : arma != null ? Component.text(br.rpgatributos.combo.Arsenal.nome(arma, tipo), r.cor())
                     : Component.translatable(tipo.translationKey(), r.cor());
             if (d.refino() > 0) nome = nome.append(Component.text(" +" + d.refino(), r.cor()));
             meta.itemName(nome);
             if (cat == Categoria.CAJADO) br.rpgatributos.exploracao.PacoteRecursos.marcar(meta, "cajado_arcano");
+            if (arma != null) br.rpgatributos.exploracao.PacoteRecursos.marcar(meta, arma.visual());
 
             // Ao definir atributos no item, os padrões somem; por isso eles são copiados junto
             // (sempre presos ao slot certo: peitoral na mão não pode dar armadura).
             Multimap<Attribute, AttributeModifier> mods = ArrayListMultimap.create();
-            tipo.getDefaultAttributeModifiers().forEach((a, m) -> {
+            if (arma != null) br.rpgatributos.combo.Arsenal.extras(arma, mods, cat.grupo());
+            tipo.getDefaultAttributeModifiers().forEach((a, m0) -> {
+                AttributeModifier m = arma == null ? m0 : new AttributeModifier(m0.getKey(),
+                        br.rpgatributos.combo.Arsenal.ajustar(arma, a, m0.getAmount()), m0.getOperation(), m0.getSlotGroup());
                 EquipmentSlotGroup grupo = m.getSlotGroup() == EquipmentSlotGroup.ANY ? cat.grupo() : m.getSlotGroup();
                 mods.put(a, new AttributeModifier(m.getKey(), m.getAmount(), m.getOperation(), grupo));
                 // Refino: dano/armadura base do item crescem 4% por nível.
@@ -413,7 +420,7 @@ public final class Forja {
             meta.setAttributeModifiers(mods);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES); // a descrição abaixo mostra tudo de forma mais clara
             meta.setEnchantmentGlintOverride(r.peloMenos(Raridade.LENDARIO) ? Boolean.TRUE : null);
-            meta.lore(semItalico(montarDescricao(tipo, cat, tier, d)));
+            meta.lore(semItalico(montarDescricao(tipo, cat, tier, d, arma)));
             plugin.lendas().decorar(meta, d.refino()); // se for uma lenda: nome, "Especial", poder e história
             Nomeada.decorar(meta, d.refino(), r.cor()); // arma com nome: nome, história e visual próprios
             Traje.decorar(meta, tipo, d.refino(), r.cor()); // armadura com nome (Traje): idem
@@ -426,7 +433,7 @@ public final class Forja {
         Traje.vestir(item); // Traje: a textura dele no corpo de quem veste
     }
 
-    private List<Component> montarDescricao(Material tipo, Categoria cat, Tier tier, DadosForja d) {
+    private List<Component> montarDescricao(Material tipo, Categoria cat, Tier tier, DadosForja d, br.rpgatributos.combo.Arsenal.Arma arma) {
         Raridade r = d.raridade();
         double mult = multiplicador(d);
         List<Component> l = new ArrayList<>();
@@ -434,6 +441,7 @@ public final class Forja {
                 .append(Component.text(r.nome().toUpperCase(Locale.ROOT), r.cor(), TextDecoration.BOLD));
         if (d.refino() > 0) cabecalho = cabecalho.append(Component.text("  +" + d.refino(), NamedTextColor.GOLD, TextDecoration.BOLD));
         l.add(cabecalho);
+        if (arma != null) l.add(Component.text(arma.descricao, NamedTextColor.GRAY));
 
         Map<Stat, Double> valores = new EnumMap<>(Stat.class);
         d.status().forEach((s, q) -> valores.put(s, s.valor(q, mult, tier)));
@@ -442,7 +450,7 @@ public final class Forja {
         Map<Attribute, Double> base = new LinkedHashMap<>();
         for (Map.Entry<Attribute, AttributeModifier> e : tipo.getDefaultAttributeModifiers().entries()) {
             if (e.getValue().getOperation() == AttributeModifier.Operation.ADD_NUMBER) {
-                base.merge(e.getKey(), e.getValue().getAmount(), Double::sum);
+                base.merge(e.getKey(), arma == null ? e.getValue().getAmount() : br.rpgatributos.combo.Arsenal.ajustar(arma, e.getKey(), e.getValue().getAmount()), Double::sum);
             }
         }
         Set<Stat> jaMostrados = EnumSet.noneOf(Stat.class);

@@ -78,6 +78,12 @@ public enum Postura {
             case TRIDENTE -> "Maré";
             case MACA -> "Colosso";
             case ARCO -> "Atirador Paciente";
+            case ADAGA -> "Sombra";
+            case DUPLAS -> "Tempestade Gêmea";
+            case ARREMESSO -> "Olho de Águia";
+            case FOICE -> "Ceifador";
+            case BASTAO -> "Monge";
+            case CHICOTE -> "Domador de Feras";
         };
     }
 
@@ -89,6 +95,12 @@ public enum Postura {
             case TRIDENTE -> "Na água ou na chuva: +30% de dano e +20% de velocidade.";
             case MACA -> "+10% de dano, desequilibra o dobro e resiste a empurrões. Um pouco mais lento.";
             case ARCO -> "Parado há 1 segundo: +35% de dano das flechas e dos golpes de arco.";
+            case ADAGA -> "+10% de dano, +10% de velocidade e o golpe pelas costas fica ainda mais forte (x1,8).";
+            case DUPLAS -> "+5% de dano e a segunda adaga acerta junto em todo golpe.";
+            case ARREMESSO -> "Arremessos +25% de dano e a arma volta sozinha para a mão.";
+            case FOICE -> "+10% de dano; cada inimigo derrotado cura 3 ❤ e dá Força por 5 s.";
+            case BASTAO -> "-15% de dano recebido e os golpes desequilibram 50% mais.";
+            case CHICOTE -> "+10% de dano e cada acerto deixa o inimigo lento.";
         };
     }
 

@@ -94,7 +94,7 @@ public final class Posturas implements Listener, CommandExecutor {
 
     /** A postura que vale com a arma da mão (null = sem arma de combo na mão). */
     public Postura ativa(Player p) {
-        TipoArma t = TipoArma.de(p.getInventory().getItemInMainHand());
+        TipoArma t = TipoArma.de(p);
         if (t == null) return null;
         Postura ps = escolhida(p);
         if (ps == Postura.MESTRA && combos.nivel(p, t) < Combos.NIVEL_MAXIMO) return Postura.NEUTRA;
@@ -102,7 +102,7 @@ public final class Posturas implements Listener, CommandExecutor {
     }
 
     private static TipoArma arma(Player p) {
-        return TipoArma.de(p.getInventory().getItemInMainHand());
+        return TipoArma.de(p);
     }
 
     public void escolher(Player p, Postura ps) {
@@ -208,6 +208,9 @@ public final class Posturas implements Listener, CommandExecutor {
             case TRIDENTE -> naChuvaOuAgua(p) ? 1.30 : 1;
             case MACA -> 1.10;
             case ARCO -> System.currentTimeMillis() - ultimoPasso.getOrDefault(p.getUniqueId(), 0L) >= 1000 ? 1.35 : 1;
+            case ADAGA, FOICE, CHICOTE -> 1.10;
+            case DUPLAS -> 1.05;
+            case ARREMESSO, BASTAO -> 1;
             case null -> 1;
         };
     }
@@ -221,6 +224,7 @@ public final class Posturas implements Listener, CommandExecutor {
             Vector frente = p.getLocation().getDirection().setY(0);
             if (para.lengthSquared() > 1e-4 && frente.lengthSquared() > 1e-4 && para.normalize().dot(frente.normalize()) > 0.4) return 0.75;
         }
+        if (ps == Postura.MESTRA && arma(p) == TipoArma.BASTAO) return 0.85;
         double r = ps.recebido();
         return r > 1 && afimClasse(p, ps) ? 1 + (r - 1) / 2 : r;
     }
@@ -228,6 +232,7 @@ public final class Posturas implements Listener, CommandExecutor {
     double multEquilibrio(Player p) {
         Postura ps = ativa(p);
         if (ps == null) return 1;
+        if (ps == Postura.MESTRA && arma(p) == TipoArma.BASTAO) return 1.5;
         return ps == Postura.MESTRA && arma(p) == TipoArma.MACA ? 2.0 : ps.equilibrio();
     }
 
@@ -261,6 +266,7 @@ public final class Posturas implements Listener, CommandExecutor {
         if (ps != Postura.MESTRA) return ps.velocidade();
         TipoArma t = arma(p);
         if (t == TipoArma.TRIDENTE) return naChuvaOuAgua(p) ? 0.20 : 0;
+        if (t == TipoArma.ADAGA) return 0.10;
         return t == TipoArma.MACA ? -0.05 : 0;
     }
 
@@ -312,7 +318,7 @@ public final class Posturas implements Listener, CommandExecutor {
     void pegada(Player p) {
         ItemStack mao = p.getInventory().getItemInMainHand();
         TipoArma t = TipoArma.de(mao);
-        if (t != TipoArma.ESPADA && t != TipoArma.MACHADO && t != TipoArma.MACA) return;
+        if (t == null || t == TipoArma.ARCO || t == TipoArma.LANCA || t == TipoArma.TRIDENTE) return; // as do arsenal novo têm base de espada
         Postura ps = ativa(p);
         String id = ps == null || ps == Postura.NEUTRA ? null : ps == Postura.MESTRA ? Postura.pegadaMestra(t) : ps.id();
         if (PacoteRecursos.postura(mao).equals(id == null ? "" : id)) return;

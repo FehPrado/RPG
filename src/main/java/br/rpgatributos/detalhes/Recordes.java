@@ -73,6 +73,7 @@ public final class Recordes implements Listener, CommandExecutor {
     }
 
     private static String nome(String id) {
+        if (id.startsWith("peixe_")) return "Maior " + br.rpgatributos.pesca.PesoPeixe.nome(id.substring(6));
         return switch (id) {
             case "maior_golpe" -> "Maior golpe";
             case "nivel_total" -> "Maior nível total";
@@ -154,7 +155,19 @@ public final class Recordes implements Listener, CommandExecutor {
         if (CONTADORES.containsKey(id)) tentar(p, id, valor);
     }
 
+    /** Peso de peixe (2.50): o maior de cada espécie no servidor. */
+    public void peixe(Player p, String especie, double kg) {
+        tentar(p, "peixe_" + especie, kg);
+    }
+
+    /** "5,8 kg — Fulano (12/10/2026)", ou null se ninguém pescou. */
+    public String textoPeixe(String especie) {
+        Recorde r = recordes.get("peixe_" + especie);
+        return r == null ? null : br.rpgatributos.pesca.PesoPeixe.kg(r.valor()) + " — " + r.quem() + " (" + r.data() + ")";
+    }
+
     private static String formatar(String id, double v) {
+        if (id.startsWith("peixe_")) return br.rpgatributos.pesca.PesoPeixe.kg(v);
         return id.equals("maior_golpe") ? StatsManager.fmt(v) + " de dano" : String.valueOf((long) v);
     }
 

@@ -9,3 +9,4 @@ NewDefault*.zip
 
 # Pasta gerada para abrir os modelos no Blockbench
 blockbench/
+docs/site/fonte/pt_br.json

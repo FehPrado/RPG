@@ -551,6 +551,14 @@ public final class Companheiros implements Listener {
         for (Entity ent : e.getEntities()) if (ent instanceof LivingEntity le && eh(le)) carregou(le);
     }
 
+    /** Estábulo (2.50): antes de a criatura ser guardada, fecha e grava o alforje nela. */
+    public void antesDeGuardar(LivingEntity e) {
+        fecharAlforje(e.getUniqueId());
+        salvarAlforje(e.getUniqueId());
+        alforjes.remove(e.getUniqueId());
+        ativos.remove(e.getUniqueId());
+    }
+
     @EventHandler
     public void aoDescarregarEntidades(EntitiesUnloadEvent e) {
         for (Entity ent : e.getEntities()) {

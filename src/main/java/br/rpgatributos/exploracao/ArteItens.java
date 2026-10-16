@@ -1659,6 +1659,128 @@ final class ArteItens {
             "................"};
 
     // ---------- 2.49: artefatos de utilidade ----------
+    // ---------- 2.51: o arsenal novo ----------
+    private static final String[] ADAGA = {
+            "................",
+            "................",
+            "................",
+            "................",
+            "...........ba...",
+            "..........bab...",
+            ".........bab....",
+            "........bab.....",
+            ".......bab......",
+            "....g.bab.......",
+            ".....gbg........",
+            "....hhg.........",
+            "...hh...........",
+            "..kh............",
+            "................",
+            "................"};
+    private static final String[] FACA_ARREMESSO = {
+            "................",
+            "................",
+            "................",
+            "................",
+            "..........aa....",
+            ".........aab....",
+            "........aab.....",
+            ".......aab......",
+            "......gab.......",
+            ".....gg.........",
+            "....kk..........",
+            "...k..k.........",
+            "....kk..........",
+            "................",
+            "................",
+            "................"};
+    private static final String[] MACHADINHA = {
+            "................",
+            "................",
+            ".........bbb....",
+            "........baaab...",
+            ".......baaaab...",
+            ".......bahhab...",
+            "........bhhb....",
+            "........hh......",
+            ".......hh.......",
+            "......hh........",
+            ".....hh.........",
+            "....hh..........",
+            "...hh...........",
+            "..kk............",
+            "................",
+            "................"};
+    private static final String[] FOICE = {
+            "................",
+            "........baaaaa..",
+            ".......hbbbbbaa.",
+            "......hh.....ba.",
+            "......h........a",
+            ".....h.........a",
+            "....hh..........",
+            "....h...........",
+            "...hh...........",
+            "...h............",
+            "..hh............",
+            "..h.............",
+            ".hh.............",
+            ".h..............",
+            ".k..............",
+            "................"};
+    private static final String[] BASTAO = {
+            "................",
+            "..............g.",
+            ".............gh.",
+            "............hh..",
+            "...........hh...",
+            "..........hh....",
+            ".........gg.....",
+            "........hh......",
+            ".......hh.......",
+            "......hh........",
+            ".....gg.........",
+            "....hh..........",
+            "...hh...........",
+            "..hh............",
+            ".gh.............",
+            "................"};
+    private static final String[] CHICOTE = {
+            "................",
+            "................",
+            "......llll......",
+            ".....l....l.....",
+            "....l..ll..l....",
+            "....l.l..l.l....",
+            "....l.l..l.l....",
+            "....l..ll..l....",
+            ".....l....l.....",
+            "......llllh.....",
+            "..........hh....",
+            "...........hh...",
+            "............kk..",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] LIVRO_CRIADOR = {
+            "................",
+            "...bbbbbbbbbb...",
+            "..bccccccccccb..",
+            "..bccffffffccb..",
+            "..bccfc..cfccb..",
+            "..bcfc....cfcb..",
+            "..bcfc....cfcb..",
+            "..bcfc....cfcb..",
+            "..bccfn..nfccb..",
+            "..bcccc..ccccb..",
+            "..bccccccccccb..",
+            "..bpppppppppppb.",
+            "..bwwwwwwwwwwwb.",
+            "...bbbbbbbbbbbb.",
+            "................",
+            "................"};
+
     private static final String[] GARRAS = {
             "................",
             ".....a..a..a....",
@@ -1956,6 +2078,14 @@ final class ArteItens {
         l.add(new Arte("flint", "pendulo_rabdomante", PENDULO, c('s', 0xFFEEEEEE, 'g', 0xFFFFD54F, 'p', 0xFF6A3FA0, 'A', 0xFFA77BDB, 'a', 0xFFE9D5FF)));
         l.add(new Arte("rabbit_hide", "cantil", CANTIL, c('o', 0xFF4E342E, 'l', 0xFFA1683A, 'h', 0xFF6D4C2F, 'm', 0xFF8D6E63, 'c', 0xFFD7B98E)));
         l.add(new Arte("leather", "bolsa_sementes", BOLSA, c('o', 0xFF4E342E, 'l', 0xFF8D6E4A, 's', 0xFFEEEEEE, 'g', 0xFF7CB342, 'y', 0xFFD4A017)));
+        l.add(new Arte("book", "livro_criador", LIVRO_CRIADOR, c('b', 0xFF3E2723, 'c', 0xFF8D5A2B, 'f', 0xFFB0BEC5, 'n', 0xFF607D8B, 'p', 0xFFEDE0C8, 'w', 0xFFD7C9AA)));
+        Map<Character, Integer> lamina = c('a', 0xFFE8EAED, 'b', 0xFF9AA0A6, 'g', 0xFF8D6E63, 'h', 0xFF6D4C41, 'k', 0xFF3E2723);
+        l.add(new Arte("iron_sword", "arma_adaga", ADAGA, lamina, true));
+        l.add(new Arte("iron_sword", "arma_faca_arremesso", FACA_ARREMESSO, lamina, true));
+        l.add(new Arte("iron_sword", "arma_machadinha", MACHADINHA, lamina, true));
+        l.add(new Arte("iron_sword", "arma_foice", FOICE, com(lamina, 'a', 0xFFCFD8DC, 'b', 0xFF607D8B), true));
+        l.add(new Arte("iron_sword", "arma_bastao", BASTAO, c('h', 0xFF8D6E4A, 'g', 0xFFB0BEC5, 'k', 0xFF3E2723), true));
+        l.add(new Arte("iron_sword", "arma_chicote", CHICOTE, c('l', 0xFF8D5A2B, 'h', 0xFF4E342E, 'k', 0xFF3E2723), true));
         l.add(new Arte("snowball", "frasco_fumaca", GARRAFA, com(VIDRO, 'c', 0xFFEEEEEE, 'l', 0xFF9E9E9E, 'd', 0xFF616161, 'a', 0xFFE0E0E0)));
         l.add(new Arte("snowball", "frasco_cola", GARRAFA, com(VIDRO, 'c', 0xFF8D6E63, 'l', 0xFF9CCC65, 'd', 0xFF558B2F, 'a', 0xFFDCEDC8)));
         l.add(new Arte("snowball", "frasco_fogo_grego", GARRAFA, com(VIDRO, 'c', 0xFFE0E0E0, 'l', 0xFFFF7043, 'd', 0xFFBF360C, 'a', 0xFFFFEB3B)));

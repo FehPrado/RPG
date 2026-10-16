@@ -278,7 +278,7 @@ public final class BonecosTreino extends Estacao {
         double xp = 0.4;
         h[1] = Math.min(limite, h[1] + xp);
         plugin.stats().darXp(p, Skill.COMBATE, xp);
-        TipoArma t = TipoArma.de(p.getInventory().getItemInMainHand());
+        TipoArma t = TipoArma.de(p);
         if (t != null && plugin.combos().nivel(p, t) < PROFICIENCIA_MAXIMA) plugin.combos().darXp(p, t, 0.5);
     }
 

@@ -17,7 +17,14 @@ public enum TipoArma {
     LANCA("Lança", "↟", 0x9FB8C8, Material.IRON_SPEAR, 'D'),
     TRIDENTE("Tridente", "♆", 0x4FC3F7, Material.TRIDENT, 'D'),
     MACA("Maça", "⚒", 0xB0A090, Material.MACE, 'D'),
-    ARCO("Arco e Besta", "➹", 0x8BC34A, Material.BOW, 'E');
+    ARCO("Arco e Besta", "➹", 0x8BC34A, Material.BOW, 'E'),
+    // 2.51: o arsenal novo (base de espada com a marca da arma; veja {@link Arsenal})
+    ADAGA("Adaga", "†", 0xB0BEC5, Material.IRON_SWORD, 'D'),
+    DUPLAS("Lâminas Duplas", "⚔", 0xEF5350, Material.SHEARS, 'D'),
+    ARREMESSO("Arremesso", "➶", 0xA1887F, Material.FLINT, 'E'),
+    FOICE("Foice", "☾", 0x7E57C2, Material.IRON_HOE, 'D'),
+    BASTAO("Bastão", "‖", 0x8D6E63, Material.STICK, 'D'),
+    CHICOTE("Chicote", "∿", 0xD4A373, Material.LEAD, 'D');
 
     private final String nome, simbolo;
     private final TextColor cor;
@@ -52,6 +59,8 @@ public enum TipoArma {
 
     public static TipoArma de(ItemStack item) {
         if (item == null || item.getType().isAir()) return null;
+        Arsenal.Arma nova = Arsenal.de(item);
+        if (nova != null) return nova.tipo();
         Material m = item.getType();
         if (m == Material.TRIDENT) return TRIDENTE;
         if (m == Material.MACE) return MACA;
@@ -61,6 +70,13 @@ public enum TipoArma {
         if (n.endsWith("_SPEAR")) return LANCA;
         if (n.endsWith("_AXE") && !n.endsWith("_PICKAXE")) return MACHADO;
         return null;
+    }
+
+    /** A arma de combo do jogador: adaga nas duas mãos vira Lâminas Duplas. */
+    public static TipoArma de(org.bukkit.entity.Player p) {
+        TipoArma t = de(p.getInventory().getItemInMainHand());
+        if (t == ADAGA && de(p.getInventory().getItemInOffHand()) == ADAGA) return DUPLAS;
+        return t;
     }
 
     public static TipoArma porId(String s) {

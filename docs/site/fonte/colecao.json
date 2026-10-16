@@ -1,0 +1,1367 @@
+{
+  "grupos": [
+    [
+      "coleta",
+      "Coisas para colher",
+      "3 por estação, espalhadas pelo chão perto de quem explora. Procure o brilho verde. Todas se comem."
+    ],
+    [
+      "colheita",
+      "Plantações da estação",
+      "As 20 colheitas: 5 por estação (o milho vai do verão ao outono e a cebola do inverno à primavera). Numa estufa com teto de vidro, crescem o ano todo."
+    ],
+    [
+      "semente",
+      "Sementes",
+      "Saem do mato quebrado na estação certa."
+    ],
+    [
+      "peixe",
+      "Peixes raros",
+      "17 peixes que só mordem em certos biomas, horários ou climas. Os 5 últimos saem só num buraco no gelo."
+    ],
+    [
+      "prato",
+      "Pratos",
+      "Os 42 pratos da Cozinha, do Pão Caseiro aos pratos de monstro, como a Omelete de Olho de Aranha que faz subir paredes."
+    ],
+    [
+      "artesao",
+      "Artesanato e trufas",
+      "O que sai do Tacho do Artesão (com a qualidade do ingrediente) e a trufa que o porco feliz acha."
+    ],
+    [
+      "elixir",
+      "Elixires",
+      "Os 12 elixires da Bancada Alquímica, cada um no seu frasco."
+    ],
+    [
+      "gema",
+      "Gemas",
+      "As 6 gemas (aqui, lapidadas). Engastadas em itens forjados, cada uma dá um bônus."
+    ],
+    [
+      "componente",
+      "Componentes e óleos",
+      "Componentes da alquimia e os 5 óleos de lâmina."
+    ],
+    [
+      "oficio",
+      "Peles, couros e tecidos",
+      "O caminho do curtume: a pele crua, o couro curtido e os tecidos do tear."
+    ],
+    [
+      "acessorio",
+      "Acessórios",
+      "Anéis, amuletos, cintos e itens de bolso para os espaços do /acessorios."
+    ],
+    [
+      "mineral",
+      "Minerais e ferramentas",
+      "Os minerais de cada bioma, a turfa, o Cinzel do Lapidador e a Bateia (2.46)."
+    ],
+    [
+      "arma",
+      "Arsenal novo",
+      "Adaga (uma em cada mão: Lâminas Duplas), faca e machadinha de arremesso, foice, bastão e chicote (2.51). Na bancada e na Forja, com 7 golpes de combo cada."
+    ],
+    [
+      "artefato",
+      "Artefatos de utilidade",
+      "Garras de Escalada, Corda de Rapel, Pêndulo do Rabdomante, Cantil e Bolsa de Sementes (2.49), e o Livro do Criador, que mostra a linhagem dos cavalos (2.50)."
+    ],
+    [
+      "carta",
+      "Cartas",
+      "As molduras das cartas por raridade e o Pacote de Cartas (2.47). Numa moldura de item na parede, a carta mostra o desenho do bicho."
+    ],
+    [
+      "lenda",
+      "Lendas",
+      "Itens únicos no servidor. Estes têm visual próprio; o arco, o escudo e as armaduras mantêm o do jogo."
+    ],
+    [
+      "fruta",
+      "Frutas do pomar",
+      "As 5 frutas que nascem penduradas nas árvores do pomar."
+    ],
+    [
+      "bebida",
+      "Bebidas do barril",
+      "Bebidas que envelhecem com os dias reais."
+    ],
+    [
+      "mel",
+      "Méis",
+      "Os méis especiais da Colmeia do Apicultor."
+    ],
+    [
+      "erva",
+      "Ervas",
+      "As ervas do Canteiro, que mudam com o lugar."
+    ],
+    [
+      "nomeada",
+      "Armas com nome",
+      "Nascem assim na Forja (mais nas raridades altas), em baús e com os chefes. Na mão viram 3D."
+    ],
+    [
+      "lendaria",
+      "Ovos dos Guardiões",
+      "Saem da Fusão Lendária no Altar do Domador e chocam no lugar certo: Qilin, Fenghuang, Longma, Baihu e Xuanwu. Só existe um de cada no servidor."
+    ],
+    [
+      "ceu",
+      "Céu e profundezas",
+      "O Balão de Cristal para descer das Ilhas do Céu, o que o Guardião dos Ventos deixa e as Sementes Brilhantes das Raízes de Luz."
+    ]
+  ],
+  "itens": {
+    "coleta": [
+      [
+        "coleta_morel",
+        "Cogumelo-Morel"
+      ],
+      [
+        "coleta_alho_selvagem",
+        "Alho-Selvagem"
+      ],
+      [
+        "coleta_broto_de_samambaia",
+        "Broto de Samambaia"
+      ],
+      [
+        "coleta_amora_silvestre",
+        "Amora-Silvestre"
+      ],
+      [
+        "coleta_alga_doce",
+        "Alga-Doce"
+      ],
+      [
+        "coleta_groselha",
+        "Groselha"
+      ],
+      [
+        "coleta_castanha",
+        "Castanha"
+      ],
+      [
+        "coleta_cogumelo_do_bosque",
+        "Cogumelo-do-Bosque"
+      ],
+      [
+        "coleta_avela",
+        "Avelã"
+      ],
+      [
+        "coleta_raiz_de_inverno",
+        "Raiz de Inverno"
+      ],
+      [
+        "coleta_cogumelo_de_neve",
+        "Cogumelo-de-Neve"
+      ],
+      [
+        "coleta_fruto_de_zimbro",
+        "Fruto de Zimbro"
+      ]
+    ],
+    "colheita": [
+      [
+        "colheita_morango",
+        "Morango"
+      ],
+      [
+        "colheita_couve_flor",
+        "Couve-Flor"
+      ],
+      [
+        "colheita_pastinaca",
+        "Pastinaca"
+      ],
+      [
+        "colheita_alho",
+        "Alho"
+      ],
+      [
+        "colheita_feijao_verde",
+        "Feijão-Verde"
+      ],
+      [
+        "colheita_mirtilo",
+        "Mirtilo"
+      ],
+      [
+        "colheita_pimenta",
+        "Pimenta"
+      ],
+      [
+        "colheita_tomate",
+        "Tomate"
+      ],
+      [
+        "colheita_milho",
+        "Milho"
+      ],
+      [
+        "colheita_melao",
+        "Melão"
+      ],
+      [
+        "colheita_uva",
+        "Uva"
+      ],
+      [
+        "colheita_abobora_moranga",
+        "Abóbora-Moranga"
+      ],
+      [
+        "colheita_berinjela",
+        "Berinjela"
+      ],
+      [
+        "colheita_inhame",
+        "Inhame"
+      ],
+      [
+        "colheita_oxicoco",
+        "Oxicoco"
+      ],
+      [
+        "colheita_couve_gelada",
+        "Couve Gelada"
+      ],
+      [
+        "colheita_nabo_de_neve",
+        "Nabo-de-Neve"
+      ],
+      [
+        "colheita_cebola",
+        "Cebola"
+      ],
+      [
+        "colheita_rabanete_gelado",
+        "Rabanete-Gelado"
+      ],
+      [
+        "colheita_alho_poro",
+        "Alho-Poró"
+      ]
+    ],
+    "semente": [
+      [
+        "semente_morango",
+        "Sementes de Morango"
+      ],
+      [
+        "semente_couve_flor",
+        "Sementes de Couve-Flor"
+      ],
+      [
+        "semente_pastinaca",
+        "Sementes de Pastinaca"
+      ],
+      [
+        "semente_alho",
+        "Sementes de Alho"
+      ],
+      [
+        "semente_feijao_verde",
+        "Sementes de Feijão-Verde"
+      ],
+      [
+        "semente_mirtilo",
+        "Sementes de Mirtilo"
+      ],
+      [
+        "semente_pimenta",
+        "Sementes de Pimenta"
+      ],
+      [
+        "semente_tomate",
+        "Sementes de Tomate"
+      ],
+      [
+        "semente_milho",
+        "Sementes de Milho"
+      ],
+      [
+        "semente_melao",
+        "Sementes de Melão"
+      ],
+      [
+        "semente_uva",
+        "Sementes de Uva"
+      ],
+      [
+        "semente_abobora_moranga",
+        "Sementes de Abóbora-Moranga"
+      ],
+      [
+        "semente_berinjela",
+        "Sementes de Berinjela"
+      ],
+      [
+        "semente_inhame",
+        "Sementes de Inhame"
+      ],
+      [
+        "semente_oxicoco",
+        "Sementes de Oxicoco"
+      ],
+      [
+        "semente_couve_gelada",
+        "Sementes de Couve Gelada"
+      ],
+      [
+        "semente_nabo_de_neve",
+        "Sementes de Nabo-de-Neve"
+      ],
+      [
+        "semente_cebola",
+        "Sementes de Cebola"
+      ],
+      [
+        "semente_rabanete_gelado",
+        "Sementes de Rabanete-Gelado"
+      ],
+      [
+        "semente_alho_poro",
+        "Sementes de Alho-Poró"
+      ]
+    ],
+    "peixe": [
+      [
+        "peixe_carpa_dourada",
+        "Carpa Dourada"
+      ],
+      [
+        "peixe_truta_arco_iris",
+        "Truta Arco-Íris"
+      ],
+      [
+        "peixe_peixe_lua",
+        "Peixe-Lua"
+      ],
+      [
+        "peixe_peixe_pedra",
+        "Peixe-Pedra"
+      ],
+      [
+        "peixe_enguia_eletrica",
+        "Enguia Elétrica"
+      ],
+      [
+        "peixe_peixe_gelo",
+        "Peixe-Gelo"
+      ],
+      [
+        "peixe_koi_celeste",
+        "Koi Celeste"
+      ],
+      [
+        "peixe_baiacu_rei",
+        "Baiacu-Rei"
+      ],
+      [
+        "peixe_salmao_rei",
+        "Salmão-Rei"
+      ],
+      [
+        "peixe_peixe_fantasma",
+        "Peixe-Fantasma"
+      ],
+      [
+        "peixe_peixe_abissal",
+        "Peixe Abissal"
+      ],
+      [
+        "peixe_peixe_dragao",
+        "Peixe-Dragão"
+      ],
+      [
+        "peixe_truta_do_gelo",
+        "Truta-do-Gelo"
+      ],
+      [
+        "peixe_lucio_polar",
+        "Lúcio Polar"
+      ],
+      [
+        "peixe_peixe_lanterna",
+        "Peixe-Lanterna Glacial"
+      ],
+      [
+        "peixe_enguia_de_cristal",
+        "Enguia de Cristal"
+      ],
+      [
+        "peixe_esturjao_ancestral",
+        "Esturjão Ancestral"
+      ]
+    ],
+    "prato": [
+      [
+        "prato_pao_caseiro",
+        "Pão Caseiro"
+      ],
+      [
+        "prato_ensopado_legumes",
+        "Ensopado de Legumes"
+      ],
+      [
+        "prato_torta_abobora",
+        "Torta de Abóbora da Vovó"
+      ],
+      [
+        "prato_peixe_ervas",
+        "Salmão com Ervas"
+      ],
+      [
+        "prato_batata_recheada",
+        "Batata Recheada"
+      ],
+      [
+        "prato_biscoito_mel",
+        "Biscoito de Mel"
+      ],
+      [
+        "prato_ensopado_cacador",
+        "Ensopado do Caçador"
+      ],
+      [
+        "prato_salada_arcana",
+        "Salada Arcana"
+      ],
+      [
+        "prato_banquete_guerreiro",
+        "Banquete do Guerreiro"
+      ],
+      [
+        "prato_pao_dourado",
+        "Pão Dourado"
+      ],
+      [
+        "prato_sopa_cristalina",
+        "Sopa Cristalina"
+      ],
+      [
+        "prato_torta_rubi",
+        "Torta Rubi"
+      ],
+      [
+        "prato_sopa_pescador",
+        "Sopa do Pescador"
+      ],
+      [
+        "prato_sushi_real",
+        "Sushi Real"
+      ],
+      [
+        "prato_caldeirada_abissal",
+        "Caldeirada Abissal"
+      ],
+      [
+        "prato_caldo_quente",
+        "Caldo Quente do Pescador"
+      ],
+      [
+        "prato_sorvete_cristal",
+        "Sorvete de Cristal"
+      ],
+      [
+        "prato_caviar_ancestral",
+        "Caviar Ancestral"
+      ],
+      [
+        "prato_banquete_lendario",
+        "Banquete Lendário"
+      ],
+      [
+        "prato_pao_com_geleia",
+        "Pão com Geleia"
+      ],
+      [
+        "prato_salada_primavera",
+        "Salada da Primavera"
+      ],
+      [
+        "prato_milho_assado",
+        "Milho Assado com Mel"
+      ],
+      [
+        "prato_omelete_queijo",
+        "Omelete de Queijo"
+      ],
+      [
+        "prato_torta_morango",
+        "Torta de Morango"
+      ],
+      [
+        "prato_creme_abobora",
+        "Creme de Abóbora-Moranga"
+      ],
+      [
+        "prato_sorvete_melao",
+        "Sorvete de Melão"
+      ],
+      [
+        "prato_pizza_da_roca",
+        "Pizza da Roça"
+      ],
+      [
+        "prato_sopa_de_inverno",
+        "Sopa de Inverno"
+      ],
+      [
+        "prato_ratatouille",
+        "Ratatouille"
+      ],
+      [
+        "prato_bolo_oxicoco",
+        "Bolo de Oxicoco"
+      ],
+      [
+        "prato_risoto_trufa",
+        "Risoto de Trufa"
+      ],
+      [
+        "prato_banquete_fazenda",
+        "Banquete da Fazenda"
+      ],
+      [
+        "prato_ensopado_do_necromante",
+        "Ensopado do Necromante"
+      ],
+      [
+        "prato_omelete_de_aranha",
+        "Omelete de Olho de Aranha"
+      ],
+      [
+        "prato_gelatina_de_slime",
+        "Gelatina de Slime"
+      ],
+      [
+        "prato_caldo_de_ossos",
+        "Caldo de Ossos"
+      ],
+      [
+        "prato_crocante_de_phantom",
+        "Crocante de Phantom"
+      ],
+      [
+        "prato_caldo_do_guardiao",
+        "Caldo do Guardião"
+      ],
+      [
+        "prato_espetinho_de_blaze",
+        "Espetinho de Blaze"
+      ],
+      [
+        "prato_sashimi_de_brisa",
+        "Sashimi de Brisa"
+      ],
+      [
+        "prato_pudim_do_fim",
+        "Pudim do Fim"
+      ],
+      [
+        "prato_lagrima_caramelizada",
+        "Lágrima de Ghast Caramelizada"
+      ]
+    ],
+    "artesao": [
+      [
+        "artesao_queijo",
+        "Queijo"
+      ],
+      [
+        "artesao_queijo_de_cabra",
+        "Queijo de Cabra"
+      ],
+      [
+        "artesao_maionese",
+        "Maionese"
+      ],
+      [
+        "artesao_geleia",
+        "Geleia"
+      ],
+      [
+        "artesao_conserva",
+        "Conserva"
+      ],
+      [
+        "artesao_oleo_de_trufa",
+        "Óleo de Trufa"
+      ],
+      [
+        "produto_trufa",
+        "Trufa"
+      ]
+    ],
+    "gema": [
+      [
+        "gema_rubi_2",
+        "Rubi"
+      ],
+      [
+        "gema_safira_2",
+        "Safira"
+      ],
+      [
+        "gema_esmeralda_2",
+        "Esmeralda"
+      ],
+      [
+        "gema_topazio_2",
+        "Topázio"
+      ],
+      [
+        "gema_ametista_2",
+        "Ametista"
+      ],
+      [
+        "gema_onix_2",
+        "Ônix"
+      ]
+    ],
+    "elixir": [
+      [
+        "elixir_cura",
+        "Elixir de Cura"
+      ],
+      [
+        "elixir_rapidez",
+        "Elixir da Rapidez"
+      ],
+      [
+        "elixir_minerador",
+        "Elixir do Minerador"
+      ],
+      [
+        "elixir_mergulhador",
+        "Elixir do Mergulhador"
+      ],
+      [
+        "elixir_sorte",
+        "Elixir da Sorte"
+      ],
+      [
+        "elixir_pedra",
+        "Elixir de Pedra"
+      ],
+      [
+        "elixir_sombras",
+        "Elixir das Sombras"
+      ],
+      [
+        "elixir_mana",
+        "Elixir de Mana"
+      ],
+      [
+        "elixir_gigante",
+        "Elixir do Gigante"
+      ],
+      [
+        "elixir_fenix",
+        "Elixir da Fênix"
+      ],
+      [
+        "elixir_tita",
+        "Elixir do Titã"
+      ],
+      [
+        "elixir_purificacao",
+        "Elixir da Purificação"
+      ]
+    ],
+    "componente": [
+      [
+        "componente_po_arcano",
+        "Pó Arcano"
+      ],
+      [
+        "componente_oleo_de_peixe",
+        "Óleo de Peixe"
+      ],
+      [
+        "componente_tintura_vital",
+        "Tintura Vital"
+      ],
+      [
+        "componente_sal_lunar",
+        "Sal Lunar"
+      ],
+      [
+        "componente_mercurio_vivo",
+        "Mercúrio Vivo"
+      ],
+      [
+        "componente_cristal_de_mana",
+        "Cristal de Mana"
+      ],
+      [
+        "componente_solvente",
+        "Solvente Alquímico"
+      ],
+      [
+        "componente_perola_negra",
+        "Pérola Negra"
+      ],
+      [
+        "componente_escama_do_abismo",
+        "Escama do Abismo"
+      ],
+      [
+        "componente_oleo_de_fogo",
+        "Óleo de Fogo"
+      ],
+      [
+        "componente_oleo_gelido",
+        "Óleo Gélido"
+      ],
+      [
+        "componente_oleo_trovejante",
+        "Óleo Trovejante"
+      ],
+      [
+        "componente_oleo_venenoso",
+        "Óleo Venenoso"
+      ],
+      [
+        "componente_oleo_de_prata",
+        "Óleo de Prata"
+      ]
+    ],
+    "oficio": [
+      [
+        "oficio_pele_de_lobo",
+        "Pele de Lobo"
+      ],
+      [
+        "oficio_pele_de_urso",
+        "Pele de Urso Polar"
+      ],
+      [
+        "oficio_pele_de_raposa",
+        "Pele de Raposa"
+      ],
+      [
+        "oficio_escama_de_guardiao",
+        "Escama de Guardião"
+      ],
+      [
+        "oficio_couro_de_hoglin",
+        "Couro de Hoglin"
+      ],
+      [
+        "oficio_couro_lobo",
+        "Couro de Lobo Curtido"
+      ],
+      [
+        "oficio_couro_urso",
+        "Couro de Urso Curtido"
+      ],
+      [
+        "oficio_couro_raposa",
+        "Couro de Raposa Curtido"
+      ],
+      [
+        "oficio_couro_escamas",
+        "Couro de Escamas"
+      ],
+      [
+        "oficio_couro_brasa",
+        "Couro de Brasa"
+      ],
+      [
+        "oficio_couro_noturno",
+        "Couro Noturno"
+      ],
+      [
+        "oficio_tecido",
+        "Tecido de Linha"
+      ],
+      [
+        "oficio_feltro",
+        "Feltro"
+      ],
+      [
+        "oficio_tecido_de_alga",
+        "Tecido de Alga"
+      ]
+    ],
+    "mineral": [
+      [
+        "raro_ambar",
+        "Âmbar"
+      ],
+      [
+        "raro_jade",
+        "Jade"
+      ],
+      [
+        "raro_perola",
+        "Pérola do Mar"
+      ],
+      [
+        "raro_cristal_de_gelo",
+        "Cristal de Gelo"
+      ],
+      [
+        "raro_pedra_sangue",
+        "Pedra-Sangue"
+      ],
+      [
+        "turfa",
+        "Turfa"
+      ],
+      [
+        "cinzel",
+        "Cinzel do Lapidador"
+      ],
+      [
+        "bateia",
+        "Bateia"
+      ]
+    ],
+    "acessorio": [
+      [
+        "anel_jade",
+        "Anel de Jade"
+      ],
+      [
+        "anel_gelo",
+        "Anel do Gelo Eterno"
+      ],
+      [
+        "pingente_ambar",
+        "Pingente de Âmbar"
+      ],
+      [
+        "colar_perolas",
+        "Colar de Pérolas"
+      ],
+      [
+        "amuleto_sangue",
+        "Amuleto de Sangue"
+      ],
+      [
+        "anel_vigor",
+        "Anel do Vigor"
+      ],
+      [
+        "anel_forca",
+        "Anel da Força"
+      ],
+      [
+        "anel_vento",
+        "Anel do Vento"
+      ],
+      [
+        "anel_mares",
+        "Anel das Marés"
+      ],
+      [
+        "anel_brasas",
+        "Anel das Brasas"
+      ],
+      [
+        "anel_minerador",
+        "Anel do Minerador"
+      ],
+      [
+        "anel_fortuna",
+        "Anel da Fortuna"
+      ],
+      [
+        "anel_sabio",
+        "Anel do Sábio"
+      ],
+      [
+        "amuleto_mana",
+        "Amuleto de Mana"
+      ],
+      [
+        "amuleto_guardiao",
+        "Amuleto do Guardião"
+      ],
+      [
+        "amuleto_vida",
+        "Amuleto da Vida"
+      ],
+      [
+        "amuleto_fenix",
+        "Amuleto da Fênix"
+      ],
+      [
+        "cinto_atleta",
+        "Cinto do Atleta"
+      ],
+      [
+        "cinto_andarilho",
+        "Cinto do Andarilho"
+      ],
+      [
+        "cinto_tita",
+        "Cinto do Titã"
+      ],
+      [
+        "lanterna_bolso",
+        "Lanterna de Bolso"
+      ],
+      [
+        "ima_bolso",
+        "Ímã de Bolso"
+      ],
+      [
+        "relogio_bolso",
+        "Relógio de Bolso"
+      ],
+      [
+        "capa_planadora",
+        "Capa Planadora"
+      ]
+    ],
+    "arma": [
+      [
+        "arma_adaga",
+        "Adaga"
+      ],
+      [
+        "arma_faca_arremesso",
+        "Faca de Arremesso"
+      ],
+      [
+        "arma_machadinha",
+        "Machadinha"
+      ],
+      [
+        "arma_foice",
+        "Foice"
+      ],
+      [
+        "arma_bastao",
+        "Bastão"
+      ],
+      [
+        "arma_chicote",
+        "Chicote"
+      ]
+    ],
+    "artefato": [
+      [
+        "garras_escalada",
+        "Garras de Escalada"
+      ],
+      [
+        "corda_rapel",
+        "Corda de Rapel"
+      ],
+      [
+        "pendulo_rabdomante",
+        "Pêndulo do Rabdomante"
+      ],
+      [
+        "cantil",
+        "Cantil"
+      ],
+      [
+        "bolsa_sementes",
+        "Bolsa de Sementes"
+      ],
+      [
+        "livro_criador",
+        "Livro do Criador"
+      ]
+    ],
+    "carta": [
+      [
+        "carta_comum",
+        "Carta comum"
+      ],
+      [
+        "carta_rara",
+        "Carta rara"
+      ],
+      [
+        "carta_epica",
+        "Carta épica"
+      ],
+      [
+        "carta_brilhante",
+        "Carta brilhante"
+      ],
+      [
+        "pacote_cartas",
+        "Pacote de Cartas"
+      ]
+    ],
+    "lenda": [
+      [
+        "lenda_lamina_do_exorcista",
+        "Lâmina do Exorcista"
+      ],
+      [
+        "lenda_presa_da_tecela",
+        "Presa da Tecelã"
+      ],
+      [
+        "lenda_machado_do_lenhador",
+        "Machado do Lenhador Eterno"
+      ],
+      [
+        "lenda_picareta_do_abismo",
+        "Picareta do Abismo"
+      ],
+      [
+        "lenda_lamina_do_carrasco",
+        "Lâmina do Carrasco"
+      ],
+      [
+        "lenda_martelo_do_forjador",
+        "Martelo do Forjador Lendário"
+      ],
+      [
+        "lenda_lamina_do_arquimago",
+        "Lâmina do Arquimago"
+      ]
+    ],
+    "fruta": [
+      [
+        "fruta_laranja",
+        "Laranja"
+      ],
+      [
+        "fruta_pessego",
+        "Pêssego"
+      ],
+      [
+        "fruta_cereja",
+        "Cereja"
+      ],
+      [
+        "fruta_limao",
+        "Limão"
+      ],
+      [
+        "fruta_maca_dourada",
+        "Maçã Dourada do Pomar"
+      ]
+    ],
+    "bebida": [
+      [
+        "bebida_hidromel",
+        "Hidromel"
+      ],
+      [
+        "bebida_cidra",
+        "Cidra"
+      ],
+      [
+        "bebida_vinho",
+        "Vinho de Frutas"
+      ],
+      [
+        "bebida_cerveja",
+        "Cerveja de Trigo"
+      ],
+      [
+        "bebida_licor_arcano",
+        "Licor Arcano"
+      ],
+      [
+        "bebida_licor_de_ervas",
+        "Licor de Ervas"
+      ],
+      [
+        "bebida_licor_de_frutas",
+        "Licor de Frutas"
+      ]
+    ],
+    "mel": [
+      [
+        "mel_silvestre",
+        "Mel Silvestre"
+      ],
+      [
+        "mel_dourado",
+        "Mel Dourado"
+      ],
+      [
+        "mel_gelado",
+        "Mel Gelado"
+      ],
+      [
+        "mel_noturno",
+        "Mel Noturno"
+      ],
+      [
+        "mel_floral",
+        "Mel Floral"
+      ]
+    ],
+    "erva": [
+      [
+        "erva_salvia",
+        "Sálvia"
+      ],
+      [
+        "erva_erva_de_sol",
+        "Erva-de-Sol"
+      ],
+      [
+        "erva_musgo_lunar",
+        "Musgo Lunar"
+      ],
+      [
+        "erva_folha_gelida",
+        "Folha Gélida"
+      ],
+      [
+        "erva_raiz_abissal",
+        "Raiz Abissal"
+      ],
+      [
+        "erva_flor_de_cristal",
+        "Flor-de-Cristal"
+      ]
+    ],
+    "ceu": [
+      [
+        "balao_de_cristal",
+        "Balão de Cristal"
+      ],
+      [
+        "amuleto_ventos",
+        "Amuleto dos Ventos"
+      ],
+      [
+        "raro_fragmento_celeste",
+        "Fragmento Celeste"
+      ],
+      [
+        "ceu_fruta_celeste",
+        "Fruta Celeste"
+      ],
+      [
+        "ceu_semente_brilhante",
+        "Semente Brilhante"
+      ]
+    ],
+    "nomeada": [
+      [
+        "nomeada_presa_do_inverno",
+        "Presa do Inverno"
+      ],
+      [
+        "nomeada_lamina_de_thalassa",
+        "Lâmina de Thalassa"
+      ],
+      [
+        "nomeada_aurora_de_aerilia",
+        "Aurora de Aerília"
+      ],
+      [
+        "nomeada_juramento_do_fortim",
+        "Juramento do Fortim"
+      ],
+      [
+        "nomeada_brasa_dos_anoes",
+        "Brasa dos Anões"
+      ],
+      [
+        "nomeada_sussurro_da_penumbra",
+        "Sussurro da Penumbra"
+      ],
+      [
+        "nomeada_talha_raizes",
+        "Talha-Raízes"
+      ],
+      [
+        "nomeada_furia_do_saqueador",
+        "Fúria do Saqueador"
+      ],
+      [
+        "nomeada_machado_do_faroleiro",
+        "Machado do Faroleiro"
+      ],
+      [
+        "nomeada_sino_de_maris",
+        "Sino de Maris"
+      ],
+      [
+        "nomeada_martelo_do_eremita",
+        "Martelo do Eremita"
+      ],
+      [
+        "nomeada_arco_do_cacador_silencioso",
+        "Arco do Caçador Silencioso"
+      ],
+      [
+        "nomeada_asa_de_zefira",
+        "Asa de Zéfira"
+      ],
+      [
+        "nomeada_arco_das_brasas",
+        "Arco das Brasas"
+      ],
+      [
+        "nomeada_besta_do_capitao",
+        "Besta do Capitão"
+      ],
+      [
+        "nomeada_besta_glacial",
+        "Besta Glacial"
+      ],
+      [
+        "nomeada_picareta_do_mineiro_perdido",
+        "Picareta do Mineiro Perdido"
+      ],
+      [
+        "nomeada_quebra_cristais",
+        "Quebra-Cristais"
+      ],
+      [
+        "nomeada_picareta_das_profundezas",
+        "Picareta das Profundezas"
+      ],
+      [
+        "nomeada_pa_do_coveiro",
+        "Pá do Coveiro"
+      ],
+      [
+        "nomeada_pa_do_arqueologo",
+        "Pá do Arqueólogo"
+      ],
+      [
+        "nomeada_enxada_da_colheita_dourada",
+        "Enxada da Colheita Dourada"
+      ],
+      [
+        "nomeada_enxada_do_jardim_suspenso",
+        "Enxada do Jardim Suspenso"
+      ],
+      [
+        "nomeada_vara_do_pescador_do_gelo",
+        "Vara do Pescador do Gelo"
+      ],
+      [
+        "nomeada_vara_de_coral",
+        "Vara de Coral"
+      ],
+      [
+        "nomeada_lamina_da_raiz_de_luz",
+        "Lâmina da Raiz de Luz"
+      ],
+      [
+        "nomeada_fio_do_guardiao",
+        "Fio do Guardião dos Ventos"
+      ],
+      [
+        "nomeada_promessa_do_primeiro_colono",
+        "Promessa do Primeiro Colono"
+      ],
+      [
+        "nomeada_lamina_do_eclipse",
+        "Lâmina do Eclipse"
+      ],
+      [
+        "nomeada_machado_do_velho_lenhador",
+        "Machado do Velho Lenhador"
+      ],
+      [
+        "nomeada_mordida_da_geada",
+        "Mordida da Geada"
+      ],
+      [
+        "nomeada_martelo_do_mestre_de_obras",
+        "Martelo do Mestre de Obras"
+      ],
+      [
+        "nomeada_coracao_roubado",
+        "Coração Roubado"
+      ],
+      [
+        "nomeada_lanca_da_sentinela",
+        "Lança da Sentinela"
+      ],
+      [
+        "nomeada_chifre_do_qilin",
+        "Chifre do Qilin"
+      ],
+      [
+        "nomeada_agulha_dos_ventos",
+        "Agulha dos Ventos"
+      ],
+      [
+        "nomeada_pique_do_cavaleiro_errante",
+        "Pique do Cavaleiro Errante"
+      ],
+      [
+        "nomeada_crescente_verde",
+        "Lâmina do Crescente Verde"
+      ],
+      [
+        "nomeada_espeto_do_bastiao",
+        "Espeto do Bastião"
+      ],
+      [
+        "nomeada_tridente_de_maris",
+        "Tridente de Maris"
+      ],
+      [
+        "nomeada_garfo_do_afogado_rei",
+        "Garfo do Afogado-Rei"
+      ],
+      [
+        "nomeada_tridente_do_pescador_de_perolas",
+        "Tridente do Pescador de Pérolas"
+      ],
+      [
+        "nomeada_tridente_da_tempestade",
+        "Tridente da Tempestade"
+      ],
+      [
+        "nomeada_arco_das_folhas_caidas",
+        "Arco das Folhas Caídas"
+      ],
+      [
+        "nomeada_besta_da_torre_de_vigia",
+        "Besta da Torre de Vigia"
+      ],
+      [
+        "nomeada_picareta_do_poco_fundo",
+        "Picareta do Poço Fundo"
+      ],
+      [
+        "nomeada_enxada_das_quatro_estacoes",
+        "Enxada das Quatro Estações"
+      ]
+    ],
+    "lendaria": [
+      [
+        "ovo_qilin",
+        "Ovo do Qilin"
+      ],
+      [
+        "ovo_fenghuang",
+        "Ovo do Fenghuang"
+      ],
+      [
+        "ovo_longma",
+        "Ovo do Longma"
+      ],
+      [
+        "ovo_baihu",
+        "Ovo do Baihu"
+      ],
+      [
+        "ovo_xuanwu",
+        "Ovo do Xuanwu"
+      ]
+    ]
+  }
+}

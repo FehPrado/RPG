@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.49</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.51</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.49.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.51.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -563,7 +563,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin carta &lt;carta&gt; [brilhante]</span></td><td>Dá uma carta do álbum</td></tr>
       <tr><td><span class="cmd">/rpgadmin pacotecartas [n]</span></td><td>Dá Pacotes de Cartas</td></tr>
       <tr><td><span class="cmd">/rpgadmin pocarta [n]</span></td><td>Dá Pó de Carta (padrão 100; negativo tira)</td></tr>
-      <tr><td><span class="cmd">/rpgadmin artefato &lt;tipo|todos&gt;</span></td><td>Dá os artefatos de utilidade (garras, corda, pendulo, cantil, bolsa)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin artefato &lt;tipo|todos&gt;</span></td><td>Dá os artefatos de utilidade (garras, corda, pendulo, cantil, bolsa) e o Livro do Criador (livro)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin arma &lt;tipo&gt; [material] [forjar]</span></td><td>Dá uma arma do arsenal novo (adaga, faca_arremesso, machadinha, foice, bastao, chicote)</td></tr>
       <tr><td><span class="cmd">/rpgadmin duelonpc &lt;morador&gt;</span></td><td>Começa um Duelo de Cartas contra o baralho de um morador (MESTRE, VELHO_PESCADOR...), sem precisar ir à vila</td></tr>
       <tr><td><span class="cmd">/rpgadmin flecha|frasco|erva|mel &lt;tipo&gt; [qtd]</span></td><td>Dá flechas especiais, frascos, ervas ou méis</td></tr>
       <tr><td><span class="cmd">/rpgadmin bebida &lt;tipo&gt; [grau 0-3]</span></td><td>Dá uma bebida do barril (3 = Lendária)</td></tr>
@@ -670,6 +671,24 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Ponha trigo e cenoura no baú. Agachado + clique: mostra as porções e para quantos dias dá.</li>
         <li>Não dê comida na mão e prenda os animais longe da grama. Pule a noite (durma): na virada do dia eles comem do baú e não perdem afeto.</li>
         <li>Só com um fardo de feno no baú: a vaca come e o fardo vira 8 trigos.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Arsenal novo (2.51)</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin arma adaga diamond</span> (ou <code>faca_arremesso</code>, <code>machadinha</code>, <code>foice</code>, <code>bastao</code>, <code>chicote</code>); com <code>forjar</code> no fim sai já forjada.</li>
+        <li>Duas adagas (uma na mão secundária): o <span class="cmd">/combos</span> mostra a aba Lâminas Duplas; bata num boneco e veja a segunda adaga acertar às vezes.</li>
+        <li>Faca/machadinha: clique direito arremessa; ela fica brilhando no chão (só o dono pega) e volta sozinha em 1 min.</li>
+        <li>Chicote: acerta de longe (+3 de alcance). Bastão: empurra mais. Foice: curar ao derrotar.</li>
+        <li>Suba o pacote novo: as 6 armas têm arte própria (em qualquer material de espada) e mudam a pegada com a postura.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Linhagens, Estábulo e peixes (2.50)</h3>
+      <ol>
+        <li><span class="cmd">/rpgadmin artefato livro</span> dá o Livro do Criador; clique num cavalo para ver a ficha.</li>
+        <li>Cruze dois cavalos domados: o filhote mostra a geração no chat. Para testar a linhagem, cruze até a 5ª geração (o nome aparece em dourado).</li>
+        <li>Estábulo: jogue 1 sela e 1 laço num fardo de feno. Montado no cavalo, clique no estábulo → Guardar. Depois clique na baia para chamar.</li>
+        <li>Pesque: a barra mostra o peso. Os recordes do servidor aparecem em <span class="cmd">/recordes</span> e no <span class="cmd">/peixes</span> (item ⚖).</li>
+        <li>As montarias guardadas ficam em <code>estabulos.yml</code>; quebrar o estábulo solta todas.</li>
       </ol>
     </div>
     <div class="card"><h3>Artefatos e Vanilla+ 2 (2.49)</h3>

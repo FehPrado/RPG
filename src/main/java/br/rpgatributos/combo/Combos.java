@@ -66,7 +66,7 @@ public final class Combos implements Listener, CommandExecutor {
     public static final TextColor COR = TextColor.color(0xFFB74D);
     public static final int NIVEL_MAXIMO = 20;
     private static final int S_INFO = 8, S_NIVEL = 13, S_POSTURA = 47, S_FECHAR = 49;
-    private static final int[] S_ABAS = {1, 2, 3, 4, 5, 6};
+    private static final int[] S_ABAS = {0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12};
     private static final int[] S_ESPACOS = {19, 21, 23, 25};
     private static final int[] S_GOLPES = {37, 38, 39, 40, 41, 42, 43};
     private static final int[] S_EXTRAS = {28, 29, 30, 31, 32, 33, 34};
@@ -149,6 +149,11 @@ public final class Combos implements Listener, CommandExecutor {
     public double xp(Player p, TipoArma t) {
         Double v = p.getPersistentDataContainer().get(kXp.get(t), PersistentDataType.DOUBLE);
         return v == null ? 0 : v;
+    }
+
+    /** Está no meio de uma sequência de combo (o clique direito não arremessa a faca). */
+    public boolean emSequencia(Player p) {
+        return entradas.containsKey(p.getUniqueId());
     }
 
     public int nivel(Player p, TipoArma t) {
@@ -469,7 +474,7 @@ public final class Combos implements Listener, CommandExecutor {
     private void avisarPronto(Player p, Golpe g, long recargaMs) {
         if (recargaMs < 2500) return;
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            if (!p.isOnline() || TipoArma.de(p.getInventory().getItemInMainHand()) == null) return;
+            if (!p.isOnline() || TipoArma.de(p) == null) return;
             if (entradas.containsKey(p.getUniqueId())) return; // no meio de uma sequência, não atrapalha
             p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.35f, 1.6f);
             p.sendActionBar(Component.text("✔ " + g.nome() + " pronto", NamedTextColor.GREEN));
@@ -540,7 +545,7 @@ public final class Combos implements Listener, CommandExecutor {
             return;
         }
         if (!podeUsar(p)) return;
-        TipoArma t = TipoArma.de(e.getItem());
+        TipoArma t = TipoArma.de(p);
         if (t == null) return;
         if (a == Action.RIGHT_CLICK_BLOCK) {
             Block b = e.getClickedBlock();
@@ -564,7 +569,7 @@ public final class Combos implements Listener, CommandExecutor {
         Integer ult = ultimoEsquerdo.get(p.getUniqueId());
         if (ult != null && ult >= Bukkit.getCurrentTick() - 1) return;
         ultimoEsquerdo.put(p.getUniqueId(), Bukkit.getCurrentTick());
-        TipoArma t = TipoArma.de(p.getInventory().getItemInMainHand());
+        TipoArma t = TipoArma.de(p);
         if (t != null) clique(p, 'E', t);
     }
 
@@ -589,10 +594,10 @@ public final class Combos implements Listener, CommandExecutor {
         TipoArma t = null;
         if (e.getDamager() instanceof Player pl) {
             p = pl;
-            t = TipoArma.de(pl.getInventory().getItemInMainHand());
+            t = TipoArma.de(pl);
         } else if (e.getDamager() instanceof Projectile pr && pr.getShooter() instanceof Player pl) {
             p = pl;
-            t = TipoArma.de(pl.getInventory().getItemInMainHand());
+            t = TipoArma.de(pl);
             if (t == null && TipoArma.de(pl.getInventory().getItemInOffHand()) == TipoArma.ARCO) t = TipoArma.ARCO;
         }
         if (p == null) return;
@@ -612,7 +617,7 @@ public final class Combos implements Listener, CommandExecutor {
         LivingEntity morto = e.getEntity();
         Player p = morto.getKiller();
         if (p == null || morto == p) return;
-        TipoArma t = TipoArma.de(p.getInventory().getItemInMainHand());
+        TipoArma t = TipoArma.de(p);
         if (t == null && morto.getLastDamageCause() instanceof EntityDamageByEntityEvent ev && ev.getDamager() instanceof Projectile
                 && TipoArma.de(p.getInventory().getItemInOffHand()) == TipoArma.ARCO) t = TipoArma.ARCO;
         if (t == null) return;
@@ -652,7 +657,7 @@ public final class Combos implements Listener, CommandExecutor {
             return true;
         }
         TipoArma t = args.length > 0 ? TipoArma.porId(args[0]) : null;
-        if (t == null) t = TipoArma.de(p.getInventory().getItemInMainHand());
+        if (t == null) t = TipoArma.de(p);
         abrirMenu(p, t == null ? TipoArma.ESPADA : t);
         return true;
     }
@@ -686,7 +691,7 @@ public final class Combos implements Listener, CommandExecutor {
                 Component.empty(),
                 Component.text("Como usar: com a arma na mão, faça", NamedTextColor.GRAY),
                 Component.text("3 cliques seguidos (D = direito, E = esquerdo).", NamedTextColor.GRAY),
-                Component.text(t == TipoArma.ARCO ? "Arco e besta começam com E." : "Armas corpo a corpo começam com D.", NamedTextColor.YELLOW),
+                Component.text(t.inicio() == 'E' ? t.nome() + " começa com E (o clique direito atira)." : "Armas corpo a corpo começam com D.", NamedTextColor.YELLOW),
                 Component.text("Agachado não solta combo.", NamedTextColor.DARK_GRAY))));
         List<Component> loreNivel = new ArrayList<>();
         loreNivel.add(Component.text("Nível " + nivel + "/" + NIVEL_MAXIMO, NamedTextColor.WHITE));
@@ -893,7 +898,7 @@ public final class Combos implements Listener, CommandExecutor {
             float f = p.getAttackCooldown();
             Integer semE = semEsquerdo.get(p.getUniqueId());
             boolean logoAposDireito = semE != null && semE >= agoraTick - 2;
-            if (f + 0.35f < e.forcaAtaque && !logoAposDireito && TipoArma.de(p.getInventory().getItemInMainHand()) == TipoArma.LANCA) {
+            if (f + 0.35f < e.forcaAtaque && !logoAposDireito && TipoArma.de(p) == TipoArma.LANCA) {
                 Integer ult = ultimoEsquerdo.get(p.getUniqueId());
                 if (ult == null || ult < agoraTick - 1) {
                     ultimoEsquerdo.put(p.getUniqueId(), agoraTick);

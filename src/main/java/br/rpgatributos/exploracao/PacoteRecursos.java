@@ -333,6 +333,11 @@ public final class PacoteRecursos implements Listener {
             caso(casos, a.vanilla(), a.id());
             if (a.naMao()) naMao.add(a.id());
         }
+        // 2.51: o arsenal novo usa a base de espada de qualquer material (a arte está na de ferro).
+        for (Material m : Material.values()) {
+            if (m.isLegacy() || !m.isItem() || !m.name().endsWith("_SWORD") || m == Material.IRON_SWORD) continue;
+            for (br.rpgatributos.combo.Arsenal.Arma a : br.rpgatributos.combo.Arsenal.Arma.values()) caso(casos, m.name().toLowerCase(java.util.Locale.ROOT), a.visual());
+        }
         // 2.47: cada carta tem o seu visual. No inventário e na mão, a moldura da raridade; numa
         // moldura de item (na parede), a carta com o ícone do bicho desenhado na janela dela.
         for (br.rpgatributos.vida.Carta c : br.rpgatributos.vida.Carta.values()) {

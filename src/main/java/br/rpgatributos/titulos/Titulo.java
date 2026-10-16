@@ -90,7 +90,7 @@ public enum Titulo {
     SENHOR_DO_TRIDENTE("Senhor do Tridente", 0x4FC3F7, Requisito.contador("proficiencia_tridente", 20, "Proficiência 20 com tridente"), Bonus.folego(3)),
     MARTELO_VIVO("Martelo Vivo", 0xB0A090, Requisito.contador("proficiencia_maca", 20, "Proficiência 20 com maça"), Bonus.vida(4)),
     OLHO_DE_FALCAO("Olho de Falcão", 0x8BC34A, Requisito.contador("proficiencia_arco", 20, "Proficiência 20 com arco e besta"), Bonus.velocidade(0.05)),
-    ARSENAL_VIVO("Arsenal Vivo", 0xFFB74D, Requisito.contador("armas_mestradas", 6, "Proficiência 20 em todas as 6 armas"), new Bonus().comDano(2).comVida(4)),
+    ARSENAL_VIVO("Arsenal Vivo", 0xFFB74D, Requisito.contador("armas_mestradas", 6, "Proficiência 20 em 6 armas"), new Bonus().comDano(2).comVida(4)),
     MESTRE_DOS_COMBOS("Mestre dos Combos", 0xFF8A65, Requisito.contador("combos", 1000, "Usar 1.000 golpes de combo"), Bonus.xpSkill(Skill.COMBATE, 0.1)),
     FINALIZADOR("Finalizador", 0xFFD54F, Requisito.contador("finalizadores", 100, "Soltar 100 finalizadores em cadeia"), Bonus.dano(1)),
 
@@ -123,6 +123,13 @@ public enum Titulo {
     RIVAL_DE_MESA("Rival de Mesa", 0xFFB74D, Requisito.contador("duelos_pvp", 5, "Vencer 5 Duelos de Cartas contra jogadores"), Bonus.velocidade(0.02)),
     ABRIDOR_DE_PACOTES("Abridor de Pacotes", 0x4FC3F7, Requisito.contador("pacotes_abertos", 25, "Abrir 25 Pacotes de Cartas"), Bonus.vida(2)),
     CURADOR_DO_ALBUM("Curador do Álbum", 0x9575CD, Requisito.contador("album_marcos", 4, "Alcançar os 4 marcos do álbum (80 cartas diferentes)"), Bonus.xpTudo(0.04)),
+    // ---------- 2.50: criação e pesca ----------
+    CRIADOR_DE_LINHAGENS("Criador de Linhagens", 0xD4A373, Requisito.contador("linhagens", 1, "Fundar uma linhagem de cavalos (5ª geração)"), Bonus.xpSkill(Skill.DOMA, 0.1)),
+    PESCADOR_DE_TROFEUS("Pescador de Troféus", 0x4FC3F7, Requisito.contador("peixes_trofeu", 10, "Pescar 10 peixes troféu (enormes ou de recorde)"), Bonus.xpSkill(Skill.PESCA, 0.1)),
+    // ---------- 2.51: o arsenal novo ----------
+    SOMBRA_DAS_LAMINAS("Sombra das Lâminas", 0xB0BEC5, Requisito.contador("proficiencia_duplas", 20, "Proficiência 20 com as Lâminas Duplas"), Bonus.velocidade(0.03)),
+    CEIFADOR("Ceifador", 0x7E57C2, Requisito.contador("proficiencia_foice", 20, "Proficiência 20 com a foice"), Bonus.vida(2)),
+    MESTRE_DO_ARSENAL("Mestre do Arsenal", 0xFFD54F, Requisito.contador("armas_mestradas", 12, "Proficiência 20 em todas as 12 armas"), new Bonus().comDano(3).comVida(6)),
     RENASCIDO("Renascido", 0xFFD54F, Requisito.contador("renascimentos", 1, "Renascer uma vez"), new Bonus().comVida(2).comDano(1)),
     ETERNO("Eterno", 0xFFF59D, Requisito.contador("renascimentos", 5, "Renascer 5 vezes"), new Bonus().comDano(2).comVida(6).comVelocidade(0.05)),
 

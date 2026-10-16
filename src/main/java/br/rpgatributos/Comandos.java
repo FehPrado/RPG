@@ -317,7 +317,7 @@ public final class Comandos implements TabExecutor {
                     /rpgadmin pacote  (onde está o pacote de recursos e como enviar)
                     /rpgadmin talentopontos <jogador> <qtd>  (pontos de talento a mais; negativo tira)
                     /rpgadmin renascer <jogador> <0-5>  (define quantas vezes ele renasceu)
-                    /rpgadmin companheironivel <1-30>  (nível do companheiro que você olha)
+                    /rpgadmin companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel <1-30>  (nível do companheiro que você olha)
                     /rpgadmin boneco|pedraamolar|fogueira|bebedouro|cartografo  (cria a estação no bloco que você olha)
                     /rpgadmin ferradura [qtd], /rpgadmin ninhopassaro [qtd]
                     /rpgadmin animalraro [ouro|neve]  (o animal que você olha vira raro)
@@ -366,7 +366,7 @@ public final class Comandos implements TabExecutor {
             case "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas" -> { adminCombos(sender, sub, args); return; }
             case "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa" -> { adminFe(sender, sub, args); return; }
             case "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote" -> { adminExploracao(sender, sub, args); return; }
-            case "talentopontos", "renascer", "companheironivel" -> { adminProgressao(sender, sub, args); return; }
+            case "talentopontos", "renascer", "companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel" -> { adminProgressao(sender, sub, args); return; }
             case "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro" -> { adminDetalhes(sender, sub, args); return; }
             case "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta" -> { adminVida(sender, sub, args); return; }
             case "estrutura", "estruturas", "esquecerestrutura" -> { adminEstruturas(sender, sub, args); return; }
@@ -377,6 +377,14 @@ public final class Comandos implements TabExecutor {
             case "constelacao" -> { adminConstelacao(sender, args); return; }
             case "mineral" -> { adminMineral(sender, args); return; }
             case "artefato" -> { adminArtefato(sender, args); return; }
+            case "arma" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                ItemStack arma = args.length >= 2 ? br.rpgatributos.combo.Arsenal.admin(args[1], args.length >= 3 ? args[2] : null) : null;
+                if (arma == null) { erro(sender, "Use: /rpgadmin arma <adaga|faca_arremesso|machadinha|foice|bastao|chicote> [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]"); return; }
+                if (args.length >= 4 && args[3].equalsIgnoreCase("forjar")) arma = plugin.forja().forjar(p, arma, null);
+                entregar(p, arma);
+                return;
+            }
             case "traje" -> { adminTraje(sender, args); return; }
             case "guerra" -> {
                 if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
@@ -1071,7 +1079,7 @@ public final class Comandos implements TabExecutor {
         }
     }
     private void adminProgressao(CommandSender sender, String sub, String[] args) {
-        if (sub.equals("companheironivel")) {
+        if (sub.equals("companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel")) {
             if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
             if (!(p.getTargetEntity(8) instanceof org.bukkit.entity.LivingEntity e) || !br.rpgatributos.domador.Companheiros.eh(e)) {
                 erro(sender, "Olhe para um companheiro (até 8 blocos)."); return;
@@ -1097,6 +1105,7 @@ public final class Comandos implements TabExecutor {
     private void adminArtefato(CommandSender sender, String[] args) {
         if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
         String a = args.length >= 2 ? args[1].toUpperCase(Locale.ROOT) : "TODOS";
+        if (a.equals("TODOS") || a.equals("LIVRO")) entregar(p, br.rpgatributos.domador.Linhagens.livro());
         for (var t : br.rpgatributos.exploracao.Artefatos.Tipo.values()) {
             if (a.equals("TODOS") || t.name().equals(a) || t.id.equalsIgnoreCase(a)) entregar(p, br.rpgatributos.exploracao.Artefatos.criar(t));
         }
@@ -1769,7 +1778,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "constelacao", "mineral", "artefato", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();
@@ -1879,7 +1888,7 @@ public final class Comandos implements TabExecutor {
                             "tesouros", "especies_peixe", "criaturas_marinhas", "gema_perfeita", "alquimias", "elixires", "acessorios"));
                 } else if (args.length == 2 && !List.of("reload", "infusor", "forjaferreiro", "altar", "cozinha", "reciclagem", "adubo",
                         "marco", "ignorar", "altardomador", "portalmasmorra", "fecharmasmorras", "santuario", "prova",
-                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companheironivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
+                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
                     return null;
                 } else if (args.length == 3 && List.of("set", "addxp", "reset").contains(sub)) {
                     for (Skill s : Skill.values()) op.add(s.id());

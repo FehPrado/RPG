@@ -260,7 +260,10 @@ public final class Pesca implements Listener {
             if (rnd().nextDouble() < chanceRaro(nivel) + sorteDoMar + extra) {
                 PeixeRaro raro = sortearPeixe(ctx, nivel);
                 if (raro != null) {
-                    item.setItemStack(raro.criar(1, Qualidade.sortear(fracao(p))));
+                    Qualidade qr = Qualidade.sortear(fracao(p));
+                    ItemStack peixeRaro = raro.criar(1, qr);
+                    PesoPeixe.pesar(plugin, p, peixeRaro, raro, qr, fracao(p));
+                    item.setItemStack(peixeRaro);
                     anunciarPeixe(p, raro);
                     if (!criativo) plugin.stats().darXp(p, Skill.PESCA, raro.xp());
                     titulos.registrar(p, "peixes", 1);
@@ -272,7 +275,9 @@ public final class Pesca implements Listener {
             // 4) Peixe comum: qualidade e chance de vir dois.
             ItemStack peixe = pego.clone();
             if (rnd().nextDouble() < nivel * cfg().pesChanceDupla) peixe.setAmount(peixe.getAmount() + 1);
-            Qualidade.sortear(fracao(p)).aplicar(peixe);
+            Qualidade qc = Qualidade.sortear(fracao(p));
+            qc.aplicar(peixe);
+            PesoPeixe.pesar(plugin, p, peixe, null, qc, fracao(p));
             item.setItemStack(peixe);
             if (!criativo) plugin.stats().darXp(p, Skill.PESCA, cfg().pesXpPeixe);
         } else if (TESOUROS.contains(tipo) || (tipo == Material.FISHING_ROD && !pego.getEnchantments().isEmpty())) {
@@ -477,6 +482,7 @@ public final class Pesca implements Listener {
                 lore.add(Component.text(pr.uso(), NamedTextColor.DARK_AQUA));
                 lore.add(Component.empty());
                 lore.add(Component.text("✔ Já pescado", NamedTextColor.GREEN));
+                lore.addAll(PesoPeixe.linhas(plugin, p, "raro_" + pr.id()));
             } else {
                 lore.add(Component.empty());
                 lore.add(Component.text("Ainda não pescado.", NamedTextColor.DARK_GRAY));
@@ -501,6 +507,14 @@ public final class Pesca implements Listener {
                 Component.text(" Afogado Faminto, Guardião das Ondas,", NamedTextColor.WHITE),
                 Component.text(" Capitão Afogado e o Senhor das Marés.", NamedTextColor.WHITE),
                 Component.text("Deixam Escamas do Abismo e Pérolas.", NamedTextColor.DARK_AQUA)), false));
+        List<Component> pesos = new ArrayList<>(List.of(
+                Component.text("Todo peixe tem peso: depende da espécie,", NamedTextColor.GRAY),
+                Component.text("da qualidade ★ e do seu nível de Pesca.", NamedTextColor.GRAY),
+                Component.text("Recordes e peixes enormes viram troféu", NamedTextColor.GRAY),
+                Component.text("(o peso fica escrito no peixe).", NamedTextColor.GRAY),
+                Component.empty()));
+        pesos.addAll(PesoPeixe.comuns(plugin, p));
+        inv.setItem(32, item(Material.COD, Component.text("⚖ Recordes de peso", NamedTextColor.GOLD, TextDecoration.BOLD), pesos, false));
         inv.setItem(S_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of(), false));
         ItemStack vidro = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
         vidro.editMeta(m -> m.setHideTooltip(true));
