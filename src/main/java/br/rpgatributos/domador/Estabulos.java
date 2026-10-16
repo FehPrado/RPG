@@ -182,11 +182,15 @@ public final class Estabulos extends Estacao {
                 Vaga v = l.get(i);
                 boolean meu = v.dono.equals(p.getUniqueId());
                 OfflineNome dono = new OfflineNome(v.dono);
-                t.inv.setItem(S_VAGAS[i], item(ovo(v.tipo), Component.text(v.nome, COR, TextDecoration.BOLD), List.of(
-                        Component.text(nomeTipo(v.tipo), NamedTextColor.GRAY),
-                        Component.text("De " + dono.nome(), NamedTextColor.DARK_GRAY),
-                        Component.empty(),
-                        Component.text(meu ? "» Clique para chamar" : "Só quem guardou pode chamar.", meu ? NamedTextColor.YELLOW : NamedTextColor.DARK_GRAY))));
+                List<Component> lore = new ArrayList<>();
+                lore.add(Component.text(nomeTipo(v.tipo), NamedTextColor.GRAY));
+                Entity guardada = ler(v, t.bloco.getWorld());
+                if (guardada != null) lore.addAll(Linhagens.resumo(guardada));
+                lore.add(Component.text("De " + dono.nome(), NamedTextColor.DARK_GRAY));
+                lore.add(Component.empty());
+                lore.add(Component.text(meu ? "» Clique para chamar" : "Só quem guardou pode chamar.", meu ? NamedTextColor.YELLOW : NamedTextColor.DARK_GRAY));
+                if (guardada instanceof AbstractHorse) lore.add(Component.text("» Shift+clique: árvore da família", NamedTextColor.YELLOW));
+                t.inv.setItem(S_VAGAS[i], item(ovo(v.tipo), Component.text(v.nome, COR, TextDecoration.BOLD), lore));
             } else {
                 t.inv.setItem(S_VAGAS[i], item(Material.HAY_BLOCK, Component.text("Baia vazia", NamedTextColor.GRAY), List.of()));
             }
@@ -226,6 +230,14 @@ public final class Estabulos extends Estacao {
             List<Vaga> l = vagas.get(chave(t.bloco));
             if (l == null || i >= l.size()) return;
             Vaga v = l.get(i);
+            if (e.isShiftClick()) {
+                // Só olhar: a ficha com a árvore da família, sem tirar do estábulo.
+                if (ler(v, t.bloco.getWorld()) instanceof AbstractHorse h) {
+                    p.closeInventory();
+                    Linhagens.ficha(p, h);
+                }
+                return;
+            }
             if (!v.dono.equals(p.getUniqueId()) && !p.hasPermission("rpg.admin")) {
                 p.sendActionBar(Component.text("Só quem guardou pode chamar essa montaria.", NamedTextColor.RED));
                 return;
@@ -313,6 +325,15 @@ public final class Estabulos extends Estacao {
         w.spawnParticle(Particle.CLOUD, onde.clone().add(0, 1, 0), 15, 0.4, 0.5, 0.4, 0.02);
         w.playSound(onde, Sound.ENTITY_HORSE_AMBIENT, 1f, 1f);
         return e;
+    }
+
+    /** A montaria guardada, lida sem aparecer no mundo (para mostrar a ficha e a linhagem). */
+    private static Entity ler(Vaga v, World w) {
+        try {
+            return Bukkit.getUnsafe().deserializeEntity(Base64.getDecoder().decode(v.dados), w, false);
+        } catch (RuntimeException ex) {
+            return null;
+        }
     }
 
     /** O UUID gravado na montaria (para não repetir um que já existe no mundo). */

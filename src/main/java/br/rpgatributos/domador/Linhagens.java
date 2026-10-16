@@ -28,7 +28,10 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -46,6 +49,8 @@ public final class Linhagens implements Listener {
     private static final NamespacedKey K_GERACAO = new NamespacedKey("rpgatributos", "lin_geracao");
     private static final NamespacedKey K_LINHAGEM = new NamespacedKey("rpgatributos", "lin_nome");
     private static final NamespacedKey K_CRIADOR = new NamespacedKey("rpgatributos", "lin_criador");
+    /** Árvore da família: a ficha dos pais e dos avós (P, M, PP, PM, MP, MM), uma por linha. */
+    private static final NamespacedKey K_ARVORE = new NamespacedKey("rpgatributos", "lin_arvore");
 
     /** Os máximos do jogo (para não passar do que um cavalo pode ter). */
     private static final double MAX_VELOCIDADE = 0.3375, MAX_PULO = 1.0, MAX_VIDA = 30;
@@ -98,7 +103,8 @@ public final class Linhagens implements Listener {
         ficha(p, h);
     }
 
-    private void ficha(Player p, AbstractHorse h) {
+    /** A ficha completa no chat (Livro do Criador e Estábulo). */
+    public static void ficha(Player p, AbstractHorse h) {
         PersistentDataContainer d = h.getPersistentDataContainer();
         int ger = d.getOrDefault(K_GERACAO, PersistentDataType.INTEGER, 0);
         String linhagem = d.get(K_LINHAGEM, PersistentDataType.STRING);
@@ -110,16 +116,137 @@ public final class Linhagens implements Listener {
         p.sendMessage(linha("Vida", fmt(vida / 2) + " ❤", vida / MAX_VIDA));
         if (h instanceof Llama l) p.sendMessage(linha("Força (carga)", l.getStrength() + "/5", l.getStrength() / 5.0));
         p.sendMessage(Component.text("  Geração: ", NamedTextColor.GRAY).append(Component.text(ger == 0 ? "selvagem" : ger + "ª", NamedTextColor.WHITE)));
-        String pai = d.get(K_PAI, PersistentDataType.STRING), mae = d.get(K_MAE, PersistentDataType.STRING);
-        if (pai != null || mae != null) {
-            p.sendMessage(Component.text("  Pais: ", NamedTextColor.GRAY).append(Component.text((pai == null ? "?" : pai) + " × " + (mae == null ? "?" : mae), NamedTextColor.WHITE)));
-        }
+        for (Component c : arvore(h)) p.sendMessage(c);
         String criador = d.get(K_CRIADOR, PersistentDataType.STRING);
         if (criador != null) p.sendMessage(Component.text("  Criado por " + criador, NamedTextColor.DARK_GRAY));
         if (ger < GERACAO_LINHAGEM && linhagem == null) {
             p.sendMessage(Component.text("  Na " + GERACAO_LINHAGEM + "ª geração a família ganha nome de linhagem.", NamedTextColor.DARK_GRAY));
         }
         p.playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 0.8f, 1f);
+    }
+
+    // =====================================================================
+    //  Árvore da família
+    // =====================================================================
+
+    /** Uma ficha curta: nome|velocidade (blocos/s)|pulo (blocos)|vida (corações)|geração|linhagem. */
+    private record Ficha(String nome, double vel, double pulo, double vida, int ger, String linhagem) {
+        String texto() {
+            return limpar(nome) + "|" + vel + "|" + pulo + "|" + vida + "|" + ger + "|" + (linhagem == null ? "" : limpar(linhagem));
+        }
+
+        static Ficha de(String s) {
+            String[] x = s.split("\\|", -1);
+            if (x.length < 6) return null;
+            try {
+                return new Ficha(x[0], Double.parseDouble(x[1]), Double.parseDouble(x[2]), Double.parseDouble(x[3]), Integer.parseInt(x[4]),
+                        x[5].isEmpty() ? null : x[5]);
+            } catch (NumberFormatException ex) {
+                return null;
+            }
+        }
+
+        private static String limpar(String t) {
+            return t.replace('|', '/').replace('\n', ' ').replace('=', '-');
+        }
+
+        /** "Relâmpago (3ª · 9,8 b/s · pulo 3,1 · 13 ❤)" */
+        String linha() {
+            StringBuilder b = new StringBuilder(nome).append(" (").append(ger == 0 ? "selvagem" : ger + "ª");
+            if (vel > 0) b.append(" · ").append(fmt(vel)).append(" b/s");
+            if (pulo > 0) b.append(" · pulo ").append(fmt(pulo));
+            b.append(" · ").append(fmt(vida)).append(" ❤)");
+            return b.toString();
+        }
+    }
+
+    private static Ficha fichaDe(Entity e) {
+        double vel = valor(e, Attribute.MOVEMENT_SPEED) * 42.16, pulo = e instanceof Llama ? 0 : alturaPulo(valor(e, Attribute.JUMP_STRENGTH));
+        if (valor(e, Attribute.JUMP_STRENGTH) <= 0) pulo = 0;
+        return new Ficha(nome(e), vel, pulo, valor(e, Attribute.MAX_HEALTH) / 2, geracao(e), linhagem(e));
+    }
+
+    /** A árvore gravada no bicho: papel (P, M, PP, PM, MP, MM) → ficha. */
+    private static Map<String, Ficha> arvoreDe(Entity e) {
+        Map<String, Ficha> m = new LinkedHashMap<>();
+        String s = e.getPersistentDataContainer().get(K_ARVORE, PersistentDataType.STRING);
+        if (s == null) return m;
+        for (String l : s.split("\n")) {
+            int i = l.indexOf('=');
+            if (i <= 0) continue;
+            Ficha f = Ficha.de(l.substring(i + 1));
+            if (f != null) m.put(l.substring(0, i), f);
+        }
+        return m;
+    }
+
+    /** Pais (a ficha de agora) e avós (os pais deles) para o filhote. */
+    private static String montarArvore(Entity pai, Entity mae) {
+        StringBuilder b = new StringBuilder();
+        b.append("P=").append(fichaDe(pai).texto()).append('\n');
+        b.append("M=").append(fichaDe(mae).texto()).append('\n');
+        arvoreDe(pai).forEach((papel, f) -> { if (papel.length() == 1) b.append('P').append(papel).append('=').append(f.texto()).append('\n'); });
+        arvoreDe(mae).forEach((papel, f) -> { if (papel.length() == 1) b.append('M').append(papel).append('=').append(f.texto()).append('\n'); });
+        return b.toString();
+    }
+
+    /** As linhas da árvore da família (pais com avós embaixo), com setas de quem é mais rápido. */
+    public static List<Component> arvore(Entity e) {
+        List<Component> l = new ArrayList<>();
+        Map<String, Ficha> a = arvoreDe(e);
+        PersistentDataContainer d = e.getPersistentDataContainer();
+        if (a.isEmpty()) {
+            // Nascidos antes da árvore (2.50): só os nomes dos pais.
+            String pai = d.get(K_PAI, PersistentDataType.STRING), mae = d.get(K_MAE, PersistentDataType.STRING);
+            if (pai != null || mae != null) {
+                l.add(Component.text("  Pais: ", NamedTextColor.GRAY).append(Component.text((pai == null ? "?" : pai) + " × " + (mae == null ? "?" : mae), NamedTextColor.WHITE)));
+            }
+            return l;
+        }
+        l.add(Component.text("  🌳 Árvore da família", COR, TextDecoration.BOLD));
+        for (String[] lado : new String[][]{{"P", "Pai", "Avô", "Avó"}, {"M", "Mãe", "Avô", "Avó"}}) {
+            Ficha f = a.get(lado[0]);
+            if (f == null) continue;
+            l.add(Component.text("  " + lado[1] + ": ", NamedTextColor.GRAY).append(Component.text(f.linha(), NamedTextColor.WHITE))
+                    .append(Component.text(f.linhagem() != null ? "  ✦ " + f.linhagem() : "", NamedTextColor.GOLD)));
+            Ficha avo = a.get(lado[0] + "P"), avoa = a.get(lado[0] + "M");
+            if (avo != null) l.add(Component.text("     ├ " + lado[2] + ": " + avo.linha(), NamedTextColor.DARK_GRAY));
+            if (avoa != null) l.add(Component.text("     └ " + lado[3] + ": " + avoa.linha(), NamedTextColor.DARK_GRAY));
+        }
+        // Comparação com o melhor dos pais.
+        Ficha eu = fichaDe(e), pai = a.get("P"), mae = a.get("M");
+        if (pai != null && mae != null) {
+            List<Component> setas = new ArrayList<>();
+            setas.add(seta("velocidade", eu.vel(), Math.max(pai.vel(), mae.vel())));
+            if (eu.pulo() > 0) setas.add(seta("pulo", eu.pulo(), Math.max(pai.pulo(), mae.pulo())));
+            setas.add(seta("vida", eu.vida(), Math.max(pai.vida(), mae.vida())));
+            Component c = Component.text("  Comparado ao melhor dos pais: ", NamedTextColor.GRAY);
+            for (int i = 0; i < setas.size(); i++) c = c.append(setas.get(i)).append(Component.text(i < setas.size() - 1 ? " · " : "", NamedTextColor.GRAY));
+            l.add(c);
+        }
+        return l;
+    }
+
+    private static Component seta(String nome, double meu, double melhor) {
+        if (meu > melhor + 0.05) return Component.text("↑ " + nome, NamedTextColor.GREEN);
+        if (meu < melhor - 0.05) return Component.text("↓ " + nome, NamedTextColor.RED);
+        return Component.text("= " + nome, NamedTextColor.YELLOW);
+    }
+
+    /** Resumo curto para o menu do Estábulo: linhagem, geração, números e pais. */
+    public static List<Component> resumo(Entity e) {
+        List<Component> l = new ArrayList<>();
+        String lin = linhagem(e);
+        if (lin != null) l.add(Component.text("✦ Linhagem " + lin, NamedTextColor.GOLD));
+        Ficha f = fichaDe(e);
+        l.add(Component.text((f.ger() == 0 ? "Selvagem" : f.ger() + "ª geração")
+                + (f.vel() > 0 ? " · " + fmt(f.vel()) + " b/s" : "") + (f.pulo() > 0 ? " · pulo " + fmt(f.pulo()) : "")
+                + " · " + fmt(f.vida()) + " ❤", NamedTextColor.GRAY));
+        Map<String, Ficha> a = arvoreDe(e);
+        String pai = a.containsKey("P") ? a.get("P").nome() : e.getPersistentDataContainer().get(K_PAI, PersistentDataType.STRING);
+        String mae = a.containsKey("M") ? a.get("M").nome() : e.getPersistentDataContainer().get(K_MAE, PersistentDataType.STRING);
+        if (pai != null || mae != null) l.add(Component.text("Pais: " + (pai == null ? "?" : pai) + " × " + (mae == null ? "?" : mae), NamedTextColor.DARK_GRAY));
+        return l;
     }
 
     private static Component linha(String nome, String valor, double fracao) {
@@ -165,6 +292,7 @@ public final class Linhagens implements Listener {
             d.set(K_GERACAO, PersistentDataType.INTEGER, ger);
             d.set(K_PAI, PersistentDataType.STRING, nome(pai));
             d.set(K_MAE, PersistentDataType.STRING, nome(mae));
+            d.set(K_ARVORE, PersistentDataType.STRING, montarArvore(pai, mae));
             if (criador != null) d.set(K_CRIADOR, PersistentDataType.STRING, criador.getName());
             int melhorou = 0;
             melhorou += melhorar(filhote, Attribute.MOVEMENT_SPEED, MAX_VELOCIDADE);
