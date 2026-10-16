@@ -28,8 +28,8 @@ jobs:
         with:
           name: RPGAtributos
           path: target/RPGAtributos-*.jar
-      # Rodado à mão com "subir_jar": o jar vai para a raiz da branch (como os das versões anteriores).
-      - if: github.event_name == 'workflow_dispatch' && inputs.subir_jar
+      # Rodado à mão com "subir_jar" (ou num push com [jar] na mensagem): o jar vai para a raiz da branch (como os das versões anteriores).
+      - if: (github.event_name == 'workflow_dispatch' && inputs.subir_jar) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[jar]'))
         run: |
           cp target/RPGAtributos-*.jar .
           git config user.name "github-actions[bot]"
