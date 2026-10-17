@@ -762,6 +762,21 @@ public final class Arsenal implements Listener {
         p.getWorld().spawnParticle(Particle.SOUL, e.getEntity().getLocation().add(0, 1, 0), 8, 0.3, 0.4, 0.3, 0.02);
     }
 
+    /**
+     * 2.54: com a chance dada, uma das armas dos minérios já forjada (Épica ou Única), para os
+     * chefes. Null quando não cai.
+     */
+    public static ItemStack talvezDeChefe(RPGAtributos plugin, double chance) {
+        java.util.concurrent.ThreadLocalRandom r = java.util.concurrent.ThreadLocalRandom.current();
+        if (r.nextDouble() >= chance) return null;
+        List<Arma> minerios = new ArrayList<>();
+        for (Arma a : Arma.values()) if (a.deMinerio()) minerios.add(a);
+        if (minerios.isEmpty()) return null;
+        Arma a = minerios.get(r.nextInt(minerios.size()));
+        br.rpgatributos.forja.Raridade rar = r.nextDouble() < 0.25 ? br.rpgatributos.forja.Raridade.UNICO : br.rpgatributos.forja.Raridade.EPICO;
+        return plugin.forja().forjar(null, criar(a, a.base), rar);
+    }
+
     /** Para o admin: dá uma arma pronta (feita na bancada). */
     public static ItemStack admin(String id, String material) {
         Arma a = Arma.porId(id);

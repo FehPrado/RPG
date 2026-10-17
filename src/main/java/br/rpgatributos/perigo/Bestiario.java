@@ -161,6 +161,7 @@ public final class Bestiario implements Listener {
             if (m > 0) lore.add(Component.text("+" + Math.round(m * DANO_POR_MARCO * 100) + "% dano · -" + Math.round(m * DEFESA_POR_MARCO * 100)
                     + "% dano recebido", NamedTextColor.GREEN));
             if (prox > 0) lore.add(Component.text("Próximo marco: " + prox, NamedTextColor.DARK_GRAY));
+            lore.addAll(br.rpgatributos.combate.Fraquezas.linhas(en.getKey()));
             ItemStack icone = new ItemStack(ovo == null ? Material.ZOMBIE_HEAD : ovo);
             icone.editMeta(meta -> {
                 meta.displayName(Component.translatable(en.getKey().translationKey(), m >= MARCOS.length ? NamedTextColor.GOLD : NamedTextColor.YELLOW)

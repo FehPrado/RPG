@@ -514,6 +514,26 @@ public final class Combos implements Listener, CommandExecutor {
             boolean ok = ativa == g.classe() || (ativa != null && ativa.requisitos().contains(g.classe()));
             return ok ? null : "precisa da classe " + g.classe().nome() + " ativa";
         }
+        if (g.tecnica() && !aprendeu(p, g)) return "ensinada por um Mestre de Armas nas vilas";
+        return null;
+    }
+
+    private static NamespacedKey chaveTecnica(Golpe g) {
+        return new NamespacedKey("rpgatributos", "tecnica_" + g.id());
+    }
+
+    /** Já aprendeu a técnica secreta com um Mestre de Armas? */
+    public boolean aprendeu(Player p, Golpe g) {
+        return p.getPersistentDataContainer().has(chaveTecnica(g));
+    }
+
+    public void ensinar(Player p, Golpe g) {
+        p.getPersistentDataContainer().set(chaveTecnica(g), PersistentDataType.BYTE, (byte) 1);
+    }
+
+    /** A técnica secreta da arma (cada arma tem uma). */
+    public static Golpe tecnicaDe(TipoArma t) {
+        for (Golpe g : Golpe.values()) if (g.tecnica() && g.tipo() == t) return g;
         return null;
     }
 
@@ -560,12 +580,42 @@ public final class Combos implements Listener, CommandExecutor {
             Block b = e.getClickedBlock();
             if (b != null && (b.getType().isInteractable() || plugin.ehEstacao(b))) return; // abrir baú, porta...
         }
+        Integer jaContou = ultimoDireitoCriatura.put(p.getUniqueId(), Bukkit.getCurrentTick());
+        if (jaContou != null && jaContou == Bukkit.getCurrentTick()) return; // já contou como clique numa criatura
         semEsquerdo.put(p.getUniqueId(), Bukkit.getCurrentTick());
         boolean meio = entradas.containsKey(p.getUniqueId());
         if (clique(p, 'D', t) && (meio || t == TipoArma.ARCO)) {
             // No meio da sequência não puxa a flecha nem arremessa o tridente.
             e.setUseItemInHand(Event.Result.DENY);
         }
+    }
+
+    /**
+     * Clique direito numa criatura não gera o clique no ar: sem isto, o "D" do combo se perde ao
+     * mirar no Boneco de Treino ou num monstro colado em você, e a sequência quebra.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void aoClicarCriatura(org.bukkit.event.player.PlayerInteractEntityEvent e) {
+        cliqueEmCriatura(e.getPlayer(), e.getRightClicked(), e.getHand());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void aoClicarCriaturaPonto(org.bukkit.event.player.PlayerInteractAtEntityEvent e) {
+        cliqueEmCriatura(e.getPlayer(), e.getRightClicked(), e.getHand());
+    }
+
+    private final Map<UUID, Integer> ultimoDireitoCriatura = new HashMap<>();
+
+    private void cliqueEmCriatura(Player p, Entity alvo, EquipmentSlot mao) {
+        if (mao != EquipmentSlot.HAND || !podeUsar(p)) return;
+        if (!plugin.bonecos().ehBoneco(alvo) && !(alvo instanceof Enemy)) return; // aldeões, montarias e pets: o clique é deles
+        TipoArma t = TipoArma.de(p);
+        if (t == null) return;
+        int tick = Bukkit.getCurrentTick();
+        Integer antes = ultimoDireitoCriatura.put(p.getUniqueId(), tick);
+        if (antes != null && antes == tick) return; // o jogo manda os dois eventos no mesmo clique
+        semEsquerdo.put(p.getUniqueId(), tick);
+        clique(p, 'D', t);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -651,6 +701,7 @@ public final class Combos implements Listener, CommandExecutor {
         estilo.sair(id);
         barras.remove(id);
         semEsquerdo.remove(id);
+        ultimoDireitoCriatura.remove(id);
         emCombate.remove(id);
         ultimoGolpe.remove(id);
         mostrarAte.remove(id);
@@ -756,8 +807,8 @@ public final class Combos implements Listener, CommandExecutor {
             Golpe g = extras.get(i);
             String falta = faltando(p, g);
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.text(g.lenda() != null ? "✦ Golpe da lenda " + g.lenda().nome() : "⚜ Golpe de classe: " + g.classe().nome(),
-                    g.lenda() != null ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.GOLD));
+            lore.add(Component.text(g.tecnica() ? "✪ Técnica secreta" : g.lenda() != null ? "✦ Golpe da lenda " + g.lenda().nome() : "⚜ Golpe de classe: " + g.classe().nome(),
+                    g.tecnica() ? NamedTextColor.AQUA : g.lenda() != null ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.GOLD));
             lore.add(Component.text(g.descricao(), NamedTextColor.GRAY));
             lore.add(Component.text("⚡ " + (int) g.vigor() + " vigor · ⏱ " + g.recarga() + " s", NamedTextColor.DARK_GRAY));
             lore.add(Component.empty());
@@ -766,7 +817,7 @@ public final class Combos implements Listener, CommandExecutor {
             else lore.add(Component.text(tela.espaco >= 0 ? "» Clique para colocar no espaço selecionado" : "Selecione um espaço acima primeiro",
                     tela.espaco >= 0 ? NamedTextColor.YELLOW : NamedTextColor.DARK_GRAY));
             ItemStack it = item(falta == null ? g.icone() : Material.GRAY_DYE,
-                    Component.text(g.nome(), falta == null ? (g.lenda() != null ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.GOLD) : NamedTextColor.DARK_GRAY,
+                    Component.text(g.nome(), falta == null ? (g.tecnica() ? NamedTextColor.AQUA : g.lenda() != null ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.GOLD) : NamedTextColor.DARK_GRAY,
                             TextDecoration.BOLD), lore);
             if (falta == null && contem(esp, g)) it.editMeta(m -> m.setEnchantmentGlintOverride(true));
             inv.setItem(S_EXTRAS[i], it);
@@ -875,7 +926,7 @@ public final class Combos implements Listener, CommandExecutor {
     private List<Golpe> extrasVisiveis(Player p, TipoArma t, Golpe[] esp) {
         List<Golpe> l = new ArrayList<>();
         for (Golpe g : Golpe.extras(t)) {
-            if (g.classe() != null || disponivel(p, g) || contem(esp, g)) l.add(g);
+            if (g.classe() != null || g.tecnica() || disponivel(p, g) || contem(esp, g)) l.add(g);
         }
         return l;
     }

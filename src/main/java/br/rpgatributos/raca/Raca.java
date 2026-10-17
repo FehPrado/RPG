@@ -1,6 +1,7 @@
 package br.rpgatributos.raca;
 
 import br.rpgatributos.Skill;
+import br.rpgatributos.classe.Classe;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 
@@ -67,7 +68,50 @@ public enum Raca {
             new String[]{"Fôlego maior e nada mais rápido", "Enxerga no escuro debaixo d'água",
                     "Graça do Golfinho e minera normal debaixo d'água", "Respira debaixo d'água", "+25% de dano na água ou na chuva"},
             new Material[]{null, Material.PRISMARINE_SHARD, Material.PRISMARINE_CRYSTALS, Material.NAUTILUS_SHELL, Material.HEART_OF_THE_SEA},
-            new int[]{0, 8, 8, 1, 1});
+            new int[]{0, 8, 8, 1, 1}),
+    // ---------- 2.53: a segunda onda ----------
+    DRACONATO("Draconato", "✹", 0xE65100, Material.BLAZE_POWDER, 1.05,
+            "Sangue de dragão, escamas no rosto e chifres na testa. O fogo faz parte deles.",
+            "O frio pesa: em neve, gelo e biomas gelados ficam lentos e fracos.",
+            Set.of(Skill.COMBATE, Skill.FERRARIA, Skill.ARCANO),
+            new String[]{"Escamas", "Sopro de Fogo", "Asas Curtas", "Coração Ígneo", "Fúria do Dragão"},
+            new String[]{"Leva metade do dano de fogo e de lava", "Agache duas vezes rápido: sopra fogo na sua frente (gasta Vigor)",
+                    "Asas pequenas: pule no ar para planar", "+2 ❤ e imune a fogo e lava", "O sopro vai mais longe e seus golpes incendeiam"},
+            new Material[]{null, Material.BLAZE_POWDER, Material.PHANTOM_MEMBRANE, Material.MAGMA_CREAM, Material.DRAGON_BREATH},
+            new int[]{0, 16, 4, 8, 1}),
+    FERA("Homem-Fera", "☾", 0x8D6E63, Material.BONE, 1.05,
+            "Meio gente, meio lobo. A lua chama e eles respondem. Primos da licantropia, mas no controle.",
+            "Armas de ouro ferem 25% mais.",
+            Set.of(Skill.COMBATE, Skill.CORRIDA, Skill.DOMA),
+            new String[]{"Faro", "Garras", "Uivo", "Sangue Selvagem", "Senhor da Lua"},
+            new String[]{"Enxerga no escuro à noite e é 4% mais rápido", "De mãos vazias, bate como uma espada (+5 de dano)",
+                    "Agache duas vezes rápido: uivo que dá Força a você e à party e espanta os monstros perto",
+                    "À noite regenera e fica mais rápido", "Imune à licantropia; à noite ganha Força (Força II na lua cheia)"},
+            new Material[]{null, Material.BONE, Material.RABBIT_FOOT, Material.COOKED_BEEF, Material.GOLDEN_APPLE},
+            new int[]{0, 32, 4, 32, 8}),
+    ESPECTRAL("Espectral", "✧", 0x90A4AE, Material.PHANTOM_MEMBRANE, 1.0,
+            "Metade aqui, metade do outro lado. Passos sem som e um frio no ar por onde passam.",
+            "De dia, ao céu aberto, o sol enfraquece (Fraqueza).",
+            Set.of(Skill.ARCANO, Skill.ALQUIMIA, Skill.PULO),
+            new String[]{"Passo Etéreo", "Pacto dos Mortos", "Desvanecer", "Toque Gélido", "Além do Véu"},
+            new String[]{"Cai devagar (sem dano até 6 blocos) e enxerga no escuro à noite",
+                    "Zumbis, esqueletos e afins só notam você bem de perto",
+                    "Agache duas vezes rápido: fica invisível por 8 s (a cada 45 s)",
+                    "Seus golpes deixam lento e roubam um pouco de vida",
+                    "Uma vez por hora, ao cair morto, volta com metade da vida"},
+            new Material[]{null, Material.PHANTOM_MEMBRANE, Material.GHAST_TEAR, Material.ECHO_SHARD, Material.TOTEM_OF_UNDYING},
+            new int[]{0, 8, 2, 4, 1}),
+    GNOMO("Gnomo Inventor", "⚙", 0x26A69A, Material.CLOCK, 0.6,
+            "Pequenos, curiosos e cheios de bugigangas. Se não funciona, consertam; se funciona, melhoram.",
+            "-4 ❤ de vida máxima.",
+            Set.of(Skill.FERRARIA, Skill.ALQUIMIA, Skill.MINERACAO),
+            new String[]{"Remendos", "Olho Técnico", "Pólvora", "Autômato", "Grande Invento"},
+            new String[]{"A ferramenta ou arma na mão se conserta um pouco a cada 30 s", "15% de chance de não gastar durabilidade",
+                    "TNT, foguetes e frascos de arremesso fazem +30% de dano e não ferem você",
+                    "Agache duas vezes rápido: um autômato de ferro luta ao seu lado por 40 s (a cada 2 min)",
+                    "+10% de chance de a Forja subir uma raridade"},
+            new Material[]{null, Material.REDSTONE, Material.GUNPOWDER, Material.IRON_BLOCK, Material.NETHERITE_INGOT},
+            new int[]{0, 32, 16, 4, 1});
 
     /** Essência total para chegar em cada estágio (I, II, III, IV, V). */
     public static final double[] ESSENCIA = {0, 1000, 4000, 12000, 30000};
@@ -122,6 +166,22 @@ public enum Raca {
         return afinidades.contains(s) ? 1.0 : 0.2;
     }
 
+    /** 2.53: as classes que combinam com a raça (com uma delas ativa: +6% de dano e -5% de dano recebido). */
+    public Set<Classe> sinergia() {
+        return switch (this) {
+            case HUMANO -> Set.of(Classe.GUERREIRO, Classe.CAVALEIRO, Classe.PALADINO, Classe.SANTO_PALADINO);
+            case ANAO -> Set.of(Classe.FERREIRO, Classe.MESTRE_FORJADOR, Classe.HERDEIRO_DO_FERREIRO, Classe.BERSERKER);
+            case ELFO -> Set.of(Classe.ARQUEIRO, Classe.CACADOR, Classe.ATIRADOR, Classe.ARQUEIRO_CELESTIAL);
+            case PEQUENINO -> Set.of(Classe.LADINO, Classe.ASSASSINO, Classe.LAMINA_FANTASMA);
+            case PASSARO -> Set.of(Classe.ARQUEIRO, Classe.ATIRADOR, Classe.ARQUEIRO_CELESTIAL);
+            case MAR -> Set.of(Classe.ELEMENTALISTA, Classe.DOMADOR, Classe.MESTRE_DAS_FERAS);
+            case DRACONATO -> Set.of(Classe.BERSERKER, Classe.ELEMENTALISTA, Classe.SENHOR_DA_GUERRA);
+            case FERA -> Set.of(Classe.DOMADOR, Classe.MESTRE_DAS_FERAS, Classe.BERSERKER, Classe.SENHOR_DAS_FERAS_ANCESTRAIS);
+            case ESPECTRAL -> Set.of(Classe.MAGO, Classe.FEITICEIRO, Classe.ASSASSINO, Classe.LAMINA_FANTASMA, Classe.SOBERANO_DAS_SOMBRAS);
+            case GNOMO -> Set.of(Classe.FERREIRO, Classe.MESTRE_FORJADOR, Classe.MAGO, Classe.ARQUIMAGO_PRIMORDIAL);
+        };
+    }
+
     public static Raca porId(String s) {
         if (s == null) return null;
         String n = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").replace("-", "_").replace(" ", "_");
@@ -132,6 +192,9 @@ public enum Raca {
             case "povo_passaro", "passaro", "ave" -> PASSARO;
             case "povo_do_mar", "mar", "tritao" -> MAR;
             case "anao" -> ANAO;
+            case "homem_fera", "fera", "lobo" -> FERA;
+            case "gnomo", "gnomo_inventor" -> GNOMO;
+            case "dragao", "draconato" -> DRACONATO;
             default -> null;
         };
     }

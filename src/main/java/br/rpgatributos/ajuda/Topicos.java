@@ -126,7 +126,8 @@ public final class Topicos {
         t("posturas", COMBATE, "Posturas, estilo e equilíbrio", Material.SHIELD)
                 .texto("Postura (/postura): Ofensiva (+dano), Defensiva (leva menos dano e cura nos golpes), Ágil (velocidade e recarga) ou a Mestra da arma (proficiência 20).",
                         "Variar os golpes sobe o estilo (D até S): mais dano e XP. Apanhar ou repetir o mesmo golpe derruba.",
-                        "Combos enchem o equilíbrio dos inimigos fortes; cheio, eles ficam parados e levam +50% de dano.")
+                        "Combos enchem o equilíbrio dos inimigos fortes; cheio, eles ficam parados e levam +50% de dano.",
+                        "Maestria: os acertos com cada postura a sobem até o nível V (2% a mais por nível no que ela faz).")
                 .dica("Depois do 2º clique, um \"tim\" marca o tempo certo do 3º: golpe perfeito, mais forte e mais barato. Acertar quem está no ar dá +30%.")
                 .cmd("postura").ligados("combos", "ligacoes", "boneco", "mobilidade").palavras("postura estilo rank equilibrio perfeito aereo ofensiva defensiva agil mestra").pronto();
         t("ligacoes", COMBATE, "Combos com magia, party e feras", Material.IRON_CHAIN)
@@ -144,7 +145,7 @@ public final class Topicos {
         t("boneco", COMBATE, "Boneco de Treino", Material.HAY_BLOCK)
                 .texto("Bata nele (com arma, combo, habilidade ou magia) para ver o dano de cada golpe, o golpe de combo e o dano por segundo.",
                         "Clique no fardo: o treino por arma (dano por segundo, média, maior e os melhores combos). Agachado + clique zera.",
-                        "Dá um pouco de XP de Combate, com limite por hora.")
+                        "Não dá XP: serve só para medir e treinar os combos.")
                 .ritual(Material.HAY_BLOCK, "Fardo de feno", Material.CARVED_PUMPKIN, 1, Material.ARMOR_STAND, 1)
                 .ligados("combos", "amolar").palavras("treino dps dano").pronto();
         t("arsenal", COMBATE, "Arsenal: adaga, foice, bastão...", Material.GOLDEN_SWORD)
@@ -159,6 +160,25 @@ public final class Topicos {
                         "Uma receita só cada uma, com o mineral. Na Forja saem forjadas.")
                 .dica("Bumerangue e Arpão: o clique direito arremessa, então os combos começam com o esquerdo.")
                 .cmd("combos").ligados("minerais", "arsenal", "incrustar", "mitrilo").palavras("montante bumerangue leques arpao mangual garras clava mitrilo ambar jade perola gelo sangue turfa").pronto();
+        t("tecnicas", COMBATE, "Técnicas secretas", Material.NETHER_STAR)
+                .texto("Cada arma tem uma técnica secreta, um golpe a mais ensinado por um Mestre de Armas nas vilas.",
+                        "Mestra das Marés (pescadores): tridente, lança, arpão, arremesso e bumerangue. Mestre do Bastão (mosteiro): bastão, leques, chicote, adaga e duplas.",
+                        "Mestre de Guerra (anões): machado, maça, montante, mangual e clava. Mestra da Lâmina (élfica): espada, arco, foice e garras.",
+                        "Cada técnica pede proficiência 12 na arma e 24 esmeraldas. Depois ela aparece no /combos.")
+                .dica("Aprender com um mestre também aumenta o laço com ele.")
+                .cmd("combos").ligados("combos", "vilas").palavras("tecnica secreta mestre armas ensinar").pronto();
+        t("aparar", COMBATE, "Aparar com o escudo", Material.SHIELD)
+                .texto("Levante o escudo bem na hora do golpe, de frente para o atacante: o golpe some, flechas voltam e o atacante fica lento e fraco.",
+                        "Você ganha 10 de Vigor e o próximo golpe em 1,5 s faz ×1,5.",
+                        "Escudo de Duelo (ferro, ouro, ferro em cima; escudo no meio): mais tempo para aparar e contra-ataque de ×1,8.")
+                .dica("Segurar o escudo levantado o tempo todo só bloqueia: o aparar é levantar no instante certo.")
+                .ligados("posturas", "fraquezas").palavras("aparar parry escudo duelo contra-ataque").pronto();
+        t("fraquezas", COMBATE, "Fraquezas e clima", Material.SPIDER_EYE)
+                .texto("Cada família de criatura apanha mais de algumas armas e menos de outras: esqueletos de maça e clava, aranhas de lança e foice, criaturas de fogo de tridente e arpão, voadores de arco e bumerangue.",
+                        "Na chuva tridente e arpão fazem mais (ainda mais na tempestade), a clava e o arco menos, e o fogo se apaga. No frio o mangual ganha 15%.",
+                        "Montado: correndo, o golpe vira carga (até +50%), flecha faz +15% e o escudo levantado protege a montaria.")
+                .dica("O aviso aparece na barra no primeiro golpe; a lista de cada criatura está no Bestiário.")
+                .ligados("combos", "aparar").palavras("fraqueza clima chuva carga montado bestiario").pronto();
         t("amolar", COMBATE, "Pedra de Amolar", Material.GRINDSTONE)
                 .texto("Clique com a arma: ela fica Afiada (+10% de dano) por 100 golpes. Gasta 1 pederneira.")
                 .ritual(Material.GRINDSTONE, "Rebolo (ou pedra lisa)", Material.FLINT, 2, Material.IRON_INGOT, 1)

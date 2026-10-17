@@ -271,7 +271,7 @@ public final class Forja {
         Raridade r = forcada != null ? forcada : sortearRaridade(nivel);
         // Ferreiro e Mestre Forjador: chance de sair uma raridade acima.
         if (forcada == null && ferreiro != null && r != Raridade.MITICO
-                && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.classes().chanceRaridadeExtra(ferreiro) + plugin.lendas().chanceRaridadeExtra(ferreiro)
+                && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.classes().chanceRaridadeExtra(ferreiro) + plugin.lendas().chanceRaridadeExtra(ferreiro) + plugin.racas().chanceRaridadeExtra(ferreiro)
                         + plugin.talentos().chanceRaridadeExtra(ferreiro)) {
             r = Raridade.values()[r.ordinal() + 1];
             // Obra-Prima: chance de subir mais uma.

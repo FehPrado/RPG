@@ -231,6 +231,9 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.domador.Linhagens linhagens;
     private br.rpgatributos.domador.Estabulos estabulos;
     private br.rpgatributos.combo.Arsenal arsenal;
+    private br.rpgatributos.combate.Aparar aparar;
+    private br.rpgatributos.combate.Fraquezas fraquezas;
+    private br.rpgatributos.domador.CargaMontada cargaMontada;
     private MercadorItinerante mercador;
     private Encontros encontros;
     private Flechas flechas;
@@ -291,6 +294,9 @@ public final class RPGAtributos extends JavaPlugin {
         linhagens = new br.rpgatributos.domador.Linhagens(this);
         estabulos = new br.rpgatributos.domador.Estabulos(this);
         arsenal = new br.rpgatributos.combo.Arsenal(this);
+        aparar = new br.rpgatributos.combate.Aparar(this);
+        fraquezas = new br.rpgatributos.combate.Fraquezas(this);
+        cargaMontada = new br.rpgatributos.domador.CargaMontada(this);
         tags = new TagManager(this);
         skillListener = new SkillListener(this);
         menus = new MenuManager(this);
@@ -438,7 +444,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
+                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, aparar, fraquezas, cargaMontada, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -448,6 +454,7 @@ public final class RPGAtributos extends JavaPlugin {
         artefatos.registrarReceitas();
         linhagens.registrarReceitas();
         arsenal.registrarReceitas();
+        aparar.registrarReceitas();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
         frascos.registrarReceitas();

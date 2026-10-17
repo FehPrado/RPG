@@ -34,6 +34,8 @@ public final class Asas {
 
     private static final Particle.DustOptions PENA = new Particle.DustOptions(Color.fromRGB(0xF5F5F5), 0.9f);
     private static final Particle.DustOptions PONTA = new Particle.DustOptions(Color.fromRGB(0x90A4AE), 0.8f);
+    private static final Particle.DustOptions ESCAMA = new Particle.DustOptions(Color.fromRGB(0xE65100), 0.9f);
+    private static final Particle.DustOptions ESCAMA_PONTA = new Particle.DustOptions(Color.fromRGB(0x4E1A08), 0.8f);
 
     private final RPGAtributos plugin;
     private final Racas racas;
@@ -77,7 +79,8 @@ public final class Asas {
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID id = p.getUniqueId();
             boolean planando = plugin.mobilidade().planando(p);
-            boolean aberto = planando && racas.de(p) == Raca.PASSARO && racas.estagio(p) >= 3 && !Racas.pesada(p);
+            Raca r = racas.de(p);
+            boolean aberto = planando && racas.estagio(p) >= 3 && ((r == Raca.PASSARO && !Racas.pesada(p)) || r == Raca.DRACONATO);
             if (!aberto) {
                 if (abertas.containsKey(id)) fechar(id);
                 continue;
@@ -119,7 +122,8 @@ public final class Asas {
         Location l = ancora(p);
         if (par == null || !par.esq.isValid() || !par.dir.isValid()) {
             if (par != null) fechar(id);
-            par = new Par(criar(l), criar(l));
+            boolean dragao = racas.de(p) == Raca.DRACONATO;
+            par = new Par(criar(l, dragao), criar(l, dragao));
             abertas.put(id, par);
         }
         par.esq.teleport(l);
@@ -127,8 +131,9 @@ public final class Asas {
         double e = escala(p);
         par.esq.setInterpolationDelay(0);
         par.dir.setInterpolationDelay(0);
-        par.esq.setTransformationMatrix(matriz(e, angulo, 1));
-        par.dir.setTransformationMatrix(matriz(e, angulo, -1));
+        double tam = racas.de(p) == Raca.DRACONATO ? e * 0.6 : e; // as asas do Draconato são curtas
+        par.esq.setTransformationMatrix(matriz(tam, angulo, 1));
+        par.dir.setTransformationMatrix(matriz(tam, angulo, -1));
         // Mostra só para quem tem o pacote (sem ele o item apareceria como uma pena comum).
         if (ciclo % 10 == 0 || par.mostrado.isEmpty()) {
             for (Player v : p.getWorld().getPlayers()) {
@@ -140,9 +145,9 @@ public final class Asas {
         }
     }
 
-    private ItemDisplay criar(Location l) {
+    private ItemDisplay criar(Location l, boolean dragao) {
         ItemStack asa = new ItemStack(Material.FEATHER);
-        asa.editMeta(m -> PacoteRecursos.marcar(m, "asa_passaro"));
+        asa.editMeta(m -> PacoteRecursos.marcar(m, dragao ? "asa_dragao" : "asa_passaro"));
         return l.getWorld().spawn(l, ItemDisplay.class, d -> {
             d.setItemStack(asa);
             d.setPersistent(false);
@@ -175,7 +180,8 @@ public final class Asas {
     // =====================================================================
 
     private void particulas(Player p, double angulo) {
-        double e = escala(p);
+        boolean dragao = racas.de(p) == Raca.DRACONATO;
+        double e = escala(p) * (dragao ? 0.6 : 1);
         Location base = ancora(p);
         double yaw = Math.toRadians(base.getYaw());
         // Frente do corpo e o lado esquerdo (o +X do corpo).
@@ -199,7 +205,7 @@ public final class Asas {
                 for (int fila = 0; fila < 2; fila++) {
                     double y = fila == 0 ? cima : baixo;
                     Location pt = base.clone().add(esquerda.clone().multiply(x)).add(frente.clone().multiply(z)).add(0, y, 0);
-                    for (Player v : veem) v.spawnParticle(Particle.DUST, pt, 1, 0, 0, 0, 0, k >= 6 ? PONTA : PENA);
+                    for (Player v : veem) v.spawnParticle(Particle.DUST, pt, 1, 0, 0, 0, 0, dragao ? (k >= 6 ? ESCAMA_PONTA : ESCAMA) : k >= 6 ? PONTA : PENA);
                 }
             }
         }

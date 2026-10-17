@@ -256,8 +256,6 @@ detalhes:
   fogueira:
     xp-descansado: 0.05               # +5% de XP enquanto Descansado
     minutos-descansado: 20
-  boneco:
-    xp-por-hora: 120                  # XP de Combate máximo por hora no Boneco de Treino
   amolar:
     golpes: 100                       # golpes que a arma fica afiada
     dano-extra: 0.10                  # +10% de dano
@@ -509,7 +507,7 @@ vanilla-mais:
   gelo-fino: true                     # parado no gelo sobre a água, ele racha e quebra (agachado aguenta; fora de territórios)
   ovelhas-misturam-cores: true        # filhote de pais de cores que o jogo não mistura: 30% de sair a cor do meio
   animais-seguem-de-longe: true       # animais de fazenda veem a comida na sua mão de 16 blocos (no jogo, 10)
-  suporte-com-bracos: true            # suporte de armadura já vem com braços; agachado + graveto liga e desliga
+  suporte-com-bracos: true            # todo suporte de armadura tem braços (os antigos também); agachado + graveto liga e desliga
   escadas-mais-rapidas: true          # sobe a escada de mão mais rápido
   lanternas-rangem-na-chuva: true     # na chuva, lanternas penduradas ao ar livre rangem com o vento
   raio-queima-arvore: true            # raio em árvore põe fogo nas folhas (se o fogo for permitido ali) e deixa carvão vegetal

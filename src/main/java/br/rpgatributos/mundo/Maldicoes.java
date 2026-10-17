@@ -86,6 +86,11 @@ public final class Maldicoes implements Listener {
             curar(p);
             return;
         }
+        // 2.53: o Homem-Fera no estágio V é imune à licantropia (a fera já está no controle).
+        if (m == Maldicao.LICANTROPIA && plugin.racas().de(p) == br.rpgatributos.raca.Raca.FERA && plugin.racas().estagio(p) >= 5) {
+            p.sendActionBar(Component.text("☾ O sangue de fera recusa a maldição.", NamedTextColor.GOLD));
+            return;
+        }
         p.getPersistentDataContainer().set(kMaldicao, PersistentDataType.STRING, m.name());
         boolean lobo = m == Maldicao.LICANTROPIA;
         p.showTitle(Title.title(Component.text(lobo ? "🐺 Licantropia" : "🦇 Vampirismo", lobo ? NamedTextColor.GOLD : NamedTextColor.DARK_RED, TextDecoration.BOLD),

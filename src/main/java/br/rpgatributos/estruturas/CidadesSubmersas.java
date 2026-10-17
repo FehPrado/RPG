@@ -457,6 +457,8 @@ final class CidadesSubmersas {
         e.getDrops().add(plugin.arqueologia().reliquiaAleatoria());
         ItemStack nomeada = plugin.nomeadas().talvezDeChefe(0.3);
         if (nomeada != null) e.getDrops().add(nomeada);
+        ItemStack minerio = br.rpgatributos.combo.Arsenal.talvezDeChefe(plugin, 0.15); // 2.54: armas dos minérios
+        if (minerio != null) e.getDrops().add(minerio);
         if (r.nextDouble() < 0.4) e.getDrops().add(Raro.PAGINA_DE_LENDA.criar(1));
         if (r.nextDouble() < 0.35) {
             ItemStack t = new ItemStack(Material.TRIDENT);

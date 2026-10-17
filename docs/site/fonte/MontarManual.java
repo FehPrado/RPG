@@ -120,6 +120,7 @@ public class MontarManual {
 
     static String categoria(String id) {
         if (ARMA.matcher(id).matches()) return "Arsenal";
+        if (id.matches("montante|bumerangue|leques|arpao|mangual|garras|clava")) return "Armas dos minérios";
         if (id.startsWith("flecha_") || id.startsWith("frasco_")) return "Flechas e frascos";
         if (id.startsWith("mitrilo_") || id.equals("cinzel") || id.equals("bateia")) return "Mineração";
         if (id.equals("adubo_rico") || id.equals("ferradura") || id.equals("livro_criador")) return "Campo e animais";
@@ -127,7 +128,7 @@ public class MontarManual {
         return "Utilidade";
     }
 
-    static final String[] ORDEM_CAT = {"Arsenal", "Utilidade", "Flechas e frascos", "Mineração", "Campo e animais", "Magia"};
+    static final String[] ORDEM_CAT = {"Arsenal", "Armas dos minérios", "Utilidade", "Flechas e frascos", "Mineração", "Campo e animais", "Magia"};
 
     static String receitas() throws IOException {
         JsonArray rs = JsonParser.parseString(Files.readString(fonte.resolve("receitas.json"))).getAsJsonArray();
@@ -137,6 +138,7 @@ public class MontarManual {
         for (JsonElement e : rs) {
             JsonObject r = e.getAsJsonObject();
             String id = r.get("id").getAsString();
+            if (id.equals("mitrilo_alto_forno")) continue; // vai junto no cartão da fornalha
             Matcher am = ARMA.matcher(id);
             if (am.matches()) {
                 // Uma carta por arma (o material da receita decide o material da arma).
@@ -239,6 +241,11 @@ public class MontarManual {
         if (arma) nome = nome.replaceAll(" de (Ferro|Madeira|Pedra|Cobre|Ouro|Diamante)$", "");
         int qtd = res.get("qtd").getAsInt();
         String desc = res.has("lore") && !res.getAsJsonArray("lore").isEmpty() ? res.getAsJsonArray("lore").get(0).getAsString() : "";
+        if (id.equals("mitrilo_aprimorar")) {
+            nome = "Peça ✦ Mitrilo";
+            desc = "Uma peça de Netherite (forjada ou não) vira ✦ Mitrilo: 50% mais durabilidade e um bônus extra.";
+            qtd = 1;
+        }
         StringBuilder sb = new StringBuilder("    <div class=\"card receita\" data-cat=\"" + esc(cat) + "\">\n");
         sb.append("      <div class=\"rec-topo\">").append(icone(res)).append("<div><p class=\"rec-cat\">").append(esc(cat)).append("</p><h3>")
                 .append(esc(nome)).append(qtd > 1 ? " <span class=\"muted\">×" + qtd + "</span>" : "").append("</h3></div></div>\n");
@@ -275,7 +282,7 @@ public class MontarManual {
                 cont.forEach((k, v) -> sb.append("<li>").append(v > 1 ? v + "× " : "").append(esc(k)).append("</li>"));
                 sb.append("</ul>\n");
             }
-            case "fornalha", "alto_forno" -> sb.append("      <p class=\"rec-modo\">").append(tipo.equals("fornalha") ? "Fornalha" : "Alto-forno").append("</p><ul class=\"lista-ing\"><li>")
+            case "fornalha", "alto_forno" -> sb.append("      <p class=\"rec-modo\">").append(tipo.equals("fornalha") ? "Fornalha (ou alto-forno, mais rápido)" : "Alto-forno").append("</p><ul class=\"lista-ing\"><li>")
                     .append(esc(nomeEscolha(r.getAsJsonObject("entrada")))).append(" → ").append(esc(nome)).append("</li></ul>\n");
             case "ferraria" -> sb.append("      <p class=\"rec-modo\">Mesa de ferraria</p><ul class=\"lista-ing\"><li>").append(esc(nomeEscolha(r.getAsJsonObject("molde"))))
                     .append("</li><li>").append(esc(nomeEscolha(r.getAsJsonObject("base")))).append("</li><li>").append(esc(nomeEscolha(r.getAsJsonObject("adicao"))))

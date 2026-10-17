@@ -83,7 +83,7 @@ public final class Settings {
     // detalhes: estações pequenas, natureza e túmulos
     public final boolean detSentar, detLapide;
     public final int detDescansadoMinutos, detAmolarGolpes, detLapideMinutos;
-    public final double detNinhoChance, detAchadoChance, detAnimalRaroChance, detDescansadoXp, detBonecoXpHora, detAmolarDano;
+    public final double detNinhoChance, detAchadoChance, detAnimalRaroChance, detDescansadoXp, detAmolarDano;
     public final int horasPorEstacao;
     public final boolean golpesEmQualquerCriatura, pvpLivreForaDeTerritorio;
 
@@ -351,7 +351,6 @@ public final class Settings {
         detAnimalRaroChance = Math.max(0, c.getDouble("detalhes.chance-de-animal-raro", 0.002));
         detDescansadoXp = Math.max(0, c.getDouble("detalhes.fogueira.xp-descansado", 0.05));
         detDescansadoMinutos = Math.max(1, c.getInt("detalhes.fogueira.minutos-descansado", 20));
-        detBonecoXpHora = Math.max(0, c.getDouble("detalhes.boneco.xp-por-hora", 120));
         detAmolarGolpes = Math.max(1, c.getInt("detalhes.amolar.golpes", 100));
         detAmolarDano = Math.max(0, c.getDouble("detalhes.amolar.dano-extra", 0.10));
 

@@ -318,6 +318,46 @@ public enum Golpe {
     ERUPCAO(TipoArma.CLAVA, 20, "Erupção", 50, 25, Material.MAGMA_BLOCK,
             "Salta e cai como um vulcão: explosão de fogo em 5 blocos."),
 
+    // ---------------- 2.54: técnicas secretas (uma por arma, ensinadas pelos Mestres de Armas nas vilas) ----------------
+    VENTO_CORTANTE(TipoArma.ESPADA, "Vento Cortante", 35, 14, Material.WIND_CHARGE,
+            "Técnica secreta: um corte que vira uma lâmina de vento de 12 blocos.", true),
+    MACHADOS_ANCESTRAIS(TipoArma.MACHADO, "Machados Ancestrais", 40, 18, Material.GOLDEN_AXE,
+            "Técnica secreta: três machados espectrais giram em volta de você por 3 s.", true),
+    MIL_ESTOCADAS(TipoArma.LANCA, "Mil Estocadas", 35, 14, Material.POINTED_DRIPSTONE,
+            "Técnica secreta: oito estocadas rapidíssimas em linha.", true),
+    MAREMOTO(TipoArma.TRIDENTE, "Maremoto", 40, 18, Material.WATER_BUCKET,
+            "Técnica secreta: uma onda gigante varre 12 blocos à sua frente.", true),
+    SINO_DO_JUIZO(TipoArma.MACA, "Sino do Juízo", 40, 18, Material.BELL,
+            "Técnica secreta: o impacto atordoa todos num raio de 6 blocos.", true),
+    FLECHA_COMETA(TipoArma.ARCO, "Flecha Cometa", 35, 16, Material.FIRE_CHARGE,
+            "Técnica secreta: três flechas em chamas caem onde você mira e explodem.", true),
+    DANCA_DAS_SOMBRAS(TipoArma.ADAGA, "Dança das Sombras", 35, 16, Material.ECHO_SHARD,
+            "Técnica secreta: salta para as costas de até 3 inimigos, cortando cada um.", true),
+    TEMPESTADE_ESCARLATE(TipoArma.DUPLAS, "Tempestade Escarlate", 40, 18, Material.REDSTONE,
+            "Técnica secreta: doze cortes em 2 s em volta, que fazem sangrar.", true),
+    MIL_LAMINAS(TipoArma.ARREMESSO, "Mil Lâminas", 40, 18, Material.IRON_NUGGET,
+            "Técnica secreta: trinta lâminas em leque na sua frente.", true),
+    LUA_DE_SANGUE(TipoArma.FOICE, "Lua de Sangue", 40, 18, Material.RED_DYE,
+            "Técnica secreta: corte em círculo de 6 blocos que cura parte do dano.", true),
+    MONTANHA_INABALAVEL(TipoArma.BASTAO, "Montanha Inabalável", 35, 20, Material.STONE,
+            "Técnica secreta: 6 s de Resistência III e quem chegar perto é jogado longe.", true),
+    SERPENTE_RELAMPAGO(TipoArma.CHICOTE, "Serpente-Relâmpago", 40, 16, Material.LIGHTNING_ROD,
+            "Técnica secreta: um raio corre pelo chicote e salta por até 5 inimigos.", true),
+    CEU_PARTIDO(TipoArma.MONTANTE, "Céu Partido", 45, 18, Material.NETHERITE_SWORD,
+            "Técnica secreta: um corte de cima a baixo que racha 12 blocos à frente.", true),
+    ORBITA_ETERNA(TipoArma.BUMERANGUE, "Órbita Eterna", 35, 16, Material.CLOCK,
+            "Técnica secreta: o bumerangue gira em volta de você por 3 s.", true),
+    VENDAVAL_DE_PETALAS(TipoArma.LEQUES, "Vendaval de Pétalas", 35, 14, Material.PINK_PETALS,
+            "Técnica secreta: um vendaval de 8 blocos que corta e empurra.", true),
+    FISGADA_DO_LEVIATA(TipoArma.ARPAO, "Fisgada do Leviatã", 40, 16, Material.FISHING_ROD,
+            "Técnica secreta: fisga todos numa linha de 15 blocos e puxa até você.", true),
+    NEVASCA_DE_FERRO(TipoArma.MANGUAL, "Nevasca de Ferro", 40, 18, Material.PACKED_ICE,
+            "Técnica secreta: gira o mangual por 3 s, congelando quem estiver perto.", true),
+    FRENESI_DA_FERA(TipoArma.GARRAS, "Frenesi da Fera", 40, 16, Material.BONE,
+            "Técnica secreta: dez garradas rápidas no alvo, roubando vida.", true),
+    ERUPCAO_VULCANICA(TipoArma.CLAVA, "Erupção Vulcânica", 45, 18, Material.MAGMA_BLOCK,
+            "Técnica secreta: bate no chão e pilares de fogo sobem em volta.", true),
+
     // ---------------- Lendas (com a lenda na mão; armaduras e a picareta: carregando) ----------------
     PURIFICACAO_SAGRADA(Lenda.LAMINA_DO_EXORCISTA, "Purificação Sagrada", 40, 18, Material.TOTEM_OF_UNDYING,
             "Explosão de luz em volta: dano enorme em mortos-vivos e cura os aliados."),
@@ -375,22 +415,29 @@ public enum Golpe {
     private final String descricao;
     private final Lenda lenda;
     private final Classe classe;
+    /** 2.54: técnica secreta (ensinada por um Mestre de Armas nas vilas). */
+    private final boolean tecnica;
 
     Golpe(TipoArma tipo, int nivel, String nome, double vigor, int recarga, Material icone, String descricao) {
-        this(tipo, nivel, nome, vigor, recarga, icone, descricao, null, null);
+        this(tipo, nivel, nome, vigor, recarga, icone, descricao, null, null, false);
     }
 
     /** Golpe de lenda: vale com qualquer arma de combo, se você tiver a lenda (veja {@link Combos#disponivel}). */
     Golpe(Lenda lenda, String nome, double vigor, int recarga, Material icone, String descricao) {
-        this(null, 1, nome, vigor, recarga, icone, descricao, lenda, null);
+        this(null, 1, nome, vigor, recarga, icone, descricao, lenda, null, false);
     }
 
     /** Golpe de classe: vale com a arma da classe enquanto ela (ou uma lendária que nasce dela) estiver ativa. */
     Golpe(Classe classe, TipoArma tipo, String nome, double vigor, int recarga, Material icone, String descricao) {
-        this(tipo, 1, nome, vigor, recarga, icone, descricao, null, classe);
+        this(tipo, 1, nome, vigor, recarga, icone, descricao, null, classe, false);
     }
 
-    Golpe(TipoArma tipo, int nivel, String nome, double vigor, int recarga, Material icone, String descricao, Lenda lenda, Classe classe) {
+    /** Técnica secreta: vale com a arma dela depois que um Mestre de Armas ensina. */
+    Golpe(TipoArma tipo, String nome, double vigor, int recarga, Material icone, String descricao, boolean tecnica) {
+        this(tipo, 1, nome, vigor, recarga, icone, descricao, null, null, tecnica);
+    }
+
+    Golpe(TipoArma tipo, int nivel, String nome, double vigor, int recarga, Material icone, String descricao, Lenda lenda, Classe classe, boolean tecnica) {
         this.tipo = tipo;
         this.nivel = nivel;
         this.nome = nome;
@@ -400,6 +447,7 @@ public enum Golpe {
         this.descricao = descricao;
         this.lenda = lenda;
         this.classe = classe;
+        this.tecnica = tecnica;
     }
 
     /** A arma do golpe (null nos golpes de lenda: valem com qualquer arma). */
@@ -407,7 +455,8 @@ public enum Golpe {
     public Lenda lenda() { return lenda; }
     public Classe classe() { return classe; }
     /** Golpe de lenda ou de classe (não sobe com a proficiência). */
-    public boolean extra() { return lenda != null || classe != null; }
+    public boolean extra() { return lenda != null || classe != null || tecnica; }
+    public boolean tecnica() { return tecnica; }
     /** Nível de proficiência da arma que libera o golpe. */
     public int nivel() { return nivel; }
     public String nome() { return nome; }

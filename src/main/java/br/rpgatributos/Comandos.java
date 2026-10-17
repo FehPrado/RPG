@@ -366,7 +366,7 @@ public final class Comandos implements TabExecutor {
             case "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas" -> { adminCombos(sender, sub, args); return; }
             case "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa" -> { adminFe(sender, sub, args); return; }
             case "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote" -> { adminExploracao(sender, sub, args); return; }
-            case "talentopontos", "renascer", "companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel" -> { adminProgressao(sender, sub, args); return; }
+            case "talentopontos", "renascer", "companheironivel" -> { adminProgressao(sender, sub, args); return; }
             case "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro" -> { adminDetalhes(sender, sub, args); return; }
             case "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta" -> { adminVida(sender, sub, args); return; }
             case "estrutura", "estruturas", "esquecerestrutura" -> { adminEstruturas(sender, sub, args); return; }
@@ -377,6 +377,8 @@ public final class Comandos implements TabExecutor {
             case "constelacao" -> { adminConstelacao(sender, args); return; }
             case "mineral" -> { adminMineral(sender, args); return; }
             case "artefato" -> { adminArtefato(sender, args); return; }
+            case "pegada" -> { adminPegada(sender, args); return; }
+            case "modelos" -> { adminModelos(sender); return; }
             case "arma" -> {
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
                 boolean forjar = args.length >= 3 && args[args.length - 1].equalsIgnoreCase("forjar");
@@ -1081,7 +1083,7 @@ public final class Comandos implements TabExecutor {
         }
     }
     private void adminProgressao(CommandSender sender, String sub, String[] args) {
-        if (sub.equals("companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel")) {
+        if (sub.equals("companheironivel")) {
             if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
             if (!(p.getTargetEntity(8) instanceof org.bukkit.entity.LivingEntity e) || !br.rpgatributos.domador.Companheiros.eh(e)) {
                 erro(sender, "Olhe para um companheiro (até 8 blocos)."); return;
@@ -1104,6 +1106,57 @@ public final class Comandos implements TabExecutor {
             ok(sender, alvo.getName() + ": " + plugin.talentos().resumo(alvo) + ".");
         }
     }
+    /**
+     * 2.54: editor de pegadas. /rpgadmin pegada [id] [3p|1p rx ry rz tx ty tz | padrao]. Os números
+     * são os do Blockbench (Display: rotação e posição). O pacote é refeito na hora.
+     */
+    /** 2.55: refaz o pacote com os modelos de pacote/modelos (e do jar) e diz quais entraram. */
+    private void adminModelos(CommandSender sender) {
+        java.io.File pasta = new java.io.File(plugin.getDataFolder(), "pacote/modelos");
+        if (!pasta.exists()) pasta.mkdirs();
+        String erro = plugin.pacote().regerar();
+        if (erro != null) { erro(sender, erro); return; }
+        java.util.List<String> prontos = br.rpgatributos.exploracao.ModelosVisuais.prontos(pasta);
+        ok(sender, prontos.size() + " de " + br.rpgatributos.exploracao.ModelosVisuais.alvos().size() + " modelos no pacote" + (prontos.isEmpty() ? "." : ": " + String.join(", ", prontos)));
+        ok(sender, "Coloque <id>.jem e <id>.png em " + pasta.getPath() + " (SHA-1 " + plugin.pacote().sha1() + ").");
+    }
+
+    private void adminPegada(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            ok(sender, "Pegadas: " + String.join(", ", br.rpgatributos.exploracao.PacoteRecursos.pegadas()));
+            ok(sender, "Use: /rpgadmin pegada <pegada> [3p|1p rx ry rz tx ty tz | padrao]  (números do Blockbench)");
+            return;
+        }
+        String id = args[1].toLowerCase(Locale.ROOT);
+        double[] v = br.rpgatributos.exploracao.PacoteRecursos.pegada(id);
+        if (v == null) { erro(sender, "Pegada desconhecida. Use: " + String.join(", ", br.rpgatributos.exploracao.PacoteRecursos.pegadas())); return; }
+        if (args.length == 2) {
+            ok(sender, id + " · 3ª pessoa: rot " + v[0] + " " + v[1] + " " + v[2] + " · pos " + v[3] + " " + v[4] + " " + v[5]);
+            ok(sender, id + " · 1ª pessoa: rot " + v[6] + " " + v[7] + " " + v[8] + " · pos " + v[9] + " " + v[10] + " " + v[11]);
+            return;
+        }
+        String erro;
+        if (args[2].equalsIgnoreCase("padrao") || args[2].equalsIgnoreCase("padrão")) {
+            erro = plugin.pacote().ajustarPegada(id, false, null);
+        } else {
+            if (args.length < 9 || !(args[2].equalsIgnoreCase("3p") || args[2].equalsIgnoreCase("1p"))) {
+                erro(sender, "Use: /rpgadmin pegada " + id + " <3p|1p> <rot x> <rot y> <rot z> <pos x> <pos y> <pos z>");
+                return;
+            }
+            double[] seis = new double[6];
+            try {
+                for (int i = 0; i < 6; i++) seis[i] = Double.parseDouble(args[3 + i].replace(',', '.'));
+            } catch (NumberFormatException ex) {
+                erro(sender, "Números inválidos.");
+                return;
+            }
+            erro = plugin.pacote().ajustarPegada(id, args[2].equalsIgnoreCase("1p"), seis);
+        }
+        if (erro != null) { erro(sender, erro); return; }
+        ok(sender, "Pegada " + id + " salva em pacote/pegadas.yml e o pacote foi refeito (SHA-1 " + plugin.pacote().sha1() + ").");
+        ok(sender, "Para ver: suba o zip novo (pacote/RPGAtributos-recursos.zip) no link do pacote, ou use a porta do plugin, e reentre.");
+    }
+
     private void adminArtefato(CommandSender sender, String[] args) {
         if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
         String a = args.length >= 2 ? args[1].toUpperCase(Locale.ROOT) : "TODOS";
@@ -1780,7 +1833,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();
@@ -1890,7 +1943,7 @@ public final class Comandos implements TabExecutor {
                             "tesouros", "especies_peixe", "criaturas_marinhas", "gema_perfeita", "alquimias", "elixires", "acessorios"));
                 } else if (args.length == 2 && !List.of("reload", "infusor", "forjaferreiro", "altar", "cozinha", "reciclagem", "adubo",
                         "marco", "ignorar", "altardomador", "portalmasmorra", "fecharmasmorras", "santuario", "prova",
-                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companhe [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]ivel", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
+                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
                     return null;
                 } else if (args.length == 3 && List.of("set", "addxp", "reset").contains(sub)) {
                     for (Skill s : Skill.values()) op.add(s.id());

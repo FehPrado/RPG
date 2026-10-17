@@ -692,6 +692,8 @@ public final class Chefes implements Listener {
         e.setDroppedExp(80 * n);
         ItemStack nomeada = plugin.nomeadas().talvezDeChefe(0.15 + 0.05 * n);
         if (nomeada != null) e.getDrops().add(nomeada);
+        ItemStack minerio = br.rpgatributos.combo.Arsenal.talvezDeChefe(plugin, 0.2 + 0.05 * n); // 2.54: armas dos minérios
+        if (minerio != null) e.getDrops().add(minerio);
 
         List<Player> participantes = new ArrayList<>();
         for (Map.Entry<UUID, Double> en : a.dano.entrySet()) {

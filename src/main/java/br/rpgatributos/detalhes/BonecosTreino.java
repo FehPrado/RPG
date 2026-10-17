@@ -44,13 +44,12 @@ import java.util.UUID;
 /**
  * Boneco de Treino: 1 abóbora esculpida e 1 suporte de armadura jogados num fardo de feno.
  * Um boneco aparece em cima: bata nele (com arma, arco, combo ou magia) para ver o dano de cada
- * golpe e o dano por segundo. Ele nunca quebra. Dá um pouco de XP de Combate e de proficiência
- * (até a proficiência 5), com limite por hora para não virar fazenda.
+ * golpe e o dano por segundo. Ele nunca quebra. Só mede: não dá XP de Combate nem de proficiência
+ * (os combos funcionam nele sem interromper a sequência).
  */
 public final class BonecosTreino extends Estacao {
 
     public static final TextColor COR = TextColor.color(0xD9A441);
-    private static final int PROFICIENCIA_MAXIMA = 5;
 
     private record Golpe(long quando, double dano) { }
 
@@ -85,8 +84,6 @@ public final class BonecosTreino extends Estacao {
     private final Map<UUID, Double> melhor = new HashMap<>();
     /** Treino de cada jogador por arma (para comparar adaga, foice, espada...). */
     private final Map<UUID, Map<String, Treino>> treinos = new HashMap<>();
-    private final Map<UUID, double[]> xpHora = new HashMap<>(); // [início da hora, XP ganho]
-    private final Map<UUID, Long> ultimoXp = new HashMap<>();
     /** Bonecos que levaram golpe há pouco (combos e habilidades empurram): voltam para o lugar. */
     private final Map<UUID, Long> ancorar = new HashMap<>();
     private int passos;
@@ -298,9 +295,12 @@ public final class BonecosTreino extends Estacao {
                 .append(Component.text("  ·  " + StatsManager.fmt(dps(g)) + "/s", NamedTextColor.YELLOW))
                 .append(Component.text("  ·  maior: " + StatsManager.fmt(recorde), NamedTextColor.GRAY))
                 .append(Component.text("  ·  " + arma, NamedTextColor.DARK_GRAY));
-        p.sendActionBar(barra);
+        // No meio de uma sequência de combo, a barra é do combo (D · E · ?): a do boneco espera.
+        if (!plugin.combos().emSequencia(p)) p.sendActionBar(barra);
         // O combo escreve o nome dele na barra logo depois do golpe: a do boneco volta 1 tick depois.
-        if (combo != null) plugin.getServer().getScheduler().runTask(plugin, () -> p.sendActionBar(barra));
+        if (combo != null) plugin.getServer().getScheduler().runTask(plugin, () -> {
+            if (!plugin.combos().emSequencia(p)) p.sendActionBar(barra);
+        });
         Entity boneco = e.getEntity();
         ancorar.put(boneco.getUniqueId(), agora + 4000);
         plugin.getServer().getScheduler().runTask(plugin, () -> voltarAoLugar(boneco));
@@ -308,7 +308,6 @@ public final class BonecosTreino extends Estacao {
                 (int) Math.min(10, Math.max(1, dano / 2)), 0.25, 0.3, 0.25, 0.1);
         boneco.getWorld().playSound(boneco.getLocation(), Sound.ENTITY_ARMOR_STAND_HIT, 0.8f, 1f);
         plugin.recordes().golpe(p, dano);
-        darXp(p, agora);
     }
 
     /** Põe o boneco de volta em cima do fardo de feno (os golpes empurram e levantam). */
@@ -333,27 +332,6 @@ public final class BonecosTreino extends Estacao {
         return soma / segundos;
     }
 
-    /** XP de Combate e de proficiência, no máximo um por meio segundo e até o limite da hora. */
-    private void darXp(Player p, long agora) {
-        if (p.getGameMode() != GameMode.SURVIVAL && p.getGameMode() != GameMode.ADVENTURE) return;
-        Long ultimo = ultimoXp.get(p.getUniqueId());
-        if (ultimo != null && agora - ultimo < 500) return;
-        ultimoXp.put(p.getUniqueId(), agora);
-        double[] h = xpHora.computeIfAbsent(p.getUniqueId(), u -> new double[]{agora, 0});
-        if (agora - h[0] > 3_600_000) { h[0] = agora; h[1] = 0; }
-        double limite = plugin.settings().detBonecoXpHora;
-        if (h[1] >= limite) {
-            if (h[1] == limite) p.sendMessage(Component.text("🎯 Você já treinou bastante por agora: o boneco não dá mais XP nesta hora.", NamedTextColor.GRAY));
-            h[1] += 0.001;
-            return;
-        }
-        double xp = 0.4;
-        h[1] = Math.min(limite, h[1] + xp);
-        plugin.stats().darXp(p, Skill.COMBATE, xp);
-        TipoArma t = TipoArma.de(p);
-        if (t != null && plugin.combos().nivel(p, t) < PROFICIENCIA_MAXIMA) plugin.combos().darXp(p, t, 0.5);
-    }
-
     @Override
     protected void aoTick() {
         if (!ancorar.isEmpty()) {
@@ -368,6 +346,5 @@ public final class BonecosTreino extends Estacao {
         long agora = System.currentTimeMillis();
         golpes.values().removeIf(g -> g.isEmpty() || agora - g.peekLast().quando() > 300_000);
         treinos.values().removeIf(m -> m.values().stream().allMatch(t -> agora - t.ultimo > 1_800_000));
-        ultimoXp.values().removeIf(t -> agora - t > 300_000);
     }
 }

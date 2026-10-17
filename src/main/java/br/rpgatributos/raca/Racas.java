@@ -196,8 +196,28 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
                         l.add(new Mod(Attribute.OXYGEN_BONUS, K_AR, 3, SOMA));
                         l.add(new Mod(Attribute.WATER_MOVEMENT_EFFICIENCY, K_AGUA, 0.33, SOMA));
                     }
-                    default -> { }
+                    case FERA -> l.add(new Mod(Attribute.MOVEMENT_SPEED, K_VEL, 0.04, MULT));
+                    case ESPECTRAL -> l.add(new Mod(Attribute.SAFE_FALL_DISTANCE, K_QUEDA, 6, SOMA));
+                    case GNOMO -> l.add(new Mod(Attribute.BLOCK_INTERACTION_RANGE, K_ALCANCE, 1.0, SOMA));
+                    default -> { } // a herança draconato (fogo pela metade) é tratada no dano
                 }
+            }
+            case DRACONATO -> {
+                if (e >= 4) l.add(new Mod(Attribute.MAX_HEALTH, K_VIDA, 4, SOMA));
+            }
+            case FERA -> {
+                l.add(new Mod(Attribute.MOVEMENT_SPEED, K_VEL, 0.04, MULT));
+                l.add(new Mod(Attribute.ENTITY_INTERACTION_RANGE, K_ALCANCE_E, 0.2, SOMA));
+            }
+            case ESPECTRAL -> {
+                l.add(new Mod(Attribute.SAFE_FALL_DISTANCE, K_QUEDA, 6, SOMA));
+                l.add(new Mod(Attribute.GRAVITY, K_GRAVIDADE, -0.15, MULT));
+            }
+            case GNOMO -> {
+                l.add(new Mod(Attribute.MAX_HEALTH, K_VIDA, -4, SOMA));
+                // Menor, mas o braço alcança o mesmo de antes.
+                l.add(new Mod(Attribute.BLOCK_INTERACTION_RANGE, K_ALCANCE, 1.0, SOMA));
+                l.add(new Mod(Attribute.ENTITY_INTERACTION_RANGE, K_ALCANCE_E, 0.5, SOMA));
             }
             case ANAO -> {
                 l.add(new Mod(Attribute.MAX_HEALTH, K_VIDA, e >= 4 ? 8 : 4, SOMA));
@@ -270,9 +290,22 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
         return eh(p, Raca.HUMANO, 2) ? 10 : 0;
     }
 
-    /** O Povo-Pássaro plana sem a Capa Planadora a partir do estágio II. */
+    /** O Povo-Pássaro plana sem a Capa Planadora a partir do estágio II; o Draconato, com as Asas Curtas (III). */
     public boolean plana(Player p) {
-        return eh(p, Raca.PASSARO, 2);
+        return eh(p, Raca.PASSARO, 2) || eh(p, Raca.DRACONATO, 3);
+    }
+
+    /** Gnomo no estágio V: chance a mais de a Forja subir uma raridade. */
+    public double chanceRaridadeExtra(Player p) {
+        return eh(p, Raca.GNOMO, 5) ? 0.10 : 0;
+    }
+
+    /** A classe ativa combina com a raça? (+6% de dano e -5% de dano recebido) */
+    public boolean sinergia(Player p) {
+        Raca r = de(p);
+        if (r == null) return false;
+        br.rpgatributos.classe.Classe c = plugin.classes().ativa(p);
+        return c != null && r.sinergia().contains(c);
     }
 
     /** Velocidade do planar (o Povo-Pássaro no estágio IV vai mais rápido). */
@@ -376,6 +409,7 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
         p.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, p.getLocation().add(0, 1, 0), 40, 0.4, 0.6, 0.4, 0.3);
         p.getWorld().playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f);
         plugin.diario().marco(p, "raca_" + r.id() + "_" + (e + 1), "Despertou o estágio " + est + " de " + r.nome());
+        if (e + 1 == 5) plugin.titulos().registrar(p, "raca_v_" + r.id(), 1);
         if (r == Raca.HUMANO && e + 1 == 5) p.sendMessage(Component.text("☺ Escolha sua Herança no /raca: o dom de outra raça.", r.cor()));
         return true;
     }
@@ -427,9 +461,37 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
                     if (e >= 4 && naAgua) agora.add(PotionEffectType.CONDUIT_POWER);
                     if (!naAgua && !p.isInRain() && seco(p)) agora.add(PotionEffectType.WEAKNESS);
                 }
+                case DRACONATO -> {
+                    if (e >= 4) agora.add(PotionEffectType.FIRE_RESISTANCE);
+                    if (frio(p)) {
+                        agora.add(PotionEffectType.SLOWNESS);
+                        agora.add(PotionEffectType.WEAKNESS);
+                    }
+                }
+                case FERA -> {
+                    boolean noite = br.rpgatributos.mundo.Ceu.noite(p.getWorld()) && p.getWorld().getEnvironment() == World.Environment.NORMAL;
+                    if (noite) agora.add(PotionEffectType.NIGHT_VISION);
+                    if (e >= 4 && noite) {
+                        agora.add(PotionEffectType.SPEED);
+                        if (ciclo % 100 == 0) curar(p, 1);
+                    }
+                    if (e >= 5 && noite) agora.add(PotionEffectType.STRENGTH);
+                }
+                case ESPECTRAL -> {
+                    boolean noite = br.rpgatributos.mundo.Ceu.noite(p.getWorld()) || p.getWorld().getEnvironment() != World.Environment.NORMAL;
+                    if (noite) agora.add(PotionEffectType.NIGHT_VISION);
+                    else if (!p.getWorld().hasStorm() && p.getEyeLocation().getBlock().getLightFromSky() >= 15) agora.add(PotionEffectType.WEAKNESS);
+                }
+                case GNOMO -> {
+                    if (ciclo % 600 == 0) remendar(p);
+                }
                 default -> { }
             }
             efeitos(p, agora);
+            // Senhor da Lua: na lua cheia a Força vira Força II.
+            if (r == Raca.FERA && e >= 5 && plugin.ceu().luaCheia() && agora.contains(PotionEffectType.STRENGTH)) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 60, 1, true, false, true));
+            }
         }
     }
 
@@ -449,6 +511,23 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
         if (p.getWorld().getEnvironment() == World.Environment.NETHER) return true;
         String b = p.getLocation().getBlock().getBiome().getKey().getKey();
         return b.contains("desert") || b.contains("badlands");
+    }
+
+    /** Draconato no frio: em cima de neve ou gelo, ou num bioma gelado. */
+    private static boolean frio(Player p) {
+        Block b = p.getLocation().getBlock();
+        Material chao = b.getRelative(org.bukkit.block.BlockFace.DOWN).getType();
+        return b.getTemperature() < 0.15 || b.getType() == Material.SNOW || chao == Material.SNOW_BLOCK || chao == Material.ICE
+                || chao == Material.PACKED_ICE || chao == Material.BLUE_ICE || chao == Material.POWDER_SNOW;
+    }
+
+    /** Gnomo: a ferramenta ou arma da mão recupera um pouco de durabilidade. */
+    private static void remendar(Player p) {
+        ItemStack mao = p.getInventory().getItemInMainHand();
+        if (mao.isEmpty() || mao.getType().getMaxDurability() <= 0 || !(mao.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable d) || d.getDamage() <= 0) return;
+        int conserto = Math.max(1, mao.getType().getMaxDurability() / 100);
+        mao.editMeta(org.bukkit.inventory.meta.Damageable.class, m -> m.setDamage(Math.max(0, m.getDamage() - conserto)));
+        p.spawnParticle(Particle.WAX_OFF, p.getLocation().add(0, 1, 0), 3, 0.2, 0.2, 0.2, 0.02);
     }
 
     private static void curar(Player p, double qtd) {
@@ -504,6 +583,8 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
     public void aoEntrar(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         aplicar(p);
+        // Quem já estava no estágio V antes da 2.53 ganha o título da raça.
+        if (de(p) != null && estagio(p) >= 5) plugin.titulos().definirMinimo(p, "raca_v_" + de(p).id(), 1);
         if (de(p) != null) return;
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!p.isOnline() || de(p) != null) return;
@@ -526,13 +607,272 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
         agachouEm.remove(id);
         sentidosAte.remove(id);
         bateuEm.remove(id);
+        ultimoAgachar.remove(id);
         asas.fechar(id);
     }
 
     @EventHandler
     public void aoAgachar(PlayerToggleSneakEvent e) {
-        if (e.isSneaking()) agachouEm.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
-        else agachouEm.remove(e.getPlayer().getUniqueId());
+        UUID id = e.getPlayer().getUniqueId();
+        if (e.isSneaking()) {
+            long agora = System.currentTimeMillis();
+            Long antes = agachouEm.put(id, agora);
+            // Agachar duas vezes rápido (2.53): a habilidade da raça.
+            Long ultimo = ultimoAgachar.put(id, agora);
+            if (ultimo != null && agora - ultimo < 350 && (antes == null || agora - antes < 600)) {
+                ultimoAgachar.remove(id);
+                habilidade(e.getPlayer());
+            }
+        } else {
+            agachouEm.remove(id);
+        }
+    }
+
+    // =====================================================================
+    //  2.53: as habilidades e os dons da segunda onda
+    // =====================================================================
+
+    private final Map<UUID, Long> ultimoAgachar = new HashMap<>(), recarga = new HashMap<>();
+    private final NamespacedKey kVeu = new NamespacedKey("rpgatributos", "raca_veu");
+
+    /** Recarga da habilidade de raça: false (e avisa) se ainda não deu o tempo. */
+    private boolean pronta(Player p, long ms) {
+        long agora = System.currentTimeMillis();
+        long ate = recarga.getOrDefault(p.getUniqueId(), 0L);
+        if (agora < ate) {
+            p.sendActionBar(Component.text("Habilidade da raça em " + (ate - agora + 999) / 1000 + " s", NamedTextColor.GRAY));
+            return false;
+        }
+        recarga.put(p.getUniqueId(), agora + ms);
+        return true;
+    }
+
+    private void habilidade(Player p) {
+        Raca r = de(p);
+        if (r == null || p.isDead() || p.getGameMode() == GameMode.SPECTATOR) return;
+        int e = estagio(p);
+        switch (r) {
+            case DRACONATO -> { if (e >= 2) sopro(p, e); }
+            case FERA -> { if (e >= 3) uivo(p); }
+            case ESPECTRAL -> { if (e >= 3) desvanecer(p); }
+            case GNOMO -> { if (e >= 4) automato(p); }
+            default -> { }
+        }
+    }
+
+    /** Draconato: sopro de fogo em cone (5 blocos; 8 no estágio V). */
+    private void sopro(Player p, int e) {
+        boolean criativo = p.getGameMode() == GameMode.CREATIVE;
+        if (!criativo && plugin.combos().vigor(p) < 20) {
+            p.sendActionBar(Component.text("✹ Sem Vigor para o sopro", NamedTextColor.RED));
+            return;
+        }
+        if (!pronta(p, 8000)) return;
+        if (!criativo) plugin.combos().darVigor(p, -20);
+        double alcance = e >= 5 ? 8 : 5, dano = e >= 5 ? 6 : 4;
+        org.bukkit.Location boca = p.getEyeLocation().subtract(0, 0.2, 0);
+        p.getWorld().playSound(boca, Sound.ENTITY_BLAZE_SHOOT, 1f, 0.7f);
+        p.getWorld().playSound(boca, Sound.ENTITY_ENDER_DRAGON_GROWL, 0.35f, 1.6f);
+        Set<UUID> acertados = new HashSet<>();
+        for (int t = 0; t < 6; t++) {
+            int passo = t;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!p.isOnline()) return;
+                org.bukkit.Location de = p.getEyeLocation().subtract(0, 0.2, 0);
+                Vector dir = p.getEyeLocation().getDirection().normalize();
+                for (double s = 0.6; s <= alcance; s += 0.6) {
+                    double abre = s * 0.18;
+                    p.getWorld().spawnParticle(Particle.FLAME, de.clone().add(dir.clone().multiply(s)), 3, abre, abre, abre, 0.02);
+                }
+                if (passo % 2 != 0) return;
+                for (Entity en : p.getNearbyEntities(alcance, alcance, alcance)) {
+                    if (!(en instanceof LivingEntity alvo) || !plugin.alvos().inimigo(p, en) || acertados.contains(en.getUniqueId())) continue;
+                    Vector para = en.getLocation().add(0, en.getHeight() / 2, 0).toVector().subtract(de.toVector());
+                    if (para.length() > alcance || para.normalize().dot(dir) < 0.8) continue;
+                    acertados.add(en.getUniqueId());
+                    plugin.alvos().ferir(p, alvo, dano);
+                    alvo.setFireTicks(Math.max(alvo.getFireTicks(), 80));
+                }
+            }, t * 2L);
+        }
+    }
+
+    /** Homem-Fera: uivo que dá Força (você e a party perto) e espanta os monstros. */
+    private void uivo(Player p) {
+        if (!pronta(p, 45_000)) return;
+        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WOLF_GROWL, 1.4f, 0.6f);
+        p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 200, 0, false, true, true));
+        for (Player o : p.getWorld().getPlayers()) {
+            if (o == p || o.getLocation().distanceSquared(p.getLocation()) > 16 * 16) continue;
+            if (plugin.parties().mesmaParty(p.getUniqueId(), o.getUniqueId())) {
+                o.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 200, 0, false, true, true));
+                o.sendActionBar(Component.text("☾ O uivo de " + p.getName() + " dá Força!", Raca.FERA.cor()));
+            }
+        }
+        for (Entity en : p.getNearbyEntities(8, 4, 8)) {
+            if (!(en instanceof Monster m) || br.rpgatributos.aventura.Chefes.ehChefe(m)) continue;
+            Vector longe = m.getLocation().toVector().subtract(p.getLocation().toVector()).setY(0);
+            if (longe.lengthSquared() < 1e-4) continue;
+            m.setVelocity(longe.normalize().multiply(0.9).setY(0.3));
+            if (p.equals(m.getTarget())) m.setTarget(null);
+            m.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 1, false, true, true));
+        }
+        p.sendActionBar(Component.text("☾ Uivo!", Raca.FERA.cor()));
+    }
+
+    /** Espectral: invisível por 8 s, e quem mirava nele perde o alvo. */
+    private void desvanecer(Player p) {
+        if (!pronta(p, 45_000)) return;
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 160, 0, false, false, true));
+        for (Entity en : p.getNearbyEntities(24, 12, 24)) if (en instanceof org.bukkit.entity.Mob m && p.equals(m.getTarget())) m.setTarget(null);
+        p.getWorld().spawnParticle(Particle.SOUL, p.getLocation().add(0, 1, 0), 20, 0.3, 0.6, 0.3, 0.02);
+        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ALLAY_ITEM_TAKEN, 0.8f, 0.6f);
+        p.sendActionBar(Component.text("✧ Você desvaneceu", Raca.ESPECTRAL.cor()));
+    }
+
+    /** Gnomo: um pequeno autômato de ferro luta ao seu lado por 40 s. */
+    private void automato(Player p) {
+        if (!pronta(p, 120_000)) return;
+        org.bukkit.Location l = p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(1.5));
+        org.bukkit.entity.IronGolem g = p.getWorld().spawn(l, org.bukkit.entity.IronGolem.class, x -> {
+            x.setPlayerCreated(true);
+            x.setPersistent(false);
+            x.customName(Component.text("⚙ Autômato de " + p.getName(), Raca.GNOMO.cor()));
+            x.setCustomNameVisible(true);
+            AttributeInstance esc = x.getAttribute(Attribute.SCALE);
+            if (esc != null) esc.setBaseValue(0.5);
+            AttributeInstance vida = x.getAttribute(Attribute.MAX_HEALTH);
+            if (vida != null) {
+                vida.setBaseValue(40);
+                x.setHealth(40);
+            }
+        });
+        p.getWorld().playSound(l, Sound.ENTITY_IRON_GOLEM_REPAIR, 1f, 1.4f);
+        p.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, l.clone().add(0, 0.8, 0), 25, 0.4, 0.5, 0.4, 0.05);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!g.isValid()) return;
+            g.getWorld().spawnParticle(Particle.SMOKE, g.getLocation().add(0, 0.6, 0), 15, 0.3, 0.4, 0.3, 0.02);
+            g.remove();
+        }, 20L * 40);
+        // Mira o monstro mais perto do dono a cada segundo enquanto existir.
+        for (int s = 1; s < 40; s++) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!g.isValid() || !p.isOnline() || (g.getTarget() != null && g.getTarget().isValid())) return;
+                Monster melhor = null;
+                double d = 12 * 12;
+                for (Entity en : p.getNearbyEntities(12, 6, 12)) {
+                    if (en instanceof Monster m && m.getLocation().distanceSquared(p.getLocation()) < d) {
+                        d = m.getLocation().distanceSquared(p.getLocation());
+                        melhor = m;
+                    }
+                }
+                if (melhor != null) g.setTarget(melhor);
+                else if (g.getLocation().distanceSquared(p.getLocation()) > 36) g.getPathfinder().moveTo(p.getLocation());
+            }, 20L * s);
+        }
+    }
+
+    /** O autômato nunca ataca o dono nem outros jogadores. */
+    @EventHandler(ignoreCancelled = true)
+    public void aoMirarAutomato(EntityTargetLivingEntityEvent e) {
+        if (e.getEntity() instanceof org.bukkit.entity.IronGolem g && g.customName() != null && e.getTarget() instanceof Player
+                && net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(g.customName()).startsWith("⚙ Autômato")) {
+            e.setCancelled(true);
+        }
+    }
+
+    /** Fogo e lava: Draconato leva metade (e nada no estágio IV); o Humano com a herança draconata também leva metade. */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoQueimar(EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof Player p)) return;
+        EntityDamageEvent.DamageCause c = e.getCause();
+        if (c != EntityDamageEvent.DamageCause.FIRE && c != EntityDamageEvent.DamageCause.FIRE_TICK
+                && c != EntityDamageEvent.DamageCause.LAVA && c != EntityDamageEvent.DamageCause.HOT_FLOOR) return;
+        if (eh(p, Raca.DRACONATO, 4)) {
+            e.setCancelled(true);
+            p.setFireTicks(0);
+        } else if (eh(p, Raca.DRACONATO, 1) || (eh(p, Raca.HUMANO, 5) && heranca(p) == Raca.DRACONATO)) {
+            e.setDamage(e.getDamage() * 0.5);
+        }
+    }
+
+    /** Espectral: os mortos-vivos só notam ele bem de perto (estágio II). */
+    @EventHandler(ignoreCancelled = true)
+    public void aoMirarMorto(EntityTargetLivingEntityEvent e) {
+        if (!(e.getTarget() instanceof Player p) || !eh(p, Raca.ESPECTRAL, 2)) return;
+        Entity m = e.getEntity();
+        boolean morto = m instanceof org.bukkit.entity.Zombie || m instanceof org.bukkit.entity.AbstractSkeleton || m instanceof org.bukkit.entity.Phantom
+                || m instanceof org.bukkit.entity.Zoglin || m instanceof org.bukkit.entity.Wither;
+        if (morto && m.getLocation().distanceSquared(p.getLocation()) > 36 && e.getReason() == EntityTargetLivingEntityEvent.TargetReason.CLOSEST_PLAYER) {
+            e.setCancelled(true);
+        }
+    }
+
+    /** Espectral V: uma vez por hora, ao cair morto, volta com metade da vida. */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void aoMorrerEspectral(EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof Player p) || !eh(p, Raca.ESPECTRAL, 5) || e.getFinalDamage() < p.getHealth()) return;
+        if (p.getInventory().getItemInMainHand().getType() == Material.TOTEM_OF_UNDYING || p.getInventory().getItemInOffHand().getType() == Material.TOTEM_OF_UNDYING) return;
+        long agora = System.currentTimeMillis();
+        long ultimo = p.getPersistentDataContainer().getOrDefault(kVeu, PersistentDataType.LONG, 0L);
+        if (agora - ultimo < 3_600_000) return;
+        p.getPersistentDataContainer().set(kVeu, PersistentDataType.LONG, agora);
+        e.setCancelled(true);
+        AttributeInstance max = p.getAttribute(Attribute.MAX_HEALTH);
+        p.setHealth(Math.max(1, (max == null ? 20 : max.getValue()) / 2));
+        p.setFireTicks(0);
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 0, false, false, true));
+        p.getWorld().spawnParticle(Particle.SOUL, p.getLocation().add(0, 1, 0), 40, 0.4, 0.8, 0.4, 0.05);
+        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WARDEN_SONIC_CHARGE, 0.6f, 1.8f);
+        p.showTitle(Title.title(Component.text("✧ Além do Véu", Raca.ESPECTRAL.cor(), TextDecoration.BOLD),
+                Component.text("Você voltou do outro lado (de novo em 1 hora).", NamedTextColor.GRAY)));
+    }
+
+    /** Gnomo II: 15% de chance de não gastar durabilidade. */
+    @EventHandler(ignoreCancelled = true)
+    public void aoGastar(org.bukkit.event.player.PlayerItemDamageEvent e) {
+        if (eh(e.getPlayer(), Raca.GNOMO, 2) && ThreadLocalRandom.current().nextDouble() < 0.15) e.setCancelled(true);
+    }
+
+    /** Quem soltou a explosão/foguete/frasco (para o dom do Gnomo). */
+    private static Player autor(Entity d) {
+        if (d instanceof org.bukkit.entity.TNTPrimed t && t.getSource() instanceof Player p) return p;
+        if (d instanceof org.bukkit.entity.Projectile pr && pr.getShooter() instanceof Player p) return p;
+        return null;
+    }
+
+    /** Gnomo III: explosivos e frascos +30% e não ferem o próprio gnomo. */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoExplodir(EntityDamageByEntityEvent e) {
+        Entity d = e.getDamager();
+        if (!(d instanceof org.bukkit.entity.TNTPrimed || d instanceof org.bukkit.entity.Firework || d instanceof org.bukkit.entity.ThrownPotion
+                || d instanceof org.bukkit.entity.Snowball)) return;
+        Player autor = autor(d);
+        if (autor == null || !eh(autor, Raca.GNOMO, 3)) return;
+        if (e.getEntity().equals(autor)) {
+            e.setCancelled(true);
+            return;
+        }
+        e.setDamage(e.getDamage() * 1.3);
+    }
+
+    /** Sinergia de raça e classe, garras do Homem-Fera, ouro contra ele, Toque Gélido e o fogo do Draconato V. */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoGolpear(EntityDamageByEntityEvent e) {
+        if (e.getEntity() instanceof Player alvo) {
+            if (sinergia(alvo)) e.setDamage(e.getDamage() * 0.95);
+            if (eh(alvo, Raca.FERA, 1) && e.getDamager() instanceof LivingEntity at && at.getEquipment() != null
+                    && at.getEquipment().getItemInMainHand().getType().name().startsWith("GOLDEN_")) e.setDamage(e.getDamage() * 1.25);
+        }
+        if (!(e.getDamager() instanceof Player p) || !(e.getEntity() instanceof LivingEntity alvo)) return;
+        if (sinergia(p)) e.setDamage(e.getDamage() * 1.06);
+        if (e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
+        if (eh(p, Raca.FERA, 2) && p.getInventory().getItemInMainHand().isEmpty()) e.setDamage(e.getDamage() + 5);
+        if (eh(p, Raca.ESPECTRAL, 4)) {
+            alvo.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 40, 0, false, true, true));
+            curar(p, e.getDamage() * 0.08);
+        }
+        if (eh(p, Raca.DRACONATO, 5)) alvo.setFireTicks(Math.max(alvo.getFireTicks(), 60));
     }
 
     /** Anão: minério dobrado no estágio IV (8%) e V (20%). */
@@ -608,7 +948,7 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
         @Override public Inventory getInventory() { return inv; }
     }
 
-    private static final int[] S_RACAS = {10, 11, 12, 14, 15, 16};
+    private static final int[] S_RACAS = {10, 11, 12, 13, 14, 15, 16, 21, 22, 23};
     private static final int[] S_ESTAGIOS = {20, 21, 22, 23, 24};
 
     private Tela nova(int linhas, String titulo, Material fundo) {
@@ -650,7 +990,7 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
     }
 
     private void abrirEscolha(Player p, boolean troca) {
-        Tela t = nova(3, troca ? "✦ Trocar de raça" : "✦ Escolha sua raça", Material.BLACK_STAINED_GLASS_PANE);
+        Tela t = nova(4, troca ? "✦ Trocar de raça" : "✦ Escolha sua raça", Material.BLACK_STAINED_GLASS_PANE);
         Raca[] rs = Raca.values();
         for (int i = 0; i < rs.length && i < S_RACAS.length; i++) {
             Raca r = rs[i];
@@ -690,6 +1030,23 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
             }
         }
         t.inv.setItem(4, item(r.item(), Component.text(r.icone() + " " + r.nome(), r.cor(), TextDecoration.BOLD), topo));
+
+        // 2.53: sinergia com as classes e o título do estágio V.
+        List<Component> sin = new ArrayList<>();
+        sin.add(Component.text("Com uma destas classes ativa:", NamedTextColor.GRAY));
+        for (br.rpgatributos.classe.Classe c : r.sinergia()) sin.add(Component.text(" • " + c.nome(), NamedTextColor.WHITE));
+        sin.add(Component.text("+6% de dano e -5% de dano recebido.", NamedTextColor.GREEN));
+        if (minha) sin.add(sinergia(p) ? Component.text("✔ Ativa agora", NamedTextColor.GREEN) : Component.text("✖ Sua classe ativa não combina", NamedTextColor.DARK_GRAY));
+        sin.add(Component.empty());
+        sin.add(Component.text("No estágio V: o título da raça.", NamedTextColor.GOLD));
+        t.inv.setItem(42, item(Material.NETHER_STAR, Component.text("✦ Sinergia de raça e classe", r.cor(), TextDecoration.BOLD), sin));
+        t.inv.setItem(41, item(Material.LEATHER_HELMET, Component.text("Enfeites de cabeça", r.cor(), TextDecoration.BOLD), List.of(
+                Component.text("Orelhas, barba, chifres, barbatanas...", NamedTextColor.GRAY),
+                Component.text("Vista na cabeça ou ponha no Guarda-roupa", NamedTextColor.GRAY),
+                Component.text("por cima do capacete (pacote de recursos).", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("» Clique para escolher", NamedTextColor.YELLOW))));
+        t.acoes.put(41, () -> abrirEnfeites(p, r));
 
         for (int e = 1; e <= 5; e++) {
             boolean tem = minha && est >= e;
@@ -753,15 +1110,26 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
     }
 
     private void abrirHeranca(Player p) {
-        Tela t = nova(3, "☺ Herança", Material.BLACK_STAINED_GLASS_PANE);
-        String[] dons = {"", "Minera 20% mais rápido", "8% mais rápido", "+2 de sorte", "Sem dano de queda até 6 blocos", "Fôlego maior e nada mais rápido"};
+        Tela t = nova(4, "☺ Herança", Material.BLACK_STAINED_GLASS_PANE);
         Raca[] rs = Raca.values();
         int s = 0;
         for (int i = 1; i < rs.length; i++, s++) {
             Raca r = rs[i];
             boolean atual = heranca(p) == r;
+            String dom = switch (r) {
+                case ANAO -> "Minera 20% mais rápido";
+                case ELFO -> "8% mais rápido";
+                case PEQUENINO -> "+2 de sorte";
+                case PASSARO -> "Sem dano de queda até 6 blocos";
+                case MAR -> "Fôlego maior e nada mais rápido";
+                case DRACONATO -> "Leva metade do dano de fogo e lava";
+                case FERA -> "4% mais rápido";
+                case ESPECTRAL -> "Sem dano de queda até 6 blocos";
+                case GNOMO -> "+1 de alcance para mexer em blocos";
+                default -> "";
+            };
             t.inv.setItem(S_RACAS[s], item(r.item(), Component.text(r.icone() + " Herança " + (r == Raca.ANAO ? "anã" : "de " + r.nome()), r.cor(), TextDecoration.BOLD),
-                    List.of(Component.text(dons[i], NamedTextColor.WHITE), Component.empty(),
+                    List.of(Component.text(dom, NamedTextColor.WHITE), Component.empty(),
                             atual ? Component.text("✔ A sua", NamedTextColor.GREEN) : Component.text("» Clique para escolher", NamedTextColor.YELLOW))));
             t.acoes.put(S_RACAS[s], () -> {
                 p.getPersistentDataContainer().set(kHeranca, PersistentDataType.STRING, r.id());
@@ -770,6 +1138,32 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
                 abrirRaca(p, Raca.HUMANO, false, false);
             });
         }
+        p.openInventory(t.inv);
+    }
+
+    /** Os enfeites de cabeça (de graça, um por clique; o da sua raça vem primeiro). */
+    private void abrirEnfeites(Player p, Raca voltar) {
+        Tela t = nova(3, "Enfeites de cabeça", Material.BLACK_STAINED_GLASS_PANE);
+        int[] slots = {10, 11, 12, 13, 14, 15, 16};
+        Enfeites.Enfeite[] es = Enfeites.Enfeite.values();
+        for (int i = 0; i < es.length && i < slots.length; i++) {
+            Enfeites.Enfeite en = es[i];
+            ItemStack icone = Enfeites.criar(en);
+            icone.editMeta(m -> {
+                List<Component> lore = new ArrayList<>(m.lore() == null ? List.of() : m.lore());
+                lore.add(Component.empty());
+                lore.add(Component.text("» Clique para pegar", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                m.lore(lore);
+            });
+            t.inv.setItem(slots[i], icone);
+            t.acoes.put(slots[i], () -> {
+                for (ItemStack sobra : p.getInventory().addItem(Enfeites.criar(en)).values()) p.getWorld().dropItemNaturally(p.getLocation(), sobra);
+                p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 0.8f, 1.2f);
+                p.sendActionBar(Component.text("Enfeite no inventário: clique direito com ele para vestir.", NamedTextColor.GREEN));
+            });
+        }
+        t.inv.setItem(18, item(Material.ARROW, Component.text("« Voltar", NamedTextColor.GRAY), List.of()));
+        t.acoes.put(18, () -> abrir(p));
         p.openInventory(t.inv);
     }
 

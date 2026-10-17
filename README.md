@@ -774,6 +774,7 @@ A colheita sai com qualidade ★ (pelo nível de Agricultura) e dá XP de Agricu
 
 Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direito, `E` = clique esquerdo). Cada clique tem até 0,9 s para o próximo; a barra de ação mostra o progresso (`D · E · ?`).
 - **Espada, machado, lança, tridente e maça** começam com o **direito** (o esquerdo continua sendo o ataque normal): `D D D`, `D E D`, `D D E` e `D E E`.
+- O clique direito num **monstro** ou no **Boneco de Treino** também conta como `D`: mirar neles não quebra a sequência.
 - **Arco e besta** começam com o **esquerdo**, porque o direito puxa a flecha: `E E E`, `E D E`, `E E D` e `E D D`.
 - **Arsenal novo (2.51):** adaga, Lâminas Duplas (uma adaga em cada mão), foice, bastão e chicote começam com o direito; o **Arremesso** (faca e machadinha) começa com o esquerdo, porque o direito arremessa.
 - Agachado não solta combo (agachar continua sendo das habilidades de classe). Clicar com o direito em baú, porta ou estação não conta. Um clique só ainda levanta o escudo.
@@ -818,7 +819,7 @@ Com uma arma na mão, **3 cliques seguidos** soltam um golpe (`D` = clique direi
 
 ### Raças (2.52)
 
-Use **`/raca`** para escolher: **Anão** (65% do tamanho), **Elfo** (110%), **Pequenino** (50%), **Povo-Pássaro** (90%), **Povo do Mar** ou **Humano**. O tamanho muda de verdade (todos veem, sem mod). Cada raça tem uma fraqueza e **5 estágios de Despertar**: a **Essência** vem do XP dos atributos da raça (cheia nos dela, 20% nos outros) e cada estágio pede uma oferenda. A primeira escolha é de graça; trocar custa 30 níveis e volta ao estágio I.
+Use **`/raca`** para escolher: **Anão** (65% do tamanho), **Elfo** (110%), **Pequenino** (50%), **Povo-Pássaro** (90%), **Povo do Mar**, **Humano** e, desde a 2.53, **Draconato**, **Homem-Fera**, **Espectral** e **Gnomo Inventor** (60%). O tamanho muda de verdade (todos veem, sem mod). Cada raça tem uma fraqueza e **5 estágios de Despertar**: a **Essência** vem do XP dos atributos da raça (cheia nos dela, 20% nos outros) e cada estágio pede uma oferenda. A primeira escolha é de graça; trocar custa 30 níveis e volta ao estágio I.
 
 | Raça | Essência de | Fraqueza | I → V |
 |---|---|---|---|
@@ -830,6 +831,21 @@ Use **`/raca`** para escolher: **Anão** (65% do tamanho), **Elfo** (110%), **Pe
 | **Povo do Mar** | Natação, Pesca | fraco no Nether e nos desertos | fôlego e nado → visão debaixo d'água → Graça do Golfinho → respira debaixo d'água → +25% de dano na água ou na chuva |
 
 As asas do Povo-Pássaro aparecem do estágio III em diante, enquanto ele plana ou voa: com o pacote de recursos são **asas de verdade** que batem; sem o pacote, asas desenhadas com **partículas**.
+
+#### A segunda onda (2.53)
+
+| Raça | Tamanho | Essência de | Fraqueza | I → V |
+|---|---|---|---|---|
+| **Draconato** | 105% | Combate, Ferraria, Arcano | lento e fraco no frio (neve, gelo, biomas gelados) | metade do dano de fogo e lava → **Sopro de Fogo** → **asas curtas** (planar) → +2 ❤ e imune a fogo/lava → sopro mais longo e golpes que incendeiam |
+| **Homem-Fera** | 105% | Combate, Corrida, Doma | armas de ouro ferem 25% mais | visão noturna e +4% de velocidade → **garras** (mãos vazias +5 de dano) → **Uivo** → regenera e corre à noite → imune à licantropia e Força à noite (II na lua cheia) |
+| **Espectral** | 100% | Arcano, Alquimia, Pulo | Fraqueza ao sol | cai devagar e enxerga à noite → mortos-vivos só notam de perto → **Desvanecer** (invisível 8 s) → golpes deixam lento e roubam vida → **Além do Véu** (volta da morte 1×/hora) |
+| **Gnomo Inventor** | 60% | Ferraria, Alquimia, Mineração | -4 ❤ | ferramenta da mão se conserta → 15% de não gastar durabilidade → explosivos e frascos +30% sem ferir você → **Autômato** de ferro por 40 s → +10% de raridade na Forja |
+
+- **Habilidade da raça:** **agache duas vezes rápido**. Sopro de Fogo (Draconato II, gasta 20 de Vigor), Uivo (Homem-Fera III: Força para você e a party, espanta os monstros), Desvanecer (Espectral III) e Autômato (Gnomo IV).
+- **Sinergia de raça e classe:** com uma classe que combina com a sua raça ativa (ex.: Anão + Ferreiro, Elfo + Arqueiro, Draconato + Berserker, Espectral + Assassino), **+6% de dano e -5% de dano recebido**. O `/raca` mostra quais são.
+- **Títulos de raça:** despertar o estágio V dá o título da raça: Coração Humano, Filho da Montanha, Guardião da Floresta, Sorte em Pessoa, Senhor dos Céus, Voz do Oceano, Sangue de Dragão, Alfa da Lua, Andarilho do Véu e Grande Inventor.
+- **Enfeites de cabeça:** no `/raca` → **Enfeites de cabeça**, de graça: Orelhas Élficas, Barba de Anão, Chifres de Dragão, Barbatanas, Orelhas de Lobo, Óculos de Inventor e Auréola Espectral. Vista com o clique direito, ou ponha no **Guarda-roupa** por cima do capacete (o capacete some e o enfeite aparece). Precisam do pacote de recursos.
+- O Humano no estágio V também pode escolher a Herança das raças novas.
 
 ### O arsenal novo (2.51)
 
@@ -916,6 +932,29 @@ Com o pacote de recursos, as 7 ficam em **3D na mão** (no inventário, o desenh
 | ▲ Ofensiva | Guerreiro, Berserker, Assassino, Senhor da Guerra, Lâmina Fantasma, Soberano das Sombras | Bellum, Mortis |
 | ■ Defensiva | Cavaleiro, Paladino, Santo Paladino, Ferreiro, Mestre Forjador, Herdeiro do Ferreiro | Ferrum, Sylva |
 | ≈ Ágil | Arqueiro, Ladino, Atirador, Caçador, Arqueiro Celestial, Mago, Elementalista, Feiticeiro, Arquimago, Domador, Mestre das Feras, Senhor das Feras | Maris, Arcanus |
+
+**Maestria de postura (2.54):** cada acerto com uma postura conta para a maestria dela, que sobe 5 níveis (200 / 600 / 1.500 / 3.500 acertos). Cada nível soma **2%** no que a postura faz (Ofensiva: mais dano; Defensiva: menos dano recebido; Ágil: menos recarga). O nível aparece no menu de posturas; 3 posturas no nível V dão o título **Mestre das Posturas**.
+
+### Técnicas secretas e Mestres de Armas (2.54)
+
+Cada tipo de arma tem uma **técnica secreta**, um golpe extra que só um **Mestre de Armas** ensina. Os mestres moram nas vilas (fale com eles e escolha "Técnicas"). Cada técnica pede **proficiência 12** na arma e **24 esmeraldas**; aprender aumenta o laço com o mestre e vai para o Diário. Depois disso ela aparece no `/combos` com a marca **✪ Técnica secreta**.
+
+| Mestre | Vila | Ensina |
+|---|---|---|
+| Mestra das Marés | Pescadores | Tridente (Maremoto), Lança (Mil Estocadas), Arpão (Fisgada do Leviatã), Arremesso (Mil Lâminas), Bumerangue (Órbita Eterna) |
+| Mestre do Bastão | Mosteiro | Bastão (Montanha Inabalável), Leques (Vendaval de Pétalas), Chicote (Serpente-Relâmpago), Adaga (Dança das Sombras), Lâminas Duplas (Tempestade Escarlate) |
+| Mestre de Guerra | Anões | Machado (Machados Ancestrais), Maça (Sino do Juízo), Montante (Céu Partido), Mangual (Nevasca de Ferro), Clava (Erupção Vulcânica) |
+| Mestra da Lâmina | Élfica | Espada (Vento Cortante), Arco (Flecha Cometa), Foice (Lua de Sangue), Garras (Frenesi da Fera) |
+
+Títulos: **Discípulo** (3 técnicas) e **Herdeiro das Técnicas** (as 19).
+
+### Aparar, fraquezas e combate montado (2.54)
+
+- **Aparar:** levante o escudo **bem na hora** em que o golpe chega (um quarto de segundo) e de frente para o atacante. O golpe é cancelado, flechas e bolas de fogo voltam, o atacante fica lento e fraco, você ganha +10 de Vigor e o próximo golpe em 1,5 s faz **×1,5**. O **Escudo de Duelo** (lingote de ferro, ouro, lingote de ferro em cima; escudo no meio) dá quase o dobro do tempo e contra-ataque de ×1,8. 50 aparadas: título **Muralha Viva**.
+- **Fraquezas:** cada família de criatura tem armas fortes e fracas (esqueletos apanham mais de maça, clava, mangual e bastão e menos de flecha; aranhas de lança e foice; slimes de maça e montante; criaturas de fogo de tridente e arpão (a clava rende pouco nelas); voadores de arco e bumerangue; guardiões de tridente e arpão...). O aviso aparece na barra no primeiro golpe e a lista fica no Bestiário.
+- **Clima:** na chuva, tridente e arpão fazem +15% (+25% na tempestade), a clava e o arco perdem um pouco e o fogo se apaga; no frio o mangual ganha +15%; à noite os mortos-vivos aguentam um pouco mais.
+- **Combate montado:** golpe de cima da montaria correndo é uma **carga** (até +50% conforme a velocidade; lança, arpão, tridente e montante ganham mais 20%), flecha atirada montado faz +15%, escudo levantado faz a montaria levar metade do dano, e lutar montado dá XP de Doma.
+- **Chefes com armas dos minérios:** chefes do Altar (20% + 5% por estrela), Cidades Submersas, Ilhas do Céu e Profundezas (15%) podem deixar uma arma dos minérios já forjada, Épica ou Única.
 
 ### Ligações: óleos, magia, party e companheiros
 
@@ -1268,6 +1307,16 @@ O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacot
 
 **Editar as texturas à mão:** os desenhos originais ficam em `pacote/texturas-padrao/`. Copie um PNG para `pacote/texturas/`, edite (mesmo nome, imagem quadrada: 16×16, 32×32...) e reinicie: ele entra no lugar do original. Apagar o arquivo volta ao original. Itens feitos antes ganham o visual sozinhos quando o jogador entra. O pacote **se soma** ao pacote do servidor (não o troca). Para enviar, ponha um link em `pacote-de-recursos.url` ou ligue o servidor embutido (`porta` + `endereco`); veja `/rpgadmin pacote`.
 
+**Editor de pegadas (2.54):** `/rpgadmin pegada <id> 3p|1p rx ry rz tx ty tz` muda como um item fica na mão (os mesmos números do Blockbench), `padrao` volta ao original. Fica salvo em `pacote/pegadas.yml` e o pacote é refeito na hora.
+
+### Modelos EMF/ETF para editar (2.55)
+
+Para quem joga com **EMF + ETF**, o plugin aceita modelos próprios para **78 criaturas** que ele reconhece pelo nome: cada morador das vilas (mestres de armas incluídos), o Cronista e o Mercador Arcano, os 6 chefes do Altar, as Bestas Errantes (Pixiu, Baize, Kunpeng), os companheiros nos estágios II e III (lobo, gato, cavalo, golem, urso, raposa, camelo, lhama, papagaio), as invocações (lobos espectrais e ancestrais, Autômato, golem e elementais dos feitiços, espíritos), as Sombras e as Elites por afixo.
+
+- Os arquivos de partida ficam em `blockbench/preparados/` (gerados, fora do git): um `.jem` com a forma vanilla exata e um `.png` com a textura vanilla de cada criatura. Abra o `.jem` no Blockbench, edite e exporte por cima. O `LEIA-ME.txt` lista todos.
+- Coloque o `<id>.jem` e o `<id>.png` em `plugins/RPGAtributos/pacote/modelos/` (pode usar subpastas) e use **`/rpgadmin modelos`**. O plugin numera os arquivos, junta as regras por nome com as dos Guardiões e, no aldeão com modelo próprio, esconde as camadas de bioma e profissão (a roupa passa a ser a sua textura).
+- Só entra o que tiver `.jem`; sem nenhum, o pacote não muda. Quem não tem os mods vê o normal. Companheiro renomeado pelo jogador volta ao visual normal (a regra é pelo nome do estágio).
+
 ## Talentos, renascer e evolução dos companheiros
 
 ### Talentos
@@ -1343,7 +1392,7 @@ Na Forja do Ferreiro, estes itens também saem **forjados** (com raridade, bônu
 
 | Estação | Ritual (jogue com Q) | O que faz |
 |---|---|---|
-| 🎯 **Boneco de Treino** | Fardo de feno + 1 abóbora esculpida + 1 suporte de armadura | Um boneco que nunca quebra: mostra o dano de cada golpe, o golpe de combo usado, o dano por segundo e o seu maior golpe. **Clique no fardo** para ver o treino **por arma** (dano por segundo, média, maior e os melhores combos, para comparar adaga, foice, espada...); agachado + clique zera. Dá um pouco de XP de Combate (até 120 por hora) e proficiência até o nível 5 |
+| 🎯 **Boneco de Treino** | Fardo de feno + 1 abóbora esculpida + 1 suporte de armadura | Um boneco que nunca quebra: mostra o dano de cada golpe, o golpe de combo usado, o dano por segundo e o seu maior golpe. **Clique no fardo** para ver o treino **por arma** (dano por segundo, média, maior e os melhores combos, para comparar adaga, foice, espada...); agachado + clique zera. Só mede: **não dá XP** de Combate nem de proficiência. Os combos funcionam nele sem quebrar a sequência (o clique direito no boneco conta como D) |
 | ⚔ **Pedra de Amolar** | Rebolo, pedra lisa ou laje de pedra lisa + 2 pederneiras + 1 lingote de ferro | Clique com a arma e 1 pederneira: **+10% de dano** pelos próximos 100 golpes |
 | ♨ **Fogueira de Acampamento** | Fogueira acesa + 1 lã + 1 tronco | Sentado perto: Regeneração e, depois de 30 s, **Descansado** (+5% de XP por 20 min). Comida crua jogada do lado do fogo assa sozinha |
 | ☘ **Bebedouro** | Caldeirão com água + 1 fardo de feno | Filhotes a até 8 blocos crescem 5x mais rápido, adultos esperam menos para cruzar e companheiros se curam |
@@ -1440,7 +1489,7 @@ Pequenas melhorias com cara de jogo normal, sem item nem textura nova (cada uma 
 - **Placa mostra o baú:** olhando para um baú ou barril com uma placa pregada nele, a barra mostra o nome da placa e o que tem dentro (os 4 itens com mais quantidade). Em território alheio, só se os baús estiverem liberados para visitantes.
 - **Peixes pulando:** em rios, lagos e no mar, peixes pulam fora d'água perto de você (salmão no rio e no frio, bacalhau no mar, peixe tropical nas águas quentes). Pescar ali até 40 s depois tem 30% de chance de vir um peixe a mais.
 - **Gelo fino:** ficar parado em cima de gelo sobre a água faz ele rachar (som e lascas) e quebrar em 3 s. Agachado, o gelo aguenta. Não vale dentro de territórios.
-- **2.49:** **ovelhas de cores misturadas** (pais de cores que o jogo não mistura: 30% de o filhote sair a cor do meio); **animais seguem de longe** (veem a comida na sua mão a 16 blocos, no jogo são 10); **suporte de armadura com braços** (agachado + graveto liga e desliga); **escadas de mão mais rápidas**; **lanternas rangem na chuva** quando penduradas ao ar livre; **raio queima árvore** (folhas pegam fogo, se o fogo for permitido ali, e sobra carvão vegetal no pé).
+- **2.49:** **ovelhas de cores misturadas** (pais de cores que o jogo não mistura: 30% de o filhote sair a cor do meio); **animais seguem de longe** (veem a comida na sua mão a 16 blocos, no jogo são 10); **suporte de armadura com braços** (todos, inclusive os que já existiam; agachado + graveto liga e desliga, e o desligado fica assim); **escadas de mão mais rápidas**; **lanternas rangem na chuva** quando penduradas ao ar livre; **raio queima árvore** (folhas pegam fogo, se o fogo for permitido ali, e sobra carvão vegetal no pé).
 
 ### Artefatos de utilidade (2.49)
 
@@ -1587,7 +1636,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 108 títulos com requisitos (em páginas), por exemplo Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 118 títulos com requisitos (em páginas), por exemplo Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1799,7 +1848,7 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.52.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.55.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

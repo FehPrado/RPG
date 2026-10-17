@@ -623,6 +623,8 @@ public final class Profundezas implements Listener {
         e.setDroppedExp(150);
         ItemStack nomeada = plugin.nomeadas().talvezDeChefe(0.3);
         if (nomeada != null) e.getDrops().add(nomeada);
+        ItemStack minerio = br.rpgatributos.combo.Arsenal.talvezDeChefe(plugin, 0.15); // 2.54: armas dos minérios
+        if (minerio != null) e.getDrops().add(minerio);
         Player quem = e.getEntity().getKiller();
         if (quem != null) {
             plugin.diario().marco(quem, "coracao_penumbra", "Derrotou o Coração da Penumbra");

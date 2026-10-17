@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.52</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.55</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.52.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.55.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -333,7 +333,6 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <tr><td><code>detalhes.chance-de-achado</code></td><td>0.015</td><td>Areia e cascalho naturais darem um achado</td></tr>
         <tr><td><code>detalhes.chance-de-animal-raro</code></td><td>0.002</td><td>Animais de Ouro e de Neve (1 em 500)</td></tr>
         <tr><td><code>detalhes.fogueira.xp-descansado</code> / <code>minutos-descansado</code></td><td>0.05 / 20</td><td>Bônus e duração do Descansado</td></tr>
-        <tr><td><code>detalhes.boneco.xp-por-hora</code></td><td>120</td><td>XP de Combate máximo por hora no Boneco</td></tr>
         <tr><td><code>detalhes.amolar.golpes</code> / <code>dano-extra</code></td><td>100 / 0.10</td><td>Quanto dura e quanto dá a Pedra de Amolar</td></tr>
       </tbody></table></div>
     </div>
@@ -613,6 +612,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin sitio</span></td><td>Cria um sítio de arqueologia à sua frente</td></tr>
       <tr><td><span class="cmd">/rpgadmin reliquia [relíquia]</span></td><td>Dá uma relíquia (sem nome: uma aleatória)</td></tr>
       <tr><td><span class="cmd">/rpgadmin pacote</span></td><td>Onde está o pacote de recursos, o SHA-1 e se ele está sendo enviado</td></tr>
+      <tr><td><span class="cmd">/rpgadmin pegada [id] [3p|1p rx ry rz tx ty tz | padrao]</span></td><td>Ajusta como um item fica na mão (números do Blockbench); salva em <code>pacote/pegadas.yml</code> e refaz o pacote. Sem id: lista as pegadas</td></tr>
+      <tr><td><span class="cmd">/rpgadmin modelos</span></td><td>Refaz o pacote com os modelos EMF de <code>pacote/modelos/</code> e diz quais entraram (2.55)</td></tr>
     </tbody></table></div></div>
     <div class="card largo"><h3>Pacote de recursos (opcional)</h3>
       <p>O plugin gera <code>plugins/RPGAtributos/pacote/RPGAtributos-recursos.zip</code> com as texturas do mitrilo, do Cajado Arcano, do Gancho, da Capa Planadora, da Ferradura, do Ninho, dos peixes raros, dos pratos, das variedades, dos componentes e dos elixires. Ele <b>se soma</b> ao pacote do servidor (não o troca). Sem ele tudo funciona com a aparência do jogo. Para enviar, escolha uma opção:</p>
@@ -621,6 +622,16 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li><b>Servidor embutido:</b> ponha uma porta liberada no host em <code>porta</code> e o IP ou domínio público em <code>endereco</code>.</li>
       </ol>
       <p class="aviso">O plugin manda o SHA-1 do zip que ele gerou. Se o arquivo do link for outro (versão antiga, editado, recompactado), o Minecraft recusa o pacote. Depois de atualizar o plugin ou editar uma textura, suba o zip novo por cima do antigo.</p>
+    </div>
+    <div class="card largo"><h3>Modelos EMF/ETF próprios (2.55)</h3>
+      <p>Para quem joga com os mods <b>EMF + ETF</b>: 78 criaturas do plugin aceitam um modelo próprio, escolhido pelo <b>nome</b> (moradores das vilas e mestres de armas, Cronista, Mercador Arcano, chefes do Altar, Bestas Errantes, companheiros nos estágios II e III, invocações, Sombras e Elites por afixo).</p>
+      <ol>
+        <li>Os arquivos de partida estão em <code>blockbench/preparados/</code> (na pasta do projeto): forma e textura vanilla de cada uma. O <code>LEIA-ME.txt</code> diz qual é qual.</li>
+        <li>Abra o <code>.jem</code> no Blockbench, edite e exporte por cima (não renomeie as partes do topo, como <code>head</code> e <code>body</code>).</li>
+        <li>Copie o <code>&lt;id&gt;.jem</code> e o <code>&lt;id&gt;.png</code> para <code>plugins/RPGAtributos/pacote/modelos/</code> e use <span class="cmd">/rpgadmin modelos</span>.</li>
+        <li>Se o pacote vem de um link, suba o zip novo (o SHA-1 muda). Sem nenhum modelo, o pacote fica igual.</li>
+      </ol>
+      <p class="aviso">Aldeão com modelo próprio perde as camadas de bioma e profissão (a roupa passa a ser a textura). Companheiro renomeado pelo jogador volta ao visual normal.</p>
     </div>
     <div class="card largo"><h3>Editar as texturas à mão</h3>
       <ol>
@@ -686,6 +697,25 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Povo-Pássaro: pule do alto e pule de novo no ar para planar; planando, pule para bater as asas e segure o pulo para voar (gasta Vigor). Com peitoral de ferro ou melhor, as asas não abrem.</li>
         <li>Com o pacote novo as asas são um modelo; sem o pacote, partículas. Teste com dois jogadores (um sem o pacote).</li>
         <li>Anão no estágio II numa caverna: visão no escuro. Povo do Mar no II debaixo d'água: o mesmo.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Raças, segunda onda (2.53)</h3>
+      <ol>
+        <li><span class="cmd">/raca definir &lt;jogador&gt; draconato 5</span> (ou <code>fera</code>, <code>espectral</code>, <code>gnomo</code>) para testar no estágio desejado.</li>
+        <li>Agache duas vezes rápido: Sopro de Fogo, Uivo, Desvanecer ou Autômato (cada um tem recarga própria).</li>
+        <li>Ative uma classe que combine (o <span class="cmd">/raca</span> mostra quais) e veja "✔ Ativa agora" na Sinergia.</li>
+        <li><span class="cmd">/raca</span> → Enfeites de cabeça: pegue um, clique direito para vestir; ou ponha no Guarda-roupa com um capacete vestido. Suba o pacote novo antes.</li>
+        <li>Homem-Fera no V não pega licantropia; Espectral no V volta da morte uma vez por hora.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Combate (2.54)</h3>
+      <ol>
+        <li>Numa vila (<span class="cmd">/rpgadmin estrutura</span>), fale com o Mestre de Armas → Técnicas. Com <span class="cmd">/rpgadmin proficiencia</span> 12 na arma e 24 esmeraldas, aprenda uma e veja "✪ Técnica secreta" no <span class="cmd">/combos</span>.</li>
+        <li>Aparar: levante o escudo no instante do golpe de um zumbi; flecha de esqueleto deve voltar. Faça o Escudo de Duelo (ferro, ouro, ferro / escudo) e compare.</li>
+        <li>Bata num esqueleto com maça e com flecha: o aviso de fraqueza aparece na barra. Na chuva, teste o tridente.</li>
+        <li>Num cavalo correndo, bata num monstro: "⚡ Carga!". Com o escudo levantado montado, a montaria leva metade do dano.</li>
+        <li>Mate um chefe do Altar algumas vezes: às vezes sai uma arma dos minérios forjada.</li>
+        <li><span class="cmd">/rpgadmin pegada</span> lista as pegadas; mude uma e use <code>padrao</code> para voltar.</li>
       </ol>
     </div>
     <div class="card"><h3>Arsenal novo (2.51)</h3>

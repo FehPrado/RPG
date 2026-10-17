@@ -210,7 +210,60 @@ public final class Vilas implements Listener {
                         "tecer um manto com todas as cores do bosque", "um tear que tece sozinho nas noites de lua cheia",
                         "uma carta brilhante e fios élficos", "Um fio meu sempre volta para casa.",
                         new Material[]{Material.STRING, Material.PINK_TULIP}),
-                "Cada fio conta uma história.", "Essa cor veio de uma flor da manhã.", "O tear canta quando trabalha.", "Paciência é o fio mais forte.");
+                "Cada fio conta uma história.", "Essa cor veio de uma flor da manhã.", "O tear canta quando trabalha.", "Paciência é o fio mais forte."),
+
+        // ---------- 2.54: os Mestres de Armas (cada um ensina as técnicas secretas das armas do seu povo) ----------
+        MESTRA_DAS_MARES(Estrutura.VILA_PESCADORES, "Mestra das Marés", new String[]{"Iemanja", "Marisa", "Dona Olinda", "Celeste"},
+                Villager.Profession.WEAPONSMITH, Villager.Type.SWAMP, 1, new int[]{-3, 2, 3},
+                "Ensina as técnicas do tridente, da lança, do arpão e das armas de arremesso.",
+                "Ensinar uma técnica secreta (proficiência 12 e 24 esmeraldas).",
+                new Lacos.Historia("um navio de guerra que afundou com toda a tripulação, menos ela", "do silêncio antes da onda grande",
+                        "ensinar alguém a vencer o mar sem odiá-lo", "o arpão que matou o kraken do porto velho",
+                        "um tridente forjado do mar", "Ele já voltou para a minha mão mil vezes. Agora volta para a sua.",
+                        new Material[]{Material.PRISMARINE_SHARD, Material.COOKED_SALMON}),
+                "A onda não briga com a pedra. Ela espera.", "Firme o pé. A maré puxa quem hesita.", "Jogue com o ombro, não com o braço.", "O mar ensina quem aguenta apanhar dele."),
+        MESTRE_DO_BASTAO(Estrutura.MOSTEIRO, "Mestre do Bastão", new String[]{"Shen", "Wu Lan", "Velho Bai", "Ming Yue"},
+                Villager.Profession.WEAPONSMITH, Villager.Type.SNOW, 1, new int[]{-3, 1, -4},
+                "Ensina as técnicas do bastão, dos leques, do chicote, da adaga e das lâminas duplas.",
+                "Ensinar uma técnica secreta (proficiência 12 e 24 esmeraldas).",
+                new Lacos.Historia("um mosteiro que nenhum mapa mostra", "de usar a força para ferir quem não precisava",
+                        "ver um discípulo passar dele", "o bastão de bambu que já pertenceu a nove mestres",
+                        "um bastão forjado do mosteiro", "O bambu dobra e não quebra. Lembre disso quando apanhar.",
+                        new Material[]{Material.BAMBOO, Material.SWEET_BERRIES}),
+                "Respire. O golpe nasce do silêncio.", "Mais devagar. A pressa é a primeira derrota.", "O vento não tem músculos e derruba árvores.", "Volte amanhã. O corpo aprende dormindo."),
+        MESTRE_DE_GUERRA_ANAO(Estrutura.ALDEIA_ANOES, "Mestre de Guerra", new String[]{"Thorgar", "Bruni", "Hildra", "Grom"},
+                Villager.Profession.WEAPONSMITH, Villager.Type.TAIGA, 0.65, new int[]{0, 1, 4},
+                "Ensina as técnicas do machado, da maça, do montante, do mangual e da clava.",
+                "Ensinar uma técnica secreta (proficiência 12 e 24 esmeraldas).",
+                new Lacos.Historia("a guerra das Montanhas Partidas", "de a forja da aldeia se apagar",
+                        "erguer de novo o salão dos ancestrais", "o martelo do pai, que ele nunca conseguiu levantar",
+                        "uma maça anã forjada", "Pesada como a promessa de um anão. Não deixe cair.",
+                        new Material[]{Material.IRON_INGOT, Material.COOKED_BEEF}),
+                "Golpe pesado, coração leve!", "Escudo em cima, cabeça embaixo.", "Um anão nunca recua. Ele só... muda de lugar.", "Mais força no quadril, garoto!"),
+        MESTRA_ELFICA(Estrutura.VILA_ELFICA, "Mestra da Lâmina", new String[]{"Galadwen", "Arwyn", "Thalindra", "Eldarya"},
+                Villager.Profession.WEAPONSMITH, Villager.Type.JUNGLE, 1.05, new int[]{3, 1, 4},
+                "Ensina as técnicas da espada, do arco, da foice e das garras.",
+                "Ensinar uma técnica secreta (proficiência 12 e 24 esmeraldas).",
+                new Lacos.Historia("a guarda da rainha élfica, que ela deixou sem explicar", "de ensinar alguém que use a lâmina por vaidade",
+                        "dançar uma última vez a dança das espadas sob a lua", "uma cicatriz que ela diz ser de um dragão",
+                        "um arco élfico forjado", "Ele escolhe o alvo antes de você. Confie nele.",
+                        new Material[]{Material.ARROW, Material.GLOW_BERRIES}),
+                "A lâmina é a extensão do pensamento.", "Leve. Mais leve. Assim.", "Quem dança não tropeça.", "O arco não perdoa um coração agitado.");
+
+        /** 2.54: as armas cujas técnicas secretas o mestre ensina (vazio = não é mestre). */
+        public java.util.List<br.rpgatributos.combo.TipoArma> armas() {
+            return switch (this) {
+                case MESTRA_DAS_MARES -> java.util.List.of(br.rpgatributos.combo.TipoArma.TRIDENTE, br.rpgatributos.combo.TipoArma.LANCA,
+                        br.rpgatributos.combo.TipoArma.ARPAO, br.rpgatributos.combo.TipoArma.ARREMESSO, br.rpgatributos.combo.TipoArma.BUMERANGUE);
+                case MESTRE_DO_BASTAO -> java.util.List.of(br.rpgatributos.combo.TipoArma.BASTAO, br.rpgatributos.combo.TipoArma.LEQUES,
+                        br.rpgatributos.combo.TipoArma.CHICOTE, br.rpgatributos.combo.TipoArma.ADAGA, br.rpgatributos.combo.TipoArma.DUPLAS);
+                case MESTRE_DE_GUERRA_ANAO -> java.util.List.of(br.rpgatributos.combo.TipoArma.MACHADO, br.rpgatributos.combo.TipoArma.MACA,
+                        br.rpgatributos.combo.TipoArma.MONTANTE, br.rpgatributos.combo.TipoArma.MANGUAL, br.rpgatributos.combo.TipoArma.CLAVA);
+                case MESTRA_ELFICA -> java.util.List.of(br.rpgatributos.combo.TipoArma.ESPADA, br.rpgatributos.combo.TipoArma.ARCO,
+                        br.rpgatributos.combo.TipoArma.FOICE, br.rpgatributos.combo.TipoArma.GARRAS);
+                default -> java.util.List.of();
+            };
+        }
 
         final Estrutura vila;
         final String titulo, servico, descricao;
@@ -507,7 +560,8 @@ public final class Vilas implements Listener {
     private Lacos.Alvo alvo(Player p, Sitio s, Papel papel, Entity npc) {
         return new Lacos.Alvo(npc.getUniqueId(), papel.nome(s), papel.historia, null, () -> {
             // O capítulo 5 também dá a carta do morador (só se ganha assim).
-            plugin.album().darCarta(p, Carta.valueOf(papel.name()), false);
+            Carta carta = Carta.porId(papel.name());
+            if (carta != null) plugin.album().darCarta(p, carta, false); // os Mestres de Armas (2.54) ainda não têm carta
             return presente(papel, p.getLocation());
         });
     }
@@ -591,6 +645,10 @@ public final class Vilas implements Listener {
             }
             case M_SERVICO -> {
                 if (t.papel.servico == null) return;
+                if (!t.papel.armas().isEmpty()) { // Mestre de Armas: a tela das técnicas
+                    abrirTecnicas(p, t.sitio, t.papel, npc);
+                    return;
+                }
                 String chave = p.getUniqueId() + ":" + t.sitio.id + ":" + t.papel.name();
                 boolean jaHoje = servicoUsado.getOrDefault(chave, -1L) == hoje();
                 if (diario(t.papel) && jaHoje) {
@@ -611,6 +669,95 @@ public final class Vilas implements Listener {
     // =====================================================================
     //  Serviços
     // =====================================================================
+
+    // =====================================================================
+    //  2.54: Mestres de Armas e as técnicas secretas
+    // =====================================================================
+
+    private static final int TECNICA_PROFICIENCIA = 12, TECNICA_CUSTO = 24;
+
+    private static final class TelaTecnicas implements InventoryHolder {
+        Inventory inv;
+        Sitio sitio;
+        Papel papel;
+        UUID npc;
+        final Map<Integer, br.rpgatributos.combo.Golpe> golpes = new HashMap<>();
+        @Override public Inventory getInventory() { return inv; }
+    }
+
+    private void abrirTecnicas(Player p, Sitio s, Papel papel, Entity npc) {
+        TelaTecnicas t = new TelaTecnicas();
+        t.sitio = s;
+        t.papel = papel;
+        t.npc = npc.getUniqueId();
+        t.inv = Bukkit.createInventory(t, 27, Component.text("✪ Técnicas de " + papel.nome(s)));
+        ItemStack vidro = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        vidro.editMeta(m -> m.itemName(Component.text(" ")));
+        for (int i = 0; i < 27; i++) t.inv.setItem(i, vidro);
+        int[] slots = {11, 12, 13, 14, 15};
+        List<br.rpgatributos.combo.TipoArma> armas = papel.armas();
+        for (int i = 0; i < armas.size() && i < slots.length; i++) {
+            br.rpgatributos.combo.TipoArma arma = armas.get(i);
+            br.rpgatributos.combo.Golpe g = br.rpgatributos.combo.Combos.tecnicaDe(arma);
+            if (g == null) continue;
+            boolean sabe = plugin.combos().aprendeu(p, g);
+            int prof = plugin.combos().nivel(p, arma);
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text(arma.simbolo() + " " + arma.nome(), arma.cor()));
+            lore.add(Component.text(g.descricao().replace("Técnica secreta: ", ""), NamedTextColor.GRAY));
+            lore.add(Component.text("⚡ " + (int) g.vigor() + " vigor · ⏱ " + g.recarga() + " s", NamedTextColor.DARK_GRAY));
+            lore.add(Component.empty());
+            if (sabe) {
+                lore.add(Component.text("✔ Você já sabe. Ponha no /combos.", NamedTextColor.GREEN));
+            } else {
+                lore.add(Component.text((prof >= TECNICA_PROFICIENCIA ? "✔" : "✖") + " Proficiência " + TECNICA_PROFICIENCIA + " (você: " + prof + ")",
+                        prof >= TECNICA_PROFICIENCIA ? NamedTextColor.GREEN : NamedTextColor.RED));
+                lore.add(Component.text("Custa " + TECNICA_CUSTO + " esmeraldas", NamedTextColor.WHITE));
+                lore.add(Component.text("» Clique para aprender", NamedTextColor.YELLOW));
+            }
+            t.inv.setItem(slots[i], item(g.icone(), Component.text("✪ " + g.nome(), NamedTextColor.AQUA, TextDecoration.BOLD), lore));
+            t.golpes.put(slots[i], g);
+        }
+        t.inv.setItem(22, item(Material.BOOK, Component.text("Como funciona", COR, TextDecoration.BOLD), List.of(
+                Component.text("Cada arma tem uma técnica secreta, um golpe", NamedTextColor.GRAY),
+                Component.text("extra que vai em qualquer sequência no /combos.", NamedTextColor.GRAY),
+                Component.text("Os outros povos ensinam as outras armas.", NamedTextColor.DARK_GRAY))));
+        p.openInventory(t.inv);
+    }
+
+    @EventHandler
+    public void aoClicarTecnica(InventoryClickEvent e) {
+        if (!(e.getInventory().getHolder() instanceof TelaTecnicas t) || !(e.getWhoClicked() instanceof Player p)) return;
+        e.setCancelled(true);
+        if (e.getClickedInventory() != e.getInventory()) return;
+        br.rpgatributos.combo.Golpe g = t.golpes.get(e.getRawSlot());
+        if (g == null || plugin.combos().aprendeu(p, g)) return;
+        Entity npc = Bukkit.getEntity(t.npc);
+        if (npc == null || !npc.isValid()) {
+            p.closeInventory();
+            return;
+        }
+        if (plugin.combos().nivel(p, g.tipo()) < TECNICA_PROFICIENCIA) {
+            p.sendActionBar(Component.text("✖ Treine mais: precisa de proficiência " + TECNICA_PROFICIENCIA + " com " + g.tipo().nome() + ".", NamedTextColor.RED));
+            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.6f, 0.6f);
+            return;
+        }
+        if (!pagar(p, TECNICA_CUSTO)) return;
+        plugin.combos().ensinar(p, g);
+        plugin.lacos().somar(p, alvo(p, t.sitio, t.papel, npc), 2);
+        plugin.titulos().registrar(p, "tecnicas", 1);
+        plugin.diario().marco(p, "tecnica_" + g.id(), "Aprendeu a técnica secreta " + g.nome() + " com " + t.papel.nome(t.sitio));
+        p.showTitle(net.kyori.adventure.title.Title.title(Component.text("✪ " + g.nome(), NamedTextColor.AQUA, TextDecoration.BOLD),
+                Component.text("Técnica secreta aprendida. Ponha no /combos.", NamedTextColor.GRAY)));
+        p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f);
+        p.sendMessage(Component.text("✪ \"" + t.papel.falas[0] + "\"", COR));
+        abrirTecnicas(p, t.sitio, t.papel, npc);
+    }
+
+    @EventHandler
+    public void aoArrastarTecnica(InventoryDragEvent e) {
+        if (e.getInventory().getHolder() instanceof TelaTecnicas) e.setCancelled(true);
+    }
 
     private static boolean pagar(Player p, int esmeraldas) {
         if (!p.getInventory().containsAtLeast(new ItemStack(Material.EMERALD), esmeraldas)) {
@@ -765,6 +912,10 @@ public final class Vilas implements Listener {
             case ARQUEIRA -> plugin.forja().criarNomeada(Nomeada.ARCO_DAS_FOLHAS_CAIDAS, Raridade.EPICO);
             case CURANDEIRA -> new ItemStack(Material.GOLDEN_APPLE, 2);
             case TECELA -> Album.carta(Album.sortear(r, true), true);
+            case MESTRA_DAS_MARES -> plugin.forja().forjar(null, new ItemStack(Material.TRIDENT), Raridade.EPICO);
+            case MESTRE_DO_BASTAO -> plugin.forja().forjar(null, br.rpgatributos.combo.Arsenal.criar(br.rpgatributos.combo.Arsenal.Arma.BASTAO, Material.DIAMOND_SWORD), Raridade.EPICO);
+            case MESTRE_DE_GUERRA_ANAO -> plugin.forja().forjar(null, new ItemStack(Material.MACE), Raridade.EPICO);
+            case MESTRA_ELFICA -> plugin.forja().forjar(null, new ItemStack(Material.BOW), Raridade.EPICO);
         };
     }
 

@@ -434,9 +434,40 @@ public final class VanillaMais implements Listener {
     //  2.49: suporte de armadura com braços
     // =====================================================================
 
+    /** Marca de quem desligou os braços com o graveto (aí não liga de novo sozinho). */
+    private final NamespacedKey kSemBracos = new NamespacedKey("rpgatributos", "suporte_sem_bracos");
+
+    /** Suporte de verdade (visível, não é marcador de holograma nem o Boneco de Treino) que ainda não tem braços. */
+    private boolean precisaBracos(org.bukkit.entity.ArmorStand a) {
+        return !a.hasArms() && !a.isMarker() && !a.isInvisible() && !a.getPersistentDataContainer().has(kSemBracos);
+    }
+
+    /** Apareceu no mundo (colocado, dispensador, comando): ganha braços no tick seguinte, depois que o jogo termina de montar. */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void aoSurgirSuporte(org.bukkit.event.entity.CreatureSpawnEvent e) {
+        darBracosDepois(e.getEntity());
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void aoColocarSuporte(org.bukkit.event.entity.EntityPlaceEvent e) {
-        if (plugin.settings().vanillaSuporte && e.getEntity() instanceof org.bukkit.entity.ArmorStand a) a.setArms(true);
+        darBracosDepois(e.getEntity());
+    }
+
+    /** O suporte de armadura conta como criatura (o evento geral de surgir não chega aqui). */
+    private void darBracosDepois(org.bukkit.entity.Entity e) {
+        if (!plugin.settings().vanillaSuporte || !(e instanceof org.bukkit.entity.ArmorStand a)) return;
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            if (a.isValid() && precisaBracos(a)) a.setArms(true);
+        });
+    }
+
+    /** Os suportes que já existiam no mundo também ganham braços quando o pedaço do mundo carrega. */
+    @EventHandler
+    public void aoCarregarSuportes(org.bukkit.event.world.EntitiesLoadEvent e) {
+        if (!plugin.settings().vanillaSuporte) return;
+        for (org.bukkit.entity.Entity en : e.getEntities()) {
+            if (en instanceof org.bukkit.entity.ArmorStand a && precisaBracos(a)) a.setArms(true);
+        }
     }
 
     /** Agachado, com um graveto na mão: liga e desliga os braços do suporte. */
@@ -448,6 +479,8 @@ public final class VanillaMais implements Listener {
         e.setCancelled(true);
         if (!plugin.territorios().podeConstruir(p, a.getLocation())) return;
         a.setArms(!a.hasArms());
+        if (a.hasArms()) a.getPersistentDataContainer().remove(kSemBracos);
+        else a.getPersistentDataContainer().set(kSemBracos, PersistentDataType.BYTE, (byte) 1);
         p.playSound(a.getLocation(), Sound.ENTITY_ARMOR_STAND_HIT, 0.8f, 1.2f);
     }
 

@@ -471,6 +471,8 @@ final class IlhasDoCeu {
         e.setDroppedExp(e.getDroppedExp() + 120);
         ItemStack nomeada = plugin.nomeadas().talvezDeChefe(0.25);
         if (nomeada != null) e.getDrops().add(nomeada);
+        ItemStack minerio = br.rpgatributos.combo.Arsenal.talvezDeChefe(plugin, 0.15); // 2.54: armas dos minérios
+        if (minerio != null) e.getDrops().add(minerio);
         Player quem = e.getEntity().getKiller();
         if (quem != null) plugin.diario().marco(quem, "guardiao_ventos", "Derrotou o Guardião dos Ventos de " + s.nome);
     }

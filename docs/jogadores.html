@@ -135,7 +135,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.39</small></a>
+  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.55</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -186,7 +186,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <main id="conteudo">
 <div class="hero">
   <div>
-    <p class="rotulo">Guia do Jogador · versão 2.39</p>
+    <p class="rotulo">Guia do Jogador · versão 2.55</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -342,6 +342,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Arsenal novo:</b> adaga, duplas, foice, bastão, chicote, montante, leques, mangual, garras e clava começam com o direito; faca, machadinha, bumerangue e arpão, com o esquerdo.</li>
         <li>A barra de ação mostra o progresso (<code>D · E · ?</code>).</li>
         <li>Agachado não solta combo. Clicar em baú ou porta não conta, e um clique só ainda levanta o escudo.</li>
+        <li>O clique direito num monstro ou no Boneco de Treino também conta como <b>D</b> (a sequência não quebra ao mirar nele).</li>
         <li>Golpes, habilidades de classe e magias acertam <b>qualquer criatura</b> (menos aldeões, NPCs, animais com nome e os bichos seus e dos aliados) e o <b>Boneco de Treino</b>.</li>
         <li><b>Jogadores:</b> fora de território vale tudo, mesmo com o PvP do servidor desligado. Dentro de território vale a regra de PvP do dono (e a Lei da Paz do reino). Party (sem fogo amigo) e reino nunca se acertam.</li>
       </ul>
@@ -408,7 +409,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>No ar:</b> golpe em quem está no ar dá +30%.</li>
       </ul>
     </div>
-    <div class="card largo"><h3>🪶 Raças (2.52)</h3>
+    <div class="card largo"><h3>🪶 Raças (2.52 e 2.53)</h3>
       <p>Use <span class="cmd">/raca</span> para escolher. O tamanho muda de verdade e cada raça cresce em 5 estágios de Despertar: a Essência vem do XP dos atributos da raça e cada estágio pede uma oferenda. Trocar custa 30 níveis.</p>
       <div class="tabela"><table><thead><tr><th>Raça</th><th>Tamanho</th><th>O que ganha</th></tr></thead><tbody>
         <tr><td>Humano</td><td>100%</td><td>Mais XP em tudo, Vigor, vida e, no V, a Herança (o dom de outra raça).</td></tr>
@@ -417,8 +418,18 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Pequenino</td><td>50%</td><td>Sorte, comida que enche mais, passa despercebido agachado e desvia de golpes. Menos vida.</td></tr>
         <tr><td>Povo-Pássaro</td><td>90%</td><td>Sem dano de queda, <b>planar</b> (II), <b>asas</b> que batem (III) e <b>voo</b> segurando o pulo (V). Armadura pesada no peito prende as asas.</td></tr>
         <tr><td>Povo do Mar</td><td>100%</td><td>Fôlego, visão e nado debaixo d'água, respira na água e bate mais forte na chuva. Fraco no Nether e nos desertos.</td></tr>
+        <tr><td>Draconato</td><td>105%</td><td>Resiste ao fogo, <b>Sopro de Fogo</b> (II), asas curtas para planar (III), imune a fogo e lava (IV). Fraco no frio.</td></tr>
+        <tr><td>Homem-Fera</td><td>105%</td><td>Visão à noite, garras de mãos vazias, <b>Uivo</b> (III), corre e regenera à noite, imune à licantropia (V). Ouro fere mais.</td></tr>
+        <tr><td>Espectral</td><td>100%</td><td>Cai devagar, mortos-vivos o ignoram de longe, <b>Desvanecer</b> (III), golpes gélidos e volta da morte 1×/hora (V). Fraco ao sol.</td></tr>
+        <tr><td>Gnomo Inventor</td><td>60%</td><td>Conserta a ferramenta da mão, poupa durabilidade, explosivos mais fortes, <b>Autômato</b> de ferro (IV), mais raridade na Forja. Menos vida.</td></tr>
       </tbody></table></div>
       <p>Com o pacote de recursos as asas são de verdade; sem ele, aparecem desenhadas com partículas.</p>
+      <ul>
+        <li><b>Habilidade da raça (2.53):</b> agache duas vezes rápido (Sopro, Uivo, Desvanecer ou Autômato).</li>
+        <li><b>Sinergia:</b> com uma classe que combina com a raça ativa, +6% de dano e -5% de dano recebido (veja no <span class="cmd">/raca</span>).</li>
+        <li><b>Estágio V:</b> o título da raça (Sangue de Dragão, Alfa da Lua, Grande Inventor...).</li>
+        <li><b>Enfeites de cabeça:</b> orelhas, barba, chifres, barbatanas, óculos e auréola no <span class="cmd">/raca</span>, de graça. Vista ou use no Guarda-roupa por cima do capacete.</li>
+      </ul>
     </div>
     <div class="card largo"><h3>🗡 O arsenal novo (2.51)</h3>
       <p>Seis armas novas, cada uma com proficiência, 7 golpes e Postura Mestra. São feitas na bancada (madeira, pedra, cobre, ferro, ouro ou diamante; netherite na mesa de ferraria) e forjadas na Forja do Ferreiro como as outras.</p>
@@ -456,6 +467,26 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Pedra-Sangue</td><td>Rouba 6% do dano em vida</td></tr>
         <tr><td>Turfa</td><td>15% de chance de pôr fogo</td></tr>
       </tbody></table></div>
+    </div>
+    <div class="card largo"><h3>✪ Técnicas secretas (2.54)</h3>
+      <p>Cada arma tem uma <b>técnica secreta</b>, um golpe a mais que só um <b>Mestre de Armas</b> ensina. Fale com o mestre na vila e escolha <b>Técnicas</b>: cada uma pede <b>proficiência 12</b> na arma e <b>24 esmeraldas</b>. Depois ela aparece no <code>/combos</code> como os outros golpes.</p>
+      <div class="tabela"><table><thead><tr><th>Mestre</th><th>Vila</th><th>Técnicas</th></tr></thead><tbody>
+        <tr><td>Mestra das Marés</td><td>Pescadores</td><td>Maremoto (tridente), Mil Estocadas (lança), Fisgada do Leviatã (arpão), Mil Lâminas (arremesso), Órbita Eterna (bumerangue)</td></tr>
+        <tr><td>Mestre do Bastão</td><td>Mosteiro</td><td>Montanha Inabalável (bastão), Vendaval de Pétalas (leques), Serpente-Relâmpago (chicote), Dança das Sombras (adaga), Tempestade Escarlate (duplas)</td></tr>
+        <tr><td>Mestre de Guerra</td><td>Anões</td><td>Machados Ancestrais (machado), Sino do Juízo (maça), Céu Partido (montante), Nevasca de Ferro (mangual), Erupção Vulcânica (clava)</td></tr>
+        <tr><td>Mestra da Lâmina</td><td>Élfica</td><td>Vento Cortante (espada), Flecha Cometa (arco), Lua de Sangue (foice), Frenesi da Fera (garras)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>🛡 Aparar</h3>
+      <p>Levante o escudo <b>bem na hora</b> do golpe, de frente para o atacante. O golpe some, flechas voltam, o atacante fica lento e fraco, você ganha 10 de Vigor e o próximo golpe em 1,5 s faz <b>×1,5</b>.</p>
+      <p><b>Escudo de Duelo:</b> ferro, ouro, ferro em cima e um escudo no meio. Dá mais tempo para aparar e o contra-ataque vira ×1,8.</p>
+    </div>
+    <div class="card"><h3>🎯 Fraquezas e clima</h3>
+      <p>Cada família de criatura apanha mais de algumas armas (esqueletos de maça e clava, aranhas de lança e foice, criaturas de fogo de tridente e arpão, voadores de arco e bumerangue...). O aviso aparece na barra e a lista fica no <b>Bestiário</b>.</p>
+      <p>Na chuva o tridente e o arpão ficam mais fortes e o fogo se apaga; no frio o mangual ganha força.</p>
+    </div>
+    <div class="card"><h3>▲ Maestria de postura</h3>
+      <p>Cada acerto conta para a postura que você usa. Ela sobe até o nível <b>V</b> (200, 600, 1.500 e 3.500 acertos) e cada nível soma 2% no que ela faz. Veja o nível no menu de posturas.</p>
     </div>
   </div>
 </section>
@@ -991,7 +1022,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     </div>
     <div class="card largo"><h3>Estações pequenas</h3>
       <div class="tabela"><table><thead><tr><th>Estação</th><th>Ritual (Q)</th><th>O que faz</th></tr></thead><tbody>
-        <tr><td>🎯 Boneco de Treino</td><td>Fardo de feno + abóbora esculpida + suporte de armadura</td><td>Mostra o dano de cada golpe, o combo usado e o dano por segundo; clique no fardo para comparar as armas (agachado zera); nunca quebra</td></tr>
+        <tr><td>🎯 Boneco de Treino</td><td>Fardo de feno + abóbora esculpida + suporte de armadura</td><td>Mostra o dano de cada golpe, o combo usado e o dano por segundo; clique no fardo para comparar as armas (agachado zera); nunca quebra. Só mede: não dá XP de Combate nem de proficiência</td></tr>
         <tr><td>⚔ Pedra de Amolar</td><td>Rebolo ou pedra lisa + 2 pederneiras + 1 ferro</td><td>Arma +10% de dano por 100 golpes (custa 1 pederneira)</td></tr>
         <tr><td>♨ Fogueira de Acampamento</td><td>Fogueira acesa + 1 lã + 1 tronco</td><td>Sentado perto: Regeneração e Descansado (+5% de XP por 20 min); assa comida jogada do lado</td></tr>
         <tr><td>☘ Bebedouro</td><td>Caldeirão com água + 1 fardo de feno</td><td>Filhotes crescem mais rápido; companheiros se curam</td></tr>
@@ -1056,7 +1087,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Placa no baú:</b> pregue uma placa num baú ou barril; olhando para ele, a barra mostra o que tem dentro.</li>
         <li><b>Peixes pulando:</b> pesque onde o peixe pulou e às vezes vem um a mais.</li>
         <li><b>Gelo fino:</b> parado no gelo sobre a água, ele racha e quebra. Agache para aguentar.</li>
-        <li><b>Novos (2.49):</b> ovelhas de cores misturadas, animais seguem a comida de mais longe, suporte de armadura com braços (agachado + graveto), escadas mais rápidas, lanternas que rangem na chuva e raio que queima árvore e deixa carvão vegetal.</li>
+        <li><b>Novos (2.49):</b> ovelhas de cores misturadas, animais seguem a comida de mais longe, suporte de armadura com braços (todos, até os antigos; agachado + graveto liga e desliga), escadas mais rápidas, lanternas que rangem na chuva e raio que queima árvore e deixa carvão vegetal.</li>
       </ul>
     </div>
     <div class="card largo"><h3>🧗 Artefatos de utilidade</h3>
@@ -1216,6 +1247,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Baize</td><td>Olhar da Verdade (12 s)</td><td>Revela, marca e enfraquece os monstros à frente</td></tr>
         <tr><td>Kunpeng</td><td>Rajada do Céu (12 s)</td><td>Ventania que joga longe os monstros em volta</td></tr>
       </tbody></table></div>
+      <p><b>Carga (2.54):</b> golpe montado com a montaria correndo faz até <b>+50%</b> (lança, arpão, tridente e montante, mais 20%). Flecha atirada montado faz +15%, e com o escudo levantado a montaria leva metade do dano.</p>
     </div>
   </div>
 </section>
@@ -1710,7 +1742,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.39 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.55 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

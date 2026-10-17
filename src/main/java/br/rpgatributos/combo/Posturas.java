@@ -189,7 +189,71 @@ public final class Posturas implements Listener, CommandExecutor {
     }
 
     /** Multiplicador do dano que o jogador causa nesse alvo. */
+    // =====================================================================
+    //  2.54: maestria de postura (cada postura sobe de I a V com os acertos)
+    // =====================================================================
+
+    /** Acertos que cada nível pede (I, II, III, IV, V). */
+    public static final int[] MAESTRIA = {0, 200, 600, 1500, 3500};
+    private final Map<UUID, Long> ultimoAcerto = new HashMap<>();
+
+    private static NamespacedKey chaveMaestria(Postura ps) {
+        return new NamespacedKey("rpgatributos", "maestria_" + ps.id());
+    }
+
+    public int acertos(Player p, Postura ps) {
+        return p.getPersistentDataContainer().getOrDefault(chaveMaestria(ps), PersistentDataType.INTEGER, 0);
+    }
+
+    /** Nível de maestria da postura (1 a 5). */
+    public int maestria(Player p, Postura ps) {
+        int a = acertos(p, ps), n = 1;
+        for (int i = 1; i < MAESTRIA.length; i++) if (a >= MAESTRIA[i]) n = i + 1;
+        return n;
+    }
+
+    /** Cada acerto com uma postura (que não seja a Neutra) conta para a maestria dela. */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void aoAcertarMaestria(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player p) || !(e.getEntity() instanceof LivingEntity alvo) || alvo instanceof org.bukkit.entity.ArmorStand) return;
+        Postura ps = ativa(p);
+        if (ps == null || ps == Postura.NEUTRA) return;
+        long agora = System.currentTimeMillis();
+        if (agora - ultimoAcerto.getOrDefault(p.getUniqueId(), 0L) < 300) return;
+        ultimoAcerto.put(p.getUniqueId(), agora);
+        int antes = maestria(p, ps);
+        p.getPersistentDataContainer().set(chaveMaestria(ps), PersistentDataType.INTEGER, acertos(p, ps) + 1);
+        int depois = maestria(p, ps);
+        if (depois > antes) {
+            String[] r = {"I", "II", "III", "IV", "V"};
+            p.sendMessage(Component.text(ps.simbolo() + " Maestria da postura " + ps.nome() + ": nível " + r[depois - 1] + "!", ps.cor()));
+            p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.7f, 1.5f);
+            if (depois == 5) plugin.titulos().registrar(p, "posturas_mestradas", 1);
+        }
+    }
+
+    /** Dano: +2% por nível de maestria acima do I. */
     double multDano(Player p, LivingEntity alvo) {
+        double m = multDanoBase(p, alvo);
+        Postura ps = ativa(p);
+        return ps == null || ps == Postura.NEUTRA ? m : m * (1 + 0.02 * (maestria(p, ps) - 1));
+    }
+
+    /** Defensiva: -2% de dano recebido por nível de maestria acima do I. */
+    double multRecebido(Player p, Entity atacante) {
+        double m = multRecebidoBase(p, atacante);
+        Postura ps = ativa(p);
+        return ps == Postura.DEFENSIVA ? m * (1 - 0.02 * (maestria(p, ps) - 1)) : m;
+    }
+
+    /** Ágil: -2% de recarga por nível de maestria acima do I. */
+    double multRecarga(Player p) {
+        double m = multRecargaBase(p);
+        Postura ps = ativa(p);
+        return ps == Postura.AGIL ? m * (1 - 0.02 * (maestria(p, ps) - 1)) : m;
+    }
+
+    private double multDanoBase(Player p, LivingEntity alvo) {
         Postura ps = ativa(p);
         if (ps == null) return 1;
         if (ps != Postura.MESTRA) {
@@ -218,7 +282,7 @@ public final class Posturas implements Listener, CommandExecutor {
     }
 
     /** Multiplicador do dano que o jogador recebe desse atacante. */
-    double multRecebido(Player p, Entity atacante) {
+    private double multRecebidoBase(Player p, Entity atacante) {
         Postura ps = ativa(p);
         if (ps == null) return 1;
         if (ps == Postura.MESTRA && arma(p) == TipoArma.LANCA && atacante != null) {
@@ -243,7 +307,7 @@ public final class Posturas implements Listener, CommandExecutor {
         return ps == null ? 1 : ps.vigor();
     }
 
-    double multRecarga(Player p) {
+    private double multRecargaBase(Player p) {
         Postura ps = ativa(p);
         return ps == null ? 1 : ps.recarga();
     }
@@ -478,6 +542,14 @@ public final class Posturas implements Listener, CommandExecutor {
                     int fe = afimDeus(p, x);
                     if (fe > 0) lore.add(Component.text("✝ Seu deus: +" + fe + "% de dano (fé " + fe + ")", NamedTextColor.GOLD));
                 }
+            }
+            if (x != Postura.NEUTRA) {
+                int nv = maestria(p, x), ac = acertos(p, x);
+                String[] r = {"I", "II", "III", "IV", "V"};
+                lore.add(Component.empty());
+                lore.add(Component.text("Maestria " + r[nv - 1] + (nv < 5 ? "  (" + ac + "/" + MAESTRIA[nv] + " acertos)" : "  (máxima)"), x.cor()));
+                lore.add(Component.text("+" + 2 * (nv - 1) + "% de dano" + (x == Postura.DEFENSIVA ? " e -" + 2 * (nv - 1) + "% recebido"
+                        : x == Postura.AGIL ? " e -" + 2 * (nv - 1) + "% de recarga" : ""), NamedTextColor.DARK_GRAY));
             }
             lore.add(Component.empty());
             lore.add(x == atual ? Component.text("● Em uso", NamedTextColor.GREEN) : Component.text("» Clique para usar", NamedTextColor.YELLOW));

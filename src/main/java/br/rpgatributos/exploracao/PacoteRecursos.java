@@ -284,7 +284,83 @@ public final class PacoteRecursos implements Listener {
         return sb.append("\n  ]\n}\n").toString();
     }
 
+    // =====================================================================
+    //  2.54: editor de pegadas no jogo (/rpgadmin pegada)
+    // =====================================================================
+
+    /** Ajustes das pegadas feitos no jogo (pacote/pegadas.yml), por cima dos números do código. */
+    private static final Map<String, double[]> AJUSTES = new java.util.HashMap<>();
+
+    private static void carregarPegadas(File pasta) {
+        AJUSTES.clear();
+        File arq = new File(pasta, "pegadas.yml");
+        if (!arq.exists()) return;
+        org.bukkit.configuration.file.YamlConfiguration y = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(arq);
+        for (String k : y.getKeys(false)) {
+            List<Double> l = y.getDoubleList(k);
+            if (l.size() != 12 || !PEGADAS.containsKey(k)) continue;
+            double[] v = new double[12];
+            for (int i = 0; i < 12; i++) v[i] = l.get(i);
+            AJUSTES.put(k, v);
+        }
+    }
+
+    /** As pegadas que dá para ajustar. */
+    public static java.util.Set<String> pegadas() {
+        return new java.util.TreeSet<>(PEGADAS.keySet());
+    }
+
+    /** Os 12 números da pegada agora (com o ajuste, se houver). */
+    public static double[] pegada(String id) {
+        double[] v = AJUSTES.getOrDefault(id, PEGADAS.get(id));
+        return v == null ? null : v.clone();
+    }
+
+    /**
+     * Muda 6 números da pegada (terceira pessoa ou primeira pessoa: rotação x, y, z e posição x, y, z),
+     * grava em pacote/pegadas.yml e refaz o pacote. Com {@code null}, volta ao padrão do código.
+     * @return null se deu certo, ou o erro.
+     */
+    public String ajustarPegada(String id, boolean primeira, double[] seis) {
+        if (!PEGADAS.containsKey(id)) return "Pegada desconhecida: " + id;
+        File pasta = new File(plugin.getDataFolder(), "pacote");
+        File arq = new File(pasta, "pegadas.yml");
+        org.bukkit.configuration.file.YamlConfiguration y = arq.exists() ? org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(arq)
+                : new org.bukkit.configuration.file.YamlConfiguration();
+        if (seis == null) {
+            y.set(id, null);
+        } else {
+            double[] v = pegada(id);
+            System.arraycopy(seis, 0, v, primeira ? 6 : 0, 6);
+            List<Double> l = new java.util.ArrayList<>();
+            for (double d : v) l.add(d);
+            y.set(id, l);
+        }
+        try {
+            y.save(arq);
+        } catch (IOException ex) {
+            return "Não consegui gravar pegadas.yml: " + ex.getMessage();
+        }
+        return regerar();
+    }
+
+    /** Refaz o zip do pacote (sem reiniciar). @return null se deu certo, ou o erro. */
+    public String regerar() {
+        if (!plugin.settings().pacAtivado) return "O pacote de recursos está desligado.";
+        try {
+            File pasta = new File(plugin.getDataFolder(), "pacote");
+            byte[] zip = montar(pasta);
+            arquivo = new File(pasta, NOME);
+            Files.write(arquivo.toPath(), zip);
+            sha1 = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(zip));
+            return null;
+        } catch (Exception ex) {
+            return "Não consegui refazer o pacote: " + ex.getMessage();
+        }
+    }
+
     private byte[] montar(File pasta) throws IOException {
+        carregarPegadas(pasta);
         Map<String, byte[]> f = new LinkedHashMap<>();
         f.put("pack.mcmeta", texto("""
                 {
@@ -442,6 +518,7 @@ public final class PacoteRecursos implements Listener {
         for (br.rpgatributos.ajuda.Fundo fu : br.rpgatributos.ajuda.Fundo.values()) texturas.put("gui/menu_" + fu.id(), fu.desenhar());
         texturas.put("block/minerio_mitrilo", minerio());
         texturas.putAll(Mineracao.texturas());
+        texturas.putAll(br.rpgatributos.raca.Enfeites.texturas());
         texturas.put("item/mitrilo_bruto", desenho(BRUTO, MITRILO));
         texturas.put("item/lingote_mitrilo", desenho(LINGOTE, MITRILO));
         texturas.put("item/cajado_arcano", desenho(CAJADO, CORES_CAJADO));
@@ -484,6 +561,9 @@ public final class PacoteRecursos implements Listener {
         f.putAll(br.rpgatributos.domador.VisualDomador.arquivosDoPacote());
         // Modelos 3D das lendárias para quem tem os mods EMF + ETF (quem não tem vê a pele normal).
         f.putAll(br.rpgatributos.domador.ModelosLendarios.arquivosDoPacote());
+        // 2.55: modelos editados no Blockbench para moradores, chefes, bestas, companheiros, invocações e elites.
+        ModelosVisuais.somar(f, new File(pasta, "modelos"));
+        f.putAll(br.rpgatributos.raca.Enfeites.arquivosDoPacote());
         // Trajes (armaduras com nome): a textura no corpo de quem veste.
         f.putAll(ArteTrajes.arquivosDoPacote());
 
@@ -613,7 +693,7 @@ public final class PacoteRecursos implements Listener {
             "colosso", new double[]{1, 1, 1});
 
     private static String modeloPegada(String pai, String pegada) {
-        double[] v = PEGADAS.get(pegada);
+        double[] v = AJUSTES.getOrDefault(pegada, PEGADAS.get(pegada));
         double[] e = ESCALAS_3P.getOrDefault(pegada, new double[]{0.85, 0.85, 0.85});
         return "{ \"parent\": \"" + pai + "\", \"display\": { "
                 + transf("thirdperson_righthand", v[0], v[1], v[2], v[3], v[4], v[5], e[0], e[1], e[2]) + ", "

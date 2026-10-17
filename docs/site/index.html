@@ -162,7 +162,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 2.51</small></a>
+  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 2.55</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: adaga, cantil, /pets)…" aria-label="Buscar no manual"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 <div class="layout">
@@ -213,7 +213,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 
 <main id="conteudo">
 <div class="hero"><div>
-    <p class="rotulo">Manual do jogador · versão 2.51</p>
+    <p class="rotulo">Manual do jogador · versão 2.55</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -241,6 +241,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li>Quase tudo é criado por <b>ritual</b>: coloque um bloco e jogue os itens em cima dele com <kbd>Q</kbd>. O bloco vira uma "estação".</li>
         <li>Abra o <span class="cmd">/rpg</span>: no topo ele mostra o <b>seu próximo passo</b>, e embaixo estão as 7 categorias com tudo do servidor.</li>
         <li>Ficou com dúvida? <span class="cmd">/guia &lt;palavra&gt;</span> (ex.: <code>/guia reciclar</code>) mostra o assunto com o ritual desenhado em itens. O livro continua com <span class="cmd">/guia livro</span>.</li>
+        <li>Achou um item e não sabe o que é? Segure na mão e use <span class="cmd">/guia mão</span> (ou o botão <b>O que é isso?</b> no <span class="cmd">/rpg</span>). Na primeira vez que você encontra algo novo aparece uma dica com <b>[ver como]</b>; <span class="cmd">/guia dicas</span> desliga. As novidades da versão ficam no botão <b>Novidades</b> do <span class="cmd">/rpg</span>.</li>
         <li>Clique com o botão direito numa estação para abrir o menu dela.</li>
       </ul>
     </div>
@@ -307,6 +308,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     <div class="card largo"><div class="tabela"><table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
       <tr><td><span class="cmd">/atributos</span></td><td>Seus atributos (e os acessórios)</td></tr>
       <tr><td><span class="cmd">/guia &lt;palavra&gt;</span>, <span class="cmd">/guia livro</span></td><td>Busca um assunto no Guia; o livro</td></tr>
+      <tr><td><span class="cmd">/guia mão</span>, <span class="cmd">/guia dicas</span>, <span class="cmd">/guia novidades</span></td><td>Explica o item da mão; liga/desliga as dicas; o que entrou na versão</td></tr>
       <tr><td><span class="cmd">/jornada</span></td><td>Jornada do Aventureiro (primeiros passos)</td></tr>
       <tr><td><span class="cmd">/forja</span></td><td>Raridades e suas chances</td></tr>
       <tr><td><span class="cmd">/grimorio</span></td><td>Grimório: magias, criador, secretas, maestria</td></tr>
@@ -371,27 +373,27 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       </tbody></table></div>
     </div>
     <div class="card receita" data-cat="Arsenal">
-      <div class="rec-topo"><img class="pixel" src="img/itens/arma_adaga.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Adaga</h3></div></div>
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_adaga_iron.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Adaga</h3></div></div>
       <p class="rec-desc">Rápida. Pelas costas: +50% de dano. Uma em cada mão: Lâminas Duplas.</p>
       <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span></span><span class="c0">b</span><span></span><span class="c1">c</span><span></span><span></span><span></span><span></span><span></span></div><ul class="legenda"><li><span class="c0">b</span>Lingote de Ferro</li><li><span class="c1">c</span>Graveto</li></ul></div>
     </div>
     <div class="card receita" data-cat="Arsenal">
-      <div class="rec-topo"><img class="pixel" src="img/itens/arma_faca_arremesso.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Faca de Arremesso</h3></div></div>
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_faca_arremesso_iron.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Faca de Arremesso</h3></div></div>
       <p class="rec-desc">Clique direito arremessa (depois recolha). Acerto à distância: dano x1,3.</p>
       <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span></span><span></span><span class="c1">b</span><span></span><span></span><span></span><span></span><span></span></div><ul class="legenda"><li><span class="c0">a</span>Lingote de Ferro</li><li><span class="c1">b</span>Pena</li></ul></div>
     </div>
     <div class="card receita" data-cat="Arsenal">
-      <div class="rec-topo"><img class="pixel" src="img/itens/arma_machadinha.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Machadinha</h3></div></div>
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_machadinha_iron.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Machadinha</h3></div></div>
       <p class="rec-desc">Clique direito arremessa (depois recolha). Pesada: dano x1,7.</p>
       <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span class="c1">b</span><span></span><span class="c2">c</span><span class="c3">d</span><span></span><span></span><span></span><span></span></div><ul class="legenda"><li><span class="c0">a</span>Lingote de Ferro</li><li><span class="c1">b</span>Lingote de Ferro</li><li><span class="c2">c</span>Graveto</li><li><span class="c3">d</span>Pena</li></ul></div>
     </div>
     <div class="card receita" data-cat="Arsenal">
-      <div class="rec-topo"><img class="pixel" src="img/itens/arma_foice.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Foice</h3></div></div>
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_foice_iron.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Foice</h3></div></div>
       <p class="rec-desc">Corte largo. Cada inimigo derrotado com ela cura 1,5 ❤.</p>
       <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span class="c1">b</span><span class="c2">c</span><span></span><span></span><span class="c3">f</span><span></span><span class="c4">h</span><span></span></div><ul class="legenda"><li><span class="c0">a</span>Lingote de Ferro</li><li><span class="c1">b</span>Lingote de Ferro</li><li><span class="c2">c</span>Lingote de Ferro</li><li><span class="c3">f</span>Graveto</li><li><span class="c4">h</span>Graveto</li></ul></div>
     </div>
     <div class="card receita" data-cat="Arsenal">
-      <div class="rec-topo"><img class="pixel" src="img/itens/arma_bastao.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Bastão</h3></div></div>
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_bastao_iron.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Bastão</h3></div></div>
       <p class="rec-desc">Mais alcance e empurrão. Bom para segurar a linha.</p>
       <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span></span><span></span><span class="c0">c</span><span></span><span class="c1">e</span><span></span><span class="c2">g</span><span></span><span></span></div><ul class="legenda"><li><span class="c0">c</span>Lingote de Ferro</li><li><span class="c1">e</span>Graveto</li><li><span class="c2">g</span>Graveto</li></ul></div>
     </div>
@@ -399,6 +401,41 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <div class="rec-topo"><img class="pixel" src="img/itens/arma_chicote.png" alt="" width="48" height="48"><div><p class="rec-cat">Arsenal</p><h3>Chicote</h3></div></div>
       <p class="rec-desc">Alcança 3 blocos mais longe que as outras armas.</p>
       <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span></span><span></span><span class="c0">c</span><span></span><span class="c1">e</span><span></span><span class="c2">g</span><span></span><span></span></div><ul class="legenda"><li><span class="c0">c</span>Lingote de Ferro</li><li><span class="c1">e</span>Couro</li><li><span class="c2">g</span>Graveto</li></ul></div>
+    </div>
+    <div class="card receita" data-cat="Armas dos minérios">
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_montante.png" alt="" width="48" height="48"><div><p class="rec-cat">Armas dos minérios</p><h3>Montante de Mitrilo</h3></div></div>
+      <p class="rec-desc">Duas mãos: pesado e com varredura. Com algo na outra mão, -40% de dano.</p>
+      <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span></span><span class="c0">b</span><span></span><span></span><span class="c1">e</span><span></span><span class="c2">g</span><span class="c3">h</span><span class="c4">i</span></div><ul class="legenda"><li><span class="c0">b</span>Lingote de Mitrilo</li><li><span class="c1">e</span>Lingote de Mitrilo</li><li><span class="c2">g</span>Diamante</li><li><span class="c3">h</span>Graveto</li><li><span class="c4">i</span>Diamante</li></ul></div>
+    </div>
+    <div class="card receita" data-cat="Armas dos minérios">
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_bumerangue.png" alt="" width="48" height="48"><div><p class="rec-cat">Armas dos minérios</p><h3>Bumerangue de Âmbar</h3></div></div>
+      <p class="rec-desc">Clique direito arremessa: ele vai, volta e acerta nas duas vezes.</p>
+      <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span class="c1">b</span><span></span><span></span><span class="c2">d</span><span></span><span></span><span></span><span></span></div><ul class="legenda"><li><span class="c0">a</span>Tábuas (qualquer madeira)</li><li><span class="c1">b</span>Âmbar</li><li><span class="c2">d</span>Tábuas (qualquer madeira)</li></ul></div>
+    </div>
+    <div class="card receita" data-cat="Armas dos minérios">
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_leques.png" alt="" width="48" height="48"><div><p class="rec-cat">Armas dos minérios</p><h3>Leques de Guerra de Jade</h3></div></div>
+      <p class="rec-desc">Rápidos. Às vezes uma rajada de vento empurra quem está em volta.</p>
+      <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span class="c1">b</span><span class="c2">c</span><span></span><span class="c3">e</span><span></span><span></span><span></span><span></span></div><ul class="legenda"><li><span class="c0">a</span>Jade</li><li><span class="c1">b</span>Papel</li><li><span class="c2">c</span>Jade</li><li><span class="c3">e</span>Graveto</li></ul></div>
+    </div>
+    <div class="card receita" data-cat="Armas dos minérios">
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_arpao.png" alt="" width="48" height="48"><div><p class="rec-cat">Armas dos minérios</p><h3>Arpão de Pérola</h3></div></div>
+      <p class="rec-desc">Clique direito arpoa: puxa o alvo até você (ou você até o bloco). Na água, dano x1,5.</p>
+      <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span></span><span></span><span class="c0">c</span><span></span><span class="c1">e</span><span></span><span class="c2">g</span><span></span><span></span></div><ul class="legenda"><li><span class="c0">c</span>Pérola do Mar</li><li><span class="c1">e</span>Lingote de Ferro</li><li><span class="c2">g</span>Graveto</li></ul></div>
+    </div>
+    <div class="card receita" data-cat="Armas dos minérios">
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_mangual.png" alt="" width="48" height="48"><div><p class="rec-cat">Armas dos minérios</p><h3>Mangual de Gelo</h3></div></div>
+      <p class="rec-desc">Cada golpe deixa o inimigo lento; às vezes congela.</p>
+      <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span></span><span></span><span class="c0">c</span><span></span><span class="c1">e</span><span></span><span class="c2">g</span><span></span><span></span></div><ul class="legenda"><li><span class="c0">c</span>Cristal de Gelo</li><li><span class="c1">e</span>Corrente de Ferro</li><li><span class="c2">g</span>Graveto</li></ul></div>
+    </div>
+    <div class="card receita" data-cat="Armas dos minérios">
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_garras.png" alt="" width="48" height="48"><div><p class="rec-cat">Armas dos minérios</p><h3>Garras de Pedra-Sangue</h3></div></div>
+      <p class="rec-desc">Muito rápidas. Cada golpe rouba 10% do dano em vida.</p>
+      <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span></span><span class="c1">c</span><span class="c2">d</span><span class="c3">e</span><span class="c4">f</span><span></span><span></span><span></span></div><ul class="legenda"><li><span class="c0">a</span>Pedra-Sangue</li><li><span class="c1">c</span>Pedra-Sangue</li><li><span class="c2">d</span>Lingote de Ferro</li><li><span class="c3">e</span>Lingote de Ferro</li><li><span class="c4">f</span>Lingote de Ferro</li></ul></div>
+    </div>
+    <div class="card receita" data-cat="Armas dos minérios">
+      <div class="rec-topo"><img class="pixel" src="img/itens/arma_clava.png" alt="" width="48" height="48"><div><p class="rec-cat">Armas dos minérios</p><h3>Clava Fumegante</h3></div></div>
+      <p class="rec-desc">Com Turfa no inventário, os golpes queimam (1 Turfa a cada 8 queimas).</p>
+      <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span></span><span></span><span class="c1">b</span><span></span><span></span><span class="c2">c</span><span></span><span></span></div><ul class="legenda"><li><span class="c0">a</span>Turfa</li><li><span class="c1">b</span>Tronco de Acácia ou Madeira de Carvalho Escuro Descascada ou Madeira de Bétula Descascada ou Madeira da Selva ou Madeira de Carvalho ou Tronco da Selva Descascado ou Madeira de Acácia ou Madeira de Carvalho Pálido ou Tronco de Carvalho Escuro ou Tronco de Bétula ou Madeira de Mangue ou Tronco de Abeto ou Hifas Distorcidas Descascadas ou Tronco da Selva ou Tronco de Bétula Descascado ou Tronco de Cerejeira Descascado ou Madeira de Carvalho Descascada ou Tronco de Abeto Descascado ou Madeira da Selva Descascada ou Caule Carmesim Descascado ou Madeira de Cerejeira Descascada ou Madeira de Carvalho Pálido Descascada ou Tronco de Acácia Descascado ou Tronco de Mangue Descascado ou Caule Distorcido ou Hifas Carmesim ou Tronco de Álamo ou Madeira de Bétula ou Madeira de Acácia Descascada ou Tronco de Carvalho Pálido Descascado ou Tronco de Carvalho Pálido ou Tronco de Carvalho Descascado ou Madeira de Carvalho Escuro ou Tronco de Mangue ou Tronco de Carvalho Escuro Descascado ou Madeira de Álamo Descascada ou Madeira de Abeto ou Madeira de Álamo ou Madeira de Cerejeira ou Caule Distorcido Descascado ou Caule Carmesim ou Tronco de Cerejeira ou Hifas Carmesim Descascadas ou Tronco de Carvalho ou Hifas Distorcidas ou Tronco de Álamo Descascado ou Madeira de Mangue Descascada ou Madeira de Abeto Descascada</li><li><span class="c2">c</span>Graveto</li></ul></div>
     </div>
     <div class="card receita" data-cat="Utilidade">
       <div class="rec-topo"><img class="pixel" src="img/itens/gancho.png" alt="" width="48" height="48"><div><p class="rec-cat">Utilidade</p><h3>Gancho de Escalada</h3></div></div>
@@ -429,6 +466,11 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <div class="rec-topo"><img class="pixel" src="img/itens/bolsa_sementes.png" alt="" width="48" height="48"><div><p class="rec-cat">Utilidade</p><h3>Bolsa de Sementes</h3></div></div>
       <p class="rec-desc">Clique na terra arada para plantar em 3×3.</p>
       <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span></span><span class="c1">c</span><span class="c2">d</span><span class="c3">e</span><span class="c4">f</span><span class="c0">g</span><span class="c1">h</span><span class="c2">i</span></div><ul class="legenda"><li><span class="c0">a</span>Linha</li><li><span class="c1">c</span>Linha</li><li><span class="c2">d</span>Couro</li><li><span class="c3">e</span>Sementes de Trigo</li><li><span class="c4">f</span>Couro</li><li><span class="c0">g</span>Couro</li><li><span class="c1">h</span>Couro</li><li><span class="c2">i</span>Couro</li></ul></div>
+    </div>
+    <div class="card receita" data-cat="Utilidade">
+      <div class="rec-topo"><span class="sem-icone" aria-hidden="true">E</span><div><p class="rec-cat">Utilidade</p><h3>Escudo de Duelo</h3></div></div>
+      <p class="rec-desc">Levante bem na hora do golpe para aparar:</p>
+      <div class="rec-corpo"><div class="bancada" role="img" aria-label="Grade da bancada"><span class="c0">a</span><span class="c1">b</span><span class="c2">c</span><span></span><span class="c3">e</span><span></span><span></span><span></span><span></span></div><ul class="legenda"><li><span class="c0">a</span>Lingote de Ferro</li><li><span class="c1">b</span>Lingote de Ouro</li><li><span class="c2">c</span>Lingote de Ferro</li><li><span class="c3">e</span>Escudo</li></ul></div>
     </div>
     <div class="card receita" data-cat="Flechas e frascos">
       <div class="rec-topo"><img class="pixel" src="img/itens/flecha_fogo.png" alt="" width="48" height="48"><div><p class="rec-cat">Flechas e frascos</p><h3>Flecha de Fogo <span class="muted">×4</span></h3></div></div>
@@ -478,16 +520,11 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     <div class="card receita" data-cat="Mineração">
       <div class="rec-topo"><img class="pixel" src="img/itens/lingote_mitrilo.png" alt="" width="48" height="48"><div><p class="rec-cat">Mineração</p><h3>Lingote de Mitrilo</h3></div></div>
       <p class="rec-desc">Aprimora netherite na mesa de ferraria.</p>
-      <p class="rec-modo">Fornalha</p><ul class="lista-ing"><li>Mitrilo Bruto → Lingote de Mitrilo</li></ul>
+      <p class="rec-modo">Fornalha (ou alto-forno, mais rápido)</p><ul class="lista-ing"><li>Mitrilo Bruto → Lingote de Mitrilo</li></ul>
     </div>
     <div class="card receita" data-cat="Mineração">
-      <div class="rec-topo"><img class="pixel" src="img/itens/lingote_mitrilo.png" alt="" width="48" height="48"><div><p class="rec-cat">Mineração</p><h3>Lingote de Mitrilo</h3></div></div>
-      <p class="rec-desc">Aprimora netherite na mesa de ferraria.</p>
-      <p class="rec-modo">Alto-forno</p><ul class="lista-ing"><li>Mitrilo Bruto → Lingote de Mitrilo</li></ul>
-    </div>
-    <div class="card receita" data-cat="Mineração">
-      <div class="rec-topo"><img class="pixel" src="img/itens/lingote_mitrilo.png" alt="" width="48" height="48"><div><p class="rec-cat">Mineração</p><h3>Lingote de Mitrilo</h3></div></div>
-      <p class="rec-desc">Aprimora netherite na mesa de ferraria.</p>
+      <div class="rec-topo"><img class="pixel" src="img/itens/lingote_mitrilo.png" alt="" width="48" height="48"><div><p class="rec-cat">Mineração</p><h3>Peça ✦ Mitrilo</h3></div></div>
+      <p class="rec-desc">Uma peça de Netherite (forjada ou não) vira ✦ Mitrilo: 50% mais durabilidade e um bônus extra.</p>
       <p class="rec-modo">Mesa de ferraria</p><ul class="lista-ing"><li>Molde de Ferraria</li><li>Machado de Netherita ou Botas de Netherita ou Peitoral de Netherita ou Capacete de Netherita ou Enxada de Netherita ou Armadura de Netherita para Cavalo ou Calças de Netherita ou Armadura de Netherita para Náutilo ou Picareta de Netherita ou Pá de Netherita ou Lança de Netherita ou Espada de Netherita</li><li>Lingote de Mitrilo</li></ul>
     </div>
     <div class="card receita" data-cat="Mineração">
@@ -638,6 +675,8 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Arcos e bestas</td><td>Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Arco das Folhas Caídas, Besta do Capitão, Besta Glacial, Besta da Torre de Vigia</td></tr>
         <tr><td>Ferramentas</td><td>Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Picareta do Poço Fundo, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada das Quatro Estações, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral</td></tr>
         <tr><td>Lanças e tridentes</td><td>Lança da Sentinela, Chifre do Qilin, Agulha dos Ventos, Pique do Cavaleiro Errante, Lâmina do Crescente Verde, Espeto do Bastião, Tridente de Maris, Garfo do Afogado-Rei, Tridente do Pescador de Pérolas, Tridente da Tempestade</td></tr>
+        <tr><td>Arsenal</td><td>Presas Gêmeas e Beijo da Víbora (adagas), Pena do Corvo (faca), Machadinha do Velho Anão, Foice do Ceifador de Trigo e Lua Minguante (foices), Bastão do Monge da Montanha e Bordão do Peregrino (bastões), Chicote do Domador de Feras e Língua de Brasa (chicotes)</td></tr>
+        <tr><td>Armas dos minérios</td><td>Coração da Montanha e Lâmina do Rei Gigante (montante), Retorno do Escorpião (bumerangue), Asas de Jade (leques), Presa do Kraken e Arpão do Velho Baleeiro (arpão), Estrela da Geada (mangual), Presas do Lobisomem (garras), Tocha do Pântano (clava)</td></tr>
       </tbody></table></div>
     </div>
     <div class="card largo"><h3>Trajes (armaduras com nome)</h3>
@@ -923,7 +962,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Placa no baú:</b> pregue uma placa num baú ou barril; olhando para ele, a barra mostra o que tem dentro.</li>
         <li><b>Peixes pulando:</b> pesque onde o peixe pulou e às vezes vem um a mais.</li>
         <li><b>Gelo fino:</b> parado no gelo sobre a água, ele racha e quebra. Agache para aguentar.</li>
-        <li><b>Novos (2.49):</b> ovelhas de cores misturadas, animais seguem a comida de mais longe, suporte de armadura com braços (agachado + graveto), escadas mais rápidas, lanternas que rangem na chuva e raio que queima árvore e deixa carvão vegetal.</li>
+        <li><b>Novos (2.49):</b> ovelhas de cores misturadas, animais seguem a comida de mais longe, suporte de armadura com braços (todos, até os antigos; agachado + graveto liga e desliga), escadas mais rápidas, lanternas que rangem na chuva e raio que queima árvore e deixa carvão vegetal.</li>
       </ul>
     </div>
     <div class="card largo"><h3>🧗 Artefatos de utilidade</h3>
@@ -937,9 +976,9 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     </div>
     <div class="card largo"><h3>🐴 Linhagens e Estábulo</h3>
       <ul>
-        <li><b>Livro do Criador</b> (livro + cenoura dourada + couro): clique num cavalo, burro, mula, lhama ou camelo e veja velocidade, pulo, vida, pais, geração e linhagem.</li>
+        <li><b>Livro do Criador</b> (livro + cenoura dourada + couro): clique num cavalo, burro, mula, lhama ou camelo e veja velocidade, pulo, vida, geração, linhagem e a <b>árvore da família</b> (pais e avós, com setas mostrando se o filhote saiu melhor). No Estábulo, Shift+clique numa montaria guardada mostra a mesma ficha.</li>
         <li><b>Cruzando:</b> o filhote herda dos pais e às vezes melhora um pouco. Na <b>5ª geração</b> a família ganha nome de linhagem.</li>
-        <li><b>Estábulo:</b> jogue uma sela e um laço em cima de um fardo de feno. Guarda até 4 montarias (elas voltam iguais) e você chama de volta clicando nele.</li>
+        <li><b>Estábulo:</b> jogue uma sela e uma porteira (qualquer madeira) em cima de um fardo de feno (com laço no lugar da porteira vira o Altar do Domador). Guarda até 4 montarias (elas voltam iguais) e você chama de volta clicando nele.</li>
       </ul>
     </div>
     <div class="card"><h3>Pelo mundo</h3>
@@ -984,7 +1023,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     </div>
     <div class="card largo"><h3>Estações pequenas</h3>
       <div class="tabela"><table><thead><tr><th>Estação</th><th>Ritual (Q)</th><th>O que faz</th></tr></thead><tbody>
-        <tr><td>🎯 Boneco de Treino</td><td>Fardo de feno + abóbora esculpida + suporte de armadura</td><td>Mostra o dano de cada golpe e por segundo; nunca quebra</td></tr>
+        <tr><td>🎯 Boneco de Treino</td><td>Fardo de feno + abóbora esculpida + suporte de armadura</td><td>Mostra o dano de cada golpe, o combo usado e o dano por segundo; clique no fardo para comparar as armas (agachado zera); nunca quebra. Só mede: não dá XP de Combate nem de proficiência</td></tr>
         <tr><td>⚔ Pedra de Amolar</td><td>Rebolo ou pedra lisa + 2 pederneiras + 1 ferro</td><td>Arma +10% de dano por 100 golpes (custa 1 pederneira)</td></tr>
         <tr><td>♨ Fogueira de Acampamento</td><td>Fogueira acesa + 1 lã + 1 tronco</td><td>Sentado perto: Regeneração e Descansado (+5% de XP por 20 min); assa comida jogada do lado</td></tr>
         <tr><td>☘ Bebedouro</td><td>Caldeirão com água + 1 fardo de feno</td><td>Filhotes crescem mais rápido; companheiros se curam</td></tr>
@@ -1007,9 +1046,10 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <ul>
         <li><b>Espada, machado, lança, tridente e maça</b> começam com o direito: <code>D D D</code>, <code>D E D</code>, <code>D D E</code>, <code>D E E</code>.</li>
         <li><b>Arco e besta</b> começam com o esquerdo: <code>E E E</code>, <code>E D E</code>, <code>E E D</code>, <code>E D D</code>.</li>
-        <li><b>Arsenal novo:</b> adaga, duplas, foice, bastão e chicote começam com o direito; faca e machadinha de arremesso, com o esquerdo.</li>
+        <li><b>Arsenal novo:</b> adaga, duplas, foice, bastão, chicote, montante, leques, mangual, garras e clava começam com o direito; faca, machadinha, bumerangue e arpão, com o esquerdo.</li>
         <li>A barra de ação mostra o progresso (<code>D · E · ?</code>).</li>
         <li>Agachado não solta combo. Clicar em baú ou porta não conta, e um clique só ainda levanta o escudo.</li>
+        <li>O clique direito num monstro ou no Boneco de Treino também conta como <b>D</b> (a sequência não quebra ao mirar nele).</li>
         <li>Golpes, habilidades de classe e magias acertam <b>qualquer criatura</b> (menos aldeões, NPCs, animais com nome e os bichos seus e dos aliados) e o <b>Boneco de Treino</b>.</li>
         <li><b>Jogadores:</b> fora de território vale tudo, mesmo com o PvP do servidor desligado. Dentro de território vale a regra de PvP do dono (e a Lei da Paz do reino). Party (sem fogo amigo) e reino nunca se acertam.</li>
       </ul>
@@ -1076,6 +1116,28 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>No ar:</b> golpe em quem está no ar dá +30%.</li>
       </ul>
     </div>
+    <div class="card largo"><h3>🪶 Raças (2.52 e 2.53)</h3>
+      <p>Use <span class="cmd">/raca</span> para escolher. O tamanho muda de verdade e cada raça cresce em 5 estágios de Despertar: a Essência vem do XP dos atributos da raça e cada estágio pede uma oferenda. Trocar custa 30 níveis.</p>
+      <div class="tabela"><table><thead><tr><th>Raça</th><th>Tamanho</th><th>O que ganha</th></tr></thead><tbody>
+        <tr><td>Humano</td><td>100%</td><td>Mais XP em tudo, Vigor, vida e, no V, a Herança (o dom de outra raça).</td></tr>
+        <tr><td>Anão</td><td>65%</td><td>Vida, mineração rápida, visão nas cavernas e minério dobrado. Um pouco mais lento.</td></tr>
+        <tr><td>Elfo</td><td>110%</td><td>Velocidade, flechas mais fortes, Sentidos Élficos (agache 2 s) e cura nas florestas. Menos vida.</td></tr>
+        <tr><td>Pequenino</td><td>50%</td><td>Sorte, comida que enche mais, passa despercebido agachado e desvia de golpes. Menos vida.</td></tr>
+        <tr><td>Povo-Pássaro</td><td>90%</td><td>Sem dano de queda, <b>planar</b> (II), <b>asas</b> que batem (III) e <b>voo</b> segurando o pulo (V). Armadura pesada no peito prende as asas.</td></tr>
+        <tr><td>Povo do Mar</td><td>100%</td><td>Fôlego, visão e nado debaixo d'água, respira na água e bate mais forte na chuva. Fraco no Nether e nos desertos.</td></tr>
+        <tr><td>Draconato</td><td>105%</td><td>Resiste ao fogo, <b>Sopro de Fogo</b> (II), asas curtas para planar (III), imune a fogo e lava (IV). Fraco no frio.</td></tr>
+        <tr><td>Homem-Fera</td><td>105%</td><td>Visão à noite, garras de mãos vazias, <b>Uivo</b> (III), corre e regenera à noite, imune à licantropia (V). Ouro fere mais.</td></tr>
+        <tr><td>Espectral</td><td>100%</td><td>Cai devagar, mortos-vivos o ignoram de longe, <b>Desvanecer</b> (III), golpes gélidos e volta da morte 1×/hora (V). Fraco ao sol.</td></tr>
+        <tr><td>Gnomo Inventor</td><td>60%</td><td>Conserta a ferramenta da mão, poupa durabilidade, explosivos mais fortes, <b>Autômato</b> de ferro (IV), mais raridade na Forja. Menos vida.</td></tr>
+      </tbody></table></div>
+      <p>Com o pacote de recursos as asas são de verdade; sem ele, aparecem desenhadas com partículas.</p>
+      <ul>
+        <li><b>Habilidade da raça (2.53):</b> agache duas vezes rápido (Sopro, Uivo, Desvanecer ou Autômato).</li>
+        <li><b>Sinergia:</b> com uma classe que combina com a raça ativa, +6% de dano e -5% de dano recebido (veja no <span class="cmd">/raca</span>).</li>
+        <li><b>Estágio V:</b> o título da raça (Sangue de Dragão, Alfa da Lua, Grande Inventor...).</li>
+        <li><b>Enfeites de cabeça:</b> orelhas, barba, chifres, barbatanas, óculos e auréola no <span class="cmd">/raca</span>, de graça. Vista ou use no Guarda-roupa por cima do capacete.</li>
+      </ul>
+    </div>
     <div class="card largo"><h3>🗡 O arsenal novo (2.51)</h3>
       <p>Seis armas novas, cada uma com proficiência, 7 golpes e Postura Mestra. São feitas na bancada (madeira, pedra, cobre, ferro, ouro ou diamante; netherite na mesa de ferraria) e forjadas na Forja do Ferreiro como as outras.</p>
       <div class="tabela"><table><thead><tr><th>Arma</th><th>Receita (M = material)</th><th>Jeito</th></tr></thead><tbody>
@@ -1087,6 +1149,51 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Chicote</td><td>M, couro e graveto</td><td>+3 de alcance.</td></tr>
       </tbody></table></div>
       <p>Posturas Mestras: Sombra (adaga), Tempestade Gêmea (duplas), Olho de Águia (arremesso), Ceifador (foice), Monge (bastão) e Domador de Feras (chicote).</p>
+    </div>
+    <div class="card largo"><h3>⛏ As armas dos minérios</h3>
+      <p>Sete armas feitas com os minerais do mundo, cada uma com mecânica própria, 7 golpes e Postura Mestra. Uma receita só (com o mineral) e forjadas na Forja do Ferreiro como as outras.</p>
+      <div class="tabela"><table><thead><tr><th>Arma</th><th>Receita</th><th>Jeito</th></tr></thead><tbody>
+        <tr><td>Montante de Mitrilo</td><td>2 Lingotes de Mitrilo em pé; diamante, graveto e diamante embaixo</td><td>Pesado e lento; <b>duas mãos</b>: varre quem está em volta do alvo (com algo na outra mão, -40%).</td></tr>
+        <tr><td>Bumerangue de Âmbar</td><td>Tábua e Âmbar; tábua embaixo à direita</td><td><b>Clique direito arremessa</b>: vai, volta para a mão e acerta nas duas vezes.</td></tr>
+        <tr><td>Leques de Guerra de Jade</td><td>Jade, papel, Jade; graveto embaixo</td><td>Rápidos; às vezes uma rajada de vento afasta quem está em volta.</td></tr>
+        <tr><td>Arpão de Pérola</td><td>Pérola, ferro e graveto na diagonal</td><td><b>Clique direito arpoa</b>: puxa o alvo até você ou você até o bloco. Mais forte na água.</td></tr>
+        <tr><td>Mangual de Gelo</td><td>Cristal de Gelo, corrente e graveto na diagonal</td><td>Cada golpe deixa lento; às vezes congela.</td></tr>
+        <tr><td>Garras de Pedra-Sangue</td><td>2 Pedras-Sangue em cima, 3 ferros embaixo</td><td>Muito rápidas e roubam vida.</td></tr>
+        <tr><td>Clava Fumegante</td><td>Turfa, tronco e graveto em pé</td><td>Com Turfa no inventário os golpes queimam.</td></tr>
+      </tbody></table></div>
+      <p>Posturas Mestras: Titã (montante), Vento que Volta (bumerangue), Garça de Jade (leques), Baleeiro (arpão), Avalanche (mangual), Fera Sangrenta (garras) e Fornalha (clava). Bumerangue e Arpão começam os combos com o esquerdo.</p>
+      <p>Com o pacote de recursos, ficam em 3D na mão. Adaga, faca, machadinha, foice e bastão da bancada têm a lâmina na cor do material.</p>
+    </div>
+    <div class="card largo"><h3>◆ Incrustar minério</h3>
+      <p>Arma corpo a corpo na mão, um mineral na outra e clique na <b>Forja do Ferreiro</b> (2 níveis de XP). Uma incrustação por arma; uma nova troca a antiga.</p>
+      <div class="tabela"><table><thead><tr><th>Mineral</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Jade</td><td>+1 ❤ de vida máxima</td></tr>
+        <tr><td>Âmbar</td><td>+1 de sorte</td></tr>
+        <tr><td>Pérola</td><td>+25% de dano na água ou na chuva</td></tr>
+        <tr><td>Cristal de Gelo</td><td>Cada acerto deixa lento</td></tr>
+        <tr><td>Pedra-Sangue</td><td>Rouba 6% do dano em vida</td></tr>
+        <tr><td>Turfa</td><td>15% de chance de pôr fogo</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card largo"><h3>✪ Técnicas secretas (2.54)</h3>
+      <p>Cada arma tem uma <b>técnica secreta</b>, um golpe a mais que só um <b>Mestre de Armas</b> ensina. Fale com o mestre na vila e escolha <b>Técnicas</b>: cada uma pede <b>proficiência 12</b> na arma e <b>24 esmeraldas</b>. Depois ela aparece no <code>/combos</code> como os outros golpes.</p>
+      <div class="tabela"><table><thead><tr><th>Mestre</th><th>Vila</th><th>Técnicas</th></tr></thead><tbody>
+        <tr><td>Mestra das Marés</td><td>Pescadores</td><td>Maremoto (tridente), Mil Estocadas (lança), Fisgada do Leviatã (arpão), Mil Lâminas (arremesso), Órbita Eterna (bumerangue)</td></tr>
+        <tr><td>Mestre do Bastão</td><td>Mosteiro</td><td>Montanha Inabalável (bastão), Vendaval de Pétalas (leques), Serpente-Relâmpago (chicote), Dança das Sombras (adaga), Tempestade Escarlate (duplas)</td></tr>
+        <tr><td>Mestre de Guerra</td><td>Anões</td><td>Machados Ancestrais (machado), Sino do Juízo (maça), Céu Partido (montante), Nevasca de Ferro (mangual), Erupção Vulcânica (clava)</td></tr>
+        <tr><td>Mestra da Lâmina</td><td>Élfica</td><td>Vento Cortante (espada), Flecha Cometa (arco), Lua de Sangue (foice), Frenesi da Fera (garras)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>🛡 Aparar</h3>
+      <p>Levante o escudo <b>bem na hora</b> do golpe, de frente para o atacante. O golpe some, flechas voltam, o atacante fica lento e fraco, você ganha 10 de Vigor e o próximo golpe em 1,5 s faz <b>×1,5</b>.</p>
+      <p><b>Escudo de Duelo:</b> ferro, ouro, ferro em cima e um escudo no meio. Dá mais tempo para aparar e o contra-ataque vira ×1,8.</p>
+    </div>
+    <div class="card"><h3>🎯 Fraquezas e clima</h3>
+      <p>Cada família de criatura apanha mais de algumas armas (esqueletos de maça e clava, aranhas de lança e foice, criaturas de fogo de tridente e arpão, voadores de arco e bumerangue...). O aviso aparece na barra e a lista fica no <b>Bestiário</b>.</p>
+      <p>Na chuva o tridente e o arpão ficam mais fortes e o fogo se apaga; no frio o mangual ganha força.</p>
+    </div>
+    <div class="card"><h3>▲ Maestria de postura</h3>
+      <p>Cada acerto conta para a postura que você usa. Ela sobe até o nível <b>V</b> (200, 600, 1.500 e 3.500 acertos) e cada nível soma 2% no que ela faz. Veja o nível no menu de posturas.</p>
     </div>
   </div>
 </section>
@@ -1689,6 +1796,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Baize</td><td>Olhar da Verdade (12 s)</td><td>Revela, marca e enfraquece os monstros à frente</td></tr>
         <tr><td>Kunpeng</td><td>Rajada do Céu (12 s)</td><td>Ventania que joga longe os monstros em volta</td></tr>
       </tbody></table></div>
+      <p><b>Carga (2.54):</b> golpe montado com a montaria correndo faz até <b>+50%</b> (lança, arpão, tridente e montante, mais 20%). Flecha atirada montado faz +15%, e com o escudo levantado a montaria leva metade do dano.</p>
     </div>
   </div>
 </section>
@@ -1900,7 +2008,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.51 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.55 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

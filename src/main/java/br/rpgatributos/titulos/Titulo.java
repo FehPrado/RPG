@@ -130,6 +130,22 @@ public enum Titulo {
     SOMBRA_DAS_LAMINAS("Sombra das Lâminas", 0xB0BEC5, Requisito.contador("proficiencia_duplas", 20, "Proficiência 20 com as Lâminas Duplas"), Bonus.velocidade(0.03)),
     CEIFADOR("Ceifador", 0x7E57C2, Requisito.contador("proficiencia_foice", 20, "Proficiência 20 com a foice"), Bonus.vida(2)),
     MESTRE_DO_ARSENAL("Mestre do Arsenal", 0xFFD54F, Requisito.contador("armas_mestradas", 12, "Proficiência 20 em 12 armas"), new Bonus().comDano(3).comVida(6)),
+    // ---------- 2.53: os títulos de raça (estágio V) ----------
+    CORACAO_HUMANO("Coração Humano", 0xE0C9A6, Requisito.contador("raca_v_humano", 1, "Despertar o estágio V do Humano"), Bonus.xpTudo(0.03)),
+    FILHO_DA_MONTANHA("Filho da Montanha", 0xC1793A, Requisito.contador("raca_v_anao", 1, "Despertar o estágio V do Anão"), Bonus.vida(2)),
+    GUARDIAO_DA_FLORESTA("Guardião da Floresta", 0x8BC34A, Requisito.contador("raca_v_elfo", 1, "Despertar o estágio V do Elfo"), Bonus.velocidade(0.02)),
+    SORTE_EM_PESSOA("Sorte em Pessoa", 0xFFB74D, Requisito.contador("raca_v_pequenino", 1, "Despertar o estágio V do Pequenino"), Bonus.xpTudo(0.03)),
+    SENHOR_DOS_CEUS("Senhor dos Céus", 0x90CAF9, Requisito.contador("raca_v_passaro", 1, "Despertar o estágio V do Povo-Pássaro"), Bonus.queda(0.3)),
+    VOZ_DO_OCEANO("Voz do Oceano", 0x26C6DA, Requisito.contador("raca_v_mar", 1, "Despertar o estágio V do Povo do Mar"), Bonus.folego(0.3)),
+    SANGUE_DE_DRAGAO("Sangue de Dragão", 0xE65100, Requisito.contador("raca_v_draconato", 1, "Despertar o estágio V do Draconato"), Bonus.dano(1)),
+    ALFA_DA_LUA("Alfa da Lua", 0x8D6E63, Requisito.contador("raca_v_fera", 1, "Despertar o estágio V do Homem-Fera"), Bonus.dano(1)),
+    ANDARILHO_DO_VEU("Andarilho do Véu", 0x90A4AE, Requisito.contador("raca_v_espectral", 1, "Despertar o estágio V do Espectral"), Bonus.mana(10)),
+    GRANDE_INVENTOR("Grande Inventor", 0x26A69A, Requisito.contador("raca_v_gnomo", 1, "Despertar o estágio V do Gnomo Inventor"), Bonus.xpSkill(Skill.FERRARIA, 0.15)),
+    // ---------- 2.54: combate ----------
+    DISCIPULO("Discípulo", 0x80DEEA, Requisito.contador("tecnicas", 3, "Aprender 3 técnicas secretas com os Mestres de Armas"), Bonus.dano(1)),
+    HERDEIRO_DAS_TECNICAS("Herdeiro das Técnicas", 0x26C6DA, Requisito.contador("tecnicas", 19, "Aprender as 19 técnicas secretas"), new Bonus().comDano(2).comVida(4)),
+    MURALHA_VIVA("Muralha Viva", 0xFFE082, Requisito.contador("aparadas", 50, "Aparar 50 golpes com o escudo"), Bonus.armadura(2)),
+    MESTRE_DAS_POSTURAS("Mestre das Posturas", 0xFFD54F, Requisito.contador("posturas_mestradas", 3, "Levar 3 posturas à maestria V"), Bonus.dano(1)),
     RENASCIDO("Renascido", 0xFFD54F, Requisito.contador("renascimentos", 1, "Renascer uma vez"), new Bonus().comVida(2).comDano(1)),
     ETERNO("Eterno", 0xFFF59D, Requisito.contador("renascimentos", 5, "Renascer 5 vezes"), new Bonus().comDano(2).comVida(6).comVelocidade(0.05)),
 
