@@ -512,7 +512,12 @@ public final class Territorios implements Listener {
         Reino reino = reinoDe(t);
         if (reino != null) texto = texto.append(Component.text("  ♛ " + reino.nome(), reino.cor()));
         if (t != null && !regra(t, Flag.PVP)) texto = texto.append(Component.text("  ☮ sem PvP", NamedTextColor.GRAY));
-        p.showTitle(Title.title(Component.empty(), texto,
+        // 2.57: a placa de boas-vindas do dono, para quem chega de fora.
+        Relacao rel = relacao(p, t);
+        Component titulo = t != null && t.boasVindas() != null && (rel == Relacao.OUTRO || rel == Relacao.AMIGO)
+                ? Component.text("“" + t.boasVindas() + "”", NamedTextColor.YELLOW, net.kyori.adventure.text.format.TextDecoration.ITALIC)
+                : Component.empty();
+        p.showTitle(Title.title(titulo, texto,
                 Title.Times.times(Duration.ofMillis(150), Duration.ofMillis(1500), Duration.ofMillis(400))));
     }
 
@@ -643,6 +648,7 @@ public final class Territorios implements Listener {
                 }
                 // Territórios salvos antes da regra "Reino pode construir" (2.25) ganham ela ligada, como os novos.
                 if (!s.getBoolean("regra-reino-vista")) t.flag(Flag.REINO, true);
+                t.boasVindas(s.getString("boas-vindas"));
                 porDono.put(t.dono(), t);
             } catch (RuntimeException ex) {
                 plugin.getLogger().warning("Território inválido em territorios.yml (" + id + "): " + ex.getMessage());
@@ -656,6 +662,7 @@ public final class Territorios implements Listener {
         for (Territorio t : porDono.values()) {
             String base = "territorios." + t.dono() + ".";
             y.set(base + "nome", t.nomeDono());
+            if (t.boasVindas() != null) y.set(base + "boas-vindas", t.boasVindas());
             y.set(base + "mundo", t.mundo());
             y.set(base + "marco", t.marcoX() + "," + t.marcoY() + "," + t.marcoZ());
             y.set(base + "bandeira", t.bandeira());

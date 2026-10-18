@@ -68,7 +68,7 @@ public final class Fraquezas implements Listener {
         if (Creeper.class.isAssignableFrom(c)) return new Regra("Creepers", Set.of(TipoArma.ARCO, TipoArma.ARREMESSO, TipoArma.BUMERANGUE, TipoArma.CHICOTE), 0.25, Set.of(), 0);
         if (Enderman.class.isAssignableFrom(c)) return new Regra("Endermen", Set.of(TipoArma.LEQUES, TipoArma.CHICOTE, TipoArma.ESPADA), 0.20, Set.of(), 0);
         if (Blaze.class.isAssignableFrom(c) || Ghast.class.isAssignableFrom(c)) return new Regra("Criaturas de fogo", Set.of(TipoArma.TRIDENTE, TipoArma.ARPAO, TipoArma.MANGUAL), 0.40,
-                Set.of(TipoArma.CLAVA), 0.30);
+                Set.of(TipoArma.CLAVA, TipoArma.LANCA_BASALTO), 0.30);
         if (Phantom.class.isAssignableFrom(c) || Vex.class.isAssignableFrom(c)) return new Regra("Voadores", Set.of(TipoArma.ARCO, TipoArma.BUMERANGUE, TipoArma.CHICOTE, TipoArma.LEQUES), 0.25, Set.of(), 0);
         if (Guardian.class.isAssignableFrom(c)) return new Regra("Guardiões", Set.of(TipoArma.TRIDENTE, TipoArma.ARPAO), 0.30, Set.of(), 0);
         if (IronGolem.class.isAssignableFrom(c) || Ravager.class.isAssignableFrom(c)) return new Regra("Brutamontes", Set.of(TipoArma.MACHADO, TipoArma.MONTANTE, TipoArma.MACA), 0.20,
@@ -127,7 +127,7 @@ public final class Fraquezas implements Listener {
         boolean chuva = w.hasStorm() && p.isInRain();
         if (t != null && chuva) {
             if (t == TipoArma.TRIDENTE || t == TipoArma.ARPAO) mult *= w.isThundering() ? 1.25 : 1.15;
-            if (t == TipoArma.CLAVA) mult *= 0.8; // a chuva apaga as brasas
+            if (t == TipoArma.CLAVA || t == TipoArma.LANCA_BASALTO) mult *= 0.8; // a chuva apaga as brasas
             if (t == TipoArma.ARCO) mult *= 0.9; // corda molhada
         }
         if (alvo.getFireTicks() > 0 && chuva) alvo.setFireTicks(Math.min(alvo.getFireTicks(), 20));

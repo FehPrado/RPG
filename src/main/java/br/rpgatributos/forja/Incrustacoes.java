@@ -53,7 +53,11 @@ public final class Incrustacoes implements Listener {
         PEROLA("Pérola", 0xF3E9F0, "+25% de dano na água ou na chuva"),
         GELO("Cristal de Gelo", 0xA8E4FF, "cada acerto deixa o inimigo lento"),
         SANGUE("Pedra-Sangue", 0xB0102A, "rouba 6% do dano em vida"),
-        TURFA("Turfa", 0xFF6F00, "15% de chance de pôr fogo no inimigo");
+        TURFA("Turfa", 0xFF6F00, "15% de chance de pôr fogo no inimigo"),
+        // 2.56: os minerais do Nether
+        MAGMA("Cristal de Magma", 0xFF5A1F, "+20% de dano em quem está pegando fogo"),
+        AMBAR_INFERNAL("Âmbar Infernal", 0xFF9A1F, "+15% de dano no Nether"),
+        QUARTZO_NEGRO("Quartzo Negro", 0x9A8CC0, "golpe crítico (caindo) faz +25%");
 
         final String nome, efeito;
         final TextColor cor;
@@ -79,6 +83,9 @@ public final class Incrustacoes implements Listener {
                 case PEROLA -> PEROLA;
                 case CRISTAL_DE_GELO -> GELO;
                 case PEDRA_SANGUE -> SANGUE;
+                case CRISTAL_DE_MAGMA -> MAGMA;
+                case AMBAR_INFERNAL -> AMBAR_INFERNAL;
+                case QUARTZO_NEGRO -> QUARTZO_NEGRO;
                 default -> null;
             };
         }
@@ -192,6 +199,22 @@ public final class Incrustacoes implements Listener {
             }
             case TURFA -> {
                 if (ThreadLocalRandom.current().nextDouble() < 0.15) alvo.setFireTicks(Math.max(alvo.getFireTicks(), 60));
+            }
+            case MAGMA -> {
+                if (alvo.getFireTicks() > 0) {
+                    e.setDamage(e.getDamage() * 1.2);
+                    alvo.getWorld().spawnParticle(Particle.LAVA, alvo.getLocation().add(0, 1, 0), 2, 0.2, 0.3, 0.2, 0);
+                }
+            }
+            case AMBAR_INFERNAL -> {
+                if (p.getWorld().getEnvironment() == org.bukkit.World.Environment.NETHER) e.setDamage(e.getDamage() * 1.15);
+            }
+            case QUARTZO_NEGRO -> {
+                // Crítico do jogo: caindo, fora do chão, sem estar na água nem subindo escada.
+                if (p.getFallDistance() > 0 && !p.isOnGround() && !p.isInWater() && !p.isClimbing() && !p.isInsideVehicle()) {
+                    e.setDamage(e.getDamage() * 1.25);
+                    alvo.getWorld().spawnParticle(Particle.CRIT, alvo.getLocation().add(0, 1, 0), 10, 0.3, 0.4, 0.3, 0.1);
+                }
             }
             default -> { }
         }

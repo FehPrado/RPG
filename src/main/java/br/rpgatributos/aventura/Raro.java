@@ -60,7 +60,15 @@ public enum Raro {
     CRISTAL_DE_GELO("Cristal de Gelo", Material.PRISMARINE_CRYSTALS, 0xA8E4FF,
             "Não derrete nem na mão de quem o segura.", "Bancada Alquímica: Anel do Gelo Eterno."),
     PEDRA_SANGUE("Pedra-Sangue", Material.NETHER_BRICK, 0xB0102A,
-            "Pulsa devagar, como se tivesse um coração.", "Bancada Alquímica: Amuleto de Sangue.");
+            "Pulsa devagar, como se tivesse um coração.", "Bancada Alquímica: Amuleto de Sangue."),
+
+    // 2.56: minerais do Nether
+    CRISTAL_DE_MAGMA("Cristal de Magma", Material.MAGMA_CREAM, 0xFF5A1F,
+            "Ainda está quente. Nasce no basalto dos deltas e nas terras do Nether.", "Faz a Lança de Basalto. Incruste numa arma (Forja)."),
+    AMBAR_INFERNAL("Âmbar Infernal", Material.GLOWSTONE_DUST, 0xFF9A1F,
+            "Resina dos fungos gigantes, endurecida pelo calor.", "Incruste numa arma (Forja). O Ferreiro Piglin paga bem."),
+    QUARTZO_NEGRO("Quartzo Negro", Material.QUARTZ, 0x4A4060,
+            "Cresce onde as almas se deitam, no vale de areia de almas.", "Incruste numa arma (Forja). O Ferreiro Piglin paga bem.");
 
     /** Chave fixa (namespace do plugin) para não depender da instância do plugin. */
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "raro");

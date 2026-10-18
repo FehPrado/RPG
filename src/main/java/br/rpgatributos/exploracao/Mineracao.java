@@ -74,7 +74,11 @@ public final class Mineracao implements Listener {
         CRISTAL_DE_GELO("Cristal de Gelo", 17, 0.35, 40, 140, 2, 4),
         PEDRA_SANGUE("Pedra-Sangue", 33, 0.30, 10, 110, 2, 4),
         TURFA("Turfa", 7, 0.50, 0, 0, 3, 6),
-        CRISTAL_BRUTO("Cristal Bruto", 11, 0, 0, 0, 0, 0);
+        CRISTAL_BRUTO("Cristal Bruto", 11, 0, 0, 0, 0, 0),
+        // 2.56: os minerais do Nether (no fim, porque o chunk guarda o número de cada um)
+        CRISTAL_DE_MAGMA("Cristal de Magma", 13, 0.45, 10, 110, 2, 4),
+        AMBAR_INFERNAL("Âmbar Infernal", 19, 0.40, 10, 110, 2, 4),
+        QUARTZO_NEGRO("Quartzo Negro", 21, 0.40, 10, 110, 2, 4);
 
         final String nome;
         /** Bits do bloco de cogumelo marrom (sempre com a face de baixo: a natureza nunca faz isso). */
@@ -105,7 +109,7 @@ public final class Mineracao implements Listener {
     public static final NamespacedKey K_TURFA = new NamespacedKey("rpgatributos", "turfa");
 
     private final RPGAtributos plugin;
-    private final NamespacedKey kGerado, kPos;
+    private final NamespacedKey kGerado, kPos, kNether;
     /** Chave do chunk → (posição empacotada → tipo). */
     private final Map<Long, Map<Integer, Tipo>> marcados = new HashMap<>();
     private final Map<UUID, Long> ultimoEco = new HashMap<>();
@@ -117,6 +121,7 @@ public final class Mineracao implements Listener {
         this.plugin = plugin;
         this.kGerado = new NamespacedKey(plugin, "minerais_gerado");
         this.kPos = new NamespacedKey(plugin, "minerais_pos");
+        this.kNether = new NamespacedKey(plugin, "minerais_nether");
     }
 
     // =====================================================================
@@ -246,11 +251,19 @@ public final class Mineracao implements Listener {
             return;
         }
         int[] v = pdc.get(kPos, PersistentDataType.INTEGER_ARRAY);
-        if (v == null || v.length < 2) return;
-        Map<Integer, Tipo> m = new HashMap<>();
-        Tipo[] tipos = Tipo.values();
-        for (int i = 0; i + 1 < v.length; i += 2) if (v[i + 1] >= 0 && v[i + 1] < tipos.length) m.put(v[i], tipos[v[i + 1]]);
-        marcados.put(chave(w, c.getX(), c.getZ()), m);
+        if (v != null && v.length >= 2) {
+            Map<Integer, Tipo> m = new HashMap<>();
+            Tipo[] tipos = Tipo.values();
+            for (int i = 0; i + 1 < v.length; i += 2) if (v[i + 1] >= 0 && v[i + 1] < tipos.length) m.put(v[i], tipos[v[i + 1]]);
+            marcados.put(chave(w, c.getX(), c.getZ()), m);
+        }
+        // 2.56: o Nether já explorado também ganha os minerais novos (uma vez por chunk).
+        if (w.getEnvironment() == World.Environment.NETHER && !pdc.has(kNether)) {
+            pdc.set(kNether, PersistentDataType.BYTE, (byte) 1);
+            if (plugin.territorios().em(w.getName(), c.getX(), c.getZ()) != null) return;
+            mineraisDoNether(c, new Random(w.getSeed() ^ (c.getX() * 734287L) ^ (c.getZ() * 912931L) ^ 0x2560L));
+            salvarChunk(c);
+        }
     }
 
     @EventHandler
@@ -269,6 +282,8 @@ public final class Mineracao implements Listener {
         if (plugin.territorios().em(w.getName(), c.getX(), c.getZ()) != null) return;
         if (w.getEnvironment() == World.Environment.NETHER) {
             if (r.nextDouble() < Tipo.PEDRA_SANGUE.chance) veios(c, r, Tipo.PEDRA_SANGUE, m -> m == Material.NETHERRACK);
+            c.getPersistentDataContainer().set(kNether, PersistentDataType.BYTE, (byte) 1);
+            mineraisDoNether(c, r);
             return;
         }
         String bioma = c.getBlock(8, Math.min(w.getMaxHeight() - 1, w.getHighestBlockYAt(c.getX() * 16 + 8, c.getZ() * 16 + 8)), 8)
@@ -286,6 +301,25 @@ public final class Mineracao implements Listener {
         if ((bioma.contains("swamp") || bioma.contains("mangrove")) && r.nextDouble() < Tipo.TURFA.chance) turfa(c, r);
         if (bioma.contains("ocean") && !bioma.contains("frozen") && r.nextDouble() < Tipo.PEROLA.chance) ostras(c, r);
         if (r.nextDouble() < 0.04) geodo(c, r);
+    }
+
+    /** 2.56: um mineral para cada bioma do Nether (Cristal de Magma, Âmbar Infernal, Quartzo Negro). */
+    private void mineraisDoNether(Chunk c, Random r) {
+        World w = c.getWorld();
+        String bn = w.getBiome(c.getX() * 16 + 8, 64, c.getZ() * 16 + 8).getKey().getKey();
+        if (bn.contains("basalt")) {
+            if (r.nextDouble() < Tipo.CRISTAL_DE_MAGMA.chance) {
+                veios(c, r, Tipo.CRISTAL_DE_MAGMA, m -> m == Material.BASALT || m == Material.BLACKSTONE || m == Material.MAGMA_BLOCK);
+            }
+        } else if (bn.contains("wastes")) {
+            if (r.nextDouble() < 0.15) veios(c, r, Tipo.CRISTAL_DE_MAGMA, m -> m == Material.NETHERRACK || m == Material.MAGMA_BLOCK);
+        } else if (bn.contains("crimson") || bn.contains("warped")) {
+            if (r.nextDouble() < Tipo.AMBAR_INFERNAL.chance) veios(c, r, Tipo.AMBAR_INFERNAL, m -> m == Material.NETHERRACK);
+        } else if (bn.contains("soul")) {
+            if (r.nextDouble() < Tipo.QUARTZO_NEGRO.chance) {
+                veios(c, r, Tipo.QUARTZO_NEGRO, m -> m == Material.SOUL_SOIL || m == Material.BASALT || m == Material.BLACKSTONE);
+            }
+        }
     }
 
     private void veios(Chunk c, Random r, Tipo t, java.util.function.Predicate<Material> hospede) {
@@ -434,6 +468,9 @@ public final class Mineracao implements Listener {
             case JADE -> { drops.add(Raro.JADE.criar(1 + extra)); xp = 35; }
             case CRISTAL_DE_GELO -> { drops.add(Raro.CRISTAL_DE_GELO.criar(1 + extra)); xp = 35; }
             case PEDRA_SANGUE -> { drops.add(Raro.PEDRA_SANGUE.criar(1 + extra)); xp = 40; }
+            case CRISTAL_DE_MAGMA -> { drops.add(Raro.CRISTAL_DE_MAGMA.criar(1 + extra)); xp = 40; }
+            case AMBAR_INFERNAL -> { drops.add(Raro.AMBAR_INFERNAL.criar(1 + extra)); xp = 40; }
+            case QUARTZO_NEGRO -> { drops.add(Raro.QUARTZO_NEGRO.criar(1 + extra)); xp = 45; }
             case TURFA -> { drops.add(turfa(2 + r.nextInt(2) + extra)); xp = 8; }
             case PEROLA -> {
                 if (r.nextDouble() < 0.6) drops.add(Raro.PEROLA.criar(1 + extra));
@@ -457,6 +494,7 @@ public final class Mineracao implements Listener {
         b.getWorld().playSound(c, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1f, 1.1f);
         if (p.getGameMode() != GameMode.CREATIVE) plugin.stats().darXp(p, Skill.MINERACAO, xp);
         if (t != Tipo.CRISTAL_BRUTO && t != Tipo.TURFA) plugin.titulos().registrar(p, "minerais_bioma", 1);
+        if (t == Tipo.CRISTAL_DE_MAGMA || t == Tipo.AMBAR_INFERNAL || t == Tipo.QUARTZO_NEGRO) plugin.titulos().registrar(p, "minerais_nether", 1);
     }
 
     // =====================================================================
@@ -693,6 +731,9 @@ public final class Mineracao implements Listener {
             case PEDRA_SANGUE -> new int[]{0x6E2A2A, 0x5A1E1E, 0x823434};
             case TURFA -> new int[]{0x3E2C1C, 0x34241A, 0x4A3624};
             case CRISTAL_BRUTO -> new int[]{0xE6E2DA, 0xD6D2CA, 0xF2EEE8};
+            case CRISTAL_DE_MAGMA -> new int[]{0x4A4A4E, 0x3C3C40, 0x58585C}; // basalto
+            case AMBAR_INFERNAL -> new int[]{0x6E2A2A, 0x5A1E1E, 0x823434};   // netherrack
+            case QUARTZO_NEGRO -> new int[]{0x4A3A2E, 0x3E3026, 0x564436};    // terra de almas
         };
         int[] pedra = switch (t) {
             case AMBAR -> new int[]{0x5A2E06, 0xB0600E, 0xF2A33A, 0xFFD27F};
@@ -702,6 +743,9 @@ public final class Mineracao implements Listener {
             case PEDRA_SANGUE -> new int[]{0x3A0008, 0x7A0A1E, 0xB0102A, 0xFF4D6A};
             case TURFA -> new int[]{0x1E140C, 0x5A4026, 0x6B8E3A, 0x8AAE4A};
             case CRISTAL_BRUTO -> new int[]{0x4A1A7A, 0x7A3AB0, 0xB66BFF, 0xE1BEFF};
+            case CRISTAL_DE_MAGMA -> new int[]{0x6E1A00, 0xC2410C, 0xFF7A1F, 0xFFD27F};
+            case AMBAR_INFERNAL -> new int[]{0x5A2400, 0xB85A0E, 0xFF9A1F, 0xFFE08A};
+            case QUARTZO_NEGRO -> new int[]{0x14101E, 0x2E2840, 0x4A4060, 0x9A8CC0};
         };
         for (int y = 0; y < 16; y++) {
             for (int x = 0; x < 16; x++) img.setRGB(x, y, 0xFF000000 | base[r.nextInt(3)]);

@@ -681,6 +681,140 @@ final class Ruinas {
     }
 
     // =====================================================================
+    //  2.56: Forja dos Piglins (Nether)
+    // =====================================================================
+
+    /** Onde fica o Ferreiro Piglin (x, y, z locais). */
+    static final int[] FERREIRO_PIGLIN = {0, 1, 0};
+
+    void forjaPiglin(Obra o) {
+        // Chão de pedra-negra polida com ouro aqui e ali.
+        for (int dx = -6; dx <= 6; dx++) {
+            for (int dz = -6; dz <= 6; dz++) {
+                if (dx * dx + dz * dz > 40) continue;
+                o.por(dx, -1, dz, Material.BLACKSTONE);
+                o.por(dx, 0, dz, o.um(Material.POLISHED_BLACKSTONE_BRICKS, 6, Material.CRACKED_POLISHED_BLACKSTONE_BRICKS, 2,
+                        Material.GILDED_BLACKSTONE, 1, Material.POLISHED_BLACKSTONE, 2));
+            }
+        }
+        // Paredes de trás e dos lados, com colunas de basalto e meio telhado de tijolo do Nether.
+        for (int dx = -5; dx <= 5; dx++) {
+            for (int dy = 1; dy <= 4; dy++) o.por(dx, dy, -5, dy == 4 ? Material.NETHER_BRICKS : o.um(Material.POLISHED_BLACKSTONE_BRICKS, 4, Material.CRACKED_POLISHED_BLACKSTONE_BRICKS, 1));
+        }
+        for (int lado : new int[]{-5, 5}) {
+            for (int dz = -4; dz <= 1; dz++) {
+                for (int dy = 1; dy <= 3; dy++) {
+                    if (dz == -1 && dy <= 2) continue; // janela
+                    o.por(lado, dy, dz, o.um(Material.POLISHED_BLACKSTONE_BRICKS, 4, Material.BLACKSTONE, 1));
+                }
+            }
+            for (int dy = 1; dy <= 5; dy++) {
+                o.por(lado, dy, -5, "polished_basalt[axis=y]");
+                o.por(lado, dy, 2, "polished_basalt[axis=y]");
+            }
+            o.por(lado, 6, -5, Material.GOLD_BLOCK);
+            o.por(lado, 6, 2, Material.GOLD_BLOCK);
+        }
+        for (int dx = -5; dx <= 5; dx++) {
+            for (int dz = -5; dz <= -1; dz++) o.por(dx, 5, dz, "nether_brick_slab[type=bottom]");
+        }
+        // A forja: lava atrás da grade, dois altos-fornos e a bigorna.
+        for (int dx = -1; dx <= 1; dx++) {
+            o.por(dx, -1, -4, Material.BLACKSTONE);
+            o.por(dx, 0, -4, Material.LAVA);
+            o.por(dx, 1, -4, Material.IRON_BARS);
+            o.por(dx, 2, -4, Material.GILDED_BLACKSTONE);
+        }
+        o.por(-3, 1, -4, "blast_furnace[facing=south,lit=true]");
+        o.por(3, 1, -4, "blast_furnace[facing=south,lit=true]");
+        o.por(-4, 1, -4, Material.GOLD_BLOCK);
+        o.por(4, 1, -4, Material.GOLD_BLOCK);
+        o.por(0, 1, -2, "anvil[facing=east]");
+        o.por(-4, 1, -1, Material.SMITHING_TABLE);
+        o.por(-4, 1, -3, "barrel[facing=up]");
+        o.por(4, 1, 0, "grindstone[face=floor,facing=north]");
+        for (int lado : new int[]{-2, 2}) {
+            o.por(lado, 4, -2, "iron_chain[axis=y]");
+            o.por(lado, 3, -2, "soul_lantern[hanging=true]");
+        }
+        // Pilhas de ouro na entrada e o baú do ferreiro.
+        o.por(-4, 1, 3, Material.GOLD_BLOCK);
+        o.por(4, 1, 3, Material.GILDED_BLACKSTONE);
+        o.por(-3, 1, 4, "blackstone_wall");
+        o.por(3, 1, 4, "blackstone_wall");
+        o.por(-3, 2, 4, "lantern[hanging=false]");
+        o.por(3, 2, 4, "lantern[hanging=false]");
+        o.por(4, 1, -2, "chest[facing=west]");
+        List<ItemStack> extras = new ArrayList<>();
+        extras.add(new ItemStack(Material.GOLD_INGOT, 6 + o.r.nextInt(10)));
+        extras.add(Raro.CRISTAL_DE_MAGMA.criar(1 + o.r.nextInt(3)));
+        if (o.chance(0.5)) extras.add(Raro.AMBAR_INFERNAL.criar(1 + o.r.nextInt(2)));
+        if (o.chance(0.3)) extras.add(Raro.QUARTZO_NEGRO.criar(1));
+        if (o.chance(0.2)) extras.add(new ItemStack(Material.NETHERITE_SCRAP));
+        if (o.chance(0.15)) extras.add(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE));
+        base.bau(o.bloco(4, 1, -2), LootTables.BASTION_OTHER, o, extras);
+    }
+
+    // =====================================================================
+    //  2.56: Primeiro Portal em Ruínas (Nether)
+    // =====================================================================
+
+    /** A pedra que guarda a Chave (x, y, z locais): obsidiana chorona no meio da moldura. */
+    static final int[] CORACAO_DO_PORTAL = {0, 1, -2};
+
+    void primeiroPortal(Obra o) {
+        // Chão: círculo de tijolos de pedra-negra rachados com veios de magma.
+        for (int dx = -5; dx <= 5; dx++) {
+            for (int dz = -5; dz <= 5; dz++) {
+                double d = Math.sqrt(dx * dx + dz * dz);
+                if (d > 5.3) continue;
+                o.por(dx, -1, dz, Material.BLACKSTONE);
+                o.por(dx, 0, dz, d > 4.4 ? o.um(Material.CRACKED_POLISHED_BLACKSTONE_BRICKS, 3, Material.BLACKSTONE, 2)
+                        : o.um(Material.POLISHED_BLACKSTONE_BRICKS, 5, Material.CRACKED_POLISHED_BLACKSTONE_BRICKS, 3, Material.MAGMA_BLOCK, 1,
+                        Material.CRYING_OBSIDIAN, 1));
+            }
+        }
+        // A moldura gigante (7 de largura por 8 de altura), quebrada: falta um pedaço em cima.
+        int z0 = -2;
+        for (int dx = -3; dx <= 3; dx++) {
+            for (int dy = 1; dy <= 8; dy++) {
+                boolean borda = Math.abs(dx) == 3 || dy == 1 || dy == 8;
+                if (!borda) continue;
+                if (dy == 8 && dx >= 0) continue;          // o canto que caiu
+                if (dx == 3 && dy >= 6) continue;
+                o.por(dx, dy, z0, o.chance(0.3) ? Material.CRYING_OBSIDIAN : Material.OBSIDIAN);
+            }
+        }
+        o.por(CORACAO_DO_PORTAL[0], CORACAO_DO_PORTAL[1], CORACAO_DO_PORTAL[2], Material.CRYING_OBSIDIAN);
+        // Pedaços caídos da moldura no chão.
+        o.por(2, 1, 0, Material.OBSIDIAN);
+        o.por(3, 1, 1, Material.CRYING_OBSIDIAN);
+        o.por(1, 1, 1, "blackstone_slab[type=bottom]");
+        // Quatro colunas de basalto com braseiros de alma.
+        int[][] colunas = {{-4, 2}, {4, 2}, {-4, -3}, {4, -3}};
+        for (int[] c : colunas) {
+            for (int dy = 1; dy <= 3; dy++) o.por(c[0], dy, c[1], "polished_basalt[axis=y]");
+            o.por(c[0], 4, c[1], "soul_campfire[lit=true]");
+        }
+        // O púlpito com o relato, de frente para quem chega.
+        o.por(0, 1, 3, "lectern[facing=south]");
+        porLivro(o.bloco(0, 1, 3), livro("O Primeiro Portal", "um ferreiro sem nome",
+                "Ninguém sabe quem abriu o primeiro portal. As crônicas dizem um ferreiro; os piglins dizem um ladrão.\n\nO certo é que ele forjou uma chave de obsidiana que chora.",
+                "Com ela, a pedra abriu como uma porta. Do outro lado havia calor, ouro e um povo que nunca tinha visto o céu.\n\nOs piglins o receberam. Depois, o seguiram.",
+                "Quando o caminho ficou largo demais, o ferreiro quebrou a moldura. Mas a chave ficou presa nela, chorando, esperando outra mão.\n\nToque na pedra que chora no meio do portal.",
+                "Desde então, todo portal que alguém acende é só uma lembrança deste.\n\nE os piglins ainda guardam ouro para o dia em que o primeiro ferreiro voltar."));
+        // O baú: o que o ferreiro deixou para trás.
+        o.por(-2, 1, 2, "chest[facing=east]");
+        List<ItemStack> extras = new ArrayList<>();
+        extras.add(new ItemStack(Material.GOLD_INGOT, 3 + o.r.nextInt(6)));
+        extras.add(new ItemStack(Material.OBSIDIAN, 2 + o.r.nextInt(4)));
+        extras.add(new ItemStack(Material.CRYING_OBSIDIAN, 1 + o.r.nextInt(3)));
+        if (o.chance(0.4)) extras.add(Raro.QUARTZO_NEGRO.criar(1));
+        if (o.chance(0.3)) extras.add(new ItemStack(Material.FLINT_AND_STEEL));
+        base.bau(o.bloco(-2, 1, 2), LootTables.RUINED_PORTAL, o, extras);
+    }
+
+    // =====================================================================
     //  Fortim em Ruínas
     // =====================================================================
 

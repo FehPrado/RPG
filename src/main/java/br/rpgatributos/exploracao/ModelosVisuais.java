@@ -1,6 +1,8 @@
 package br.rpgatributos.exploracao;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import java.io.File;
@@ -61,9 +63,13 @@ public final class ModelosVisuais {
         npc("pescadores", "velho_pescador", "Velho Pescador", "plains", "fisherman", "Velho Pescador (Vila de Pescadores)");
         npc("pescadores", "peixeira", "Peixeira", "swamp", "fisherman", "Peixeira (Vila de Pescadores)");
         npc("pescadores", "carpinteiro_naval", "Carpinteiro Naval", "plains", "fletcher", "Carpinteiro Naval (Vila de Pescadores)");
-        npc("pescadores", "menina_do_cais", "Menina do Cais", "plains", "none", "Menina do Cais (Vila de Pescadores, pequena)");
+        // A Menina do Cais nasce bebê, e o aldeão bebê tem modelo próprio no EMF (villager_baby).
+        a("vilas/pescadores", "menina_do_cais", "villager_baby", "Menina do Cais .*", "Menina do Cais (Vila de Pescadores, aldeã bebê)",
+                "villager/villager_baby", "villager/baby/plains");
         npc("pescadores", "mestra_das_mares", "Mestra das Marés", "swamp", "fisherman", "Mestra das Marés: mestra de armas (arpão)");
-        npc("mosteiro", "mestre", "Mestre", "snow", "weaponsmith", "Mestre do Mosteiro (treino diário)");
+        // O nome é "Mestre Mestre Wen" / "Mestre Mestra Mei": a regra não pode pegar Mestre do Bastão, Mineiro ou de Guerra.
+        ALVOS.add(new Alvo("vilas/mosteiro", "mestre", "villager", "Mestre (Mestre|Mestra) .*",
+                List.of("villager/villager", "villager/type/snow", "villager/profession/weaponsmith"), "Mestre do Mosteiro (treino diário)"));
         npc("mosteiro", "monge_herbalista", "Monge Herbalista", "snow", "cleric", "Monge Herbalista (Mosteiro)");
         npc("mosteiro", "guardiao_do_sino", "Guardião do Sino", "snow", "cleric", "Guardião do Sino (Mosteiro)");
         npc("mosteiro", "peregrino", "Peregrino", "taiga", "nitwit", "Peregrino (Mosteiro)");
@@ -88,6 +94,21 @@ public final class ModelosVisuais {
         a("chefes", "lich", "skeleton", ".*☠ Lich.*", "Lich", "skeleton/skeleton");
         a("chefes", "tempestade_viva", "breeze", ".*Tempestade Viva.*", "Tempestade Viva", "breeze/breeze");
         a("chefes", "arauto_do_fim", "wither_skeleton", ".*Arauto do Fim.*", "Arauto do Fim", "skeleton/wither_skeleton");
+
+        // Chefes do mundo e guardiões dos sete Locais Ocultos.
+        a("expansao", "nian", "ravager", "Nian 年", "Nian", "illager/ravager");
+        a("expansao", "lobisomem", "wolf", "🐺 Lobisomem", "Lobisomem", "wolf/wolf");
+        a("expansao", "vampiro", "zombie", "🦇 Vampiro", "Vampiro", "zombie/zombie");
+        a("expansao", "coracao_da_penumbra", "wither_skeleton", "☾ Coração da Penumbra", "Coração da Penumbra", "skeleton/wither_skeleton");
+        a("expansao", "guardiao_dos_ventos", "breeze", "Guardião dos Ventos", "Guardião dos Ventos", "breeze/breeze");
+        a("expansao", "sumo_sacerdote", "drowned", "Sumo-Sacerdote .*", "Sumo-Sacerdote das cidades submersas", "zombie/drowned");
+        a("expansao", "guardiao_da_forja_antiga", "iron_golem", "✦ Guardião da Forja Antiga ✦", "Guardião da Forja Antiga", "iron_golem/iron_golem");
+        a("expansao", "bibliotecario_amaldicoado", "evoker", "✦ Bibliotecário Amaldiçoado ✦", "Bibliotecário Amaldiçoado", "illager/evoker");
+        a("expansao", "fera_ancestral", "ravager", "✦ Fera Ancestral ✦", "Fera Ancestral", "illager/ravager");
+        a("expansao", "rei_caido", "wither_skeleton", "✦ Rei Caído ✦", "Rei Caído", "skeleton/wither_skeleton");
+        a("expansao", "sombra_sem_nome", "vindicator", "✦ Sombra Sem Nome ✦", "Sombra Sem Nome", "illager/vindicator");
+        a("expansao", "arqueiro_espectral", "stray", "✦ Arqueiro Espectral ✦", "Arqueiro Espectral", "skeleton/stray");
+        a("expansao", "paladino_corrompido", "zombie", "✦ Paladino Corrompido ✦", "Paladino Corrompido", "zombie/zombie");
 
         // Bestas Errantes (as lendárias soltas; os Guardiões já têm modelo próprio).
         a("bestas", "pixiu", "wolf", "Pixiu.*", "Pixiu, a besta do ouro (lobo)", "wolf/wolf");
@@ -159,7 +180,7 @@ public final class ModelosVisuais {
     public static void somar(Map<String, byte[]> f, File pasta) throws IOException {
         String cem = "assets/minecraft/optifine/cem/";
         Map<String, List<String[]>> novas = new LinkedHashMap<>(); // cem -> [arquivo, regex]
-        List<String> aldeoes = new ArrayList<>();
+        List<String> aldeoes = new ArrayList<>(), bebes = new ArrayList<>();
         for (Alvo a : ALVOS) {
             byte[] jem = ler(pasta, a.id() + ".jem");
             if (jem == null) continue;
@@ -175,10 +196,12 @@ public final class ModelosVisuais {
                 o.addProperty("texture", textura);
                 f.put(cem + textura, png);
             }
+            if (a.cem().equals("villager_baby")) paraBebe(o);
             List<String[]> l = novas.computeIfAbsent(a.cem(), k -> new ArrayList<>());
             l.add(new String[]{a.id(), a.nome()});
             f.put(cem + "rpg_" + a.id() + ".jem", o.toString().getBytes(StandardCharsets.UTF_8));
             if (a.cem().equals("villager")) aldeoes.add(a.nome());
+            if (a.cem().equals("villager_baby")) bebes.add(a.nome());
         }
         for (Map.Entry<String, List<String[]>> en : novas.entrySet()) {
             String base = en.getKey();
@@ -192,17 +215,42 @@ public final class ModelosVisuais {
             }
             f.put(chave, r.gravar("RPGAtributos - modelos por nome (" + base + ")"));
         }
-        if (!aldeoes.isEmpty()) esconderCamadasAldeao(f, aldeoes);
+        if (!aldeoes.isEmpty()) esconderCamadasAldeao(f, aldeoes, false);
+        if (!bebes.isEmpty()) esconderCamadasAldeao(f, bebes, true);
+        // These vanilla overlays would otherwise cover the new robe/cape geometry.
+        for (String base : List.of("drowned", "stray")) {
+            List<String[]> alvos = novas.get(base);
+            if (alvos == null) continue;
+            String camada = base + "_outer";
+            Regras regras = Regras.ler(f.get(cem + camada + ".properties"));
+            int numero = regras.proximoArquivo();
+            JsonObject vazio = new JsonObject();
+            JsonArray partes = new JsonArray();
+            for (String parte : List.of("head", "headwear", "body", "left_arm", "right_arm", "left_leg", "right_leg")) {
+                JsonObject p = new JsonObject();
+                p.addProperty("part", parte);
+                p.addProperty("attach", false);
+                p.add("boxes", new JsonArray());
+                partes.add(p);
+            }
+            vazio.add("models", partes);
+            f.put(cem + camada + numero + ".jem", vazio.toString().getBytes(StandardCharsets.UTF_8));
+            for (String[] alvo : alvos) regras.regras.add(new String[]{String.valueOf(numero), alvo[1]});
+            f.put(cem + camada + ".properties", regras.gravar("RPGAtributos - ocultar sobreposicao vanilla"));
+        }
     }
 
     /** Bioma, profissão e nível do aldeão com modelo próprio viram textura transparente (ETF). */
-    private static void esconderCamadasAldeao(Map<String, byte[]> f, List<String> nomes) {
+    private static void esconderCamadasAldeao(Map<String, byte[]> f, List<String> nomes, boolean bebe) {
         byte[] vazio = pngVazio();
         String raiz = "assets/minecraft/optifine/random/entity/villager/";
         List<String> caminhos = new ArrayList<>();
-        for (String t : TIPOS_ALDEAO) caminhos.add("type/" + t);
-        for (String p : PROFISSOES) caminhos.add("profession/" + p);
-        for (String n : NIVEIS) caminhos.add("profession_level/" + n);
+        // O bebê só tem a camada do bioma (villager/baby/<bioma>); o adulto tem bioma, profissão e nível.
+        for (String t : TIPOS_ALDEAO) caminhos.add((bebe ? "baby/" : "type/") + t);
+        if (!bebe) {
+            for (String p : PROFISSOES) caminhos.add("profession/" + p);
+            for (String n : NIVEIS) caminhos.add("profession_level/" + n);
+        }
         String regex = "regex:(" + String.join("|", nomes) + ")";
         for (String c : caminhos) {
             f.put(raiz + c + "2.png", vazio);
@@ -210,6 +258,49 @@ public final class ModelosVisuais {
                     + "textures.1=2\nname.1=" + ascii(regex) + "\n";
             f.put(raiz + c + ".properties", props.getBytes(StandardCharsets.ISO_8859_1));
         }
+    }
+
+    /** Tamanho do aldeão bebê perto do adulto (cabeça no alto a 16 px em vez de 34). */
+    static final double ESCALA_BEBE = 0.5;
+
+    /**
+     * O modelo da Menina é feito na forma do aldeão adulto. Para o villager_baby, a geometria encolhe a
+     * partir do chão (as UVs são por face, então a textura não muda) e a mão do bebê, que o adulto não tem,
+     * fica vazia.
+     */
+    static void paraBebe(JsonObject jem) {
+        JsonArray partes = jem.getAsJsonArray("models");
+        if (partes == null) return;
+        boolean temMao = false;
+        for (JsonElement e : partes) {
+            JsonObject p = e.getAsJsonObject();
+            if (p.has("part") && p.get("part").getAsString().equals("right_hand")) temMao = true;
+            escalar(p, ESCALA_BEBE);
+        }
+        if (!temMao) {
+            JsonObject mao = new JsonObject();
+            mao.addProperty("part", "right_hand");
+            mao.addProperty("attach", false);
+            mao.add("boxes", new JsonArray());
+            partes.add(mao);
+        }
+    }
+
+    private static void escalar(JsonObject parte, double k) {
+        multiplicar(parte.getAsJsonArray("translate"), k, 3);
+        if (parte.has("boxes")) {
+            for (JsonElement b : parte.getAsJsonArray("boxes")) {
+                JsonObject c = b.getAsJsonObject();
+                multiplicar(c.getAsJsonArray("coordinates"), k, 6);
+                if (c.has("sizeAdd")) c.addProperty("sizeAdd", c.get("sizeAdd").getAsDouble() * k);
+            }
+        }
+        if (parte.has("submodels")) for (JsonElement s : parte.getAsJsonArray("submodels")) escalar(s.getAsJsonObject(), k);
+    }
+
+    private static void multiplicar(JsonArray a, double k, int n) {
+        if (a == null) return;
+        for (int i = 0; i < Math.min(n, a.size()); i++) a.set(i, new com.google.gson.JsonPrimitive(Math.round(a.get(i).getAsDouble() * k * 1000) / 1000.0));
     }
 
     private static byte[] pngVazio() {

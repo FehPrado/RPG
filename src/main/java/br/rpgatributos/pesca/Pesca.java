@@ -68,7 +68,7 @@ public final class Pesca implements Listener {
     private static final Set<Material> TESOUROS = Set.of(Material.BOW, Material.ENCHANTED_BOOK, Material.NAME_TAG,
             Material.NAUTILUS_SHELL, Material.SADDLE);
     /** Os peixes raros no diário: 12 da água comum e, embaixo, os 5 do gelo. */
-    private static final int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 38, 39, 40, 41, 42};
+    private static final int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 38, 39, 40, 41, 42, 47, 48, 50, 51};
     private static final int S_INFO = 4;
     private static final int S_FECHAR = 49;
 
@@ -333,6 +333,11 @@ public final class Pesca implements Listener {
         return s == null || s.isEmpty() ? new HashSet<>() : new HashSet<>(Arrays.asList(s.split(",")));
     }
 
+    /** 2.56: peixe da lava entra no Diário do Pescador como os outros. */
+    public void marcarVistoLava(Player p, PeixeRaro pr) {
+        if (marcarVisto(p, pr)) p.sendMessage(Component.text("  (novo no Diário do Pescador)", NamedTextColor.GRAY));
+    }
+
     private boolean marcarVisto(Player p, PeixeRaro pr) {
         Set<String> v = vistos(p);
         if (!v.add(pr.name())) return false;
@@ -515,6 +520,14 @@ public final class Pesca implements Listener {
                 Component.empty()));
         pesos.addAll(PesoPeixe.comuns(plugin, p));
         inv.setItem(32, item(Material.COD, Component.text("⚖ Recordes de peso", NamedTextColor.GOLD, TextDecoration.BOLD), pesos, false));
+        inv.setItem(46, item(Material.LAVA_BUCKET, Component.text("🔥 Pesca na lava", TextColor.color(0xFF7043), TextDecoration.BOLD), List.of(
+                Component.text("Com a Vara Ígnea, pesque na lava do Nether:", NamedTextColor.GRAY),
+                Component.text("a boia fica por cima e o peixe morde.", NamedTextColor.GRAY),
+                Component.text("Recolha logo depois do estalo de lava.", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("Vara Ígnea: vara de pescar, 2 Cristais", NamedTextColor.DARK_AQUA),
+                Component.text("de Magma e 1 vara de blaze (bancada).", NamedTextColor.DARK_AQUA),
+                Component.text("Também vêm tesouros da lava e cubos de magma.", NamedTextColor.DARK_GRAY)), false));
         inv.setItem(S_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of(), false));
         ItemStack vidro = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
         vidro.editMeta(m -> m.setHideTooltip(true));

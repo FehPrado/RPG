@@ -238,7 +238,7 @@ public final class Duelos implements Listener, CommandExecutor {
     private static int dificuldade(String chave) {
         return switch (chave) {
             case "MENINA_DO_CAIS", "PEIXEIRA", "CARPINTEIRO_NAVAL", "TECELA", "HERBALISTA" -> 0;
-            case "MESTRE", "TAVERNEIRO", "FERREIRO_ANAO" -> 2;
+            case "MESTRE", "TAVERNEIRO", "FERREIRO_ANAO", "FERREIRO_PIGLIN" -> 2;
             default -> 1;
         };
     }

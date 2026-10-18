@@ -234,6 +234,13 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.combate.Aparar aparar;
     private br.rpgatributos.combate.Fraquezas fraquezas;
     private br.rpgatributos.domador.CargaMontada cargaMontada;
+    private br.rpgatributos.pesca.PescaLava pescaLava;
+    private br.rpgatributos.detalhes.Polinizacao polinizacao;
+    private br.rpgatributos.detalhes.Conforto conforto;
+    private br.rpgatributos.detalhes.Elevadores elevadores;
+    private br.rpgatributos.domador.Apito apito;
+    private br.rpgatributos.mundo.CeuEncantado ceuEncantado;
+    private br.rpgatributos.detalhes.Estantes estantes;
     private MercadorItinerante mercador;
     private Encontros encontros;
     private Flechas flechas;
@@ -297,6 +304,13 @@ public final class RPGAtributos extends JavaPlugin {
         aparar = new br.rpgatributos.combate.Aparar(this);
         fraquezas = new br.rpgatributos.combate.Fraquezas(this);
         cargaMontada = new br.rpgatributos.domador.CargaMontada(this);
+        pescaLava = new br.rpgatributos.pesca.PescaLava(this);
+        polinizacao = new br.rpgatributos.detalhes.Polinizacao(this);
+        conforto = new br.rpgatributos.detalhes.Conforto(this);
+        elevadores = new br.rpgatributos.detalhes.Elevadores(this);
+        apito = new br.rpgatributos.domador.Apito(this);
+        ceuEncantado = new br.rpgatributos.mundo.CeuEncantado(this);
+        estantes = new br.rpgatributos.detalhes.Estantes(this);
         tags = new TagManager(this);
         skillListener = new SkillListener(this);
         menus = new MenuManager(this);
@@ -444,7 +458,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, aparar, fraquezas, cargaMontada, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
+                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, aparar, fraquezas, cargaMontada, pescaLava, polinizacao, conforto, elevadores, apito, ceuEncantado, estantes, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -455,6 +469,10 @@ public final class RPGAtributos extends JavaPlugin {
         linhagens.registrarReceitas();
         arsenal.registrarReceitas();
         aparar.registrarReceitas();
+        pescaLava.registrarReceitas();
+        elevadores.registrarReceitas();
+        apito.registrarReceitas();
+        elevadores.iniciar();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
         frascos.registrarReceitas();
@@ -546,6 +564,9 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, skillListener::verificarCorrida, 20L, 20L);
         // Tags: seguem o jogador a cada tick.
         agenda.runTaskTimer(this, tags::tick, 1L, 1L);
+        agenda.runTaskTimer(this, pescaLava::tick, 1L, 1L);
+        agenda.runTaskTimer(this, ceuEncantado::tick, 1L, 1L);
+        agenda.runTaskTimer(this, estantes::tick, 1L, 1L);
         // Efeitos passivos (itens forjados, conjuntos, títulos, núcleos): 1x por segundo.
         efeitos.registrarFonte(titulos::efeitos);
         efeitos.registrarFonte(lendas::efeitos);
@@ -887,6 +908,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Bebedouros bebedouros() { return bebedouros; }
     public br.rpgatributos.vida.Comedouros comedouros() { return comedouros; }
     public br.rpgatributos.pesca.CabanasPesca cabanasPesca() { return cabanasPesca; }
+    public br.rpgatributos.mundo.CeuEncantado ceuEncantado() { return ceuEncantado; }
     public br.rpgatributos.oficio.Oficios oficios() { return oficios; }
     public br.rpgatributos.oficio.Ateliers ateliers() { return ateliers; }
     public br.rpgatributos.mundo.Sonhos sonhos() { return sonhos; }

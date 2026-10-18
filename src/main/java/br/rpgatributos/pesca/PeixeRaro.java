@@ -71,7 +71,20 @@ public enum PeixeRaro {
             c -> c.gelo() && c.nevasca()),
     ESTURJAO_ANCESTRAL("Esturjão Ancestral", Material.COD, 0x546E7A, 0.8, 1, 150,
             "Buraco no gelo, no inverno, de noite. Raríssimo.", "Dá o Caviar Ancestral (Cozinha).",
-            c -> c.gelo() && c.inverno() && c.noite());
+            c -> c.gelo() && c.inverno() && c.noite()),
+    // ---------- 2.56: só na lava do Nether, com a Vara Ígnea (veja PescaLava; na água nunca mordem) ----------
+    PEIXE_BRASA("Peixe-Brasa", Material.COOKED_COD, 0xFF7043, 0.1, 10, 25,
+            "Lava do Nether, em qualquer bioma.", "Ingrediente do Peixe-Brasa na Pedra (Cozinha).",
+            c -> false),
+    ENGUIA_DE_MAGMA("Enguia de Magma", Material.COOKED_SALMON, 0xFF3D00, 0.3, 6, 40,
+            "Lava dos deltas de basalto.", "Ingrediente do Caldo Vulcânico (Cozinha).",
+            c -> false),
+    CARPA_DE_ALMAS("Carpa de Almas", Material.COOKED_COD, 0x4FC3F7, 0.4, 5, 50,
+            "Lava do vale de areia de almas.", "Ingrediente do Ensopado das Almas (Cozinha).",
+            c -> false),
+    SALAMANDRA_DE_LAVA("Salamandra de Lava", Material.COOKED_SALMON, 0xFFD54F, 0.75, 1, 150,
+            "Lava do Nether. Raríssima.", "Coração do Banquete Infernal (Cozinha).",
+            c -> false);
 
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "peixe_raro");
 
@@ -87,7 +100,12 @@ public enum PeixeRaro {
 
     /** Só sai pescando num buraco no gelo. */
     public boolean doGelo() {
-        return ordinal() >= TRUTA_DO_GELO.ordinal();
+        return ordinal() >= TRUTA_DO_GELO.ordinal() && ordinal() <= ESTURJAO_ANCESTRAL.ordinal();
+    }
+
+    /** 2.56: só sai pescando na lava (Vara Ígnea). */
+    public boolean daLava() {
+        return ordinal() >= PEIXE_BRASA.ordinal();
     }
 
     private final String nome;

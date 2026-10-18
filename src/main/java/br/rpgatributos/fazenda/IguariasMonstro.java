@@ -164,6 +164,17 @@ public final class IguariasMonstro implements Listener {
         p.getWorld().playSound(destino, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1.2f);
     }
 
+    /** 2.56: os pratos do Nether acalmam piglins (Espeto de Hoglin) e hoglins/brutos (fungo distorcido). */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void aoMirar(org.bukkit.event.entity.EntityTargetLivingEntityEvent e) {
+        if (!(e.getTarget() instanceof Player p)) return;
+        Entity quem = e.getEntity();
+        boolean calmo = quem instanceof org.bukkit.entity.PiglinBrute || quem instanceof org.bukkit.entity.Hoglin
+                ? tem(p, Prato.Especial.CHEIRO_DISTORCIDO)
+                : quem instanceof org.bukkit.entity.Piglin && tem(p, Prato.Especial.AMIGO_DOS_PIGLINS);
+        if (calmo && e.getReason() != org.bukkit.event.entity.EntityTargetEvent.TargetReason.TARGET_ATTACKED_ENTITY) e.setCancelled(true);
+    }
+
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void aoEfeito(EntityPotionEffectEvent e) {
         if (!(e.getEntity() instanceof Player p) || e.getNewEffect() == null || !tem(p, Prato.Especial.ESTOMAGO_DE_FERRO)) return;

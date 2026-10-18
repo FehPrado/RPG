@@ -1,0 +1,69 @@
+MODELOS AUTORAIS DO RPGATRIBUTOS
+
+EXPANSÃO: 13 NOVOS MODELOS
+Nian, Lobisomem, Vampiro, Coração da Penumbra, Guardião dos Ventos,
+Sumo-Sacerdote e os sete guardiões dos locais ocultos. Geometrias em
+ferramentas/modelos_expansao.py. Total: 91 variantes + 5 Guardiões = 96.
+Prévia da expansão: blockbench/autorais/novos-modelos-13.png.
+
+REVISÃO VISUAL 2 — FANTASIA ELABORADA
+Os 56 visuais de criaturas foram refeitos em ferramentas/modelos_criaturas.py:
+geometria de corpo, mandíbula, patas, caudas, carapaças, penas e equipamentos,
+com atlas de materiais próprios. Os 22 aldeões/personagens aprovados e os cinco
+Guardiões anteriores foram preservados. As raízes de animação são as originais;
+os detalhes novos são submodelos dessas raízes, com conversão de coordenadas
+para acompanhar a mesma articulação (inclusive partes com rotação inicial).
+O teste ferramentas/test_modelos_criaturas.py verifica essa conversão e os
+segmentos usados em presas, galhadas, asas e articulações.
+
+Foram criadas 91 variantes de fantasia voxel, além dos cinco Guardiões já existentes.
+Os 91 pares .jem/.png ficam em src/main/resources/modelos/visual e entram no JAR
+pelo mecanismo já existente de ModelosVisuais. As partes e pivôs de animação das
+bases foram preservados; os acessórios acompanham suas partes. Asas de cavalos são
+adereços geométricos, sem ciclo de voo próprio. A Menina do Cais nasce aldeã bebê:
+o plugin grava o modelo dela como villager_baby, encolhido a 50% a partir do chão
+(as UVs são por face), com a mão do bebê vazia e a camada de bioma do bebê transparente.
+
+ENTREGA LOCAL (blockbench/autorais, pasta ignorada pelo Git)
+- RPGAtributos_EMF_ETF_96.zip: pacote para resourcepacks do cliente. Ative acima
+  do pacote normal do RPG, com EMF e ETF. Usa as regras por nome do próprio plugin.
+- Modelos_RPGAtributos_91.zip: fontes JEM e PNG, NÃO é um resource pack. Extraia
+  em plugins/RPGAtributos/pacote/modelos/ e execute /rpgadmin modelos. Se o pacote
+  é hospedado manualmente, substitua também o ZIP no endereço configurado.
+- catalogo-01.png até catalogo-08.png: prévias das 91 variantes.
+- validacao.json: conceitos, contagem de cubos e resultados estruturais.
+
+As prévias são renderizações ortográficas da geometria exportada em repouso.
+Não simulam poses, animações, camadas de equipamento ou iluminação do Minecraft.
+Nas prévias das aranhas, a abertura neutra das pernas é aproximada pelo renderizador;
+essa pose não é gravada no JEM. O jogo continua responsável pela animação real.
+O teste no Minecraft/EMF/ETF ainda é necessário, incluindo bebês, montarias,
+sela/armadura/coleira, voo, combate e criaturas com mais de um afixo.
+Companheiros renomeados deixam de corresponder às regras, como já ocorria antes.
+
+REGERAR
+1. Python com Pillow e numpy: python ferramentas/gerar_modelos_visuais.py
+   Usa ferramentas/modelos_bases.json; não depende da pasta ignorada preparados.
+   Substitui apenas os 91 recursos autorais e suas prévias. Guarde edições manuais
+   em outra pasta antes de regenerar. Os Guardiões não são alterados pelo script.
+2. Java 25 e Maven: mvn package
+3. Com target/classes e gson.jar no classpath:
+   java -cp "target/classes;CAMINHO/gson.jar" ferramentas/ExportarModelos.java blockbench/autorais/RPGAtributos_EMF_ETF_96.zip
+   O exportador usa ModelosLendarios e ModelosVisuais, inclusive regras ETF,
+   numeração, ajustes de escala dos Guardiões e texturas das camadas de aldeão.
+
+ORIGEM DAS BASES
+Snapshot de geometria dos templates já preparados neste projeto pelo
+ferramentas/PrepararModelos.java (CEM Template Loader / Ewan Howell):
+https://github.com/ewanhowell5195/wynem
+https://raw.githubusercontent.com/ewanhowell5195/wynem/main/src/assets/json/cem_template_models.json
+Nenhuma textura vanilla foi copiada para os 91 PNGs novos: os atlas são desenhados
+pelo gerador, com paletas e materiais próprios. Os cinco Guardiões são os recursos
+preexistentes do projeto.
+Formato CEM: https://github.com/sp614x/optifine/blob/master/OptiFineDoc/doc/cem_part.txt
+
+VERIFICAÇÃO
+O gerador verifica todos os pares, JSON, dimensões, coordenadas finitas, UV dentro
+do atlas, identificadores únicos e preservação de partes/pivôs. Os testes Java
+conferem cobertura dos alvos, dimensões PNG, montagem das regras, ausência de
+colisão com Guardiões e prioridade das edições locais do servidor.

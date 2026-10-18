@@ -91,6 +91,7 @@ public enum Postura {
             case MANGUAL -> "Avalanche";
             case GARRAS -> "Fera Sangrenta";
             case CLAVA -> "Fornalha";
+            case LANCA_BASALTO -> "Vulcão";
         };
     }
 
@@ -115,6 +116,7 @@ public enum Postura {
             case MANGUAL -> "+10% de dano e todo golpe deixa o inimigo muito lento (Lentidão III).";
             case GARRAS -> "+10% de dano e o dobro de roubo de vida.";
             case CLAVA -> "+10% de dano e os golpes sempre queimam, sem gastar turfa.";
+            case LANCA_BASALTO -> "+10% de dano, o fogo dura mais e quem já queima leva +40% (em vez de +25%).";
         };
     }
 

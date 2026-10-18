@@ -135,7 +135,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.55</small></a>
+  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.58</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -158,6 +158,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   <a href="#fe">✧ Fé e mistério</a>
   <a href="#descobertas">🗺 Exploração e campanha</a>
   <a href="#ceu">☁ Céu e Profundezas</a>
+  <a href="#nether">🔥 O Nether</a>
   <a href="#progressao">★ Talentos e renascer</a>
   <a href="#detalhes">♨ Detalhes do dia a dia</a>
   <a href="#vida">🛢 Vida no mundo</a>
@@ -186,7 +187,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <main id="conteudo">
 <div class="hero">
   <div>
-    <p class="rotulo">Guia do Jogador · versão 2.55</p>
+    <p class="rotulo">Guia do Jogador · versão 2.58</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -453,8 +454,9 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Mangual de Gelo</td><td>Cristal de Gelo, corrente e graveto na diagonal</td><td>Cada golpe deixa lento; às vezes congela.</td></tr>
         <tr><td>Garras de Pedra-Sangue</td><td>2 Pedras-Sangue em cima, 3 ferros embaixo</td><td>Muito rápidas e roubam vida.</td></tr>
         <tr><td>Clava Fumegante</td><td>Turfa, tronco e graveto em pé</td><td>Com Turfa no inventário os golpes queimam.</td></tr>
+        <tr><td>Lança de Basalto (2.56)</td><td>Cristal de Magma, basalto polido e vara de blaze na diagonal</td><td>Longa; todo golpe põe fogo e quem queima leva +25%.</td></tr>
       </tbody></table></div>
-      <p>Posturas Mestras: Titã (montante), Vento que Volta (bumerangue), Garça de Jade (leques), Baleeiro (arpão), Avalanche (mangual), Fera Sangrenta (garras) e Fornalha (clava). Bumerangue e Arpão começam os combos com o esquerdo.</p>
+      <p>Posturas Mestras: Titã (montante), Vento que Volta (bumerangue), Garça de Jade (leques), Baleeiro (arpão), Avalanche (mangual), Fera Sangrenta (garras), Fornalha (clava) e Vulcão (lança de basalto). Bumerangue e Arpão começam os combos com o esquerdo.</p>
       <p>Com o pacote de recursos, ficam em 3D na mão. Adaga, faca, machadinha, foice e bastão da bancada têm a lâmina na cor do material.</p>
     </div>
     <div class="card largo"><h3>◆ Incrustar minério</h3>
@@ -475,6 +477,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <tr><td>Mestre do Bastão</td><td>Mosteiro</td><td>Montanha Inabalável (bastão), Vendaval de Pétalas (leques), Serpente-Relâmpago (chicote), Dança das Sombras (adaga), Tempestade Escarlate (duplas)</td></tr>
         <tr><td>Mestre de Guerra</td><td>Anões</td><td>Machados Ancestrais (machado), Sino do Juízo (maça), Céu Partido (montante), Nevasca de Ferro (mangual), Erupção Vulcânica (clava)</td></tr>
         <tr><td>Mestra da Lâmina</td><td>Élfica</td><td>Vento Cortante (espada), Flecha Cometa (arco), Lua de Sangue (foice), Frenesi da Fera (garras)</td></tr>
+        <tr><td>Ferreiro Piglin</td><td>Forja dos Piglins (Nether)</td><td>Coração do Vulcão (Lança de Basalto), pago em 24 lingotes de ouro</td></tr>
       </tbody></table></div>
     </div>
     <div class="card"><h3>🛡 Aparar</h3>
@@ -964,6 +967,50 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     </div>
   </div>
 </section>
+<section class="secao" id="nether">
+  <h2><span class="ico">🔥</span>O Nether</h2>
+  <p class="intro">Desde a 2.56 o Nether tem uma forja de piglins, as ruínas do primeiro portal, três minerais, a Lança de Basalto, pesca na lava e uma cozinha própria.</p>
+  <div class="grade">
+    <div class="card"><h3>⚒ Forja dos Piglins</h3>
+      <p>Nas florestas carmesim e nos ermos. Mora ali o <b>Ferreiro Piglin</b>, um morador como os das vilas, mas que só aceita <b>ouro</b>.</p>
+      <ul>
+        <li><b>Loja:</b> Cristais de Magma, Lança de Basalto, sucata de netherite, pedra-negra dourada; ele compra Âmbar Infernal e Quartzo Negro.</li>
+        <li><b>Técnica secreta</b> da Lança de Basalto: proficiência 12 e 24 lingotes de ouro.</li>
+        <li>Laço com história e duelo de cartas (difícil).</li>
+      </ul>
+    </div>
+    <div class="card"><h3>✦ Primeiro Portal em Ruínas</h3>
+      <p>Uma moldura de obsidiana gigante e partida. Leia o livro no púlpito e clique na <b>pedra que chora</b> no meio do portal: ela solta a relíquia <b>Chave do Primeiro Portal</b> (uma por jogador) e o título Portador da Chave.</p>
+    </div>
+    <div class="card largo"><h3>💎 Minerais do Nether</h3>
+      <div class="tabela"><table><thead><tr><th>Mineral</th><th>Onde</th><th>Incrustado na arma</th></tr></thead><tbody>
+        <tr><td>Cristal de Magma</td><td>Deltas de basalto (e um pouco nos ermos)</td><td>+20% em quem está pegando fogo</td></tr>
+        <tr><td>Âmbar Infernal</td><td>Florestas carmesim e distorcida</td><td>+15% de dano no Nether</td></tr>
+        <tr><td>Quartzo Negro</td><td>Vale de areia de almas</td><td>Golpe crítico (caindo) +25%</td></tr>
+      </tbody></table></div>
+      <p>Saem com picareta de pedra ou melhor. Aparecem também nas partes do Nether já exploradas.</p>
+    </div>
+    <div class="card"><h3>⚶ Lança de Basalto</h3>
+      <p>Cristal de Magma, basalto polido e vara de blaze na diagonal. Longa, <b>todo golpe põe fogo</b> e quem já queima leva +25%. Postura Mestra: <b>Vulcão</b>.</p>
+      <p>Golpes: Estocada de Magma, Muralha de Basalto, Chuva de Cinzas, Salto do Strider, Rio de Lava, Pele de Obsidiana, Lança do Inferno.</p>
+    </div>
+    <div class="card"><h3>🎣 Pesca na lava</h3>
+      <p><b>Vara Ígnea:</b> vara de pescar, 2 Cristais de Magma e 1 vara de blaze. Na lava a boia não afunda; quando a lava <b>estala</b>, recolha logo.</p>
+      <p>Peixe-Brasa, Enguia de Magma (deltas), Carpa de Almas (vale das almas) e a raríssima Salamandra de Lava, além de tesouros e cubos de magma.</p>
+    </div>
+    <div class="card largo"><h3>🍲 Cozinha do Nether</h3>
+      <div class="tabela"><table><thead><tr><th>Prato</th><th>Ingredientes</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Ensopado Carmesim</td><td>2 fungos carmesim, raízes carmesim, tigela</td><td>Força e Resistência ao Fogo</td></tr>
+        <tr><td>Caldo Distorcido</td><td>2 fungos distorcidos, raízes distorcidas, tigela</td><td>Visão noturna; hoglins e piglins brutos não te atacam</td></tr>
+        <tr><td>Espeto de Hoglin</td><td>2 costeletas assadas, fungo carmesim, 4 pepitas de ouro</td><td>Força e Absorção; os piglins te deixam em paz</td></tr>
+        <tr><td>Peixe-Brasa na Pedra</td><td>Peixe-Brasa, creme de magma</td><td>Resistência ao Fogo, Pressa e golpes de fogo</td></tr>
+        <tr><td>Caldo Vulcânico</td><td>Enguia de Magma, 2 verrugas do Nether, tigela</td><td>Força, Resistência e Resistência ao Fogo</td></tr>
+        <tr><td>Ensopado das Almas</td><td>Carpa de Almas, fungo distorcido, tigela</td><td>Velocidade II e visão noturna; hoglins não atacam</td></tr>
+        <tr><td>Banquete Infernal</td><td>Salamandra de Lava, 2 costeletas, cenoura dourada, tigela</td><td>Força, Resistência, Regeneração e Fogo para todos em volta</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
 <section class="secao" id="progressao">
   <h2><span class="ico">★</span>Talentos, renascer e companheiros</h2>
   <div class="grade">
@@ -1000,6 +1047,17 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <section class="secao" id="detalhes">
   <h2><span class="ico">♨</span>Detalhes do dia a dia</h2>
   <div class="grade">
+    <div class="card largo"><h3>🛋 Conforto (2.57)</h3>
+      <ul>
+        <li><b>Colher com clique:</b> clique direito na plantação madura (trigo, cenoura, batata, beterraba, verruga): colhe e já replanta. Agachado, não colhe.</li>
+        <li><b>Ordenar:</b> com a mão vazia, <b>clique direito num espaço vazio</b> do baú, barril ou caixa de shulker: tudo se organiza. No seu inventário, arruma a mochila (a barra de atalhos fica).</li>
+        <li><b>Repor a mão:</b> acabou a pilha (bloco ou comida) ou a ferramenta quebrou: outra igual vem para a mão sozinha.</li>
+        <li><b>Portas duplas</b> abrem juntas (e portões lado a lado). Agachado, abre só uma.</li>
+        <li><b>Elevador:</b> 4 lingotes de ferro em cruz e uma pérola do ender no meio (sai 2). Um acima do outro: <b>pule para subir</b>, <b>agache para descer</b> (até 16 blocos).</li>
+        <li><b>Apito do Domador:</b> bambu, pepita de ferro e linha. Clique direito: seus companheiros e animais domados a até 100 blocos vêm andando até você.</li>
+        <li><b>Placa de boas-vindas:</b> <span class="cmd">/territorio boasvindas &lt;frase&gt;</span>: quem entra no seu território lê a frase.</li>
+      </ul>
+    </div>
     <div class="card"><h3>Mais coisas na Forja</h3>
       <ul>
         <li><b>Barco:</b> isca mais rápida pescando nele e menos dano para quem vai dentro.</li>
@@ -1087,6 +1145,8 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Placa no baú:</b> pregue uma placa num baú ou barril; olhando para ele, a barra mostra o que tem dentro.</li>
         <li><b>Peixes pulando:</b> pesque onde o peixe pulou e às vezes vem um a mais.</li>
         <li><b>Gelo fino:</b> parado no gelo sobre a água, ele racha e quebra. Agache para aguentar.</li>
+        <li><b>Abelhas polinizam (2.56):</b> colmeia ou ninho com abelhas a até 8 blocos faz a plantação crescer mais rápido.</li>
+        <li><b>Estante viva (2.58):</b> olhando um livro na estante entalhada, a barra mostra o título; <b>agachado + clique</b> abre para ler sem tirar.</li>
         <li><b>Novos (2.49):</b> ovelhas de cores misturadas, animais seguem a comida de mais longe, suporte de armadura com braços (todos, até os antigos; agachado + graveto liga e desliga), escadas mais rápidas, lanternas que rangem na chuva e raio que queima árvore e deixa carvão vegetal.</li>
       </ul>
     </div>
@@ -1131,6 +1191,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Tesouros do Mar:</b> esmeraldas, ouro, diamantes, livros, Pérolas Negras, às vezes Mapa Rasgado ou Fragmento.</li>
         <li><b>Criaturas marinhas</b> que lutam: Afogado Faminto, Guardião das Ondas, Capitão Afogado e o Senhor das Marés.</li>
         <li><span class="cmd">/peixes</span>: Diário do Pescador com onde achar cada raro.</li>
+        <li><b>Pesca na lava (2.56):</b> com a Vara Ígnea, pesque na lava do Nether (veja O Nether).</li>
         <li><b>Peso:</b> todo peixe tem peso (ex.: Salmão, 3,2 kg). Os maiores viram recorde seu e do servidor; os enormes viram troféu com o peso escrito.</li>
       </ul>
     </div>
@@ -1569,6 +1630,8 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Clima:</b> nevasca (lentidão), neblina, ventania (desvia flechas), tempestade elétrica (raio em quem segura metal) e onda de calor.</li>
         <li><b>Lua cheia:</b> monstros mais fortes e lobisomens. <b>Lua nova:</b> magias +15% e vampiros.</li>
         <li><b>Lua de Sangue</b>, <b>chuva de meteoros</b> (quebre para pegar minérios), <b>eclipse</b> e <b>aurora</b>.</li>
+        <li><b>Arco-íris (2.58):</b> quando a chuva para de dia, às vezes um arco-íris aparece. Onde a ponta da direita toca o chão brilha o <b>Pote do Arco-Íris</b> por 3 minutos: quem pegar primeiro leva.</li>
+        <li><b>Estrelas cadentes (2.58):</b> nas noites limpas, quando uma estrela passar, <b>agache olhando para o céu</b> em até 6 s: o pedido dá uma bênção até o amanhecer (um por noite).</li>
         <li><b>O Nian</b> 年 (noites de inverno): a fera do fim do ano desce das montanhas. Arma nenhuma o derruba: espante com <b>fogos de artifício</b>, fogo, explosões e <b>chifres de cabra</b>. Quem ajudar ganha Essência Primordial, ouro, esmeraldas e o título Espanta-Nian.</li>
         <li><b>Temperatura:</b> frio na neve e calor no deserto/Nether. Couro, fogueira ou resistência ao fogo protegem.</li>
       </ul>
@@ -1742,7 +1805,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.55 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.58 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

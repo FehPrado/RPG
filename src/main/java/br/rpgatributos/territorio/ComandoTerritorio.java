@@ -20,7 +20,7 @@ import java.util.UUID;
 /** /territorio: menu, mapa, bordas, reivindicar, liberar, membros, abandonar. */
 public final class ComandoTerritorio implements TabExecutor {
 
-    private static final List<String> SUBS = List.of("mapa", "bordas", "info", "reivindicar", "liberar",
+    private static final List<String> SUBS = List.of("mapa", "bordas", "info", "reivindicar", "liberar", "boasvindas",
             "adicionar", "remover", "abandonar");
 
     private final RPGAtributos plugin;
@@ -93,6 +93,25 @@ public final class ComandoTerritorio implements TabExecutor {
                     p.sendMessage(Component.text("⚑ " + args[1] + " não é mais membro.", NamedTextColor.GRAY));
                 }
             }
+            case "boasvindas", "placa" -> {
+                if (meu == null) { erro(p, "Você não tem território."); return true; }
+                if (args.length < 2) {
+                    erro(p, "Use: /territorio boasvindas <frase>  (ou: /territorio boasvindas apagar)");
+                    if (meu.boasVindas() != null) p.sendMessage(Component.text("Agora: “" + meu.boasVindas() + "”", NamedTextColor.GRAY));
+                    return true;
+                }
+                String frase = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length)).trim();
+                if (frase.equalsIgnoreCase("apagar")) {
+                    meu.boasVindas(null);
+                    ter().salvar();
+                    p.sendMessage(Component.text("⚑ Placa de boas-vindas apagada.", NamedTextColor.GRAY));
+                    return true;
+                }
+                if (frase.length() > 60) { erro(p, "No máximo 60 letras (essa tem " + frase.length() + ")."); return true; }
+                meu.boasVindas(frase);
+                ter().salvar();
+                p.sendMessage(Component.text("⚑ Quem entrar no seu território vai ler: “" + frase + "”", Territorios.COR));
+            }
             case "abandonar" -> {
                 if (meu == null) { erro(p, "Você não tem território."); return true; }
                 if (args.length < 2 || !args[1].equalsIgnoreCase("confirmar")) {
@@ -108,6 +127,7 @@ public final class ComandoTerritorio implements TabExecutor {
                     /territorio info  (de quem é este chunk)
                     /territorio reivindicar | liberar  (o chunk onde você está)
                     /territorio adicionar | remover <nick>
+                    /territorio boasvindas <frase>  (o que aparece para quem entra; "apagar" tira)
                     /territorio abandonar confirmar""", NamedTextColor.YELLOW));
         }
         return true;

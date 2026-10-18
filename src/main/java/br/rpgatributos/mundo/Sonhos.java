@@ -137,6 +137,8 @@ public final class Sonhos implements Listener {
             case MOSTEIRO -> "Um sino tocando entre as montanhas, e um velho de olhos fechados te chamando para treinar.";
             case ALDEIA_ANOES -> "Um salão de pedra cheio de risadas graves, cerveja e o som de um martelo na bigorna.";
             case VILA_ELFICA -> "Duas árvores enormes, uma rosa e uma verde, e alguém tecendo debaixo delas.";
+            case FORJA_PIGLIN -> "Ouro derretendo atrás de uma grade, e um piglin que batia na bigorna cantando.";
+            case PRIMEIRO_PORTAL -> "Uma moldura de obsidiana partida no meio do calor, e uma pedra que chorava o seu nome.";
         };
     }
 

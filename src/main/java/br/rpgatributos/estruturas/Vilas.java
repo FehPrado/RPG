@@ -248,7 +248,18 @@ public final class Vilas implements Listener {
                         "dançar uma última vez a dança das espadas sob a lua", "uma cicatriz que ela diz ser de um dragão",
                         "um arco élfico forjado", "Ele escolhe o alvo antes de você. Confie nele.",
                         new Material[]{Material.ARROW, Material.GLOW_BERRIES}),
-                "A lâmina é a extensão do pensamento.", "Leve. Mais leve. Assim.", "Quem dança não tropeça.", "O arco não perdoa um coração agitado.");
+                "A lâmina é a extensão do pensamento.", "Leve. Mais leve. Assim.", "Quem dança não tropeça.", "O arco não perdoa um coração agitado."),
+
+        // ---------- 2.56: o Nether (a NPC é um piglin; paga-se em ouro) ----------
+        FERREIRO_PIGLIN(Estrutura.FORJA_PIGLIN, "Ferreiro Piglin", new String[]{"Grunk", "Zogrul", "Barrok", "Tuska"},
+                null, null, 1, Ruinas.FERREIRO_PIGLIN,
+                "Troca ouro por peças do Nether e ensina a técnica da Lança de Basalto.",
+                "Ensinar a técnica secreta da Lança de Basalto (proficiência 12 e 24 lingotes de ouro).",
+                new Lacos.Historia("um bastião que caiu quando os hoglins fugiram", "de que o ouro do mundo de cima acabe um dia",
+                        "forjar uma coroa digna do primeiro ferreiro", "o martelo dele é feito de um pedaço do Primeiro Portal",
+                        "uma Lança de Basalto forjada", "Quente ainda. Segure pelo cabo, humano. Pelo cabo!",
+                        new Material[]{Material.GOLD_INGOT, Material.COOKED_PORKCHOP}),
+                "Ouro primeiro. Conversa depois.", "Humano com ouro é humano amigo.", "A lava canta quando o metal está pronto.", "Grunf! Esse basalto é dos bons.");
 
         /** 2.54: as armas cujas técnicas secretas o mestre ensina (vazio = não é mestre). */
         public java.util.List<br.rpgatributos.combo.TipoArma> armas() {
@@ -261,6 +272,7 @@ public final class Vilas implements Listener {
                         br.rpgatributos.combo.TipoArma.MONTANTE, br.rpgatributos.combo.TipoArma.MANGUAL, br.rpgatributos.combo.TipoArma.CLAVA);
                 case MESTRA_ELFICA -> java.util.List.of(br.rpgatributos.combo.TipoArma.ESPADA, br.rpgatributos.combo.TipoArma.ARCO,
                         br.rpgatributos.combo.TipoArma.FOICE, br.rpgatributos.combo.TipoArma.GARRAS);
+                case FERREIRO_PIGLIN -> java.util.List.of(br.rpgatributos.combo.TipoArma.LANCA_BASALTO);
                 default -> java.util.List.of();
             };
         }
@@ -291,6 +303,11 @@ public final class Vilas implements Listener {
 
         String nome(Sitio s) {
             return titulo + " " + nomes[Math.floorMod((s.id + name()).hashCode(), nomes.length)];
+        }
+
+        /** 2.56: a NPC é um piglin (sem profissão de aldeão; preços em ouro). */
+        boolean piglin() {
+            return profissao == null;
         }
 
         static List<Papel> da(Estrutura e) {
@@ -344,6 +361,24 @@ public final class Vilas implements Listener {
     private Entity nascer(Sitio s, Papel papel, Location onde) {
         BlockFace frente = new Obra(onde.getWorld(), s.x, s.y, s.z, s.rot, null).face(BlockFace.SOUTH);
         onde.setDirection(frente.getDirection());
+        if (papel.piglin()) {
+            // 2.56: o Ferreiro Piglin (não vira zumbi no mundo de cima; a loja dele é à parte, em ouro).
+            return onde.getWorld().spawn(onde, org.bukkit.entity.Piglin.class, m -> {
+                m.customName(Component.text(papel.nome(s), s.tipo.cor()));
+                m.setCustomNameVisible(true);
+                m.setAI(false);
+                m.setInvulnerable(true);
+                m.setPersistent(true);
+                m.setRemoveWhenFarAway(false);
+                m.setImmuneToZombification(true);
+                m.setAdult();
+                m.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_AXE));
+                m.getEquipment().setItemInMainHandDropChance(0);
+                m.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
+                m.getEquipment().setHelmetDropChance(0);
+                m.getPersistentDataContainer().set(K_NPC, PersistentDataType.STRING, s.id + ":" + papel.name());
+            });
+        }
         Villager v = onde.getWorld().spawn(onde, Villager.class, m -> {
             m.customName(Component.text(papel.nome(s), s.tipo.cor()));
             m.setCustomNameVisible(true);
@@ -361,6 +396,22 @@ public final class Vilas implements Listener {
         });
         renovarLoja(s, papel, v);
         return v;
+    }
+
+    /** 2.56: a loja do piglin (não é aldeão): uma por forja, refeita a cada dia. */
+    private final Map<String, org.bukkit.inventory.Merchant> lojasPiglin = new HashMap<>();
+    private final Map<String, Long> diaLojaPiglin = new HashMap<>();
+
+    private org.bukkit.inventory.Merchant lojaPiglin(Sitio s, Papel papel, Entity npc) {
+        String chave = s.id + ":" + papel.name();
+        org.bukkit.inventory.Merchant m = lojasPiglin.get(chave);
+        if (m == null || diaLojaPiglin.getOrDefault(chave, -1L) != hoje()) {
+            m = Bukkit.createMerchant(Component.text(papel.nome(s), s.tipo.cor()));
+            m.setRecipes(ofertas(s, papel, npc.getLocation()));
+            lojasPiglin.put(chave, m);
+            diaLojaPiglin.put(chave, hoje());
+        }
+        return m;
     }
 
     /** As ofertas mudam a cada dia (sempre as mesmas no mesmo dia). */
@@ -504,6 +555,18 @@ public final class Vilas implements Listener {
                 l.add(vende(new ItemStack(Material.GLOW_BERRIES, 8), 1, 4));
                 l.add(vende(new ItemStack(Material.HONEY_BOTTLE, 3), 2, 4));
             }
+            case FERREIRO_PIGLIN -> {
+                // Tudo em lingotes de ouro: o piglin vende peças do Nether e compra os minerais de lá.
+                l.add(new Oferta(Raro.CRISTAL_DE_MAGMA.criar(2), new ItemStack(Material.GOLD_INGOT, 10), 3));
+                l.add(new Oferta(br.rpgatributos.combo.Arsenal.criar(br.rpgatributos.combo.Arsenal.Arma.LANCA_BASALTO,
+                        br.rpgatributos.combo.Arsenal.Arma.LANCA_BASALTO.base), new ItemStack(Material.GOLD_INGOT, 32), 1));
+                l.add(new Oferta(new ItemStack(Material.NETHERITE_SCRAP), new ItemStack(Material.GOLD_INGOT, 24), 1));
+                l.add(new Oferta(new ItemStack(Material.GILDED_BLACKSTONE, 4), new ItemStack(Material.GOLD_INGOT, 6), 3));
+                l.add(new Oferta(new ItemStack(Material.SOUL_LANTERN, 3), new ItemStack(Material.GOLD_INGOT, 4), 3));
+                l.add(new Oferta(new ItemStack(Material.GOLD_INGOT, 6), Raro.AMBAR_INFERNAL.criar(1), 6));
+                l.add(new Oferta(new ItemStack(Material.GOLD_INGOT, 8), Raro.QUARTZO_NEGRO.criar(1), 6));
+                if (r.nextBoolean()) l.add(new Oferta(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE), new ItemStack(Material.GOLD_INGOT, 40), 1));
+            }
             case TECELA -> {
                 Material[] laas = {Material.LIME_WOOL, Material.GREEN_WOOL, Material.PINK_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL};
                 l.add(vende(new ItemStack(laas[r.nextInt(laas.length)], 16), 2, 4));
@@ -587,9 +650,10 @@ public final class Vilas implements Listener {
                 Component.text("\"" + papel.falas[new Random(hoje() + papel.ordinal()).nextInt(papel.falas.length)] + "\"", COR))));
         t.inv.setItem(M_LACO, item(Material.POPPY, Component.text("♥ Laço com " + papel.nome(s), TextColor.color(0xFF8FA8), TextDecoration.BOLD),
                 plugin.lacos().descricao(p, alvo(p, s, papel, npc), papel.servico != null ? "Usar o serviço dele: +1 (uma vez por dia)" : null)));
-        if (npc instanceof Villager v && !v.getRecipes().isEmpty()) {
-            t.inv.setItem(M_LOJA, item(Material.EMERALD, Component.text("Loja", NamedTextColor.GREEN, TextDecoration.BOLD), List.of(
-                    Component.text("As ofertas mudam a cada dia.", NamedTextColor.GRAY),
+        if (npc instanceof Villager v && !v.getRecipes().isEmpty() || papel.piglin()) {
+            t.inv.setItem(M_LOJA, item(papel.piglin() ? Material.GOLD_INGOT : Material.EMERALD,
+                    Component.text("Loja", NamedTextColor.GREEN, TextDecoration.BOLD), List.of(
+                    Component.text(papel.piglin() ? "Só aceita ouro. As ofertas mudam a cada dia." : "As ofertas mudam a cada dia.", NamedTextColor.GRAY),
                     Component.empty(),
                     Component.text("» Clique para abrir", NamedTextColor.YELLOW))));
         }
@@ -607,7 +671,7 @@ public final class Vilas implements Listener {
                 Component.empty(),
                 Component.text("» Clique para duelar", NamedTextColor.YELLOW))));
         p.openInventory(t.inv);
-        p.playSound(npc.getLocation(), Sound.ENTITY_VILLAGER_AMBIENT, 1f, papel.escala < 1 ? 0.8f : 1.1f);
+        p.playSound(npc.getLocation(), papel.piglin() ? Sound.ENTITY_PIGLIN_AMBIENT : Sound.ENTITY_VILLAGER_AMBIENT, 1f, papel.escala < 1 ? 0.8f : 1.1f);
     }
 
     private static ItemStack item(Material m, Component nome, List<Component> lore) {
@@ -642,6 +706,7 @@ public final class Vilas implements Listener {
             }
             case M_LOJA -> {
                 if (npc instanceof Villager v && !v.getRecipes().isEmpty()) p.openMerchant(v, true);
+                else if (t.papel.piglin()) p.openMerchant(lojaPiglin(t.sitio, t.papel, npc), true);
             }
             case M_SERVICO -> {
                 if (t.papel.servico == null) return;
@@ -712,7 +777,7 @@ public final class Vilas implements Listener {
             } else {
                 lore.add(Component.text((prof >= TECNICA_PROFICIENCIA ? "✔" : "✖") + " Proficiência " + TECNICA_PROFICIENCIA + " (você: " + prof + ")",
                         prof >= TECNICA_PROFICIENCIA ? NamedTextColor.GREEN : NamedTextColor.RED));
-                lore.add(Component.text("Custa " + TECNICA_CUSTO + " esmeraldas", NamedTextColor.WHITE));
+                lore.add(Component.text("Custa " + TECNICA_CUSTO + (papel.piglin() ? " lingotes de ouro" : " esmeraldas"), NamedTextColor.WHITE));
                 lore.add(Component.text("» Clique para aprender", NamedTextColor.YELLOW));
             }
             t.inv.setItem(slots[i], item(g.icone(), Component.text("✪ " + g.nome(), NamedTextColor.AQUA, TextDecoration.BOLD), lore));
@@ -742,7 +807,7 @@ public final class Vilas implements Listener {
             p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.6f, 0.6f);
             return;
         }
-        if (!pagar(p, TECNICA_CUSTO)) return;
+        if (!(t.papel.piglin() ? pagarOuro(p, TECNICA_CUSTO) : pagar(p, TECNICA_CUSTO))) return;
         plugin.combos().ensinar(p, g);
         plugin.lacos().somar(p, alvo(p, t.sitio, t.papel, npc), 2);
         plugin.titulos().registrar(p, "tecnicas", 1);
@@ -757,6 +822,16 @@ public final class Vilas implements Listener {
     @EventHandler
     public void aoArrastarTecnica(InventoryDragEvent e) {
         if (e.getInventory().getHolder() instanceof TelaTecnicas) e.setCancelled(true);
+    }
+
+    /** 2.56: o Ferreiro Piglin só aceita ouro. */
+    private static boolean pagarOuro(Player p, int lingotes) {
+        if (!p.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), lingotes)) {
+            p.sendActionBar(Component.text("✖ Precisa de " + lingotes + " lingotes de ouro.", NamedTextColor.RED));
+            return false;
+        }
+        p.getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, lingotes));
+        return true;
     }
 
     private static boolean pagar(Player p, int esmeraldas) {
@@ -916,6 +991,8 @@ public final class Vilas implements Listener {
             case MESTRE_DO_BASTAO -> plugin.forja().forjar(null, br.rpgatributos.combo.Arsenal.criar(br.rpgatributos.combo.Arsenal.Arma.BASTAO, Material.DIAMOND_SWORD), Raridade.EPICO);
             case MESTRE_DE_GUERRA_ANAO -> plugin.forja().forjar(null, new ItemStack(Material.MACE), Raridade.EPICO);
             case MESTRA_ELFICA -> plugin.forja().forjar(null, new ItemStack(Material.BOW), Raridade.EPICO);
+            case FERREIRO_PIGLIN -> plugin.forja().forjar(null, br.rpgatributos.combo.Arsenal.criar(br.rpgatributos.combo.Arsenal.Arma.LANCA_BASALTO,
+                    br.rpgatributos.combo.Arsenal.Arma.LANCA_BASALTO.base), Raridade.EPICO);
         };
     }
 

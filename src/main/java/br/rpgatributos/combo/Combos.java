@@ -66,7 +66,7 @@ public final class Combos implements Listener, CommandExecutor {
     public static final TextColor COR = TextColor.color(0xFFB74D);
     public static final int NIVEL_MAXIMO = 20;
     private static final int S_INFO = 8, S_NIVEL = 13, S_POSTURA = 47, S_FECHAR = 49;
-    private static final int[] S_ABAS = {0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14, 15, 16, 17, 50, 51, 52};
+    private static final int[] S_ABAS = {0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14, 15, 16, 17, 50, 51, 52, 53};
     private static final int[] S_ESPACOS = {19, 21, 23, 25};
     private static final int[] S_GOLPES = {37, 38, 39, 40, 41, 42, 43};
     private static final int[] S_EXTRAS = {28, 29, 30, 31, 32, 33, 34};

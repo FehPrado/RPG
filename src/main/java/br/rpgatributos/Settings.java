@@ -48,6 +48,8 @@ public final class Settings {
     /** Plantações da estação: as fora de época murcham quando a estação troca (menos na estufa); gigantes 3×3. */
     public final boolean plantasMurcham, colheitasGigantes;
     public final double cliChanceEvento, ceuChanceSangue, ceuChanceMeteoros, ceuChanceEclipse, ceuChanceAurora, malChanceMordida;
+    public final boolean ceuArcoIris, ceuEstrelas, vanillaEstantes;
+    public final double ceuArcoIrisChance, ceuEstrelasPorMinuto;
     public final double gueTesouroVencedor;
 
     // portais, sombras e torre (Fase C)
@@ -104,7 +106,8 @@ public final class Settings {
     public final double ilhaChance;
     public final boolean profAtivadas, constelacoesAtivadas;
     public final boolean vanillaMudas, vanillaGalhos, vanillaCabecas, vanillaPlacaBau, vanillaPeixes, vanillaGeloFino;
-    public final boolean vanillaOvelhas, vanillaFila, vanillaSuporte, vanillaEscadas, vanillaLanternas, vanillaRaio;
+    public final boolean vanillaOvelhas, vanillaFila, vanillaSuporte, vanillaEscadas, vanillaLanternas, vanillaRaio, vanillaAbelhas;
+    public final boolean confColher, confOrdenar, confRepor, confPortas, confElevadores, confApito;
     public final double vanillaCabecaChance;
     public final int profAltura, profPenumbraMaxima;
     public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
@@ -280,6 +283,11 @@ public final class Settings {
         cliChanceEvento = c.getDouble("mundo-vivo.chance-evento-de-clima", 0.08);
         ceuChanceSangue = c.getDouble("mundo-vivo.chance-lua-de-sangue", 0.2);
         ceuChanceMeteoros = c.getDouble("mundo-vivo.chance-chuva-de-meteoros", 0.06);
+        ceuArcoIris = c.getBoolean("mundo-vivo.arco-iris", true);
+        ceuArcoIrisChance = Math.max(0, Math.min(1, c.getDouble("mundo-vivo.chance-arco-iris", 0.4)));
+        ceuEstrelas = c.getBoolean("mundo-vivo.estrelas-cadentes", true);
+        ceuEstrelasPorMinuto = Math.max(0, c.getDouble("mundo-vivo.estrelas-cadentes-por-minuto", 0.25));
+        vanillaEstantes = c.getBoolean("vanilla-mais.estante-viva", true);
         ceuChanceEclipse = c.getDouble("mundo-vivo.chance-eclipse", 0.02);
         ceuChanceAurora = c.getDouble("mundo-vivo.chance-aurora-no-inverno", 0.25);
         malChanceMordida = c.getDouble("mundo-vivo.chance-mordida-amaldicoar", 0.2);
@@ -391,6 +399,13 @@ public final class Settings {
         vanillaEscadas = c.getBoolean("vanilla-mais.escadas-mais-rapidas", true);
         vanillaLanternas = c.getBoolean("vanilla-mais.lanternas-rangem-na-chuva", true);
         vanillaRaio = c.getBoolean("vanilla-mais.raio-queima-arvore", true);
+        vanillaAbelhas = c.getBoolean("vanilla-mais.abelhas-polinizam", true);
+        confColher = c.getBoolean("conforto.colher-com-clique", true);
+        confOrdenar = c.getBoolean("conforto.ordenar-com-clique", true);
+        confRepor = c.getBoolean("conforto.repor-a-mao", true);
+        confPortas = c.getBoolean("conforto.portas-duplas", true);
+        confElevadores = c.getBoolean("conforto.elevadores", true);
+        confApito = c.getBoolean("conforto.apito", true);
         profAltura = c.getInt("profundezas.abaixo-de-y", 0);
         profPenumbraMaxima = Math.max(1, Math.min(9, c.getInt("profundezas.penumbra-maxima", 5)));
         profChanceRaiz = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-raiz-por-chunk", 0.1)));

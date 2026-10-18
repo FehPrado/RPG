@@ -318,6 +318,22 @@ public enum Golpe {
     ERUPCAO(TipoArma.CLAVA, 20, "Erupção", 50, 25, Material.MAGMA_BLOCK,
             "Salta e cai como um vulcão: explosão de fogo em 5 blocos."),
 
+    // ---------------- 2.56: Lança de Basalto (minério do Nether) ----------------
+    ESTOCADA_DE_MAGMA(TipoArma.LANCA_BASALTO, 1, "Estocada de Magma", 12, 3, Material.MAGMA_CREAM,
+            "Estocada longa (5 blocos) que põe fogo no primeiro inimigo."),
+    MURALHA_DE_BASALTO(TipoArma.LANCA_BASALTO, 3, "Muralha de Basalto", 15, 8, Material.POLISHED_BASALT,
+            "Finca a lança: empurra quem está à frente e dá Resistência por 3 s."),
+    CHUVA_DE_CINZAS(TipoArma.LANCA_BASALTO, 5, "Chuva de Cinzas", 20, 8, Material.GRAY_DYE,
+            "Gira a lança: cinzas cegam e queimam quem estiver em volta."),
+    SALTO_DO_STRIDER(TipoArma.LANCA_BASALTO, 8, "Salto do Strider", 20, 8, Material.WARPED_FUNGUS_ON_A_STICK,
+            "Salta para a frente e cai com a ponta: dano e fogo onde pousa."),
+    RIO_DE_LAVA(TipoArma.LANCA_BASALTO, 12, "Rio de Lava", 30, 12, Material.LAVA_BUCKET,
+            "Arrasta a lança no chão: uma linha de fogo de 10 blocos."),
+    PELE_DE_OBSIDIANA(TipoArma.LANCA_BASALTO, 16, "Pele de Obsidiana", 30, 16, Material.OBSIDIAN,
+            "Por 6 s: Resistência II e Resistência ao Fogo; quem te bate pega fogo."),
+    LANCA_DO_INFERNO(TipoArma.LANCA_BASALTO, 20, "Lança do Inferno", 50, 25, Material.BLAZE_ROD,
+            "Arremessa a lança em chamas: atravessa 15 blocos e explode no fim."),
+
     // ---------------- 2.54: técnicas secretas (uma por arma, ensinadas pelos Mestres de Armas nas vilas) ----------------
     VENTO_CORTANTE(TipoArma.ESPADA, "Vento Cortante", 35, 14, Material.WIND_CHARGE,
             "Técnica secreta: um corte que vira uma lâmina de vento de 12 blocos.", true),
@@ -357,6 +373,8 @@ public enum Golpe {
             "Técnica secreta: dez garradas rápidas no alvo, roubando vida.", true),
     ERUPCAO_VULCANICA(TipoArma.CLAVA, "Erupção Vulcânica", 45, 18, Material.MAGMA_BLOCK,
             "Técnica secreta: bate no chão e pilares de fogo sobem em volta.", true),
+    CORACAO_DO_VULCAO(TipoArma.LANCA_BASALTO, "Coração do Vulcão", 45, 20, Material.RESPAWN_ANCHOR,
+            "Técnica secreta: finca a lança e o chão vira magma em 6 blocos por 4 s, queimando e prendendo quem pisa.", true),
 
     // ---------------- Lendas (com a lenda na mão; armaduras e a picareta: carregando) ----------------
     PURIFICACAO_SAGRADA(Lenda.LAMINA_DO_EXORCISTA, "Purificação Sagrada", 40, 18, Material.TOTEM_OF_UNDYING,

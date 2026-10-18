@@ -272,7 +272,7 @@ public final class Posturas implements Listener, CommandExecutor {
             case TRIDENTE -> naChuvaOuAgua(p) ? 1.30 : 1;
             case MACA -> 1.10;
             case ARCO -> System.currentTimeMillis() - ultimoPasso.getOrDefault(p.getUniqueId(), 0L) >= 1000 ? 1.35 : 1;
-            case ADAGA, FOICE, CHICOTE, LEQUES, MANGUAL, GARRAS, CLAVA -> 1.10;
+            case ADAGA, FOICE, CHICOTE, LEQUES, MANGUAL, GARRAS, CLAVA, LANCA_BASALTO -> 1.10;
             case MONTANTE -> 1.20;
             case BUMERANGUE, ARPAO -> 1;
             case DUPLAS -> 1.05;

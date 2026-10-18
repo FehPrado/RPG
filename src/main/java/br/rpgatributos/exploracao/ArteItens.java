@@ -255,6 +255,15 @@ final class ArteItens {
                 c('o', 0xFF3A2A60, 'd', 0xFF7E6AB0, 'm', 0xFFB39DDB, 'h', 0xFFEDE7F6, 'w', BRANCO, 'k', PRETO, 'a', BRANCO)));
         l.add(new Arte("cod", "peixe_esturjao_ancestral", PEIXE_COROA,
                 c('o', 0xFF1C262B, 'd', 0xFF37474F, 'm', 0xFF546E7A, 'h', 0xFF90A4AE, 'w', BRANCO, 'k', PRETO, 'c', 0xFFB0BEC5)));
+        // 2.56: os peixes da lava (pescados com a Vara Ígnea).
+        l.add(new Arte("cooked_cod", "peixe_peixe_brasa", PEIXE_PINTADO,
+                c('o', 0xFF3A0A00, 'd', 0xFF8A2A0A, 'm', 0xFFFF7043, 'h', 0xFFFFC08A, 'w', 0xFFFFF0A0, 'k', PRETO, 'a', 0xFF2A1A14)));
+        l.add(new Arte("cooked_salmon", "peixe_enguia_de_magma", ENGUIA,
+                c('o', 0xFF2A0A00, 'd', 0xFFA02000, 'm', 0xFFFF3D00, 'h', 0xFFFFA040, 'w', 0xFFFFE08A, 'k', PRETO, 'a', 0xFFFFD27F)));
+        l.add(new Arte("cooked_cod", "peixe_carpa_de_almas", PEIXE_LISTRADO,
+                c('o', 0xFF1A2A3A, 'd', 0xFF3A5A6A, 'm', 0xFF4FC3F7, 'h', 0xFFB3ECFF, 'w', BRANCO, 'k', PRETO, 'a', 0xFF6D4C41)));
+        l.add(new Arte("cooked_salmon", "peixe_salamandra_de_lava", PEIXE_DRAGAO,
+                c('o', 0xFF5A2A00, 'd', 0xFFC06A00, 'm', 0xFFFFD54F, 'h', 0xFFFFF59D, 'w', BRANCO, 'k', PRETO, 'a', 0xFFFF3D00)));
     }
 
     // =====================================================================
@@ -520,6 +529,21 @@ final class ArteItens {
                 c('o', 0xFF2A3A4A, 'm', 0xFFA8D8F0, 'h', 0xFFE0F4FF, 'k', 0xFF1E3A1E, 'w', 0xFFF8F8F0, 'a', 0xFF7FD6FF)));
         l.add(new Arte("pumpkin_pie", "prato_pudim_do_fim", TORTA, com(CROSTA, 'c', 0xFF7B3FA0, 'a', 0xFFE8D8FF)));
         l.add(new Arte("cookie", "prato_lagrima_caramelizada", BISCOITO, com(MASSA, 'm', 0xFFE0A050, 'h', 0xFFF8F0E0, 'a', 0xFFBFE9FF)));
+        // 2.56: a cozinha do Nether.
+        l.add(new Arte("mushroom_stew", "prato_ensopado_carmesim", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFB0102A, 'a', 0xFFFF5A6A, 'b', 0xFFFFB300)));
+        l.add(new Arte("beetroot_soup", "prato_caldo_distorcido", TIGELA_FRIA,
+                com(TIGELA_MADEIRA, 'c', 0xFF14A08C, 'a', 0xFF7FFFE0, 'b', 0xFFB0102A)));
+        l.add(new Arte("cooked_beef", "prato_espeto_de_hoglin", CARNE,
+                c('o', 0xFF3A1A0A, 'd', 0xFF7A3A2A, 'm', 0xFFC06A50, 'h', 0xFFF0B090, 'a', 0xFF5A2A10, 'w', 0xFFFFD54F)));
+        l.add(new Arte("cooked_cod", "prato_peixe_brasa_na_pedra", FILE,
+                c('o', 0xFF2A1A14, 'd', 0xFF8A2A0A, 'm', 0xFFFF7043, 'h', 0xFFFFC08A, 'w', 0xFF4A4A4E, 'a', 0xFFFFD27F, 'k', 0xFF3C3C40)));
+        l.add(new Arte("rabbit_stew", "prato_caldo_vulcanico", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFE64A19, 'a', 0xFFFFD27F, 'b', 0xFF8A0A1E)));
+        l.add(new Arte("mushroom_stew", "prato_ensopado_das_almas", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFF4FC3F7, 'a', 0xFFB3ECFF, 'b', 0xFF5D4037)));
+        l.add(new Arte("suspicious_stew", "prato_banquete_infernal", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFFF7043, 'a', 0xFFFFD54F, 'b', 0xFFB0102A)));
     }
 
     // =====================================================================
@@ -1241,6 +1265,13 @@ final class ArteItens {
                 c('o', 0xFF2E6E94, 'd', 0xFF6FB6DE, 'm', 0xFFA8E4FF, 'h', 0xFFE6F7FF, 'w', BRANCO, 'a', 0xFFE6F7FF)));
         l.add(new Arte("nether_brick", "raro_pedra_sangue", GEMA_BRUTA,
                 c('p', 0xFF6E2A2A, 'q', 0xFF3E1414, 'w', 0xFFFF9AA8, 'o', 0xFF3A0008, 'd', 0xFF7A0A1E, 'm', 0xFFB0102A, 'h', 0xFFFF4D6A, 'a', 0xFFFFD0D8)));
+        // 2.56: minerais do Nether.
+        l.add(new Arte("magma_cream", "raro_cristal_de_magma", CRISTAL,
+                c('o', 0xFF3A0A00, 'd', 0xFFC2410C, 'm', 0xFFFF7A1F, 'h', 0xFFFFD27F, 'w', 0xFFFFF4D6, 'a', 0xFFFF9A4A)));
+        l.add(new Arte("glowstone_dust", "raro_ambar_infernal", GEMA_LAPIDADA,
+                c('o', 0xFF4A1A00, 'd', 0xFFB85A0E, 'm', 0xFFFF9A1F, 'h', 0xFFFFE08A, 'w', 0xFFFFF4D6)));
+        l.add(new Arte("quartz", "raro_quartzo_negro", GEMA_BRUTA,
+                c('p', 0xFF2E2840, 'q', 0xFF14101E, 'w', 0xFFE6DEFF, 'o', 0xFF0A0810, 'd', 0xFF2E2840, 'm', 0xFF4A4060, 'h', 0xFF9A8CC0, 'a', 0xFFE6DEFF)));
         l.add(new Arte("coal", "turfa", FRAGMENTO,
                 c('o', 0xFF1E140C, 'd', 0xFF3A2816, 'm', 0xFF5A4026, 'h', 0xFF7A5A36, 'a', 0xFF6B8E3A)));
         l.add(new Arte("brush", "cinzel", CINZEL,
@@ -1747,6 +1778,44 @@ final class ArteItens {
             ".khhhhhhaabbbkk.",
             "..kkkkkkbbkkk...",
             "........kk......"};
+
+    /** 2.57: Apito do Domador (bambu com um furo e cordão). */
+    private static final String[] APITO = {
+            "................",
+            "................",
+            "................",
+            "..........sss...",
+            ".........s...s..",
+            ".........s...s..",
+            "..kkkkkkkkkkks..",
+            ".kgggggkgggggk..",
+            ".khhhhhkkhhhhk..",
+            ".kgggggggggggk..",
+            "..kkkkkkkkkkk...",
+            "................",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    /** 2.56: Lança de Basalto (ponta de Cristal de Magma, cabo de basalto, ponta de baixo de vara de blaze). */
+    private static final String[] ARMA_LANCA_BASALTO = {
+            "............kkkk",
+            "...........kyaak",
+            "..........kyxxak",
+            "..........kxxyk.",
+            ".........kkxyk..",
+            "........kbkkk...",
+            ".......kbhk.....",
+            "......khgk......",
+            ".....khgk.......",
+            "....khgk........",
+            "...khgk.........",
+            "..khgk..........",
+            ".krrk...........",
+            "krrk............",
+            "rrk.............",
+            "kk.............."};
 
     private static final String[] ARMA_CLAVA = {
             "................",
@@ -2260,6 +2329,9 @@ final class ArteItens {
         l.add(new Arte("iron_sword", "arma_mangual", ARMA_MANGUAL, c('k', 0xFF1E2832, 'h', 0xFF5D4037, 'g', 0xFF8D6E63, 'b', 0xFF8C8C96, 'x', 0xFFA8E4FF, 'y', 0xFF64B4E6, 'a', 0xFFF0FAFF), true));
         l.add(new Arte("iron_sword", "arma_garras", ARMA_GARRAS, c('k', 0xFF1E0A0A, 'h', 0xFF4E342E, 'g', 0xFF8D5A2B, 'x', 0xFFB0102A, 'a', 0xFFECEFF1, 'b', 0xFF9696A0), true));
         l.add(new Arte("iron_sword", "arma_clava", ARMA_CLAVA, c('k', 0xFF28190A, 'h', 0xFF4E342E, 'g', 0xFF7A5A36, 'x', 0xFFFF6F00, 'y', 0xFF3C2819), true));
+        l.add(new Arte("iron_nugget", "apito_domador", APITO, c('k', 0xFF3E2A14, 'g', 0xFF7FA23A, 'h', 0xFFB5D46A, 's', 0xFFE0E0E0)));
+        l.add(new Arte("iron_sword", "arma_lanca_basalto", ARMA_LANCA_BASALTO, c('k', 0xFF1A1414, 'h', 0xFF6E6E74, 'g', 0xFF3C3C42,
+                'b', 0xFFC9A227, 'x', 0xFFFF7A1F, 'y', 0xFFFFD27F, 'a', 0xFFC2410C, 'r', 0xFFFFB300), true));
         l.add(new Arte("snowball", "frasco_fumaca", GARRAFA, com(VIDRO, 'c', 0xFFEEEEEE, 'l', 0xFF9E9E9E, 'd', 0xFF616161, 'a', 0xFFE0E0E0)));
         l.add(new Arte("snowball", "frasco_cola", GARRAFA, com(VIDRO, 'c', 0xFF8D6E63, 'l', 0xFF9CCC65, 'd', 0xFF558B2F, 'a', 0xFFDCEDC8)));
         l.add(new Arte("snowball", "frasco_fogo_grego", GARRAFA, com(VIDRO, 'c', 0xFFE0E0E0, 'l', 0xFFFF7043, 'd', 0xFFBF360C, 'a', 0xFFFFEB3B)));

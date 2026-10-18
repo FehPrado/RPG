@@ -2011,6 +2011,100 @@ public final class Golpes implements Listener {
                 w.playSound(onde, Sound.ENTITY_GENERIC_EXPLODE, 1f, 0.7f);
             });
 
+            // ---------------- 2.56: Lança de Basalto ----------------
+            case ESTOCADA_DE_MAGMA -> {
+                LivingEntity a = alvo(p, 5.5);
+                if (a == null) return falhar(p, "Nenhum inimigo na sua frente");
+                ferir(p, a, 1.6 * d);
+                a.setFireTicks(Math.max(a.getFireTicks(), 80));
+                Vector dir = a.getLocation().toVector().subtract(l.toVector()).setY(0);
+                Location de = l.clone().add(0, 1.1, 0);
+                double dist = Math.min(5.5, dir.length());
+                if (dir.lengthSquared() > 1e-4) dir.normalize();
+                for (double s = 0.5; s <= dist; s += 0.4) w.spawnParticle(Particle.FLAME, de.clone().add(dir.clone().multiply(s)), 1, 0.03, 0.03, 0.03, 0);
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_STRONG, 0.8f, 0.8f);
+                w.playSound(l, Sound.ITEM_FIRECHARGE_USE, 0.6f, 1.3f);
+            }
+            case MURALHA_DE_BASALTO -> {
+                for (LivingEntity e : cone(p, 4.5, 100)) {
+                    ferir(p, e, 0.8 * d);
+                    empurrar(e, l, 1.3, 0.35);
+                }
+                efeito(p, PotionEffectType.RESISTANCE, 60, 0);
+                w.spawnParticle(Particle.BLOCK, l.clone().add(horizontal(p).multiply(1.5)), 40, 0.8, 0.6, 0.8, Material.BASALT.createBlockData());
+                w.playSound(l, Sound.BLOCK_BASALT_PLACE, 1.2f, 0.6f);
+            }
+            case CHUVA_DE_CINZAS -> {
+                for (LivingEntity e : perto(p, l, 4)) {
+                    ferir(p, e, 0.9 * d);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 60));
+                    efeito(e, PotionEffectType.BLINDNESS, 50, 0);
+                }
+                w.spawnParticle(Particle.ASH, l.clone().add(0, 1.5, 0), 120, 3, 1.2, 3, 0.02);
+                w.spawnParticle(Particle.WHITE_ASH, l.clone().add(0, 1.5, 0), 60, 3, 1.2, 3, 0.02);
+                anel(l.clone().add(0, 0.8, 0), 3, Particle.FLAME, 20);
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 0.7f);
+            }
+            case SALTO_DO_STRIDER -> saltar(p, horizontal(p).multiply(0.9).setY(0.7), 5, onde -> {
+                for (LivingEntity e : perto(p, onde, 3.5)) {
+                    ferir(p, e, 1.8 * d);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 80));
+                }
+                w.spawnParticle(Particle.LAVA, onde, 15, 1.2, 0.3, 1.2, 0);
+                w.spawnParticle(Particle.FLAME, onde.clone().add(0, 0.3, 0), 40, 1.5, 0.3, 1.5, 0.03);
+                w.playSound(onde, Sound.BLOCK_BASALT_BREAK, 1.2f, 0.6f);
+            });
+            case RIO_DE_LAVA -> {
+                Vector dir = horizontal(p);
+                Location de = l.clone().add(0, 0.3, 0);
+                for (LivingEntity e : linha(p, de.clone().add(0, 0.7, 0), dir, 10, 1.4)) {
+                    ferir(p, e, 1.6 * d);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 120));
+                }
+                for (double s = 0.5; s <= 10; s += 0.4) {
+                    Location pt = de.clone().add(dir.clone().multiply(s));
+                    w.spawnParticle(Particle.FLAME, pt, 2, 0.15, 0.05, 0.15, 0.01);
+                    if (((int) (s * 2.5)) % 3 == 0) w.spawnParticle(Particle.LAVA, pt, 1, 0.1, 0, 0.1, 0);
+                }
+                w.playSound(l, Sound.BLOCK_LAVA_POP, 1.2f, 0.7f);
+                w.playSound(l, Sound.ITEM_FIRECHARGE_USE, 1f, 0.6f);
+            }
+            case PELE_DE_OBSIDIANA -> {
+                efeito(p, PotionEffectType.RESISTANCE, 120, 1);
+                efeito(p, PotionEffectType.FIRE_RESISTANCE, 120, 0);
+                repetir(10, 12, i -> {
+                    if (!p.isOnline()) return;
+                    Location c = p.getLocation();
+                    for (LivingEntity e : perto(p, c, 2.2)) e.setFireTicks(Math.max(e.getFireTicks(), 60));
+                    w.spawnParticle(Particle.SMOKE, c.clone().add(0, 1, 0), 8, 0.4, 0.6, 0.4, 0.01);
+                    w.spawnParticle(Particle.DRIPPING_LAVA, c.clone().add(0, 1.6, 0), 3, 0.4, 0.3, 0.4, 0);
+                });
+                w.playSound(l, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1f, 0.7f);
+            }
+            case LANCA_DO_INFERNO -> {
+                Vector dir = p.getEyeLocation().getDirection().normalize();
+                Location de = p.getEyeLocation().subtract(0, 0.2, 0);
+                List<LivingEntity> atingidos = linha(p, de, dir, 15, 1.3);
+                for (LivingEntity e : atingidos) {
+                    ferir(p, e, 2.4 * d);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 120));
+                }
+                Location fim = de.clone().add(dir.clone().multiply(15));
+                var bateu = w.rayTraceBlocks(de, dir, 15);
+                if (bateu != null) fim = bateu.getHitPosition().toLocation(w);
+                for (double s = 0.5; s <= de.distance(fim); s += 0.5) w.spawnParticle(Particle.FLAME, de.clone().add(dir.clone().multiply(s)), 2, 0.05, 0.05, 0.05, 0.01);
+                Location centro = fim;
+                for (LivingEntity e : perto(p, centro, 3.5)) {
+                    if (atingidos.contains(e)) continue;
+                    ferir(p, e, 1.8 * d);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 100));
+                }
+                w.spawnParticle(Particle.EXPLOSION, centro, 2, 0.5, 0.5, 0.5, 0);
+                w.spawnParticle(Particle.LAVA, centro, 20, 1, 0.5, 1, 0);
+                w.playSound(l, Sound.ENTITY_BLAZE_SHOOT, 1f, 0.8f);
+                w.playSound(centro, Sound.ENTITY_GENERIC_EXPLODE, 0.9f, 0.9f);
+            }
+
             // ---------------- 2.54: técnicas secretas ----------------
             case VENTO_CORTANTE -> {
                 Vector dir = p.getEyeLocation().getDirection().normalize();
@@ -2272,6 +2366,34 @@ public final class Golpes implements Listener {
                 }
                 w.playSound(l, Sound.ENTITY_BLAZE_SHOOT, 1.2f, 0.5f);
                 w.playSound(l, Sound.BLOCK_LAVA_POP, 1f, 0.6f);
+            }
+            case CORACAO_DO_VULCAO -> {
+                // O chão vira magma só na tela de quem está perto (nenhum bloco muda de verdade).
+                Location centro = l.clone();
+                List<org.bukkit.block.Block> chao = new ArrayList<>();
+                for (int dx = -6; dx <= 6; dx++) {
+                    for (int dz = -6; dz <= 6; dz++) {
+                        if (dx * dx + dz * dz > 36) continue;
+                        org.bukkit.block.Block bl = centro.clone().add(dx, -0.5, dz).getBlock();
+                        if (bl.getType().isSolid() && bl.getRelative(org.bukkit.block.BlockFace.UP).isPassable()) chao.add(bl);
+                    }
+                }
+                org.bukkit.block.data.BlockData magma = Material.MAGMA_BLOCK.createBlockData();
+                List<Player> vendo = new ArrayList<>();
+                for (Player o : w.getPlayers()) if (o.getLocation().distanceSquared(centro) < 48 * 48) vendo.add(o);
+                for (Player o : vendo) for (org.bukkit.block.Block bl : chao) o.sendBlockChange(bl.getLocation(), magma);
+                repetir(10, 8, i -> {
+                    for (LivingEntity e : perto(p, centro, 6)) {
+                        ferir(p, e, 0.5 * d);
+                        e.setFireTicks(Math.max(e.getFireTicks(), 60));
+                        efeito(e, PotionEffectType.SLOWNESS, 20, 3);
+                    }
+                    w.spawnParticle(Particle.LAVA, centro, 6, 4, 0.1, 4, 0);
+                    w.spawnParticle(Particle.FLAME, centro.clone().add(0, 0.2, 0), 25, 4, 0.1, 4, 0.01);
+                    if (i == 7) for (Player o : vendo) if (o.isOnline()) for (org.bukkit.block.Block bl : chao) o.sendBlockChange(bl.getLocation(), bl.getBlockData());
+                });
+                w.playSound(l, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1.2f, 0.6f);
+                w.playSound(l, Sound.BLOCK_LAVA_AMBIENT, 1.2f, 0.8f);
             }
 
             // ---------------- Lendas ----------------

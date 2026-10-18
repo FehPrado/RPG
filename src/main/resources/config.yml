@@ -149,6 +149,10 @@ mundo-vivo:
   chance-evento-de-clima: 0.08        # a cada 2,5 min: nevasca, neblina, ventania, tempestade elétrica, onda de calor
   chance-lua-de-sangue: 0.2           # em noite de lua cheia
   chance-chuva-de-meteoros: 0.06      # por noite
+  arco-iris: true                     # 2.58: quando a chuva para de dia, às vezes aparece um arco-íris com um pote onde ele toca o chão
+  chance-arco-iris: 0.4               # chance a cada chuva que termina de dia
+  estrelas-cadentes: true             # 2.58: estrelas cadentes nas noites limpas; agache olhando para o céu e faça um pedido
+  estrelas-cadentes-por-minuto: 0.25  # em média, quantas por minuto de noite (0,25 = uma a cada 4 minutos)
   chance-eclipse: 0.02                # por dia
   chance-aurora-no-inverno: 0.25      # por noite de inverno
   chance-mordida-amaldicoar: 0.2      # mordida de lobisomem ou vampiro passa a maldição
@@ -511,6 +515,17 @@ vanilla-mais:
   escadas-mais-rapidas: true          # sobe a escada de mão mais rápido
   lanternas-rangem-na-chuva: true     # na chuva, lanternas penduradas ao ar livre rangem com o vento
   raio-queima-arvore: true            # raio em árvore põe fogo nas folhas (se o fogo for permitido ali) e deixa carvão vegetal
+  abelhas-polinizam: true             # 2.56: colmeia ou ninho de abelha com abelhas a até 8 blocos faz a plantação crescer mais rápido
+  estante-viva: true                  # 2.58: olhando um livro na estante entalhada, a barra mostra o título; agachado + clique lê
+
+# 2.57: conforto no dia a dia (cada um pode ser desligado)
+conforto:
+  colher-com-clique: true             # clique direito em trigo, cenoura, batata, beterraba ou verruga madura: colhe e replanta
+  ordenar-com-clique: true            # clique direito num espaço vazio do baú (ou da mochila do inventário) com a mão vazia: organiza
+  repor-a-mao: true                   # acabou a pilha na mão (bloco, comida) ou a ferramenta quebrou: pega outra igual do inventário
+  portas-duplas: true                 # abrir uma porta de madeira abre a do lado (portões lado a lado também); agachado abre só uma
+  elevadores: true                    # Elevador (bancada): pule para subir até o próximo, agache para descer (até 16 blocos)
+  apito: true                         # Apito do Domador: chama seus companheiros e montarias a até 100 blocos (vêm andando)
 
 guia:
   # Dá o livro "Guia do Aventureiro" na primeira vez que o jogador entra (/guia pega outro).

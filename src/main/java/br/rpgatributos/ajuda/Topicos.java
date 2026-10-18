@@ -155,8 +155,8 @@ public final class Topicos {
                 .dica("Adaga pelas costas dá +50%. O Chicote alcança 3 blocos mais longe. Compare as armas no Boneco de Treino.")
                 .cmd("combos").ligados("armas_minerios", "combos", "forja", "boneco", "nomeadas").palavras("adaga duplas faca machadinha foice bastao chicote arremesso").pronto();
         t("armas_minerios", COMBATE, "Armas dos minérios", Material.DIAMOND_SWORD)
-                .texto("Sete armas feitas com os minerais do mundo, cada uma com mecânica própria, 7 golpes e Postura Mestra:",
-                        "Montante (Mitrilo, duas mãos e varredura), Bumerangue (Âmbar, vai e volta), Leques de Guerra (Jade, rajada de vento), Arpão (Pérola, puxa o alvo ou você), Mangual (Cristal de Gelo, deixa lento), Garras (Pedra-Sangue, roubam vida) e Clava Fumegante (Turfa, queima).",
+                .texto("Oito armas feitas com os minerais do mundo, cada uma com mecânica própria, 7 golpes e Postura Mestra:",
+                        "Montante (Mitrilo, duas mãos e varredura), Bumerangue (Âmbar, vai e volta), Leques de Guerra (Jade, rajada de vento), Arpão (Pérola, puxa o alvo ou você), Mangual (Cristal de Gelo, deixa lento), Garras (Pedra-Sangue, roubam vida), Clava Fumegante (Turfa, queima) e Lança de Basalto (Cristal de Magma do Nether, fogo e +25% em quem queima).",
                         "Uma receita só cada uma, com o mineral. Na Forja saem forjadas.")
                 .dica("Bumerangue e Arpão: o clique direito arremessa, então os combos começam com o esquerdo.")
                 .cmd("combos").ligados("minerais", "arsenal", "incrustar", "mitrilo").palavras("montante bumerangue leques arpao mangual garras clava mitrilo ambar jade perola gelo sangue turfa").pronto();
@@ -164,6 +164,7 @@ public final class Topicos {
                 .texto("Cada arma tem uma técnica secreta, um golpe a mais ensinado por um Mestre de Armas nas vilas.",
                         "Mestra das Marés (pescadores): tridente, lança, arpão, arremesso e bumerangue. Mestre do Bastão (mosteiro): bastão, leques, chicote, adaga e duplas.",
                         "Mestre de Guerra (anões): machado, maça, montante, mangual e clava. Mestra da Lâmina (élfica): espada, arco, foice e garras.",
+                        "Ferreiro Piglin (Forja dos Piglins, no Nether): Lança de Basalto, pago em ouro.",
                         "Cada técnica pede proficiência 12 na arma e 24 esmeraldas. Depois ela aparece no /combos.")
                 .dica("Aprender com um mestre também aumenta o laço com ele.")
                 .cmd("combos").ligados("combos", "vilas").palavras("tecnica secreta mestre armas ensinar").pronto();
@@ -300,7 +301,7 @@ public final class Topicos {
                 .ritual(Material.DECORATED_POT, "Vaso decorado", Material.GLASS_BOTTLE, 4, Material.SUGAR, 1)
                 .ligados("criacao", "cozinha").palavras("queijo geleia conserva maionese oleo trufa artesanato").pronto();
         t("pesca", OFICIOS, "Pesca", Material.FISHING_ROD)
-                .texto("Peixes com qualidade, 17 peixes raros por bioma e clima (5 só no buraco no gelo), Tesouros do Mar e criaturas que lutam de volta.")
+                .texto("Peixes com qualidade, 21 peixes raros por bioma e clima (5 só no buraco no gelo, 4 só na lava do Nether com a Vara Ígnea), Tesouros do Mar e criaturas que lutam de volta.")
                 .cmd("peixes").ligados("pescagelo", "alquimia", "cozinha").palavras("peixe raro tesouro mar vara").pronto();
         t("pescagelo", OFICIOS, "Pesca no gelo", Material.PACKED_ICE)
                 .texto("Quebre o gelo de um lago ou mar gelado (ou de qualquer lago no inverno) e pesque no buraco: +5% de peixe raro.",
@@ -351,8 +352,9 @@ public final class Topicos {
         t("estacoes", MUNDO, "Estações, clima e céu", Material.CLOCK)
                 .texto("Cada estação dura uma semana real e muda plantas, pesca e monstros. Festival no 4º dia.",
                         "O chão muda: flores na primavera, vaga-lumes no verão, folhas secas no outono, neve no inverno.",
-                        "Lua cheia, lua de sangue, eclipse, aurora e chuva de meteoros.")
-                .cmd("calendario").ligados("coletas", "plantacoes", "pomar", "perigo").palavras("estacao inverno verao clima lua festival").pronto();
+                        "Lua cheia, lua de sangue, eclipse, aurora e chuva de meteoros.",
+                        "Arco-íris quando a chuva para de dia: o Pote do Arco-Íris fica onde ele toca o chão. Estrela cadente à noite: agache olhando para o céu e faça um pedido.")
+                .cmd("calendario").ligados("coletas", "plantacoes", "pomar", "perigo").palavras("estacao inverno verao clima lua festival arco iris pote estrela cadente pedido").pronto();
         t("coletas", MUNDO, "Coisas para colher", Material.BROWN_MUSHROOM)
                 .texto("Cada estação espalha 3 coisas pelo chão, conforme o bioma: cogumelos, bagas, nozes, raízes, algas...",
                         "Procure o brilho verde perto de você e clique para pegar. Elas somem quando a estação acaba.",
@@ -375,8 +377,17 @@ public final class Topicos {
                         "Clique num morador: Laço (5 capítulos; no último, um presente único), Loja (muda todo dia, alguns compram coisas suas) e Serviço (o que só ele faz).",
                         "Os moradores também jogam Duelo de Cartas.")
                 .ligados("estruturas", "duelo", "colonia").palavras("vila morador loja servico laco pescadores mosteiro anoes elfica").pronto();
+        t("conforto", MUNDO, "Conforto no dia a dia", Material.LODESTONE)
+                .texto("Colher: clique direito na plantação madura (trigo, cenoura, batata, beterraba, verruga) colhe e replanta.",
+                        "Ordenar: mão vazia, clique direito num espaço vazio do baú (ou da mochila): tudo se organiza.",
+                        "Repor a mão: acabou a pilha ou a ferramenta quebrou, outra igual vem do inventário. Portas duplas abrem juntas (agachado, só uma).",
+                        "Elevador (4 ferros em cruz + pérola do ender): pule para subir, agache para descer. Apito do Domador (bambu, pepita, linha): seus bichos vêm até você.")
+                .dica("/territorio boasvindas <frase>: quem entra no seu território lê a sua frase.")
+                .ligados("vanilla", "companheiros", "territorio").palavras("conforto colher replantar ordenar organizar bau repor porta dupla elevador apito boas vindas").pronto();
         t("vanilla", MUNDO, "Vanilla+ e artefatos", Material.OAK_SAPLING)
                 .texto("Detalhes com cara de jogo normal: mudas que se plantam sozinhas, folhas que soltam graveto, cabeças de monstro, placa que mostra o baú, peixes pulando e gelo fino.",
+                        "Abelhas polinizam: colmeia ou ninho com abelhas a até 8 blocos faz a plantação crescer mais rápido.",
+                        "Estante viva: olhando um livro na estante entalhada, a barra mostra o título; agachado + clique lê sem tirar.",
                         "Artefatos de bancada: Garras de Escalada, Corda de Rapel, Pêndulo do Rabdomante, Cantil e Bolsa de Sementes.")
                 .ligados("minerais", "coletas").palavras("garras escalada corda rapel pendulo rabdomante cantil bolsa sementes muda graveto gelo").pronto();
         t("estruturas", MUNDO, "Estruturas", Material.MOSSY_STONE_BRICKS)
@@ -403,6 +414,13 @@ public final class Topicos {
                         "No Ninho mora o Guardião dos Ventos: ele deixa Fragmentos Celestes (Amuleto dos Ventos, na Bancada Alquímica).")
                 .dica("Balão de Cristal: 4 lãs brancas + 4 linhas na Bancada Alquímica. Mais lento que a capa e estoura em 5 usos.")
                 .ligados("estruturas", "profundezas", "acessorios").palavras("ilha ceu nuvem plataforma vento lancar balao capa fruta celeste guardiao ninho fragmento").pronto();
+        t("nether", MUNDO, "O Nether", Material.CRYING_OBSIDIAN)
+                .texto("Forja dos Piglins: nas florestas carmesim e nos ermos. O Ferreiro Piglin vende peças do Nether, compra minerais e ensina a técnica da Lança de Basalto. Tudo em ouro.",
+                        "Primeiro Portal em Ruínas: uma moldura gigante partida. Leia o púlpito e toque na pedra que chora no meio do portal: ela guarda a Chave do Primeiro Portal (uma por jogador).",
+                        "Minerais: Cristal de Magma (deltas de basalto e ermos), Âmbar Infernal (florestas) e Quartzo Negro (vale das almas). Servem para incrustar, para a Lança de Basalto e para a Vara Ígnea.",
+                        "Pesca na lava: com a Vara Ígnea a boia não afunda. Recolha logo depois do estalo da lava. Os peixes da lava viram pratos do Nether na Cozinha.")
+                .dica("O Espeto de Hoglin acalma os piglins e o Caldo Distorcido afasta hoglins e brutos.")
+                .ligados("armas_minerios", "tecnicas", "pesca", "cozinha", "minerais").palavras("nether inferno piglin forja portal obsidiana chave magma ambar quartzo lava vara ignea").pronto();
         t("profundezas", MUNDO, "Profundezas", Material.SHROOMLIGHT)
                 .texto("Abaixo do y 0 o mundo fica escuro de verdade (Visão Noturna ajuda).",
                         "Raízes de Luz adormecidas brilham de leve nas cavernas fundas: clique no bulbo e ela ilumina a área para sempre.",

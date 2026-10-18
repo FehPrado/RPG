@@ -350,6 +350,7 @@ Como em Harvest Moon e Stardew Valley. **Agachado + clique com a mão vazia** nu
   - **Membros:** constroem e mexem em tudo. A **party** do dono também (regra "Party pode construir").
   - **Regras:** PvP, portas para visitantes, baús para visitantes, monstros nascem, explosões, fogo, reino e party ("Reino pode construir": membros do seu reino constroem aqui).
   - **Mostrar bordas:** partículas nas bordas por 20 segundos.
+  - **Placa de boas-vindas (2.57):** `/territorio boasvindas <frase>` (até 60 letras). Quem entra no seu território lê a frase em cima do aviso de território. `apagar` tira.
   - Segurando outro estandarte, clique na bandeira do menu para trocar.
 - Ao entrar num território aparece "Território de Fulano" na tela (e o reino, se for uma província).
 
@@ -740,6 +741,8 @@ A colheita sai com qualidade ★ (pelo nível de Agricultura) e dá XP de Agricu
 - **Chuva de meteoros:** meteoritos caem pelo mundo; quebre para pegar minério, diamante e Fragmentos.
 - **Eclipse** (raro, ao meio-dia): fica escuro por 2,5 minutos; magias +30% e mais Elites.
 - **Aurora** (noites de inverno): mana extra para quem está ao ar livre.
+- **Arco-íris (2.58):** quando a chuva para de dia, 40% de chance de um arco-íris aparecer na frente de quem está ao ar livre (`mundo-vivo.arco-iris` e `chance-arco-iris`). Ele fica 3 minutos e, **onde a ponta da direita toca o chão**, brilha o **Pote do Arco-Íris**: quem pegar primeiro leva esmeraldas, ouro e às vezes um pacote de cartas, um mineral de bioma ou um diamante. 3 potes: título **Caçador de Arco-Íris**.
+- **Estrelas cadentes (2.58):** em noites limpas, uma a cada uns 4 minutos (`mundo-vivo.estrelas-cadentes-por-minuto`). Quem está ao ar livre vê a estrela riscar o céu e tem **6 segundos para agachar olhando para cima** e fazer um pedido: ganha uma bênção até o amanhecer (Sorte, Velocidade, Regeneração, visão noturna, Resistência ou Pressa). Um pedido por noite. 10 pedidos: título **Pedido às Estrelas**.
 - **O Nian** 年 (noites de inverno, 25% por noite, `perigo.chance-nian-por-noite`): a fera do fim do ano desce das montanhas perto de alguém a céu aberto. Ele é enorme e bate forte, e **arma nenhuma o derruba** (só 20% do dano entra e ele nunca morre). Ele só **foge com medo**: fogos de artifício estourando perto dele (com ou sem estrela), fogo e lava, explosões e o som dos **chifres de cabra**. A barra mostra a coragem dele. Espantado, ele deixa 1 Essência Primordial, 2 blocos de ouro, 12 esmeraldas e 16 fogos; quem ajudou ganha o título **Espanta-Nian** e uma página no diário. Se amanhecer antes, ele volta sozinho para as montanhas.
 
 **Temperatura** (leve, dá para desligar no config):
@@ -872,7 +875,7 @@ Títulos: **Sombra das Lâminas** (Lâminas Duplas no 20), **Ceifador** (foice n
 
 ### As armas dos minérios (ajustes da 2.51)
 
-Sete armas feitas com os minerais do mundo, cada uma com **mecânica própria, 7 golpes e Postura Mestra**. Têm **uma receita só** (com o mineral do plugin), nome e base fixos, e entram na **Forja do Ferreiro** como as outras (raridade, status, gemas, runas, refino). O Montante (base de diamante) ainda vira Netherite na mesa de ferraria. `/rpgadmin arma <tipo> [forjar]` dá uma pronta.
+Oito armas feitas com os minerais do mundo (a oitava, a Lança de Basalto, é do Nether, 2.56), cada uma com **mecânica própria, 7 golpes e Postura Mestra**. Têm **uma receita só** (com o mineral do plugin), nome e base fixos, e entram na **Forja do Ferreiro** como as outras (raridade, status, gemas, runas, refino). O Montante (base de diamante) ainda vira Netherite na mesa de ferraria. `/rpgadmin arma <tipo> [forjar]` dá uma pronta.
 
 | Arma | Receita | Jeito | Postura Mestra |
 |---|---|---|---|
@@ -883,6 +886,7 @@ Sete armas feitas com os minerais do mundo, cada uma com **mecânica própria, 7
 | **Mangual de Gelo** | Cristal de Gelo, corrente e graveto na diagonal | +2 de dano; cada golpe deixa lento e às vezes **congela** | **Avalanche**: +10% de dano e lentidão forte em todo golpe |
 | **Garras de Pedra-Sangue** | 2 Pedras-Sangue em cima, 3 lingotes de ferro embaixo | Muito rápidas (2,6 golpes/s); **cada golpe rouba 10% do dano em vida** | **Fera Sangrenta**: +10% de dano e o dobro de roubo de vida |
 | **Clava Fumegante** | Turfa, tronco e graveto em pé | +2 de dano e empurrão. Com **Turfa** no inventário os golpes queimam (1 Turfa a cada 8 queimas) | **Fornalha**: +10% de dano e sempre queima, sem gastar Turfa |
+| **Lança de Basalto** (2.56) | Cristal de Magma, basalto polido e vara de blaze na diagonal | +2 de dano e +1,5 de alcance. **Todo golpe põe fogo**; em quem já está queimando, +25% de dano | **Vulcão**: +10% de dano, fogo mais longo e +40% em quem queima |
 
 Golpes (nível de proficiência 1, 3, 5, 8, 12, 16 e 20):
 - **Montante:** Golpe Pesado, Varredura do Titã, Investida do Montante, Lâmina Erguida, Corte do Horizonte, Fúria do Gigante, Queda da Montanha.
@@ -892,10 +896,11 @@ Golpes (nível de proficiência 1, 3, 5, 8, 12, 16 e 20):
 - **Mangual:** Golpe Gelado, Giro da Corrente, Quebra-Gelo, Corrente que Prende, Nevasca, Prisão de Gelo, Avalanche.
 - **Garras:** Rasgar, Salto da Fera, Sangria, Frenesi, Garras Cruzadas, Predador (marca o alvo), Banquete de Sangue.
 - **Clava:** Pancada em Brasa, Fumaça Sufocante, Brasas Espalhadas, Golpe Sísmico, Chama do Pântano, Fornalha Viva, Erupção.
+- **Lança de Basalto:** Estocada de Magma, Muralha de Basalto, Chuva de Cinzas, Salto do Strider, Rio de Lava, Pele de Obsidiana, Lança do Inferno.
 
 Bumerangue e Arpão começam os combos com o **esquerdo** (o direito arremessa); as outras, com o direito.
 
-Com o pacote de recursos, as 7 ficam em **3D na mão** (no inventário, o desenho). A adaga, a faca, a machadinha, a foice e o bastão da bancada têm **desenho por material**: a lâmina (ou as ponteiras do bastão) pega a cor da madeira, pedra, cobre, ferro, ouro, diamante ou netherite.
+Com o pacote de recursos, as 8 ficam em **3D na mão** (no inventário, o desenho). A adaga, a faca, a machadinha, a foice e o bastão da bancada têm **desenho por material**: a lâmina (ou as ponteiras do bastão) pega a cor da madeira, pedra, cobre, ferro, ouro, diamante ou netherite.
 
 **Incrustar minério:** com uma arma corpo a corpo na mão e um mineral na outra, clique na **Forja do Ferreiro** (custa 2 níveis de XP e o mineral). Cada arma aceita uma incrustação; uma nova troca a antiga, e ela continua ao refinar e reforjar.
 
@@ -907,6 +912,9 @@ Com o pacote de recursos, as 7 ficam em **3D na mão** (no inventário, o desenh
 | Cristal de Gelo | cada acerto deixa o inimigo lento |
 | Pedra-Sangue | rouba 6% do dano em vida |
 | Turfa | 15% de chance de pôr fogo |
+| Cristal de Magma (2.56) | +20% de dano em quem está pegando fogo |
+| Âmbar Infernal (2.56) | +15% de dano no Nether |
+| Quartzo Negro (2.56) | Golpe crítico (caindo) faz +25% |
 ### Posturas, estilo e equilíbrio
 
 **Posturas** (`/postura` ou o botão no `/combos`): valem enquanto você segura uma arma de combo.
@@ -945,8 +953,9 @@ Cada tipo de arma tem uma **técnica secreta**, um golpe extra que só um **Mest
 | Mestre do Bastão | Mosteiro | Bastão (Montanha Inabalável), Leques (Vendaval de Pétalas), Chicote (Serpente-Relâmpago), Adaga (Dança das Sombras), Lâminas Duplas (Tempestade Escarlate) |
 | Mestre de Guerra | Anões | Machado (Machados Ancestrais), Maça (Sino do Juízo), Montante (Céu Partido), Mangual (Nevasca de Ferro), Clava (Erupção Vulcânica) |
 | Mestra da Lâmina | Élfica | Espada (Vento Cortante), Arco (Flecha Cometa), Foice (Lua de Sangue), Garras (Frenesi da Fera) |
+| Ferreiro Piglin (2.56) | Forja dos Piglins (Nether) | Lança de Basalto (Coração do Vulcão). Ele cobra **24 lingotes de ouro** em vez de esmeraldas |
 
-Títulos: **Discípulo** (3 técnicas) e **Herdeiro das Técnicas** (as 19).
+Títulos: **Discípulo** (3 técnicas) e **Herdeiro das Técnicas** (as 20).
 
 ### Aparar, fraquezas e combate montado (2.54)
 
@@ -1181,6 +1190,9 @@ Cada bioma tem um **mineral próprio**, que só nasce lá. Eles aparecem até na
 | **Cristal de Gelo** | Montanhas e biomas gelados (pedra e gelo compacto, y 40–140) | Picareta de pedra ou melhor | Anel do Gelo Eterno |
 | **Pedra-Sangue** | Nether (netherrack) | Picareta de pedra ou melhor | Amuleto de Sangue |
 | **Turfa** | Pântano e mangue (lama ou terra, logo abaixo do chão) | Pá ou mão | **Combustível**: queima 2,5 vezes mais que o carvão |
+| **Cristal de Magma** (2.56) | Nether: deltas de basalto (basalto, pedra-negra, magma) e um pouco nos ermos | Picareta de pedra ou melhor | Lança de Basalto, Vara Ígnea, incrustar |
+| **Âmbar Infernal** (2.56) | Nether: florestas carmesim e distorcida (netherrack) | Picareta de pedra ou melhor | Incrustar; o Ferreiro Piglin compra |
+| **Quartzo Negro** (2.56) | Nether: vale de areia de almas (terra de almas, basalto, pedra-negra) | Picareta de pedra ou melhor | Incrustar; o Ferreiro Piglin compra |
 
 Os minerais dão XP de Mineração e não são levados por explosões nem empurrados por pistões.
 
@@ -1289,6 +1301,18 @@ Todo baú das ilhas tem lã e linha (para o Balão de Cristal).
 
 Configure em `estruturas.ilha-do-ceu` (região, chance e distância do spawn).
 
+### O Nether (2.56)
+
+O Nether ganhou duas estruturas (nascem nas cavernas largas, com metade da chance das do mundo normal) e o resto do pacote do Nether: minerais, a Lança de Basalto, a pesca na lava e a cozinha.
+
+- **Forja dos Piglins** (florestas carmesim e ermos): uma forja de pedra-negra e ouro, com lava atrás da grade, altos-fornos, bigorna e um baú com ouro, minerais do Nether e, às vezes, sucata ou o molde de netherite. Mora ali o **Ferreiro Piglin**, um morador como os das vilas (laço com história, duelo de cartas **difícil**), mas que só aceita **ouro**:
+  - **Loja do dia:** Cristais de Magma, a Lança de Basalto, sucata de netherite, pedra-negra dourada, lanternas de alma e, às vezes, o molde de netherite; ele **compra** Âmbar Infernal (6 ouros) e Quartzo Negro (8 ouros).
+  - **Técnica secreta da Lança de Basalto** (Coração do Vulcão: o chão vira magma por 4 s): proficiência 12 e **24 lingotes de ouro**.
+  - O presente do laço completo é uma Lança de Basalto forjada épica. Ele não vira zumbi no mundo de cima.
+- **Primeiro Portal em Ruínas**: uma moldura de obsidiana gigante e partida, com obsidiana chorona, braseiros de alma, um púlpito com **"O Primeiro Portal"** (a história de quem abriu o caminho entre os mundos) e um baú. Clicando na **pedra que chora no meio da moldura**, ela solta a relíquia **Chave do Primeiro Portal** (uma por jogador; vale para a coleção de relíquias e dá o título **Portador da Chave**).
+- **Cozinha do Nether** (na Cozinha, como os outros pratos): Ensopado Carmesim (Força e Resistência ao Fogo), Caldo Distorcido (**hoglins e piglins brutos não te atacam**), Espeto de Hoglin (**piglins te deixam em paz** mesmo sem ouro), Peixe-Brasa na Pedra (golpes de fogo), Caldo Vulcânico, Ensopado das Almas e o Banquete Infernal (vale para todos em volta).
+- Títulos novos: **Portador da Chave**, **Pescador do Inferno** (25 pescas na lava) e **Garimpeiro do Inferno** (30 minerais do Nether).
+
 ### Profundezas
 
 Abaixo do **y 0** ficam as Profundezas. Desde a 2.44 elas não escurecem mais a tela; as **Raízes de Luz** continuam sendo a luz das cavernas fundas e o que afasta a Penumbra.
@@ -1311,7 +1335,9 @@ O plugin gera o **seu próprio pacote de recursos** (`plugins/RPGAtributos/pacot
 
 ### Modelos EMF/ETF para editar (2.55)
 
-Para quem joga com **EMF + ETF**, o plugin aceita modelos próprios para **78 criaturas** que ele reconhece pelo nome: cada morador das vilas (mestres de armas incluídos), o Cronista e o Mercador Arcano, os 6 chefes do Altar, as Bestas Errantes (Pixiu, Baize, Kunpeng), os companheiros nos estágios II e III (lobo, gato, cavalo, golem, urso, raposa, camelo, lhama, papagaio), as invocações (lobos espectrais e ancestrais, Autômato, golem e elementais dos feitiços, espíritos), as Sombras e as Elites por afixo.
+Para quem joga com **EMF + ETF**, o plugin aceita modelos próprios para **91 criaturas** que ele reconhece pelo nome: cada morador das vilas (mestres de armas incluídos), o Cronista e o Mercador Arcano, os 6 chefes do Altar, as Bestas Errantes (Pixiu, Baize, Kunpeng), os companheiros nos estágios II e III (lobo, gato, cavalo, golem, urso, raposa, camelo, lhama, papagaio), as invocações (lobos espectrais e ancestrais, Autômato, golem e elementais dos feitiços, espíritos), as Sombras e as Elites por afixo, Nian, Lobisomem, Vampiro, Coração da Penumbra, Guardião dos Ventos, Sumo-Sacerdote e os sete guardiões dos locais ocultos.
+
+- **Os 91 modelos já vão no jar** (`resources/modelos/visual`, ver `ferramentas/MODELOS-EMF.txt`). Um `<id>.jem`/`.png` com o mesmo nome em `pacote/modelos/` passa na frente do que está no jar.
 
 - Os arquivos de partida ficam em `blockbench/preparados/` (gerados, fora do git): um `.jem` com a forma vanilla exata e um `.png` com a textura vanilla de cada criatura. Abra o `.jem` no Blockbench, edite e exporte por cima. O `LEIA-ME.txt` lista todos.
 - Coloque o `<id>.jem` e o `<id>.png` em `plugins/RPGAtributos/pacote/modelos/` (pode usar subpastas) e use **`/rpgadmin modelos`**. O plugin numera os arquivos, junta as regras por nome com as dos Guardiões e, no aldeão com modelo próprio, esconde as camadas de bioma e profissão (a roupa passa a ser a sua textura).
@@ -1490,6 +1516,20 @@ Pequenas melhorias com cara de jogo normal, sem item nem textura nova (cada uma 
 - **Peixes pulando:** em rios, lagos e no mar, peixes pulam fora d'água perto de você (salmão no rio e no frio, bacalhau no mar, peixe tropical nas águas quentes). Pescar ali até 40 s depois tem 30% de chance de vir um peixe a mais.
 - **Gelo fino:** ficar parado em cima de gelo sobre a água faz ele rachar (som e lascas) e quebrar em 3 s. Agachado, o gelo aguenta. Não vale dentro de territórios.
 - **2.49:** **ovelhas de cores misturadas** (pais de cores que o jogo não mistura: 30% de o filhote sair a cor do meio); **animais seguem de longe** (veem a comida na sua mão a 16 blocos, no jogo são 10); **suporte de armadura com braços** (todos, inclusive os que já existiam; agachado + graveto liga e desliga, e o desligado fica assim); **escadas de mão mais rápidas**; **lanternas rangem na chuva** quando penduradas ao ar livre; **raio queima árvore** (folhas pegam fogo, se o fogo for permitido ali, e sobra carvão vegetal no pé).
+- **2.56: abelhas polinizam:** colmeia ou ninho de abelha com abelhas (dentro ou voando perto) a até 8 blocos faz trigo, cenoura, batata, beterraba, frutas silvestres, caules de melão e abóbora, tocha-flor e jarro crescerem mais rápido (40% de chance de um estágio a mais), com pólen no ar. `vanilla-mais.abelhas-polinizam`.
+- **2.58: estante viva:** olhando para um livro numa **estante entalhada**, a barra mostra o título e o autor (livro encantado: os encantamentos). **Agachado + clique direito** no livro abre para ler sem tirar da estante (rascunhos também). A estante vira uma biblioteca. `vanilla-mais.estante-viva`.
+
+### Conforto no dia a dia (2.57)
+
+Coisas pequenas que tiram a chatice de toda hora. Cada uma pode ser desligada em `conforto` no config.
+
+- **Colher com clique:** clique direito em trigo, cenoura, batata, beterraba ou verruga do Nether **madura** colhe e já replanta (usa uma semente do que caiu ou do inventário). Conta como colher de verdade: qualidade ★, variedades e XP de Agricultura. Agachado, não colhe. Em território alheio, só quem pode quebrar ali.
+- **Ordenar com clique:** com a mão vazia, **clique direito num espaço vazio** de um baú, barril, caixa de shulker ou baú do ender: tudo se organiza (junta as pilhas e agrupa por tipo). No seu próprio inventário, organiza a mochila (a barra de atalhos e a armadura ficam como estão).
+- **Repor a mão:** acabou a pilha na mão (bloco colocado ou comida) ou a ferramenta quebrou: outra igual do inventário vai para a mão sozinha (a ferramenta pode ser de outro material, mas do mesmo tipo).
+- **Portas duplas:** abrir uma porta de madeira abre a do lado (as duas folhas); portões lado a lado também. Agachado, abre só uma.
+- **Elevador:** 4 lingotes de ferro em cruz com uma pérola do ender no meio (sai 2). Ponha um acima do outro, na mesma coluna: em cima dele, **pule para subir** até o próximo e **agache para descer** (até 16 blocos; precisa de 2 blocos livres em cima do destino). Quebrado, devolve o Elevador; explosões e pistões não mexem nele.
+- **Apito do Domador:** bambu, pepita de ferro e linha (sem forma). Clique direito: seus companheiros e animais domados a até 100 blocos **vêm andando** até você (quem estava sentado levanta). 8 s de fôlego entre um apito e outro.
+- **Placa de boas-vindas:** `/territorio boasvindas <frase>` (veja Territórios).
 
 ### Artefatos de utilidade (2.49)
 
@@ -1531,7 +1571,7 @@ Feitos na bancada; as Garras, a Corda e a Bolsa gastam **Vigor**.
 ## Pesca
 
 Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
-- **Peixes raros:** 12 espécies que só mordem em certos lugares, horários ou climas. `/peixes` abre o **Diário do Pescador**, com onde procurar cada um.
+- **Peixes raros:** 12 espécies que só mordem em certos lugares, horários ou climas (mais 5 do gelo e 4 da lava, abaixo). `/peixes` abre o **Diário do Pescador**, com onde procurar cada um.
 - **Tesouros do Mar:** esmeraldas, ouro, diamantes, livros encantados, Pérolas Negras e, raramente, Mapa Rasgado ou Fragmento de Forja.
 - **Criaturas marinhas:** às vezes algo grande morde a isca e luta de volta (Afogado Faminto, Guardião das Ondas, Capitão Afogado e o gigante Senhor das Marés). Elas deixam Escamas do Abismo e Pérolas Negras.
 - **Peso dos peixes (2.50):** todo peixe vem com **peso** ("🎣 Salmão — 3,2 kg"), que depende da espécie, da qualidade ★ e do nível de Pesca (os raros pesam mais). O maior de cada espécie vira **recorde pessoal** e, se for o maior do servidor, entra nos `/recordes` (e é anunciado quando alguém toma o recorde). Para os peixes continuarem empilhando, só os **troféus** (novo recorde pessoal ou peixe enorme) levam o peso escrito no item. O Diário do Pescador mostra seus recordes e os do servidor.
@@ -1564,6 +1604,21 @@ Quebre o gelo de um lago ou mar **gelado** (ou de **qualquer lago congelado no i
 | Esturjão Ancestral | De noite, no inverno (raríssimo e anunciado) | 80 | Caviar Ancestral (Cozinha) |
 
 **Cabana de Pesca:** jogue **1 vara de pescar, 1 bacalhau cru e 4 tábuas de abeto** numa **fogueira**. A até 12 blocos, a isca afunda **30% mais rápido**, há **+4% de peixe raro** (em qualquer água) e **ninguém sente frio**. Quebrar a fogueira devolve a vara.
+
+### Pesca na lava (2.56)
+
+A **Vara Ígnea** (vara de pescar + 2 Cristais de Magma + 1 vara de blaze, sem forma) pesca na **lava do Nether**: a boia não afunda, fica boiando em cima. Depois de um tempo a lava **estala** e a boia mergulha: recolha **logo em seguida** (1,5 s). Pesca alta faz a mordida chegar mais rápido. Na água, a Vara Ígnea pesca como uma vara comum.
+
+Na lava vêm peixes da lava (~57%), **Tesouros da Lava** (18% a 24%, conforme a Pesca: ouro, Cristais de Magma, Âmbar Infernal, Quartzo Negro, livros de Proteção contra Fogo ou Aspecto Flamejante, sucata de netherite e, raramente, detrito ancestral), lixo do Nether (pepitas de ouro, quartzo, creme de magma, pó de blaze, basalto) e às vezes um **cubo de magma** ou um **strider** perdido.
+
+| Peixe da lava | Onde | Pesca | Para quê |
+|---|---|---|---|
+| Peixe-Brasa | Qualquer lava do Nether | 10% | Peixe-Brasa na Pedra |
+| Enguia de Magma | Deltas de basalto | 30% | Caldo Vulcânico |
+| Carpa de Almas | Vale de areia de almas | 40% | Ensopado das Almas |
+| Salamandra de Lava | Qualquer lava (raríssima e anunciada) | 75% | Banquete Infernal |
+
+Título **Pescador do Inferno**: pescar 25 vezes na lava.
 
 ## Curtume e tecelagem
 
@@ -1636,7 +1691,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 ## Títulos
 
-`/titulos`: 118 títulos com requisitos (em páginas), por exemplo Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 127 títulos com requisitos (em páginas), por exemplo Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -1698,7 +1753,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/album` | todos | Álbum de Cartas: páginas, pacotes, pó, marcos e baralho |
 | `/duelo <jogador\|aceitar\|abrir\|desistir>` | todos | Duelo de Cartas entre jogadores |
 | `/segredos` | todos | Segredos descobertos e dicas dos outros |
-| `/territorio` | todos | Menu do território (`mapa`, `bordas`, `info`, `reivindicar`, `liberar`, `adicionar`, `remover`, `abandonar confirmar`) |
+| `/territorio` | todos | Menu do território (`mapa`, `bordas`, `info`, `reivindicar`, `liberar`, `adicionar`, `remover`, `boasvindas <frase>`, `abandonar confirmar`) |
 | `/cosmeticos`, `/chapeu`, `/tag` | todos | Item na cabeça e tag personalizada |
 | `/rpgadmin` | OP | Mostra todos os comandos de admin |
 
@@ -1848,7 +1903,7 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.55.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.58.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

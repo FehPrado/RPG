@@ -30,7 +30,10 @@ public enum Reliquia {
     OLHO_DO_ARAUTO("Olho do Arauto", "danger_pottery_sherd", 4,
             "Dizem que o Arauto do Fim abriu", "os primeiros portais. E que ainda observa."),
     CORACAO_DE_SOMBRA("Coração de Sombra", "heartbreak_pottery_sherd", 3,
-            "Pulsa quando os mortos se levantam.", "O último Soberano o deixou para trás.");
+            "Pulsa quando os mortos se levantam.", "O último Soberano o deixou para trás."),
+    // 2.56: não sai da terra, só das Ruínas do Primeiro Portal no Nether (peso 0)
+    CHAVE_DO_PRIMEIRO_PORTAL("Chave do Primeiro Portal", "burn_pottery_sherd", 0,
+            "Obsidiana que chora, presa num aro de ouro.", "Foi com ela que alguém abriu o caminho.");
 
     private final String nome, modelo, linha1, linha2;
     private final int peso;

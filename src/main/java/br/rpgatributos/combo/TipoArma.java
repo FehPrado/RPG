@@ -32,7 +32,9 @@ public enum TipoArma {
     ARPAO("Arpão", "⥅", 0xF3E9F0, Material.QUARTZ, 'E'),
     MANGUAL("Mangual", "❄", 0xA8E4FF, Material.PRISMARINE_CRYSTALS, 'D'),
     GARRAS("Garras", "♠", 0xB0102A, Material.NETHER_BRICK, 'D'),
-    CLAVA("Clava Fumegante", "♨", 0xFF6F00, Material.COAL, 'D');
+    CLAVA("Clava Fumegante", "♨", 0xFF6F00, Material.COAL, 'D'),
+    // 2.56: a arma do Nether
+    LANCA_BASALTO("Lança de Basalto", "⚶", 0xE0582A, Material.BASALT, 'D');
 
     private final String nome, simbolo;
     private final TextColor cor;

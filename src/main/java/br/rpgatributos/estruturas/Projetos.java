@@ -79,6 +79,8 @@ final class Projetos {
             case MOSTEIRO -> Vilas.mosteiro(o);
             case ALDEIA_ANOES -> Vilas.anoes(o);
             case VILA_ELFICA -> Vilas.elfica(o);
+            case FORJA_PIGLIN -> ruinas.forjaPiglin(o);
+            case PRIMEIRO_PORTAL -> ruinas.primeiroPortal(o);
         }
         o.conectar();
     }

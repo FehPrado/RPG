@@ -379,12 +379,24 @@ public final class Comandos implements TabExecutor {
             case "artefato" -> { adminArtefato(sender, args); return; }
             case "pegada" -> { adminPegada(sender, args); return; }
             case "modelos" -> { adminModelos(sender); return; }
+            case "arcoiris" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                plugin.ceuEncantado().arcoIris(p);
+                ok(sender, "Arco-íris na sua frente (3 minutos); o pote está na ponta da direita.");
+                return;
+            }
+            case "estrelacadente" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                plugin.ceuEncantado().estrelaCadente(p.getWorld());
+                ok(sender, "Estrela cadente para quem está ao ar livre (agache olhando para o céu em 6 s).");
+                return;
+            }
             case "arma" -> {
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
                 boolean forjar = args.length >= 3 && args[args.length - 1].equalsIgnoreCase("forjar");
                 String material = args.length >= 3 && !args[2].equalsIgnoreCase("forjar") ? args[2] : null;
                 ItemStack arma = args.length >= 2 ? br.rpgatributos.combo.Arsenal.admin(args[1], material) : null;
-                if (arma == null) { erro(sender, "Use: /rpgadmin arma <adaga|faca_arremesso|machadinha|foice|bastao|chicote|montante|bumerangue|leques|arpao|mangual|garras|clava> [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]"); return; }
+                if (arma == null) { erro(sender, "Use: /rpgadmin arma <adaga|faca_arremesso|machadinha|foice|bastao|chicote|montante|bumerangue|leques|arpao|mangual|garras|clava|lanca_basalto> [wooden|stone|copper|iron|golden|diamond|netherite] [forjar]"); return; }
                 if (forjar) arma = plugin.forja().forjar(p, arma, null);
                 entregar(p, arma);
                 return;
@@ -528,12 +540,13 @@ public final class Comandos implements TabExecutor {
 
     private void adminMineral(CommandSender sender, String[] args) {
         if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
-        String uso = "Use: /rpgadmin mineral <ambar|jade|perola|cristal_de_gelo|pedra_sangue|turfa|cristal_bruto|geodo|cinzel|bateia>";
+        String uso = "Use: /rpgadmin mineral <ambar|jade|perola|cristal_de_gelo|pedra_sangue|turfa|cristal_bruto|cristal_de_magma|ambar_infernal|quartzo_negro|geodo|cinzel|bateia|vara_ignea>";
         if (args.length < 2) { erro(sender, uso); return; }
         String a = args[1].toLowerCase(Locale.ROOT);
         switch (a) {
             case "cinzel" -> { p.getInventory().addItem(br.rpgatributos.exploracao.Mineracao.cinzel()); ok(sender, "Cinzel do Lapidador no inventário."); return; }
             case "bateia" -> { p.getInventory().addItem(br.rpgatributos.exploracao.Mineracao.bateia()); ok(sender, "Bateia no inventário."); return; }
+            case "vara_ignea" -> { p.getInventory().addItem(br.rpgatributos.pesca.PescaLava.vara()); ok(sender, "Vara Ígnea no inventário (pesque na lava do Nether)."); return; }
             case "geodo" -> {
                 plugin.mineracao().geodoAqui(p.getLocation().getBlock().getRelative(0, -20, 0));
                 ok(sender, "Tentei abrir um geodo neste chunk (precisa de rocha maciça entre o y -48 e 24).");
@@ -1943,7 +1956,7 @@ public final class Comandos implements TabExecutor {
                             "tesouros", "especies_peixe", "criaturas_marinhas", "gema_perfeita", "alquimias", "elixires", "acessorios"));
                 } else if (args.length == 2 && !List.of("reload", "infusor", "forjaferreiro", "altar", "cozinha", "reciclagem", "adubo",
                         "marco", "ignorar", "altardomador", "portalmasmorra", "fecharmasmorras", "santuario", "prova",
-                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
+                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companheironivel", "modelos", "arcoiris", "estrelacadente", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
                     return null;
                 } else if (args.length == 3 && List.of("set", "addxp", "reset").contains(sub)) {
                     for (Skill s : Skill.values()) op.add(s.id());

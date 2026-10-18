@@ -67,7 +67,7 @@ public class MontarManual {
                 {"Começar", "inicio", "atributos", "comandos"},
                 {"Fabricar", "receitas", "rituais", "forja", "alquimia", "arcano", "curtume", "fazenda", "campo", "vida", "detalhes"},
                 {"Combate", "combos", "mobilidade", "classes", "lendarias", "lendas", "visual", "progressao"},
-                {"Explorar", "descobertas", "exploracao", "ceu", "mundovivo", "perigo", "altar", "masmorras", "portais", "torre"},
+                {"Explorar", "descobertas", "exploracao", "ceu", "nether", "mundovivo", "perigo", "altar", "masmorras", "portais", "torre"},
                 {"Conviver", "pesca", "domador", "fe", "party", "colonia", "reinos"},
                 {"Referência", "colecao"}};
         StringBuilder nav = new StringBuilder("<nav class=\"indice\" id=\"indice\">\n");
@@ -120,7 +120,7 @@ public class MontarManual {
 
     static String categoria(String id) {
         if (ARMA.matcher(id).matches()) return "Arsenal";
-        if (id.matches("montante|bumerangue|leques|arpao|mangual|garras|clava")) return "Armas dos minérios";
+        if (id.matches("montante|bumerangue|leques|arpao|mangual|garras|clava|lanca_basalto")) return "Armas dos minérios";
         if (id.startsWith("flecha_") || id.startsWith("frasco_")) return "Flechas e frascos";
         if (id.startsWith("mitrilo_") || id.equals("cinzel") || id.equals("bateia")) return "Mineração";
         if (id.equals("adubo_rico") || id.equals("ferradura") || id.equals("livro_criador")) return "Campo e animais";

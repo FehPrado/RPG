@@ -37,6 +37,8 @@ public final class MateriaisListener implements Listener {
                 || i.getPersistentDataContainer().has(br.rpgatributos.vida.Coleta.CHAVE)
                 || i.getPersistentDataContainer().has(br.rpgatributos.vida.Cultivo.K_SEMENTE)
                 || i.getPersistentDataContainer().has(br.rpgatributos.vida.Cultivo.K_COLHEITA)
+                || i.getPersistentDataContainer().has(br.rpgatributos.domador.Apito.CHAVE)
+                || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.Elevadores.CHAVE)
                 || (i.getType() == org.bukkit.Material.BREEZE_ROD && i.getPersistentDataContainer().has(FORJADO));
     }
 

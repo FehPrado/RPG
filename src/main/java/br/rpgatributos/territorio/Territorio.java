@@ -21,6 +21,8 @@ public final class Territorio {
 
     private final UUID dono;
     private String nomeDono;
+    /** 2.57: frase de boas-vindas para quem entra (null = nenhuma). */
+    private String boasVindas;
     private final String mundo;
     private int marcoX, marcoY, marcoZ;
     private ItemStack bandeira;
@@ -63,6 +65,8 @@ public final class Territorio {
     public UUID dono() { return dono; }
     public String nomeDono() { return nomeDono; }
     void nomeDono(String n) { nomeDono = n; }
+    public String boasVindas() { return boasVindas; }
+    void boasVindas(String s) { boasVindas = s == null || s.isBlank() ? null : s; }
     public String mundo() { return mundo; }
     public World world() { return Bukkit.getWorld(mundo); }
 

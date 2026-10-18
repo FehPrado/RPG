@@ -267,22 +267,24 @@ public final class Estruturas implements Listener {
         if (!plugin.settings().estrAtivadas) return;
         Chunk c = e.getChunk();
         World w = c.getWorld();
-        if (w.getEnvironment() != World.Environment.NORMAL || plugin.masmorras().ehMundo(w)) return;
+        boolean nether = w.getEnvironment() == World.Environment.NETHER;
+        if ((w.getEnvironment() != World.Environment.NORMAL && !nether) || plugin.masmorras().ehMundo(w)) return;
         boolean novo = e.isNewChunk();
         if (!novo && plugin.settings().estrSoChunksNovos) return;
         var pdc = c.getPersistentDataContainer();
         if (pdc.has(kChunk)) return;
         pdc.set(kChunk, PersistentDataType.BYTE, (byte) 1);
-        if (novo) {
+        if (novo && !nether) {
             cidades.talvez(c);
             ilhas.talvez(c);
         }
         Random r =new Random(w.getSeed() ^ (c.getX() * 0x9E3779B97F4A7C15L) ^ (c.getZ() * 0xC2B2AE3D27D4EB4FL) ^ 0x57A0L);
-        if (r.nextDouble() >= plugin.settings().estrChance) return;
+        // No Nether a viagem rende 8x: metade da chance, para não ficar uma estrutura em cada esquina.
+        if (r.nextDouble() >= plugin.settings().estrChance * (nether ? 0.5 : 1)) return;
         // Até 3 tipos diferentes: se o chão não serve para um, talvez sirva para outro.
         List<Estrutura> tipos = new ArrayList<>();
         for (int i = 0; i < 12 && tipos.size() < 3; i++) {
-            Estrutura t = Estrutura.sortear(r);
+            Estrutura t = Estrutura.sortear(r, nether);
             if (!tipos.contains(t)) tipos.add(t);
         }
         int rot = r.nextInt(4);
@@ -301,6 +303,34 @@ public final class Estruturas implements Listener {
             Block b = w.getBlockAt(x, y, z);
             if (b.isLiquid() || b.getBlockData() instanceof Waterlogged wl && wl.isWaterlogged()) return null;
             if (ehChao(b.getType())) return b;
+        }
+        return null;
+    }
+
+    /**
+     * 2.56: o chão de uma caverna do Nether no centro (de cima para baixo, entre y 100 e 32), com
+     * pelo menos {@code altura} blocos de ar por cima. Integer.MIN_VALUE se não achar.
+     */
+    private static int pisoNether(World w, int x, int z, int altura) {
+        int livre = 0;
+        for (int y = 110; y > 31; y--) {
+            Block b = w.getBlockAt(x, y, z);
+            if (b.getType().isAir()) {
+                livre++;
+                continue;
+            }
+            if (livre >= Math.min(altura, 7) && y <= 100 && ehChao(b.getType()) && !b.isLiquid()) return y;
+            livre = 0;
+        }
+        return Integer.MIN_VALUE;
+    }
+
+    /** O chão da coluna no Nether perto da altura de referência (4 blocos para cima ou para baixo); null se for lava ou abismo. */
+    private static Block chaoNether(World w, int x, int z, int ref) {
+        for (int y = ref + 4; y >= ref - 4; y--) {
+            Block b = w.getBlockAt(x, y, z);
+            if (b.isLiquid()) return null;
+            if (ehChao(b.getType()) && !b.getRelative(org.bukkit.block.BlockFace.UP).getType().isSolid()) return b;
         }
         return null;
     }
@@ -420,11 +450,21 @@ public final class Estruturas implements Listener {
         Map<Material, Integer> tipos = new EnumMap<>(Material.class);
         int[] todas = new int[lado * lado];
         int n = 0, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        // No Nether não há céu: o chão é o de uma caverna larga o bastante, perto do centro.
+        int pisoNether = 0;
+        if (t.nether()) {
+            pisoNether = pisoNether(w, x, z, t.altura());
+            if (pisoNether == Integer.MIN_VALUE) {
+                if (!forcar) return recusa("sem chão no Nether");
+                pisoNether = 64;
+            }
+        }
         for (int dx = -raio; dx <= raio; dx++) {
             for (int dz = -raio; dz <= raio; dz++) {
-                Block g = t.submersa() ? fundoDoMar(w, x + dx, z + dz, 7) : t.palafita() ? superficie(w, x + dx, z + dz) : chao(w, x + dx, z + dz);
+                Block g = t.nether() ? chaoNether(w, x + dx, z + dz, pisoNether)
+                        : t.submersa() ? fundoDoMar(w, x + dx, z + dz, 7) : t.palafita() ? superficie(w, x + dx, z + dz) : chao(w, x + dx, z + dz);
                 if (g == null && !forcar) return recusa(t.submersa() ? "mar raso" : "água ou lava");
-                int h = g == null ? w.getHighestBlockYAt(x + dx, z + dz) : g.getY();
+                int h = g != null ? g.getY() : t.nether() ? pisoNether : w.getHighestBlockYAt(x + dx, z + dz);
                 if (g != null) tipos.merge(g.getType(), 1, Integer::sum);
                 alt[dx + raio][dz + raio] = h;
                 todas[n++] = h;
@@ -492,6 +532,17 @@ public final class Estruturas implements Listener {
             }
         }
 
+        if (t.nether()) {
+            // A lava em volta escorreria para dentro da área aberta: vira pedra-negra.
+            for (int dx = -raio - 1; dx <= raio + 1; dx++) {
+                for (int dz = -raio - 1; dz <= raio + 1; dz++) {
+                    for (int yy = y0 - 2; yy <= y0 + t.altura() + 1; yy++) {
+                        Block b = w.getBlockAt(x + dx, yy, z + dz);
+                        if (b.getType() == Material.LAVA) b.setType(Material.BLACKSTONE, false);
+                    }
+                }
+            }
+        }
         Sitio s = new Sitio(UUID.randomUUID().toString().substring(0, 8), t, w.getName(), x, y0, z, rot);
         s.fundo = fundo;
         if (t == Estrutura.SANTUARIO_ESQUECIDO) s.deus = Deus.values()[r.nextInt(Deus.values().length)];
@@ -1255,10 +1306,58 @@ public final class Estruturas implements Listener {
             acenderFarol(e.getPlayer(), farol, b);
             return;
         }
+        if (b.getType() == Material.CRYING_OBSIDIAN) {
+            Sitio portal = coracaoDoPortal(b);
+            if (portal != null) {
+                e.setCancelled(true);
+                tocarPortal(e.getPlayer(), portal, b);
+                return;
+            }
+        }
         Sitio s = altar(b);
         if (s == null || s.deus == null) return;
         e.setCancelled(true);
         rezar(e.getPlayer(), s);
+    }
+
+    // ---------------------------------------------------------------------
+    //  2.56: o Primeiro Portal em Ruínas
+    // ---------------------------------------------------------------------
+
+    private static final NamespacedKey K_CHAVE_PORTAL = new NamespacedKey("rpgatributos", "chave_primeiro_portal");
+
+    private Sitio coracaoDoPortal(Block b) {
+        for (Sitio s : sitios) {
+            if (s.tipo != Estrutura.PRIMEIRO_PORTAL || !s.mundo.equals(b.getWorld().getName())) continue;
+            if (Math.abs(s.x - b.getX()) > 6 || Math.abs(s.z - b.getZ()) > 6) continue;
+            int[] c = Ruinas.CORACAO_DO_PORTAL;
+            if (s.ponto(b.getWorld(), c[0], c[1], c[2]).getBlock().equals(b)) return s;
+        }
+        return null;
+    }
+
+    /** A pedra que chora: a Chave do Primeiro Portal (uma por jogador; depois, só a lembrança). */
+    private void tocarPortal(Player p, Sitio s, Block b) {
+        Location c = b.getLocation().add(0.5, 0.5, 0.5);
+        var pdc = p.getPersistentDataContainer();
+        c.getWorld().spawnParticle(Particle.REVERSE_PORTAL, c, 60, 0.4, 0.6, 0.4, 0.05);
+        c.getWorld().spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, c, 12, 0.3, 0.4, 0.3, 0);
+        if (pdc.has(K_CHAVE_PORTAL)) {
+            p.playSound(c, Sound.BLOCK_PORTAL_AMBIENT, 0.6f, 1.4f);
+            p.sendActionBar(Component.text("A pedra ainda chora. A chave já é sua.", TextColor.color(0xB388FF)));
+            return;
+        }
+        pdc.set(K_CHAVE_PORTAL, PersistentDataType.BYTE, (byte) 1);
+        p.getWorld().dropItem(p.getLocation().add(0, 0.5, 0),
+                br.rpgatributos.exploracao.Arqueologia.criar(br.rpgatributos.exploracao.Reliquia.CHAVE_DO_PRIMEIRO_PORTAL));
+        p.giveExp(60);
+        p.showTitle(Title.title(Component.text("✦ A Chave do Primeiro Portal", TextColor.color(0xB388FF), TextDecoration.BOLD),
+                Component.text("A pedra soltou o que guardava há mil anos.", NamedTextColor.GRAY),
+                Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(3000), Duration.ofMillis(800))));
+        p.playSound(c, Sound.BLOCK_END_PORTAL_SPAWN, 0.5f, 1.3f);
+        p.playSound(c, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1f, 0.8f);
+        plugin.diario().marco(p, "primeiro_portal", "Achou a Chave do Primeiro Portal no Nether");
+        plugin.titulos().registrar(p, "primeiro_portal", 1);
     }
 
     /** Fruta Celeste: leve como o vento (dá para descer da ilha sem planador). */

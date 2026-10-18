@@ -143,9 +143,15 @@ public enum Titulo {
     GRANDE_INVENTOR("Grande Inventor", 0x26A69A, Requisito.contador("raca_v_gnomo", 1, "Despertar o estágio V do Gnomo Inventor"), Bonus.xpSkill(Skill.FERRARIA, 0.15)),
     // ---------- 2.54: combate ----------
     DISCIPULO("Discípulo", 0x80DEEA, Requisito.contador("tecnicas", 3, "Aprender 3 técnicas secretas com os Mestres de Armas"), Bonus.dano(1)),
-    HERDEIRO_DAS_TECNICAS("Herdeiro das Técnicas", 0x26C6DA, Requisito.contador("tecnicas", 19, "Aprender as 19 técnicas secretas"), new Bonus().comDano(2).comVida(4)),
+    HERDEIRO_DAS_TECNICAS("Herdeiro das Técnicas", 0x26C6DA, Requisito.contador("tecnicas", 20, "Aprender as 20 técnicas secretas"), new Bonus().comDano(2).comVida(4)),
     MURALHA_VIVA("Muralha Viva", 0xFFE082, Requisito.contador("aparadas", 50, "Aparar 50 golpes com o escudo"), Bonus.armadura(2)),
     MESTRE_DAS_POSTURAS("Mestre das Posturas", 0xFFD54F, Requisito.contador("posturas_mestradas", 3, "Levar 3 posturas à maestria V"), Bonus.dano(1)),
+    // 2.56: o Nether
+    PORTADOR_DA_CHAVE("Portador da Chave", 0xB388FF, Requisito.contador("primeiro_portal", 1, "Achar a Chave do Primeiro Portal no Nether"), Bonus.xpTudo(0.03)),
+    PESCADOR_DO_INFERNO("Pescador do Inferno", 0xFF7043, Requisito.contador("peixes_lava", 25, "Pescar 25 vezes na lava com a Vara Ígnea"), Bonus.xpSkill(Skill.PESCA, 0.15)),
+    CACADOR_DE_ARCO_IRIS("Caçador de Arco-Íris", 0xFFD54F, Requisito.contador("arco_iris", 3, "Achar 3 Potes do Arco-Íris"), Bonus.xpTudo(0.03)),
+    PEDIDO_AS_ESTRELAS("Pedido às Estrelas", 0xE1F5FE, Requisito.contador("pedidos_estrela", 10, "Fazer 10 pedidos a estrelas cadentes"), Bonus.xpTudo(0.03)),
+    GARIMPEIRO_DO_INFERNO("Garimpeiro do Inferno", 0xFFB300, Requisito.contador("minerais_nether", 30, "Minerar 30 minerais do Nether (magma, âmbar infernal, quartzo negro)"), Bonus.xpSkill(Skill.MINERACAO, 0.1)),
     RENASCIDO("Renascido", 0xFFD54F, Requisito.contador("renascimentos", 1, "Renascer uma vez"), new Bonus().comVida(2).comDano(1)),
     ETERNO("Eterno", 0xFFF59D, Requisito.contador("renascimentos", 5, "Renascer 5 vezes"), new Bonus().comDano(2).comVida(6).comVelocidade(0.05)),
 

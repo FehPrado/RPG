@@ -153,7 +153,31 @@ public enum Prato {
             List.of(e(PotionEffectType.SPEED, 90, 0)), Especial.PASSO_DO_VAZIO),
     LAGRIMA_CARAMELIZADA("Lágrima de Ghast Caramelizada", Material.COOKIE, 0.6, 55, 4,
             List.of(m(Material.GHAST_TEAR, 1), m(Material.SUGAR, 2), m(Material.GLOW_BERRIES, 1)),
-            List.of(e(PotionEffectType.REGENERATION, 30, 1), e(PotionEffectType.ABSORPTION, 120, 0)), null);
+            List.of(e(PotionEffectType.REGENERATION, 30, 1), e(PotionEffectType.ABSORPTION, 120, 0)), null),
+
+    // ---------------- 2.56: a cozinha do Nether (fungos, hoglin e os peixes da lava) ----------------
+    ENSOPADO_CARMESIM("Ensopado Carmesim", Material.MUSHROOM_STEW, 0.2, 20, 6,
+            List.of(m(Material.CRIMSON_FUNGUS, 2), m(Material.CRIMSON_ROOTS, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.STRENGTH, 180, 0), e(PotionEffectType.FIRE_RESISTANCE, 180, 0)), null),
+    CALDO_DISTORCIDO("Caldo Distorcido", Material.BEETROOT_SOUP, 0.25, 25, 5,
+            List.of(m(Material.WARPED_FUNGUS, 2), m(Material.WARPED_ROOTS, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.NIGHT_VISION, 300, 0)), Especial.CHEIRO_DISTORCIDO),
+    ESPETO_DE_HOGLIN("Espeto de Hoglin", Material.COOKED_BEEF, 0.3, 30, 9,
+            List.of(m(Material.COOKED_PORKCHOP, 2), m(Material.CRIMSON_FUNGUS, 1), m(Material.GOLD_NUGGET, 4)),
+            List.of(e(PotionEffectType.STRENGTH, 240, 0), e(PotionEffectType.ABSORPTION, 120, 0)), Especial.AMIGO_DOS_PIGLINS),
+    PEIXE_BRASA_NA_PEDRA("Peixe-Brasa na Pedra", Material.COOKED_COD, 0.3, 30, 8,
+            List.of(p(PeixeRaro.PEIXE_BRASA, 1), m(Material.MAGMA_CREAM, 1)),
+            List.of(e(PotionEffectType.FIRE_RESISTANCE, 480, 0), e(PotionEffectType.HASTE, 180, 0)), Especial.PUNHOS_DE_FOGO),
+    CALDO_VULCANICO("Caldo Vulcânico", Material.RABBIT_STEW, 0.5, 45, 8,
+            List.of(p(PeixeRaro.ENGUIA_DE_MAGMA, 1), m(Material.NETHER_WART, 2), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.STRENGTH, 300, 0), e(PotionEffectType.RESISTANCE, 300, 0), e(PotionEffectType.FIRE_RESISTANCE, 300, 0)), null),
+    ENSOPADO_DAS_ALMAS("Ensopado das Almas", Material.MUSHROOM_STEW, 0.55, 50, 8,
+            List.of(p(PeixeRaro.CARPA_DE_ALMAS, 1), m(Material.WARPED_FUNGUS, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.SPEED, 240, 1), e(PotionEffectType.NIGHT_VISION, 300, 0)), Especial.CHEIRO_DISTORCIDO),
+    BANQUETE_INFERNAL("Banquete Infernal", Material.SUSPICIOUS_STEW, 0.85, 90, 12,
+            List.of(p(PeixeRaro.SALAMANDRA_DE_LAVA, 1), m(Material.COOKED_PORKCHOP, 2), m(Material.GOLDEN_CARROT, 1), m(Material.BOWL, 1)),
+            List.of(e(PotionEffectType.STRENGTH, 300, 0), e(PotionEffectType.RESISTANCE, 300, 0),
+                    e(PotionEffectType.REGENERATION, 300, 0), e(PotionEffectType.FIRE_RESISTANCE, 600, 0)), Especial.BANQUETE);
 
     /** Ingrediente: um material comum, uma variedade mutante, um peixe raro OU outro item do plugin. */
     public record Ingrediente(Material material, Variedade variedade, PeixeRaro peixe, Extra extra, int qtd) {}
@@ -177,7 +201,10 @@ public enum Prato {
         FIRME("Ossos de pedra: quase não é empurrado", 180),
         SEM_SONO("Os phantoms esquecem você (como se tivesse dormido)", 0),
         PUNHOS_DE_FOGO("Seus golpes põem fogo no alvo", 120),
-        PASSO_DO_VAZIO("Ao levar um golpe, às vezes some e reaparece atrás de quem bateu", 90);
+        PASSO_DO_VAZIO("Ao levar um golpe, às vezes some e reaparece atrás de quem bateu", 90),
+        // 2.56: da cozinha do Nether
+        AMIGO_DOS_PIGLINS("Cheiro de ouro: os piglins te deixam em paz, mesmo sem armadura de ouro", 300),
+        CHEIRO_DISTORCIDO("Cheiro de fungo distorcido: hoglins e piglins brutos não te atacam", 240);
 
         private final String descricao;
         private final int segundos;

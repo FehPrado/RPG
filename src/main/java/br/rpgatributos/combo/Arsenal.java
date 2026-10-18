@@ -95,7 +95,10 @@ public final class Arsenal implements Listener {
         GARRAS("garras", "Garras de Pedra-Sangue", TipoArma.GARRAS, -2, 2.6, 0, 0,
                 "Muito rápidas. Cada golpe rouba 10% do dano em vida.", Material.IRON_SWORD),
         CLAVA("clava", "Clava Fumegante", TipoArma.CLAVA, 2, 0.9, 0, 0.6,
-                "Com Turfa no inventário, os golpes queimam (1 Turfa a cada 8 queimas).", Material.STONE_SWORD);
+                "Com Turfa no inventário, os golpes queimam (1 Turfa a cada 8 queimas).", Material.STONE_SWORD),
+        // 2.56: a arma do Nether (Cristal de Magma); quem ensina a técnica é o Ferreiro Piglin
+        LANCA_BASALTO("lanca_basalto", "Lança de Basalto", TipoArma.LANCA_BASALTO, 2, 1.0, 1.5, 0.6,
+                "Longa. Cada golpe põe fogo; em quem já queima, +25% de dano.", Material.IRON_SWORD);
 
         public final String id, nome, descricao;
         private final TipoArma tipo;
@@ -343,6 +346,12 @@ public final class Arsenal implements Listener {
                     r.shape("B B", "III");
                     r.setIngredient('B', new RecipeChoice.ExactChoice(br.rpgatributos.aventura.Raro.PEDRA_SANGUE.criar(1)));
                     r.setIngredient('I', Material.IRON_INGOT);
+                }
+                case LANCA_BASALTO -> {
+                    r.shape("  C", " B ", "R  ");
+                    r.setIngredient('C', new RecipeChoice.ExactChoice(br.rpgatributos.aventura.Raro.CRISTAL_DE_MAGMA.criar(1)));
+                    r.setIngredient('B', Material.POLISHED_BASALT);
+                    r.setIngredient('R', Material.BLAZE_ROD);
                 }
                 case CLAVA -> {
                     r.shape(" T ", " L ", " S ");
@@ -605,6 +614,13 @@ public final class Arsenal implements Listener {
                     queimas.remove(p.getUniqueId());
                     gastarTurfa(p);
                 }
+            }
+            case LANCA_BASALTO -> {
+                // Em quem já queima o golpe entra mais fundo; depois, põe (ou renova) o fogo.
+                boolean mestre = mestra(p, TipoArma.LANCA_BASALTO, 2) > 1;
+                if (alvo.getFireTicks() > 0) e.setDamage(e.getDamage() * (mestre ? 1.4 : 1.25));
+                alvo.setFireTicks(Math.max(alvo.getFireTicks(), mestre ? 100 : 60));
+                alvo.getWorld().spawnParticle(Particle.LAVA, alvo.getLocation().add(0, 1, 0), 2, 0.2, 0.3, 0.2, 0);
             }
             default -> { }
         }

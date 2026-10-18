@@ -2,6 +2,7 @@ target/
 *.class
 .idea/
 *.iml
+__pycache__/
 
 # Pacote de referência (direitos do autor, não vai para o git)
 NewDefault*.zip

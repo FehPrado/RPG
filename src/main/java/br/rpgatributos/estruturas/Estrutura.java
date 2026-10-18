@@ -68,7 +68,12 @@ public enum Estrutura {
             3, 7, 2, 14, b -> b.contains("dark_forest") || b.contains("birch") || b.contains("old_growth") || b.contains("flower_forest") || b.equals("forest")),
     /** Não é sorteada por chunk: a {@link IlhasDoCeu} escolhe o lugar (uma por região, em terra firme, lá no alto). */
     ILHA_DO_CEU("Ilha do Céu", "a", 0x90CAF9, "Lá em cima, o vento ainda lembra de quem morou entre as nuvens.",
-            0, 30, 99, 0, b -> !b.contains("ocean") && !b.contains("river"));
+            0, 30, 99, 0, b -> !b.contains("ocean") && !b.contains("river")),
+    // ---------------- 2.56: o Nether (só nascem lá; veja nether()) ----------------
+    FORJA_PIGLIN("Forja dos Piglins", "a", 0xFFB300, "Ouro, fogo e um ferreiro que só confia em quem paga.",
+            6, 6, 3, 8, b -> b.contains("crimson") || b.contains("wastes")),
+    PRIMEIRO_PORTAL("Primeiro Portal em Ruínas", "o", 0xB388FF, "Foi por aqui que alguém abriu, pela primeira vez, o caminho entre os mundos.",
+            2, 5, 3, 10, b -> !b.contains("basalt"));
 
     private final String nome, artigo, frase;
     private final TextColor cor;
@@ -107,8 +112,13 @@ public enum Estrutura {
     }
 
     public boolean aceita(String bioma) {
-        if (this == FAROL || this == VILA_PESCADORES || submersa()) return this.bioma.test(bioma); // o farol e a vila de pescadores são na praia; os do mar, no mar
+        if (this == FAROL || this == VILA_PESCADORES || submersa() || nether()) return this.bioma.test(bioma); // o farol e a vila de pescadores são na praia; os do mar, no mar
         return !agua(bioma) && this.bioma.test(bioma);
+    }
+
+    /** 2.56: nasce no Nether (e só lá). */
+    public boolean nether() {
+        return this == FORJA_PIGLIN || this == PRIMEIRO_PORTAL;
     }
 
     /** Fica no fundo do mar. */
@@ -124,22 +134,24 @@ public enum Estrutura {
     /** Tem um morador (NPC) que negocia. */
     /** Vila com vários moradores (NPCs com loja, serviço e laço; veja Vilas). */
     public boolean vila() {
-        return this == VILA_PESCADORES || this == MOSTEIRO || this == ALDEIA_ANOES || this == VILA_ELFICA;
+        return this == VILA_PESCADORES || this == MOSTEIRO || this == ALDEIA_ANOES || this == VILA_ELFICA || this == FORJA_PIGLIN;
     }
 
     public boolean temMorador() {
         return this == CABANA_DO_EREMITA || this == OASIS || this == CABANA_DA_BRUXA;
     }
 
-    public static Estrutura sortear(Random r) {
+    /** Sorteia pelo peso entre as do mundo normal ou, com {@code nether}, entre as do Nether. */
+    public static Estrutura sortear(Random r, boolean nether) {
         int total = 0;
-        for (Estrutura e : values()) total += e.peso;
+        for (Estrutura e : values()) if (e.nether() == nether) total += e.peso;
         int v = r.nextInt(total);
         for (Estrutura e : values()) {
+            if (e.nether() != nether) continue;
             v -= e.peso;
             if (v < 0) return e;
         }
-        return TORRE_DE_VIGIA;
+        return nether ? FORJA_PIGLIN : TORRE_DE_VIGIA;
     }
 
     public static Estrutura porId(String s) {
