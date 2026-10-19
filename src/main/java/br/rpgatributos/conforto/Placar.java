@@ -128,6 +128,7 @@ public final class Placar implements Listener, CommandExecutor {
         l.add(Component.text("  muda em " + br.rpgatributos.mundo.Estacoes.duracao(plugin.estacoes().restante()), NamedTextColor.DARK_GRAY));
         long t = (p.getWorld().getTime() + 6000) % 24000;
         l.add(Component.text("☾ " + Ceu.nomeFase(p.getWorld()) + " · " + String.format("%02d:%02d", t / 1000, t % 1000 * 60 / 1000), NamedTextColor.GRAY));
+        if (p.getVehicle() instanceof org.bukkit.entity.Boat) l.add(Component.text("🌬 " + br.rpgatributos.mundo.Vento.texto(plugin), NamedTextColor.AQUA));
         long descanso = plugin.fogueiras().descansadoAte(p) - System.currentTimeMillis();
         if (descanso > 0) l.add(Component.text("♨ Descansado " + (descanso / 60000 + 1) + " min", TextColor.color(0xFF8A3D)));
         int livres = plugin.talentos().livres(p);

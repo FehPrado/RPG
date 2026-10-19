@@ -110,7 +110,7 @@ public final class Settings {
     public final boolean confColher, confOrdenar, confRepor, confPortas, confElevadores, confApito;
     public final String manualUrl;
     public final boolean bausVanilla, vilasVanilla, ferrovias, velas, barcoGrande, cobre, comecoGuiado, conjuntosMinerais;
-    public final boolean utilChave, utilFunil, utilRegador, utilLanterna, utilBancada, utilBalde, utilTrena, utilCinto;
+    public final boolean utilChave, utilFunil, utilRegador, utilLanterna, utilBancada, utilBalde, utilTrena, utilCinto, carroca;
     public final double vanillaCabecaChance;
     public final int profAltura, profPenumbraMaxima;
     public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
@@ -424,6 +424,7 @@ public final class Settings {
         utilBalde = c.getBoolean("utilidades.balde-de-gelo", true);
         utilTrena = c.getBoolean("utilidades.trena", true);
         utilCinto = c.getBoolean("utilidades.cinto-de-ferramentas", true);
+        carroca = c.getBoolean("utilidades.carroca", true);
         cobre = c.getBoolean("integracao.para-raios-guarda-o-raio", true);
         comecoGuiado = c.getBoolean("integracao.comeco-guiado", true);
         profAltura = c.getInt("profundezas.abaixo-de-y", 0);

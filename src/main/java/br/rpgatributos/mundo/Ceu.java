@@ -73,7 +73,6 @@ public final class Ceu implements Listener {
     private final RPGAtributos plugin;
     private Clima clima;
     private int climaAte;
-    private Vector vento = new Vector(1, 0, 0);
     private boolean luaDeSangue, aurora, eclipse;
     private int meteorosAte, eclipseAte;
     private long ultimaHora = -1;
@@ -308,7 +307,6 @@ public final class Ceu implements Listener {
         }
         clima = c;
         climaAte = segundos + 240;
-        vento = new Vector(rnd().nextDouble(-1, 1), 0, rnd().nextDouble(-1, 1)).normalize();
         if (c == Clima.NEVASCA || c == Clima.TEMPESTADE) {
             w.setStorm(true);
             w.setWeatherDuration(240 * 20);
@@ -332,7 +330,7 @@ public final class Ceu implements Listener {
     public void aoLancar(ProjectileLaunchEvent e) {
         if (clima != Clima.VENTANIA || !e.getEntity().getWorld().equals(mundo())) return;
         Projectile pr = e.getEntity();
-        plugin.getServer().getScheduler().runTask(plugin, () -> pr.setVelocity(pr.getVelocity().add(vento.clone().multiply(0.35))));
+        plugin.getServer().getScheduler().runTask(plugin, () -> pr.setVelocity(pr.getVelocity().add(Vento.direcao().multiply(0.35))));
     }
 
     private void efeitos(Player p) {
@@ -364,7 +362,7 @@ public final class Ceu implements Listener {
                 }
             }
             case VENTANIA -> {
-                if (fora && segundos % 2 == 0) p.spawnParticle(Particle.CLOUD, l.clone().add(vento.clone().multiply(-6)).add(0, 1.5, 0), 6, 1, 1, 1, 0.3);
+                if (fora && segundos % 2 == 0) p.spawnParticle(Particle.CLOUD, l.clone().add(Vento.direcao().multiply(-6)).add(0, 1.5, 0), 6, 1, 1, 1, 0.3);
             }
             case TEMPESTADE -> {
                 if (!fora || segundos % 5 != 0) return;

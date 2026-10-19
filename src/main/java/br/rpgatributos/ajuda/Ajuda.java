@@ -543,6 +543,10 @@ public final class Ajuda implements Listener {
     private record Novidade(Material icone, String nome, String texto, String topico) { }
 
     private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.SPRUCE_CHEST_BOAT, "Carroça",
+                    "Baú, barco, tábuas e gravetos: laço nela e clique num cavalo. Leva carga e ganha melhorias.", "carroca"),
+            new Novidade(Material.WHITE_BANNER, "O vento",
+                    "Sopra de um lado e muda 4 vezes por dia: a favor, o barco a vela voa; contra, só no remo. Veja no /calendario.", "integracao"),
             new Novidade(Material.IRON_CHESTPLATE, "Conjuntos dos minerais",
                     "Armas, ferramentas e armaduras de Âmbar, Jade, Pérola, Gelo, Pedra-Sangue, Magma e Quartzo Negro, com bônus de 2 e 4 peças.", "conjuntos_minerais"),
             new Novidade(Material.PAPER, "Utilidades do dia a dia",

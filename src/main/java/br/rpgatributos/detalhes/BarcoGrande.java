@@ -78,6 +78,8 @@ public final class BarcoGrande implements Listener {
     /** Os 4 bancos (x, z no barco; +z é a frente). O banco 1 vira o mastro quando há vela. */
     private static final double[][] BANCOS = {{-0.4, -1.35}, {0.4, -1.35}, {-0.4, -2.4}, {0.4, -2.4}};
     private static final int BANCO_DO_MASTRO = 1;
+    /** Os bancos de trás ficam acima da água (o convés é mais alto que o fundo do barco da frente). */
+    private static final double ALTURA_ASSENTO = 0.55;
 
     private final RPGAtributos plugin;
     /** Barco → os assentos ocupados (null = livre). */
@@ -174,12 +176,12 @@ public final class BarcoGrande implements Listener {
         // O lastro vai na frente da fila: assim nenhuma peça desenhada fica no 1º lugar (que muda de posição).
         pecas.add(w.spawn(l, ItemDisplay.class, d -> marcar(d)));
         BlockData tabua = Material.SPRUCE_PLANKS.createBlockData(), borda = Material.STRIPPED_SPRUCE_WOOD.createBlockData();
-        pecas.add(bloco(w, l, tabua, -0.75f, -0.15f, -3.1f, 1.5f, 0.25f, 2.6f));      // convés
-        pecas.add(bloco(w, l, borda, -0.9f, -0.15f, -3.1f, 0.15f, 0.6f, 2.6f));       // borda esquerda
-        pecas.add(bloco(w, l, borda, 0.75f, -0.15f, -3.1f, 0.15f, 0.6f, 2.6f));       // borda direita
-        pecas.add(bloco(w, l, borda, -0.9f, -0.15f, -3.25f, 1.8f, 0.65f, 0.15f));     // popa
-        pecas.add(bloco(w, l, tabua, -0.75f, 0.1f, -1.55f, 1.5f, 0.1f, 0.4f));        // banco da frente
-        pecas.add(bloco(w, l, tabua, -0.75f, 0.1f, -2.6f, 1.5f, 0.1f, 0.4f));         // banco de trás
+        pecas.add(bloco(w, l, tabua, -0.75f, 0.15f, -3.1f, 1.5f, 0.25f, 2.6f));       // convés
+        pecas.add(bloco(w, l, borda, -0.9f, 0.05f, -3.1f, 0.15f, 0.7f, 2.6f));        // borda esquerda
+        pecas.add(bloco(w, l, borda, 0.75f, 0.05f, -3.1f, 0.15f, 0.7f, 2.6f));        // borda direita
+        pecas.add(bloco(w, l, borda, -0.9f, 0.05f, -3.25f, 1.8f, 0.75f, 0.15f));      // popa
+        pecas.add(bloco(w, l, tabua, -0.75f, 0.4f, -1.55f, 1.5f, 0.1f, 0.4f));        // banco da frente
+        pecas.add(bloco(w, l, tabua, -0.75f, 0.4f, -2.6f, 1.5f, 0.1f, 0.4f));         // banco de trás
         if (Velas.temVela(b)) pecas.add(mastro(w, l));
         pecas.add(w.spawn(l, Interaction.class, i -> {
             i.setInteractionWidth(2.4f);
@@ -211,7 +213,7 @@ public final class BarcoGrande implements Listener {
         return w.spawn(l, ItemDisplay.class, d -> {
             d.setItemStack(new ItemStack(Material.WHITE_BANNER));
             d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
-            d.setTransformation(new Transformation(new Vector3f((float) m[0], 1.2f - PRESO_Y, (float) m[1] - PRESO_Z), new AxisAngle4f(),
+            d.setTransformation(new Transformation(new Vector3f((float) m[0], 1.5f - PRESO_Y, (float) m[1] - PRESO_Z), new AxisAngle4f(),
                     new Vector3f(1.6f, 1.6f, 1.6f), new AxisAngle4f()));
             marcar(d);
             d.getPersistentDataContainer().set(Velas.K_DISPLAY, PersistentDataType.BYTE, (byte) 1);
@@ -417,7 +419,7 @@ public final class BarcoGrande implements Listener {
         double x = BANCOS[i][0], z = BANCOS[i][1];
         // No barco, +z é a frente (-sen, cos) e +x é (cos, sen), como nos blocos desenhados.
         double wx = x * Math.cos(yaw) - z * Math.sin(yaw), wz = x * Math.sin(yaw) + z * Math.cos(yaw);
-        Location r = l.clone().add(wx, PRESO_Y, wz);
+        Location r = l.clone().add(wx, ALTURA_ASSENTO, wz);
         r.setPitch(0);
         return r;
     }

@@ -252,6 +252,7 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.detalhes.Velas velas;
     private br.rpgatributos.detalhes.BarcoGrande barcoGrande;
     private br.rpgatributos.detalhes.Utilidades utilidades;
+    private br.rpgatributos.detalhes.Carrocas carrocas;
     private br.rpgatributos.detalhes.Cobre cobre;
     private br.rpgatributos.ajuda.Boasvindas boasvindas;
     private MercadorItinerante mercador;
@@ -333,6 +334,7 @@ public final class RPGAtributos extends JavaPlugin {
         velas = new br.rpgatributos.detalhes.Velas(this);
         barcoGrande = new br.rpgatributos.detalhes.BarcoGrande(this);
         utilidades = new br.rpgatributos.detalhes.Utilidades(this);
+        carrocas = new br.rpgatributos.detalhes.Carrocas(this);
         cobre = new br.rpgatributos.detalhes.Cobre(this);
         boasvindas = new br.rpgatributos.ajuda.Boasvindas(this);
         tags = new TagManager(this);
@@ -502,6 +504,8 @@ public final class RPGAtributos extends JavaPlugin {
         barcoGrande.registrarReceitas();
         utilidades.registrarReceitas();
         utilidades.registrar(getServer().getPluginManager());
+        carrocas.registrarReceitas();
+        getServer().getPluginManager().registerEvents(carrocas, this);
         elevadores.iniciar();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
@@ -533,6 +537,7 @@ public final class RPGAtributos extends JavaPlugin {
         conquistas.carregar();
         getServer().getScheduler().runTask(this, livroReceitas::iniciar);
         getServer().getScheduler().runTask(this, barcoGrande::restaurar);
+        getServer().getScheduler().runTask(this, carrocas::restaurar);
         PluginCommand craca = getCommand("raca");
         if (craca != null) {
             craca.setExecutor(racas);
@@ -614,6 +619,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, barcoGrande::tick, 1L, 1L);
         agenda.runTaskTimer(this, utilidades::tick, 1L, 1L);
         agenda.runTaskTimer(this, utilidades::segundo, 20L, 20L);
+        agenda.runTaskTimer(this, carrocas::tick, 1L, 1L);
         agenda.runTaskTimer(this, cobre::tick, 1L, 1L);
         // Efeitos passivos (itens forjados, conjuntos, títulos, núcleos): 1x por segundo.
         efeitos.registrarFonte(titulos::efeitos);
@@ -773,6 +779,7 @@ public final class RPGAtributos extends JavaPlugin {
         if (menus != null) menus.fecharTodos();
         if (barcoGrande != null) barcoGrande.desligar();
         if (utilidades != null) utilidades.desligar();
+        if (carrocas != null) carrocas.desligar();
         if (guardaRoupa != null) guardaRoupa.desfazerTodos();
         if (racas != null) racas.asas().fecharTodas();
         if (acessorios != null) acessorios.apagarTodas();

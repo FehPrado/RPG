@@ -396,7 +396,7 @@ public final class Topicos {
                 .texto("Conquistas (tecla L): há uma aba RPGAtributos. O livro de receitas mostra as receitas do servidor quando você tem um ingrediente.",
                         "Baús das estruturas do próprio jogo às vezes trazem itens do servidor. No menu dos moradores, Conversar abre perguntas conforme o laço.",
                         "Vilas do jogo: aldeões com nome; o sino chama todos para a praça; a cada 3 dias é dia de feira (trocas 20% mais baratas).",
-                        "Trilho reto: o carrinho corre o dobro; um sino ao lado do trilho toca quando você passa. Vela de Barco (lã em cruz + 2 gravetos): clique num barco e reme.",
+                        "Trilho reto: o carrinho corre o dobro; um sino ao lado do trilho toca quando você passa. Vela de Barco (lã em cruz + 2 gravetos): clique num barco e reme; o vento por trás dá mais velocidade, de frente quase nada (veja o vento no /calendario).",
                         "Barco Grande (7 tábuas + 2 barcos): 5 lugares, ou 4 com a Vela. Comboio: laço num barco e, agachado, clique em outro barco: ficam amarrados.",
                         "Para-raios atingido solta faíscas: clique para ficar ligeiro e forjar com mais chance de raridade. Funil em cima da Bancada de Reciclagem e baú embaixo: ela recicla sozinha.")
                 .ligados("vanilla", "conforto", "vilas").palavras("conquista avanco receita livro bau loot conversar aldeao sino feira trilho carrinho ferrovia vela barco grande comboio para raios cobre reciclagem funil").pronto();
@@ -407,6 +407,12 @@ public final class Topicos {
                         "Bancada de Bolso (bancada e couro): abre a bancada; agachado, a pedra de amolar, o tear, o cortador, a cartografia ou a ferraria.",
                         "Balde de Gelo (Cristal de Gelo e balde): guarda 4 baldes de água ou de lava. Trena: mede entre dois blocos. Cinto de Ferramentas: segure e bata no bloco, a ferramenta certa vem para a mão.")
                 .ligados("conforto", "integracao", "vanilla").palavras("chave construtor girar funil filtro regador lanterna luz bancada bolso balde gelo trena medir cinto ferramentas").pronto();
+        t("carroca", MUNDO, "Carroça", Material.SPRUCE_CHEST_BOAT)
+                .texto("Receita: baú em cima, um barco no meio entre 2 tábuas e 2 gravetos embaixo. Clique no chão para pôr.",
+                        "Laço na carroça e depois clique num cavalo, mula, burro, lhama ou camelo domado: ela vai atrás (o animal fica um pouco mais lento).",
+                        "Clique: a carga. Agachado + clique: solta (ou senta, com o Banco). Batendo, vira item de novo.",
+                        "Melhorias, clicando com o item: bloco de ferro (rodas), baú (54 espaços), 3 lãs (toldo: monstros não quebram), lanterna (luz), alavanca (freio) e laje de madeira (banco).")
+                .ligados("utilidades", "companheiros").palavras("carroca carroça cavalo mula burro lhama camelo carga baú puxar laço").pronto();
         t("vanilla", MUNDO, "Vanilla+ e artefatos", Material.OAK_SAPLING)
                 .texto("Detalhes com cara de jogo normal: mudas que se plantam sozinhas, folhas que soltam graveto, cabeças de monstro, placa que mostra o baú, peixes pulando e gelo fino.",
                         "Abelhas polinizam: colmeia ou ninho com abelhas a até 8 blocos faz a plantação crescer mais rápido.",

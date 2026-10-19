@@ -157,26 +157,87 @@ public final class Velas implements Listener {
     //  O vento na vela
     // =====================================================================
 
-    /** A cada tick: o barco a vela com alguém remando para a frente ganha impulso. */
+    /** Onde cada barco a vela estava no tick anterior (para medir a velocidade de verdade). */
+    private final java.util.Map<java.util.UUID, org.bukkit.Location> antes = new java.util.HashMap<>();
+
+    /** O ângulo em que a vela de cada barco está agora (para não mandar o mesmo de novo). */
+    private final java.util.Map<java.util.UUID, Float> anguloVela = new java.util.HashMap<>();
+
+    /**
+     * A cada tick: o barco a vela com alguém remando para a frente ganha o impulso do vento.
+     * <ul>
+     *   <li>Vento por trás: o máximo; de lado: a metade; de frente: quase nada (sobra o remo).</li>
+     *   <li>A força vem do tempo (fraco, bom na chuva, forte na Ventania; na Ventania ele ainda
+     *       empurra o barco um pouco para o lado do vento).</li>
+     *   <li>A vela gira para pegar o vento, e a barra diz se ele está a favor, de lado ou contra.</li>
+     * </ul>
+     * Quem move o barco é o jogo de quem pilota: no servidor, a velocidade do barco fica quase
+     * zero. Por isso a velocidade é medida pelo quanto o barco andou desde o tick anterior (usar a
+     * do servidor freava o barco a cada tick).
+     */
     public void tick() {
         if (!plugin.settings().velas) return;
-        boolean ventania = plugin.ceu().clima() == br.rpgatributos.mundo.Ceu.Clima.VENTANIA;
+        double forca = br.rpgatributos.mundo.Vento.forca(plugin);
+        boolean ventania = forca >= 1.5;
+        double rumo = br.rpgatributos.mundo.Vento.rumo();
+        Vector vento = br.rpgatributos.mundo.Vento.direcao();
+        java.util.Set<java.util.UUID> vistos = new java.util.HashSet<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (!(p.getVehicle() instanceof Boat b) || !temVela(b) || b.getPassengers().getFirst() != p) continue;
+            vistos.add(b.getUniqueId());
+            orientarVela(b, rumo, ventania);
+            org.bukkit.Location agora = b.getLocation(), ultimo = antes.put(b.getUniqueId(), agora);
+            if (ultimo == null || !ultimo.getWorld().equals(agora.getWorld())) continue;
             if (b.getStatus() != Boat.Status.IN_WATER || !p.getCurrentInput().isForward()) continue;
-            Vector frente = b.getLocation().getDirection().setY(0);
+            Vector frente = agora.getDirection().setY(0);
             if (frente.lengthSquared() < 1e-4) continue;
             frente.normalize();
-            Vector v = b.getVelocity();
-            double impulso = ventania ? 0.035 : 0.025;
-            Vector nova = v.clone().add(frente.multiply(impulso));
-            double h = Math.hypot(nova.getX(), nova.getZ()), max = ventania ? VELOCIDADE_MAXIMA * 1.25 : VELOCIDADE_MAXIMA;
+            Vector v = agora.toVector().subtract(ultimo.toVector());
+            if (v.lengthSquared() > 4) continue; // teleporte ou volta ao mundo: não é velocidade
+            v.setY(Math.max(-0.1, Math.min(0.1, v.getY())));
+            double cos = frente.dot(vento);
+            double aproveita = 0.15 + 0.85 * (1 + cos) / 2;
+            Vector nova = v.clone().add(frente.clone().multiply(0.03 * forca * aproveita));
+            if (ventania) nova.add(vento.clone().multiply(0.006));
+            double h = Math.hypot(nova.getX(), nova.getZ());
+            double max = VELOCIDADE_MAXIMA * (0.55 + 0.45 * aproveita) * (ventania ? 1.25 : 1);
             if (h > max) {
                 nova.setX(nova.getX() / h * max);
                 nova.setZ(nova.getZ() / h * max);
             }
             b.setVelocity(nova);
             if (Bukkit.getCurrentTick() % 10 == 0) b.getWorld().spawnParticle(Particle.SPLASH, b.getLocation(), 6, 0.5, 0.1, 0.5, 0.1);
+            if (Bukkit.getCurrentTick() % 30 == 0) {
+                String lado = cos > 0.5 ? "a favor" : cos < -0.5 ? "contra" : "de lado";
+                NamedTextColor c = cos > 0.5 ? NamedTextColor.GREEN : cos < -0.5 ? NamedTextColor.RED : NamedTextColor.YELLOW;
+                p.sendActionBar(Component.text("⛵ Vento " + lado, c).append(Component.text(" · "
+                        + br.rpgatributos.mundo.Vento.intensidade(forca) + " (" + br.rpgatributos.mundo.Vento.de() + ")", COR)));
+            }
+        }
+        antes.keySet().retainAll(vistos);
+        anguloVela.keySet().retainAll(vistos);
+    }
+
+    /**
+     * A vela (o estandarte) gira em cima do barco para ficar de frente para o vento, até 70° para
+     * cada lado (a posição dela no barco não muda: só o giro em volta do mastro).
+     */
+    private void orientarVela(Boat b, double rumo, boolean ventania) {
+        for (Entity x : b.getPassengers()) {
+            if (!(x instanceof ItemDisplay d) || !d.getPersistentDataContainer().has(K_DISPLAY)) continue;
+            double phi = ((d.getLocation().getYaw() - rumo) % 360 + 540) % 360 - 180;
+            if (phi > 90) phi -= 180; // a vela é igual dos dois lados
+            if (phi < -90) phi += 180;
+            phi = Math.max(-70, Math.min(70, phi));
+            if (ventania) phi += java.util.concurrent.ThreadLocalRandom.current().nextDouble(-6, 6);
+            Float atual = anguloVela.get(b.getUniqueId());
+            if (atual != null && Math.abs(atual - phi) < 3) continue;
+            anguloVela.put(b.getUniqueId(), (float) phi);
+            Transformation t = d.getTransformation();
+            d.setInterpolationDelay(0);
+            d.setInterpolationDuration(8);
+            d.setTransformation(new Transformation(t.getTranslation(), new org.joml.Quaternionf().rotationY((float) Math.toRadians(phi)),
+                    t.getScale(), t.getRightRotation()));
         }
     }
 }

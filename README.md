@@ -1551,7 +1551,8 @@ Coisas que aproveitam o que o jogo já tem. Tudo pode ser desligado em `integrac
 - **Conversa com os moradores:** no menu de cada morador das vilas, **💬 Conversar** abre uma janela de conversa: a conversa do dia (soma laço) e perguntas que se abrem conforme o laço cresce (de onde veio, do que tem medo, o sonho, o segredo, do que gosta de ganhar).
 - **Vilas do jogo com vida:** os aldeões ganham **nome** (aparece quando você olha); **tocar o sino** da vila chama os aldeões para a praça; a cada 3 dias é **dia de feira** (de dia): festa em volta do sino, trocas **20% mais baratas** e às vezes chega um mercador ambulante.
 - **Ferrovias:** em trilho reto e plano (8 blocos ou mais), o carrinho com gente acelera até o **dobro da velocidade** e volta ao normal antes das curvas. Um **sino ao lado do trilho** vira estação: toca quando o carrinho passa.
-- **Barco a vela:** a **Vela de Barco** (lã em cruz com 2 gravetos) vai num barco comum com um clique. Remando para a frente na água, ele corre bem mais (mais ainda na Ventania). A vela ocupa o segundo lugar do barco; agachado + clique (mão vazia) tira.
+- **Barco a vela:** a **Vela de Barco** (lã em cruz com 2 gravetos) vai num barco comum com um clique. A vela ocupa o segundo lugar do barco; agachado + clique (mão vazia) tira.
+- **O vento (2.66):** sopra de um lado e muda 4 vezes por dia de jogo (a virada é aos poucos). Remando para a frente com vela, o vento **por trás** dá a velocidade máxima, **de lado** a metade e **de frente** quase nada (sobra o remo). A força vem do tempo: **fraco** com tempo bom, **bom** na chuva e **forte** na Ventania (que ainda empurra o barco um pouco para o lado do vento). A vela gira para pegar o vento, a barra mostra "Vento a favor / de lado / contra", e o vento aparece no `/calendario` e no placar (quando você está num barco). Os projéteis desviados pela Ventania seguem esse mesmo vento.
 - **Barco Grande (2.63):** 7 tábuas e 2 barcos comuns na bancada (`PBP / PBP / PPP`, barcos no meio). Clique na água com ele: aparece um barco comprido de abeto com convés, bordas e 2 bancos. Leva **5 pessoas**: o primeiro a subir pilota, os outros sentam nos 4 bancos (é só clicar no barco). Com a Vela de Barco, o mastro ocupa um banco (**4 pessoas**) e ele corre como o barco a vela. Agachado + clique com a mão vazia tira a vela; sem vela e sem ninguém a bordo, recolhe o barco (volta o item).
 - **Comboio de barcos (2.63):** do próprio jogo: ponha o laço num barco e, agachado, clique em outro barco: o primeiro fica amarrado no segundo. Um barco a vela puxa os de trás (2 pessoas em cada, ou baús nos barcos com baú). O Barco Grande também entra no comboio, puxando ou sendo puxado.
 - **Para-raios guarda o raio:** quando um raio cai num para-raios, ele solta faíscas por 15 minutos. Clique nele para pegar a carga: Pressa II e Velocidade por 3 minutos, e a próxima peça forjada (em até 30 minutos) tem **+8% de chance de sair uma raridade acima**.
@@ -1593,6 +1594,26 @@ Espada, picareta, machado, pá, enxada e as 4 peças de armadura de **Âmbar, Ja
 | **Cinto de Ferramentas** | 3 couros, 2 linhas e 1 ferro | Clique direito: guarde até 9 ferramentas. Segurando o cinto, bata num bloco: a melhor ferramenta para ele vem para a mão (e troca sozinha em outro tipo de bloco). Parou 4 s, trocou de espaço, abriu um inventário, soltou ou morreu: ela volta para o cinto. |
 
 Cada uma pode ser desligada em `utilidades:` no config.
+
+### Carroça (2.67)
+
+**Receita:** baú em cima, um barco comum no meio entre 2 tábuas e 2 gravetos embaixo (`C / PBP / S S`). Clique no chão para pôr.
+
+- **Atrelar:** laço na carroça (ela fica presa em você) e depois clique num **cavalo, mula, burro, lhama ou camelo domado**. O animal anda 15% mais devagar enquanto puxa.
+- **Usar:** clique abre a carga (27 espaços; 54 com o Baú duplo). Agachado + clique solta do animal (o laço fica no chão) ou, com o Banco, senta. Batendo, ela quebra e volta a ser item, com as melhorias (a carga cai no chão).
+- **Como anda:** ela é um barco com baú do próprio jogo; o plugin só ajusta a velocidade dela enquanto está atrelada (sem peças desenhadas seguindo o animal). Sobe degraus de 1 bloco com um pulinho, segue o trote e o galope, e na água boia como barco. Se ficar a mais de 10 blocos do animal, ela se solta.
+- **Melhorias** (clique na carroça com o item):
+
+| Melhoria | Item | O que faz |
+|---|---|---|
+| Rodas de ferro | 1 bloco de ferro | mais rápida em estrada (caminho, cascalho, pedra, tijolo) |
+| Baú duplo | 1 baú | 54 espaços |
+| Toldo | 3 lãs | monstros, flechas de esqueleto e explosões não a quebram |
+| Lanterna | 1 lanterna | ilumina em volta enquanto anda (luz só desenhada, o mundo não muda) |
+| Freio | 1 alavanca | solta e parada, não escorrega (gelo, ladeira) |
+| Banco | 1 laje de madeira | leva uma pessoa sentada em cima da carga |
+
+- **Visual:** para todos, é o barco com baú de abeto. Ela se chama "Carroça" (nome escondido) para receber um modelo de carroça com rodas no EMF/ETF quando o modelo for feito.
 
 ### Artefatos de utilidade (2.49)
 
@@ -1939,6 +1960,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin traje <traje ou aleatorio> [capacete/peitoral/calca/botas/todas] [raridade]` | Peças de um Traje (armadura com nome) já forjadas |
 | `/rpgadmin conjuntomineral <ambar/jade/perola/gelo/pedra_sangue/magma/quartzo_negro> [forjar]` | As 9 peças de um conjunto dos minerais (forjadas, se pedir) |
 | `/rpgadmin utilidade <chave/regador/bancada/balde_gelo/trena/cinto/todas>` | Os itens das utilidades do dia a dia |
+| `/rpgadmin carroca [completa]` | A Carroça (completa = com todas as melhorias) |
 | `/rpgadmin raiz` | Planta uma Raiz de Luz no chão embaixo de você (precisa de 5 blocos de ar em cima) |
 | `/rpgadmin coracaopenumbra` | O Coração da Penumbra aparece à sua frente |
 | `/rpgadmin penumbra` | Zera a sua Penumbra |
@@ -1969,7 +1991,7 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.65.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.67.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

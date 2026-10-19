@@ -569,3 +569,4 @@ utilidades:
   balde-de-gelo: true                 # guarda até 4 baldes de água ou de lava
   trena: true                         # mede entre dois blocos e desenha a caixa
   cinto-de-ferramentas: true          # a ferramenta certa vem para a mão ao bater no bloco
+  carroca: true                       # 2.67: carroça puxada por cavalo/mula/burro/lhama/camelo, com melhorias
