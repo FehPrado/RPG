@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * no corpo de quem veste (o item aponta para o modelo e para o equipamento próprios do pacote).
  * Só aparência: a força continua sendo a da raridade. O desenho fica no {@code ArteTrajes}.
  */
-public enum Traje {
+public enum Traje implements br.rpgatributos.exploracao.ArteTrajes.Paleta {
     PENUMBRA("da Penumbra", Estilo.ESCAMAS, "Escamas escuras achadas abaixo das raízes. Quem a veste não teme o escuro.",
             0xFF2E1F47, 0xFF5B3F8C, 0xFF160E24, 0xFF9575CD, 0xFFB388FF),
     VENTOS("dos Ventos", Estilo.PLACAS, "Dos guardiões das ilhas do céu. Leve como uma nuvem.",
@@ -147,7 +147,7 @@ public enum Traje {
     public static boolean aceita(ItemStack item) {
         if (item == null || Peca.de(item.getType()) == null || item.getType() == Material.TURTLE_HELMET) return false;
         var pdc = item.getPersistentDataContainer();
-        return !pdc.has(K_LENDA) && !pdc.has(K_CONJUNTO);
+        return !pdc.has(K_LENDA) && !pdc.has(K_CONJUNTO) && !pdc.has(ConjuntoMineral.CHAVE);
     }
 
     /**

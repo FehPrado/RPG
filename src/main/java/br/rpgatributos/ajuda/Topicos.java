@@ -348,6 +348,13 @@ public final class Topicos {
         t("mitrilo", OFICIOS, "Mitrilo", Material.RAW_IRON)
                 .texto("Minério raro no fundo do mundo (picareta de diamante ou netherita). Funda e use na mesa de ferraria para melhorar netherita.")
                 .ligados("forja", "mapas").palavras("minerio raro lingote").pronto();
+        t("conjuntos_minerais", OFICIOS, "Conjuntos dos minerais", Material.IRON_CHESTPLATE)
+                .texto("Espada, picareta, machado, pá, enxada e as 4 peças de armadura de Âmbar, Jade, Pérola, Gelo, Pedra-Sangue, Magma e Quartzo Negro. A receita é a do jogo, com o mineral no lugar do ferro.",
+                        "Mais fortes que o ferro: +1 de armadura e +1 de dureza por peça, a espada com +0,5 de dano e tudo mais durável. A armadura aparece no corpo com a cor do mineral.",
+                        "Com 2 e 4 peças vestidas: Âmbar dá sorte; Jade, vida; Pérola, água; Gelo deixa lento quem bate; Pedra-Sangue rouba vida; Magma protege do fogo; Quartzo Negro acalma os piglins.",
+                        "Picareta de Âmbar: às vezes o minério solta um a mais. Picareta de Magma: ferro, ouro e cobre já saem em lingote.")
+                .dica("Conserta na bigorna com o mineral. Vai à Forja (sai com raridade) e a Reciclagem devolve o mineral.")
+                .ligados("minerais", "forja", "reciclagem").palavras("conjunto armadura espada picareta ambar jade perola gelo sangue magma quartzo negro").pronto();
 
         // ===================== Mundo e aventura =====================
         t("estacoes", MUNDO, "Estações, clima e céu", Material.CLOCK)
@@ -393,6 +400,13 @@ public final class Topicos {
                         "Barco Grande (7 tábuas + 2 barcos): 5 lugares, ou 4 com a Vela. Comboio: laço num barco e, agachado, clique em outro barco: ficam amarrados.",
                         "Para-raios atingido solta faíscas: clique para ficar ligeiro e forjar com mais chance de raridade. Funil em cima da Bancada de Reciclagem e baú embaixo: ela recicla sozinha.")
                 .ligados("vanilla", "conforto", "vilas").palavras("conquista avanco receita livro bau loot conversar aldeao sino feira trilho carrinho ferrovia vela barco grande comboio para raios cobre reciclagem funil").pronto();
+        t("utilidades", MUNDO, "Utilidades do dia a dia", Material.PAPER)
+                .texto("Chave de Construtor (2 ferros, 2 gravetos): gira o bloco clicado; agachado, vira de cabeça para baixo.",
+                        "Funil com filtro: uma moldura com um item presa no funil faz ele só aceitar aquele item.",
+                        "Regador (cobre e balde): enche na água; molha a plantação em 3x3 e ajuda a crescer. Lanterna de mão: segurando tocha ou lanterna, onde você está fica iluminado.",
+                        "Bancada de Bolso (bancada e couro): abre a bancada; agachado, a pedra de amolar, o tear, o cortador, a cartografia ou a ferraria.",
+                        "Balde de Gelo (Cristal de Gelo e balde): guarda 4 baldes de água ou de lava. Trena: mede entre dois blocos. Cinto de Ferramentas: segure e bata no bloco, a ferramenta certa vem para a mão.")
+                .ligados("conforto", "integracao", "vanilla").palavras("chave construtor girar funil filtro regador lanterna luz bancada bolso balde gelo trena medir cinto ferramentas").pronto();
         t("vanilla", MUNDO, "Vanilla+ e artefatos", Material.OAK_SAPLING)
                 .texto("Detalhes com cara de jogo normal: mudas que se plantam sozinhas, folhas que soltam graveto, cabeças de monstro, placa que mostra o baú, peixes pulando e gelo fino.",
                         "Abelhas polinizam: colmeia ou ninho com abelhas a até 8 blocos faz a plantação crescer mais rápido.",

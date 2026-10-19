@@ -19,6 +19,16 @@ public final class ArteTrajes {
 
     private ArteTrajes() { }
 
+    /** As cores e o estilo de uma armadura desenhada (os Trajes e, desde a 2.64, os conjuntos dos minerais). */
+    public interface Paleta {
+        int base();
+        int luz();
+        int sombra();
+        int detalhe();
+        int gema();
+        Traje.Estilo estilo();
+    }
+
     // =====================================================================
     //  Ícones (o = contorno, b = cor, h = luz, d = sombra, t = detalhe, g = gema)
     // =====================================================================
@@ -104,7 +114,7 @@ public final class ArteTrajes {
         };
     }
 
-    static Map<Character, Integer> paleta(Traje t) {
+    static Map<Character, Integer> paleta(Paleta t) {
         Map<Character, Integer> m = new HashMap<>();
         m.put('o', escurecer(t.sombra(), 0.55));
         m.put('b', t.base());
@@ -116,7 +126,7 @@ public final class ArteTrajes {
     }
 
     /** O ícone de uma peça (16x16). */
-    public static BufferedImage icone(Traje t, Traje.Peca p) {
+    public static BufferedImage icone(Paleta t, Traje.Peca p) {
         String[] m = molde(p);
         Map<Character, Integer> cores = paleta(t);
         BufferedImage im = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
@@ -135,7 +145,7 @@ public final class ArteTrajes {
         BOTA, BOTA_SOLA, CINTO, CINTO_FRENTE, PERNA, PERNA_FRENTE }
 
     /** Camada de cima: elmo (cabeça), peitoral (tronco e braços) e botas (fim das pernas). */
-    public static BufferedImage corpo(Traje t) {
+    public static BufferedImage corpo(Paleta t) {
         BufferedImage im = new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB);
         // Cabeça (8x8x8 em 0,0): topo, direita, frente, esquerda e trás.
         face(im, t, 8, 0, 8, 8, Parte.ELMO_TOPO);
@@ -159,7 +169,7 @@ public final class ArteTrajes {
     }
 
     /** Camada das pernas: cinto (fim do tronco) e grevas. */
-    public static BufferedImage pernas(Traje t) {
+    public static BufferedImage pernas(Paleta t) {
         BufferedImage im = new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB);
         face(im, t, 16, 20, 4, 12, Parte.CINTO);
         face(im, t, 20, 20, 8, 12, Parte.CINTO_FRENTE);
@@ -173,7 +183,7 @@ public final class ArteTrajes {
         return im;
     }
 
-    private static void face(BufferedImage im, Traje t, int x0, int y0, int w, int h, Parte parte) {
+    private static void face(BufferedImage im, Paleta t, int x0, int y0, int w, int h, Parte parte) {
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int c = pixel(t, parte, x, y, w, h, x0 * 31 + y0 * 17);
@@ -183,7 +193,7 @@ public final class ArteTrajes {
     }
 
     /** A cor de um pixel de uma face (0 = vazio). */
-    private static int pixel(Traje t, Parte parte, int x, int y, int w, int h, int semente) {
+    private static int pixel(Paleta t, Parte parte, int x, int y, int w, int h, int semente) {
         boolean borda = x == 0 || x == w - 1;
         switch (parte) {
             case ELMO_TOPO -> {
@@ -262,7 +272,7 @@ public final class ArteTrajes {
     }
 
     /** A textura do material: placas com emendas, escamas ou tecido trançado (com um pouco de ruído). */
-    private static int padrao(Traje t, int x, int y, int semente, boolean sombraNaBorda) {
+    private static int padrao(Paleta t, int x, int y, int semente, boolean sombraNaBorda) {
         int c = switch (t.estilo()) {
             case PLACAS -> y % 4 == 3 ? t.sombra() : y % 4 == 0 ? t.luz() : t.base();
             case ESCAMAS -> {
@@ -333,7 +343,7 @@ public final class ArteTrajes {
         return 0xFF000000 | (r << 16) | (g << 8) | bl;
     }
 
-    private static byte[] png(BufferedImage im) throws IOException {
+    static byte[] png(BufferedImage im) throws IOException {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         javax.imageio.ImageIO.write(im, "png", b);
         return b.toByteArray();

@@ -234,6 +234,8 @@ public final class Reciclagem extends Estacao {
             Recipe r = br.rpgatributos.combo.Arsenal.receita(a, base(item.getType()));
             if (r != null) return r;
         }
+        Recipe m = ConjuntoMineral.receita(item); // 2.64: conjunto dos minerais devolve o mineral
+        if (m != null) return m;
         return receita(base(item.getType()));
     }
 

@@ -1557,6 +1557,43 @@ Coisas que aproveitam o que o jogo já tem. Tudo pode ser desligado em `integrac
 - **Para-raios guarda o raio:** quando um raio cai num para-raios, ele solta faíscas por 15 minutos. Clique nele para pegar a carga: Pressa II e Velocidade por 3 minutos, e a próxima peça forjada (em até 30 minutos) tem **+8% de chance de sair uma raridade acima**.
 - **Começo guiado:** quem entra pela primeira vez recebe uma janela de boas-vindas com 3 primeiros passos (raça, Jornada, Manual). Com 30 minutos de jogo, uma janela sobre Forja, classe e companheiro; com 2 horas, sobre party, território, colônia e reino. Quem desligou as dicas (`/guia dicas`) não recebe as duas últimas.
 
+### Conjuntos dos minerais (2.64)
+
+Espada, picareta, machado, pá, enxada e as 4 peças de armadura de **Âmbar, Jade, Pérola, Gelo (Cristal de Gelo), Pedra-Sangue, Magma (Cristal de Magma) e Quartzo Negro**. A receita é a do jogo, com o mineral do plugin no lugar do ferro (o item comum por baixo dele não serve). O Mitrilo fica de fora: ele já tem as peças **✦ Mitrilo**.
+
+- **Força:** entre o ferro e o diamante. Cada peça de armadura tem +1 de armadura e +1 de dureza sobre a de ferro; a espada, +0,5 de dano; as ferramentas duram 60% mais que as de ferro (a armadura, 50%).
+- **No corpo:** a armadura aparece com a cor do mineral (pacote de recursos).
+- **Bônus de conjunto:**
+
+| Conjunto | 2 peças | 4 peças |
+|---|---|---|
+| Âmbar | Sorte I | Sorte II e +10% de chance de minério a mais com qualquer picareta |
+| Jade | +1 ❤ | +2 ❤ e recupera meio coração a cada 8 s |
+| Pérola | Respira debaixo d'água | Nada como golfinho e +15% de dano na água ou na chuva |
+| Gelo | Não congela na neve fofa | Quem bate em você fica lento |
+| Pedra-Sangue | Rouba 5% do dano em vida | Rouba 12%, mas a vida máxima cai 1 ❤ |
+| Magma | -30% de dano de fogo e lava | Resistência ao Fogo |
+| Quartzo Negro | Os piglins não atacam | Força I no escuro |
+
+- **Picaretas com poder:** a de **Âmbar** dá 10% de chance de o minério soltar um a mais; a de **Magma** funde o minério (ferro, ouro e cobre saem em lingote, com um pouco de XP).
+- **Conserto:** na bigorna, só com o mineral do plugin.
+- **Forja e Reciclagem:** forjadas na Forja do Ferreiro, saem com raridade e continuam do conjunto; a Reciclagem devolve o mineral.
+
+### Utilidades do dia a dia (2.65)
+
+| Utilidade | Receita | O que faz |
+|---|---|---|
+| **Chave de Construtor** | `I I / S / S` (2 ferros, 2 gravetos) | Clique direito num bloco: gira (escadas, troncos, alçapões, cabeças, fornalhas...). Agachado: vira de cabeça para baixo (escada, laje, alçapão). Portas, camas e baús duplos não giram. Respeita territórios. |
+| **Funil com filtro** | — | Uma moldura com um item presa no funil: o funil só aceita aquele item (várias molduras: qualquer um deles). |
+| **Regador** | 4 lingotes de cobre e 1 balde | Clique na água: enche (20 regadas). Clique na plantação: molha um 3x3 e cada planta tem 40% de chance de subir um estágio. |
+| **Lanterna de mão** | — | Segurando tocha, lanterna, pedra luminosa e afins (em qualquer mão), o lugar onde você está fica iluminado enquanto anda. A luz é desenhada só para quem está perto: o mundo não muda. |
+| **Bancada de Bolso** | bancada de trabalho e 3 couros | Clique direito: bancada de trabalho. Agachado: pedra de amolar, tear, cortador de pedras, mesa de cartografia ou de ferraria. |
+| **Balde de Gelo** | 3 Cristais de Gelo e 1 balde | Guarda até 4 baldes de água ou de lava (um líquido só). Mirando numa fonte, enche; agachado (ou sem fonte na mira), despeja. Não serve para leite, peixes nem caldeirão. |
+| **Trena** | corante amarelo, 3 ferros e linha | Clique num bloco e depois noutro: largura × altura × comprimento, quantos blocos e a distância, com uma caixa de partículas por 15 s. Agachado + clique apaga. |
+| **Cinto de Ferramentas** | 3 couros, 2 linhas e 1 ferro | Clique direito: guarde até 9 ferramentas. Segurando o cinto, bata num bloco: a melhor ferramenta para ele vem para a mão (e troca sozinha em outro tipo de bloco). Parou 4 s, trocou de espaço, abriu um inventário, soltou ou morreu: ela volta para o cinto. |
+
+Cada uma pode ser desligada em `utilidades:` no config.
+
 ### Artefatos de utilidade (2.49)
 
 Feitos na bancada; as Garras, a Corda e a Bolsa gastam **Vigor**.
@@ -1900,6 +1937,8 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin nian [estado ou embora]` | Faz o Nian descer aqui perto (ou mostra onde está, ou manda embora) |
 | `/rpgadmin constelacao <moedas N ou testar>` | Dá Moedas Estelares ou faz uma constelação comentar (para testar) |
 | `/rpgadmin traje <traje ou aleatorio> [capacete/peitoral/calca/botas/todas] [raridade]` | Peças de um Traje (armadura com nome) já forjadas |
+| `/rpgadmin conjuntomineral <ambar/jade/perola/gelo/pedra_sangue/magma/quartzo_negro> [forjar]` | As 9 peças de um conjunto dos minerais (forjadas, se pedir) |
+| `/rpgadmin utilidade <chave/regador/bancada/balde_gelo/trena/cinto/todas>` | Os itens das utilidades do dia a dia |
 | `/rpgadmin raiz` | Planta uma Raiz de Luz no chão embaixo de você (precisa de 5 blocos de ar em cima) |
 | `/rpgadmin coracaopenumbra` | O Coração da Penumbra aparece à sua frente |
 | `/rpgadmin penumbra` | Zera a sua Penumbra |
@@ -1930,7 +1969,7 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.63.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.65.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

@@ -109,7 +109,8 @@ public final class Settings {
     public final boolean vanillaOvelhas, vanillaFila, vanillaSuporte, vanillaEscadas, vanillaLanternas, vanillaRaio, vanillaAbelhas;
     public final boolean confColher, confOrdenar, confRepor, confPortas, confElevadores, confApito;
     public final String manualUrl;
-    public final boolean bausVanilla, vilasVanilla, ferrovias, velas, barcoGrande, cobre, comecoGuiado;
+    public final boolean bausVanilla, vilasVanilla, ferrovias, velas, barcoGrande, cobre, comecoGuiado, conjuntosMinerais;
+    public final boolean utilChave, utilFunil, utilRegador, utilLanterna, utilBancada, utilBalde, utilTrena, utilCinto;
     public final double vanillaCabecaChance;
     public final int profAltura, profPenumbraMaxima;
     public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
@@ -414,6 +415,15 @@ public final class Settings {
         ferrovias = c.getBoolean("integracao.ferrovias", true);
         velas = c.getBoolean("integracao.barco-a-vela", true);
         barcoGrande = c.getBoolean("integracao.barco-grande", true);
+        conjuntosMinerais = c.getBoolean("forja.conjuntos-dos-minerais", true);
+        utilChave = c.getBoolean("utilidades.chave-de-construtor", true);
+        utilFunil = c.getBoolean("utilidades.funil-com-filtro", true);
+        utilRegador = c.getBoolean("utilidades.regador", true);
+        utilLanterna = c.getBoolean("utilidades.lanterna-de-mao", true);
+        utilBancada = c.getBoolean("utilidades.bancada-de-bolso", true);
+        utilBalde = c.getBoolean("utilidades.balde-de-gelo", true);
+        utilTrena = c.getBoolean("utilidades.trena", true);
+        utilCinto = c.getBoolean("utilidades.cinto-de-ferramentas", true);
         cobre = c.getBoolean("integracao.para-raios-guarda-o-raio", true);
         comecoGuiado = c.getBoolean("integracao.comeco-guiado", true);
         profAltura = c.getInt("profundezas.abaixo-de-y", 0);

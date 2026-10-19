@@ -68,7 +68,12 @@
     [
       "artefato",
       "Artefatos de utilidade",
-      "Garras de Escalada, Corda de Rapel, Pêndulo do Rabdomante, Cantil e Bolsa de Sementes (2.49), e o Livro do Criador, que mostra a linhagem dos cavalos (2.50)."
+      "Garras de Escalada, Corda de Rapel, Pêndulo do Rabdomante, Cantil e Bolsa de Sementes (2.49), e o Livro do Criador, que mostra a linhagem dos cavalos (2.50). Também o Apito do Domador, a Vela de Barco e as utilidades da 2.65: Chave de Construtor, Regador, Bancada de Bolso, Balde de Gelo, Trena e Cinto de Ferramentas."
+    ],
+    [
+      "conjunto_mineral",
+      "Conjuntos dos minerais",
+      "Espada, picareta, machado, pá, enxada e as 4 peças de armadura de cada mineral (2.64): Âmbar, Jade, Pérola, Gelo, Pedra-Sangue, Magma e Quartzo Negro. A receita é a do jogo, com o mineral no lugar do ferro."
     ],
     [
       "carta",
@@ -983,6 +988,284 @@
       [
         "vela_barco",
         "Vela de Barco"
+      ],
+      [
+        "chave",
+        "Chave de Construtor"
+      ],
+      [
+        "regador",
+        "Regador"
+      ],
+      [
+        "bancada",
+        "Bancada de Bolso"
+      ],
+      [
+        "balde_gelo_agua",
+        "Balde de Gelo"
+      ],
+      [
+        "trena",
+        "Trena"
+      ],
+      [
+        "cinto",
+        "Cinto de Ferramentas"
+      ]
+    ],
+    "conjunto_mineral": [
+      [
+        "mineral_ambar_espada",
+        "Espada de Âmbar"
+      ],
+      [
+        "mineral_ambar_picareta",
+        "Picareta de Âmbar"
+      ],
+      [
+        "mineral_ambar_machado",
+        "Machado de Âmbar"
+      ],
+      [
+        "mineral_ambar_pa",
+        "Pá de Âmbar"
+      ],
+      [
+        "mineral_ambar_enxada",
+        "Enxada de Âmbar"
+      ],
+      [
+        "mineral_ambar_elmo",
+        "Elmo de Âmbar"
+      ],
+      [
+        "mineral_ambar_peitoral",
+        "Peitoral de Âmbar"
+      ],
+      [
+        "mineral_ambar_grevas",
+        "Grevas de Âmbar"
+      ],
+      [
+        "mineral_ambar_botas",
+        "Botas de Âmbar"
+      ],
+      [
+        "mineral_jade_espada",
+        "Espada de Jade"
+      ],
+      [
+        "mineral_jade_picareta",
+        "Picareta de Jade"
+      ],
+      [
+        "mineral_jade_machado",
+        "Machado de Jade"
+      ],
+      [
+        "mineral_jade_pa",
+        "Pá de Jade"
+      ],
+      [
+        "mineral_jade_enxada",
+        "Enxada de Jade"
+      ],
+      [
+        "mineral_jade_elmo",
+        "Elmo de Jade"
+      ],
+      [
+        "mineral_jade_peitoral",
+        "Peitoral de Jade"
+      ],
+      [
+        "mineral_jade_grevas",
+        "Grevas de Jade"
+      ],
+      [
+        "mineral_jade_botas",
+        "Botas de Jade"
+      ],
+      [
+        "mineral_perola_espada",
+        "Espada de Pérola"
+      ],
+      [
+        "mineral_perola_picareta",
+        "Picareta de Pérola"
+      ],
+      [
+        "mineral_perola_machado",
+        "Machado de Pérola"
+      ],
+      [
+        "mineral_perola_pa",
+        "Pá de Pérola"
+      ],
+      [
+        "mineral_perola_enxada",
+        "Enxada de Pérola"
+      ],
+      [
+        "mineral_perola_elmo",
+        "Elmo de Pérola"
+      ],
+      [
+        "mineral_perola_peitoral",
+        "Peitoral de Pérola"
+      ],
+      [
+        "mineral_perola_grevas",
+        "Grevas de Pérola"
+      ],
+      [
+        "mineral_perola_botas",
+        "Botas de Pérola"
+      ],
+      [
+        "mineral_gelo_espada",
+        "Espada de Gelo"
+      ],
+      [
+        "mineral_gelo_picareta",
+        "Picareta de Gelo"
+      ],
+      [
+        "mineral_gelo_machado",
+        "Machado de Gelo"
+      ],
+      [
+        "mineral_gelo_pa",
+        "Pá de Gelo"
+      ],
+      [
+        "mineral_gelo_enxada",
+        "Enxada de Gelo"
+      ],
+      [
+        "mineral_gelo_elmo",
+        "Elmo de Gelo"
+      ],
+      [
+        "mineral_gelo_peitoral",
+        "Peitoral de Gelo"
+      ],
+      [
+        "mineral_gelo_grevas",
+        "Grevas de Gelo"
+      ],
+      [
+        "mineral_gelo_botas",
+        "Botas de Gelo"
+      ],
+      [
+        "mineral_pedra_sangue_espada",
+        "Espada de Pedra-Sangue"
+      ],
+      [
+        "mineral_pedra_sangue_picareta",
+        "Picareta de Pedra-Sangue"
+      ],
+      [
+        "mineral_pedra_sangue_machado",
+        "Machado de Pedra-Sangue"
+      ],
+      [
+        "mineral_pedra_sangue_pa",
+        "Pá de Pedra-Sangue"
+      ],
+      [
+        "mineral_pedra_sangue_enxada",
+        "Enxada de Pedra-Sangue"
+      ],
+      [
+        "mineral_pedra_sangue_elmo",
+        "Elmo de Pedra-Sangue"
+      ],
+      [
+        "mineral_pedra_sangue_peitoral",
+        "Peitoral de Pedra-Sangue"
+      ],
+      [
+        "mineral_pedra_sangue_grevas",
+        "Grevas de Pedra-Sangue"
+      ],
+      [
+        "mineral_pedra_sangue_botas",
+        "Botas de Pedra-Sangue"
+      ],
+      [
+        "mineral_magma_espada",
+        "Espada de Magma"
+      ],
+      [
+        "mineral_magma_picareta",
+        "Picareta de Magma"
+      ],
+      [
+        "mineral_magma_machado",
+        "Machado de Magma"
+      ],
+      [
+        "mineral_magma_pa",
+        "Pá de Magma"
+      ],
+      [
+        "mineral_magma_enxada",
+        "Enxada de Magma"
+      ],
+      [
+        "mineral_magma_elmo",
+        "Elmo de Magma"
+      ],
+      [
+        "mineral_magma_peitoral",
+        "Peitoral de Magma"
+      ],
+      [
+        "mineral_magma_grevas",
+        "Grevas de Magma"
+      ],
+      [
+        "mineral_magma_botas",
+        "Botas de Magma"
+      ],
+      [
+        "mineral_quartzo_negro_espada",
+        "Espada de Quartzo Negro"
+      ],
+      [
+        "mineral_quartzo_negro_picareta",
+        "Picareta de Quartzo Negro"
+      ],
+      [
+        "mineral_quartzo_negro_machado",
+        "Machado de Quartzo Negro"
+      ],
+      [
+        "mineral_quartzo_negro_pa",
+        "Pá de Quartzo Negro"
+      ],
+      [
+        "mineral_quartzo_negro_enxada",
+        "Enxada de Quartzo Negro"
+      ],
+      [
+        "mineral_quartzo_negro_elmo",
+        "Elmo de Quartzo Negro"
+      ],
+      [
+        "mineral_quartzo_negro_peitoral",
+        "Peitoral de Quartzo Negro"
+      ],
+      [
+        "mineral_quartzo_negro_grevas",
+        "Grevas de Quartzo Negro"
+      ],
+      [
+        "mineral_quartzo_negro_botas",
+        "Botas de Quartzo Negro"
       ]
     ],
     "carta": [

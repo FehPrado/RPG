@@ -212,6 +212,7 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.vida.Comedouros comedouros;
     private br.rpgatributos.pesca.CabanasPesca cabanasPesca;
     private br.rpgatributos.oficio.Oficios oficios;
+    private br.rpgatributos.forja.EquipamentoMineral equipamentoMineral;
     private br.rpgatributos.oficio.Ateliers ateliers;
     private br.rpgatributos.mundo.Sonhos sonhos;
     private Trofeus trofeus;
@@ -250,6 +251,7 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.detalhes.Ferrovias ferrovias;
     private br.rpgatributos.detalhes.Velas velas;
     private br.rpgatributos.detalhes.BarcoGrande barcoGrande;
+    private br.rpgatributos.detalhes.Utilidades utilidades;
     private br.rpgatributos.detalhes.Cobre cobre;
     private br.rpgatributos.ajuda.Boasvindas boasvindas;
     private MercadorItinerante mercador;
@@ -330,6 +332,7 @@ public final class RPGAtributos extends JavaPlugin {
         ferrovias = new br.rpgatributos.detalhes.Ferrovias(this);
         velas = new br.rpgatributos.detalhes.Velas(this);
         barcoGrande = new br.rpgatributos.detalhes.BarcoGrande(this);
+        utilidades = new br.rpgatributos.detalhes.Utilidades(this);
         cobre = new br.rpgatributos.detalhes.Cobre(this);
         boasvindas = new br.rpgatributos.ajuda.Boasvindas(this);
         tags = new TagManager(this);
@@ -429,6 +432,7 @@ public final class RPGAtributos extends JavaPlugin {
         comedouros = new br.rpgatributos.vida.Comedouros(this);
         cabanasPesca = new br.rpgatributos.pesca.CabanasPesca(this);
         oficios = new br.rpgatributos.oficio.Oficios(this);
+        equipamentoMineral = new br.rpgatributos.forja.EquipamentoMineral(this);
         ateliers = new br.rpgatributos.oficio.Ateliers(this, oficios);
         sonhos = new br.rpgatributos.mundo.Sonhos(this);
         trofeus = new Trofeus(this);
@@ -477,7 +481,7 @@ public final class RPGAtributos extends JavaPlugin {
                 classes, provas, santuarios, lendas, menuLendas, pedras, locais, pesca, alquimia, acessorios, guardaRoupa, colonias, colonias.obras(), prefeituras, reinos, perigo, bestiario, ninhos, chefeMundial,
                 estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), combos.posturas(), combos.ligacoes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista,
                 talentos, evolucao,
-                forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
+                forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, equipamentoMineral, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
                 canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, aparar, fraquezas, cargaMontada, pescaLava, polinizacao, conforto, elevadores, apito, ceuEncantado, estantes, conquistas, livroReceitas, bausVanilla, vilasVanilla, ferrovias, velas, barcoGrande, cobre, boasvindas, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
         locais.iniciar();
@@ -489,12 +493,15 @@ public final class RPGAtributos extends JavaPlugin {
         artefatos.registrarReceitas();
         linhagens.registrarReceitas();
         arsenal.registrarReceitas();
+        br.rpgatributos.forja.ConjuntoMineral.registrarReceitas(this);
         aparar.registrarReceitas();
         pescaLava.registrarReceitas();
         elevadores.registrarReceitas();
         apito.registrarReceitas();
         velas.registrarReceitas();
         barcoGrande.registrarReceitas();
+        utilidades.registrarReceitas();
+        utilidades.registrar(getServer().getPluginManager());
         elevadores.iniciar();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
@@ -605,6 +612,8 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, boasvindas::tick, 20L, 20L);
         agenda.runTaskTimer(this, velas::tick, 1L, 1L);
         agenda.runTaskTimer(this, barcoGrande::tick, 1L, 1L);
+        agenda.runTaskTimer(this, utilidades::tick, 1L, 1L);
+        agenda.runTaskTimer(this, utilidades::segundo, 20L, 20L);
         agenda.runTaskTimer(this, cobre::tick, 1L, 1L);
         // Efeitos passivos (itens forjados, conjuntos, títulos, núcleos): 1x por segundo.
         efeitos.registrarFonte(titulos::efeitos);
@@ -706,6 +715,7 @@ public final class RPGAtributos extends JavaPlugin {
         }
         agenda.runTaskTimer(this, forjadosEspeciais::tick, 10L, 10L);
         agenda.runTaskTimer(this, oficios::tick, 20L, 20L);
+        agenda.runTaskTimer(this, equipamentoMineral::tick, 20L, 20L);
         agenda.runTaskTimer(this, natureza::tick, 40L, 40L);
         agenda.runTaskTimer(this, lapides::tick, 40L, 40L);
         agenda.runTaskTimer(this, recordes::tick, 100L, 100L);
@@ -762,6 +772,7 @@ public final class RPGAtributos extends JavaPlugin {
     public void onDisable() {
         if (menus != null) menus.fecharTodos();
         if (barcoGrande != null) barcoGrande.desligar();
+        if (utilidades != null) utilidades.desligar();
         if (guardaRoupa != null) guardaRoupa.desfazerTodos();
         if (racas != null) racas.asas().fecharTodas();
         if (acessorios != null) acessorios.apagarTodas();

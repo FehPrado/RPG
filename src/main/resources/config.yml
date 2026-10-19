@@ -436,6 +436,7 @@ ferraria:
   xp-por-lingote-fundido: 0.5   # tirar lingotes de ferro/ouro/cobre da fornalha (sucata de netherite vale 4x)
 
 forja:
+  conjuntos-dos-minerais: true        # 2.64: armas, ferramentas e armaduras dos minerais (Âmbar, Jade, Pérola, Gelo, Pedra-Sangue, Magma, Quartzo Negro)
   ativada: true
   # true = itens só saem forjados na Forja do Ferreiro (ritual: jogue 2 blocos de ferro e
   # 1 balde de lava em cima de uma bigorna). Na bancada comum saem normais.
@@ -557,3 +558,14 @@ tag:
 
 backup:
   dias: 7                             # ao ligar, copia os .yml do plugin para backups/AAAA-MM-DD (1 vez por dia) e guarda os últimos 7 dias (0 = desliga)
+
+# 2.65: utilidades do dia a dia (cada uma pode ser desligada)
+utilidades:
+  chave-de-construtor: true           # gira e vira blocos sem quebrar
+  funil-com-filtro: true              # moldura com item presa no funil: ele só aceita aquele item
+  regador: true                       # enche na água; ajuda a plantação a crescer (3x3)
+  lanterna-de-mao: true               # segurando tocha/lanterna, o lugar onde você está fica iluminado
+  bancada-de-bolso: true              # abre bancada, pedra de amolar, tear, cortador, cartografia e ferraria
+  balde-de-gelo: true                 # guarda até 4 baldes de água ou de lava
+  trena: true                         # mede entre dois blocos e desenha a caixa
+  cinto-de-ferramentas: true          # a ferramenta certa vem para a mão ao bater no bloco

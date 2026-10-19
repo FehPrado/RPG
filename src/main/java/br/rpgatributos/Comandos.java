@@ -402,6 +402,31 @@ public final class Comandos implements TabExecutor {
                 return;
             }
             case "traje" -> { adminTraje(sender, args); return; }
+            case "utilidade" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                if (args.length >= 2 && args[1].equalsIgnoreCase("todas")) {
+                    for (br.rpgatributos.detalhes.Utilidades.Item u : br.rpgatributos.detalhes.Utilidades.Item.values()) entregar(p, u.criar());
+                    ok(sender, "Utilidades entregues.");
+                    return;
+                }
+                br.rpgatributos.detalhes.Utilidades.Item u = args.length >= 2 ? br.rpgatributos.detalhes.Utilidades.Item.porId(args[1]) : null;
+                if (u == null) { erro(sender, "Use: /rpgadmin utilidade <chave|regador|bancada|balde_gelo|trena|cinto|todas>"); return; }
+                entregar(p, u.criar());
+                ok(sender, u.nome + " entregue.");
+                return;
+            }
+            case "conjuntomineral" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                br.rpgatributos.forja.ConjuntoMineral c = args.length >= 2 ? br.rpgatributos.forja.ConjuntoMineral.porId(args[1]) : null;
+                if (c == null) { erro(sender, "Use: /rpgadmin conjuntomineral <" + String.join("|", java.util.Arrays.stream(br.rpgatributos.forja.ConjuntoMineral.values()).map(br.rpgatributos.forja.ConjuntoMineral::id).toList()) + "> [forjar]"); return; }
+                boolean forjar = args.length >= 3 && args[2].equalsIgnoreCase("forjar");
+                for (br.rpgatributos.forja.ConjuntoMineral.Peca pc : br.rpgatributos.forja.ConjuntoMineral.Peca.values()) {
+                    ItemStack item = c.criar(pc);
+                    entregar(p, forjar ? plugin.forja().forjar(p, item, null) : item);
+                }
+                ok(sender, c.nomeConjunto() + " entregue (9 peças).");
+                return;
+            }
             case "guerra" -> {
                 if (args.length >= 4 && args[1].equalsIgnoreCase("iniciar")) {
                     String erro = plugin.reinos().guerraAgora(args[2], args[3]);
@@ -1846,7 +1871,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

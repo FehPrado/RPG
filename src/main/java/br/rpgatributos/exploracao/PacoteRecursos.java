@@ -566,6 +566,8 @@ public final class PacoteRecursos implements Listener {
         f.putAll(br.rpgatributos.raca.Enfeites.arquivosDoPacote());
         // Trajes (armaduras com nome): a textura no corpo de quem veste.
         f.putAll(ArteTrajes.arquivosDoPacote());
+        // 2.64: conjuntos dos minerais (ícones e a armadura no corpo).
+        f.putAll(ArteMinerais.arquivosDoPacote());
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try (ZipOutputStream zip = new ZipOutputStream(bytes)) {

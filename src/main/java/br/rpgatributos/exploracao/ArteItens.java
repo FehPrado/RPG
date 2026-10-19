@@ -1817,6 +1817,115 @@ final class ArteItens {
             "................",
             "................"};
 
+    // 2.65: as utilidades do dia a dia.
+    private static final String[] CHAVE_CONSTRUTOR = {
+            "................",
+            "...........kk.kk",
+            "...........khkhk",
+            "...........khhhk",
+            "..........khssk.",
+            ".........khsk...",
+            "........khsk....",
+            ".......khsk.....",
+            "......khsk......",
+            ".....khsk.......",
+            "....khsk........",
+            "...kssk.........",
+            "..khhhk.........",
+            "..khkhk.........",
+            "..kk.kk.........",
+            "................"};
+
+    private static final String[] REGADOR = {
+            "................",
+            "................",
+            "......kkkk......",
+            ".....k....k.....",
+            ".....k....k.....",
+            "...kkkkkkkkk....",
+            "..kbbbbbbbbbk..k",
+            "..kbhhbbbbbbk.kk",
+            "..kbhbbbbbbbbkk.",
+            "..kbbbbbbbbbbk..",
+            "..kbbbbbbbbbk...",
+            "..kddddddddk....",
+            "...kkkkkkkk.....",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] BANCADA_BOLSO = {
+            "................",
+            "................",
+            "...kkkkkkkkkk...",
+            "..kwwwwwwwwwwk..",
+            "..kwgwwgwwgwwk..",
+            "..kwwwwwwwwwwk..",
+            "..kkkkkkkkkkkk..",
+            "..kbbbbbbbbbbk..",
+            "..kbsbbbbbbsbk..",
+            "..kbbbbbbbbbbk..",
+            "..kbbbbbbbbbbk..",
+            "..kddddddddddk..",
+            "...kkkkkkkkkk...",
+            "....l......l....",
+            "....llllllll....",
+            "................"};
+
+    private static final String[] BALDE_GELO = {
+            "................",
+            "................",
+            "...kkkkkkkkkk...",
+            "..kiiiiiiiiiik..",
+            "..kllllllllllk..",
+            "..kiiiiiiiiiik..",
+            "..kbhbbbbbbbdk..",
+            "...kbhbbbbbdk...",
+            "...kbhbbbbbdk...",
+            "...kbbbbbbbdk...",
+            "....kbbbbbdk....",
+            "....kkkkkkkk....",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] TRENA = {
+            "................",
+            "................",
+            "................",
+            "...kkkkkkk......",
+            "..kyyyyyyyk.....",
+            "..kyykkkyyk.....",
+            "..kykssskyk.....",
+            "..kykssskykkkkkk",
+            "..kykssskytmtmtk",
+            "..kyykkkyykkkkkk",
+            "..kyyyyyyyk.....",
+            "...kkkkkkk......",
+            "................",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] CINTO_FERRAMENTAS = {
+            "................",
+            "................",
+            "................",
+            "...s...p....a...",
+            "...s...p...aa...",
+            "...s...p....a...",
+            "kkkkkkkkkkkkkkkk",
+            "kbbbbbbbbbbbbbbk",
+            "kbkkkbkkkbkkkbbk",
+            "kbkdkbkdkbkdkbbk",
+            "kbkkkbkkkbkkkbbk",
+            "kbbbbbbbbbbgbbbk",
+            "kkkkkkkkkkkkkkkk",
+            "................",
+            "................",
+            "................"};
+
     /** 2.56: Lança de Basalto (ponta de Cristal de Magma, cabo de basalto, ponta de baixo de vara de blaze). */
     private static final String[] ARMA_LANCA_BASALTO = {
             "............kkkk",
@@ -2350,6 +2459,21 @@ final class ArteItens {
         l.add(new Arte("iron_sword", "arma_clava", ARMA_CLAVA, c('k', 0xFF28190A, 'h', 0xFF4E342E, 'g', 0xFF7A5A36, 'x', 0xFFFF6F00, 'y', 0xFF3C2819), true));
         l.add(new Arte("paper", "vela_barco", VELA, c('k', 0xFF5D4037, 'w', 0xFFF5F5F5, 'h', 0xFFCFD8DC, 'b', 0xFF8D6E63, 'd', 0xFF4E342E)));
         l.add(new Arte("iron_nugget", "apito_domador", APITO, c('k', 0xFF3E2A14, 'g', 0xFF7FA23A, 'h', 0xFFB5D46A, 's', 0xFFE0E0E0)));
+        l.add(new Arte("paper", "chave", CHAVE_CONSTRUTOR, c('k', 0xFF2B2F36, 'h', 0xFFCFD8DC, 's', 0xFF8C969E)));
+        l.add(new Arte("paper", "regador", REGADOR, c('k', 0xFF1B3324, 'b', 0xFF4FA36A, 'h', 0xFF9EDCAF, 'd', 0xFF2E6B43)));
+        l.add(new Arte("paper", "bancada", BANCADA_BOLSO, c('k', 0xFF3B2412, 'w', 0xFFC8955A, 'g', 0xFF6B4423, 'b', 0xFF9C6B3A,
+                's', 0xFF8C969E, 'd', 0xFF6B4423, 'l', 0xFF7A4A2A)));
+        Map<Character, Integer> gelo = c('k', 0xFF1E3A50, 'i', 0xFFE6F8FF, 'b', 0xFFA8E4FF, 'h', 0xFFE6F8FF, 'd', 0xFF4A90B8);
+        Map<Character, Integer> vazio = new HashMap<>(gelo), agua = new HashMap<>(gelo), lava = new HashMap<>(gelo);
+        vazio.put('l', 0xFF37474F);
+        agua.put('l', 0xFF3F76E4);
+        lava.put('l', 0xFFE8650F);
+        l.add(new Arte("bucket", "balde_gelo", BALDE_GELO, vazio));
+        l.add(new Arte("bucket", "balde_gelo_agua", BALDE_GELO, agua));
+        l.add(new Arte("bucket", "balde_gelo_lava", BALDE_GELO, lava));
+        l.add(new Arte("paper", "trena", TRENA, c('k', 0xFF2B2B2B, 'y', 0xFFF2C12E, 's', 0xFF8C969E, 't', 0xFFF5E7A0, 'm', 0xFF3A3A3A)));
+        l.add(new Arte("paper", "cinto", CINTO_FERRAMENTAS, c('k', 0xFF3B2412, 'b', 0xFF8D5A2B, 'd', 0xFF5A3A1A, 'g', 0xFFD4AF37,
+                's', 0xFF8C969E, 'p', 0xFF7A5230, 'a', 0xFFB0BEC5)));
         l.add(new Arte("iron_sword", "arma_lanca_basalto", ARMA_LANCA_BASALTO, c('k', 0xFF1A1414, 'h', 0xFF6E6E74, 'g', 0xFF3C3C42,
                 'b', 0xFFC9A227, 'x', 0xFFFF7A1F, 'y', 0xFFFFD27F, 'a', 0xFFC2410C, 'r', 0xFFFFB300), true));
         l.add(new Arte("snowball", "frasco_fumaca", GARRAFA, com(VIDRO, 'c', 0xFFEEEEEE, 'l', 0xFF9E9E9E, 'd', 0xFF616161, 'a', 0xFFE0E0E0)));
