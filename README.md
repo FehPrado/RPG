@@ -62,6 +62,8 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 - **`/rpg`:** o menu central. No topo, **"Seu próximo passo"**: 3 sugestões que mudam conforme o progresso (o passo da Jornada, pontos de talento para gastar, colônia ou reino que já dá para fundar, deus para seguir...). Abaixo, **7 categorias** (Personagem, Combate, Magia e fé, Ofícios, Mundo e aventura, Comunidade, Coleções) e atalhos para os menus mais usados.
 - **Guia interativo:** cada assunto é uma tela curta com o **ritual desenhado em itens** (o bloco, os itens que você joga em cima e o que ele vira), uma dica, o botão para abrir o sistema e os assuntos ligados. Clique numa categoria do `/rpg` e depois num assunto.
 - **Busca:** `/guia <palavra>` (ex.: `/guia reciclar`, `/guia alquimia`) mostra os assuntos no chat, para clicar.
+- **Manual em janela (2.59):** `/manual` (ou `/wiki`, ou o botão 📖 no `/rpg`) abre o Manual numa **janela nativa do jogo** (sem mod): tela inicial com as 7 áreas, um campo de busca e as novidades; cada área lista os assuntos (passe o mouse para ver do que se trata); cada assunto mostra o texto, o ritual, a dica, os assuntos ligados, um botão que abre o sistema e outro que abre o **site do Manual no navegador**. `/manual <palavra>` busca direto.
+- **Link do site:** `/manual link` manda no chat um link clicável (o jogo pergunta antes de abrir), e o Manual também aparece no menu de pausa: **Esc → Links do servidor**. O endereço fica em `manual.url` no config.
 - **Dicas na hora certa:** na primeira vez que você segura, pega ou encontra algo novo (uma arma do arsenal, um mineral, uma arma com nome, o Livro do Criador, uma semente da estação, uma pele, um cavalo, as Profundezas, o céu...), aparece uma dica curta no chat com **[ver como]**, que abre o assunto. Cada dica aparece uma vez só; `/guia dicas` desliga ou liga.
 - **O que é isso?:** com um item na mão, o botão no `/rpg` ou `/guia mão` abre o assunto daquele item.
 - **Novidades da versão:** botão no `/rpg` (ou `/guia novidades`) com o que entrou na última versão, cada coisa levando ao assunto dela. Depois de uma atualização, quem entra recebe um aviso clicável.
@@ -1748,6 +1750,7 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/sentar` | todos | Senta no chão (ou levanta) |
 | `/rpg` | todos | Menu central: próximos passos, categorias e atalhos |
 | `/guia [palavra\|livro\|mão\|dicas\|novidades]` | todos | Guia interativo e busca; `livro` dá o livro, `mão` explica o item da mão, `dicas` liga/desliga as dicas, `novidades` mostra o que entrou na versão |
+| `/manual [link\|palavra]` (`/wiki`) | todos | O Manual numa janela dentro do jogo, com busca; `link` manda o link do site no chat |
 | `/jornada` | todos | Jornada do Aventureiro (12 primeiros passos) |
 | `/placar` | todos | Liga ou desliga o placar lateral |
 | `/album` | todos | Álbum de Cartas: páginas, pacotes, pó, marcos e baralho |
@@ -1903,7 +1906,7 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.58.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.59.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

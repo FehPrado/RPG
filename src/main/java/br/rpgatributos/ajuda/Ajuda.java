@@ -207,6 +207,16 @@ public final class Ajuda implements Listener {
                 Component.text("O que entrou na última versão,", NamedTextColor.GRAY),
                 Component.text("com o caminho para cada coisa.", NamedTextColor.GRAY),
                 Component.empty(), Component.text("» Clique: ver as novidades", NamedTextColor.YELLOW))), s -> abrirNovidades(p));
+        botao(t, 50, item(Material.WRITTEN_BOOK, Component.text("📖 Manual", COR, TextDecoration.BOLD), List.of(
+                Component.text("O Manual inteiro numa janela,", NamedTextColor.GRAY),
+                Component.text("com busca e um botão para o site.", NamedTextColor.GRAY),
+                Component.text("Também: /manual", NamedTextColor.DARK_GRAY),
+                Component.empty(), Component.text("» Clique: abrir", NamedTextColor.YELLOW))), s -> comando(p, "manual"));
+        botao(t, 51, item(Material.MAP, Component.text("🌐 Manual no navegador", NamedTextColor.AQUA, TextDecoration.BOLD), List.of(
+                Component.text("Manda no chat o link do site", NamedTextColor.GRAY),
+                Component.text("(com imagens e as receitas).", NamedTextColor.GRAY),
+                Component.text("Também: Esc → Links do servidor", NamedTextColor.DARK_GRAY),
+                Component.empty(), Component.text("» Clique: receber o link", NamedTextColor.YELLOW))), s -> comando(p, "manual link"));
         botao(t, 47, item(Material.OAK_SIGN, Component.text("Placar lateral", NamedTextColor.WHITE, TextDecoration.BOLD),
                 List.of(Component.text("Liga ou desliga o placar do lado da tela.", NamedTextColor.GRAY))), s -> comando(p, "placar"));
         botao(t, S_MEIO, item(Material.KNOWLEDGE_BOOK, Component.text("Guia do Aventureiro", TextColor.color(0x6A1B9A), TextDecoration.BOLD), List.of(
@@ -533,6 +543,8 @@ public final class Ajuda implements Listener {
     private record Novidade(Material icone, String nome, String texto, String topico) { }
 
     private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.WRITTEN_BOOK, "Manual no jogo",
+                    "/manual abre o Manual numa janela com busca; também em Esc → Links do servidor.", "combos"),
             new Novidade(Material.DECORATED_POT, "Arco-íris",
                     "Quando a chuva para de dia, procure o Pote do Arco-Íris onde ele toca o chão.", "estacoes"),
             new Novidade(Material.NETHER_STAR, "Estrelas cadentes",

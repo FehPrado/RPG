@@ -527,6 +527,10 @@ conforto:
   elevadores: true                    # Elevador (bancada): pule para subir até o próximo, agache para descer (até 16 blocos)
   apito: true                         # Apito do Domador: chama seus companheiros e montarias a até 100 blocos (vêm andando)
 
+# 2.59: o Manual (/manual abre em janela dentro do jogo; o link vai para o chat e para Esc → Links do servidor)
+manual:
+  url: "https://claude.ai/artifact/R2LWqwSqHR28jKwegfqChF"   # troque se hospedar o Manual em outro lugar (ex.: GitHub Pages)
+
 guia:
   # Dá o livro "Guia do Aventureiro" na primeira vez que o jogador entra (/guia pega outro).
   dar-ao-entrar-pela-primeira-vez: true

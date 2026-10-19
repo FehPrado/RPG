@@ -234,6 +234,11 @@ commands:
     usage: /guia [palavra|livro]
     aliases: [livroguia, ajuda]
     permission: rpg.guia
+  manual:
+    description: Manual do RPGAtributos numa janela dentro do jogo. /manual link manda o link do site; /manual <palavra> busca.
+    usage: /manual [link|palavra]
+    aliases: [wiki, site]
+    permission: rpg.guia
   jornada:
     description: Jornada do Aventureiro (os primeiros passos, com recompensas).
     usage: /jornada

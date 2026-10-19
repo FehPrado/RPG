@@ -241,6 +241,7 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.domador.Apito apito;
     private br.rpgatributos.mundo.CeuEncantado ceuEncantado;
     private br.rpgatributos.detalhes.Estantes estantes;
+    private br.rpgatributos.ajuda.ManualJanela manualJanela;
     private MercadorItinerante mercador;
     private Encontros encontros;
     private Flechas flechas;
@@ -493,6 +494,13 @@ public final class RPGAtributos extends JavaPlugin {
         }
         ComandoParty cmdParty = new ComandoParty(this);
         ComandoTerritorio cmdTerritorio = new ComandoTerritorio(this);
+        manualJanela = new br.rpgatributos.ajuda.ManualJanela(this);
+        PluginCommand cmanual = getCommand("manual");
+        if (cmanual != null) {
+            cmanual.setExecutor(manualJanela);
+            cmanual.setTabCompleter(manualJanela);
+        }
+        manualJanela.registrarLink();
         PluginCommand craca = getCommand("raca");
         if (craca != null) {
             craca.setExecutor(racas);
