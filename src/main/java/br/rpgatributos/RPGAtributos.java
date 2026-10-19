@@ -242,6 +242,16 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.mundo.CeuEncantado ceuEncantado;
     private br.rpgatributos.detalhes.Estantes estantes;
     private br.rpgatributos.ajuda.ManualJanela manualJanela;
+    private br.rpgatributos.titulos.Conquistas conquistas;
+    private br.rpgatributos.exploracao.LivroReceitas livroReceitas;
+    private br.rpgatributos.exploracao.BausVanilla bausVanilla;
+    private br.rpgatributos.colonia.Conversas conversas;
+    private br.rpgatributos.mundo.VilasVanilla vilasVanilla;
+    private br.rpgatributos.detalhes.Ferrovias ferrovias;
+    private br.rpgatributos.detalhes.Velas velas;
+    private br.rpgatributos.detalhes.BarcoGrande barcoGrande;
+    private br.rpgatributos.detalhes.Cobre cobre;
+    private br.rpgatributos.ajuda.Boasvindas boasvindas;
     private MercadorItinerante mercador;
     private Encontros encontros;
     private Flechas flechas;
@@ -312,6 +322,16 @@ public final class RPGAtributos extends JavaPlugin {
         apito = new br.rpgatributos.domador.Apito(this);
         ceuEncantado = new br.rpgatributos.mundo.CeuEncantado(this);
         estantes = new br.rpgatributos.detalhes.Estantes(this);
+        conquistas = new br.rpgatributos.titulos.Conquistas(this);
+        livroReceitas = new br.rpgatributos.exploracao.LivroReceitas(this);
+        bausVanilla = new br.rpgatributos.exploracao.BausVanilla(this);
+        conversas = new br.rpgatributos.colonia.Conversas(this);
+        vilasVanilla = new br.rpgatributos.mundo.VilasVanilla(this);
+        ferrovias = new br.rpgatributos.detalhes.Ferrovias(this);
+        velas = new br.rpgatributos.detalhes.Velas(this);
+        barcoGrande = new br.rpgatributos.detalhes.BarcoGrande(this);
+        cobre = new br.rpgatributos.detalhes.Cobre(this);
+        boasvindas = new br.rpgatributos.ajuda.Boasvindas(this);
         tags = new TagManager(this);
         skillListener = new SkillListener(this);
         menus = new MenuManager(this);
@@ -459,7 +479,7 @@ public final class RPGAtributos extends JavaPlugin {
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, ateliers, sonhos, trofeus,
                 mesasCartografo, lapides, recordes, diario,
-                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, aparar, fraquezas, cargaMontada, pescaLava, polinizacao, conforto, elevadores, apito, ceuEncantado, estantes, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
+                canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, aparar, fraquezas, cargaMontada, pescaLava, polinizacao, conforto, elevadores, apito, ceuEncantado, estantes, conquistas, livroReceitas, bausVanilla, vilasVanilla, ferrovias, velas, barcoGrande, cobre, boasvindas, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
         locais.iniciar();
         masmorras.iniciar();
         controle.aplicarLimites();
@@ -473,6 +493,8 @@ public final class RPGAtributos extends JavaPlugin {
         pescaLava.registrarReceitas();
         elevadores.registrarReceitas();
         apito.registrarReceitas();
+        velas.registrarReceitas();
+        barcoGrande.registrarReceitas();
         elevadores.iniciar();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
@@ -501,6 +523,9 @@ public final class RPGAtributos extends JavaPlugin {
             cmanual.setTabCompleter(manualJanela);
         }
         manualJanela.registrarLink();
+        conquistas.carregar();
+        getServer().getScheduler().runTask(this, livroReceitas::iniciar);
+        getServer().getScheduler().runTask(this, barcoGrande::restaurar);
         PluginCommand craca = getCommand("raca");
         if (craca != null) {
             craca.setExecutor(racas);
@@ -575,6 +600,12 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, pescaLava::tick, 1L, 1L);
         agenda.runTaskTimer(this, ceuEncantado::tick, 1L, 1L);
         agenda.runTaskTimer(this, estantes::tick, 1L, 1L);
+        agenda.runTaskTimer(this, livroReceitas::tick, 20L, 20L);
+        agenda.runTaskTimer(this, vilasVanilla::tick, 20L, 20L);
+        agenda.runTaskTimer(this, boasvindas::tick, 20L, 20L);
+        agenda.runTaskTimer(this, velas::tick, 1L, 1L);
+        agenda.runTaskTimer(this, barcoGrande::tick, 1L, 1L);
+        agenda.runTaskTimer(this, cobre::tick, 1L, 1L);
         // Efeitos passivos (itens forjados, conjuntos, títulos, núcleos): 1x por segundo.
         efeitos.registrarFonte(titulos::efeitos);
         efeitos.registrarFonte(lendas::efeitos);
@@ -730,6 +761,7 @@ public final class RPGAtributos extends JavaPlugin {
     @Override
     public void onDisable() {
         if (menus != null) menus.fecharTodos();
+        if (barcoGrande != null) barcoGrande.desligar();
         if (guardaRoupa != null) guardaRoupa.desfazerTodos();
         if (racas != null) racas.asas().fecharTodas();
         if (acessorios != null) acessorios.apagarTodas();
@@ -917,6 +949,10 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.vida.Comedouros comedouros() { return comedouros; }
     public br.rpgatributos.pesca.CabanasPesca cabanasPesca() { return cabanasPesca; }
     public br.rpgatributos.mundo.CeuEncantado ceuEncantado() { return ceuEncantado; }
+    public br.rpgatributos.titulos.Conquistas conquistas() { return conquistas; }
+    public br.rpgatributos.colonia.Conversas conversas() { return conversas; }
+    public br.rpgatributos.detalhes.Cobre cobre() { return cobre; }
+    public br.rpgatributos.ajuda.ManualJanela manualJanela() { return manualJanela; }
     public br.rpgatributos.oficio.Oficios oficios() { return oficios; }
     public br.rpgatributos.oficio.Ateliers ateliers() { return ateliers; }
     public br.rpgatributos.mundo.Sonhos sonhos() { return sonhos; }

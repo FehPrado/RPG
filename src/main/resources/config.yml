@@ -527,6 +527,16 @@ conforto:
   elevadores: true                    # Elevador (bancada): pule para subir até o próximo, agache para descer (até 16 blocos)
   apito: true                         # Apito do Domador: chama seus companheiros e montarias a até 100 blocos (vêm andando)
 
+# 2.61: integração com o próprio jogo
+integracao:
+  itens-nos-baus-do-jogo: true        # baús de vilas, templos, minas, fortalezas, cidades do End... ganham itens do plugin (com chance)
+  vilas-do-jogo-com-vida: true        # 2.62: aldeões com nome, o sino reúne a vila, dia de feira a cada 3 dias (trocas 20% mais baratas)
+  ferrovias: true                     # 2.62: carrinho acelera em trilho reto; sino ao lado do trilho toca quando ele passa
+  barco-a-vela: true                  # 2.62: a Vela de Barco deixa o barco bem mais rápido remando na água
+  barco-grande: true                  # 2.63: Barco Grande de 5 lugares (com vela, 4) e dica do comboio de barcos amarrados
+  para-raios-guarda-o-raio: true      # 2.62: para-raios atingido guarda a carga (clique: ligeiro e forja melhor)
+  comeco-guiado: true                 # 2.62: janelas de boas-vindas e das próximas etapas para jogadores novos
+
 # 2.59: o Manual (/manual abre em janela dentro do jogo; o link vai para o chat e para Esc → Links do servidor)
 manual:
   url: "https://claude.ai/artifact/R2LWqwSqHR28jKwegfqChF"   # troque se hospedar o Manual em outro lugar (ex.: GitHub Pages)

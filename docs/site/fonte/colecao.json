@@ -975,6 +975,14 @@
       [
         "livro_criador",
         "Livro do Criador"
+      ],
+      [
+        "apito_domador",
+        "Apito do Domador"
+      ],
+      [
+        "vela_barco",
+        "Vela de Barco"
       ]
     ],
     "carta": [

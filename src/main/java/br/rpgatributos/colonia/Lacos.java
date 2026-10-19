@@ -215,6 +215,13 @@ public final class Lacos implements Listener {
                 "Às vezes eu penso na minha terra.", "Obrigado por parar para conversar.", "Você parece cansado. Come alguma coisa!");
     }
 
+    /** 2.61: em que capítulo do laço o jogador está com esse morador (0 a 5). */
+    public int capitulo(Player p, UUID morador) {
+        Map<UUID, Laco> m = lacos.get(p.getUniqueId());
+        Laco l = m == null ? null : m.get(morador);
+        return l == null ? 0 : l.capitulo;
+    }
+
     /** Clique no botão do laço: entrega o presente que está na mão ou conversa (uma vez por dia cada). */
     public void interagir(Player p, Alvo a, String... falas) {
         Laco l = laco(p, a.id());

@@ -109,6 +109,7 @@ public final class Settings {
     public final boolean vanillaOvelhas, vanillaFila, vanillaSuporte, vanillaEscadas, vanillaLanternas, vanillaRaio, vanillaAbelhas;
     public final boolean confColher, confOrdenar, confRepor, confPortas, confElevadores, confApito;
     public final String manualUrl;
+    public final boolean bausVanilla, vilasVanilla, ferrovias, velas, barcoGrande, cobre, comecoGuiado;
     public final double vanillaCabecaChance;
     public final int profAltura, profPenumbraMaxima;
     public final double profChanceRaiz, profChancePenumbra, profChanceCoracao;
@@ -408,6 +409,13 @@ public final class Settings {
         confElevadores = c.getBoolean("conforto.elevadores", true);
         confApito = c.getBoolean("conforto.apito", true);
         manualUrl = c.getString("manual.url", "https://claude.ai/artifact/R2LWqwSqHR28jKwegfqChF");
+        bausVanilla = c.getBoolean("integracao.itens-nos-baus-do-jogo", true);
+        vilasVanilla = c.getBoolean("integracao.vilas-do-jogo-com-vida", true);
+        ferrovias = c.getBoolean("integracao.ferrovias", true);
+        velas = c.getBoolean("integracao.barco-a-vela", true);
+        barcoGrande = c.getBoolean("integracao.barco-grande", true);
+        cobre = c.getBoolean("integracao.para-raios-guarda-o-raio", true);
+        comecoGuiado = c.getBoolean("integracao.comeco-guiado", true);
         profAltura = c.getInt("profundezas.abaixo-de-y", 0);
         profPenumbraMaxima = Math.max(1, Math.min(9, c.getInt("profundezas.penumbra-maxima", 5)));
         profChanceRaiz = Math.max(0, Math.min(1, c.getDouble("profundezas.chance-de-raiz-por-chunk", 0.1)));

@@ -1779,6 +1779,25 @@ final class ArteItens {
             "..kkkkkkbbkkk...",
             "........kk......"};
 
+    /** 2.62: Vela de Barco (vela branca, mastro e um casco pequeno). */
+    private static final String[] VELA = {
+            "................",
+            ".......k........",
+            ".......kww......",
+            ".......kwwh.....",
+            ".......kwwwh....",
+            ".......kwwwwh...",
+            ".......kwwwwwh..",
+            ".......kwwwwwwh.",
+            ".......kkkkkkkkk",
+            ".......k........",
+            "..bbbbbkbbbbbb..",
+            "..dbbbbbbbbbbd..",
+            "...dbbbbbbbbd...",
+            "....dddddddd....",
+            "................",
+            "................"};
+
     /** 2.57: Apito do Domador (bambu com um furo e cordão). */
     private static final String[] APITO = {
             "................",
@@ -2329,6 +2348,7 @@ final class ArteItens {
         l.add(new Arte("iron_sword", "arma_mangual", ARMA_MANGUAL, c('k', 0xFF1E2832, 'h', 0xFF5D4037, 'g', 0xFF8D6E63, 'b', 0xFF8C8C96, 'x', 0xFFA8E4FF, 'y', 0xFF64B4E6, 'a', 0xFFF0FAFF), true));
         l.add(new Arte("iron_sword", "arma_garras", ARMA_GARRAS, c('k', 0xFF1E0A0A, 'h', 0xFF4E342E, 'g', 0xFF8D5A2B, 'x', 0xFFB0102A, 'a', 0xFFECEFF1, 'b', 0xFF9696A0), true));
         l.add(new Arte("iron_sword", "arma_clava", ARMA_CLAVA, c('k', 0xFF28190A, 'h', 0xFF4E342E, 'g', 0xFF7A5A36, 'x', 0xFFFF6F00, 'y', 0xFF3C2819), true));
+        l.add(new Arte("paper", "vela_barco", VELA, c('k', 0xFF5D4037, 'w', 0xFFF5F5F5, 'h', 0xFFCFD8DC, 'b', 0xFF8D6E63, 'd', 0xFF4E342E)));
         l.add(new Arte("iron_nugget", "apito_domador", APITO, c('k', 0xFF3E2A14, 'g', 0xFF7FA23A, 'h', 0xFFB5D46A, 's', 0xFFE0E0E0)));
         l.add(new Arte("iron_sword", "arma_lanca_basalto", ARMA_LANCA_BASALTO, c('k', 0xFF1A1414, 'h', 0xFF6E6E74, 'g', 0xFF3C3C42,
                 'b', 0xFFC9A227, 'x', 0xFFFF7A1F, 'y', 0xFFFFD27F, 'a', 0xFFC2410C, 'r', 0xFFFFB300), true));

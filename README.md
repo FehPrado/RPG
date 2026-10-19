@@ -109,9 +109,17 @@ Até +5, falhar só gasta o material. De +6 a +8, o item perde 1 nível. No +9 e
 
 ## Bancada de Reciclagem
 
-**Ritual:** jogue **1 funil** e **1 tesoura** em cima de um **rebolo**. Clique nela, escolha um item do seu inventário e recicle.
+**Ritual:** jogue **1 funil** e **1 tesoura** em cima de um **rebolo**. Clique nela, clique nos itens do seu inventário para pô-los na bancada (**até 9 de uma vez**; clique de novo para tirar) e em **"Reciclar tudo"**. O que ficar na bancada volta para você ao fechar.
 - Recicla tudo o que não empilha e tem receita de bancada: armas, ferramentas, armaduras, arcos, escudos, carrinhos, barcos...
 - Volta **50% do material** da receita (até **75%** com Ferraria no máximo). Item gasto devolve menos.
+- **Reciclagem 2.0 (2.60):**
+  - **O material principal vem primeiro:** a parte quebrada vira chance (a picareta de ferro dá 1 ferro garantido e 50% de mais 1). O graveto, a tábua e a linha não "roubam" o material.
+  - **Item pouco gasto** (mais da metade da durabilidade) devolve **pelo menos 1 do material mais valioso**: a pá de ferro nova devolve 1 ferro (antes, só um graveto).
+  - **Armas dos minérios** devolvem o mineral do plugin (a Lança de Basalto devolve Cristal de Magma; o Montante, Lingote de Mitrilo). Antes saía o item comum por baixo dele.
+  - Peças **"✦ Mitrilo"** devolvem o Lingote de Mitrilo (com chance).
+  - **Encantamentos devolvem XP**, como o rebolo do jogo, além da chance de livro.
+  - **Confirmação:** com item valioso na bancada (forjado Épico ou melhor, com nome, com gema ou refino, ou Mitrilo), o botão pede um segundo clique.
+- **Reciclagem automática (2.62):** um **funil em cima da bancada** joga os itens dentro dela, um a um (a cada 2 s), e o material vai para o **baú (ou barril, ou funil) embaixo do rebolo**; sem baú, cai no chão. Recicla a 50%, com 25% de chance de livro. Item valioso nunca é reciclado sozinho: fica no funil. Boa para fazendas de monstros (espadas e armaduras de zumbi).
 - Netherite volta como diamante + sucata de netherite.
 - Item encantado: 25% a 50% de chance de um **livro** com um dos encantos.
 - Lendário ou Mítico de diamante/netherite: chance de **Fragmento de Forja** (15% / 50%). Refino +5 ou mais devolve 1 Fragmento garantido.
@@ -1533,6 +1541,22 @@ Coisas pequenas que tiram a chatice de toda hora. Cada uma pode ser desligada em
 - **Apito do Domador:** bambu, pepita de ferro e linha (sem forma). Clique direito: seus companheiros e animais domados a até 100 blocos **vêm andando** até você (quem estava sentado levanta). 8 s de fôlego entre um apito e outro.
 - **Placa de boas-vindas:** `/territorio boasvindas <frase>` (veja Territórios).
 
+### O próprio Minecraft, com mais vida (2.61 e 2.62)
+
+Coisas que aproveitam o que o jogo já tem. Tudo pode ser desligado em `integracao` no config.
+
+- **Conquistas (tecla L):** uma aba **RPGAtributos** na tela de Conquistas do jogo, com 37 conquistas em árvore (Forja, combate, magia, exploração, pesca, companheiros, vilas...). Aparecem no canto e no chat como as do vanilla. Quem já tinha feito a coisa antes ganha ao entrar.
+- **Livro de receitas:** as receitas do plugin (armas do arsenal, Elevador, Vara Ígnea, Apito...) aparecem no livro de receitas assim que você tem um dos ingredientes.
+- **Baús das estruturas do jogo:** vilas, templos, minas, fortalezas, bastiões, portais em ruínas, cidades do End, cidades antigas, mansões, postos de saqueadores, iglus e câmaras de provação ganham, com chance, itens do plugin que combinam com o lugar (cartas, minerais, relíquias, tomos, páginas de lenda, fragmentos).
+- **Conversa com os moradores:** no menu de cada morador das vilas, **💬 Conversar** abre uma janela de conversa: a conversa do dia (soma laço) e perguntas que se abrem conforme o laço cresce (de onde veio, do que tem medo, o sonho, o segredo, do que gosta de ganhar).
+- **Vilas do jogo com vida:** os aldeões ganham **nome** (aparece quando você olha); **tocar o sino** da vila chama os aldeões para a praça; a cada 3 dias é **dia de feira** (de dia): festa em volta do sino, trocas **20% mais baratas** e às vezes chega um mercador ambulante.
+- **Ferrovias:** em trilho reto e plano (8 blocos ou mais), o carrinho com gente acelera até o **dobro da velocidade** e volta ao normal antes das curvas. Um **sino ao lado do trilho** vira estação: toca quando o carrinho passa.
+- **Barco a vela:** a **Vela de Barco** (lã em cruz com 2 gravetos) vai num barco comum com um clique. Remando para a frente na água, ele corre bem mais (mais ainda na Ventania). A vela ocupa o segundo lugar do barco; agachado + clique (mão vazia) tira.
+- **Barco Grande (2.63):** 7 tábuas e 2 barcos comuns na bancada (`PBP / PBP / PPP`, barcos no meio). Clique na água com ele: aparece um barco comprido de abeto com convés, bordas e 2 bancos. Leva **5 pessoas**: o primeiro a subir pilota, os outros sentam nos 4 bancos (é só clicar no barco). Com a Vela de Barco, o mastro ocupa um banco (**4 pessoas**) e ele corre como o barco a vela. Agachado + clique com a mão vazia tira a vela; sem vela e sem ninguém a bordo, recolhe o barco (volta o item).
+- **Comboio de barcos (2.63):** do próprio jogo: ponha o laço num barco e, agachado, clique em outro barco: o primeiro fica amarrado no segundo. Um barco a vela puxa os de trás (2 pessoas em cada, ou baús nos barcos com baú). O Barco Grande também entra no comboio, puxando ou sendo puxado.
+- **Para-raios guarda o raio:** quando um raio cai num para-raios, ele solta faíscas por 15 minutos. Clique nele para pegar a carga: Pressa II e Velocidade por 3 minutos, e a próxima peça forjada (em até 30 minutos) tem **+8% de chance de sair uma raridade acima**.
+- **Começo guiado:** quem entra pela primeira vez recebe uma janela de boas-vindas com 3 primeiros passos (raça, Jornada, Manual). Com 30 minutos de jogo, uma janela sobre Forja, classe e companheiro; com 2 horas, sobre party, território, colônia e reino. Quem desligou as dicas (`/guia dicas`) não recebe as duas últimas.
+
 ### Artefatos de utilidade (2.49)
 
 Feitos na bancada; as Garras, a Corda e a Bolsa gastam **Vigor**.
@@ -1906,7 +1930,7 @@ Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jei
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.59.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.63.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

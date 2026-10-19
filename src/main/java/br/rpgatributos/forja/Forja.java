@@ -269,10 +269,12 @@ public final class Forja {
         if (cat == null) return base;
         int nivel = ferreiro == null ? 0 : plugin.stats().getNivel(ferreiro, Skill.FERRARIA);
         Raridade r = forcada != null ? forcada : sortearRaridade(nivel);
+        // 2.62: a carga do raio (para-raios de cobre) também ajuda.
+        double cargaDoRaio = forcada == null && ferreiro != null && r != Raridade.MITICO && plugin.cobre() != null ? plugin.cobre().gastarCarga(ferreiro) : 0;
         // Ferreiro e Mestre Forjador: chance de sair uma raridade acima.
         if (forcada == null && ferreiro != null && r != Raridade.MITICO
                 && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.classes().chanceRaridadeExtra(ferreiro) + plugin.lendas().chanceRaridadeExtra(ferreiro) + plugin.racas().chanceRaridadeExtra(ferreiro)
-                        + plugin.talentos().chanceRaridadeExtra(ferreiro)) {
+                        + plugin.talentos().chanceRaridadeExtra(ferreiro) + cargaDoRaio) {
             r = Raridade.values()[r.ordinal() + 1];
             // Obra-Prima: chance de subir mais uma.
             if (r != Raridade.MITICO && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.talentos().chanceSegundaRaridade(ferreiro)) {

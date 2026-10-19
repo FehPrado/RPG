@@ -144,6 +144,7 @@ public final class Titulos implements Listener {
     private void contou(Player p, String id, int valor) {
         plugin.recordes().aoContar(p, id, valor);
         plugin.diario().aoContar(p, id, valor);
+        if (plugin.conquistas() != null) plugin.conquistas().aoContar(p, id, valor);
     }
 
     // =====================================================================

@@ -135,7 +135,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.59</small></a>
+  <a class="marca" href="#conteudo"><b>RPG<span>Atributos</span></b><small>Guia do Jogador · versão 2.63</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: forja, torre, /pets)…" aria-label="Buscar no guia"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -187,7 +187,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <main id="conteudo">
 <div class="hero">
   <div>
-    <p class="rotulo">Guia do Jogador · versão 2.59</p>
+    <p class="rotulo">Guia do Jogador · versão 2.63</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -564,8 +564,11 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     <div class="card"><h3>Bancada de Reciclagem</h3>
       <div class="ritual"><span class="b">Rebolo</span><span class="mais">+</span><span class="i">1 funil</span><span class="mais">+</span><span class="i">1 tesoura</span></div>
       <ul>
-        <li>Devolve 50% do material (até 75% com Ferraria alta). Netherite volta como diamante + sucata.</li>
-        <li>Encantados: 25–50% de chance de livro com um dos encantos.</li>
+        <li><b>Até 9 itens de uma vez:</b> clique nos itens do inventário para pô-los na bancada e em "Reciclar tudo".</li>
+        <li>Devolve 50% do material (até 75% com Ferraria alta). O <b>material principal vem primeiro</b>: a sobra vira chance, e item pouco gasto devolve ao menos 1 (a pá de ferro devolve 1 ferro). Netherite volta como diamante + sucata.</li>
+        <li>Armas dos minérios devolvem o mineral do plugin (Cristal de Magma, Mitrilo, Âmbar...).</li>
+        <li>Encantados: XP de volta e 25–50% de chance de livro com um dos encantos.</li>
+        <li>Item valioso (forjado Épico+, com nome ou gema) pede confirmação.</li>
         <li>Lendário/Mítico de diamante ou netherite: chance de Fragmento de Forja. Refino +5 ou mais devolve 1 Fragmento garantido.</li>
         <li>Gemas engastadas voltam inteiras.</li>
       </ul>
@@ -1048,6 +1051,21 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <section class="secao" id="detalhes">
   <h2><span class="ico">♨</span>Detalhes do dia a dia</h2>
   <div class="grade">
+    <div class="card largo"><h3>🌍 O próprio Minecraft, com mais vida (2.61 e 2.62)</h3>
+      <ul>
+        <li><b>Conquistas:</b> aperte <kbd>L</kbd>: há uma aba <b>RPGAtributos</b> com 37 conquistas do servidor.</li>
+        <li><b>Livro de receitas:</b> as receitas do servidor aparecem nele quando você tem um ingrediente.</li>
+        <li><b>Baús das estruturas do jogo</b> (vilas, templos, fortalezas, cidades do End...) às vezes trazem itens do servidor.</li>
+        <li><b>💬 Conversar</b> no menu dos moradores: perguntas que se abrem conforme o laço cresce.</li>
+        <li><b>Vilas do jogo:</b> aldeões com nome; tocar o sino chama todos para a praça; a cada 3 dias é <b>dia de feira</b>, com trocas 20% mais baratas.</li>
+        <li><b>Ferrovias:</b> em trilho reto o carrinho corre o dobro. Um sino ao lado do trilho toca quando você passa (estação).</li>
+        <li><b>Barco a vela:</b> lã em cruz e 2 gravetos fazem a Vela; clique num barco e reme para a frente. No barco comum, a vela ocupa o 2º lugar.</li>
+        <li><b>Barco Grande (2.63):</b> 7 tábuas e 2 barcos (barcos no meio). Leva <b>5 pessoas</b>: o primeiro pilota, os outros clicam no barco e sentam nos bancos. Com a Vela, o mastro ocupa um banco (4 pessoas). Agachado + clique com a mão vazia recolhe.</li>
+        <li><b>Comboio:</b> laço num barco e, agachado, clique em outro barco: ficam amarrados. O barco a vela puxa os de trás.</li>
+        <li><b>Para-raios:</b> depois de um raio, ele solta faíscas. Clique: fica ligeiro e a próxima peça forjada tem mais chance de sair mais rara.</li>
+        <li><b>Reciclagem automática:</b> funil em cima da Bancada de Reciclagem e baú embaixo dela.</li>
+      </ul>
+    </div>
     <div class="card largo"><h3>🛋 Conforto (2.57)</h3>
       <ul>
         <li><b>Colher com clique:</b> clique direito na plantação madura (trigo, cenoura, batata, beterraba, verruga): colhe e já replanta. Agachado, não colhe.</li>
@@ -1806,7 +1824,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.59 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.63 · Guia do Jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>

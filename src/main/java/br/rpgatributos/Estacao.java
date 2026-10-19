@@ -124,6 +124,11 @@ public abstract class Estacao implements Listener {
         return b != null && blocoValido(b.getType()) && marcas.marcado(b);
     }
 
+    /** 2.62: as estações em chunks carregados (para quem trabalha sozinho, como a reciclagem automática). */
+    protected java.util.Set<Location> carregadas() {
+        return java.util.Set.copyOf(carregados.keySet());
+    }
+
     /** Estações carregadas a até {@code raio} blocos. */
     public List<Location> perto(Location l, double raio) {
         List<Location> lista = new ArrayList<>();

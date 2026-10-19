@@ -543,6 +543,16 @@ public final class Ajuda implements Listener {
     private record Novidade(Material icone, String nome, String texto, String topico) { }
 
     private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.SPRUCE_BOAT, "Barco Grande e comboio",
+                    "Um barco de 5 lugares (4 com vela) e barcos amarrados uns nos outros com laço.", "integracao"),
+            new Novidade(Material.KNOWLEDGE_BOOK, "Conquistas e receitas",
+                    "Tecla L: aba RPGAtributos com 37 conquistas. O livro de receitas mostra as receitas do servidor.", "integracao"),
+            new Novidade(Material.BELL, "Vilas do jogo vivas",
+                    "Aldeões com nome, o sino chama todos e a cada 3 dias tem feira com trocas mais baratas.", "integracao"),
+            new Novidade(Material.OAK_BOAT, "Vela, trilho e raio",
+                    "Barco a vela, carrinho rápido em trilho reto e a carga do para-raios para a forja.", "integracao"),
+            new Novidade(Material.GRINDSTONE, "Reciclagem 2.0",
+                    "Até 9 itens de uma vez, o material principal primeiro (a pá devolve ferro), XP dos encantos e confirmação.", "reciclagem"),
             new Novidade(Material.WRITTEN_BOOK, "Manual no jogo",
                     "/manual abre o Manual numa janela com busca; também em Esc → Links do servidor.", "combos"),
             new Novidade(Material.DECORATED_POT, "Arco-íris",

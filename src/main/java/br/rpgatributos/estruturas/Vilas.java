@@ -600,7 +600,7 @@ public final class Vilas implements Listener {
         @Override public Inventory getInventory() { return inv; }
     }
 
-    private static final int M_INFO = 4, M_LACO = 11, M_LOJA = 13, M_SERVICO = 15, M_DUELO = 22;
+    private static final int M_INFO = 4, M_LACO = 11, M_LOJA = 13, M_SERVICO = 15, M_DUELO = 22, M_CONVERSA = 20;
 
     @EventHandler(priority = EventPriority.HIGH)
     public void aoClicar(PlayerInteractEntityEvent e) {
@@ -664,6 +664,11 @@ public final class Vilas implements Listener {
                     Component.empty(),
                     Component.text(usado ? "Já usado hoje. Volte amanhã." : "» Clique para usar", usado ? NamedTextColor.DARK_GRAY : NamedTextColor.YELLOW))));
         }
+        t.inv.setItem(M_CONVERSA, item(Material.WRITABLE_BOOK, Component.text("💬 Conversar", TextColor.color(0xFF8FA8), TextDecoration.BOLD), List.of(
+                Component.text("Uma conversa de verdade, com perguntas", NamedTextColor.GRAY),
+                Component.text("que se abrem conforme o laço cresce.", NamedTextColor.GRAY),
+                Component.empty(),
+                Component.text("» Clique para conversar", NamedTextColor.YELLOW))));
         t.inv.setItem(M_DUELO, item(Material.PAPER, Component.text("🃏 Duelo de Cartas", TextColor.color(0xF2C14E), TextDecoration.BOLD), List.of(
                 Component.text("Dificuldade: " + br.rpgatributos.vida.Duelos.nomeDificuldade(papel.name()), NamedTextColor.WHITE),
                 Component.text("Vença para ganhar esmeraldas e Pacotes", NamedTextColor.GRAY),
@@ -727,6 +732,13 @@ public final class Vilas implements Listener {
                 p.closeInventory();
             }
             case M_DUELO -> plugin.duelos().contraNpc(p, t.papel.name(), t.papel.nome(t.sitio));
+            case M_CONVERSA -> {
+                p.closeInventory();
+                Sitio s = t.sitio;
+                Papel papel = t.papel;
+                plugin.conversas().abrir(p, alvo(p, s, papel, npc), papel.piglin() ? Material.PIGLIN_HEAD : Material.EMERALD, papel.falas,
+                        () -> abrir(p, s, papel, npc));
+            }
             default -> { }
         }
     }
