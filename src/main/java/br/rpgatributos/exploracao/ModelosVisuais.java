@@ -88,6 +88,8 @@ public final class ModelosVisuais {
         a("personagens", "mercador_arcano", "wandering_trader", ".*Mercador Arcano.*", "Mercador Arcano (Altar)", "wandering_trader/wandering_trader");
 
         // Chefes do Altar (nome "☠ <chefe> ☠").
+        // 2.67: a Carroça é um barco com baú de abeto com o nome "Carroça" (escondido): casco com 4 rodas, sem remos.
+        a("objetos", "carroca", "spruce_chest_boat", "Carroça", "Carroça (barco com baú de abeto puxado por animal)", "boat/spruce");
         a("chefes", "golem_ancestral", "iron_golem", ".*Golem Ancestral.*", "Golem Ancestral", "iron_golem/iron_golem");
         a("chefes", "rainha_aracnidea", "spider", ".*Rainha Aracnídea.*", "Rainha Aracnídea", "spider/spider");
         a("chefes", "senhor_das_chamas", "blaze", ".*Senhor das Chamas.*", "Senhor das Chamas", "blaze/blaze");

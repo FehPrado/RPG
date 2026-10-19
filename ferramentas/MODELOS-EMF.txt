@@ -67,3 +67,9 @@ O gerador verifica todos os pares, JSON, dimensões, coordenadas finitas, UV den
 do atlas, identificadores únicos e preservação de partes/pivôs. Os testes Java
 conferem cobertura dos alvos, dimensões PNG, montagem das regras, ausência de
 colisão com Guardiões e prioridade das edições locais do servidor.
+
+CARROÇA (2.67.1)
+Modelo 92: carroca.jem/.png (spruce_chest_boat, regra por nome "Carroça"). Casco do barco
+com baú, 4 rodas (2x10x10) presas à parte back e remos invisíveis (this.visible=false).
+Gerado por código, sem Blockbench; precisa ser conferido no jogo com EMF + ETF.
+Pacote do cliente: blockbench/autorais/RPGAtributos_EMF_ETF_97.zip.

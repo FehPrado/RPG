@@ -20,8 +20,8 @@ class ModelosVisuaisTest {
 
     @Test
     void todosOsAlvosTemModeloTexturaETamanhoCoerentes() throws Exception {
-        assertEquals(91, ModelosVisuais.alvos().size());
-        assertEquals(91, ModelosVisuais.prontos(null).size());
+        assertEquals(92, ModelosVisuais.alvos().size());
+        assertEquals(92, ModelosVisuais.prontos(null).size());
         for (var alvo : ModelosVisuais.alvos()) {
             try (var jem = getClass().getResourceAsStream("/modelos/visual/" + alvo.id() + ".jem");
                  var png = getClass().getResourceAsStream("/modelos/visual/" + alvo.id() + ".png")) {

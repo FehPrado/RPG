@@ -1613,7 +1613,7 @@ Cada uma pode ser desligada em `utilidades:` no config.
 | Freio | 1 alavanca | solta e parada, não escorrega (gelo, ladeira) |
 | Banco | 1 laje de madeira | leva uma pessoa sentada em cima da carga |
 
-- **Visual:** para todos, é o barco com baú de abeto. Ela se chama "Carroça" (nome escondido) para receber um modelo de carroça com rodas no EMF/ETF quando o modelo for feito.
+- **Visual:** sem mod, é o barco com baú de abeto. Com EMF + ETF, vira uma carroça com 4 rodas e sem remos (2.67.1; ela se chama "Carroça", com o nome escondido, e o modelo vale por esse nome).
 
 ### Artefatos de utilidade (2.49)
 
