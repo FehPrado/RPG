@@ -332,6 +332,7 @@ public final class Classes implements Listener {
     public String aceitarCaminho(Player p, Classe c) {
         PerfilClasse pf = perfil(p);
         if (c.tier() == Classe.Tier.LENDARIA) return c == Classe.SOBERANO_DAS_SOMBRAS ? "O Soberano das Sombras desperta do outro lado de um Portal Pesadelo."
+                : c.monarca() ? "Os Monarcas vêm do Portal do Monarca (Mural das Relíquias)."
                 : "Classes lendárias só vêm do selo do Local Oculto delas.";
         if (pf.aprendeu(c)) return "Você já aprendeu essa classe.";
         List<String> falta = faltando(p, c);
@@ -481,6 +482,12 @@ public final class Classes implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void aoDano(EntityDamageByEntityEvent e) {
         Entity d = e.getDamager();
+        // 2.76: a Bola de Fogo leva o dano dela no projétil.
+        Double fogo = d.getPersistentDataContainer().get(Habilidades.K_FOGO, org.bukkit.persistence.PersistentDataType.DOUBLE);
+        if (fogo != null) {
+            e.setDamage(fogo);
+            return;
+        }
         Player a = null;
         boolean flecha = false;
         if (d instanceof Player pl) {
@@ -538,6 +545,11 @@ public final class Classes implements Listener {
                 alvo.getWorld().spawnParticle(Particle.WITCH, alvo.getLocation().add(0, 1, 0), 12, 0.3, 0.4, 0.3, 0.05);
             }
             if (h.afiado(a)) mult *= 1.25;
+            if (h.consumirMutilacao(a)) {
+                mult *= 1.5;
+                alvo.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.WITHER, 80, 1));
+                alvo.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SLOWNESS, 80, 1));
+            }
             if (h.consumirVeu(a)) {
                 mult *= 3;
                 a.removePotionEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY);
@@ -547,7 +559,57 @@ public final class Classes implements Listener {
             mult *= 1.6;
         }
         if (h.marcado(a, alvo)) mult *= 1.3;
+        // 2.76: as passivas dos Monarcas nos golpes.
+        if (c == Classe.MONARCA_CHAMAS_BRANCAS && ThreadLocalRandom.current().nextDouble() < 0.25) {
+            alvo.getWorld().strikeLightningEffect(alvo.getLocation());
+            extra += 4;
+        } else if (c == Classe.MONARCA_GEADA) {
+            alvo.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SLOWNESS, 40, 0));
+        } else if (c == Classe.MONARCA_INSETOS) {
+            alvo.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.POISON, 60, 0));
+        }
         e.setDamage(e.getDamage() * mult + extra);
+    }
+
+    /** 2.76: a Bola de Fogo não acende blocos. */
+    @EventHandler(ignoreCancelled = true)
+    public void aoAcender(org.bukkit.event.block.BlockIgniteEvent e) {
+        if (e.getIgnitingEntity() != null && e.getIgnitingEntity().getPersistentDataContainer().has(Habilidades.K_FOGO)) e.setCancelled(true);
+    }
+
+    /** 2.76: a cada 5 s, o Curandeiro cura um pouco a si e a party perto. */
+    public void tick() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (ativa(p) != Classe.CURANDEIRO || p.isDead()) continue;
+            double quanto = 1 + fator(p);
+            for (Player a : habilidades.aliadosDe(p, 8)) Habilidades.curar(a, quanto);
+        }
+    }
+
+    /**
+     * 2.76: o Portal do Monarca dá a classe lendária dele (sem as exigências do selo).
+     * @return false se ela já tem dono ou se o jogador já é um Monarca.
+     */
+    public boolean concederMonarca(Player p, Classe c) {
+        if (!c.monarca() || donosLendarias.containsKey(c)) return false;
+        for (Classe o : Classe.values()) if (o.monarca() && p.getUniqueId().equals(donosLendarias.get(o))) return false;
+        donosLendarias.put(c, p.getUniqueId());
+        nomesDonos.put(c, p.getName());
+        salvarLendarias();
+        conceder(p, c);
+        plugin.titulos().registrar(p, "classe_lendaria", 1);
+        plugin.getServer().broadcast(Component.text("♛ ", c.cor())
+                .append(Component.text(p.getName(), NamedTextColor.YELLOW, TextDecoration.BOLD))
+                .append(Component.text(" agora é o ", NamedTextColor.GRAY))
+                .append(Component.text(c.nome(), c.cor(), TextDecoration.BOLD))
+                .append(Component.text("! Só pode haver um.", NamedTextColor.GRAY)));
+        return true;
+    }
+
+    /** O Monarca deste jogador (a classe lendária dele), ou null. */
+    public Classe monarcaDe(Player p) {
+        for (Classe o : Classe.values()) if (o.monarca() && p.getUniqueId().equals(donosLendarias.get(o))) return o;
+        return null;
     }
 
     /** O atacante está atrás do alvo? */
@@ -567,6 +629,13 @@ public final class Classes implements Listener {
             v.playSound(v.getLocation(), Sound.ENTITY_PHANTOM_FLAP, 0.7f, 1.6f);
             v.sendActionBar(Component.text("✧ Esquivou!", NamedTextColor.AQUA));
             return;
+        }
+        // 2.76: Carapaça (Monarca dos Insetos): quem bate leva 3 de dano (no tick seguinte, fora deste evento).
+        if (habilidades.carapaca(v)) {
+            Entity origem = e.getDamager() instanceof Projectile pr && pr.getShooter() instanceof Entity s ? s : e.getDamager();
+            if (origem instanceof LivingEntity bateu && !bateu.equals(v)) {
+                plugin.getServer().getScheduler().runTask(plugin, () -> { if (bateu.isValid() && !bateu.isDead()) plugin.alvos().ferir(v, bateu, 3); });
+            }
         }
         if (habilidades.escudoElemental(v) && e.getDamager() instanceof LivingEntity atacante) {
             atacante.setFireTicks(Math.max(atacante.getFireTicks(), 60));
@@ -604,6 +673,37 @@ public final class Classes implements Listener {
         if (e.getAction() != Action.LEFT_CLICK_AIR || e.getHand() != EquipmentSlot.HAND || !p.isSneaking()) return;
         if (plugin.arcano().ehGrimorio(e.getItem())) return;
         trocarHabilidade(p);
+    }
+
+    // ---- 2.77: o que o mod de apoio mostra (HUD e roda de habilidades) ----
+
+    /** As habilidades da classe ativa (vazio sem classe). */
+    public List<Habilidade> habilidadesDe(Player p) {
+        Classe c = ativa(p);
+        return c == null ? List.of() : c.habilidades();
+    }
+
+    /** Qual habilidade está escolhida agora (0 sem classe). */
+    public int indiceSelecionado(Player p) {
+        List<Habilidade> hs = habilidadesDe(p);
+        return hs.isEmpty() ? 0 : Math.floorMod(perfil(p).selecionada, hs.size());
+    }
+
+    /** Quanto falta (ms) para a habilidade ficar pronta (0 = pronta). */
+    public long recargaRestante(Player p, Habilidade h) {
+        return Math.max(0, faltaRecarga(p, h));
+    }
+
+    /** Roda de habilidades do mod: escolhe a habilidade {@code i} e já usa. */
+    public void usarHabilidade(Player p, int i) {
+        List<Habilidade> hs = habilidadesDe(p);
+        if (i < 0 || i >= hs.size()) return;
+        PerfilClasse pf = perfil(p);
+        if (pf.selecionada != i) {
+            pf.selecionada = i;
+            pf.salvar(p);
+        }
+        usar(p);
     }
 
     /** Tecla do mod de apoio: usa a habilidade selecionada (o mesmo que agachar + F). */
@@ -664,6 +764,8 @@ public final class Classes implements Listener {
             }
         }
         double forca = 0.6 + 0.4 * nivel(p, c) / (double) NIVEL_MAXIMO;
+        // 2.76: dentro dos portais as habilidades ficam 20% mais fortes.
+        if (plugin.masmorras() != null && plugin.masmorras().ehMundo(p.getWorld())) forca *= 1.2;
         if (!habilidades.usar(p, h, forca)) return;
         if (arc != null) plugin.arcano().gastarMana(p, arc, h.mana());
         recargas.computeIfAbsent(p.getUniqueId(), k -> new HashMap<>()).put(h, System.currentTimeMillis() + h.recarga() * 1000L);

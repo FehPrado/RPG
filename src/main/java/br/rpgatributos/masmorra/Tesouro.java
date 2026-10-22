@@ -28,7 +28,12 @@ public final class Tesouro {
 
     /** Enche o baú. {@code rolagens}: quantos sorteios; {@code chefe}: o baú final (com equipamento garantido). */
     public static void encher(RPGAtributos plugin, Inventory inv, Dificuldade d, int rolagens, boolean chefe, Random r) {
-        List<ItemStack> itens = sortear(plugin, d, rolagens, chefe, r);
+        encher(plugin, inv, d, rolagens, chefe, r, false);
+    }
+
+    /** 2.71: {@code vault} = baú do vault (o equipamento vem não identificado). */
+    public static void encher(RPGAtributos plugin, Inventory inv, Dificuldade d, int rolagens, boolean chefe, Random r, boolean vault) {
+        List<ItemStack> itens = sortear(plugin, d, rolagens, chefe, r, vault);
         List<Integer> slots = new ArrayList<>();
         for (int i = 0; i < inv.getSize(); i++) slots.add(i);
         Collections.shuffle(slots, r);
@@ -42,6 +47,10 @@ public final class Tesouro {
     }
 
     static List<ItemStack> sortear(RPGAtributos plugin, Dificuldade d, int rolagens, boolean chefe, Random r) {
+        return sortear(plugin, d, rolagens, chefe, r, false);
+    }
+
+    static List<ItemStack> sortear(RPGAtributos plugin, Dificuldade d, int rolagens, boolean chefe, Random r, boolean vault) {
         int t = d.nivel();
         List<ItemStack> l = new ArrayList<>();
         l.add(new ItemStack(Material.EMERALD, 3 + r.nextInt(6 * (t + 1))));
@@ -57,12 +66,12 @@ public final class Tesouro {
                     ItemStack raro = raro(t, chefe, r);
                     l.add(raro != null ? raro : new ItemStack(Material.EMERALD, 4 + r.nextInt(6)));
                 }
-                case 6 -> l.add(equipamento(plugin, d, false, r));
+                case 6 -> l.add(equipamento(plugin, d, false, r, vault));
                 default -> l.add(new ItemStack(t >= 2 ? Material.NETHERITE_SCRAP : Material.IRON_INGOT, t >= 2 ? 1 : 4 + r.nextInt(5)));
             }
         }
         if (chefe) {
-            l.add(equipamento(plugin, d, true, r));
+            l.add(equipamento(plugin, d, true, r, vault));
             if (t >= 1) l.add(Raro.FRAGMENTO_DE_FORJA.criar(1 + r.nextInt(t + 1)));
             if (t >= 2 && r.nextDouble() < 0.5) l.add(Raro.PEDRA_DE_PROTECAO.criar(1));
             if (t == 3 && r.nextDouble() < 0.35) l.add(Raro.ESSENCIA_PRIMORDIAL.criar(1));
@@ -73,6 +82,11 @@ public final class Tesouro {
         } else {
             if (r.nextDouble() < 0.08) l.add(Raro.MAPA_RASGADO.criar(1));
             if (r.nextDouble() < 0.05) l.add(Raro.PAGINA_DE_LENDA.criar(1));
+        }
+        // 2.72: os baús do vault às vezes guardam uma Inscrição (para a Mesa de Inscrição).
+        if (vault && r.nextDouble() < (chefe ? 0.5 : 0.12)) {
+            Inscricao[] is = Inscricao.values();
+            l.add(is[r.nextInt(is.length)].criar(1));
         }
         return l;
     }
@@ -95,7 +109,7 @@ public final class Tesouro {
     }
 
     /** Arma ou armadura forjada, do material da dificuldade. {@code melhor}: puxa para a raridade máxima. */
-    private static ItemStack equipamento(RPGAtributos plugin, Dificuldade d, boolean melhor, Random r) {
+    private static ItemStack equipamento(RPGAtributos plugin, Dificuldade d, boolean melhor, Random r, boolean vault) {
         String prefixo = switch (d.material()) {
             case IRON_INGOT -> "IRON_";
             case NETHERITE_INGOT -> "NETHERITE_";
@@ -103,6 +117,7 @@ public final class Tesouro {
         };
         Material m = r.nextInt(8) == 0 ? Material.BOW : Material.matchMaterial(prefixo + PECAS[r.nextInt(PECAS.length)]);
         if (m == null) m = Material.IRON_SWORD;
+        if (vault) return EquipamentoPortal.naoIdentificado(m, d.raridadeMin(), d.raridadeMax(), melhor);
         Raridade[] todas = Raridade.values();
         int min = d.raridadeMin().ordinal(), max = d.raridadeMax().ordinal();
         int escolhida;

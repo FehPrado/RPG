@@ -6,6 +6,7 @@ import br.rpgatributos.aventura.Chefe;
 import br.rpgatributos.classe.Classe;
 import br.rpgatributos.colonia.Colonia;
 import br.rpgatributos.masmorra.Dificuldade;
+import br.rpgatributos.masmorra.Rank;
 import br.rpgatributos.masmorra.Masmorra;
 import br.rpgatributos.masmorra.Masmorras;
 import br.rpgatributos.masmorra.Tesouro;
@@ -88,6 +89,15 @@ public final class Portais implements Listener, CommandExecutor {
         final long criado;
         long transbordaEm;
         final boolean eco;
+        /** 2.68: o rank (E a S); a dificuldade sai dele. */
+        Rank r;
+        /** Portal Vermelho: sem saída lá dentro até vencer. */
+        boolean vermelho;
+        /** 2.75: Ataque de Rank S (várias parties, o chefe cresce com elas). */
+        boolean ataque;
+        /** Aberto pela magia: quem conjurou (e a party) entra primeiro, até {@code reservaAte}. */
+        UUID reservadoPara;
+        long reservaAte;
         UUID masmorra;
         int avisos;
         // transbordo
@@ -129,6 +139,10 @@ public final class Portais implements Listener, CommandExecutor {
     private final File arquivo;
     private int ciclo;
     private int segundosAteSorteio;
+    /** 2.75: quando foi o último Ataque de Rank S (um a cada 3 dias, com 2 ou mais jogadores). */
+    private long ultimoAtaque;
+    private int segundosAteAtaque;
+    private static final long ENTRE_ATAQUES_MS = 72L * 3_600_000;
 
     public Portais(RPGAtributos plugin) {
         this.plugin = plugin;
@@ -139,7 +153,44 @@ public final class Portais implements Listener, CommandExecutor {
     private Masmorras masmorras() { return plugin.masmorras(); }
 
     public static String nome(Dificuldade d) {
-        return "Portal " + d.nome();
+        return "Portal " + Rank.de(d).nomeCompleto();
+    }
+
+    /** "Portal Rank C · Normal" (ou "Portal Vermelho Rank C · Normal"). */
+    static String nome(Portal p) {
+        if (p.ataque) return "Portal do Ataque de Rank S";
+        return "Portal " + (p.vermelho ? "Vermelho " : "") + rank(p).nomeCompleto();
+    }
+
+    static TextColor cor(Portal p) {
+        if (p.ataque) return TextColor.color(0xFFAB00);
+        return p.vermelho ? TextColor.color(0xD50000) : rank(p).cor();
+    }
+
+    static Rank rank(Portal p) {
+        return p.r != null ? p.r : Rank.de(p.d);
+    }
+
+    /** As dificuldades antigas viram ranks: Fácil sai E ou D; Pesadelo, A (ou S, de vez em quando). */
+    private static Rank rankDe(Dificuldade d) {
+        double x = ThreadLocalRandom.current().nextDouble();
+        return switch (d) {
+            case FACIL -> x < 0.5 ? Rank.E : Rank.D;
+            case NORMAL -> Rank.C;
+            case DIFICIL -> Rank.B;
+            case PESADELO -> x < 0.25 ? Rank.S : Rank.A;
+        };
+    }
+
+    /**
+     * 2.68: a magia oculta Abrir Portal. O portal fica na frente de quem conjurou, com o rank dado;
+     * ele e a party têm 30 s para entrar antes de todo mundo.
+     */
+    public Portal abrirPorMagia(Location centro, Rank r, boolean vermelho, UUID quem) {
+        Portal p = abrir(centro, r.dificuldade(), false, r, vermelho);
+        p.reservadoPara = quem;
+        p.reservaAte = System.currentTimeMillis() + 30_000;
+        return p;
     }
 
     /** Fácil dura mais, Pesadelo transborda mais rápido. */
@@ -171,6 +222,7 @@ public final class Portais implements Listener, CommandExecutor {
         segundosAteSorteio = plugin.settings().porIntervaloMin * 60;
         if (!arquivo.exists()) return;
         YamlConfiguration y = YamlConfiguration.loadConfiguration(arquivo);
+        ultimoAtaque = y.getLong("ultimo-ataque", 0);
         ConfigurationSection raiz = y.getConfigurationSection("portais");
         if (raiz == null) return;
         for (String k : raiz.getKeys(false)) {
@@ -181,8 +233,12 @@ public final class Portais implements Listener, CommandExecutor {
             if (w == null || d == null) continue;
             try {
                 Location c = new Location(w, s.getDouble("x"), s.getDouble("y"), s.getDouble("z"));
-                portais.put(UUID.fromString(k), new Portal(UUID.fromString(k), c, (float) s.getDouble("yaw"), d,
-                        s.getLong("criado"), s.getLong("transborda"), s.getBoolean("eco")));
+                Portal lido = new Portal(UUID.fromString(k), c, (float) s.getDouble("yaw"), d,
+                        s.getLong("criado"), s.getLong("transborda"), s.getBoolean("eco"));
+                lido.r = Rank.porId(s.getString("rank"));
+                lido.vermelho = s.getBoolean("vermelho");
+                lido.ataque = s.getBoolean("ataque");
+                portais.put(lido.id, lido);
             } catch (IllegalArgumentException ignorado) {
                 // linha estranha
             }
@@ -191,6 +247,7 @@ public final class Portais implements Listener, CommandExecutor {
 
     private void salvar() {
         YamlConfiguration y = new YamlConfiguration();
+        y.set("ultimo-ataque", ultimoAtaque);
         for (Portal p : portais.values()) {
             String b = "portais." + p.id + ".";
             y.set(b + "mundo", p.centro.getWorld().getName());
@@ -202,6 +259,9 @@ public final class Portais implements Listener, CommandExecutor {
             y.set(b + "criado", p.criado);
             y.set(b + "transborda", p.transbordaEm);
             y.set(b + "eco", p.eco);
+            y.set(b + "rank", rank(p).name());
+            y.set(b + "vermelho", p.vermelho);
+            y.set(b + "ataque", p.ataque);
         }
         try {
             y.save(arquivo);
@@ -280,16 +340,67 @@ public final class Portais implements Listener, CommandExecutor {
     }
 
     public Portal abrir(Location centro, Dificuldade d, boolean eco) {
+        return abrir(centro, d, eco, rankDe(d), false);
+    }
+
+    /**
+     * 2.75: o Ataque de Rank S. Um portal S grande abre perto de alguém; qualquer party entra, e o
+     * chefe cresce com quem está na luta. Transborda em 1 hora se ninguém o fechar.
+     * @param perto perto de quem (null = alguém sorteado)
+     * @return o portal, ou null se não achou lugar.
+     */
+    public Portal abrirAtaque(Player perto) {
+        Player alvo = perto;
+        if (alvo == null) {
+            List<Player> candidatos = new ArrayList<>();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getWorld().getEnvironment() != World.Environment.NORMAL || masmorras().ehMundo(p.getWorld())) continue;
+                if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) candidatos.add(p);
+            }
+            if (candidatos.isEmpty()) return null;
+            alvo = candidatos.get(rnd().nextInt(candidatos.size()));
+        }
+        Location l = lugar(alvo);
+        if (l == null) return null;
+        Portal p = abrir(l, Rank.S.dificuldade(), false, Rank.S, false);
+        p.ataque = true;
+        p.transbordaEm = System.currentTimeMillis() + 3_600_000L;
+        ultimoAtaque = System.currentTimeMillis();
+        salvar();
+        plugin.getServer().broadcast(Component.text("⚔ ATAQUE DE RANK S! ", TextColor.color(0xFFAB00), TextDecoration.BOLD)
+                .append(Component.text("Um portal gigante se abriu em " + p.onde() + ". Todas as parties podem entrar; o chefe fica mais forte com cada caçador. "
+                        + "Transborda em 1 hora.", NamedTextColor.GOLD)));
+        for (Player j : Bukkit.getOnlinePlayers()) {
+            j.showTitle(Title.title(Component.text("⚔ ATAQUE DE RANK S ⚔", TextColor.color(0xFFAB00), TextDecoration.BOLD),
+                    Component.text(p.onde(), NamedTextColor.GOLD), Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(3500), Duration.ofMillis(800))));
+            j.playSound(j.getLocation(), Sound.EVENT_RAID_HORN, 1f, 1f);
+        }
+        return p;
+    }
+
+    /** A cada 10 minutos: se faz 3 dias do último Ataque e há 2 ou mais caçadores, começa outro. */
+    private void talvezAtaque() {
+        if (System.currentTimeMillis() - ultimoAtaque < ENTRE_ATAQUES_MS) return;
+        int jogando = 0;
+        for (Player p : Bukkit.getOnlinePlayers()) if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) jogando++;
+        if (jogando < 2) return;
+        for (Portal o : portais.values()) if (o.ataque) return;
+        abrirAtaque(null);
+    }
+
+    public Portal abrir(Location centro, Dificuldade d, boolean eco, Rank r, boolean vermelho) {
         long agora = System.currentTimeMillis();
         Location c = centro.getBlock().getLocation().add(0.5, 0, 0.5);
         Portal p = new Portal(UUID.randomUUID(), c, centro.getYaw(), d, agora, agora + duracaoMs(d), eco);
+        p.r = r;
+        p.vermelho = vermelho;
         portais.put(p.id, p);
         salvar();
         World w = c.getWorld();
         w.strikeLightningEffect(c);
         w.playSound(c, Sound.BLOCK_END_PORTAL_SPAWN, 3f, 0.7f);
         plugin.getServer().broadcast(Component.text("⛩ Um ", COR)
-                .append(Component.text(nome(d), d.cor(), TextDecoration.BOLD))
+                .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
                 .append(Component.text(" se abriu em " + p.onde() + "! Ele transborda em " + tempo(p.transbordaEm - agora)
                         + " se ninguém o fechar. (/portais)", COR)));
         if (eco) {
@@ -316,7 +427,7 @@ public final class Portais implements Listener, CommandExecutor {
     private void desenhar(Portal p) {
         World w = p.centro.getWorld();
         Vector lado = p.lado();
-        int cor = p.transbordando ? 0xD50000 : p.d.cor().value();
+        int cor = p.transbordando || p.vermelho ? 0xD50000 : cor(p).value();
         Particle.DustOptions po = new Particle.DustOptions(Color.fromRGB(cor), 1.5f);
         double alto = 2.1, largo = 1.4;
         for (int i = 0; i < 28; i++) {
@@ -355,11 +466,19 @@ public final class Portais implements Listener, CommandExecutor {
     /** @return por que não entrou (a masmorra se formando também conta), ou null se entrou. */
     private String entrar(Player j, Portal p) {
         Masmorra m = masmorras().ativa(p.masmorra);
+        // Aberto pela magia: os primeiros 30 s são de quem conjurou e da party dele.
+        if (p.reservadoPara != null && p.reservaAte > System.currentTimeMillis() && !j.getUniqueId().equals(p.reservadoPara)
+                && !plugin.parties().mesmaParty(p.reservadoPara, j.getUniqueId())) {
+            return "Este portal ainda obedece a quem o abriu (" + ((p.reservaAte - System.currentTimeMillis()) / 1000 + 1) + " s).";
+        }
         if (m == null) {
             String erro = masmorras().impedimentoPortal(j, p.d);
             if (erro != null) return erro;
-            m = masmorras().criarParaPortal(j, p.d, tesouroExtra(p.d), mm -> fechado(p, mm));
+            Rank rp = rank(p), rj = br.rpgatributos.masmorra.Cacador.rank(j);
+            if (rp.ordinal() > rj.ordinal() + 1) j.sendMessage(Component.text("[Sistema] Perigo: portal " + rp.nome() + ". Você é caçador " + rj.nome() + ".", NamedTextColor.RED));
+            m = masmorras().criarParaPortal(j, rp, tesouroExtra(p.d) + rp.tesouroExtra() + (p.ataque ? 6 : 0), mm -> fechado(p, mm), p.vermelho);
             if (m == null) return "O portal está instável agora (masmorras demais abertas). Tente daqui a pouco.";
+            if (p.ataque) masmorras().marcarAtaque(m);
             p.masmorra = m.id();
             p.centro.getWorld().playSound(p.centro, Sound.BLOCK_END_PORTAL_FRAME_FILL, 1.5f, 0.6f);
             return "O portal desperta... entre de novo em alguns segundos.";
@@ -376,6 +495,10 @@ public final class Portais implements Listener, CommandExecutor {
         if (--segundosAteSorteio <= 0) {
             segundosAteSorteio = plugin.settings().porIntervaloMin * 60;
             if (rnd().nextDouble() < plugin.settings().porChance) sortear();
+        }
+        if (++segundosAteAtaque >= 600) {
+            segundosAteAtaque = 0;
+            talvezAtaque();
         }
         esperaToque.values().removeIf(t -> t < agora);
         for (Portal p : new ArrayList<>(portais.values())) {
@@ -399,7 +522,7 @@ public final class Portais implements Listener, CommandExecutor {
             Masmorra m = masmorras().ativa(p.masmorra);
             String estado = m == null ? "Entre para fechá-lo"
                     : m.estado() == Masmorra.Estado.GERANDO ? "Se abrindo..." : m.participantes().size() + " caçador(es) lá dentro";
-            atualizarPlaca(p, Component.text("⛩ " + nome(p.d), p.d.cor(), TextDecoration.BOLD)
+            atualizarPlaca(p, Component.text("⛩ " + nome(p), cor(p), TextDecoration.BOLD)
                     .append(Component.newline())
                     .append(Component.text("Transborda em " + tempo(falta), falta < 10 * 60_000L ? NamedTextColor.RED : NamedTextColor.WHITE))
                     .append(Component.newline())
@@ -410,7 +533,7 @@ public final class Portais implements Listener, CommandExecutor {
 
     private void aviso(Portal p, String texto) {
         plugin.getServer().broadcast(Component.text("⚠ O ", NamedTextColor.GOLD)
-                .append(Component.text(nome(p.d), p.d.cor(), TextDecoration.BOLD))
+                .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
                 .append(Component.text(" em " + p.onde() + " " + texto, NamedTextColor.GOLD)));
     }
 
@@ -460,7 +583,7 @@ public final class Portais implements Listener, CommandExecutor {
             j.sendMessage(Component.text("⛩ O portal lá fora se fechou! O baú do chefe tem tesouro a mais.", COR));
         }
         plugin.getServer().broadcast(Component.text("⛩ O ", COR)
-                .append(Component.text(nome(p.d), p.d.cor(), TextDecoration.BOLD))
+                .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
                 .append(Component.text(" em " + p.onde() + " foi fechado" + (nomes.isEmpty() ? "" : " por " + String.join(", ", nomes)) + "!", COR)));
         if (p.eco) despertar(m);
     }
@@ -499,13 +622,13 @@ public final class Portais implements Listener, CommandExecutor {
         Masmorra m = masmorras().ativa(p.masmorra);
         if (m != null) masmorras().encerrar(m, "⚠ O portal transbordou! Você foi lançado para fora.");
         p.masmorra = null;
-        p.barra = BossBar.bossBar(Component.text("⚠ " + nome(p.d) + " transbordou!", NamedTextColor.RED), 1f,
+        p.barra = BossBar.bossBar(Component.text("⚠ " + nome(p) + " transbordou!", NamedTextColor.RED), 1f,
                 BossBar.Color.RED, BossBar.Overlay.NOTCHED_10);
         World w = p.centro.getWorld();
         w.playSound(p.centro, Sound.EVENT_RAID_HORN, 6f, 0.6f);
         w.strikeLightningEffect(p.centro);
         plugin.getServer().broadcast(Component.text("⚠ O ", NamedTextColor.RED)
-                .append(Component.text(nome(p.d), p.d.cor(), TextDecoration.BOLD))
+                .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
                 .append(Component.text(" em " + p.onde() + " TRANSBORDOU! Monstros invadem a região!", NamedTextColor.RED, TextDecoration.BOLD)));
         if (p.eco) {
             plugin.getServer().broadcast(Component.text("☾ O Eco do Soberano se perdeu no transbordo...", TextColor.color(0x7E57C2), TextDecoration.ITALIC));
@@ -564,10 +687,10 @@ public final class Portais implements Listener, CommandExecutor {
         float prog;
         if (chefe != null) {
             AttributeInstance max = chefe.getAttribute(Attribute.MAX_HEALTH);
-            titulo = Component.text("☠ O chefe do " + nome(p.d) + " saiu!", NamedTextColor.DARK_RED, TextDecoration.BOLD);
+            titulo = Component.text("☠ O chefe do " + nome(p) + " saiu!", NamedTextColor.DARK_RED, TextDecoration.BOLD);
             prog = (float) (chefe.getHealth() / (max == null ? chefe.getHealth() : max.getValue()));
         } else {
-            titulo = Component.text("⚠ " + nome(p.d) + " transbordou! Onda " + Math.max(1, p.onda) + "/" + p.ondas + " • "
+            titulo = Component.text("⚠ " + nome(p) + " transbordou! Onda " + Math.max(1, p.onda) + "/" + p.ondas + " • "
                     + p.monstros.size() + " inimigos", NamedTextColor.RED);
             prog = Math.max(0, Math.min(1, 1f - (p.onda - 1 + (p.ultimaOnda == 0 ? 0 : 1f - p.monstros.size() / (float) p.ultimaOnda)) / (p.ondas + 1f)));
         }
@@ -691,7 +814,7 @@ public final class Portais implements Listener, CommandExecutor {
         if (vida != null) boss.setHealth(vida.getValue());
         p.chefe = boss.getUniqueId();
         plugin.getServer().broadcast(Component.text("☠ O chefe do ", NamedTextColor.DARK_RED)
-                .append(Component.text(nome(p.d), p.d.cor(), TextDecoration.BOLD))
+                .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
                 .append(Component.text(" saiu: " + c.nome() + "! Derrote-o para fechar o portal.", NamedTextColor.DARK_RED)));
     }
 
@@ -736,7 +859,7 @@ public final class Portais implements Listener, CommandExecutor {
         }
         for (Colonia c : coloniasPerto(p)) plugin.colonias().alterarFelicidade(c, 10);
         plugin.getServer().broadcast(Component.text("⛩ O transbordo do ", COR)
-                .append(Component.text(nome(p.d), p.d.cor(), TextDecoration.BOLD))
+                .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
                 .append(Component.text(" foi contido" + (nomes.isEmpty() ? "" : " por " + String.join(", ", nomes)) + "!", COR)));
     }
 
@@ -755,7 +878,7 @@ public final class Portais implements Listener, CommandExecutor {
         Entity chefe = p.chefe == null ? null : Bukkit.getEntity(p.chefe);
         if (chefe != null) chefe.remove();
         for (Colonia c : coloniasPerto(p)) plugin.colonias().alterarFelicidade(c, -10);
-        plugin.getServer().broadcast(Component.text("⛩ O " + nome(p.d) + " em " + p.onde()
+        plugin.getServer().broadcast(Component.text("⛩ O " + nome(p) + " em " + p.onde()
                 + " se esgotou sozinho... e deixou a região em ruínas.", NamedTextColor.GRAY));
     }
 
@@ -772,6 +895,36 @@ public final class Portais implements Listener, CommandExecutor {
             if (x < d) { d = x; melhor = p; }
         }
         return melhor;
+    }
+
+    /** 2.71: o Medidor de Mana lê o portal mais perto (até {@code raio} blocos). */
+    public List<Component> medir(Player j, double raio) {
+        List<Component> l = new ArrayList<>();
+        Portal p = maisProximo(j);
+        if (p == null || p.centro.distanceSquared(j.getLocation()) > raio * raio) {
+            l.add(Component.text("[Sistema] Nenhuma onda de mana por perto (" + (int) raio + " blocos).", NamedTextColor.GRAY));
+            return l;
+        }
+        long agora = System.currentTimeMillis();
+        Rank rp = rank(p), rj = br.rpgatributos.masmorra.Cacador.rank(j);
+        l.add(Component.text("[Sistema] ", TextColor.color(0x4FC3F7))
+                .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
+                .append(Component.text(" a " + (int) j.getLocation().distance(p.centro) + " blocos.", NamedTextColor.WHITE)));
+        int dif = rp.ordinal() - rj.ordinal();
+        l.add(dif <= 0 ? Component.text(" • Mana dentro do seu alcance (você é " + rj.nome() + ").", NamedTextColor.GREEN)
+                : Component.text(" • Mana " + dif + " rank(s) acima do seu (você é " + rj.nome() + "). Vá com uma party.",
+                        dif >= 2 ? NamedTextColor.RED : NamedTextColor.GOLD));
+        l.add(p.transbordando ? Component.text(" • TRANSBORDANDO!", NamedTextColor.DARK_RED, TextDecoration.BOLD)
+                : Component.text(" • Transborda em " + tempo(p.transbordaEm - agora) + ".", NamedTextColor.GRAY));
+        Masmorra m = p.masmorra == null ? null : masmorras().ativa(p.masmorra);
+        if (m != null && !m.participantes().isEmpty()) {
+            l.add(Component.text(" • " + m.participantes().size() + " caçador(es) lá dentro.", NamedTextColor.GRAY));
+        }
+        if (p.reservadoPara != null && p.reservaAte > agora) {
+            l.add(Component.text(" • Reservado para quem o abriu por mais " + tempo(p.reservaAte - agora) + ".", NamedTextColor.GRAY));
+        }
+        if (p.vermelho) l.add(Component.text(" • Portal Vermelho: lá dentro não há saída até vencer.", NamedTextColor.DARK_RED));
+        return l;
     }
 
     /** Admin: faz o portal mais perto transbordar agora. */
@@ -832,7 +985,7 @@ public final class Portais implements Listener, CommandExecutor {
             Component estado = p.transbordando ? Component.text("TRANSBORDANDO!", NamedTextColor.DARK_RED, TextDecoration.BOLD)
                     : Component.text("transborda em " + tempo(p.transbordaEm - agora), NamedTextColor.GRAY);
             sender.sendMessage(Component.text(" • ", NamedTextColor.DARK_GRAY)
-                    .append(Component.text(nome(p.d), p.d.cor(), TextDecoration.BOLD))
+                    .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
                     .append(Component.text(" — " + p.onde() + dist + " — ", NamedTextColor.WHITE))
                     .append(estado)
                     .append(p.eco ? Component.text(" ☾", TextColor.color(0x7E57C2)) : Component.empty()));

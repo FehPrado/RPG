@@ -286,7 +286,9 @@ public final class Forja {
         item.setAmount(1);
         construir(item, d);
         // Às vezes a peça já nasce com nome (mais chance nas raridades altas).
-        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && Traje.de(item) == null && ConjuntoMineral.de(item) == null && !br.rpgatributos.lenda.Lendas.marcado(item)
+        if (plugin.settings().nomeadasAtivadas && Nomeada.de(item) == null && Traje.de(item) == null && ConjuntoMineral.de(item) == null
+                && !item.getPersistentDataContainer().has(br.rpgatributos.masmorra.EquipamentoPortal.K_CACADOR) && !item.getPersistentDataContainer().has(br.rpgatributos.masmorra.EquipamentoPortal.K_ARMA_CHEFE)
+                && !br.rpgatributos.lenda.Lendas.marcado(item)
                 && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < Nomeada.chance(r) * plugin.settings().nomeadasChance) {
             Nomeada n = Nomeada.sortear(item); // arma do arsenal: só as nomeadas dela
             if (n == null && Traje.aceita(item)) {
@@ -434,6 +436,7 @@ public final class Forja {
             plugin.mitrilo().decorar(meta, tipo); // aprimorado com Mitrilo: bônus e linha voltam também
             plugin.oficios().decorar(meta, tipo); // peça de conjunto do Ateliê: nome, bônus e o +1 de armadura voltam
             ConjuntoMineral.decorar(meta, tipo); // 2.64: peça de conjunto dos minerais: nome, bônus e atributos a mais voltam
+            br.rpgatributos.masmorra.EquipamentoPortal.decorar(meta, tipo); // 2.71: peça de Caçador ou arma de chefe: o nome e a linha voltam
             br.rpgatributos.combo.Ligacoes.decorar(meta); // óleo de lâmina passado: a linha dele volta
             plugin.pedrasAmolar().decorar(meta); // arma afiada: a linha do fio volta
             Incrustacoes.decorar(meta, tipo); // minério incrustado: a linha e o atributo voltam

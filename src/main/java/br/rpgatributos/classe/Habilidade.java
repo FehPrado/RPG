@@ -71,7 +71,27 @@ public enum Habilidade {
     AURA_SAGRADA("Aura Sagrada", 45, 40, "Você e a party ganham Regeneração II e Resistência e se livram de efeitos ruins."),
     // Soberano das Sombras
     LEVANTE_SE("Levante-se", 8, 20, "Os inimigos que você derrotou há pouco se levantam como sombras do seu exército."),
-    EXERCITO_DAS_SOMBRAS("Exército das Sombras", 30, 40, "Chama as sombras guardadas; se já estão em campo, ficam furiosas e atacam o seu alvo.");
+    EXERCITO_DAS_SOMBRAS("Exército das Sombras", 30, 40, "Chama as sombras guardadas; se já estão em campo, ficam furiosas e atacam o seu alvo."),
+
+    // ---------------- 2.76: as habilidades que eram das classes de caçador ----------------
+    DISPARADA("Disparada", 20, 0, "Velocidade III e Salto I por 4 s."),
+    SEDE_DE_SANGUE("Sede de Sangue", 40, 0, "Os inimigos a até 8 blocos ficam com Fraqueza II e Lentidão por 5 s."),
+    PROVOCAR("Provocar", 20, 0, "Os monstros a até 10 blocos vêm atrás de você; Resistência I por 5 s."),
+    MURALHA("Muralha", 45, 0, "Resistência III por 4 s e Absorção II, mas você fica lento."),
+    CURA("Cura", 15, 20, "Cura você e a party a até 8 blocos."),
+    PURIFICAR("Purificar", 40, 30, "Tira os efeitos ruins da party perto e dá Resistência I por 6 s."),
+    BOLA_DE_FOGO("Bola de Fogo", 8, 20, "Uma bola de fogo que fere e queima quem acertar (não acende blocos)."),
+    NOVA_DE_GELO("Nova de Gelo", 30, 40, "Dano e Lentidão III nos inimigos a até 6 blocos."),
+    MUTILACAO("Mutilação", 20, 0, "O próximo golpe em 4 s dá +50%, definha e deixa lento."),
+    // Monarcas
+    RELAMPAGO_BRANCO("Relâmpago Branco", 18, 40, "Raios em até 5 inimigos a até 12 blocos."),
+    CHAMA_BRANCA("Chama Branca", 35, 50, "Um anel de fogo branco: dano e fogo nos inimigos a até 7 blocos."),
+    LANCA_DE_GELO("Lança de Gelo", 12, 30, "Uma lança no inimigo que você mira (até 20 blocos): dano e congela."),
+    INVERNO_ETERNO("Inverno Eterno", 40, 60, "Dano e Lentidão IV nos inimigos a até 10 blocos."),
+    INVESTIDA_DA_FERA("Investida da Fera", 15, 0, "Avança ferindo e empurrando quem estiver no caminho."),
+    MATILHA("Matilha", 45, 0, "Chama 3 lobos que lutam com você por 20 s."),
+    ENXAME("Enxame", 20, 30, "Veneno II, cegueira e dano nos inimigos a até 8 blocos."),
+    CARAPACA("Carapaça", 40, 0, "Resistência II por 6 s; quem te bate leva 3 de dano.");
 
     private final String nome;
     private final int recarga;

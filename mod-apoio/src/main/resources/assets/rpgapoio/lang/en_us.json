@@ -1,9 +1,13 @@
 {
   "key.category.rpgapoio.rpgatributos": "RPGAtributos",
   "key.rpgapoio.golpe_montaria": "Mount strike",
-  "key.rpgapoio.habilidade": "Class ability",
+  "key.rpgapoio.habilidade": "Class ability (hold: wheel)",
   "key.rpgapoio.trocar_habilidade": "Next ability",
   "key.rpgapoio.esquiva": "Dodge",
   "key.rpgapoio.postura": "Next stance",
-  "key.rpgapoio.menu": "RPG menu (/rpg)"
+  "key.rpgapoio.menu": "RPG menu (/rpg)",
+  "key.rpgapoio.sistema": "System window (hunter)",
+  "key.rpgapoio.missao": "Daily Quest",
+  "key.rpgapoio.loja": "System Shop",
+  "key.rpgapoio.classes": "Class tree"
 }

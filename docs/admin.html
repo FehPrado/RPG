@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.67</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 2.69</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.67.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-2.69.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
       </ol>
@@ -144,9 +144,11 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <div class="card"><h3>Mod de apoio (2.43, opcional)</h3>
       <ul>
         <li>O servidor <b>não</b> precisa dele: é só para o jogo de quem quiser (NeoForge 26.3), por exemplo no modpack.</li>
-        <li>Arquivo: <code>rpgapoio-0.1.0.jar</code> na raiz do repositório. Vai na pasta <code>mods/</code> do cliente.</li>
-        <li>Teste: entre com o mod e veja "Mod de apoio conectado" na barra e no console (<i>fulano está com o mod de apoio</i>). Monte num companheiro e aperte <kbd>R</kbd>; com classe, <kbd>V</kbd>; <kbd>N</kbd> troca a postura; <kbd>J</kbd> abre o <span class="cmd">/rpg</span>.</li>
-        <li>O plugin escuta o canal <code>rpgatributos:tecla</code>. Teclas de uma versão mais nova do mod são ignoradas sem erro.</li>
+        <li>Arquivo: <code>rpgapoio-0.2.0.jar</code> na raiz do repositório (precisa do plugin 2.77+ para telas e HUD). Vai na pasta <code>mods/</code> do cliente.</li>
+        <li>Teste: entre com o mod e veja "Mod de apoio conectado" na barra e no console (<i>fulano está com o mod de apoio (0.2.0).</i>; se aparecer "sem o canal de dados", só as teclas funcionam). Monte num companheiro e aperte <kbd>R</kbd>; com classe, toque <kbd>V</kbd> e depois segure <kbd>V</kbd> (roda); <kbd>N</kbd> troca a postura; <kbd>J</kbd> abre o <span class="cmd">/rpg</span>.</li>
+        <li>Telas (0.2.0): <kbd>K</kbd> (Sistema), <kbd>O</kbd> (classes, troque de página), <kbd>Y</kbd> (Loja: clique compra) e um Mural das Relíquias: os cliques devem fazer o mesmo que no menu comum. Abra outros menus (Forja, colônia, /rpg) e veja a pele sem os vidros.</li>
+        <li>HUD: com classe, a lista de habilidades embaixo à direita com a recarga; num portal, o tempo e o objetivo no alto (sem a barra de ação); na Câmara das Estátuas, o aviso dos olhos.</li>
+        <li>O plugin escuta <code>rpgatributos:tecla</code> e manda <code>rpgatributos:dados</code>. Teclas de uma versão mais nova do mod são ignoradas sem erro.</li>
       </ul>
     </div>
     <div class="card"><h3>Atualizar</h3>
@@ -181,6 +183,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>mundo.yml</code></td><td>Idade do mundo e próximo Chefe Mundial</td></tr>
       <tr><td><code>estacoes.yml</code></td><td>Estação atual e neve do inverno (para desfazer)</td></tr>
       <tr><td><code>portais.yml</code></td><td>Portais abertos pelo mundo</td></tr>
+      <tr><td><code>recordes_portais.yml</code></td><td>Os 5 portais mais rápidos de cada rank (2.70)</td></tr>
       <tr><td><code>torre.yml</code></td><td>Ranking da Torre (semanal e de todos os tempos)</td></tr>
       <tr><td><code>deuses.yml</code></td><td>Deus oficial de cada reino (a fé de cada um fica no próprio jogador)</td></tr>
       <tr><td><code>lapides.yml</code></td><td>Túmulos de quem morreu (com os itens), até alguém abrir</td></tr>
@@ -717,6 +720,83 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li><code>/rpgadmin conjuntomineral magma</code>: quebre minério de ferro com a picareta (sai lingote) e entre na lava com as 4 peças.</li>
         <li><code>/rpgadmin conjuntomineral quartzo_negro</code> no Nether: os piglins não atacam com 2 peças.</li>
         <li>Gelo (4): deixe um zumbi bater em você: ele fica lento. Pedra-Sangue: bata e veja a vida subir.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Câmara das Estátuas e Ataque de Rank S (2.75)</h3>
+      <ol>
+        <li><code>/rpgadmin cristal e</code>, abra e entre; dentro, <code>/rpgadmin dupla</code>. Vença o chefe: a janela "Masmorra Dupla" e uma passagem marrom na sala do chefe.</li>
+        <li>Entre: leia as placas. Agache 3 s (barra de ação), toque os 4 sinos e atravesse até o altar parando quando o som avisar (olhos vermelhos = não se mexa).</li>
+        <li>Fique parado e depois ande com os olhos abertos: dano, raio e volta 5 blocos. No altar: baú e saída.</li>
+        <li><code>/rpgadmin ataquerank</code>: anúncio para todos, portal dourado "Ataque de Rank S"; entre com dois jogadores e veja a vida de Beru crescer.</li>
+        <li>O último ataque fica em <code>portais.yml</code> (<code>ultimo-ataque</code>); o próximo vem 72 h depois, com 2 ou mais jogadores online.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Relíquias e Monarcas (2.74)</h3>
+      <ol>
+        <li>Mural: pedra-negra polida entalhada + 1 obsidiana chorona + 1 bloco de ouro. <code>/rpgadmin reliquiamonarca geada</code> e "Colocar todas".</li>
+        <li><code>/rpgadmin cacador 1500</code> (Rank A) e clique em "Portal do Monarca da Geada": o portal abre em cima do mural; suba em 30 s.</li>
+        <li>No chefe: a barra mostra "Monarca da Geada"; dê o golpe final: a classe lendária vira a sua ativa, janela do Sistema e anúncio no servidor. <code>/masmorra monarcas</code> e a página "✪ Lendárias e Monarcas" em <code>/classe</code>.</li>
+        <li><code>/rpgadmin monarca feras</code> (classe no nível 20): Agache + F usa Investida da Fera, Agache + clique esquerdo troca para Matilha. <code>/rpgadmin monarca nenhum</code> libera.</li>
+        <li><code>/rpgadmin reliquiamonarca todas</code>: com as 25, o botão de Antares acende (todas se gastam). Quebre o mural com relíquias dentro: elas caem.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Classes unificadas (2.76) e Missão Diária (2.73)</h3>
+      <ol>
+        <li><code>/classe</code>: Tanque e Curandeiro nas pontas da linha das básicas; o botão "✪ Lendárias e Monarcas" abre a página das lendárias.</li>
+        <li><code>/rpgadmin classe SEU_NICK tanque 20</code>: Provocar atrai os monstros; troque (Agache + clique esquerdo) e use Muralha.</li>
+        <li><code>/rpgadmin classe SEU_NICK curandeiro 20</code>: perto de alguém da party, a cada 5 s os dois se curam um pouco; Cura e Purificar.</li>
+        <li><code>/rpgadmin classe SEU_NICK mago 20</code>: troque até Bola de Fogo; ela fere e queima mas não acende blocos. Teste também Guerreiro (Disparada), Berserker (Sede de Sangue), Elementalista (Nova de Gelo) e Assassino (Mutilação).</li>
+        <li>Use a mesma habilidade fora e dentro de um portal: lá dentro ela fica 20% mais forte.</li>
+        <li><code>/rpgadmin missao</code>: em até 5 s chega a janela "Missão Diária concluída" com o prêmio. <code>/rpgadmin missao zerar</code> recomeça.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Árvore, Despertar e Inscrições (2.72)</h3>
+      <ol>
+        <li><code>/rpgadmin cacador 100</code>: título do rank D e, 4 s depois, o Despertar com uma característica. <code>/masmorra arvore</code>: 4 pontos.</li>
+        <li>Suba nós e entre num portal: Vigor dá corações a mais (somem ao sair); Olhos de Gato e Pés Ligeiros só lá dentro (<code>/rpgadmin despertar olhos_de_gato</code>).</li>
+        <li><code>/rpgadmin despertar segunda_chance</code>: num portal, morra de propósito: volta com 3 ❤ (só uma vez). Com totem na mão, o totem é gasto antes.</li>
+        <li>Faro (C) e Instinto: partículas amarelas nas paredes rachadas, roxas nos mímicos e vermelhas nas armadilhas.</li>
+        <li>Mesa de Inscrição: mesa de flecheiro + 1 livro + 1 tinta brilhante. <code>/rpgadmin inscricao todas</code>, segure um cristal (<code>/rpgadmin cristal c</code>) e aplique 4; a 5ª é recusada. Abra o portal: confira os minutos e as salas de tesouro/minas a mais.</li>
+        <li>Re-despertar exige Shift + clique e 48 de mana; Refazer a árvore, 16. <code>/rpgadmin despertar zerar</code> zera tudo.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Equipamento dos portais (2.71)</h3>
+      <ol>
+        <li><code>/rpgadmin naoidentificado c</code>: clique direito num deles (revela) e clique no Altar do Portal com outro (Avaliador, 1 de mana: <code>/rpgadmin cristalmana</code>).</li>
+        <li><code>/rpgadmin pecacacador b</code>: vista as 4 peças e bata num monstro do vault; compare o dano com e sem elas.</li>
+        <li><code>/rpgadmin armachefe</code>: teste cada efeito (maça empurra, veneno, fogo, flecha que definha, raio do tridente também arremessado, definhar e curar).</li>
+        <li>Refaça uma peça na Forja do Ferreiro: o nome e a linha ◈ continuam.</li>
+        <li><code>/masmorra loja</code> (ou o botão no altar): compre com Cristais de Mana. <code>/rpgadmin itemsistema</code> entrega os itens.</li>
+        <li>Pergaminho de Retorno dentro de um portal (sai com tudo); num Portal Vermelho ele não funciona. Medidor de Mana perto de um portal do mundo. Chave Instantânea no mundo normal (fora de território alheio).</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Dentro do vault (2.70)</h3>
+      <ol>
+        <li>Pise numa placa de pedra-negra (corredor ou perto de porta): espinhos, flechas ou chamas; espere 3 s e pise de novo.</li>
+        <li>Abra baús até achar um mímico (mais comum no rank S): ele vira monstro; vença e o tesouro cai.</li>
+        <li>Clique num Pilar de Bênção (quartzo entalhado com o nome em cima): veja a bênção na party.</li>
+        <li>No chefe: com 66% e 33% de vida, título de fase, reforços e círculos vermelhos no chão (dano 1,5 s depois).</li>
+        <li>Ao vencer: título com a nota, a linha com os pontos e o tesouro extra. <code>/masmorra stats</code> e <code>/masmorra recordes</code>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Geração nova do vault (2.69)</h3>
+      <ol>
+        <li><code>/rpgadmin cristal s monolitos</code> e abra: veja o tempo de formação (o S tem 3 andares e ~34 salas).</li>
+        <li>Ande pelos corredores (retos, pontes e túneis) e pelas Escadarias até o último andar.</li>
+        <li>Numa Mina de Cristal, quebre a ametista: saem Cristais de Mana.</li>
+        <li>Ache a parede rachada (C para cima) e bata nela: a passagem cai e há um Baú de Cristal.</li>
+        <li>Nas salas de ponte e alagadas, confira que os monstros nascem em chão firme e que as grades fecham nas portas certas.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Masmorra 2.0 (2.68)</h3>
+      <ol>
+        <li>Crie um Altar do Portal (o ritual de sempre). Clique: veja os 6 ranks, a oferenda e o seu Rank de Caçador.</li>
+        <li><code>/rpgadmin cristalmana</code> e clique direito num rank: o cristal sai pago em mana. Ou <code>/rpgadmin cristal c saque</code>.</li>
+        <li>Clique no altar com o cristal na mão; suba no altar. Confira o título (rank, objetivo), os vasos dourados (Saque) ou as magnetitas (Monólitos) e o relógio de 15 min.</li>
+        <li>Pegue algo lá dentro e deixe o tempo acabar: só o que você pegou vai para o Cofre das Almas.</li>
+        <li><code>/rpgadmin cacador 700</code> (Rank B) e veja o altar liberar até A. <code>/masmorra rank</code>.</li>
+        <li><code>/rpgadmin grimoriooculto</code>: clique para aprender, encha a mana e tenha um Cristal de Mana grande; clique de novo: abre um portal na frente.</li>
+        <li>Num Portal Vermelho (3% da magia), <code>/masmorra sair</code> não funciona até vencer.</li>
       </ol>
     </div>
     <div class="card"><h3>Carroça (2.67)</h3>

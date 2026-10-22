@@ -410,6 +410,175 @@ public final class Comandos implements TabExecutor {
                 ok(sender, "Carroça entregue.");
                 return;
             }
+            case "cristal" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                br.rpgatributos.masmorra.Rank r = args.length >= 2 ? br.rpgatributos.masmorra.Rank.porId(args[1]) : null;
+                if (r == null) { erro(sender, "Use: /rpgadmin cristal <e|d|c|b|a|s> [cacada|saque|monolitos]"); return; }
+                br.rpgatributos.masmorra.Objetivo o = args.length >= 3 ? br.rpgatributos.masmorra.Objetivo.porId(args[2]) : null;
+                entregar(p, o == null ? br.rpgatributos.masmorra.CristalPortal.sortear(r) : br.rpgatributos.masmorra.CristalPortal.criar(r, o, java.util.EnumSet.noneOf(br.rpgatributos.masmorra.ModificadorPortal.class)));
+                ok(sender, "Cristal de Portal " + r.nome() + " entregue.");
+                return;
+            }
+            case "cristalmana" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                for (br.rpgatributos.masmorra.ManaCristal.Tamanho t : br.rpgatributos.masmorra.ManaCristal.Tamanho.values()) entregar(p, br.rpgatributos.masmorra.ManaCristal.criar(t, 4));
+                ok(sender, "4 Cristais de Mana de cada tamanho entregues.");
+                return;
+            }
+            case "grimoriooculto" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                br.rpgatributos.masmorra.MagiaOculta.esquecer(p);
+                entregar(p, br.rpgatributos.masmorra.MagiaOculta.grimorio());
+                ok(sender, "Grimório Oculto entregue (a magia e a recarga foram zeradas).");
+                return;
+            }
+            case "naoidentificado" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                br.rpgatributos.masmorra.Rank r = args.length >= 2 ? br.rpgatributos.masmorra.Rank.porId(args[1]) : br.rpgatributos.masmorra.Rank.C;
+                if (r == null) { erro(sender, "Use: /rpgadmin naoidentificado [e..s]"); return; }
+                br.rpgatributos.masmorra.Dificuldade d = r.dificuldade();
+                for (Material mat : List.of(Material.IRON_SWORD, Material.DIAMOND_CHESTPLATE, Material.BOW)) {
+                    entregar(p, br.rpgatributos.masmorra.EquipamentoPortal.naoIdentificado(mat, d.raridadeMin(), d.raridadeMax(), false));
+                }
+                ok(sender, "3 equipamentos não identificados (" + r.nome() + ") entregues.");
+                return;
+            }
+            case "pecacacador" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                br.rpgatributos.masmorra.Rank r = args.length >= 2 ? br.rpgatributos.masmorra.Rank.porId(args[1]) : null;
+                if (r == null) { erro(sender, "Use: /rpgadmin pecacacador <e..s>"); return; }
+                for (br.rpgatributos.masmorra.EquipamentoPortal.Peca pc : br.rpgatributos.masmorra.EquipamentoPortal.Peca.values()) {
+                    entregar(p, plugin.equipamentoPortal().pecaCacador(r, pc));
+                }
+                ok(sender, "Conjunto de Caçador " + r.nome() + " entregue.");
+                return;
+            }
+            case "armachefe" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                for (br.rpgatributos.aventura.Chefe c : br.rpgatributos.aventura.Chefe.values()) {
+                    ItemStack a = plugin.equipamentoPortal().armaDeChefe(c);
+                    if (a != null) entregar(p, a);
+                }
+                ok(sender, "Armas de chefe entregues.");
+                return;
+            }
+            case "inscricao" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                if (args.length < 2 || args[1].equalsIgnoreCase("todas")) {
+                    for (br.rpgatributos.masmorra.Inscricao i : br.rpgatributos.masmorra.Inscricao.values()) entregar(p, i.criar(2));
+                    ok(sender, "2 Inscrições de cada tipo entregues.");
+                    return;
+                }
+                try {
+                    br.rpgatributos.masmorra.Inscricao i = br.rpgatributos.masmorra.Inscricao.valueOf(args[1].toUpperCase(java.util.Locale.ROOT));
+                    entregar(p, i.criar(4));
+                    ok(sender, "4 Inscrições de " + i.nome() + " entregues.");
+                } catch (IllegalArgumentException ex) {
+                    erro(sender, "Use: /rpgadmin inscricao [todas|" + String.join("|", Arrays.stream(br.rpgatributos.masmorra.Inscricao.values()).map(x -> x.name().toLowerCase(java.util.Locale.ROOT)).toList()) + "]");
+                }
+                return;
+            }
+            case "despertar" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                if (args.length >= 2 && args[1].equalsIgnoreCase("zerar")) {
+                    br.rpgatributos.masmorra.Despertar.definir(p, List.of());
+                    br.rpgatributos.masmorra.ArvoreCacador.refazer(p);
+                    ok(sender, "Características e Árvore de Caçador zeradas.");
+                    return;
+                }
+                if (args.length >= 2) {
+                    try {
+                        br.rpgatributos.masmorra.Despertar.Caracteristica c = br.rpgatributos.masmorra.Despertar.Caracteristica.valueOf(args[1].toUpperCase(java.util.Locale.ROOT));
+                        List<br.rpgatributos.masmorra.Despertar.Caracteristica> l = new ArrayList<>(br.rpgatributos.masmorra.Despertar.de(p));
+                        if (!l.contains(c)) l.add(c);
+                        br.rpgatributos.masmorra.Despertar.definir(p, l);
+                        ok(sender, "Característica " + c.nome + " dada.");
+                    } catch (IllegalArgumentException ex) {
+                        erro(sender, "Use: /rpgadmin despertar [zerar|" + String.join("|", Arrays.stream(br.rpgatributos.masmorra.Despertar.Caracteristica.values()).map(x -> x.name().toLowerCase(java.util.Locale.ROOT)).toList()) + "]");
+                    }
+                    return;
+                }
+                br.rpgatributos.masmorra.Despertar.verificar(p);
+                br.rpgatributos.masmorra.Cacador.mostrar(p);
+                return;
+            }
+            case "missao" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                if (args.length >= 2 && args[1].equalsIgnoreCase("zerar")) {
+                    br.rpgatributos.masmorra.MissaoDiaria.zerarAdmin(p);
+                    ok(sender, "Missão Diária de hoje recomeçada.");
+                } else {
+                    br.rpgatributos.masmorra.MissaoDiaria.completarAdmin(p);
+                    ok(sender, "Tarefas de hoje completas: o prêmio chega em até 5 s.");
+                }
+                return;
+            }
+            case "reliquiamonarca" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                if (args.length < 2 || args[1].equalsIgnoreCase("todas")) {
+                    for (br.rpgatributos.masmorra.Monarca m : br.rpgatributos.masmorra.Monarca.values()) {
+                        for (int i = 0; i < 5; i++) entregar(p, br.rpgatributos.masmorra.Reliquias.criar(m, i));
+                    }
+                    ok(sender, "As 25 Relíquias do Monarca entregues.");
+                    return;
+                }
+                try {
+                    br.rpgatributos.masmorra.Monarca m = br.rpgatributos.masmorra.Monarca.valueOf(args[1].toUpperCase(java.util.Locale.ROOT));
+                    for (int i = 0; i < 5; i++) entregar(p, br.rpgatributos.masmorra.Reliquias.criar(m, i));
+                    ok(sender, "As 5 relíquias do " + m.nome + " entregues.");
+                } catch (IllegalArgumentException ex) {
+                    erro(sender, "Use: /rpgadmin reliquiamonarca [todas|chamas_brancas|geada|feras|insetos|destruicao]");
+                }
+                return;
+            }
+            case "monarca" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                try {
+                    if (args.length >= 2 && args[1].equalsIgnoreCase("nenhum")) {
+                        Classe atual = plugin.classes().monarcaDe(p);
+                        if (atual != null) plugin.classes().liberarLendariaAdmin(atual);
+                        ok(sender, "Você não é mais Monarca.");
+                        return;
+                    }
+                    br.rpgatributos.masmorra.Monarca m = br.rpgatributos.masmorra.Monarca.valueOf(args[1].toUpperCase(java.util.Locale.ROOT));
+                    if (!m.jogavel()) { erro(sender, "O Monarca da Destruição é só o chefe final."); return; }
+                    // 2.76: o Monarca é uma classe lendária (nível 20 para testar).
+                    Classe antes = plugin.classes().monarcaDe(p);
+                    if (antes != null && antes != m.classe()) plugin.classes().liberarLendariaAdmin(antes);
+                    plugin.classes().definir(p, m.classe(), 20);
+                    ok(sender, "Você agora é o " + m.nome + " (classe lendária, nível 20).");
+                } catch (RuntimeException ex) {
+                    erro(sender, "Use: /rpgadmin monarca <chamas_brancas|geada|feras|insetos|nenhum>");
+                }
+                return;
+            }
+            case "ataquerank" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                if (plugin.portais().abrirAtaque(p) == null) erro(sender, "Não achei chão livre por perto (fora de territórios).");
+                else ok(sender, "Ataque de Rank S aberto perto de você.");
+                return;
+            }
+            case "dupla" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                String falha = plugin.masmorras().tornarDupla(p);
+                if (falha != null) erro(sender, falha);
+                else ok(sender, "Esta masmorra agora é Dupla: a Câmara das Estátuas abre quando o chefe cair.");
+                return;
+            }
+            case "itemsistema" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                for (br.rpgatributos.masmorra.LojaSistema.Oferta o : br.rpgatributos.masmorra.LojaSistema.Oferta.values()) {
+                    if (o != br.rpgatributos.masmorra.LojaSistema.Oferta.PECA_CACADOR) entregar(p, plugin.lojaSistema().item(o, p));
+                }
+                ok(sender, "Itens da Loja do Sistema entregues.");
+                return;
+            }
+            case "cacador" -> {
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                try { br.rpgatributos.masmorra.Cacador.definirXp(p, Integer.parseInt(args[1])); } catch (Exception ex) { erro(sender, "Use: /rpgadmin cacador <xp> (D=100, C=300, B=700, A=1500, S=3000)"); return; }
+                br.rpgatributos.masmorra.Cacador.mostrar(p);
+                return;
+            }
             case "utilidade" -> {
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
                 if (args.length >= 2 && args[1].equalsIgnoreCase("todas")) {
@@ -1626,21 +1795,61 @@ public final class Comandos implements TabExecutor {
 
     private void masmorra(CommandSender sender, String[] args) {
         if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+        if (args.length >= 1 && args[0].equalsIgnoreCase("rank")) { br.rpgatributos.masmorra.Cacador.mostrar(p); return; }
+        if (args.length >= 1 && args[0].equalsIgnoreCase("stats")) { plugin.masmorras().estatisticas().mostrar(p); return; }
+        if (args.length >= 1 && args[0].equalsIgnoreCase("loja")) { plugin.lojaSistema().abrir(p); return; }
+        if (args.length >= 1 && (args[0].equalsIgnoreCase("arvore") || args[0].equalsIgnoreCase("sistema"))) { plugin.sistemaCacador().abrir(p); return; }
+        if (args.length >= 1 && args[0].equalsIgnoreCase("missao")) { plugin.missaoDiaria().mostrar(p); return; }
+        if (args.length >= 1 && args[0].equalsIgnoreCase("monarcas")) {
+            // 2.76: os Monarcas são classes lendárias.
+            p.sendMessage(Component.text("♛ Os Monarcas (classes lendárias, um dono cada)", br.rpgatributos.masmorra.JanelaSistema.AZUL, TextDecoration.BOLD));
+            for (br.rpgatributos.masmorra.Monarca mo : br.rpgatributos.masmorra.Monarca.values()) {
+                if (!mo.jogavel()) {
+                    p.sendMessage(Component.text(" • " + mo.nome + ": o chefe final (as 25 relíquias no Mural).", NamedTextColor.DARK_GRAY));
+                    continue;
+                }
+                boolean livre = plugin.classes().donoLendaria(mo.classe()) == null;
+                p.sendMessage(Component.text(" • ", NamedTextColor.DARK_GRAY).append(Component.text(mo.nome, mo.cor, TextDecoration.BOLD))
+                        .append(Component.text(": " + (livre ? "livre" : plugin.classes().nomeDonoLendaria(mo.classe())), livre ? NamedTextColor.GRAY : NamedTextColor.YELLOW)));
+            }
+            return;
+        }
+        if (args.length >= 2 && args[0].equalsIgnoreCase("monarca") && args[1].equalsIgnoreCase("abdicar")) {
+            Classe mo = plugin.classes().monarcaDe(p);
+            if (mo == null) erro(sender, "Você não é um Monarca.");
+            else {
+                String falha = plugin.classes().renunciarLendaria(p, mo);
+                if (falha != null) erro(sender, falha);
+            }
+            return;
+        }
+        if (args.length >= 1 && args[0].equalsIgnoreCase("recordes")) {
+            plugin.masmorras().estatisticas().mostrarRecordes(p, args.length >= 2 ? br.rpgatributos.masmorra.Rank.porId(args[1]) : null);
+            return;
+        }
         Masmorra m = plugin.masmorras().de(p);
         if (args.length >= 1 && args[0].equalsIgnoreCase("sair")) {
             if (m == null) { erro(sender, "Você não está numa masmorra."); return; }
+            if (plugin.masmorras().presoNoVermelho(m)) { erro(sender, "⛔ Portal Vermelho: não há saída até cumprir o objetivo."); return; }
             plugin.masmorras().sair(p, m, "Você saiu da masmorra.");
             return;
         }
         if (m == null) {
             sender.sendMessage(Component.text("""
-                    ۞ Masmorras: crie um Portal da Masmorra (tijolos de pedra entalhados
-                    + 1 olho do ender + 1 bússola, tecla Q) e clique nele.
+                    ۞ Masmorras: crie um Altar do Portal (tijolos de pedra entalhados
+                    + 1 olho do ender + 1 bússola, tecla Q). Nele você faz um Cristal de Portal
+                    (rank E a S) e clica no altar com o cristal na mão.
+                    /masmorra rank  (seu Rank de Caçador)
+                    /masmorra stats  (suas estatísticas)  •  /masmorra recordes [rank]
+                    /masmorra loja  (Loja do Sistema: paga com Cristais de Mana)
+                    /masmorra arvore  (Árvore de Caçador, características e Classe de Caçador)
+                    /masmorra missao  (Missão Diária)
+                    /masmorra monarcas  (quem é cada Monarca)  •  /masmorra monarca abdicar
                     /masmorra sair  (sai da masmorra em que você está)""", NamedTextColor.LIGHT_PURPLE));
             return;
         }
-        sender.sendMessage(Component.text("۞ Masmorra " + m.dificuldade().nome() + " (" + m.tema().nome()
-                + "). Para sair: /masmorra sair", NamedTextColor.LIGHT_PURPLE));
+        sender.sendMessage(Component.text("۞ " + m.rank().nomeCompleto() + " (" + m.tema().nome() + ", " + m.objetivo().nome()
+                + "). " + (m.vermelho() ? "Portal Vermelho: sem saída até vencer." : "Para sair: /masmorra sair"), NamedTextColor.LIGHT_PURPLE));
     }
 
     private void adminMasmorra(CommandSender sender, String sub, String[] args) {
@@ -1879,7 +2088,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

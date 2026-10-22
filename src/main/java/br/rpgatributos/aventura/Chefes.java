@@ -104,6 +104,12 @@ public final class Chefes implements Listener {
         final List<UUID> lacaios = new ArrayList<>();
         int abandonado;
         boolean furia;
+        /** 2.74: nome e cor próprios (o Monarca de um Portal do Monarca), ou null. */
+        String nomeProprio;
+        net.kyori.adventure.text.format.TextColor corPropria;
+
+        String nome() { return nomeProprio != null ? nomeProprio : chefe.nome(); }
+        net.kyori.adventure.text.format.TextColor cor() { return corPropria != null ? corPropria : chefe.cor(); }
 
         Ativo(Chefe chefe, LivingEntity entidade, Location altar, BossBar barra) {
             this.chefe = chefe;
@@ -126,6 +132,15 @@ public final class Chefes implements Listener {
     public boolean ocupado(Location altar) {
         for (Ativo a : ativos.values()) if (a.altar.equals(altar)) return true;
         return false;
+    }
+
+    /** 2.74: dá um nome próprio ao chefe (na cabeça e na barra). */
+    public void renomear(LivingEntity e, String nome, net.kyori.adventure.text.format.TextColor cor) {
+        Ativo a = ativos.get(e.getUniqueId());
+        if (a == null) return;
+        a.nomeProprio = nome;
+        a.corPropria = cor;
+        e.customName(Component.text("☠ " + nome + " ☠", cor, TextDecoration.BOLD));
     }
 
     public static boolean ehChefe(Entity e) {
@@ -269,7 +284,7 @@ public final class Chefes implements Listener {
                 if (a.abandonado >= TICKS_ABANDONADO) {
                     e.getWorld().spawnParticle(Particle.LARGE_SMOKE, e.getLocation(), 60, 1, 1.5, 1, 0.02);
                     for (Player p : perto(e.getLocation(), 100)) {
-                        p.sendMessage(Component.text("☠ " + a.chefe.nome() + " voltou para as sombras.", NamedTextColor.GRAY));
+                        p.sendMessage(Component.text("☠ " + a.nome() + " voltou para as sombras.", NamedTextColor.GRAY));
                     }
                     encerrar(a);
                     e.remove();
@@ -302,7 +317,7 @@ public final class Chefes implements Listener {
         LivingEntity e = a.entidade;
         double max = maxVida(e);
         a.barra.progress((float) Math.max(0, Math.min(1, e.getHealth() / max)));
-        a.barra.name(Component.text("☠ " + a.chefe.nome() + (a.furia ? " (FÚRIA)" : ""), a.chefe.cor(), TextDecoration.BOLD)
+        a.barra.name(Component.text("☠ " + a.nome() + (a.furia ? " (FÚRIA)" : ""), a.cor(), TextDecoration.BOLD)
                 .append(Component.text("   ♥ " + (int) Math.ceil(e.getHealth()) + " / " + (int) max, NamedTextColor.WHITE)));
         Set<UUID> agora = new HashSet<>();
         for (Player p : e.getWorld().getPlayers()) {
@@ -328,7 +343,7 @@ public final class Chefes implements Listener {
         e.getWorld().playSound(e.getLocation(), Sound.ENTITY_RAVAGER_ROAR, 2f, 0.6f);
         e.getWorld().spawnParticle(Particle.ANGRY_VILLAGER, e.getLocation().add(0, e.getHeight(), 0), 20, 1, 0.5, 1);
         for (Player p : perto(e.getLocation(), RAIO_BARRA)) {
-            p.sendActionBar(Component.text("☠ " + a.chefe.nome() + " entrou em FÚRIA!", NamedTextColor.RED, TextDecoration.BOLD));
+            p.sendActionBar(Component.text("☠ " + a.nome() + " entrou em FÚRIA!", NamedTextColor.RED, TextDecoration.BOLD));
         }
     }
 
@@ -727,7 +742,7 @@ public final class Chefes implements Listener {
             nomes.add(p.getName());
             int dano = (int) Math.round(a.dano.getOrDefault(p.getUniqueId(), 0.0));
             p.sendMessage(Component.text("☠ Você ajudou a derrotar ", NamedTextColor.GOLD)
-                    .append(Component.text(c.nome(), c.cor(), TextDecoration.BOLD))
+                    .append(Component.text(a.nome(), a.cor(), TextDecoration.BOLD))
                     .append(Component.text(" (" + dano + " de dano). O saque caiu onde ele morreu.", NamedTextColor.GRAY)));
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
                 plugin.stats().darXp(p, Skill.COMBATE, 150.0 * n);
@@ -737,7 +752,7 @@ public final class Chefes implements Listener {
             plugin.mercadores().contratoCumprido(p, c);
         }
         plugin.getServer().broadcast(Component.text("☠ ", NamedTextColor.DARK_RED)
-                .append(Component.text(c.nome(), c.cor(), TextDecoration.BOLD))
+                .append(Component.text(a.nome(), a.cor(), TextDecoration.BOLD))
                 .append(Component.text(" foi derrotado por ", NamedTextColor.GRAY))
                 .append(Component.text(nomes.isEmpty() ? "ninguém" : String.join(", ", nomes), NamedTextColor.YELLOW))
                 .append(Component.text("!", NamedTextColor.GRAY)));

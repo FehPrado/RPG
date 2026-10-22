@@ -624,9 +624,140 @@ Correndo montado (com a tecla de correr), a montaria também **atropela** os mon
 
 ## Masmorras
 
-**Ritual:** coloque **tijolos de pedra entalhados** e jogue em cima **1 olho do ender** e **1 bússola**. Vira o **Portal da Masmorra**.
+**Ritual:** coloque **tijolos de pedra entalhados** e jogue em cima **1 olho do ender** e **1 bússola**. Vira o **Altar do Portal** (até a 2.67, Portal da Masmorra).
 
-**Entrar:** clique no portal, escolha a dificuldade e pague. A masmorra é construída em alguns segundos num mundo só dela (`rpg_masmorras`). Depois o **portal abre por 30 segundos**: quem subir no bloco entra. Entram você e a sua **party**.
+### Masmorra 2.0: Cristais de Portal (2.68)
+
+1. **Faça um Cristal de Portal:** clique no altar e escolha o rank (**E, D, C, B, A ou S**). Clique esquerdo paga a **oferenda** (3 coisas sorteadas para você, que ficam as mesmas até você pagar); clique direito paga com **Cristais de Mana** (E 4, D 8, C 16, B 32, A 64, S 128 de mana). O altar faz cristais até **um rank acima do seu Rank de Caçador**.
+2. **Use o cristal:** clique no altar com ele na mão. A masmorra se forma e o portal abre por 30 segundos; suba nele com a sua party.
+3. **Cumpra o objetivo** do cristal em **15 minutos**:
+
+| Objetivo | O que fazer |
+|---|---|
+| Caçada | derrotar o chefe (como sempre) |
+| Saque | achar 75% das **relíquias** (vasos dourados) espalhadas pelas salas; cada uma dá Cristais de Mana |
+| Monólitos | despertar as **magnetitas** (clique): cada uma solta guardiões; vencidos, ela acende |
+
+No Saque e nos Monólitos, o tesouro e a saída aparecem na sala de entrada.
+
+- **Tempo:** o relógio aparece no topo. Se o tempo acabar com você lá dentro, **o que você pegou na masmorra vai para o Cofre das Almas** (o que você levou fica com você).
+- **Rank:** cada rank usa a dificuldade de sempre (tabela abaixo) e ajusta a força: E é um Fácil mais leve (monstros x0,8), D um Fácil mais forte (x1,15), C Normal, B Difícil, A Pesadelo e S um Pesadelo bem mais forte (x1,45). Ranks altos dão mais tesouro e mais Cristais de Mana.
+- **Modificadores** (às vezes, no cristal): Fúria (+30% de dano dos monstros), Couraça (+40% de vida), Relógio Curto (4 min a menos), Sem Cura (a fome cheia não cura), Onda Extra; os ruins aumentam o tesouro. Os bons: Tesouro Farto, Bênção (Regeneração I) e Pressa (Velocidade I).
+- **Baús de raridade:** madeira, ferro, ouro e **cristal**, com mais sorteios e Cristais de Mana quanto mais raros.
+- **Cristais de Mana** (pequeno, médio, grande e perfeito, valendo 1, 4, 16 e 64): caem dos monstros dos portais, das relíquias e dos baús. Pagam cristais no altar e a magia oculta.
+- **Rank de Caçador** (`/masmorra rank`): sobe vencendo portais (do altar e do mundo): E → D (100 XP) → C (300) → B (700) → A (1500) → S (3000). O portal do mundo dá 25% a mais e o Portal Vermelho, o dobro.
+- **Portais do mundo** também têm rank (E a S) e, raramente, são **Vermelhos**: lá dentro não há saída (nem `/masmorra sair`) até vencer.
+- **Magia oculta: Abrir Portal.** O **Grimório Oculto** (raro nos tesouros dos portais B, A e S e nos baús de cristal) ensina a magia na primeira vez que você clica com ele. Depois, com ele na mão: abre um portal do mundo na sua frente, **com o rank do seu Rank de Caçador**, gastando a mana quase cheia e um **Cristal de Mana grande**, uma vez por dia de jogo. 10% de chance de sair um rank acima e 3% de abrir um **Portal Vermelho**. Você e a sua party têm 30 segundos para entrar antes de todo mundo.
+
+### Geração nova: o vault (2.69)
+
+Desde a 2.69 toda masmorra (do altar e dos portais do mundo) é montada no molde do Vault Hunters:
+- **Grade de chunks com tamanho fixo pelo rank:** E 6×6 chunks (~7 salas), D 8×8 (~11), C 10×10 (~16), B 10×10 (~20), A 12×12 (~25), S 14×14 (~34).
+- **Salas de 2×2 chunks**; às vezes (7%) uma sala grande de **3×3, 3×2 ou 2×3** chunks. A **sala do portal** (entrada) fica no meio.
+- **Corredores** de 8 blocos ligam salas vizinhas; alguns são **pontes sobre abismo** ou **túneis**, e há **atalhos** que fecham voltas (o mapa não é só uma árvore). Salas podem ficar 2 blocos acima ou abaixo: o corredor ganha **degraus**.
+- **Andares:** C e B têm 2, S tem 3. Ligados por **Escadarias** (uma sala alta com escada encostada na parede norte e o piso de cima).
+- **Estilos de sala:** pilares, arena, ponte sobre abismo (as pontes saem das portas até o meio), biblioteca, alagada (caminhos secos até o meio), mezanino (varanda em volta com escada), cripta e jardim.
+- **Minas de Cristal** (D para cima): veios de ametista nas paredes. Quebrar um dá **Cristais de Mana**.
+- **Salas secretas** (C para cima): atrás de uma **parede rachada**; um golpe derruba a passagem. Dentro, um **Baú de Cristal**.
+- O chefe fica na sala mais longe da entrada (sala grande vale mais). As salas construídas por admins entram no meio da sala sorteada, com os caminhos até as portas abertos.
+
+### Dentro do vault (2.70)
+
+- **Fases do chefe:** com 66% e 33% de vida o chefe muda de fase: fica protegido por 3 s, chama reforços e passa a soltar **golpes marcados no chão** (um círculo vermelho avisa 1,5 s antes; saia dele). Na fase 3 os golpes vêm mais rápido e caem também em lugares aleatórios. (Só no vault; os chefes do Altar Ritualístico continuam como antes.)
+- **Armadilhas:** placas de pedra-negra no meio de corredores e perto das portas. Pisou: **espinhos** (dano e lentidão), **flechas** que saem das paredes ou **chamas**. Cada placa espera 3 s para disparar de novo.
+- **Mímicos:** alguns baús (4% a 9%, mais nos ranks altos) são mímicos: ao abrir, viram um monstro com o baú na cabeça. Vença e o tesouro do baú cai.
+- **Pilares de Bênção:** 1 a 3 por vault, cada um de um deus da Devoção. Clique: a party ganha a bênção até o fim do portal (Ferrum: Resistência; Sylva: Regeneração; Maris: Velocidade e Graça do golfinho; Bellum: Força; Arcanus: Pressa e mana; Mortis: Absorção). Quem segue aquele deus ganha o nível II.
+- **Nota da corrida (S, A, B, C, D):** sai pelo tempo usado, pelas mortes (-15 cada), pelas salas limpas, pelos segredos achados (+10) e pelo chefe vencido. **B** dá +1 sorteio no tesouro final, **A** +2, **S** +4.
+- **`/masmorra stats`**: portais vencidos por rank, melhor nota, melhores tempos, segredos, relíquias, mímicos e mortes. **`/masmorra recordes [rank]`**: os 5 portais mais rápidos de cada rank no servidor.
+
+### Equipamento dos portais (2.71)
+
+- **Equipamento não identificado:** as armas e armaduras dos baús do vault vêm como **"❓ Espada não identificada"** (sem atributos), com a faixa de raridade possível. **Clique direito** revela: o item é forjado na hora com a raridade sorteada.
+- **Avaliador:** clique no **Altar do Portal** com o item não identificado na mão: ele revela por **1 de mana** em Cristais de Mana, com **15% de chance de subir uma raridade** (pode passar do máximo da faixa).
+- **Equipamento de Caçador:** espada, elmo, peitoral, grevas e botas "de Caçador" de cada rank (E/D de ferro, C/B de diamante, A/S de netherite; Raro, Épico, Épico, Único, Único e Lendário). Cada peça dá **+1% a +6% de dano nos monstros dos portais** e **o mesmo a menos do dano deles** (pelo rank da peça); com as **4 peças de armadura**, +50% nisso (a redução para em 50%). Sai em **35%** dos tesouros finais e na Loja do Sistema.
+- **Armas de chefe** (Lendárias, só quando o chefe do vault é vencido; 4% no E até 25% no S): **Punho do Golem Ancestral** (maça: empurra e deixa lento), **Ferrão da Rainha** (veneno), **Machado do Senhor das Chamas** (fogo), **Arco do Lich** (flechas que definham), **Tridente da Tempestade Viva** (20%: um raio e +5 de dano, também arremessado) e **Lâmina do Arauto do Fim** (definha e cura você). Refazer na Forja mantém o nome e o efeito.
+- **Loja do Sistema** (**`/masmorra loja`** ou o botão no Altar do Portal), paga com Cristais de Mana:
+
+| Item | Preço | O que faz |
+|---|---|---|
+| Poção do Caçador | 6 | Cura II na hora e Regeneração por 10 s |
+| Poção de Mana | 6 | +50 de mana |
+| Poção de Força | 10 | Força II por 60 s |
+| Pergaminho de Retorno | 16 | Dentro de um portal: sai na hora **com tudo o que pegou** (não vale no Portal Vermelho) |
+| Medidor de Mana | 12 | Luneta: clique e veja o portal mais perto (até 64 blocos): rank, se está acima do seu, quando transborda, quem está dentro e reserva |
+| Chave Instantânea | 24 + 16 por rank | Abre na hora, onde você está, um portal do seu Rank de Caçador (objetivo sorteado, sem modificadores) |
+| Peça de Caçador | 30 + 20 por rank | Uma peça do seu rank |
+
+### Caçador: Árvore, Despertar e Inscrições (2.72)
+
+- **Janela do Sistema** (**`/masmorra arvore`** ou o botão do caçador no Altar do Portal): o Rank de Caçador, a Árvore de Caçador e as características.
+- **Árvore de Caçador:** **1 ponto no E e +3 a cada rank** (D 4, C 7, B 10, A 13, S 16; no S, +1 a cada 500 XP, até 26). Cada nó pede um rank mínimo. **Os bônus valem só dentro dos portais.** Refazer custa 16 de mana.
+
+| Ramo | Nó (graus, rank) | Efeito |
+|---|---|---|
+| Lâmina | Golpe de Caçador (3, E) | +4% de dano nos monstros dos portais por grau |
+| Lâmina | Execução (2, D) | +10% por grau em monstros com menos de 35% de vida |
+| Lâmina | Caça-Chefes (2, C) | +6% por grau no chefe |
+| Lâmina | Frenesi (1, B) | abater dá Força I por 4 s |
+| Escudo | Pele Grossa (3, E) | -4% do dano dos monstros por grau |
+| Escudo | Vigor do Portal (2, D) | +1 ❤ de vida máxima por grau |
+| Escudo | Recuperação (2, C) | abater cura meio ❤ por grau |
+| Escudo | Passo Leve (1, B) | armadilhas dão metade do dano e não deixam lento |
+| Fortuna | Olho de Mana (3, E) | +15% de chance de Cristal de Mana por grau |
+| Fortuna | Saqueador (2, D) | +1 sorteio no tesouro final por grau (vale o melhor da party) |
+| Fortuna | Faro (1, C) | paredes rachadas e mímicos brilham para você |
+| Fortuna | Sorte do Avaliador (2, B) | +5% por grau de subir a raridade ao revelar |
+
+- **Despertar:** ao virar **caçador D** você desperta e ganha uma **característica** sorteada (Comum 55%, Rara 33%, Épica 12%); no **B** ganha a segunda e no **S** a terceira. Valem nos portais. **Re-despertar** (Shift + clique, 48 de mana) sorteia todas de novo.
+  - Comuns: **Pele de Aço** (-8% de dano dos monstros), **Olhos de Gato** (visão noturna), **Pés Ligeiros** (Velocidade I), **Mana Farta** (+20% de Cristal de Mana).
+  - Raras: **Segunda Chance** (uma vez por portal, o golpe fatal te deixa com 3 ❤; o totem vem primeiro), **Vampírico** (cura 4% do dano causado), **Sangue Frio** (+12% de dano abaixo da metade da vida), **Instinto** (armadilhas brilham).
+  - Épicas: **Caçador Nato** (+15% de XP de caçador), **Rei dos Baús** (+1 sorteio no tesouro final), **Inabalável** (imune a lentidão, fraqueza e veneno dos monstros), **Assassino** (+50% no primeiro golpe em monstro de vida cheia).
+- **Mesa de Inscrição:** jogue **1 livro + 1 bolsa de tinta brilhante** numa **mesa de flecheiro**. Clique direito num tipo: escreve uma **Inscrição** (1 papel comum + mana). Com um **Cristal de Portal na mão**, clique esquerdo: aplica uma Inscrição que você tem. **Até 4 por cristal**:
+  - um **modificador** (os 8 de sempre; 4 de mana nos que dão risco, 8 a 12 nos que ajudam);
+  - **Tempo** (+3 minutos, até 2), **Tesouro** (+1 sala de tesouro, até 2), **Mina** (+1 Mina de Cristal, até 2);
+  - **Objetivo** (vira Caçada, Saque ou Monólitos).
+  - Os baús do vault às vezes trazem Inscrições (12%; o do chefe, 50%). O vault sempre deixa pelo menos 2 salas de luta além do chefe.
+
+### Missão Diária e janelas do Sistema (2.73)
+
+- **Missão Diária** ("Preparação para ficar forte", **sem punição**): num dia (real), **agachar 100 vezes, pular 100 vezes, correr 2 km e abater 20 monstros** (os números vêm das estatísticas do jogo). Concluída: **XP de caçador** (10 + 5 por rank) e **Cristais de Mana médios**; a cada **7 dias seguidos**, mais 1 Cristal de Mana grande e 1 Inscrição. **`/masmorra missao`** mostra o progresso.
+- **Janelas do Sistema:** os avisos de rank novo, Despertar, Monarca e Missão Diária aparecem numa moldura azul no chat, como no anime.
+
+### Um esquema só de classes (2.76)
+
+A 2.73 tinha trazido "classes de caçador" separadas, com F duas vezes. Na 2.76 elas **se juntaram à árvore de classes** (`/classe`): uma classe só, as mesmas teclas (**Agache + F** usa a habilidade escolhida, **Agache + clique esquerdo no ar** troca) e as habilidades valem **em todo lugar**. **Dentro dos portais, as habilidades de classe ficam 20% mais fortes.**
+
+- **Classes básicas novas:** **Tanque** (⛨, +3 ❤ e +4 de armadura; **Provocar** e **Muralha**) e **Curandeiro** (✙, +1 ❤, +30 de mana e +1 de mana/s, e a cada 5 s cura um pouco você e a party perto; **Cura** e **Purificar**). Elas seguem o caminho de sempre: tarefas e Prova num Santuário das Classes.
+- **Habilidades novas em classes que já existiam:** Guerreiro ganhou **Disparada**, Berserker **Sede de Sangue**, Mago **Bola de Fogo** (não acende blocos), Elementalista **Nova de Gelo** e Assassino **Mutilação**. O Arqueiro já tinha Chuva de Flechas e Salto Evasivo, e o Ladino a Bomba de Fumaça (a antiga Furtividade).
+- Os **Monarcas viraram classes lendárias** da árvore (veja abaixo). A árvore ganhou uma página **"✪ Lendárias e Monarcas"**, com o Soberano das Sombras no meio dos quatro Monarcas.
+
+### Relíquias, Mural e os Monarcas (2.74)
+
+- **Relíquias do Monarca:** 25 no total, **5 de cada Monarca** (ex.: "Coroa de Gelo"). Caem nos tesouros finais dos portais **A (6%)** e **S (12%)**.
+- **Mural das Relíquias:** jogue **1 obsidiana chorona + 1 bloco de ouro** numa **pedra-negra polida entalhada**. Ele tem 5 linhas de 5: clique numa relíquia que falta (ou em "Colocar todas"). Qualquer um pode colocar. Se o mural for quebrado, as relíquias caem no chão.
+- **Portal do Monarca:** com uma **linha completa**, um caçador **A ou S** abre ali o Portal daquele Monarca (as 5 relíquias se gastam): rank S, Caçada, **25 minutos**; suba no portal em até 30 s. O chefe é o próprio Monarca (2,5× a vida de um chefe S e mais dano). Tesouro: 2 Cristais de Mana perfeitos e a arma do chefe, sempre.
+- **Monarcas** (desde a 2.76, **classes lendárias** da árvore, um dono por servidor, como o Soberano das Sombras): **quem dá o golpe final** (ou o dono do portal, ou outro da party) **herda a classe**, se ela está livre e a pessoa ainda não é Monarca. Ela vira a classe ativa, sobe de nível como as outras e usa as teclas de sempre (Agache + F). 30 dias sem entrar a liberam (como as outras lendárias); `/masmorra monarca abdicar` também.
+
+| Monarca | Passivo | Habilidades |
+|---|---|---|
+| Chamas Brancas (Baran) | +3 ❤, +60 de mana, +15% de dano; 25% de raio branco nos golpes (+4 de dano) | **Relâmpago Branco** (18 s): raios em até 5 inimigos a até 12 blocos · **Chama Branca** (35 s): anel de fogo branco a até 7 blocos |
+| Geada | +100 de mana, +2 de mana/s, magias 20% mais baratas; os golpes deixam lento | **Lança de Gelo** (12 s): no inimigo da mira (até 20 blocos), dano e congela · **Inverno Eterno** (40 s): dano e Lentidão IV a até 10 blocos |
+| Feras (Rakan) | +3 ❤, +10% de velocidade e +15% de dano corpo a corpo | **Investida da Fera** (15 s): avança ferindo quem está no caminho · **Matilha** (45 s): 3 lobos lutam com você por 20 s |
+| Insetos (Querehsha) | +10% de velocidade, 10% de esquiva, +10% de dano; os golpes envenenam | **Enxame** (20 s): Veneno II, cegueira e dano a até 8 blocos · **Carapaça** (40 s): Resistência II por 6 s; quem te bate leva 3 de dano |
+
+- **Monarca da Destruição (Antares):** o **chefe final**. O portal dele pede **as 25 relíquias** no mural (todas se gastam). 4× a vida de um chefe S. Não vira classe: vencer é anunciado no servidor e dá 4 Cristais perfeitos, 3 Inscrições, uma peça de Caçador S e a arma do chefe.
+- **`/masmorra monarcas`**: quem é cada Monarca agora.
+
+### Câmara das Estátuas e Ataque de Rank S (2.75)
+
+- **Masmorra Dupla:** às vezes um portal **E ou D** (5% dos portais do mundo, 3% dos cristais) esconde algo. Quando o chefe cai, uma **passagem escondida** se abre na sala dele e leva à **Câmara das Estátuas**, embaixo do vault. A masmorra espera até 15 minutos enquanto a câmara não termina. Os mandamentos estão nas placas da parede:
+  1. **Adore o deus:** agache-se diante da estátua por 3 segundos (quem não fizer em 40 s é punido).
+  2. **Louve o deus:** toque os **quatro sinos** (em até 60 s).
+  3. **Prove a sua fé:** chegue ao **altar dourado**. A cada 7 s os olhos do deus **abrem** por 2,5 s (há um aviso 1 s antes): **quem se mexer** leva dano e volta 5 blocos.
+- Quem entrou na câmara e chegou ao altar ganha o **Tesouro da Câmara** (1 ou 2 Relíquias do Monarca, Cristais de Mana grandes, Inscrições, uma peça de Caçador C e, às vezes, o Grimório Oculto), **100 XP de caçador** e o anúncio no servidor. A saída aparece em cima do altar.
+- **Ataque de Rank S:** a cada **3 dias** (com 2 ou mais jogadores online), um **Portal do Ataque de Rank S** se abre perto de alguém e é anunciado para todos. **Qualquer party** entra. O chefe é **Beru, o Rei das Formigas**, e ganha **+60% de vida por caçador** na luta. Vencer: XP de caçador em dobro, **25% de chance de uma Relíquia do Monarca para cada um** e mais tesouro. Se ninguém fechar, ele **transborda em 1 hora**.
+
+**Masmorras antigas:** a tabela abaixo é a base de cada rank (salas, monstros, chefe e o nível total para entrar). O custo em esmeraldas/diamantes deu lugar à oferenda do cristal.
 
 | Dificuldade | Salas | Monstros | Chefe | Nível total | Custo | Tesouro |
 |---|---|---|---|---|---|---|
@@ -1015,26 +1146,28 @@ Títulos: **Discípulo** (3 técnicas) e **Herdeiro das Técnicas** (as 20).
 3. **Passe na Prova**, que começa num Santuário: uma arena só sua com **ondas de monstros**, **alvos só com flechas** ou um **duelo contra o Guardião da classe**, em 4 minutos. Morrer na prova não perde nada; falhou, espera 5 minutos.
 4. A classe sobe do **nível 1 ao 20** com o XP dos atributos dela. No 20 ela fica **Dominada** e entra no seu **histórico para sempre**.
 - Você usa **uma classe por vez**. Voltar para uma classe que já aprendeu custa 10 esmeraldas, num Santuário.
-- **Habilidades:** **agache + F** usa a selecionada; **agache + clique esquerdo no ar** troca. A força cresce com o nível da classe. A classe aparece na tag acima da cabeça.
+- **Habilidades:** **agache + F** usa a selecionada; **agache + clique esquerdo no ar** troca. A força cresce com o nível da classe e fica **20% maior dentro dos portais** (2.76). A classe aparece na tag acima da cabeça.
 
 **A árvore** (as avançadas pedem classes **dominadas**, às vezes duas):
 
 | Classe | Pede | Passivo (no nível 20) | Habilidades |
 |---|---|---|---|
-| ⚔ Guerreiro | Combate 15 | +2 ❤, +10% dano corpo a corpo | Investida, Grito de Guerra |
+| ⚔ Guerreiro | Combate 15 | +2 ❤, +10% dano corpo a corpo | Investida, Grito de Guerra, Disparada |
 | ➹ Arqueiro | Combate 15 | +15% dano de flecha, +5% velocidade | Chuva de Flechas, Salto Evasivo |
-| ✦ Mago | Arcano 15 | +40 mana, +1 mana/s | Míssil Arcano, Barreira Arcana |
+| ✦ Mago | Arcano 15 | +40 mana, +1 mana/s | Míssil Arcano, Barreira Arcana, Bola de Fogo |
 | ✧ Ladino | Corrida 15 | +12% velocidade, 8% esquiva | Bomba de Fumaça, Rolamento |
 | ⚒ Ferreiro | Ferraria 15 | 5% de forjar uma raridade acima, +3% refino | Reparo Rápido, Armadura Reforçada |
 | ♞ Domador | Doma 15 | +1 companheiro, +15% dano deles | Chamado, Fúria da Matilha |
-| ☠ Berserker | Guerreiro | +15% dano, até +40% com pouca vida | Fúria, Redemoinho |
+| ⛨ Tanque | Combate 15 | +3 ❤, +4 armadura | Provocar, Muralha |
+| ✙ Curandeiro | Arcano 15 | +1 ❤, +30 mana, +1 mana/s; cura a party perto a cada 5 s | Cura, Purificar |
+| ☠ Berserker | Guerreiro | +15% dano, até +40% com pouca vida | Fúria, Redemoinho, Sede de Sangue |
 | ♜ Cavaleiro | Guerreiro + Domador | +3 ❤, +4 armadura, +25% dano montado | Carga, Baluarte |
 | ✚ Paladino | Guerreiro + Mago | +3 ❤, +3 armadura, +30 mana | Luz Sagrada, Escudo Divino |
 | ➶ Atirador de Elite | Arqueiro | +30% dano de flecha, 15% de crítico x2 | Tiro Perfurante, Olho de Águia |
 | ☤ Caçador | Arqueiro + Domador | +20% dano de flecha e dos companheiros | Marca do Caçador, Armadilha |
-| ❄ Elementalista | Mago | +80 mana, +2 mana/s, magias 20% mais baratas | Tempestade Elemental, Escudo Elemental |
+| ❄ Elementalista | Mago | +80 mana, +2 mana/s, magias 20% mais baratas | Tempestade Elemental, Escudo Elemental, Nova de Gelo |
 | ✴ Feiticeiro de Batalha | Mago + Guerreiro | +40 mana, +10% dano; golpes devolvem mana | Lâmina Arcana, Passo Arcano |
-| ✝ Assassino | Ladino | +15% velocidade, 12% esquiva, +50% dano pelas costas | Passos das Sombras, Golpe Letal |
+| ✝ Assassino | Ladino | +15% velocidade, 12% esquiva, +50% dano pelas costas | Passos das Sombras, Golpe Letal, Mutilação |
 | ⚒ Mestre Forjador | Ferreiro | 12% de forjar uma raridade acima, +8% refino | Afiar, Martelo do Trovão |
 | ♞ Mestre das Feras | Domador | +2 companheiros, +1 componente, +40% dano deles | Rugido, Vínculo Vital |
 
@@ -1106,6 +1239,8 @@ Na primeira vez que liga, o plugin escolhe **14 lugares** pelo mundo (2 de cada 
 (Cada uma também pede o atributo da classe no nível 40 e a classe de requisito **dominada**.)
 
 A oitava classe lendária, **☾ Soberano das Sombras**, não tem Local Oculto: ela desperta num Portal Pesadelo (veja [Portais](#portais-soberano-das-sombras-e-torre-infinita)).
+
+Os quatro **Monarcas** (desde a 2.76) também são classes lendárias sem Local Oculto: vêm do **Portal do Monarca**, aberto no Mural das Relíquias (veja [Relíquias, Mural e os Monarcas](#relíquias-mural-e-os-monarcas-274)). Na árvore, as lendárias ficam na página **"✪ Lendárias e Monarcas"**.
 
 ## Fé e mistério
 
@@ -1800,7 +1935,8 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/pc <mensagem>` | todos | Chat da party (sem mensagem: liga/desliga o modo chat) |
 | `/pets` | todos | Seus companheiros (domador) |
 | `/constelacoes` | todos | Moedas Estelares e bênçãos dos deuses que assistem aos seus feitos |
-| `/masmorra [sair]` | todos | Informações da masmorra / sair dela |
+| `/masmorra [sair\|rank\|arvore\|missao\|monarcas\|stats\|recordes\|loja]` | todos | Informações da masmorra / sair dela / Rank de Caçador / Árvore e Despertar / Missão Diária / quem é cada Monarca / estatísticas / recordes / Loja do Sistema |
+| `/masmorra monarca abdicar` | todos | Deixa a classe do seu Monarca livre para outro |
 | `/classe` | todos | Árvore de classes, caminho, tarefas e habilidades |
 | `/lendas` | todos | Livro das Lendas: enigmas, donos e Forja Lendária |
 | `/locais` | todos | Os Locais Ocultos que você já achou |
@@ -1961,6 +2097,21 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 | `/rpgadmin conjuntomineral <ambar/jade/perola/gelo/pedra_sangue/magma/quartzo_negro> [forjar]` | As 9 peças de um conjunto dos minerais (forjadas, se pedir) |
 | `/rpgadmin utilidade <chave/regador/bancada/balde_gelo/trena/cinto/todas>` | Os itens das utilidades do dia a dia |
 | `/rpgadmin carroca [completa]` | A Carroça (completa = com todas as melhorias) |
+| `/rpgadmin cristal <e..s> [cacada/saque/monolitos]` | Um Cristal de Portal |
+| `/rpgadmin cristalmana` | 4 Cristais de Mana de cada tamanho |
+| `/rpgadmin grimoriooculto` | O Grimório Oculto (zera a magia e a recarga) |
+| `/rpgadmin cacador <xp>` | Define o XP de caçador (D=100, C=300, B=700, A=1500, S=3000) |
+| `/rpgadmin naoidentificado [e..s]` | 3 equipamentos não identificados da faixa daquele rank |
+| `/rpgadmin pecacacador <e..s>` | As 5 peças de Caçador do rank |
+| `/rpgadmin armachefe` | As 6 armas de chefe |
+| `/rpgadmin itemsistema` | Os itens da Loja do Sistema (poções, pergaminho, medidor, chave) |
+| `/rpgadmin inscricao [todas/<tipo>]` | Inscrições (2 de cada, ou 4 de um tipo) |
+| `/rpgadmin despertar [zerar/<característica>]` | Desperta (se o rank já dá), zera as características e a árvore, ou dá uma característica |
+| `/rpgadmin missao [zerar]` | Completa as tarefas da Missão Diária de hoje (o prêmio vem em até 5 s), ou recomeça o dia |
+| `/rpgadmin reliquiamonarca [todas/<monarca>]` | As Relíquias do Monarca (as 25, ou as 5 de um) |
+| `/rpgadmin monarca <chamas_brancas/geada/feras/insetos/nenhum>` | Dá a você a classe lendária daquele Monarca no nível 20 (ou tira) |
+| `/rpgadmin dupla` | A masmorra em que você está vira Dupla (a Câmara das Estátuas abre quando o chefe cair) |
+| `/rpgadmin ataquerank` | Abre um Ataque de Rank S perto de você |
 | `/rpgadmin raiz` | Planta uma Raiz de Luz no chão embaixo de você (precisa de 5 blocos de ar em cima) |
 | `/rpgadmin coracaopenumbra` | O Coração da Penumbra aparece à sua frente |
 | `/rpgadmin penumbra` | Zera a sua Penumbra |
@@ -1972,26 +2123,34 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 ## Mod de apoio (opcional, no cliente)
 
-O servidor **não precisa** de nada além do plugin. O **mod de apoio** (`rpgapoio-0.1.0.jar`, para **NeoForge 26.3**) vai só no jogo de quem quiser, por exemplo no modpack. Ele cria teclas próprias em **Opções > Controles > RPGAtributos**, que dá para trocar como qualquer tecla do jogo:
+O servidor **não precisa** de nada além do plugin. O **mod de apoio** (`rpgapoio-0.2.0.jar`, para **NeoForge 26.3**; precisa do plugin 2.77 ou mais novo para as telas e o HUD) vai só no jogo de quem quiser, por exemplo no modpack. Ele cria teclas próprias em **Opções > Controles > RPGAtributos**, que dá para trocar como qualquer tecla do jogo:
 
 | Tecla (padrão) | Ação | Sem o mod |
 |---|---|---|
 | **R** | Golpe da montaria | F montado |
-| **V** | Habilidade de classe | Agachar + F |
+| **V** | Habilidade de classe: **toque** usa; **segure** abre a **roda de habilidades** (aponte e solte) | Agachar + F |
 | **B** | Trocar de habilidade | Agachar + clique esquerdo no ar |
 | **Alt esquerdo** | Esquiva (para o lado que você aperta, ou para trás) | Dois toques em A, D ou S |
 | **N** | Próxima postura | `/postura` |
 | **J** | Menu do RPG | `/rpg` |
+| **K** | Janela do Sistema (Árvore de Caçador e Despertar) | `/masmorra arvore` |
+| **U** | Missão Diária | `/masmorra missao` |
+| **Y** | Loja do Sistema | `/masmorra loja` |
+| **O** | Árvore de classes | `/classe` |
 
-Quem não tem o mod continua usando os atalhos de sempre; com o mod, os dois jeitos funcionam. Ao entrar, aparece "Mod de apoio conectado" na barra. Em servidores sem o RPGAtributos, as teclas não fazem nada (e o jogo avisa uma vez).
+**Telas (0.2.0):** com o mod, **todos os menus do plugin** ganham uma "pele": fundo com a cor do assunto (portais em roxo, classes em dourado, forja em laranja, colônia e reino em verde...), sem os vidros de enfeite e com um quadrinho atrás de cada item. Quatro menus têm **tela própria**: a **janela do Sistema** (rank e barra de XP, os ramos da Árvore de Caçador ligados por linhas, as características com nome), a **árvore de classes** (básicas em cima, avançadas embaixo ligadas a elas, e a página das lendárias com o Soberano no meio dos Monarcas), a **Loja do Sistema** (cartões com o preço em verde ou vermelho) e o **Mural das Relíquias** (uma linha por Monarca com a barra de quantas já estão lá). Por baixo é o mesmo menu do servidor: os cliques (esquerdo, direito, Shift) fazem o mesmo de sempre.
 
-**Como funciona:** o mod manda o nome da tecla pelo canal `rpgatributos:tecla`, que o plugin escuta. O código fica em `mod-apoio/` (compile com `gradlew build`, Java 25; o jar sai em `mod-apoio/build/libs/`).
+**HUD (0.2.0):** embaixo à direita, a sua classe com cada habilidade (a escolhida marcada, a recarga em segundos) e a mana com os Cristais de Mana; dentro de um portal, no alto à esquerda, o rank, o tempo e o objetivo (e a barra de ação fica livre); na Câmara das Estátuas, no meio da tela, o mandamento da vez e o aviso dos olhos ("vão abrir" / "NÃO SE MEXA").
+
+Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, os dois jeitos funcionam. Ao entrar, aparece "Mod de apoio conectado" na barra. Em servidores sem o RPGAtributos, as teclas não fazem nada (e o jogo avisa uma vez).
+
+**Como funciona:** o mod manda o nome da tecla pelo canal `rpgatributos:tecla`; desde a 2.77 o plugin manda pelo `rpgatributos:dados` o HUD (a cada meio segundo) e qual menu está abrindo, para o mod desenhar a tela dele. O código fica em `mod-apoio/` (compile com `gradlew build`, Java 25; o jar sai em `mod-apoio/build/libs/`).
 
 ## Como gerar o .jar
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.67.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.77.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 
@@ -2017,6 +2176,7 @@ Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtri
 - Lendas, classes lendárias, Pedras de Viagem e Locais Ocultos ficam em `lendas.yml`, `classes_lendarias.yml`, `pedras.yml` e `locais.yml`. Para sortear novos Locais Ocultos, apague o `locais.yml` (os já construídos continuam no mundo como ruínas).
 - As lendárias (quem tem cada uma, onde está o ovo e quanto já chocou) ficam em `lendarias.yml`. As Bestas Errantes soltas não são salvas: ao reiniciar elas voltam a estar livres. Para começar de novo, use `/rpgadmin lendaria <nome> livre`.
 - O mundo `rpg_masmorras` é **apagado e recriado vazio** sempre que o servidor liga (as masmorras são temporárias). Não construa nada nele. O Cofre das Almas fica em `cofre.yml` e não se perde.
+- Os recordes dos portais ficam em `recordes_portais.yml`; os donos dos Monarcas, como os das outras classes lendárias, em `classes_lendarias.yml`. O Rank de Caçador, a árvore, as características e a Missão Diária ficam no próprio jogador; as relíquias de cada Mural, no chunk dele.
 - Se você já usa outro plugin de proteção (WorldGuard, GriefPrevention...), os dois funcionam juntos: basta um deles bloquear para a ação ser bloqueada.
 - A tag usa um time de scoreboard; se usar outro plugin de nametag (ex.: TAB), desative a parte de nametag de um deles.
 - Mudar o `multiplicador` das raridades no config vale para itens forjados depois disso.

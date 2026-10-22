@@ -69,6 +69,36 @@ public enum Tema {
     public Material decorChao() { return um(decorChao); }
     public Material decorTeto() { return decorTeto; }
 
+    /** 2.69: a escada dos corredores com rampa e das Escadarias. */
+    public Material escada() {
+        return switch (this) {
+            case CRIPTA -> Material.STONE_BRICK_STAIRS;
+            case CAVERNA -> Material.DEEPSLATE_TILE_STAIRS;
+            case INFERNO -> Material.POLISHED_BLACKSTONE_BRICK_STAIRS;
+            case GELO -> Material.QUARTZ_STAIRS;
+        };
+    }
+
+    /** 2.69: a parede rachada das salas secretas (um golpe e ela cai). */
+    public Material rachado() {
+        return switch (this) {
+            case CRIPTA -> Material.MOSSY_COBBLESTONE;
+            case CAVERNA -> Material.CRACKED_DEEPSLATE_TILES;
+            case INFERNO -> Material.CRACKED_NETHER_BRICKS;
+            case GELO -> Material.CALCITE;
+        };
+    }
+
+    /** 2.69: a cerca das pontes e dos mezaninos. */
+    public Material cerca() {
+        return switch (this) {
+            case CRIPTA -> Material.STONE_BRICK_WALL;
+            case CAVERNA -> Material.DEEPSLATE_TILE_WALL;
+            case INFERNO -> Material.NETHER_BRICK_FENCE;
+            case GELO -> Material.DIORITE_WALL;
+        };
+    }
+
     public static Tema sortear() {
         Tema[] t = values();
         return t[ThreadLocalRandom.current().nextInt(t.length)];

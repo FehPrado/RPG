@@ -10,7 +10,11 @@ public enum TipoSala {
     INICIO("Entrada", 19, 9),
     COMBATE("Combate", 19, 9),
     TESOURO("Tesouro", 19, 9),
-    CHEFE("Chefe", 27, 12);
+    CHEFE("Chefe", 27, 12),
+    // 2.69: salas da geração nova (feitas só pelo código)
+    ESCADA("Escadaria", 19, 9),
+    MINA("Mina de Cristal", 19, 9),
+    SECRETA("Sala Secreta", 19, 9);
 
     private final String nome;
     private final int tamanho;

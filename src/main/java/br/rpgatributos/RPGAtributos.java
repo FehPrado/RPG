@@ -253,6 +253,13 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.detalhes.BarcoGrande barcoGrande;
     private br.rpgatributos.detalhes.Utilidades utilidades;
     private br.rpgatributos.detalhes.Carrocas carrocas;
+    private br.rpgatributos.masmorra.EquipamentoPortal equipamentoPortal;
+    private br.rpgatributos.masmorra.LojaSistema lojaSistema;
+    private br.rpgatributos.masmorra.PoderCacador poderCacador;
+    private br.rpgatributos.masmorra.SistemaCacador sistemaCacador;
+    private br.rpgatributos.masmorra.MesaInscricao mesasInscricao;
+    private br.rpgatributos.masmorra.MissaoDiaria missaoDiaria;
+    private br.rpgatributos.masmorra.MuralReliquias muraisReliquias;
     private br.rpgatributos.detalhes.Cobre cobre;
     private br.rpgatributos.ajuda.Boasvindas boasvindas;
     private MercadorItinerante mercador;
@@ -335,6 +342,13 @@ public final class RPGAtributos extends JavaPlugin {
         barcoGrande = new br.rpgatributos.detalhes.BarcoGrande(this);
         utilidades = new br.rpgatributos.detalhes.Utilidades(this);
         carrocas = new br.rpgatributos.detalhes.Carrocas(this);
+        equipamentoPortal = new br.rpgatributos.masmorra.EquipamentoPortal(this);
+        lojaSistema = new br.rpgatributos.masmorra.LojaSistema(this);
+        poderCacador = new br.rpgatributos.masmorra.PoderCacador(this);
+        sistemaCacador = new br.rpgatributos.masmorra.SistemaCacador(this);
+        mesasInscricao = new br.rpgatributos.masmorra.MesaInscricao(this);
+        missaoDiaria = new br.rpgatributos.masmorra.MissaoDiaria(this);
+        muraisReliquias = new br.rpgatributos.masmorra.MuralReliquias(this);
         cobre = new br.rpgatributos.detalhes.Cobre(this);
         boasvindas = new br.rpgatributos.ajuda.Boasvindas(this);
         tags = new TagManager(this);
@@ -506,6 +520,14 @@ public final class RPGAtributos extends JavaPlugin {
         utilidades.registrar(getServer().getPluginManager());
         carrocas.registrarReceitas();
         getServer().getPluginManager().registerEvents(carrocas, this);
+        getServer().getPluginManager().registerEvents(new br.rpgatributos.masmorra.MagiaOculta(this), this);
+        getServer().getPluginManager().registerEvents(equipamentoPortal, this);
+        getServer().getPluginManager().registerEvents(lojaSistema, this);
+        getServer().getPluginManager().registerEvents(poderCacador, this);
+        getServer().getPluginManager().registerEvents(sistemaCacador, this);
+        getServer().getPluginManager().registerEvents(mesasInscricao, this);
+        getServer().getPluginManager().registerEvents(missaoDiaria, this);
+        getServer().getPluginManager().registerEvents(muraisReliquias, this);
         elevadores.iniciar();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
@@ -653,6 +675,13 @@ public final class RPGAtributos extends JavaPlugin {
         // Masmorras: obras (todo tick), portais (5 ticks), salas e ondas (10 ticks).
         portaisMasmorra.iniciar();
         agenda.runTaskTimer(this, portaisMasmorra::tick, 5L, 5L);
+        mesasInscricao.iniciar();
+        agenda.runTaskTimer(this, mesasInscricao::tick, 5L, 5L);
+        agenda.runTaskTimer(this, poderCacador::tick, 20L, 20L);
+        agenda.runTaskTimer(this, missaoDiaria::tick, 100L, 100L);
+        agenda.runTaskTimer(this, classes::tick, 100L, 100L); // 2.76: aura do Curandeiro
+        muraisReliquias.iniciar();
+        agenda.runTaskTimer(this, muraisReliquias::tick, 5L, 5L);
         agenda.runTaskTimer(this, masmorras::construir, 1L, 1L);
         agenda.runTaskTimer(this, masmorras::tickPortais, 5L, 5L);
         agenda.runTaskTimer(this, masmorras::tick, 10L, 10L);
@@ -743,6 +772,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, nian::tick, 49L, 40L); // a cada 2 s: o Nian (noites de inverno)
         agenda.runTaskTimer(this, combateMontado::tick, 20L, 1L); // a cada tick: golpes da montaria em curso e atropelar
         canalApoio.iniciar(); // teclas do mod de apoio (opcional, no cliente)
+        agenda.runTaskTimer(this, canalApoio::tick, 10L, 10L); // 2.77: HUD do mod de apoio
         agenda.runTaskTimer(this, iguarias::tick, 21L, 1L); // a cada tick: efeitos dos pratos de monstro (subir paredes)
         agenda.runTaskTimer(this, ajuda::tick, 60L, 60L);
         obeliscos.iniciar();
@@ -909,6 +939,12 @@ public final class RPGAtributos extends JavaPlugin {
     public MenusDomador menusDomador() { return menusDomador; }
     public Masmorras masmorras() { return masmorras; }
     public PortaisMasmorra portaisMasmorra() { return portaisMasmorra; }
+    public br.rpgatributos.masmorra.EquipamentoPortal equipamentoPortal() { return equipamentoPortal; }
+    public br.rpgatributos.masmorra.LojaSistema lojaSistema() { return lojaSistema; }
+    public br.rpgatributos.masmorra.SistemaCacador sistemaCacador() { return sistemaCacador; }
+    public br.rpgatributos.masmorra.MesaInscricao mesasInscricao() { return mesasInscricao; }
+    public br.rpgatributos.masmorra.MissaoDiaria missaoDiaria() { return missaoDiaria; }
+    public br.rpgatributos.masmorra.MuralReliquias muraisReliquias() { return muraisReliquias; }
     public Classes classes() { return classes; }
     public Provas provas() { return provas; }
     public Santuarios santuarios() { return santuarios; }
@@ -1008,7 +1044,8 @@ public final class RPGAtributos extends JavaPlugin {
                 || altaresDomador.eh(b) || portaisMasmorra.eh(b) || santuarios.eh(b) || pedras.eh(b) || alquimia.eh(b) || prefeituras.eh(b) || obeliscos.eh(b)
                 || santuariosDivinos.eh(b) || transmutacao.eh(b) || mesasRunicas.eh(b)
                 || fogueiras.eh(b) || bonecos.eh(b) || pedrasAmolar.eh(b) || bebedouros.eh(b) || comedouros.eh(b) || estabulos.eh(b) || trofeus.eh(b) || mesasCartografo.eh(b)
-                || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || tachos.eh(b) || cabanasPesca.eh(b) || ateliers.eh(b);
+                || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || tachos.eh(b) || cabanasPesca.eh(b) || ateliers.eh(b)
+                || (mesasInscricao != null && mesasInscricao.eh(b)) || (muraisReliquias != null && muraisReliquias.eh(b));
     }
 
     /**

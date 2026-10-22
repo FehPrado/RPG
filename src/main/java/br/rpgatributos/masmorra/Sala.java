@@ -5,24 +5,36 @@ import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-/** Uma sala da masmorra: posição na grade, limites no mundo, portas e o andamento da luta. */
+/**
+ * Uma sala da masmorra: o lugar na grade de chunks, os limites no mundo, as portas e o andamento
+ * da luta. Desde a 2.69 a sala tem tamanho variável (2x2 chunks; às vezes 3x3, 3x2 ou 2x3), um
+ * andar, e as portas ficam onde o corredor chega (não mais sempre no meio da parede).
+ */
 public final class Sala {
 
     public enum Estado { AGUARDANDO, LUTANDO, LIMPA }
 
-    /** Posição na grade de salas. */
+    /** Uma porta: a parede, a coordenada ao longo dela (o meio dos 3 blocos) e a altura do piso. */
+    public record Porta(BlockFace face, int linha, int y) { }
+
+    /** Canto da sala na grade de chunks (relativo à masmorra) e o tamanho em chunks. */
     final int gx, gz;
+    int cw = 2, ch = 2;
+    /** O andar (0 = o da entrada). A Escadaria ocupa este andar e o de cima. */
+    int nivel;
     TipoSala tipo;
     /** Distância (em salas) até a entrada. */
-    final int profundidade;
-    /** Portas abertas para as salas vizinhas. */
-    final EnumSet<BlockFace> portas = EnumSet.noneOf(BlockFace.class);
+    int profundidade;
+    final List<Porta> portas = new ArrayList<>();
+    /** Estilo do interior (o gerador decide). */
+    Gerador.Estilo estilo = Gerador.Estilo.SIMPLES;
+    /** 2.70: tem um Pilar de Bênção num canto. */
+    boolean pilar;
 
     // Limites no mundo (com as paredes).
     int minX, minY, minZ, maxX, maxY, maxZ;
@@ -42,6 +54,9 @@ public final class Sala {
     long proximaOnda;
     long semJogadoresDesde;
     UUID chefe;
+    /** 2.70: a fase do chefe (0, 1 a partir de 66% de vida, 2 a partir de 33%) e o próximo golpe marcado. */
+    int fase;
+    long proximoGolpe;
 
     Sala(int gx, int gz, TipoSala tipo, int profundidade) {
         this.gx = gx;
@@ -50,17 +65,14 @@ public final class Sala {
         this.profundidade = profundidade;
     }
 
-    /** Define os limites a partir do centro da célula e da altura do piso. */
-    void posicionar(int cx, int y, int cz) {
-        int meio = (tipo.tamanho() - 1) / 2;
-        centroX = cx;
-        centroZ = cz;
-        minX = cx - meio;
-        maxX = cx + meio;
-        minZ = cz - meio;
-        maxZ = cz + meio;
-        minY = y;
-        maxY = y + tipo.altura() - 1;
+    /** Ocupa a célula (x, z) da grade de chunks? */
+    boolean ocupa(int x, int z) {
+        return x >= gx && x < gx + cw && z >= gz && z < gz + ch;
+    }
+
+    /** Sala grande (mais de 2x2 chunks)? */
+    boolean grande() {
+        return cw * ch > 4;
     }
 
     /** Está dentro da sala, a pelo menos {@code margem} blocos das paredes? */

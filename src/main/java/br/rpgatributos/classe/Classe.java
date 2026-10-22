@@ -23,7 +23,7 @@ public enum Classe {
     GUERREIRO("Guerreiro", "⚔", 0xE53935, Material.IRON_SWORD, Tier.BASICA, List.of(), Skill.COMBATE,
             EnumSet.of(Skill.COMBATE),
             Passivo.p().vida(4).corpo(0.10).texto("+2 ❤ e +10% de dano corpo a corpo"),
-            List.of(Habilidade.INVESTIDA, Habilidade.GRITO_DE_GUERRA),
+            List.of(Habilidade.INVESTIDA, Habilidade.GRITO_DE_GUERRA, Habilidade.DISPARADA),
             List.of(t(ABATES_CORPO, 100)),
             Prova.ONDAS, null, List.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER),
             "Linha de frente: aguenta pancada e bate forte."),
@@ -37,7 +37,7 @@ public enum Classe {
     MAGO("Mago", "✦", 0x8E24AA, Material.ENCHANTED_BOOK, Tier.BASICA, List.of(), Skill.ARCANO,
             EnumSet.of(Skill.ARCANO),
             Passivo.p().mana(40).regen(1).texto("+40 de mana e +1 de mana por segundo"),
-            List.of(Habilidade.MISSIL_ARCANO, Habilidade.BARREIRA_ARCANA),
+            List.of(Habilidade.MISSIL_ARCANO, Habilidade.BARREIRA_ARCANA, Habilidade.BOLA_DE_FOGO),
             List.of(t(MAGIAS, 150)),
             Prova.DUELO, EntityType.EVOKER, List.of(EntityType.VEX),
             "Domina o Arcano: mais mana e magias de classe."),
@@ -62,12 +62,27 @@ public enum Classe {
             List.of(t(COMPANHEIROS, 2), t(ABATES_COMPANHEIRO, 30)),
             Prova.ONDAS, null, List.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER),
             "Luta junto com as suas feras."),
+    // 2.76: as funções de caçador que faltavam na árvore.
+    TANQUE("Tanque", "⛨", 0x8D6E63, Material.SHIELD, Tier.BASICA, List.of(), Skill.COMBATE,
+            EnumSet.of(Skill.COMBATE),
+            Passivo.p().vida(6).armadura(4).texto("+3 ❤ e +4 de armadura"),
+            List.of(Habilidade.PROVOCAR, Habilidade.MURALHA),
+            List.of(t(ABATES_CORPO, 100)),
+            Prova.ONDAS, null, List.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER),
+            "Segura a linha: chama os monstros para si e aguenta."),
+    CURANDEIRO("Curandeiro", "✙", 0x66BB6A, Material.GOLDEN_APPLE, Tier.BASICA, List.of(), Skill.ARCANO,
+            EnumSet.of(Skill.ARCANO, Skill.ALQUIMIA),
+            Passivo.p().vida(2).mana(30).regen(1).texto("+1 ❤, +30 de mana e +1 de mana/s; a cada 5 s cura um pouco você e a party perto"),
+            List.of(Habilidade.CURA, Habilidade.PURIFICAR),
+            List.of(t(MAGIAS, 100)),
+            Prova.ONDAS, null, List.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER),
+            "Mantém a party de pé."),
 
     // ---------------- avançadas ----------------
     BERSERKER("Berserker", "☠", 0xB71C1C, Material.NETHERITE_AXE, Tier.AVANCADA, List.of(GUERREIRO), Skill.COMBATE,
             EnumSet.of(Skill.COMBATE),
             Passivo.p().vida(4).corpo(0.15).texto("+15% de dano corpo a corpo; até +40% com pouca vida"),
-            List.of(Habilidade.FURIA, Habilidade.REDEMOINHO),
+            List.of(Habilidade.FURIA, Habilidade.REDEMOINHO, Habilidade.SEDE_DE_SANGUE),
             List.of(t(ABATES_CORPO, 500), t(CHEFES, 3)),
             Prova.ONDAS, null, List.of(EntityType.VINDICATOR, EntityType.ZOMBIE, EntityType.HUSK),
             "Quanto mais apanha, mais forte bate."),
@@ -102,7 +117,7 @@ public enum Classe {
     ELEMENTALISTA("Elementalista", "❄", 0x29B6F6, Material.BLAZE_ROD, Tier.AVANCADA, List.of(MAGO), Skill.ARCANO,
             EnumSet.of(Skill.ARCANO),
             Passivo.p().mana(80).regen(2).custoMagia(0.20).texto("+80 de mana, +2 de mana/s e magias 20% mais baratas"),
-            List.of(Habilidade.TEMPESTADE_ELEMENTAL, Habilidade.ESCUDO_ELEMENTAL),
+            List.of(Habilidade.TEMPESTADE_ELEMENTAL, Habilidade.ESCUDO_ELEMENTAL, Habilidade.NOVA_DE_GELO),
             List.of(t(MAGIAS, 800), t(CHEFES, 3)),
             Prova.DUELO, EntityType.BLAZE, List.of(EntityType.BLAZE),
             "Fogo, gelo e raio na ponta dos dedos."),
@@ -116,7 +131,7 @@ public enum Classe {
     ASSASSINO("Assassino", "✝", 0x263238, Material.NETHERITE_SWORD, Tier.AVANCADA, List.of(LADINO), Skill.CORRIDA,
             EnumSet.of(Skill.CORRIDA, Skill.PULO, Skill.COMBATE),
             Passivo.p().velocidade(0.15).esquiva(0.12).corpo(0.10).texto("+15% de velocidade, 12% de esquiva e +50% de dano pelas costas"),
-            List.of(Habilidade.PASSOS_DAS_SOMBRAS, Habilidade.GOLPE_LETAL),
+            List.of(Habilidade.PASSOS_DAS_SOMBRAS, Habilidade.GOLPE_LETAL, Habilidade.MUTILACAO),
             List.of(t(ABATES_CORPO, 400), t(MASMORRAS, 2)),
             Prova.DUELO, EntityType.WITHER_SKELETON, List.of(),
             "Some nas sombras e acaba com tudo num golpe."),
@@ -183,7 +198,37 @@ public enum Classe {
             Passivo.p().vida(6).mana(60).regen(1).corpo(0.15).texto("+3 ❤, +60 de mana, +15% de dano; quem você derrota pode virar sombra"),
             List.of(Habilidade.LEVANTE_SE, Habilidade.EXERCITO_DAS_SOMBRAS),
             List.of(), Prova.DUELO, null, List.of(),
-            "Desperta do outro lado de um Portal Pesadelo. Os mortos se levantam para servi-lo.");
+            "Desperta do outro lado de um Portal Pesadelo. Os mortos se levantam para servi-lo."),
+    // 2.76: os Monarcas (vêm do Portal do Monarca, aberto no Mural das Relíquias).
+    MONARCA_CHAMAS_BRANCAS("Monarca das Chamas Brancas", "ϟ", 0xE3F2FD, Material.BLAZE_ROD, Tier.LENDARIA,
+            List.of(), Skill.COMBATE, EnumSet.of(Skill.COMBATE, Skill.ARCANO),
+            Passivo.p().vida(6).mana(60).corpo(0.15).texto("+3 ❤, +60 de mana, +15% de dano; 25% de raio branco nos golpes"),
+            List.of(Habilidade.RELAMPAGO_BRANCO, Habilidade.CHAMA_BRANCA),
+            List.of(), Prova.DUELO, null, List.of(),
+            "Baran, o rei dos demônios, deixou o raio branco com você."),
+    MONARCA_GEADA("Monarca da Geada", "❆", 0x80D8FF, Material.BLUE_ICE, Tier.LENDARIA,
+            List.of(), Skill.ARCANO, EnumSet.of(Skill.ARCANO),
+            Passivo.p().mana(100).regen(2).custoMagia(0.20).texto("+100 de mana, +2 de mana/s, magias 20% mais baratas; seus golpes deixam lento"),
+            List.of(Habilidade.LANCA_DE_GELO, Habilidade.INVERNO_ETERNO),
+            List.of(), Prova.DUELO, null, List.of(),
+            "O frio que congela reinos inteiros."),
+    MONARCA_FERAS("Monarca das Feras", "☬", 0xA1887F, Material.BONE, Tier.LENDARIA,
+            List.of(), Skill.COMBATE, EnumSet.of(Skill.COMBATE, Skill.DOMA),
+            Passivo.p().vida(6).velocidade(0.10).corpo(0.15).texto("+3 ❤, +10% de velocidade e +15% de dano corpo a corpo"),
+            List.of(Habilidade.INVESTIDA_DA_FERA, Habilidade.MATILHA),
+            List.of(), Prova.DUELO, null, List.of(),
+            "Rakan, o rei das feras, corre ao seu lado."),
+    MONARCA_INSETOS("Monarca dos Insetos", "❦", 0x9CCC65, Material.SPIDER_EYE, Tier.LENDARIA,
+            List.of(), Skill.COMBATE, EnumSet.of(Skill.COMBATE, Skill.CORRIDA),
+            Passivo.p().velocidade(0.10).esquiva(0.10).corpo(0.10).texto("+10% de velocidade, 10% de esquiva e +10% de dano; seus golpes envenenam"),
+            List.of(Habilidade.ENXAME, Habilidade.CARAPACA),
+            List.of(), Prova.DUELO, null, List.of(),
+            "Querehsha, a rainha do enxame.");
+
+    /** É um dos Monarcas (2.76)? */
+    public boolean monarca() {
+        return this == MONARCA_CHAMAS_BRANCAS || this == MONARCA_GEADA || this == MONARCA_FERAS || this == MONARCA_INSETOS;
+    }
 
     public enum Tier {
         BASICA("Básica"), AVANCADA("Avançada"), OCULTA("Oculta"), LENDARIA("Lendária");

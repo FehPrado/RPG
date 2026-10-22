@@ -162,7 +162,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 2.67</small></a>
+  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 2.77</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: adaga, cantil, /pets)…" aria-label="Buscar no manual"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 <div class="layout">
@@ -214,7 +214,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 
 <main id="conteudo">
 <div class="hero"><div>
-    <p class="rotulo">Manual do jogador · versão 2.67</p>
+    <p class="rotulo">Manual do jogador · versão 2.77</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -340,6 +340,11 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <tr><td><span class="cmd">/reino</span></td><td>Seu reino: cargos, tesouro, províncias, leis (<span class="cmd">/reino lei</span>), mapa, guerra e paz</td></tr>
       <tr><td><span class="cmd">/pets</span></td><td>Seus companheiros</td></tr>
       <tr><td><span class="cmd">/masmorra sair</span></td><td>Sai da masmorra sem perder nada</td></tr>
+      <tr><td><span class="cmd">/masmorra rank</span>, <span class="cmd">/masmorra stats</span>, <span class="cmd">/masmorra recordes</span></td><td>Rank de Caçador, suas estatísticas e os recordes dos portais</td></tr>
+      <tr><td><span class="cmd">/masmorra loja</span></td><td>Loja do Sistema (paga com Cristais de Mana)</td></tr>
+      <tr><td><span class="cmd">/masmorra arvore</span></td><td>Árvore de Caçador e características do Despertar</td></tr>
+      <tr><td><span class="cmd">/masmorra missao</span></td><td>Missão Diária</td></tr>
+      <tr><td><span class="cmd">/masmorra monarcas</span>, <span class="cmd">/masmorra monarca abdicar</span></td><td>Quem é cada Monarca / deixar o título livre</td></tr>
       <tr><td><span class="cmd">/portais</span></td><td>Portais abertos e quando transbordam</td></tr>
       <tr><td><span class="cmd">/sombras</span></td><td>Exército das sombras (Soberano)</td></tr>
       <tr><td><span class="cmd">/torre</span>, <span class="cmd">/torre ranking</span>, <span class="cmd">/torre sair</span></td><td>Torre Infinita</td></tr>
@@ -986,7 +991,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <tr><td><b>Marco do Território</b></td><td>Magnetita</td><td>1 estandarte + 4 esmeraldas</td><td>Proteger a sua área</td></tr>
       <tr><td><b>Prefeitura</b></td><td>Sino (no seu território)</td><td>1 bloco de esmeralda + 1 cama</td><td>Começar a sua colônia</td></tr>
       <tr><td><b>Altar do Domador</b></td><td>Fardo de feno</td><td>1 laço + 1 sela</td><td>Companheiros e componentes</td></tr>
-      <tr><td><b>Portal da Masmorra</b></td><td>Tijolos de pedra entalhados</td><td>1 olho do ender + 1 bússola</td><td>Abrir masmorras e o Cofre das Almas</td></tr>
+      <tr><td><b>Altar do Portal</b></td><td>Tijolos de pedra entalhados</td><td>1 olho do ender + 1 bússola</td><td>Cristais de Portal (rank E a S), masmorras e o Cofre das Almas</td></tr>
       <tr><td><b>Santuário das Classes</b></td><td>Púlpito</td><td>1 livro e pena + 1 diamante</td><td>Classes, provas e troca de classe</td></tr>
       <tr><td><b>Pedra de Viagem</b></td><td>Pedra entalhada de ardósia</td><td>2 pérolas do ender + 4 fragmentos de ametista</td><td>Teleporte entre pedras</td></tr>
       <tr><td><b>Bancada Alquímica</b></td><td>Suporte de poções</td><td>2 garrafas de vidro + 1 pó de blaze</td><td>Elixires, componentes, gemas, acessórios</td></tr>
@@ -1665,7 +1670,8 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <p>A capa barata: abre do mesmo jeito (pule no ar), desce ainda mais devagar, mas anda bem mais devagar e <b>estoura no fim do 5º voo</b>. A descrição mostra os usos que restam.</p>
     </div>
     <div class="card"><h3>Mod de apoio (opcional)</h3>
-      <p>Quem usa NeoForge 26.3 pode pôr o <code>rpgapoio</code> no jogo e ganhar teclas próprias em <b>Opções &gt; Controles &gt; RPGAtributos</b>: <kbd>R</kbd> golpe da montaria, <kbd>V</kbd> habilidade de classe, <kbd>B</kbd> trocar habilidade, <kbd>Alt</kbd> esquiva, <kbd>N</kbd> próxima postura e <kbd>J</kbd> menu. Dá para trocar qualquer uma. Sem o mod, os atalhos de sempre continuam valendo.</p>
+      <p>Quem usa NeoForge 26.3 pode pôr o <code>rpgapoio</code> no jogo e ganhar teclas próprias em <b>Opções &gt; Controles &gt; RPGAtributos</b>: <kbd>R</kbd> golpe da montaria, <kbd>V</kbd> habilidade de classe (<b>segure</b> para a roda de habilidades), <kbd>B</kbd> trocar habilidade, <kbd>Alt</kbd> esquiva, <kbd>N</kbd> próxima postura, <kbd>J</kbd> menu, <kbd>K</kbd> janela do Sistema, <kbd>U</kbd> Missão Diária, <kbd>Y</kbd> Loja do Sistema e <kbd>O</kbd> árvore de classes. Dá para trocar qualquer uma.</p>
+      <p>Com o mod (0.2.0), os menus do plugin ficam mais bonitos (cor do assunto, sem os vidros de enfeite), e a janela do Sistema, a árvore de classes, a Loja e o Mural das Relíquias ganham tela própria. Um HUD mostra a classe com a recarga das habilidades, a mana e, nos portais, o tempo, o objetivo e o aviso da Câmara das Estátuas. Sem o mod, tudo continua como sempre.</p>
     </div>
     <div class="card"><h3>Mochila</h3>
       <p><span class="cmd">/mochila</span>: baú pessoal com 1 fileira no começo e +1 a cada 150 níveis somados, até 6. Não cai quando você morre.</p>
@@ -1687,20 +1693,22 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <p class="muted">Uma classe ativa por vez. Voltar para uma já aprendida custa 10 esmeraldas. Básicas pedem nível total 55 e o atributo no 15; avançadas pedem o atributo no 40.</p>
     </div>
     <div class="card largo"><div class="tabela"><table><thead><tr><th>Classe</th><th>Pede</th><th>Passivo (nível 20)</th><th>Habilidades</th></tr></thead><tbody>
-      <tr><td>⚔ Guerreiro</td><td>Combate 15</td><td>+2 ❤, +10% dano corpo a corpo</td><td>Investida, Grito de Guerra</td></tr>
+      <tr><td>⚔ Guerreiro</td><td>Combate 15</td><td>+2 ❤, +10% dano corpo a corpo</td><td>Investida, Grito de Guerra, Disparada</td></tr>
       <tr><td>➹ Arqueiro</td><td>Combate 15</td><td>+15% dano de flecha, +5% velocidade</td><td>Chuva de Flechas, Salto Evasivo</td></tr>
-      <tr><td>✦ Mago</td><td>Arcano 15</td><td>+40 mana, +1 mana/s</td><td>Míssil Arcano, Barreira Arcana</td></tr>
+      <tr><td>✦ Mago</td><td>Arcano 15</td><td>+40 mana, +1 mana/s</td><td>Míssil Arcano, Barreira Arcana, Bola de Fogo</td></tr>
       <tr><td>✧ Ladino</td><td>Corrida 15</td><td>+12% velocidade, 8% esquiva</td><td>Bomba de Fumaça, Rolamento</td></tr>
       <tr><td>⚒ Ferreiro</td><td>Ferraria 15</td><td>5% de forjar uma raridade acima, +3% refino</td><td>Reparo Rápido, Armadura Reforçada</td></tr>
       <tr><td>♞ Domador</td><td>Doma 15</td><td>+1 companheiro, +15% dano deles</td><td>Chamado, Fúria da Matilha</td></tr>
-      <tr><td>☠ Berserker</td><td>Guerreiro</td><td>+15% dano, até +40% com pouca vida</td><td>Fúria, Redemoinho</td></tr>
+      <tr><td>⛨ Tanque</td><td>Combate 15</td><td>+3 ❤, +4 armadura</td><td>Provocar, Muralha</td></tr>
+      <tr><td>✙ Curandeiro</td><td>Arcano 15</td><td>+1 ❤, +30 mana, +1 mana/s; cura a party perto</td><td>Cura, Purificar</td></tr>
+      <tr><td>☠ Berserker</td><td>Guerreiro</td><td>+15% dano, até +40% com pouca vida</td><td>Fúria, Redemoinho, Sede de Sangue</td></tr>
       <tr><td>♜ Cavaleiro</td><td>Guerreiro + Domador</td><td>+3 ❤, +4 armadura, +25% dano montado</td><td>Carga, Baluarte</td></tr>
       <tr><td>✚ Paladino</td><td>Guerreiro + Mago</td><td>+3 ❤, +3 armadura, +30 mana</td><td>Luz Sagrada, Escudo Divino</td></tr>
       <tr><td>➶ Atirador de Elite</td><td>Arqueiro</td><td>+30% dano de flecha, 15% de crítico ×2</td><td>Tiro Perfurante, Olho de Águia</td></tr>
       <tr><td>☤ Caçador</td><td>Arqueiro + Domador</td><td>+20% dano de flecha e dos companheiros</td><td>Marca do Caçador, Armadilha</td></tr>
-      <tr><td>❄ Elementalista</td><td>Mago</td><td>+80 mana, +2 mana/s, magias 20% mais baratas</td><td>Tempestade Elemental, Escudo Elemental</td></tr>
+      <tr><td>❄ Elementalista</td><td>Mago</td><td>+80 mana, +2 mana/s, magias 20% mais baratas</td><td>Tempestade Elemental, Escudo Elemental, Nova de Gelo</td></tr>
       <tr><td>✴ Feiticeiro de Batalha</td><td>Mago + Guerreiro</td><td>+40 mana, +10% dano; golpes devolvem mana</td><td>Lâmina Arcana, Passo Arcano</td></tr>
-      <tr><td>✝ Assassino</td><td>Ladino</td><td>+15% velocidade, 12% esquiva, +50% dano pelas costas</td><td>Passos das Sombras, Golpe Letal</td></tr>
+      <tr><td>✝ Assassino</td><td>Ladino</td><td>+15% velocidade, 12% esquiva, +50% dano pelas costas</td><td>Passos das Sombras, Golpe Letal, Mutilação</td></tr>
       <tr><td>⚒ Mestre Forjador</td><td>Ferreiro</td><td>12% de forjar uma raridade acima, +8% refino</td><td>Afiar, Martelo do Trovão</td></tr>
       <tr><td>♞ Mestre das Feras</td><td>Domador</td><td>+2 companheiros, +1 componente, +40% dano</td><td>Rugido, Vínculo Vital</td></tr>
     </tbody></table></div></div>
@@ -1720,6 +1728,10 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <tr><td>✵ Arqueiro Celestial</td><td>Observatório Celeste</td><td>Atirador de Elite</td><td>Flecha Estelar, Chuva de Estrelas</td></tr>
       <tr><td>☀ Santo Paladino</td><td>Capela Profanada</td><td>Paladino</td><td>Julgamento Divino, Aura Sagrada</td></tr>
       <tr><td>☾ Soberano das Sombras</td><td>Portal Pesadelo com o Eco do Soberano</td><td>Qualquer classe avançada</td><td>Levante-se, Exército das Sombras</td></tr>
+      <tr><td>ϟ Monarca das Chamas Brancas</td><td>Portal do Monarca (Mural das Relíquias)</td><td>—</td><td>Relâmpago Branco, Chama Branca</td></tr>
+      <tr><td>❆ Monarca da Geada</td><td>Portal do Monarca (Mural das Relíquias)</td><td>—</td><td>Lança de Gelo, Inverno Eterno</td></tr>
+      <tr><td>☬ Monarca das Feras</td><td>Portal do Monarca (Mural das Relíquias)</td><td>—</td><td>Investida da Fera, Matilha</td></tr>
+      <tr><td>❦ Monarca dos Insetos</td><td>Portal do Monarca (Mural das Relíquias)</td><td>—</td><td>Enxame, Carapaça</td></tr>
     </tbody></table></div>
     <p class="muted">As 7 primeiras também pedem o atributo da classe no nível 40.</p></div>
   </div>
@@ -2092,6 +2104,80 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <section class="secao" id="masmorras">
   <h2><span class="ico">۞</span>Masmorras</h2>
   <div class="grade">
+    <div class="card largo"><h3>💎 Masmorra 2.0: Cristais de Portal (2.68)</h3>
+      <p>O ritual de sempre agora é o <b>Altar do Portal</b>. Nele você faz um <b>Cristal de Portal</b> de rank <b>E a S</b>: clique esquerdo paga a oferenda que o altar pede (3 coisas), clique direito paga com <b>Cristais de Mana</b>. Depois, clique no altar com o cristal na mão e suba nele com a sua party.</p>
+      <ul>
+        <li><b>Objetivos:</b> Caçada (o chefe), Saque (achar as relíquias, vasos dourados) ou Monólitos (despertar as magnetitas e vencer os guardiões).</li>
+        <li><b>15 minutos:</b> quem não sai a tempo perde o que pegou lá dentro (vai para o Cofre das Almas).</li>
+        <li><b>Modificadores</b> às vezes vêm no cristal: Fúria, Couraça, Relógio Curto, Sem Cura e Onda Extra dão mais tesouro; Tesouro Farto, Bênção e Pressa ajudam.</li>
+        <li><b>Baús de raridade:</b> madeira, ferro, ouro e cristal. <b>Cristais de Mana</b> caem dos monstros, das relíquias e dos baús.</li>
+        <li><b>Rank de Caçador</b> (<span class="cmd">/masmorra rank</span>): sobe vencendo portais; o altar faz cristais até um rank acima do seu.</li>
+        <li><b>Portais do mundo</b> também têm rank. O raro <b>Portal Vermelho</b> não deixa ninguém sair até vencer (XP de caçador em dobro).</li>
+        <li><b>Grimório Oculto</b> (raro nos portais B, A e S): ensina a magia <b>Abrir Portal</b>, que abre um portal do seu rank gastando a mana e um Cristal de Mana grande, uma vez por dia.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>🔔 Câmara das Estátuas e Ataque de Rank S (2.75)</h3>
+      <ul>
+        <li><b>Masmorra Dupla:</b> às vezes um portal E ou D esconde, atrás do chefe, uma passagem para a <b>Câmara das Estátuas</b>.</li>
+        <li>Leia as placas e obedeça: <b>1.</b> agache diante do deus; <b>2.</b> toque os quatro sinos; <b>3.</b> chegue ao altar dourado, mas <b>não se mexa quando os olhos dele abrirem</b> (um som avisa antes).</li>
+        <li>No altar: Relíquias do Monarca, Cristais de Mana, Inscrições e mais XP de caçador.</li>
+        <li><b>Ataque de Rank S:</b> a cada 3 dias um portal gigante se abre e é anunciado para todos. Todas as parties podem entrar contra <b>Beru, o Rei das Formigas</b>, que fica mais forte com cada caçador. Vencer dá XP em dobro e chance de Relíquia para cada um.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>♛ Relíquias e os Monarcas (2.74)</h3>
+      <div class="ritual"><span class="b">Pedra-negra polida entalhada</span><span class="mais">+</span><span class="i">1 obsidiana chorona</span><span class="mais">+</span><span class="i">1 bloco de ouro</span></div>
+      <ul>
+        <li><b>Relíquias do Monarca</b> (25, 5 de cada Monarca) caem nos tesouros dos portais A e S. Coloque no <b>Mural das Relíquias</b>.</li>
+        <li>Com as 5 de um Monarca, um caçador A ou S abre o <b>Portal do Monarca</b> no mural. Quem der o golpe final herda a <b>classe lendária</b> daquele Monarca (um por servidor): <b>Chamas Brancas</b>, <b>Geada</b>, <b>Feras</b> ou <b>Insetos</b>.</li>
+        <li>Ela funciona como as outras classes: passivo, duas habilidades (Agache + F usa, Agache + clique esquerdo troca) e nível de 1 a 20. Está na página "✪ Lendárias e Monarcas" da árvore (<span class="cmd">/classe</span>).</li>
+        <li>As 25 relíquias abrem o portal de <b>Antares, o Monarca da Destruição</b>: o chefe final.</li>
+        <li><span class="cmd">/masmorra monarcas</span> mostra quem é cada um. 30 dias sem entrar liberam a classe.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>⚔ Um esquema só de classes (2.76) e Missão Diária (2.73)</h3>
+      <ul>
+        <li>As classes de caçador entraram na <b>árvore de classes</b> (<span class="cmd">/classe</span>): uma classe só, as teclas de sempre e habilidades em todo lugar. <b>Nos portais, as habilidades ficam 20% mais fortes.</b></li>
+        <li>Classes básicas novas: <b>Tanque</b> (Provocar e Muralha) e <b>Curandeiro</b> (Cura e Purificar; cura a party perto aos poucos).</li>
+        <li>Habilidades novas: Guerreiro <b>Disparada</b>, Berserker <b>Sede de Sangue</b>, Mago <b>Bola de Fogo</b>, Elementalista <b>Nova de Gelo</b>, Assassino <b>Mutilação</b>.</li>
+        <li><b>Missão Diária</b> (<span class="cmd">/masmorra missao</span>): agachar 100 vezes, pular 100 vezes, correr 2 km e abater 20 monstros no dia. Prêmio: XP de caçador e Cristais de Mana; a cada 7 dias seguidos, um prêmio a mais. Não tem punição.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>🌳 Árvore de Caçador, Despertar e Inscrições (2.72)</h3>
+      <ul>
+        <li><span class="cmd">/masmorra arvore</span> (ou o botão do caçador no altar) abre a janela do Sistema.</li>
+        <li><b>Árvore de Caçador:</b> 1 ponto no rank E e +3 a cada rank. São 3 ramos: <b>Lâmina</b> (mais dano, execução, chefes), <b>Escudo</b> (menos dano, vida, cura, armadilhas) e <b>Fortuna</b> (mana, tesouro, faro, sorte ao revelar). Os bônus valem só dentro dos portais.</li>
+        <li><b>Despertar:</b> no <b>Rank D</b> você ganha uma característica sorteada (Comum, Rara ou Épica), outra no B e outra no S. Exemplos: Pele de Aço, Segunda Chance, Vampírico, Assassino. O Re-despertar sorteia de novo (48 de mana).</li>
+        <li><b>Mesa de Inscrição:</b> jogue <b>1 livro + 1 tinta brilhante</b> numa <b>mesa de flecheiro</b>. Escreva Inscrições (papel + mana) e, com o Cristal de Portal na mão, aplique até 4: um modificador, +3 minutos, uma sala de tesouro, uma Mina de Cristal ou outro objetivo.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>🛡 Equipamento dos portais e Loja do Sistema (2.71)</h3>
+      <ul>
+        <li><b>Não identificado:</b> armas e armaduras dos baús do vault vêm com "❓" e sem atributos. <b>Clique direito</b> revela a raridade.</li>
+        <li><b>Avaliador:</b> clique no Altar do Portal com o item na mão. Custa 1 de mana e tem <b>15% de chance de subir uma raridade</b>.</li>
+        <li><b>Equipamento de Caçador</b> (E a S): mais dano nos monstros dos portais e menos dano deles. Com as 4 peças de armadura, o bônus sobe 50%.</li>
+        <li><b>Armas de chefe</b> (Lendárias): às vezes caem ao vencer o chefe do vault. Cada uma tem um efeito do chefe (veneno, fogo, raio...).</li>
+        <li><b>Loja do Sistema</b> (<span class="cmd">/masmorra loja</span> ou no altar): Poção do Caçador, de Mana e de Força, <b>Pergaminho de Retorno</b> (sai do portal com tudo), <b>Medidor de Mana</b> (lê o portal mais perto), <b>Chave Instantânea</b> (abre um portal do seu rank onde você está) e peças de Caçador. Paga com Cristais de Mana.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>⚠ Perigos e recompensas do vault (2.70)</h3>
+      <ul>
+        <li><b>Chefe com 3 fases:</b> com 66% e 33% de vida ele chama reforços e solta golpes marcados no chão. Saia do <b>círculo vermelho</b> antes de 1,5 s.</li>
+        <li><b>Armadilhas:</b> placas de pedra-negra nos corredores e perto das portas soltam espinhos, flechas ou chamas.</li>
+        <li><b>Mímicos:</b> às vezes o baú é um monstro. Vença e o tesouro dele cai.</li>
+        <li><b>Pilares de Bênção:</b> clique e a party ganha a bênção de um deus até o fim do portal (nível II para quem segue aquele deus).</li>
+        <li><b>Nota S a D</b> no fim: tempo, mortes, salas limpas, segredos e o chefe. Nota boa, mais tesouro. Veja <span class="cmd">/masmorra stats</span> e <span class="cmd">/masmorra recordes</span>.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>🗺 O vault: geração nova (2.69)</h3>
+      <ul>
+        <li>As salas ficam numa <b>grade</b> com <b>corredores</b> entre elas (alguns são pontes ou túneis) e <b>atalhos</b> que fecham voltas. A entrada fica no meio.</li>
+        <li>Quanto maior o rank, maior o vault: de ~7 salas (E) a ~34 (S), às vezes uma <b>sala grande</b>.</li>
+        <li><b>Andares:</b> ranks C e B têm 2, o S tem 3. Suba pelas <b>Escadarias</b>.</li>
+        <li>Salas de vários estilos: pilares, arena, ponte sobre abismo, biblioteca, alagada, mezanino, cripta e jardim.</li>
+        <li><b>Minas de Cristal:</b> quebre a ametista das paredes e ganhe Cristais de Mana.</li>
+        <li><b>Salas secretas:</b> procure uma parede rachada diferente das outras. Um golpe derruba a passagem e lá dentro há um Baú de Cristal.</li>
+      </ul>
+    </div>
     <div class="card"><h3>Portal da Masmorra</h3>
       <div class="ritual"><span class="b">Tijolos de pedra entalhados</span><span class="mais">+</span><span class="i">1 olho do ender</span><span class="mais">+</span><span class="i">1 bússola</span></div>
       <p>Clique, escolha a dificuldade e pague. Ela se forma em segundos e o portal abre por 30 s: suba nele com a sua party.</p>
@@ -2506,7 +2592,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.67 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 2.77 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

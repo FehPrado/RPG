@@ -42,6 +42,13 @@ public final class MateriaisListener implements Listener {
                 || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.BarcoGrande.CHAVE)
                 || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.Utilidades.CHAVE)
                 || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.Carrocas.CHAVE)
+                || i.getPersistentDataContainer().has(br.rpgatributos.masmorra.CristalPortal.CHAVE)
+                || i.getPersistentDataContainer().has(br.rpgatributos.masmorra.ManaCristal.CHAVE)
+                || i.getPersistentDataContainer().has(br.rpgatributos.masmorra.MagiaOculta.CHAVE)
+                || i.getPersistentDataContainer().has(br.rpgatributos.masmorra.EquipamentoPortal.chaveNaoIdentificado())
+                || i.getPersistentDataContainer().has(br.rpgatributos.masmorra.LojaSistema.chave())
+                || i.getPersistentDataContainer().has(br.rpgatributos.masmorra.Inscricao.chave())
+                || i.getPersistentDataContainer().has(br.rpgatributos.masmorra.Reliquias.chave())
                 || i.getPersistentDataContainer().has(br.rpgatributos.detalhes.Elevadores.CHAVE)
                 || (i.getType() == org.bukkit.Material.BREEZE_ROD && i.getPersistentDataContainer().has(FORJADO));
     }

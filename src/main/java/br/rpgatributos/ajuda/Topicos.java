@@ -96,10 +96,11 @@ public final class Topicos {
                 .cmd("renascer").ligados("talentos").palavras("renascimento prestigio").pronto();
         t("classes", PERSONAGEM, "Classes", Material.LECTERN)
                 .texto("Escolha um caminho, faça as tarefas dele e passe na Prova para ganhar a classe.",
-                        "Cada classe tem passivo e habilidades. Classes dominadas liberam as avançadas.")
+                        "Cada classe tem passivo e habilidades. Classes dominadas liberam as avançadas.",
+                        "Básicas: Guerreiro, Arqueiro, Mago, Ladino, Ferreiro, Domador, Tanque e Curandeiro. As lendárias (e os Monarcas) ficam na página \"Lendárias e Monarcas\". Nos portais, as habilidades ficam 20% mais fortes.")
                 .ritual(Material.LECTERN, "Púlpito", Material.WRITABLE_BOOK, 1, Material.DIAMOND, 1)
                 .dica("Habilidade: agache + F. Trocar a habilidade: agache + clique esquerdo no ar.")
-                .cmd("classe").ligados("atributos", "combos", "locais").palavras("santuario prova habilidade guerreiro mago arqueiro").pronto();
+                .cmd("classe").ligados("atributos", "combos", "locais").palavras("santuario prova habilidade guerreiro mago arqueiro tanque curandeiro monarca").pronto();
         t("titulos", PERSONAGEM, "Títulos", Material.NAME_TAG)
                 .texto("Conquistas que você libera jogando. O título em uso dá um bônus e aparece acima da sua cabeça.")
                 .dica("Os títulos mais difíceis são anunciados para o servidor inteiro.")
@@ -194,18 +195,42 @@ public final class Topicos {
                 .ritual(Material.CRYING_OBSIDIAN, "Obsidiana chorona", Material.ENDER_EYE, 1, Material.CANDLE, 4)
                 .dica("Clique no altar para ver cada chefe e a oferenda dele.")
                 .ligados("masmorras", "trofeus").palavras("chefe boss invocar golem rainha oferenda").pronto();
-        t("masmorras", COMBATE, "Masmorras", Material.CHISELED_STONE_BRICKS)
-                .texto("Entre com a sua party numa masmorra gerada na hora: salas com ondas, armadilhas e um chefe no fim.",
-                        "Quatro dificuldades; o tesouro cresce com ela.")
+        t("masmorras", COMBATE, "Masmorras e Cristais de Portal", Material.CHISELED_STONE_BRICKS)
+                .texto("O Altar do Portal faz um Cristal de Portal (rank E a S) com uma oferenda ou com Cristais de Mana. Clique no altar com o cristal na mão e suba nele com a party.",
+                        "Cada cristal tem um objetivo: Caçada (o chefe), Saque (achar as relíquias, vasos dourados) ou Monólitos (despertar as magnetitas e vencer os guardiões). Às vezes vem com modificadores: mais risco, mais tesouro.",
+                        "São 15 minutos. Quem não sair a tempo perde o que pegou lá dentro (vai para o Cofre das Almas). Os baús têm raridade: madeira, ferro, ouro e cristal.",
+                        "Vencer dá XP de caçador: o Rank de Caçador (/masmorra rank) diz até que rank de cristal o altar faz para você.",
+                        "O vault (2.69): salas em grade com corredores, atalhos, pontes e túneis; até 3 andares ligados por Escadarias. Minas de Cristal (quebre a ametista) e salas secretas atrás de paredes rachadas (um golpe derruba).",
+                        "Cuidado (2.70): placas-armadilha, baús que são mímicos e o chefe com 3 fases (saia dos círculos vermelhos). Os Pilares de Bênção dão a bênção de um deus à party. No fim, uma nota de S a D: nota boa, mais tesouro. /masmorra stats e /masmorra recordes.",
+                        "Equipamento (2.71): armas e armaduras do vault vêm não identificadas (clique direito revela; no altar, o Avaliador cobra 1 de mana e às vezes sobe a raridade). Peças de Caçador dão mais dano nos monstros dos portais e menos dano deles. Vencer o chefe às vezes dá a arma dele (Lendária). /masmorra loja: poções, Pergaminho de Retorno, Medidor de Mana e Chave Instantânea, pagos com Cristais de Mana.",
+                        "Caçador (2.72): /masmorra arvore abre a Árvore de Caçador (pontos a cada rank; bônus só nos portais) e as características do Despertar (a 1ª no Rank D, a 2ª no B e a 3ª no S). Mesa de Inscrição: livro + tinta brilhante numa mesa de flecheiro; escreve Inscrições e as aplica no Cristal de Portal (até 4: modificador, mais tempo, sala de tesouro, mina ou objetivo).",
+                        "Nos portais, as habilidades da sua classe ficam 20% mais fortes. Missão Diária (/masmorra missao): agachar, pular, correr e abater monstros dão XP de caçador e Cristais de Mana.",
+                        "Monarcas: as Relíquias do Monarca caem nos portais A e S. No Mural das Relíquias, 5 de um Monarca abrem o Portal dele: quem der o golpe final herda a classe lendária daquele Monarca (uma por servidor). As 25 abrem o portal do Monarca da Destruição, o chefe final. /masmorra monarcas.",
+                        "Masmorra Dupla (2.75): às vezes um portal E ou D esconde a Câmara das Estátuas atrás do chefe. Obedeça os mandamentos: agache diante do deus, toque os quatro sinos e chegue ao altar sem se mexer quando os olhos dele abrirem. A cada 3 dias, um Ataque de Rank S chama todas as parties contra Beru, o Rei das Formigas.")
+                .dica("O Grimório Oculto (raro nos portais B, A e S) ensina a magia Abrir Portal: abre um portal do seu rank, gastando a mana e um Cristal de Mana grande.")
                 .ritual(Material.CHISELED_STONE_BRICKS, "Tijolos de pedra entalhados", Material.ENDER_EYE, 1, Material.COMPASS, 1)
-                .cmd("masmorra").ligados("party", "torre", "portais").palavras("dungeon portal cofre").pronto();
+                .cmd("masmorra").ligados("party", "torre", "portais").palavras("dungeon portal cofre cristal rank cacador mana reliquia monolito grimorio vermelho loja sistema avaliador identificar pergaminho chave arvore despertar caracteristica inscricao mesa funcao lutador tanque curandeiro mago assassino arqueiro habilidade missao diaria monarca reliquias mural antares dupla camara estatuas sinos ataque beru formigas").pronto();
+        t("inscricao", COMBATE, "Mesa de Inscrição", Material.FLETCHING_TABLE)
+                .texto("Escreve Inscrições (1 papel comum + Cristais de Mana) e as aplica num Cristal de Portal: segure o cristal, clique na mesa e clique esquerdo na Inscrição.",
+                        "Até 4 por cristal: um modificador (Fúria, Couraça, Tesouro Farto...), Tempo (+3 minutos), Tesouro (+1 sala de tesouro), Mina (+1 Mina de Cristal) ou Objetivo (Caçada, Saque ou Monólitos).",
+                        "Os baús do vault às vezes trazem Inscrições prontas; o do chefe, metade das vezes.")
+                .ritual(Material.FLETCHING_TABLE, "Mesa de flecheiro", Material.BOOK, 1, Material.GLOW_INK_SAC, 1)
+                .ligados("masmorras").palavras("inscricao inscrever cristal portal modificador tempo mesa flecheiro").pronto();
+        t("mural", COMBATE, "Mural das Relíquias", Material.CHISELED_POLISHED_BLACKSTONE)
+                .texto("Guarda as Relíquias do Monarca: 5 linhas de 5, uma para cada Monarca. Qualquer um pode colocar; se o mural for quebrado, elas caem no chão.",
+                        "Linha completa: um caçador A ou S abre ali o Portal daquele Monarca (rank S, 25 minutos). Quem der o golpe final herda a classe lendária do Monarca, se ela estiver livre.",
+                        "As 25 juntas abrem o portal de Antares, o Monarca da Destruição: o chefe final.")
+                .dica("As relíquias caem nos tesouros finais dos portais A (6%) e S (12%).")
+                .ritual(Material.CHISELED_POLISHED_BLACKSTONE, "Pedra-negra polida entalhada", Material.CRYING_OBSIDIAN, 1, Material.GOLD_BLOCK, 1)
+                .cmd("masmorra").ligados("masmorras").palavras("mural reliquia monarca portal antares baran geada feras insetos").pronto();
         t("torre", COMBATE, "Torre Infinita", Material.CRYING_OBSIDIAN)
                 .texto("Andares cada vez mais difíceis, com chefe e baú a cada 10. Ranking semanal e de todos os tempos.",
                         "Morrer na Torre não perde itens.")
                 .ritual(Material.CRYING_OBSIDIAN, "Obsidiana chorona", Material.ENDER_EYE, 1, Material.GOLD_BLOCK, 1)
                 .cmd("torre ranking").ligados("masmorras", "party").palavras("obelisco andar ranking").pronto();
         t("portais", COMBATE, "Portais pelo mundo", Material.END_PORTAL_FRAME)
-                .texto("Portais aparecem perto de quem explora. Entre e vença a masmorra antes que ele transborde e monstros saiam.")
+                .texto("Portais aparecem perto de quem explora, com rank de E a S. Entre e vença a masmorra antes que ele transborde e monstros saiam.",
+                        "Portal Vermelho: lá dentro não há saída até vencer, mas o XP de caçador dobra.")
                 .cmd("portais").ligados("masmorras", "perigo").palavras("gate transbordar soberano sombras").pronto();
         t("perigo", COMBATE, "Mundo perigoso", Material.ZOMBIE_HEAD)
                 .texto("O mundo envelhece e os monstros ficam mais fortes. Elites com poderes, ninhos, hordas à noite e chefes mundiais.",

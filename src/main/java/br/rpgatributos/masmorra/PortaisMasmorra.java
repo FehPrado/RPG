@@ -37,7 +37,8 @@ import java.util.List;
 public final class PortaisMasmorra extends Estacao {
 
     private static final int S_INFO = 4, S_COFRE = 40, S_FECHAR = 49;
-    private static final int[] S_DIFICULDADES = {19, 21, 23, 25};
+    private static final int[] S_RANKS = {19, 20, 21, 23, 24, 25};
+    private static final int S_CACADOR = 31, S_LOJA = 33, S_AVALIADOR = 29;
 
     private static final class Tela implements InventoryHolder {
         Inventory inventario;
@@ -98,7 +99,7 @@ public final class PortaisMasmorra extends Estacao {
 
     @Override
     protected Component nome() {
-        return Component.text("۞ Portal da Masmorra ۞", Masmorras.COR)
+        return Component.text("۞ Altar do Portal ۞", Masmorras.COR)
                 .append(Component.newline())
                 .append(Component.text("clique com o botão direito", NamedTextColor.GRAY));
     }
@@ -110,8 +111,8 @@ public final class PortaisMasmorra extends Estacao {
         w.spawnParticle(Particle.REVERSE_PORTAL, c, 80, 0.4, 0.8, 0.4, 0.05);
         w.playSound(c, Sound.BLOCK_END_PORTAL_FRAME_FILL, 1f, 0.8f);
         if (quem == null) return;
-        quem.showTitle(Title.title(Component.text("۞ Portal da Masmorra ۞", Masmorras.COR, TextDecoration.BOLD),
-                Component.text("Clique para escolher a dificuldade", NamedTextColor.GRAY),
+        quem.showTitle(Title.title(Component.text("۞ Altar do Portal ۞", Masmorras.COR, TextDecoration.BOLD),
+                Component.text("Clique para fazer um Cristal de Portal", NamedTextColor.GRAY),
                 Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(2500), Duration.ofMillis(600))));
     }
 
@@ -128,9 +129,27 @@ public final class PortaisMasmorra extends Estacao {
 
     @Override
     protected void abrir(Player p, Block b, boolean agachado) {
+        // 2.68: com um Cristal de Portal na mão, o altar abre a masmorra dele.
+        ItemStack mao = p.getInventory().getItemInMainHand();
+        CristalPortal.Dados c = CristalPortal.ler(mao);
+        if (c != null) {
+            String erro = masmorras().abrirComCristal(p, c, b.getLocation());
+            if (erro != null) erro(p, erro);
+            else if (p.getGameMode() != org.bukkit.GameMode.CREATIVE) mao.setAmount(mao.getAmount() - 1);
+            return;
+        }
+        // 2.71: o Avaliador revela o equipamento não identificado por 1 de mana (com chance de raridade a mais).
+        if (EquipamentoPortal.naoIdentificado(mao)) {
+            if (p.getGameMode() != org.bukkit.GameMode.CREATIVE && !ManaCristal.gastar(p, 1)) {
+                erro(p, "O Avaliador cobra 1 de mana em Cristais de Mana (ou clique com o item fora do altar).");
+                return;
+            }
+            p.getInventory().setItemInMainHand(plugin.equipamentoPortal().revelar(p, mao, true));
+            return;
+        }
         Tela t = new Tela();
         t.portal = b.getLocation();
-        t.inventario = Bukkit.createInventory(t, 54, Component.text("۞ Portal da Masmorra"));
+        t.inventario = Bukkit.createInventory(t, 54, Component.text("۞ Altar do Portal"));
         desenhar(p, t);
         p.openInventory(t.inventario);
         p.playSound(p.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 0.6f, 0.6f);
@@ -145,65 +164,81 @@ public final class PortaisMasmorra extends Estacao {
         inv.clear();
         int nivelTotal = plugin.renascimento().nivelTotalEfetivo(p);
         int maxTotal = plugin.settings().nivelMaximo * Skill.values().length;
+        Rank cacador = Cacador.rank(p), maximo = Cacador.maximoCristal(p);
         String estado = masmorras().portalAberto(t.portal) ? "O portal está aberto: suba nele!"
-                : masmorras().formando(t.portal) ? "Uma masmorra está se formando..." : "Escolha a dificuldade abaixo.";
-        inv.setItem(S_INFO, item(Material.RECOVERY_COMPASS, Component.text("۞ Masmorras", Masmorras.COR, TextDecoration.BOLD), List.of(
-                Component.text("Salas aleatórias, ondas de monstros,", NamedTextColor.GRAY),
-                Component.text("tesouros e um chefe no final.", NamedTextColor.GRAY),
-                Component.text("Sua party entra junto (subindo no portal).", NamedTextColor.GRAY),
+                : masmorras().formando(t.portal) ? "Uma masmorra está se formando..." : "Faça um cristal abaixo, ou clique no altar com um na mão.";
+        inv.setItem(S_INFO, item(Material.RECOVERY_COMPASS, Component.text("۞ Altar do Portal", Masmorras.COR, TextDecoration.BOLD), List.of(
+                Component.text("1. Faça um Cristal de Portal (oferenda abaixo).", NamedTextColor.GRAY),
+                Component.text("2. Clique no altar com o cristal na mão.", NamedTextColor.GRAY),
+                Component.text("3. Suba no altar com a sua party.", NamedTextColor.GRAY),
                 Component.empty(),
-                Component.text("Morreu lá dentro? Os itens vão para o", NamedTextColor.GRAY),
-                Component.text("Cofre das Almas (" + plugin.settings().masCustoCofre + " diamantes para pegar).", NamedTextColor.GRAY),
+                Component.text("Cada cristal: rank, objetivo (Caçada, Saque", NamedTextColor.GRAY),
+                Component.text("ou Monólitos) e às vezes modificadores.", NamedTextColor.GRAY),
+                Component.text("15 minutos: quem não sai a tempo perde", NamedTextColor.GRAY),
+                Component.text("o que pegou lá dentro.", NamedTextColor.GRAY),
                 Component.empty(),
                 Component.text("Seu nível total: " + nivelTotal, NamedTextColor.YELLOW),
                 Component.text(estado, NamedTextColor.AQUA))));
 
-        Dificuldade[] difs = Dificuldade.values();
-        for (int i = 0; i < difs.length && i < S_DIFICULDADES.length; i++) {
-            Dificuldade d = difs[i];
-            int precisa = d.nivelTotalNecessario(maxTotal);
-            boolean nivelOk = nivelTotal >= precisa;
-            boolean pago = p.getInventory().containsAtLeast(new ItemStack(d.custo()), d.qtdCusto());
+        int mana = ManaCristal.valor(p);
+        for (Rank r : Rank.values()) {
+            int precisa = r.dificuldade().nivelTotalNecessario(maxTotal);
+            boolean rankOk = r.ordinal() <= maximo.ordinal() || p.getGameMode() == org.bukkit.GameMode.CREATIVE;
+            boolean ofOk = CristalPortal.temOferenda(p, r);
+            boolean manaOk = mana >= CristalPortal.valorMana(r);
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.text(d.salasMin() + " a " + d.salasMax() + " salas • " + d.ondas() + " ondas por sala", NamedTextColor.GRAY));
-            lore.add(Component.text("Monstros: vida x" + d.vida() + ", dano x" + d.dano(), NamedTextColor.GRAY));
-            StringBuilder chefes = new StringBuilder();
-            for (Chefe c : d.chefes()) chefes.append(chefes.isEmpty() ? "" : " ou ").append(c.nome());
-            lore.add(Component.text("Chefe: " + chefes, NamedTextColor.GRAY));
-            lore.add(Component.text("Tesouro: forjados " + d.raridadeMin().nome() + " a " + d.raridadeMax().nome(), NamedTextColor.GRAY));
+            lore.add(Component.text(r.nomeCompleto() + " • monstros x" + String.format(java.util.Locale.ROOT, "%.2f", r.forca()).replace('.', ','), NamedTextColor.GRAY));
+            lore.add(Component.text("Nível total para entrar: " + precisa + (nivelTotal >= precisa ? " ✔" : " ✖"), nivelTotal >= precisa ? NamedTextColor.GREEN : NamedTextColor.RED));
             lore.add(Component.empty());
-            lore.add(Component.text((nivelOk ? "✔" : "✖") + " Nível total " + precisa, nivelOk ? NamedTextColor.GREEN : NamedTextColor.RED));
-            lore.add(Component.text((pago ? "✔ " : "✖ ") + d.qtdCusto() + "x ", pago ? NamedTextColor.GREEN : NamedTextColor.RED)
-                    .append(Component.translatable(d.custo().translationKey())));
+            lore.add(Component.text("Oferenda (clique esquerdo):", NamedTextColor.WHITE));
+            for (ItemStack i : CristalPortal.oferenda(p, r)) {
+                boolean tem = p.getInventory().containsAtLeast(new ItemStack(i.getType()), i.getAmount());
+                lore.add(Component.text((tem ? " ✔ " : " ✖ ") + i.getAmount() + "x ", tem ? NamedTextColor.GREEN : NamedTextColor.RED)
+                        .append(Component.translatable(i.getType().translationKey())));
+            }
+            lore.add(Component.text("Ou " + CristalPortal.valorMana(r) + " de mana em cristais (clique direito)" + (manaOk ? " ✔" : " ✖"),
+                    manaOk ? NamedTextColor.GREEN : NamedTextColor.DARK_GRAY));
             lore.add(Component.empty());
-            lore.add(nivelOk && pago ? Component.text("» Clique para abrir o portal", NamedTextColor.YELLOW)
-                    : Component.text("Ainda não dá.", NamedTextColor.DARK_GRAY));
-            ItemStack icone = item(nivelOk ? icone(d) : Material.GRAY_DYE, Component.text("۞ " + d.nome(), d.cor(), TextDecoration.BOLD), lore);
-            if (nivelOk && pago) icone.editMeta(m -> m.setEnchantmentGlintOverride(true));
-            inv.setItem(S_DIFICULDADES[i], icone);
+            if (!rankOk) lore.add(Component.text("✖ Caçadores " + Rank.values()[Math.max(0, r.ordinal() - 1)].nome() + " ou acima.", NamedTextColor.RED));
+            else lore.add(ofOk || manaOk ? Component.text("» Clique para fazer o cristal", NamedTextColor.YELLOW)
+                    : Component.text("Ainda falta a oferenda.", NamedTextColor.DARK_GRAY));
+            ItemStack icone = item(rankOk ? Material.AMETHYST_SHARD : Material.GRAY_DYE, Component.text("Cristal de Portal · " + r.nome(), r.cor(), TextDecoration.BOLD), lore);
+            if (rankOk && (ofOk || manaOk)) icone.editMeta(m -> m.setEnchantmentGlintOverride(true));
+            inv.setItem(S_RANKS[r.ordinal()], icone);
         }
+
+        inv.setItem(S_CACADOR, item(Material.NAME_TAG, Component.text("[Sistema] Caçador " + cacador.nome(), cacador.cor(), TextDecoration.BOLD), List.of(
+                Component.text(Cacador.xp(p) + " XP de caçador" + (cacador == Rank.S ? "" : " (faltam " + Cacador.falta(p) + " para " + cacador.acima().nome() + ")"), NamedTextColor.GRAY),
+                Component.text("Sobe vencendo portais (do altar e do mundo).", NamedTextColor.GRAY),
+                Component.text("O altar faz cristais até " + maximo.nome() + ".", NamedTextColor.AQUA),
+                Component.text("Cristais de Mana: " + mana + " de mana.", ManaCristal.COR),
+                Component.empty(),
+                Component.text("» Clique: Árvore de Caçador e Despertar", NamedTextColor.YELLOW))));
+        inv.setItem(S_LOJA, item(Material.AMETHYST_CLUSTER, Component.text("[Sistema] Loja", LojaSistema.COR, TextDecoration.BOLD), List.of(
+                Component.text("Poções, Pergaminho de Retorno, Medidor de Mana,", NamedTextColor.GRAY),
+                Component.text("Chave Instantânea e peças de Caçador.", NamedTextColor.GRAY),
+                Component.text("Paga com Cristais de Mana.", ManaCristal.COR),
+                Component.empty(),
+                Component.text("» Clique para abrir", NamedTextColor.YELLOW))));
+        inv.setItem(S_AVALIADOR, item(Material.SPYGLASS, Component.text("Avaliador", EquipamentoPortal.COR, TextDecoration.BOLD), List.of(
+                Component.text("Clique no altar com um equipamento", NamedTextColor.GRAY),
+                Component.text("não identificado na mão: ele revela", NamedTextColor.GRAY),
+                Component.text("por 1 de mana, com 15% de chance", NamedTextColor.GRAY),
+                Component.text("de subir uma raridade.", NamedTextColor.GRAY),
+                Component.text("(Sem o altar, clique com ele na mão.)", NamedTextColor.DARK_GRAY))));
 
         int pacotes = masmorras().pacotes(p.getUniqueId());
         inv.setItem(S_COFRE, item(pacotes > 0 ? Material.SOUL_LANTERN : Material.LANTERN,
                 Component.text("☠ Cofre das Almas", NamedTextColor.LIGHT_PURPLE, TextDecoration.BOLD), pacotes > 0 ? List.of(
-                        Component.text(pacotes + " morte(s), " + masmorras().itensNoCofre(p.getUniqueId()) + " item(ns) guardados.", NamedTextColor.WHITE),
-                        Component.text("Cada morte custa " + plugin.settings().masCustoCofre + " diamantes.", NamedTextColor.GRAY),
+                        Component.text(pacotes + " pacote(s), " + masmorras().itensNoCofre(p.getUniqueId()) + " item(ns) guardados.", NamedTextColor.WHITE),
+                        Component.text("Cada pacote custa " + plugin.settings().masCustoCofre + " diamantes.", NamedTextColor.GRAY),
                         Component.empty(),
-                        Component.text("» Clique para recuperar a mais antiga", NamedTextColor.YELLOW))
+                        Component.text("» Clique para recuperar o mais antigo", NamedTextColor.YELLOW))
                         : List.of(Component.text("Vazio. Que continue assim!", NamedTextColor.GRAY))));
         inv.setItem(S_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of()));
         ItemStack vidro = new ItemStack(Material.PURPLE_STAINED_GLASS_PANE);
         vidro.editMeta(m -> m.setHideTooltip(true));
         for (int i = 0; i < inv.getSize(); i++) if (inv.getItem(i) == null) inv.setItem(i, vidro);
-    }
-
-    private static Material icone(Dificuldade d) {
-        return switch (d) {
-            case FACIL -> Material.IRON_SWORD;
-            case NORMAL -> Material.DIAMOND_SWORD;
-            case DIFICIL -> Material.NETHERITE_SWORD;
-            case PESADELO -> Material.WITHER_SKELETON_SKULL;
-        };
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -214,6 +249,8 @@ public final class PortaisMasmorra extends Estacao {
         if (!(e.getWhoClicked() instanceof Player p) || e.getRawSlot() >= topo.getSize()) return;
         int slot = e.getSlot();
         if (slot == S_FECHAR) { p.closeInventory(); return; }
+        if (slot == S_LOJA) { plugin.lojaSistema().abrir(p); return; }
+        if (slot == S_CACADOR) { plugin.sistemaCacador().abrir(p); return; }
         if (!eh(t.portal.getBlock())) {
             p.closeInventory();
             return;
@@ -224,12 +261,32 @@ public final class PortaisMasmorra extends Estacao {
             desenhar(p, t);
             return;
         }
-        Dificuldade[] difs = Dificuldade.values();
-        for (int i = 0; i < difs.length && i < S_DIFICULDADES.length; i++) {
-            if (S_DIFICULDADES[i] != slot) continue;
-            String erro = masmorras().abrir(p, difs[i], t.portal);
-            if (erro != null) erro(p, erro);
-            else p.closeInventory();
+        for (Rank r : Rank.values()) {
+            if (S_RANKS[r.ordinal()] != slot) continue;
+            boolean criativo = p.getGameMode() == org.bukkit.GameMode.CREATIVE;
+            if (!criativo && r.ordinal() > Cacador.maximoCristal(p).ordinal()) {
+                erro(p, "O altar não responde: seu Rank de Caçador ainda é " + Cacador.rank(p).nome() + ".");
+                return;
+            }
+            if (!criativo) {
+                if (e.isRightClick()) {
+                    if (!ManaCristal.gastar(p, CristalPortal.valorMana(r))) {
+                        erro(p, "Faltam Cristais de Mana (" + CristalPortal.valorMana(r) + " de mana).");
+                        return;
+                    }
+                } else {
+                    if (!CristalPortal.temOferenda(p, r)) {
+                        erro(p, "Falta a oferenda (ou clique direito para pagar com Cristais de Mana).");
+                        return;
+                    }
+                    CristalPortal.pagarOferenda(p, r);
+                }
+            }
+            ItemStack cristal = CristalPortal.sortear(r);
+            for (ItemStack s : p.getInventory().addItem(cristal).values()) p.getWorld().dropItemNaturally(p.getLocation(), s);
+            p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1f, 1.2f);
+            p.sendMessage(Component.text("۞ O altar forma um Cristal de Portal " + r.nome() + ". Clique no altar com ele na mão para abrir.", r.cor()));
+            desenhar(p, t);
             return;
         }
     }

@@ -111,7 +111,8 @@ public final class Ajuda implements Listener {
     /** Título do menu: com o pacote, desenha o fundo; sem ele, só o texto. */
     public Component titulo(Player p, Fundo f, String texto) {
         Component t = Component.text(texto);
-        if (!temPacote(p)) return t;
+        // 2.77: com o mod de apoio, quem pinta o fundo é o mod.
+        if (!temPacote(p) || (plugin.canalApoio() != null && plugin.canalApoio().temMod(p))) return t;
         Component fundo = Component.text("" + Fundo.VOLTA_ANTES + f.letra() + Fundo.VOLTA_DEPOIS).font(FONTE).color(NamedTextColor.WHITE);
         return Component.text().append(fundo).append(t).build();
     }
@@ -123,7 +124,7 @@ public final class Ajuda implements Listener {
     }
 
     private void mostrar(Player p, Tela t) {
-        if (!temPacote(p)) {
+        if (!temPacote(p) || (plugin.canalApoio() != null && plugin.canalApoio().temMod(p))) {
             ItemStack vidro = item(Material.BLACK_STAINED_GLASS_PANE, Component.text(" "), List.of());
             vidro.editMeta(m -> m.setHideTooltip(true));
             for (int i = 0; i < t.inventario.getSize(); i++) if (t.inventario.getItem(i) == null) t.inventario.setItem(i, vidro);
@@ -543,6 +544,26 @@ public final class Ajuda implements Listener {
     private record Novidade(Material icone, String nome, String texto, String topico) { }
 
     private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.SPYGLASS, "Mod de apoio 0.2.0",
+                    "Quem usa o mod ganha telas novas nos menus, um HUD com recargas e mana, a roda de habilidades (segure V) e teclas para o Sistema, a Missão, a Loja e as classes.", "classes"),
+            new Novidade(Material.SHIELD, "Um esquema só de classes",
+                    "Tanque e Curandeiro na árvore, habilidades novas e os Monarcas como classes lendárias. Nos portais, as habilidades ficam 20% mais fortes.", "classes"),
+            new Novidade(Material.BELL, "Câmara das Estátuas e Ataque de Rank S",
+                    "A Masmorra Dupla e seus mandamentos, e o portal gigante que chama todas as parties a cada 3 dias.", "masmorras"),
+            new Novidade(Material.CHISELED_POLISHED_BLACKSTONE, "Os Monarcas",
+                    "Relíquias do Monarca, o Mural das Relíquias e os Portais do Monarca: vença e herde o poder de um Monarca.", "mural"),
+            new Novidade(Material.WRITABLE_BOOK, "Missão Diária",
+                    "Agachar, pular, correr e abater monstros no dia: XP de caçador e Cristais de Mana (/masmorra missao).", "masmorras"),
+            new Novidade(Material.FLETCHING_TABLE, "Árvore, Despertar e Inscrições",
+                    "Árvore de Caçador e características (/masmorra arvore) e a Mesa de Inscrição para turbinar o Cristal de Portal.", "masmorras"),
+            new Novidade(Material.SPYGLASS, "Equipamento dos portais",
+                    "Itens não identificados, Avaliador, Equipamento de Caçador, armas de chefe e a Loja do Sistema (/masmorra loja).", "masmorras"),
+            new Novidade(Material.TRAPPED_CHEST, "Perigos do vault",
+                    "Armadilhas, mímicos, chefe com 3 fases, Pilares de Bênção e a nota da corrida (S a D).", "masmorras"),
+            new Novidade(Material.LADDER, "O vault: geração nova",
+                    "Salas em grade, corredores, atalhos, até 3 andares, Minas de Cristal e salas secretas.", "masmorras"),
+            new Novidade(Material.AMETHYST_SHARD, "Masmorra 2.0",
+                    "Cristais de Portal (rank E a S), objetivos, 15 minutos, baús de raridade, Cristais de Mana e Rank de Caçador.", "masmorras"),
             new Novidade(Material.SPRUCE_CHEST_BOAT, "Carroça",
                     "Baú, barco, tábuas e gravetos: laço nela e clique num cavalo. Leva carga e ganha melhorias.", "carroca"),
             new Novidade(Material.WHITE_BANNER, "O vento",

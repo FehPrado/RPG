@@ -39,24 +39,31 @@ public final class Santuarios extends Estacao {
 
     /** Posição de cada classe na árvore (colunas: a básica em cima, as avançadas embaixo). */
     private static final Map<Classe, Integer> POSICAO = Map.ofEntries(
+            // 2.76: Tanque e Curandeiro nas pontas da linha das básicas
+            Map.entry(Classe.TANQUE, 9), Map.entry(Classe.CURANDEIRO, 16),
             Map.entry(Classe.GUERREIRO, 10), Map.entry(Classe.ARQUEIRO, 11), Map.entry(Classe.MAGO, 12),
             Map.entry(Classe.LADINO, 13), Map.entry(Classe.FERREIRO, 14), Map.entry(Classe.DOMADOR, 15),
             Map.entry(Classe.BERSERKER, 19), Map.entry(Classe.CAVALEIRO, 28), Map.entry(Classe.PALADINO, 37),
             Map.entry(Classe.ATIRADOR, 20), Map.entry(Classe.CACADOR, 29),
             Map.entry(Classe.ELEMENTALISTA, 21), Map.entry(Classe.FEITICEIRO, 30),
-            Map.entry(Classe.ASSASSINO, 22), Map.entry(Classe.MESTRE_FORJADOR, 23), Map.entry(Classe.MESTRE_DAS_FERAS, 24),
-            // lendárias, nas duas colunas da direita
-            Map.entry(Classe.HERDEIRO_DO_FERREIRO, 16), Map.entry(Classe.ARQUIMAGO_PRIMORDIAL, 17),
-            Map.entry(Classe.SENHOR_DAS_FERAS_ANCESTRAIS, 25), Map.entry(Classe.SENHOR_DA_GUERRA, 26),
-            Map.entry(Classe.LAMINA_FANTASMA, 34), Map.entry(Classe.ARQUEIRO_CELESTIAL, 35), Map.entry(Classe.SANTO_PALADINO, 43),
-            Map.entry(Classe.SOBERANO_DAS_SOMBRAS, 44));
-    private static final int S_PERFIL = 4, S_ABANDONAR = 45, S_FECHAR = 49, S_COMO = 53;
+            Map.entry(Classe.ASSASSINO, 22), Map.entry(Classe.MESTRE_FORJADOR, 23), Map.entry(Classe.MESTRE_DAS_FERAS, 24));
+    /** 2.76: as lendárias ficam numa página só delas (o Soberano no meio dos Monarcas). */
+    private static final Map<Classe, Integer> POSICAO_LENDARIAS = Map.ofEntries(
+            Map.entry(Classe.HERDEIRO_DO_FERREIRO, 10), Map.entry(Classe.ARQUIMAGO_PRIMORDIAL, 11),
+            Map.entry(Classe.SENHOR_DAS_FERAS_ANCESTRAIS, 12), Map.entry(Classe.SENHOR_DA_GUERRA, 13),
+            Map.entry(Classe.LAMINA_FANTASMA, 14), Map.entry(Classe.ARQUEIRO_CELESTIAL, 15), Map.entry(Classe.SANTO_PALADINO, 16),
+            Map.entry(Classe.MONARCA_CHAMAS_BRANCAS, 29), Map.entry(Classe.MONARCA_GEADA, 30),
+            Map.entry(Classe.SOBERANO_DAS_SOMBRAS, 31),
+            Map.entry(Classe.MONARCA_FERAS, 32), Map.entry(Classe.MONARCA_INSETOS, 33));
+    private static final int S_PERFIL = 4, S_ABANDONAR = 45, S_FECHAR = 49, S_COMO = 53, S_PAGINA = 26;
     private static final TextColor COR = TextColor.color(0xFFD54F);
 
     private static final class Tela implements InventoryHolder {
         Inventory inventario;
         /** Aberto num Santuário (pode trocar de classe e começar a prova) ou pelo /classe (null). */
         Location santuario;
+        /** 2.76: mostrando a página das lendárias. */
+        boolean lendarias;
 
         @Override
         public Inventory getInventory() { return inventario; }
@@ -164,11 +171,22 @@ public final class Santuarios extends Estacao {
         Classes cl = classes();
         PerfilClasse pf = cl.perfil(p);
         inv.setItem(S_PERFIL, perfil(p, pf));
-        for (Map.Entry<Classe, Integer> en : POSICAO.entrySet()) {
+        for (Map.Entry<Classe, Integer> en : (t.lendarias ? POSICAO_LENDARIAS : POSICAO).entrySet()) {
             Classe c = en.getKey();
             inv.setItem(en.getValue(), c.tier() == Classe.Tier.LENDARIA ? lendaria(p, pf, c, t.santuario != null) : icone(p, pf, c, t.santuario != null));
         }
-        if (pf.alvo != null) {
+        if (t.lendarias) {
+            inv.setItem(22, item(Material.WITHER_SKELETON_SKULL, Component.text("♛ Os Monarcas", NamedTextColor.LIGHT_PURPLE, TextDecoration.BOLD), List.of(
+                    Component.text("Embaixo: o Soberano das Sombras e os Monarcas.", NamedTextColor.GRAY),
+                    Component.text("Os Monarcas vêm do Portal do Monarca,", NamedTextColor.GRAY),
+                    Component.text("aberto no Mural das Relíquias.", NamedTextColor.GRAY))));
+        }
+        inv.setItem(t.lendarias ? 45 : S_PAGINA, t.lendarias
+                ? item(Material.ARROW, Component.text("« Voltar à árvore", NamedTextColor.YELLOW), List.of())
+                : item(Material.NETHER_STAR, Component.text("✪ Lendárias e Monarcas", NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+                        Component.text("As classes de um dono só.", NamedTextColor.GRAY),
+                        Component.text("» Clique para ver", NamedTextColor.YELLOW))));
+        if (pf.alvo != null && !t.lendarias) {
             inv.setItem(S_ABANDONAR, item(Material.BARRIER, Component.text("Abandonar o caminho de " + pf.alvo.nome(), NamedTextColor.RED), List.of(
                     Component.text("As tarefas voltam para o zero.", NamedTextColor.GRAY),
                     Component.text("Shift + clique para confirmar.", NamedTextColor.GRAY))));
@@ -298,7 +316,7 @@ public final class Santuarios extends Estacao {
         java.util.UUID dono = cl.donoLendaria(c);
         boolean minha = p.getUniqueId().equals(dono);
         boolean soberano = c == Classe.SOBERANO_DAS_SOMBRAS;
-        boolean conhece = soberano || minha || dono != null || (tipo != null && plugin.locais().descobriuTipo(p, tipo));
+        boolean conhece = soberano || c.monarca() || minha || dono != null || (tipo != null && plugin.locais().descobriuTipo(p, tipo));
         if (!conhece) {
             return item(Material.BLACK_CANDLE, Component.text("??? Classe lendária esquecida", NamedTextColor.DARK_GRAY, TextDecoration.BOLD), List.of(
                     Component.text("Nenhum santuário ensina este caminho.", NamedTextColor.GRAY),
@@ -320,8 +338,13 @@ public final class Santuarios extends Estacao {
             lore.add(Component.text("Origem: um Portal Pesadelo raro (Eco do Soberano)", NamedTextColor.GOLD));
             lore.add(req(cl.dominouAvancada(p), "Uma classe avançada dominada"));
         }
-        for (Classe r : c.requisitos()) lore.add(req(cl.dominou(p, r), r.nome() + " dominada"));
-        lore.add(req(plugin.stats().getNivel(p, c.atributo()) >= cl.atributoNecessario(c), c.atributo().nome() + " nível " + cl.atributoNecessario(c)));
+        if (c.monarca()) {
+            lore.add(Component.text("Origem: o Portal do Monarca (5 relíquias no Mural das Relíquias)", NamedTextColor.GOLD));
+            lore.add(Component.text("Quem der o golpe final no Monarca herda a classe.", NamedTextColor.GRAY));
+        } else {
+            for (Classe r : c.requisitos()) lore.add(req(cl.dominou(p, r), r.nome() + " dominada"));
+            lore.add(req(plugin.stats().getNivel(p, c.atributo()) >= cl.atributoNecessario(c), c.atributo().nome() + " nível " + cl.atributoNecessario(c)));
+        }
         lore.add(Component.empty());
         if (minha) {
             int n = cl.nivel(p, c);
@@ -332,7 +355,8 @@ public final class Santuarios extends Estacao {
         } else if (dono != null) {
             lore.add(Component.text("Pertence a " + cl.nomeDonoLendaria(c) + ".", NamedTextColor.RED));
         } else {
-            lore.add(Component.text(soberano ? "Livre! Feche um Portal Pesadelo com o Eco do Soberano." : "Livre! Vença o guardião e toque o selo.", NamedTextColor.GREEN));
+            lore.add(Component.text(soberano ? "Livre! Feche um Portal Pesadelo com o Eco do Soberano."
+                    : c.monarca() ? "Livre! Vença o Portal do Monarca." : "Livre! Vença o guardião e toque o selo.", NamedTextColor.GREEN));
         }
         ItemStack i = item(dono == null || minha ? c.icone() : Material.GRAY_DYE,
                 Component.text(c.simbolo() + " " + c.nome(), dono == null || minha ? c.cor() : NamedTextColor.DARK_GRAY, TextDecoration.BOLD), lore);
@@ -358,7 +382,13 @@ public final class Santuarios extends Estacao {
         if (slot == S_FECHAR) { p.closeInventory(); return; }
         Classes cl = classes();
         PerfilClasse pf = cl.perfil(p);
-        if (slot == S_ABANDONAR && pf.alvo != null) {
+        if ((!t.lendarias && slot == S_PAGINA) || (t.lendarias && slot == 45)) {
+            t.lendarias = !t.lendarias;
+            p.playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
+            desenhar(p, t);
+            return;
+        }
+        if (slot == S_ABANDONAR && pf.alvo != null && !t.lendarias) {
             if (!e.isShiftClick()) { erro(p, "Use shift + clique para abandonar o caminho."); return; }
             cl.abandonarCaminho(p);
             p.sendMessage(Component.text("Você abandonou o caminho.", NamedTextColor.GRAY));
@@ -366,7 +396,7 @@ public final class Santuarios extends Estacao {
             return;
         }
         Classe c = null;
-        for (Map.Entry<Classe, Integer> en : POSICAO.entrySet()) if (en.getValue() == slot) c = en.getKey();
+        for (Map.Entry<Classe, Integer> en : (t.lendarias ? POSICAO_LENDARIAS : POSICAO).entrySet()) if (en.getValue() == slot) c = en.getKey();
         if (c == null || pf.ativa == c && !(c.tier() == Classe.Tier.LENDARIA && e.isShiftClick())) return;
         boolean noSantuario = t.santuario != null && eh(t.santuario.getBlock());
         if (c.tier() == Classe.Tier.LENDARIA) {
@@ -377,7 +407,9 @@ public final class Santuarios extends Estacao {
                 return;
             }
             if (!pf.aprendeu(c)) {
-                erro(p, "Classes lendárias só vêm do selo do Local Oculto delas.");
+                erro(p, c.monarca() ? "Os Monarcas vêm do Portal do Monarca (Mural das Relíquias)."
+                        : c == Classe.SOBERANO_DAS_SOMBRAS ? "O Soberano das Sombras desperta do outro lado de um Portal Pesadelo."
+                        : "Classes lendárias só vêm do selo do Local Oculto delas.");
                 return;
             }
         }

@@ -107,6 +107,8 @@ public final class Habilidades {
         escudoElemental.remove(id);
         lamina.remove(id);
         laminaAte.remove(id);
+        mutilar.remove(id);
+        carapaca.remove(id);
     }
 
     // =====================================================================
@@ -649,8 +651,188 @@ public final class Habilidades {
             case EXERCITO_DAS_SOMBRAS -> {
                 return plugin.sombras().exercito(p, alvo(p, 32));
             }
+            // ---- 2.76: as que eram das classes de caçador ----
+            case DISPARADA -> {
+                efeito(p, PotionEffectType.SPEED, 4, 2);
+                efeito(p, PotionEffectType.JUMP_BOOST, 4, 0);
+                w.spawnParticle(Particle.CLOUD, l.clone().add(0, 0.2, 0), 20, 0.3, 0.1, 0.3, 0.05);
+                w.playSound(l, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.6f, 1.6f);
+            }
+            case SEDE_DE_SANGUE -> {
+                for (LivingEntity e : inimigos(p, l, 8)) {
+                    efeito(e, PotionEffectType.WEAKNESS, 5, 1);
+                    efeito(e, PotionEffectType.SLOWNESS, 5, 0);
+                }
+                anel(l, 8, Particle.DUST, new Particle.DustOptions(org.bukkit.Color.fromRGB(0xB71C1C), 1.6f));
+                w.playSound(l, Sound.ENTITY_RAVAGER_ROAR, 0.8f, 1.3f);
+            }
+            case PROVOCAR -> {
+                for (LivingEntity e : inimigos(p, l, 10)) {
+                    if (!(e instanceof Mob m)) continue;
+                    m.setTarget(p);
+                    w.spawnParticle(Particle.ANGRY_VILLAGER, m.getLocation().add(0, m.getHeight() + 0.3, 0), 1);
+                }
+                efeito(p, PotionEffectType.RESISTANCE, 5, 0);
+                w.playSound(l, Sound.ITEM_SHIELD_BLOCK, 1f, 0.7f);
+            }
+            case MURALHA -> {
+                efeito(p, PotionEffectType.RESISTANCE, 4, 2);
+                efeito(p, PotionEffectType.ABSORPTION, 10, 1);
+                efeito(p, PotionEffectType.SLOWNESS, 4, 0);
+                anel(l, 1.5, Particle.DUST, new Particle.DustOptions(org.bukkit.Color.fromRGB(0x8D6E63), 1.4f));
+                w.playSound(l, Sound.BLOCK_ANVIL_LAND, 0.5f, 1.4f);
+            }
+            case CURA -> {
+                for (Player a : aliados(p, 8)) {
+                    curar(a, 6 * forca);
+                    w.spawnParticle(Particle.HEART, a.getLocation().add(0, 2, 0), 4, 0.4, 0.2, 0.4, 0);
+                }
+                w.playSound(l, Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1f, 1.4f);
+            }
+            case PURIFICAR -> {
+                for (Player a : aliados(p, 8)) {
+                    for (PotionEffectType ruim : RUINS) a.removePotionEffect(ruim);
+                    efeito(a, PotionEffectType.RESISTANCE, 6, 0);
+                    w.spawnParticle(Particle.END_ROD, a.getLocation().add(0, 1, 0), 15, 0.3, 0.6, 0.3, 0.02);
+                }
+                w.playSound(l, Sound.BLOCK_BEACON_ACTIVATE, 0.6f, 1.6f);
+            }
+            case BOLA_DE_FOGO -> {
+                Vector dir = p.getEyeLocation().getDirection();
+                org.bukkit.entity.SmallFireball b = p.launchProjectile(org.bukkit.entity.SmallFireball.class);
+                b.setIsIncendiary(false);
+                b.setVelocity(dir.clone().multiply(1.4));
+                b.setAcceleration(dir.clone().multiply(0.1));
+                b.getPersistentDataContainer().set(K_FOGO, org.bukkit.persistence.PersistentDataType.DOUBLE, 9 * forca);
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> { if (b.isValid()) b.remove(); }, 100L);
+                w.playSound(l, Sound.ENTITY_BLAZE_SHOOT, 1f, 1.1f);
+            }
+            case NOVA_DE_GELO -> {
+                for (LivingEntity e : inimigos(p, l, 6)) {
+                    plugin.alvos().ferir(p, e, 7 * forca);
+                    efeito(e, PotionEffectType.SLOWNESS, 4, 2);
+                }
+                anel(l, 6, Particle.SNOWFLAKE, null);
+                w.playSound(l, Sound.BLOCK_GLASS_BREAK, 1f, 0.6f);
+            }
+            case MUTILACAO -> {
+                mutilar.put(id, agora() + 4000);
+                w.spawnParticle(Particle.CRIT, l.clone().add(0, 1, 0), 20, 0.4, 0.5, 0.4, 0.1);
+                w.playSound(l, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1f, 0.8f);
+            }
+            // ---- 2.76: Monarcas ----
+            case RELAMPAGO_BRANCO -> {
+                List<LivingEntity> l2 = inimigos(p, l, 12);
+                l2.sort(java.util.Comparator.comparingDouble(e -> e.getLocation().distanceSquared(l)));
+                for (int i = 0; i < l2.size() && i < 5; i++) {
+                    w.strikeLightningEffect(l2.get(i).getLocation());
+                    plugin.alvos().ferir(p, l2.get(i), 14 * forca);
+                }
+                w.playSound(l, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.6f, 1.4f);
+            }
+            case CHAMA_BRANCA -> {
+                for (LivingEntity e : inimigos(p, l, 7)) {
+                    plugin.alvos().ferir(p, e, 12 * forca);
+                    e.setFireTicks(Math.max(e.getFireTicks(), 100));
+                }
+                anel(l, 7, Particle.END_ROD, null);
+                anel(l, 4, Particle.SOUL_FIRE_FLAME, null);
+                w.playSound(l, Sound.ITEM_FIRECHARGE_USE, 1f, 0.6f);
+            }
+            case LANCA_DE_GELO -> {
+                LivingEntity alvo = alvo(p, 20);
+                if (alvo == null) { falhar(p, "Mire num inimigo."); return false; }
+                raio(p.getEyeLocation(), alvo.getEyeLocation(), Particle.SNOWFLAKE);
+                plugin.alvos().ferir(p, alvo, 18 * forca);
+                efeito(alvo, PotionEffectType.SLOWNESS, 3, 3);
+                alvo.setFreezeTicks(Math.max(alvo.getFreezeTicks(), 140));
+                w.playSound(alvo.getLocation(), Sound.BLOCK_GLASS_BREAK, 1f, 1.4f);
+            }
+            case INVERNO_ETERNO -> {
+                for (LivingEntity e : inimigos(p, l, 10)) {
+                    plugin.alvos().ferir(p, e, 11 * forca);
+                    efeito(e, PotionEffectType.SLOWNESS, 5, 3);
+                    e.setFreezeTicks(Math.max(e.getFreezeTicks(), 200));
+                }
+                anel(l, 10, Particle.SNOWFLAKE, null);
+                anel(l, 5, Particle.SNOWFLAKE, null);
+                w.playSound(l, Sound.ENTITY_PLAYER_HURT_FREEZE, 1f, 0.6f);
+            }
+            case INVESTIDA_DA_FERA -> {
+                investida(p, 2.2, 12 * forca, false);
+                w.playSound(l, Sound.ENTITY_RAVAGER_ROAR, 0.8f, 1.4f);
+            }
+            case MATILHA -> {
+                for (int i = 0; i < 3; i++) {
+                    Location onde = l.clone().add(Math.cos(i * 2.1) * 1.5, 0, Math.sin(i * 2.1) * 1.5);
+                    org.bukkit.entity.Wolf lobo = w.spawn(onde, org.bukkit.entity.Wolf.class, o -> {
+                        o.setTamed(true);
+                        o.setOwner(p);
+                        o.setPersistent(false);
+                        o.setCollarColor(org.bukkit.DyeColor.BROWN);
+                        o.customName(Component.text("Lobo de Rakan", NamedTextColor.GOLD));
+                        AttributeInstance dano = o.getAttribute(Attribute.ATTACK_DAMAGE);
+                        if (dano != null) dano.setBaseValue(6 * forca);
+                    });
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                        if (!lobo.isValid()) return;
+                        lobo.getWorld().spawnParticle(Particle.POOF, lobo.getLocation(), 10, 0.3, 0.3, 0.3, 0.02);
+                        lobo.remove();
+                    }, 400L);
+                }
+                w.playSound(l, Sound.ENTITY_WOLF_BIG_GROWL, 1f, 0.9f);
+            }
+            case ENXAME -> {
+                for (LivingEntity e : inimigos(p, l, 8)) {
+                    efeito(e, PotionEffectType.POISON, 5, 1);
+                    efeito(e, PotionEffectType.BLINDNESS, 3, 0);
+                    plugin.alvos().ferir(p, e, 6 * forca);
+                    w.spawnParticle(Particle.ITEM_SLIME, e.getLocation().add(0, 1, 0), 10, 0.4, 0.5, 0.4, 0.02);
+                }
+                w.playSound(l, Sound.ENTITY_BEE_LOOP_AGGRESSIVE, 1f, 0.8f);
+            }
+            case CARAPACA -> {
+                efeito(p, PotionEffectType.RESISTANCE, 6, 1);
+                carapaca.put(id, agora() + 6000);
+                w.playSound(l, Sound.ITEM_ARMOR_EQUIP_TURTLE, 1f, 0.8f);
+            }
         }
         return true;
+    }
+
+    // ---- 2.76 ----
+    /** A bola de fogo do Mago (o dano vai no projétil). */
+    static final org.bukkit.NamespacedKey K_FOGO = new org.bukkit.NamespacedKey("rpgatributos", "habilidade_fogo");
+    private static final List<PotionEffectType> RUINS = List.of(PotionEffectType.SLOWNESS, PotionEffectType.WEAKNESS, PotionEffectType.POISON,
+            PotionEffectType.WITHER, PotionEffectType.BLINDNESS, PotionEffectType.NAUSEA, PotionEffectType.HUNGER,
+            PotionEffectType.MINING_FATIGUE, PotionEffectType.DARKNESS, PotionEffectType.LEVITATION);
+    private final Map<UUID, Long> mutilar = new HashMap<>();
+    private final Map<UUID, Long> carapaca = new HashMap<>();
+
+    boolean consumirMutilacao(Player p) {
+        return ativo(mutilar, p.getUniqueId()) && mutilar.remove(p.getUniqueId()) != null;
+    }
+
+    boolean carapaca(Player p) { return ativo(carapaca, p.getUniqueId()); }
+
+    /** Você e a party perto (para a aura do Curandeiro). */
+    List<Player> aliadosDe(Player p, double raio) { return aliados(p, raio); }
+
+    static void curar(Player a, double quanto) {
+        AttributeInstance max = a.getAttribute(Attribute.MAX_HEALTH);
+        if (a.isDead()) return;
+        a.setHealth(Math.min(max == null ? 20 : max.getValue(), a.getHealth() + quanto));
+    }
+
+    private static <T> void anel(Location c, double raio, Particle part, T dados) {
+        World w = c.getWorld();
+        int pontos = (int) Math.max(12, raio * 8);
+        for (int i = 0; i < pontos; i++) {
+            double a = Math.PI * 2 * i / pontos;
+            Location l = c.clone().add(Math.cos(a) * raio, 0.3, Math.sin(a) * raio);
+            if (dados != null) w.spawnParticle(part, l, 1, 0, 0, 0, 0, dados);
+            else w.spawnParticle(part, l, 1, 0, 0, 0, 0);
+        }
     }
 
     /** Véu Sombrio: o próximo golpe dá dano x3. */
