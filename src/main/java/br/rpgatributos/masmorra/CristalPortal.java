@@ -81,6 +81,7 @@ public final class CristalPortal {
             m.getPersistentDataContainer().set(K_MODS, PersistentDataType.STRING, ModificadorPortal.texto(d.mods()));
             if (n > 0) m.getPersistentDataContainer().set(K_INSC, PersistentDataType.STRING, Inscricao.texto(d.insc()));
         });
+        EquipamentoPortal.aplicarVisual(i);
         return i;
     }
 

@@ -25,7 +25,13 @@ public enum Fundo {
             new int[][]{{2, 2, 1, 7, 1}, {4, 4, 1, 7, 2}}),
     /** A Jornada do Aventureiro: 12 passos num caminho. */
     JORNADA(0xE003, new int[]{4, 10, 12, 14, 16, 25, 23, 21, 19, 28, 30, 32, 34, 40, 45, 53},
-            new int[][]{{1, 3, 1, 7, 1}});
+            new int[][]{{1, 3, 1, 7, 1}}),
+    GUARDAROUPA(0xE004, new int[]{4, 10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43, 48, 49, 50, 51, 52},
+            new int[][]{{1, 4, 1, 7, 2}}),
+    ESTUDIO(0xE005, new int[]{4, 10, 12, 14, 16, 22, 29, 31, 33, 45, 49, 53},
+            new int[][]{{1, 2, 1, 7, 2}, {3, 4, 1, 7, 1}}),
+    DECORACOES(0xE006, new int[]{1, 3, 5, 7, 19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,49},
+            new int[][]{{2, 4, 1, 7, 2}});
 
     /** Os 12 passos da Jornada, em ordem (4 por linha, em zigue-zague). */
     public static final int[] CAMINHO = {10, 12, 14, 16, 25, 23, 21, 19, 28, 30, 32, 34};

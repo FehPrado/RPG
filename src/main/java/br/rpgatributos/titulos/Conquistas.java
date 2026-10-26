@@ -173,6 +173,7 @@ public final class Conquistas implements Listener {
 
     /** Chamado pelos títulos sempre que um contador muda. */
     public void aoContar(Player p, String contador, int valor) {
+        if (br.rpgatributos.ModoTeste.ehTeste(p)) return;
         for (C c : TODAS) if (c.contador().equals(contador) && valor >= c.minimo()) dar(p, c);
     }
 

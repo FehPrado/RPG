@@ -107,6 +107,8 @@ public final class Chefes implements Listener {
         /** 2.74: nome e cor próprios (o Monarca de um Portal do Monarca), ou null. */
         String nomeProprio;
         net.kyori.adventure.text.format.TextColor corPropria;
+        /** 2.84: invocado no Altar da Convergência (mais forte, saque melhor e Alma Desperta). */
+        boolean desperto;
 
         String nome() { return nomeProprio != null ? nomeProprio : chefe.nome(); }
         net.kyori.adventure.text.format.TextColor cor() { return corPropria != null ? corPropria : chefe.cor(); }
@@ -141,6 +143,38 @@ public final class Chefes implements Listener {
         a.nomeProprio = nome;
         a.corPropria = cor;
         e.customName(Component.text("☠ " + nome + " ☠", cor, TextDecoration.BOLD));
+    }
+
+    /**
+     * 2.84: a versão Desperta do chefe (Altar da Convergência): 2,5x a vida (até 2500),
+     * +50% de dano, +6 de armadura e um pouco maior. Avisa o servidor inteiro.
+     */
+    public LivingEntity invocarDesperto(Chefe c, Location altar, Player quem) {
+        LivingEntity boss = invocar(c, altar, quem, false);
+        Ativo a = ativos.get(boss.getUniqueId());
+        if (a == null) return boss;
+        a.desperto = true;
+        boolean fem = c == Chefe.RAINHA || c == Chefe.TEMPESTADE;
+        renomear(boss, c.nome() + (fem ? " Desperta" : " Desperto"), c.cor());
+        AttributeInstance vida = boss.getAttribute(Attribute.MAX_HEALTH);
+        if (vida != null) {
+            vida.setBaseValue(Math.min(2500, vida.getBaseValue() * 2.5));
+            boss.setHealth(vida.getBaseValue());
+        }
+        AttributeInstance dano = boss.getAttribute(Attribute.ATTACK_DAMAGE);
+        if (dano != null) dano.setBaseValue(dano.getBaseValue() * 1.5);
+        AttributeInstance armadura = boss.getAttribute(Attribute.ARMOR);
+        if (armadura != null) armadura.setBaseValue(Math.min(30, armadura.getBaseValue() + 6));
+        AttributeInstance escala = boss.getAttribute(Attribute.SCALE);
+        if (escala != null) escala.setBaseValue(escala.getBaseValue() * 1.15);
+        boss.setGlowing(true);
+        atualizarBarra(a);
+        plugin.getServer().broadcast(Component.text("☠ ", NamedTextColor.DARK_RED)
+                .append(Component.text(quem == null ? "Alguém" : quem.getName(), NamedTextColor.YELLOW))
+                .append(Component.text(" despertou ", NamedTextColor.GRAY))
+                .append(Component.text(a.nome(), c.cor(), TextDecoration.BOLD))
+                .append(Component.text(" no Altar da Convergência!", NamedTextColor.GRAY)));
+        return boss;
     }
 
     public static boolean ehChefe(Entity e) {
@@ -732,6 +766,17 @@ public final class Chefes implements Listener {
         if (rnd().nextDouble() < essencia[n - 1]) saque.add(Raro.ESSENCIA_PRIMORDIAL.criar());
         if (rnd().nextDouble() < 0.05 + 0.03 * n) saque.add(br.rpgatributos.arcano.ItensMagicos.tomoAleatorio());
         for (Chefe.Saque s : c.saque()) saque.add(new ItemStack(s.material(), rnd().nextInt(s.min(), s.max() + 1)));
+        if (a.desperto) {
+            // 2.84: Desperto: outro núcleo, Almas Despertas, Essência e Pedra garantidas, o dobro de fragmentos.
+            saque.add(c.nucleo().criar());
+            saque.add(Raro.ALMA_DESPERTA.criar(Math.max(1, Math.min(3, participantes.size()))));
+            saque.add(Raro.ESSENCIA_PRIMORDIAL.criar());
+            saque.add(Raro.PEDRA_DE_PROTECAO.criar());
+            saque.add(Raro.FRAGMENTO_DE_FORJA.criar(frag));
+            ItemStack outra = plugin.nomeadas().talvezDeChefe(0.3);
+            if (outra != null) saque.add(outra);
+            e.setDroppedExp(e.getDroppedExp() * 2);
+        }
 
         Location l = e.getEntity().getLocation();
         l.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, l.clone().add(0, 1, 0), 150, 1, 1.5, 1, 0.5);
@@ -748,6 +793,7 @@ public final class Chefes implements Listener {
                 plugin.stats().darXp(p, Skill.COMBATE, 150.0 * n);
             }
             plugin.titulos().registrar(p, "chefes", 1);
+            if (a.desperto) plugin.titulos().registrar(p, "chefes_despertos", 1);
             plugin.titulos().registrar(p, "chefe_" + c.id(), 1);
             plugin.mercadores().contratoCumprido(p, c);
         }

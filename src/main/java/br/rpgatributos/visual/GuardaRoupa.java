@@ -1,6 +1,8 @@
 package br.rpgatributos.visual;
 
 import br.rpgatributos.RPGAtributos;
+import br.rpgatributos.raca.Enfeites;
+import br.rpgatributos.raca.Enfeites.Enfeite;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Equippable;
@@ -56,27 +58,34 @@ public final class GuardaRoupa implements Listener {
             Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS};
     /** Componentes que mudam a aparência (e voltam ao normal ao tirar). */
     private static final List<DataComponentType> VISUAIS = List.of(DataComponentTypes.EQUIPPABLE, DataComponentTypes.DYED_COLOR,
-            DataComponentTypes.TRIM, DataComponentTypes.ITEM_MODEL, DataComponentTypes.PROFILE);
+            DataComponentTypes.TRIM, DataComponentTypes.ITEM_MODEL, DataComponentTypes.PROFILE, DataComponentTypes.CUSTOM_MODEL_DATA);
     private static final int S_INFO = 4;
     private static final int S_LIGADO = 48;
     private static final int S_VOLTAR = 49;
     private static final int S_FECHAR = 50;
+    private static final int S_PERSONAGEM = 51, S_COLECAO = 52, S_ESTUDIO = 53;
+    private static final int[] S_ENFEITES = {10, 12, 14, 28, 30, 32, 16, 34, 37};
+    private static final String[] CATEGORIAS = {"Barba", "Chifres", "Orelhas", "Rosto", "Coroa / Auréola", "Barbatanas", "Cabelo", "Bigode", "Brincos"};
+    public static final NamespacedKey K_TOM = new NamespacedKey("rpgatributos", "aparencia_tom");
+    private static final NamespacedKey K_ANCORA = new NamespacedKey("rpgatributos", "visual_ancora");
 
     private static final class Tela implements InventoryHolder {
         Inventory inventario;
+        boolean personagem;
 
         @Override
         public Inventory getInventory() { return inventario; }
     }
 
     private final RPGAtributos plugin;
-    private final NamespacedKey kRoupas, kOcultos, kDesligado;
+    private final NamespacedKey kRoupas, kOcultos, kDesligado, kEnfeites;
     private static NamespacedKey kVisual, kBackup;
     private final Set<UUID> pendentes = new HashSet<>();
 
     public GuardaRoupa(RPGAtributos plugin) {
         this.plugin = plugin;
         kRoupas = new NamespacedKey(plugin, "guarda_roupa");
+        kEnfeites = new NamespacedKey(plugin, "guarda_roupa_enfeites");
         kOcultos = new NamespacedKey(plugin, "guarda_roupa_oculto");
         kDesligado = new NamespacedKey(plugin, "guarda_roupa_desligado");
         kVisual = new NamespacedKey(plugin, "visual");
@@ -103,6 +112,28 @@ public final class GuardaRoupa implements Listener {
         p.getPersistentDataContainer().set(kRoupas, PersistentDataType.BYTE_ARRAY, ItemStack.serializeItemsAsBytes(copia));
     }
 
+    private ItemStack[] enfeites(Player p) {
+        ItemStack[] r = new ItemStack[Enfeites.Categoria.values().length];
+        byte[] bytes = p.getPersistentDataContainer().get(kEnfeites, PersistentDataType.BYTE_ARRAY);
+        if (bytes != null) {
+            ItemStack[] lidos = ItemStack.deserializeItemsFromBytes(bytes);
+            for (int i = 0; i < Math.min(r.length, lidos.length); i++) {
+                Enfeite e = Enfeites.de(lidos[i]);
+                if (e != null && e.categoria().ordinal() == i) r[i] = lidos[i].asOne();
+            }
+        }
+        return r;
+    }
+
+    private void salvarEnfeites(Player p, ItemStack[] r) {
+        ItemStack[] copia = Arrays.stream(r).map(i -> i == null ? ItemStack.empty() : i).toArray(ItemStack[]::new);
+        p.getPersistentDataContainer().set(kEnfeites, PersistentDataType.BYTE_ARRAY, ItemStack.serializeItemsAsBytes(copia));
+    }
+
+    private static List<Enfeite> selecionados(ItemStack[] itens) {
+        return Arrays.stream(itens).map(Enfeites::de).filter(Objects::nonNull).toList();
+    }
+
     private int ocultos(Player p) {
         return p.getPersistentDataContainer().getOrDefault(kOcultos, PersistentDataType.INTEGER, 0);
     }
@@ -125,20 +156,55 @@ public final class GuardaRoupa implements Listener {
 
     /** Confere as 4 peças vestidas e aplica (ou tira) a aparência escolhida. */
     public void atualizar(Player p) {
+        if (p.isDead()) return;
         EntityEquipment eq = p.getEquipment();
         ItemStack[] roupas = roupas(p);
+        ItemStack[] adornos = enfeites(p);
+        // O enfeite antigo guardado no único espaço de cabeça migra sem criar uma cópia.
+        Enfeite antigo = Enfeites.de(roupas[0]);
+        if (antigo != null && adornos[antigo.categoria().ordinal()] == null) {
+            adornos[antigo.categoria().ordinal()] = roupas[0]; roupas[0] = null;
+            salvarEnfeites(p, adornos); salvarRoupas(p, roupas);
+        }
+        List<Enfeite> combinados = ligado(p) ? selecionados(adornos) : List.of();
         int ocultos = ocultos(p);
         for (int i = 0; i < PARTES.length; i++) {
             ItemStack vestido = eq.getItem(PARTES[i]);
+            if (i == 0 && vestido.isEmpty() && !combinados.isEmpty()) {
+                vestido = new ItemStack(Material.PAPER);
+                vestido.setData(DataComponentTypes.EQUIPPABLE, Equippable.equippable(EquipmentSlot.HEAD).build());
+                vestido.editMeta(m -> {
+                    m.itemName(Component.text("Aparência do guarda-roupa", COR));
+                    m.getPersistentDataContainer().set(K_ANCORA, PersistentDataType.BYTE, (byte) 1);
+                });
+            }
             if (vestido.isEmpty()) continue;
             String quero = desejado(p, i, roupas, ocultos);
+            if (i == 0 && !combinados.isEmpty()) quero = "enfeites:" + combinados.toString() + ":" + p.getPersistentDataContainer().getOrDefault(K_TOM, PersistentDataType.INTEGER, 0xFFFFFF);
             String tem = vestido.getPersistentDataContainer().get(kVisual, PersistentDataType.STRING);
             if (Objects.equals(quero, tem)) continue;
             ItemStack novo = vestido.clone();
-            reverter(novo);
-            if (quero != null) aplicar(novo, PARTES[i], quero.equals("oculto") ? null : roupas[i], quero);
+            boolean ancora = novo.getPersistentDataContainer().has(K_ANCORA);
+            if (ancora && i == 0 && !combinados.isEmpty()) {
+                novo.editPersistentDataContainer(pdc -> { pdc.remove(kVisual); pdc.remove(kBackup); });
+            } else reverter(novo);
+            if (i == 0 && !combinados.isEmpty()) aplicarEnfeites(novo, combinados, quero, p.getPersistentDataContainer().getOrDefault(K_TOM, PersistentDataType.INTEGER, 0xFFFFFF));
+            else if (!novo.isEmpty() && quero != null) aplicar(novo, PARTES[i], quero.equals("oculto") ? null : roupas[i], quero);
             if (!novo.equals(vestido)) eq.setItem(PARTES[i], novo);
         }
+    }
+
+    private static void aplicarEnfeites(ItemStack vestido, List<Enfeite> enfeites, String assinatura, int tom) {
+        Equippable base = vestido.getData(DataComponentTypes.EQUIPPABLE);
+        if (base == null) return;
+        byte[] original = vestido.serializeAsBytes();
+        vestido.setData(DataComponentTypes.EQUIPPABLE, base.toBuilder().assetId(null).build());
+        vestido.setData(DataComponentTypes.ITEM_MODEL, Key.key("rpgatributos", "enfeites_combinados"));
+        vestido.editMeta(m -> {
+            var cmd = m.getCustomModelDataComponent(); cmd.setFlags(Enfeites.flags(enfeites)); cmd.setColors(List.of(org.bukkit.Color.fromRGB(tom))); m.setCustomModelDataComponent(cmd);
+            m.getPersistentDataContainer().set(kVisual, PersistentDataType.STRING, assinatura);
+            m.getPersistentDataContainer().set(kBackup, PersistentDataType.BYTE_ARRAY, original);
+        });
     }
 
     private static void aplicar(ItemStack vestido, EquipmentSlot parte, ItemStack roupa, String assinatura) {
@@ -183,6 +249,7 @@ public final class GuardaRoupa implements Listener {
 
     /** Desfaz a aparência: o item volta a ser exatamente como era (só a parte visual muda). */
     public static void reverter(ItemStack item) {
+        if (item != null && !item.isEmpty() && item.getPersistentDataContainer().has(K_ANCORA)) { item.setAmount(0); return; }
         if (!temVisual(item)) return;
         byte[] bytes = item.getPersistentDataContainer().get(kBackup, PersistentDataType.BYTE_ARRAY);
         ItemStack original;
@@ -282,6 +349,16 @@ public final class GuardaRoupa implements Listener {
     }
 
     @EventHandler
+    public void aoSair(org.bukkit.event.player.PlayerQuitEvent e) {
+        ItemStack cabeca = e.getPlayer().getInventory().getHelmet();
+        if (cabeca != null && cabeca.getPersistentDataContainer().has(K_ANCORA)) e.getPlayer().getInventory().setHelmet(null);
+        limpar(e.getPlayer()); pendentes.remove(e.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void aoRenascer(org.bukkit.event.player.PlayerRespawnEvent e) { agendar(e.getPlayer()); }
+
+    @EventHandler
     public void aoFechar(InventoryCloseEvent e) {
         if (!(e.getPlayer() instanceof Player p)) return;
         Inventory topo = e.getView().getTopInventory();
@@ -292,6 +369,7 @@ public final class GuardaRoupa implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void aoJogar(PlayerDropItemEvent e) {
         ItemStack s = e.getItemDrop().getItemStack();
+        if (s.getPersistentDataContainer().has(K_ANCORA)) { e.setCancelled(true); agendar(e.getPlayer()); return; }
         if (!temVisual(s)) return;
         reverter(s);
         e.getItemDrop().setItemStack(s);
@@ -300,6 +378,32 @@ public final class GuardaRoupa implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void aoMorrer(PlayerDeathEvent e) {
         for (ItemStack s : e.getDrops()) reverter(s);
+        e.getDrops().removeIf(ItemStack::isEmpty);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void aoMoverItem(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player p)) return;
+        ItemStack atual = e.getCurrentItem();
+        if (atual != null && atual.getPersistentDataContainer().has(K_ANCORA)) {
+            e.setCancelled(true);
+            if (e.getSlotType() == org.bukkit.event.inventory.InventoryType.SlotType.ARMOR) {
+                ItemStack cursor = e.getCursor();
+                Equippable eq = cursor.isEmpty() ? null : cursor.getData(DataComponentTypes.EQUIPPABLE);
+                if (eq != null && eq.slot() == EquipmentSlot.HEAD) {
+                    p.getInventory().setHelmet(cursor.asOne());
+                    ItemStack resto = cursor.clone(); resto.setAmount(cursor.getAmount() - 1); e.setCursor(resto.isEmpty() ? ItemStack.empty() : resto);
+                }
+            }
+            agendar(p); return;
+        }
+        ItemStack cabeca = p.getInventory().getHelmet();
+        if (e.isShiftClick() && e.getClickedInventory() == p.getInventory() && atual != null && !atual.isEmpty()
+                && cabeca != null && cabeca.getPersistentDataContainer().has(K_ANCORA)) {
+            Equippable eq = atual.getData(DataComponentTypes.EQUIPPABLE);
+            if (eq != null && eq.slot() == EquipmentSlot.HEAD) p.getInventory().setHelmet(null);
+        }
+        agendar(p);
     }
 
     // =====================================================================
@@ -308,7 +412,13 @@ public final class GuardaRoupa implements Listener {
 
     public void abrir(Player p) {
         Tela t = new Tela();
-        t.inventario = Bukkit.createInventory(t, 54, Component.text("✦ Guarda-roupa"));
+        Component titulo = Component.text("✦ Guarda-roupa");
+        if (plugin.ajuda().temPacote(p)) {
+            var fundo = br.rpgatributos.ajuda.Fundo.GUARDAROUPA;
+            titulo = Component.text("" + br.rpgatributos.ajuda.Fundo.VOLTA_ANTES + fundo.letra() + br.rpgatributos.ajuda.Fundo.VOLTA_DEPOIS)
+                    .font(Key.key("rpgatributos", "menus")).color(NamedTextColor.WHITE).append(titulo);
+        }
+        t.inventario = Bukkit.createInventory(t, 54, titulo);
         desenhar(p, t);
         p.openInventory(t.inventario);
     }
@@ -319,6 +429,10 @@ public final class GuardaRoupa implements Listener {
         ItemStack[] roupas = roupas(p);
         int ocultos = ocultos(p);
         boolean ligado = ligado(p);
+        if (t.personagem) {
+            desenharPersonagem(p, t);
+            return;
+        }
         inv.setItem(S_INFO, item(Material.ARMOR_STAND, Component.text("✦ Guarda-roupa", COR, TextDecoration.BOLD), List.of(
                 Component.text("Muda a aparência da sua armadura", NamedTextColor.GRAY),
                 Component.text("sem tirar a armadura de verdade.", NamedTextColor.GRAY),
@@ -353,7 +467,7 @@ public final class GuardaRoupa implements Listener {
                     List.of(Component.text(oculto ? "A peça vestida fica invisível." : "Mostra a peça (ou a aparência escolhida).", NamedTextColor.GRAY),
                             Component.text("» Clique para " + (oculto ? "mostrar" : "esconder"), NamedTextColor.YELLOW)), false));
             ItemStack vestido = eq.getItem(PARTES[i]);
-            if (vestido.isEmpty()) {
+            if (vestido.isEmpty() || vestido.getPersistentDataContainer().has(K_ANCORA)) {
                 inv.setItem(base + 6, item(Material.GLASS_PANE, Component.text("Nada vestido", NamedTextColor.DARK_GRAY), List.of(), false));
             } else {
                 ItemStack mostra = vestido.clone();
@@ -368,9 +482,46 @@ public final class GuardaRoupa implements Listener {
                 List.of(Component.text("» Clique para " + (ligado ? "desligar" : "ligar"), NamedTextColor.YELLOW)), false));
         inv.setItem(S_VOLTAR, item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of(), false));
         inv.setItem(S_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of(), false));
+        inv.setItem(S_PERSONAGEM, item(Material.PLAYER_HEAD, Component.text("Personalizar personagem", COR), List.of(
+                Component.text("Combine barba, chifres, orelhas e mais.", NamedTextColor.GRAY)), false));
+        inv.setItem(S_COLECAO, item(Material.BOOK, Component.text("Coleção de enfeites", NamedTextColor.AQUA), List.of(
+                Component.text("Escolha enfeites gratuitos para usar.", NamedTextColor.GRAY)), false));
+        inv.setItem(S_ESTUDIO, item(Material.NAME_TAG, Component.text("Estúdio: cores e combinações", NamedTextColor.AQUA), List.of(), false));
         ItemStack vidro = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
         vidro.editMeta(m -> m.setHideTooltip(true));
-        for (int i = 0; i < inv.getSize(); i++) if (inv.getItem(i) == null) inv.setItem(i, vidro);
+        for (int i = 0; i < inv.getSize(); i++) if (inv.getItem(i) == null && !plugin.ajuda().temPacote(p)) inv.setItem(i, vidro);
+    }
+
+    private void desenharPersonagem(Player p, Tela t) {
+        Inventory inv = t.inventario;
+        ItemStack fundo = plugin.ajuda().temPacote(p) ? ItemStack.empty() : item(Material.PURPLE_STAINED_GLASS_PANE, Component.empty(), List.of(), false);
+        for (int i = 0; i < inv.getSize(); i++) inv.setItem(i, fundo);
+        inv.setItem(S_INFO, item(Material.PLAYER_HEAD, Component.text("Sua aparência", COR, TextDecoration.BOLD), List.of(
+                Component.text("Combine até nove categorias de enfeites.", NamedTextColor.GRAY),
+                Component.text("Clique nos enfeites do seu inventário", NamedTextColor.WHITE),
+                Component.text("para equipar; clique aqui nos usados", NamedTextColor.WHITE),
+                Component.text("para devolver ao inventário.", NamedTextColor.WHITE),
+                Component.empty(),
+                Component.text("Funciona com ou sem capacete.", NamedTextColor.AQUA),
+                Component.text("Os enfeites substituem o visual do elmo;", NamedTextColor.GRAY),
+                Component.text("a proteção e os efeitos continuam.", NamedTextColor.GRAY)), false));
+        ItemStack[] adornos = enfeites(p);
+        for (int i = 0; i < adornos.length; i++) {
+            int categoria = i;
+            ItemStack mostra = adornos[i] == null ? new ItemStack(Material.LIGHT_GRAY_DYE) : adornos[i].clone();
+            mostra.editMeta(m -> {
+                if (adornos[categoria] == null) m.itemName(Component.text(CATEGORIAS[categoria] + " · Livre", NamedTextColor.GRAY));
+                m.lore(List.of(Component.text(CATEGORIAS[categoria], COR).decoration(TextDecoration.ITALIC, false),
+                        Component.text(adornos[categoria] == null ? "Escolha na Coleção de enfeites." : "Clique para devolver este enfeite.", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)));
+            });
+            inv.setItem(S_ENFEITES[i], mostra);
+        }
+        inv.setItem(S_LIGADO, item(ligado(p) ? Material.LIME_DYE : Material.GRAY_DYE, Component.text("Ligar / desligar aparência", COR), List.of(), false));
+        inv.setItem(S_VOLTAR, item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of(), false));
+        inv.setItem(S_FECHAR, item(Material.BARRIER, Component.text("Fechar", NamedTextColor.RED), List.of(), false));
+        inv.setItem(S_PERSONAGEM, item(Material.IRON_CHESTPLATE, Component.text("Aparências de armadura", COR), List.of(), false));
+        inv.setItem(S_COLECAO, item(Material.BOOK, Component.text("Coleção de enfeites", NamedTextColor.AQUA), List.of(Component.text(Enfeite.values().length + " opções gratuitas · /aparencia para cores", NamedTextColor.GRAY)), false));
+        inv.setItem(S_ESTUDIO, item(Material.NAME_TAG, Component.text("Estúdio: cores e combinações", NamedTextColor.AQUA), List.of(), false));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -394,12 +545,21 @@ public final class GuardaRoupa implements Listener {
         switch (slot) {
             case S_FECHAR -> p.closeInventory();
             case S_VOLTAR -> plugin.menus().abrirCosmeticos(p);
+            case S_PERSONAGEM -> { t.personagem = !t.personagem; desenhar(p, t); }
+            case S_COLECAO -> plugin.racas().abrirColecaoEnfeites(p);
+            case S_ESTUDIO -> plugin.embelezamento().abrir(p);
             case S_LIGADO -> {
                 if (ligado(p)) p.getPersistentDataContainer().set(kDesligado, PersistentDataType.BYTE, (byte) 1);
                 else p.getPersistentDataContainer().remove(kDesligado);
                 mudou(p, t);
             }
             default -> {
+                if (t.personagem) {
+                    for (int i = 0; i < S_ENFEITES.length; i++) if (slot == S_ENFEITES[i]) {
+                        devolverEnfeite(p, t, i); return;
+                    }
+                    return;
+                }
                 int linha = (slot - 10) / 9, coluna = (slot - 10) % 9;
                 if (slot < 10 || linha >= PARTES.length) return;
                 if (coluna == 2) devolver(p, t, linha);
@@ -431,6 +591,20 @@ public final class GuardaRoupa implements Listener {
             reverter(c);
             clicado = c;
         }
+        Enfeite enfeite = Enfeites.de(clicado);
+        if (enfeite != null) {
+            ItemStack[] adornos = enfeites(p);
+            int categoria = enfeite.categoria().ordinal();
+            ItemStack antiga = adornos[categoria];
+            adornos[categoria] = clicado.asOne();
+            ItemStack resto = clicado.clone(); resto.setAmount(clicado.getAmount() - 1);
+            p.getInventory().setItem(slotInv, resto.isEmpty() ? null : resto);
+            if (antiga != null) p.getInventory().addItem(antiga).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
+            salvarEnfeites(p, adornos);
+            t.personagem = true;
+            p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 1.2f);
+            mudou(p, t); return;
+        }
         int parte = parteDe(clicado);
         ItemStack[] roupas = roupas(p);
         ItemStack antiga = roupas[parte];
@@ -442,6 +616,14 @@ public final class GuardaRoupa implements Listener {
         salvarRoupas(p, roupas);
         p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 1.2f);
         mudou(p, t);
+    }
+
+    private void devolverEnfeite(Player p, Tela t, int categoria) {
+        ItemStack[] adornos = enfeites(p);
+        if (adornos[categoria] == null) { plugin.racas().abrirColecaoEnfeites(p); return; }
+        if (p.getInventory().firstEmpty() < 0) { erro(p, "Seu inventário está cheio."); return; }
+        p.getInventory().addItem(adornos[categoria]); adornos[categoria] = null;
+        salvarEnfeites(p, adornos); mudou(p, t);
     }
 
     private void devolver(Player p, Tela t, int parte) {
@@ -461,6 +643,14 @@ public final class GuardaRoupa implements Listener {
     private void mudou(Player p, Tela t) {
         atualizar(p);
         desenhar(p, t);
+    }
+
+    public List<String> selecao(Player p) { return selecionados(enfeites(p)).stream().map(e -> e.id).toList(); }
+    public void usarSelecao(Player p, List<String> ids) {
+        ItemStack[] antigas = enfeites(p), novas = new ItemStack[Enfeites.Categoria.values().length];
+        for (String id : ids) { Enfeite e = Enfeites.porId(id); if (e != null) novas[e.categoria().ordinal()] = Enfeites.criar(e); }
+        for (ItemStack i : antigas) if (i != null) p.getInventory().addItem(i).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
+        salvarEnfeites(p, novas); atualizar(p);
     }
 
     private static void erro(Player p, String msg) {

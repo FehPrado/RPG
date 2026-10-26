@@ -437,6 +437,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin obelisco</span></td><td>Obsidiana chorona</td><td>Obelisco da Torre</td></tr>
       <tr><td><span class="cmd">/rpgadmin santuariodivino</span></td><td>Quartzo entalhado</td><td>Santuário dos Deuses</td></tr>
       <tr><td><span class="cmd">/rpgadmin circulo</span></td><td>Bloco de ametista</td><td>Círculo de Transmutação</td></tr>
+      <tr><td><span class="cmd">/rpgadmin convergencia</span></td><td>Âncora de renascimento</td><td>Altar da Convergência</td></tr>
+      <tr><td><span class="cmd">/rpgadmin selo &lt;tipo|asas|cetro&gt; [nível]</span></td><td>(item na mão)</td><td>Selo de guardião ou Asas de Guardião</td></tr>
       <tr><td><span class="cmd">/rpgadmin mesarunica</span></td><td>Tufo entalhado</td><td>Mesa Rúnica</td></tr>
     </tbody></table></div></div>
   </div>
@@ -651,6 +653,30 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <section class="secao" id="testes">
   <h2><span class="ico">✅</span>Roteiro de testes rápido</h2>
   <div class="grade">
+    <div class="card"><h3>Área de testes (2.88)</h3>
+      <p><code>/rpgadmin teste</code> leva você a um mundo plano à parte (<code>rpg_teste</code>), no criativo, com uma cópia do seu inventário. Lá dentro <b>nada conta</b>:</p>
+      <ul>
+        <li>XP de atributos e de armas;</li>
+        <li>títulos e conquistas (do plugin e do jogo);</li>
+        <li>XP de Caçador;</li>
+        <li>recordes;</li>
+        <li>o limite de guardiões.</li>
+      </ul>
+      <p>O mundo de testes não tem monstros nascendo, chuva, estruturas do plugin nem profundezas, e o inventário não cai ao morrer.</p>
+      <ol>
+        <li>Ao entrar, o plugin guarda num arquivo (<code>teste/&lt;uuid&gt;.yml</code>): inventário, baú do fim, XP, vida, fome, efeitos, posição, modo de jogo e todos os dados do plugin no jogador.</li>
+        <li>Teste à vontade. Masmorras abertas a partir do teste também são teste.</li>
+        <li><code>/rpgadmin teste</code> de novo: tudo volta exatamente como estava, e o que você pegou ou ganhou lá some.</li>
+        <li>Saiu por outro caminho (<code>/tp</code>, <code>/spawn</code>, portal) ou o servidor caiu no meio? Ao trocar de mundo ou entrar de novo, tudo é devolvido do mesmo jeito.</li>
+        <li><code>/rpgadmin teste limpar</code>: remove criaturas e itens soltos a até 64 blocos de você (só dentro do teste).</li>
+        <li>Quando o último testador sai, o mundo de testes é apagado (só a pasta <code>dimensions/minecraft/rpg_teste</code>; o mundo principal, o Nether, o End e as masmorras não são tocados) e nasce limpo na próxima vez.</li>
+      </ol>
+      <p>Cuidados:</p>
+      <ul>
+        <li>O que fica em arquivo do servidor e não no jogador não volta: territórios, colônias, a dona de uma classe lendária e o que você muda nos outros com comandos.</li>
+        <li>Os avisos para o servidor inteiro (chefe invocado, relíquia criada) ainda aparecem para todos.</li>
+      </ul>
+    </div>
     <div class="card"><h3>Colônia (construções)</h3>
       <ol>
         <li>No seu território, <span class="cmd">/rpgadmin prefeitura</span> olhando para um sino e <span class="cmd">/rpgadmin colono 3</span>.</li>
@@ -720,6 +746,53 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li><code>/rpgadmin conjuntomineral magma</code>: quebre minério de ferro com a picareta (sai lingote) e entre na lava com as 4 peças.</li>
         <li><code>/rpgadmin conjuntomineral quartzo_negro</code> no Nether: os piglins não atacam com 2 peças.</li>
         <li>Gelo (4): deixe um zumbi bater em você: ele fica lento. Pedra-Sangue: bata e veja a vida subir.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Ferramentas e túneis (2.87)</h3>
+      <ol>
+        <li>Dentro de um morro, olhe para um lado e ponha <code>/rpgadmin selo minerador</code>. O nome mostra "⚠ sem picareta". Ponha um baú ao lado com cercas, tábuas e tochas e clique nele com uma picareta de diamante: ele começa o túnel 3×3 para onde você olhava.</li>
+        <li>Veja a sustentação a cada 4 blocos, a tocha a cada 8 e a câmara 5×5 no bloco 12. Com o baú sem cercas, o nome avisa e ele continua cavando. Lava ao lado é tampada.</li>
+        <li>Clique com a mão vazia: o painel mostra a durabilidade da picareta e "túnel x/24". Troque por uma de madeira e veja ficar mais lento.</li>
+        <li>Fazenda com enxada, água e um pouco de terra arada, e sementes e farinha de osso no baú: ela ara ao lado, planta e aduba. Pastor com tesoura, trigo e baldes no baú: lã, leite e corações nas ovelhas.</li>
+        <li>Torre: <code>/give</code> pó de blaze e clique nela; à noite a munição vai acabando e, sem ela, o nome avisa "sem munição (fraco)". Golem Guardião ferido com lingotes no baú: se conserta.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Altar II, níveis e rituais do céu (2.86)</h3>
+      <ol>
+        <li>Altar com 2 vacas perto. Na mão, estrela do Nether; nos pedestais, 8 obsidianas choronas, 2 Almas Despertas, 8 blocos de lápis e 2 cristais do End. As vacas sobem, giram, encolhem e somem; o altar mostra "· II" e a estrela do Nether. Agachado com a mão vazia: "pedestais x/16".</li>
+        <li><code>/rpgadmin selo espirito 1</code>: ponha e guarde (agachado). Selo na mão, 2 galinhas perto, pedestais com 2 blocos de ferro, 16 lápis e 16 fragmentos de ametista: sai o Selo nível II.</li>
+        <li>Comece um ritual e corra mais de 24 blocos: "saiu errado", Aberração e 3 vexes, e só o Selo ou equipamento volta. Quebrar um pedestal no meio dá o mesmo.</li>
+        <li>Lenhador perto de uma árvore e um baú: corta tronco por tronco e replanta; numa casa de troncos, não mexe. Minerador numa parede com minérios à vista: troca por pedra.</li>
+        <li>Pastor perto de ovelhas: tosquia e junta a lã. Curandeiro: cura você. Torre Arcana à noite: explosões nos monstros.</li>
+        <li>Cetro de Comando: o guardião segue você; clique de novo e ele fica de posto. Fazenda nível III sem baú: a colheita vai para a mochila (clique nele).</li>
+        <li>Chuva, Céu Limpo, Dia e Noite. Lua Azul à noite com 2 jogadores e altar II: barra azul e materiais raros caindo. Aura da Paz dentro do território: sem monstros nascendo.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Guardiões e ajudantes (2.85)</h3>
+      <ol>
+        <li><code>/rpgadmin selo espirito</code> (também <code>ferro</code>, <code>fazenda</code>, <code>cobre</code> e <code>asas</code>). Clique num bloco: o guardião aparece, a mensagem mostra "x/6".</li>
+        <li>À noite, perto do Espírito: raios azuis nos monstros a até 12 blocos. Golem Guardião: corre atrás do monstro e volta para o posto.</li>
+        <li>Plantação madura a até 8 blocos do Golem de Fazenda e um baú perto: ele colhe, replanta e guarda no baú, sem pisotear a terra.</li>
+        <li>Golem de Cobre com um baú de cobre e outros baús: organiza e não oxida. Asas nele são recusadas.</li>
+        <li>Asas no Espírito e no Golem Guardião: partículas de asas nas costas; o golem voa até um monstro em cima de uma torre e pousa de volta.</li>
+        <li>Bata num guardião (nada acontece). Agachado, mão vazia, clique no seu: volta para o Selo, com as asas. Ponha 7: o sétimo é recusado.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Chefes Despertos e relíquias (2.84)</h3>
+      <ol>
+        <li><code>/rpgadmin raro nucleo_golem</code> (ou outro núcleo). Pedestais: 8 blocos de ferro, 1 abóbora entalhada, 2 diamantes. Núcleo na mão, clique no altar: depois da explosão sai o "Golem Ancestral Desperto" brilhando, com aviso no chat.</li>
+        <li>Vença: saque com 2 núcleos, Alma Desperta, Essência Primordial, Pedra de Proteção e o dobro de Fragmentos.</li>
+        <li>Grimório: 5 abas (Transmutar, Infundir, Raros, Invocações, Guardiões); clicar troca a aba.</li>
+        <li>Lâmina da Convergência: espada de netherite na mão; 2 Almas Despertas, 1 Essência, 1 estrela do Nether e 2 blocos de diamante. Sai com Afiação VII e "Relíquia única"; uma segunda vez é recusada ("uma por jogador").</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Altar da Convergência (2.83)</h3>
+      <ol>
+        <li>Ponha uma âncora de renascimento e jogue em cima 1 olho do ender, 1 diamante e 4 fragmentos de ametista (ou <code>/rpgadmin convergencia</code> olhando para ela). Aparece o cristal do End girando.</li>
+        <li>Pedestais de tijolos de pedra entalhados a 3 blocos (em cruz) e 2+2 (diagonal); teste um de 2 blocos de altura. Agache com a mão vazia no altar: conta os pedestais.</li>
+        <li>16 sculk e 4 pérolas do ender em dois pedestais, 4 fragmentos de ametista na mão, clique no altar: 10 s de cerimônia (céu escuro, chuva, raios, câmera tremendo, explosão sem dano) e 2 Fragmentos de Eco no centro. Só quem acendeu pega.</li>
+        <li>Espada com Afiação V + 4 diamantes, 8 blocos de quartzo, 16 pederneiras e 8 fragmentos de ametista: sai Afiação VI com "✦ Infusão: Fio Afiado". Faça 3 infusões e veja a quarta ser recusada.</li>
+        <li>Quebre o altar no meio de um ritual: tudo volta para o chão, o céu volta ao normal. Desligue o servidor no meio: o resultado cai no altar.</li>
       </ol>
     </div>
     <div class="card"><h3>Câmara das Estátuas e Ataque de Rank S (2.75)</h3>

@@ -165,6 +165,9 @@ public final class RPGAtributos extends JavaPlugin {
     private Alquimia alquimia;
     private Acessorios acessorios;
     private GuardaRoupa guardaRoupa;
+    private br.rpgatributos.visual.AnimacoesMagicas animacoesMagicas;
+    private br.rpgatributos.visual.Decoracoes decoracoes;
+    private br.rpgatributos.visual.Embelezamento embelezamento;
     private Colonias colonias;
     private Prefeituras prefeituras;
     private Reinos reinos;
@@ -260,6 +263,10 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.masmorra.MesaInscricao mesasInscricao;
     private br.rpgatributos.masmorra.MissaoDiaria missaoDiaria;
     private br.rpgatributos.masmorra.MuralReliquias muraisReliquias;
+    private br.rpgatributos.ritual.AltarPedestais altarConvergencia;
+    private br.rpgatributos.ritual.Guardioes guardioes;
+    private br.rpgatributos.ritual.RituaisMundo rituaisMundo;
+    private ModoTeste modoTeste;
     private br.rpgatributos.detalhes.Cobre cobre;
     private br.rpgatributos.ajuda.Boasvindas boasvindas;
     private MercadorItinerante mercador;
@@ -349,6 +356,10 @@ public final class RPGAtributos extends JavaPlugin {
         mesasInscricao = new br.rpgatributos.masmorra.MesaInscricao(this);
         missaoDiaria = new br.rpgatributos.masmorra.MissaoDiaria(this);
         muraisReliquias = new br.rpgatributos.masmorra.MuralReliquias(this);
+        altarConvergencia = new br.rpgatributos.ritual.AltarPedestais(this);
+        guardioes = new br.rpgatributos.ritual.Guardioes(this);
+        rituaisMundo = new br.rpgatributos.ritual.RituaisMundo(this);
+        modoTeste = new ModoTeste(this);
         cobre = new br.rpgatributos.detalhes.Cobre(this);
         boasvindas = new br.rpgatributos.ajuda.Boasvindas(this);
         tags = new TagManager(this);
@@ -399,6 +410,9 @@ public final class RPGAtributos extends JavaPlugin {
         alquimia = new Alquimia(this);
         acessorios = new Acessorios(this);
         guardaRoupa = new GuardaRoupa(this);
+        animacoesMagicas = new br.rpgatributos.visual.AnimacoesMagicas(this);
+        decoracoes = new br.rpgatributos.visual.Decoracoes(this);
+        embelezamento = new br.rpgatributos.visual.Embelezamento(this);
         colonias = new Colonias(this);
         colonias.carregar();
         prefeituras = new Prefeituras(this);
@@ -528,6 +542,11 @@ public final class RPGAtributos extends JavaPlugin {
         getServer().getPluginManager().registerEvents(mesasInscricao, this);
         getServer().getPluginManager().registerEvents(missaoDiaria, this);
         getServer().getPluginManager().registerEvents(muraisReliquias, this);
+        getServer().getPluginManager().registerEvents(altarConvergencia, this);
+        getServer().getPluginManager().registerEvents(guardioes, this);
+        getServer().getPluginManager().registerEvents(rituaisMundo, this);
+        getServer().getPluginManager().registerEvents(modoTeste, this);
+        modoTeste.iniciar();
         elevadores.iniciar();
         itensDetalhes.registrarReceita();
         flechas.registrarReceitas();
@@ -540,7 +559,7 @@ public final class RPGAtributos extends JavaPlugin {
         Comandos comandos = new Comandos(this);
         for (String nome : new String[]{"atributos", "rpgadmin", "chapeu", "tag", "cosmeticos", "forja", "grimorio",
                 "guia", "jornada", "titulos", "missoes", "receitas", "pets", "masmorra", "classe", "lendas", "locais", "peixes", "alquimia",
-                "acessorios", "guardaroupa", "colonia", "bestiario", "calendario", "maldicao"}) {
+                "acessorios", "guardaroupa", "aparencia", "decoracoes", "colonia", "bestiario", "calendario", "maldicao"}) {
             PluginCommand c = getCommand(nome);
             if (c != null) {
                 c.setExecutor(comandos);
@@ -647,6 +666,7 @@ public final class RPGAtributos extends JavaPlugin {
         efeitos.registrarFonte(titulos::efeitos);
         efeitos.registrarFonte(lendas::efeitos);
         efeitos.registrarFonte(acessorios::efeitos);
+        efeitos.registrarFonte(poderCacador::efeitos);
         agenda.runTaskTimer(this, efeitos::aplicarPassivos, 20L, 20L);
         // Estações de ritual: Forja do Ferreiro e Altar Ritualístico.
         forjas.iniciar();
@@ -682,6 +702,11 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, classes::tick, 100L, 100L); // 2.76: aura do Curandeiro
         muraisReliquias.iniciar();
         agenda.runTaskTimer(this, muraisReliquias::tick, 5L, 5L);
+        altarConvergencia.iniciar();
+        agenda.runTaskTimer(this, altarConvergencia::tick, 5L, 5L);
+        guardioes.iniciar();
+        agenda.runTaskTimer(this, guardioes::tick, 2L, 2L);
+        agenda.runTaskTimer(this, rituaisMundo::tick, 100L, 100L);
         agenda.runTaskTimer(this, masmorras::construir, 1L, 1L);
         agenda.runTaskTimer(this, masmorras::tickPortais, 5L, 5L);
         agenda.runTaskTimer(this, masmorras::tick, 10L, 10L);
@@ -700,6 +725,9 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, alquimia::tick, 5L, 5L);
         agenda.runTaskTimer(this, acessorios::tick, 2L, 2L);
         agenda.runTaskTimer(this, guardaRoupa::tick, 40L, 40L);
+        registrar(decoracoes, embelezamento);
+        agenda.runTaskTimer(this, animacoesMagicas::tick, 2L, 2L);
+        agenda.runTaskTimer(this, embelezamento::tick, 2L, 2L);
         // Colônias: Prefeituras (5 ticks) e turnos de trabalho (1 segundo).
         prefeituras.iniciar();
         agenda.runTaskTimer(this, prefeituras::tick, 5L, 5L);
@@ -810,7 +838,10 @@ public final class RPGAtributos extends JavaPlugin {
         if (barcoGrande != null) barcoGrande.desligar();
         if (utilidades != null) utilidades.desligar();
         if (carrocas != null) carrocas.desligar();
+        if (altarConvergencia != null) altarConvergencia.desligar();
         if (guardaRoupa != null) guardaRoupa.desfazerTodos();
+        if (animacoesMagicas != null) animacoesMagicas.parar();
+        if (embelezamento != null) embelezamento.parar();
         if (racas != null) racas.asas().fecharTodas();
         if (acessorios != null) acessorios.apagarTodas();
         if (tags != null) tags.removerTodos();
@@ -945,6 +976,10 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.masmorra.MesaInscricao mesasInscricao() { return mesasInscricao; }
     public br.rpgatributos.masmorra.MissaoDiaria missaoDiaria() { return missaoDiaria; }
     public br.rpgatributos.masmorra.MuralReliquias muraisReliquias() { return muraisReliquias; }
+    public br.rpgatributos.ritual.AltarPedestais altarConvergencia() { return altarConvergencia; }
+    public br.rpgatributos.ritual.Guardioes guardioes() { return guardioes; }
+    public br.rpgatributos.ritual.RituaisMundo rituaisMundo() { return rituaisMundo; }
+    public ModoTeste modoTeste() { return modoTeste; }
     public Classes classes() { return classes; }
     public Provas provas() { return provas; }
     public Santuarios santuarios() { return santuarios; }
@@ -956,6 +991,9 @@ public final class RPGAtributos extends JavaPlugin {
     public Alquimia alquimia() { return alquimia; }
     public Acessorios acessorios() { return acessorios; }
     public GuardaRoupa guardaRoupa() { return guardaRoupa; }
+    public br.rpgatributos.visual.AnimacoesMagicas animacoesMagicas() { return animacoesMagicas; }
+    public br.rpgatributos.visual.Decoracoes decoracoes() { return decoracoes; }
+    public br.rpgatributos.visual.Embelezamento embelezamento() { return embelezamento; }
     public Colonias colonias() { return colonias; }
     public Prefeituras prefeituras() { return prefeituras; }
     public Reinos reinos() { return reinos; }
@@ -1045,7 +1083,8 @@ public final class RPGAtributos extends JavaPlugin {
                 || santuariosDivinos.eh(b) || transmutacao.eh(b) || mesasRunicas.eh(b)
                 || fogueiras.eh(b) || bonecos.eh(b) || pedrasAmolar.eh(b) || bebedouros.eh(b) || comedouros.eh(b) || estabulos.eh(b) || trofeus.eh(b) || mesasCartografo.eh(b)
                 || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || tachos.eh(b) || cabanasPesca.eh(b) || ateliers.eh(b)
-                || (mesasInscricao != null && mesasInscricao.eh(b)) || (muraisReliquias != null && muraisReliquias.eh(b));
+                || (mesasInscricao != null && mesasInscricao.eh(b)) || (muraisReliquias != null && muraisReliquias.eh(b))
+                || (altarConvergencia != null && altarConvergencia.eh(b));
     }
 
     /**

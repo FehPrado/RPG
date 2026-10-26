@@ -85,6 +85,7 @@ public final class MenuManager implements Listener {
     private static final int C_TAG_ATUAL = 15;
     private static final int C_TAG_REMOVER = 16;
     private static final int C_GUARDA_ROUPA = 13;
+    private static final int C_APARENCIA = 21, C_DECORACOES = 23;
     private static final int C_VOLTAR = 31;
 
     private static final long TEMPO_PARA_DIGITAR_MS = 60_000;
@@ -359,6 +360,8 @@ public final class MenuManager implements Listener {
         }
 
         inv.setItem(C_VOLTAR, item(Material.ARROW, Component.text("« Voltar", NamedTextColor.YELLOW), List.of()));
+        inv.setItem(C_APARENCIA, item(Material.PLAYER_HEAD, Component.text("Estúdio do personagem", NamedTextColor.LIGHT_PURPLE), List.of(Component.text("Cores, acessórios e visuais salvos.", NamedTextColor.GRAY))));
+        inv.setItem(C_DECORACOES, item(Material.BRICKS, Component.text("Decoração e cenários", NamedTextColor.AQUA), List.of(Component.text("Móveis, estandartes e ornamentos.", NamedTextColor.GRAY))));
         preencherBorda(inv);
     }
 
@@ -465,6 +468,8 @@ public final class MenuManager implements Listener {
                 clique(p);
                 plugin.guardaRoupa().abrir(p);
             }
+            case C_APARENCIA -> plugin.embelezamento().abrir(p);
+            case C_DECORACOES -> plugin.decoracoes().abrir(p);
             case C_TAG_REMOVER -> {
                 if (plugin.tags().getTag(p) != null) {
                     plugin.tags().setTag(p, null);

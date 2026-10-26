@@ -1141,10 +1141,12 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
         p.openInventory(t.inv);
     }
 
-    /** Os enfeites de cabeça (de graça, um por clique; o da sua raça vem primeiro). */
+    public void abrirColecaoEnfeites(Player p) { abrirEnfeites(p, de(p)); }
+
+    /** Os enfeites de cabeça (de graça, um por clique). */
     private void abrirEnfeites(Player p, Raca voltar) {
-        Tela t = nova(3, "Enfeites de cabeça", Material.BLACK_STAINED_GLASS_PANE);
-        int[] slots = {10, 11, 12, 13, 14, 15, 16};
+        Tela t = nova(6, "Coleção de enfeites", Material.BLACK_STAINED_GLASS_PANE);
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
         Enfeites.Enfeite[] es = Enfeites.Enfeite.values();
         for (int i = 0; i < es.length && i < slots.length; i++) {
             Enfeites.Enfeite en = es[i];
@@ -1162,8 +1164,8 @@ public final class Racas implements Listener, CommandExecutor, TabCompleter {
                 p.sendActionBar(Component.text("Enfeite no inventário: clique direito com ele para vestir.", NamedTextColor.GREEN));
             });
         }
-        t.inv.setItem(18, item(Material.ARROW, Component.text("« Voltar", NamedTextColor.GRAY), List.of()));
-        t.acoes.put(18, () -> abrir(p));
+        t.inv.setItem(45, item(Material.ARROW, Component.text("« Guarda-roupa", NamedTextColor.GRAY), List.of()));
+        t.acoes.put(45, () -> plugin.guardaRoupa().abrir(p));
         p.openInventory(t.inv);
     }
 

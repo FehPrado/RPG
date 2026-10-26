@@ -54,7 +54,7 @@ public final class Cacador {
     }
 
     public static void darXp(Player p, int quanto) {
-        if (quanto <= 0) return;
+        if (quanto <= 0 || br.rpgatributos.ModoTeste.ehTeste(p)) return;
         quanto = (int) Math.round(quanto * PoderCacador.multXp(p)); // Caçador Nato (Despertar)
         Rank antes = rank(p);
         p.getPersistentDataContainer().set(K_XP, PersistentDataType.INTEGER, xp(p) + quanto);

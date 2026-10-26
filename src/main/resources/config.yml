@@ -377,6 +377,9 @@ locais-ocultos:
 # ==========================================================
 
 masmorra:
+  encontros-variados: true             # patrulhas, hordas e sentinelas em salas de combate
+  enigma-runas: true                  # sequência opcional em uma tesouraria nativa, se houver espaço
+  avisos-salas: true                  # nome, andar e dica na primeira visita de cada jogador
   maximo-ao-mesmo-tempo: 6            # quantas masmorras podem estar abertas juntas
   tempo-limite-minutos: 40            # depois disso a masmorra fecha (ninguém perde nada)
   diamantes-cofre-das-almas: 2        # quanto custa recuperar os itens de uma morte lá dentro
@@ -555,6 +558,12 @@ tag:
 # ==========================================================
 #  Backup automático
 # ==========================================================
+
+embelezamento:
+  magias: true                       # modelos temporários de conjuração, projéteis e impactos
+  personagens: true                 # acessórios no corpo, auras e rastros
+  cenarios: true                     # partículas de ambiente e dos ornamentos próximos
+  limite-animacoes: 96               # limite global (16 a 256); até 12 por jogador
 
 backup:
   dias: 7                             # ao ligar, copia os .yml do plugin para backups/AAAA-MM-DD (1 vez por dia) e guarda os últimos 7 dias (0 = desliga)

@@ -177,6 +177,7 @@ public final class Conjuracao {
         Feiticos.Lance lance = new Feiticos.Lance(p, pf, m.essencias(), pot, m.mods());
         Receita r = m.receita();
         boolean ok = r != null ? receita(p, pf, r, pot, lance) : feiticos.executar(lance, m.forma());
+        if (ok) plugin.animacoesMagicas().conjurar(p, m.essencias(), m.forma(), r);
         if (ok && r == null && m.tem(Modificador.ECO) && Modificador.ECO.serveEm(m.forma())) feiticos.eco(lance, m.forma());
         return ok;
     }
@@ -1200,25 +1201,30 @@ public final class Conjuracao {
         World w = p.getWorld();
         Location pos = p.getEyeLocation();
         Vector dir = pos.getDirection().normalize();
+        UUID visual = plugin.animacoesMagicas().orbe(p, pos, es, maxTicks + 4);
         w.playSound(pos, Sound.ENTITY_ILLUSIONER_CAST_SPELL, 0.8f, 1.6f);
         new BukkitRunnable() {
             int t = 0;
             @Override
             public void run() {
+                if (!p.isOnline() || p.getWorld() != w || !pos.isChunkLoaded()) { plugin.animacoesMagicas().remover(visual); cancel(); return; }
                 RayTraceResult r = w.rayTrace(pos, dir, velocidade, FluidCollisionMode.NEVER, true, 0.35,
                         e -> e instanceof LivingEntity && e != p && !(e instanceof ArmorStand) && e.isValid());
                 if (r != null) {
                     Location l = r.getHitPosition().toLocation(w);
+                    plugin.animacoesMagicas().remover(visual); plugin.animacoesMagicas().impacto(p, l, es);
                     aoImpactar.accept(new Impacto(l, r.getHitEntity() instanceof LivingEntity le ? le : null,
                             r.getHitBlock(), r.getHitBlockFace()));
                     cancel();
                     return;
                 }
                 pos.add(dir.clone().multiply(velocidade));
+                plugin.animacoesMagicas().mover(visual, pos);
                 for (Essencia e : es) {
                     w.spawnParticle(Particle.DUST, pos, 3, 0.08, 0.08, 0.08, 0, e.poeira(1.3f));
                 }
                 if (++t >= maxTicks || !pos.isChunkLoaded()) {
+                    plugin.animacoesMagicas().remover(visual);
                     aoImpactar.accept(new Impacto(pos.clone(), null, null, null));
                     cancel();
                 }
@@ -1228,6 +1234,7 @@ public final class Conjuracao {
 
     /** Área que aplica as essências por um tempo (inimigos apanham, aliados recebem ajuda). */
     void zona(Player p, Location centro, double raio, int duracao, Set<Essencia> es, double pot) {
+        if (es.contains(Essencia.FOGO)) plugin.animacoesMagicas().pilar(p, centro, Math.min(duracao, 80));
         new BukkitRunnable() {
             int t = 0;
             @Override
@@ -1281,6 +1288,7 @@ public final class Conjuracao {
 
     /** Puxa as criaturas para o centro; no final roda {@code aoFim}. */
     void vortice(Player p, Location centro, double raio, int duracao, double forca, Runnable aoFim) {
+        if (aoFim != null) plugin.animacoesMagicas().buracoNegro(p, centro, duracao);
         new BukkitRunnable() {
             int t = 0;
             @Override

@@ -672,6 +672,10 @@ Desde a 2.69 toda masmorra (do altar e dos portais do mundo) é montada no molde
 
 ### Equipamento dos portais (2.71)
 
+- **Variedade (2.79):** seis famílias — Clássico, Vigia, Predador, Rúnico, Espinhos e Abissal — para cada rank e arma de chefe: **180 peças de Caçador e 36 armas de chefe**. Mudam os desenhos, formas das lâminas, guardas, detalhes dos arcos e o padrão das armaduras no corpo. O estilo é sorteado no saque e fica salvo no item ao refinar; itens antigos ficam com o estilo Clássico. O bônus do conjunto continua valendo com famílias misturadas. Para receber uma família completa: `/rpgadmin pecacacador s runico`; para as seis armas na mesma família: `/rpgadmin armachefe abissal`. IDs: `classico`, `vigia`, `predador`, `runico`, `espinho`, `abissal`.
+- **Monstros (2.79):** 17 espécies comuns têm quatro modelos temáticos cada (Cripta, Caverna, Inferno e Gelo), dentro e fora dos portais. As criaturas novas das masmorras recebem o nome visual do tema; fora delas as variantes são sorteadas pelo EMF. As regras dos chefes, Elites e personagens têm prioridade, e os cinco Monarcas agora têm regras para seus nomes próprios. São necessários EMF, ETF e o pacote atualizado. Se usa ZIP manual, desative o ZIP antigo do RPG e coloque o novo acima dos outros pacotes de criaturas. Os modelos ainda precisam de conferência dentro do jogo.
+- **Visuais próprios (2.78):** os seis ranks de Caçador têm ícones, espadas 3D e armaduras com textura no corpo. As seis armas dos chefes têm visual temático (o Arco do Lich mantém as três fases de puxar a corda). Cristais de Mana, Cristais de Portal, as 14 Inscrições, as 25 Relíquias, o Grimório Oculto e equipamentos não identificados também têm ícones próprios, incluídos no pacote de recursos do plugin. Equipamentos antigos recebem os visuais ao entrar, abrir baús ou recolher itens. O tridente arremessado continua com a aparência da entidade do jogo; o item na mão e no inventário usa o visual próprio.
+- **Conferir como administrador:** `/rpgadmin pecacacador s` entrega o conjunto S (troque a letra para os outros ranks); `/rpgadmin armachefe` entrega as seis armas. O efeito da flecha do Lich usa o arco que a disparou, mesmo depois de trocar de item na mão.
 - **Equipamento não identificado:** as armas e armaduras dos baús do vault vêm como **"❓ Espada não identificada"** (sem atributos), com a faixa de raridade possível. **Clique direito** revela: o item é forjado na hora com a raridade sorteada.
 - **Avaliador:** clique no **Altar do Portal** com o item não identificado na mão: ele revela por **1 de mana** em Cristais de Mana, com **15% de chance de subir uma raridade** (pode passar do máximo da faixa).
 - **Equipamento de Caçador:** espada, elmo, peitoral, grevas e botas "de Caçador" de cada rank (E/D de ferro, C/B de diamante, A/S de netherite; Raro, Épico, Épico, Único, Único e Lendário). Cada peça dá **+1% a +6% de dano nos monstros dos portais** e **o mesmo a menos do dano deles** (pelo rank da peça); com as **4 peças de armadura**, +50% nisso (a redução para em 50%). Sai em **35%** dos tesouros finais e na Loja do Sistema.
@@ -1672,7 +1676,7 @@ Coisas pequenas que tiram a chatice de toda hora. Cada uma pode ser desligada em
 - **Ordenar com clique:** com a mão vazia, **clique direito num espaço vazio** de um baú, barril, caixa de shulker ou baú do ender: tudo se organiza (junta as pilhas e agrupa por tipo). No seu próprio inventário, organiza a mochila (a barra de atalhos e a armadura ficam como estão).
 - **Repor a mão:** acabou a pilha na mão (bloco colocado ou comida) ou a ferramenta quebrou: outra igual do inventário vai para a mão sozinha (a ferramenta pode ser de outro material, mas do mesmo tipo).
 - **Portas duplas:** abrir uma porta de madeira abre a do lado (as duas folhas); portões lado a lado também. Agachado, abre só uma.
-- **Elevador:** 4 lingotes de ferro em cruz com uma pérola do ender no meio (sai 2). Ponha um acima do outro, na mesma coluna: em cima dele, **pule para subir** até o próximo e **agache para descer** (até 16 blocos; precisa de 2 blocos livres em cima do destino). Quebrado, devolve o Elevador; explosões e pistões não mexem nele.
+- **Elevador:** 4 lingotes de ferro em cruz com uma pérola do ender no meio (sai 2). Ponha um acima do outro, na mesma coluna: em cima dele, **pule para subir** até o próximo e **agache para descer** (até 16 blocos; precisa de 2 blocos livres em cima do destino). Quebrado, devolve o Elevador; explosões e pistões não mexem nele. Na **2.81.1**, a subida usa a posição onde o salto começou e transporta no tick seguinte ao cancelamento do pulo, evitando que o processamento do salto desfaça o transporte. O pacote de recursos da 2.81.0 continua compatível.
 - **Apito do Domador:** bambu, pepita de ferro e linha (sem forma). Clique direito: seus companheiros e animais domados a até 100 blocos **vêm andando** até você (quem estava sentado levanta). 8 s de fôlego entre um apito e outro.
 - **Placa de boas-vindas:** `/territorio boasvindas <frase>` (veja Territórios).
 
@@ -1908,6 +1912,202 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 - Dá para **esconder** uma peça (ela fica invisível).
 - A aparência só aparece por cima de uma peça vestida. Ao tirar a peça, ela volta ao normal sozinha.
 
+**Personalização do personagem:** o botão **Personalizar personagem** abre nove espaços independentes: **Barba, Chifres, Orelhas, Rosto, Coroa/Auréola, Barbatanas, Cabelo, Bigode e Brincos**. Dá para usar barba e chifres juntos e combinar até um enfeite de cada categoria. Abra **Coleção de enfeites**, pegue as peças gratuitas e clique nelas no inventário com o Guarda-roupa aberto. Clique em um enfeite usado para devolvê-lo. O botão **Aparências de armadura** volta à página das roupas.
+
+São **27 enfeites**: os sete originais, dez opções de barba, chifres, orelhas e rosto da 2.80, e dez opções de cabelo, bigode e brincos da 2.81. A escolha é livre e não troca a raça. Os enfeites combinados funcionam **com ou sem capacete**; quando existe um capacete, substituem sua aparência e mantêm a proteção, os encantamentos e os efeitos. As aparências das outras partes da armadura continuam funcionando. O enfeite antigo do espaço de cabeça migra para sua categoria. A composição visual exige o pacote de recursos atualizado; a movimentação dos itens ainda precisa de validação no jogo.
+
+## Altar da Convergência (2.83)
+
+Uma **âncora de renascimento** com 1 olho do ender, 1 diamante e 4 fragmentos de ametista jogados em cima vira o altar (`/rpgadmin convergencia` cria direto). Em volta dele ficam até **8 pedestais**, a 3 blocos: 4 em cruz e 4 na diagonal (2+2), na mesma altura do altar ou 1 acima/abaixo. Pedestal é qualquer bloco lapidado (pedra, ardósia, quartzo, pedra-negra, tufo, arenito, tijolos do Nether, resina) ou pilar de quartzo/púrpura, e pode ter 2 blocos de altura.
+
+- Clique num pedestal com um item para pôr nele (agachado: só 1); clique de novo para tirar. O item fica flutuando e girando em cima, e é guardado ali mesmo (sobrevive a reinícios). Pedestal quebrado, empurrado ou explodido derruba o item.
+- Com o **catalisador** na mão, clique no altar. Os pedestais com item precisam bater exatamente com a receita, um ingrediente por pedestal.
+- **Cerimônia de 10 s**: os itens sobem dos pedestais, giram em volta do altar cada vez mais rápido e mais perto, com feixes até o centro; o céu de quem está perto escurece até a meia-noite e chove; caem raios (só visuais) e a câmera treme; os itens são sugados para o centro e explodem (sem dano, só empurra de leve). O resultado cai brilhando, e só quem acendeu pode pegar.
+- Altar quebrado no meio: tudo volta para o chão. Servidor desligando: o resultado cai no altar.
+- Mão vazia no altar abre o **Grimório** com todas as receitas; agachado, conta os pedestais.
+
+| Transmutar (na mão → pedestais) | Resultado |
+|---|---|
+| 4 fragmentos de ametista → 16 sculk, 4 pérolas | 2 Fragmentos de Eco |
+| 2 lingotes de ouro → 16 quartzo, 8 areia das almas | 2 Lágrimas de Ghast |
+| 4 cristais de prismarinho → 16 fragmentos de prismarinho, 16 algas | 2 Conchas de Náutilo |
+| 2 diamantes → 32 netherrack, 1 bloco de ouro, 4 obsidianas | Molde de Netherite |
+| 16 garrafas → 16 lápis, 16 redstone | 16 Garrafas de Experiência |
+| 2 cargas de fogo → 16 gravetos, 8 pó de pedra luminosa, 4 blocos de magma | 4 Varas de Blaze |
+| 8 lápis → 8 bolas de slime, 2 obsidianas | 4 Pérolas do Fim |
+| 4 pérolas → 16 púrpura, 16 frutas do coro | 2 Cascas de Shulker |
+
+**Infundir:** o equipamento na mão sobe 1 nível de encantamento, passando do limite normal. Fio Afiado (Afiação até VII), Lâmina Flamejante (Aspecto Flamejante IV), Saque Arcano (Saque V), Pele de Pedra (Proteção VI), Pés de Pena (Peso-Pena VI), Mão Ligeira (Eficiência VII), Fortuna Arcana (Fortuna V), Arco Certeiro (Força VII) e Eterna (Inquebrável +1 até V e Remendo). Cada item aceita até **3 infusões**, que ficam escritas na descrição; encantamentos que não combinam (Fortuna com Toque Suave) são recusados.
+
+O Grimório tem uma aba por tipo de ritual (Transmutar, Infundir, Raros e únicos, Invocações maiores, Guardiões e ajudantes).
+
+### Raros, relíquias e chefes Despertos (2.84)
+
+**Raros e únicos** (na mão → pedestais):
+
+| Na mão | Pedestais | Resultado |
+|---|---|---|
+| 1 bloco de ouro | 2 blocos de esmeralda, 4 maçãs douradas | Totem da Imortalidade |
+| 1 maçã dourada | 8 blocos de ouro, 16 garrafas de experiência | Maçã Dourada Encantada |
+| 8 cristais de prismarinho | 4 conchas de náutilo, 2 diamantes | Coração do Mar |
+| 1 crânio de esqueleto wither | 16 areias das almas, 1 Alma Desperta, 2 blocos de ouro | Estrela do Nether |
+| 8 membranas de phantom | 2 cascas de shulker, 32 penas, 1 Alma Desperta, 4 diamantes | Élitro |
+| 1 bloco de diamante | 2 Almas Despertas, 8 Fragmentos de Forja, 16 fragmentos de ametista | Essência Primordial |
+
+As **Relíquias da Convergência** são feitas uma vez por jogador. A peça de netherite (ou o arco) vai na mão, e os pedestais levam 2 Almas Despertas, 1 Essência Primordial e mais dois ingredientes. A peça ganha nome, não queima e recebe encantamentos acima do normal:
+- **Lâmina:** Afiação VII, Saque IV, Aspecto Flamejante III, Varredura III, Inquebrável V, Remendo. Mais 1 estrela do Nether e 2 blocos de diamante.
+- **Égide:** Proteção VI, Espinhos III, Inquebrável V, Remendo. Mais 1 totem e 2 blocos de diamante.
+- **Picareta:** Eficiência VII, Fortuna V, Inquebrável V, Remendo. Mais 4 blocos de esmeralda e 8 blocos de redstone.
+- **Arco:** Força VII, Impacto II, Chama, Infinidade, Inquebrável V. Mais 32 flechas espectrais e 4 varas de breeze.
+
+**Invocações maiores:** o **núcleo** do chefe vai na mão, e os pedestais levam a oferenda reforçada. O chefe volta **Desperto**: 2,5× a vida (até 2500), +50% de dano, +6 de armadura, 15% maior e brilhando, com aviso para o servidor. Saque: outro núcleo, 1 a 3 **Almas Despertas** (uma por participante), Essência Primordial e Pedra de Proteção garantidas, o dobro de Fragmentos de Forja, mais uma chance de arma nomeada e o dobro de XP. O altar não desperta outro chefe enquanto um está lutando nele.
+
+| Chefe Desperto | Pedestais |
+|---|---|
+| Golem Ancestral | 8 blocos de ferro, 1 abóbora entalhada, 2 diamantes |
+| Rainha Aracnídea | 16 olhos de aranha, 32 linhas, 4 olhos de aranha fermentados |
+| Senhor das Chamas | 12 varas de blaze, 8 cremes de magma, 2 lágrimas de ghast |
+| Lich | 1 crânio de esqueleto, 16 blocos de osso, 8 terras das almas |
+| Tempestade Viva | 6 varas de breeze, 16 cargas de vento, 16 penas |
+| Arauto do Fim | 1 estrela do Nether, 8 fragmentos de eco, 2 bafos de dragão, 1 cristal do End |
+
+### Guardiões e ajudantes (2.85)
+
+O ritual dá um **Selo**: com ele na mão, clique num bloco e o guardião fica ali, de posto (precisa de 2 blocos livres e permissão de construir). Cada jogador pode ter até **8** (6 na 2.85). Agachado, clique no seu guardião com a mão vazia para guardá-lo de volta no Selo, com as asas. Com a mão vazia (sem agachar), clique para ver a vida e o dono. Jogadores e outros guardiões não ferem os guardiões. Eles não atacam companheiros, não pisoteiam plantação e se curam 1 ponto de vida a cada 2 s.
+
+| Guardião | Na mão → pedestais | O que faz |
+|---|---|---|
+| Espírito Guardião (allay) | olho do ender → 4 blocos de ametista, 4 varas de blaze, 2 blocos de redstone, 2 blocos de ferro | Fica parado e atira um raio (6 de dano a cada 1,5 s) no inimigo mais perto a até 12 blocos |
+| Golem Guardião (golem de ferro) | abóbora entalhada → 8 blocos de ferro, 2 diamantes, 1 maçã dourada | 200 de vida; ataca inimigos a até 12 blocos do posto e volta para ele |
+| Golem de Fazenda (golem de ferro pequeno) | abóbora entalhada → 4 blocos de ferro, 8 fardos de feno, 32 farinhas de osso, 1 composteira | Colhe trigo, cenoura, batata, beterraba e fungo do Nether maduros a até 8 blocos, replanta com uma semente da colheita e guarda o resto no baú ou barril mais perto (sem baú, deixa no chão) |
+| Golem de Cobre (o do jogo) | abóbora entalhada → 4 blocos de cobre, 4 favos de mel, 2 baús | Leva os itens do baú de cobre para os outros baús; já vem encerado e nunca vira estátua |
+| Asas de Guardião | 4 membranas de phantom → 32 penas, 2 varas de breeze, 8 fragmentos de ametista | Clique no Espírito ou num golem de ferro: asas de partículas nas costas e voo. O Espírito vai até o inimigo (18 blocos, raio de 7). O Golem Guardião voa atrás até dos inimigos no alto e pousa no posto. O de Fazenda voa por cima das plantações |
+
+Os dados ficam no próprio bicho (tipo, dono, posto, asas, nível, modo e mochila) e em `guardioes.yml` (quantos cada jogador tem). Admin: `/rpgadmin selo <tipo|asas|cetro> [nível 1-5]`.
+
+### Altar nível II, níveis dos guardiões e rituais do mundo (2.86)
+
+**Novos guardiões:**
+
+| Guardião | Na mão → pedestais | O que faz |
+|---|---|---|
+| Golem Lenhador | abóbora entalhada → 4 blocos de ferro, 1 machado de ferro, 8 mudas de carvalho, 1 baú | Acha uma árvore **natural** perto do posto (troncos sobre terra, com folhas que não foram postas por jogador) e corta um tronco por vez, de cima para baixo. Replanta a muda certa e guarda a madeira. Não mexe em casas de troncos |
+| Golem Minerador | abóbora entalhada → 4 blocos de ferro, 1 picareta de ferro, 32 tochas, 1 baú | Fica no posto, numa mina, e tira um minério **à vista** (encostado no ar) a cada 3 s, a até 4 blocos. Deixa pedra, ardósia ou netherrack no lugar, então não segue o veio para dentro da parede. Detrito ancestral a partir do nível IV |
+| Pastor de Neve (boneco de neve) | abóbora entalhada → 4 blocos de neve, 1 tesoura, 16 trigos, 2 laços | Tosquia as ovelhas, junta ovos, lã, penas, couro e escamas do chão e traz de volta os animais que fugiram para além do raio. Não derrete e não deixa neve |
+| Espírito Curandeiro (allay) | fatia de melancia reluzente → 2 blocos de ametista, 2 maçãs douradas, 1 lágrima de ghast, 4 garrafas de mel | A cada 2 s cura jogadores e guardiões a até 6 blocos (1 + nível de vida). A partir do nível III, tira veneno e murchidão |
+| Torre Arcana (blaze) | vara de blaze → 4 blocos de ametista, 8 blocos de magma, 16 cargas de fogo, 8 obsidianas; sacrifício: 1 blaze | Fica parada e, a cada 3 s, explode fogo arcano em volta do inimigo mais perto a até 14 blocos (5 de dano em área de 3 blocos, sem quebrar nada) |
+| Cetro de Comando | vara de blaze → 8 fragmentos de ametista, 4 lingotes de ouro, 4 linhas | Clique no seu guardião: ele passa a seguir você (os espíritos voam, os golens andam ou voam com asas, e todos se teleportam se ficarem a mais de 40 blocos). Clique de novo: fica de posto onde está |
+
+Agora cabem **8 guardiões** por jogador.
+
+**Níveis I a V:** guarde o guardião no Selo (agachado, mão vazia). Depois segure o Selo no altar com:
+- o pedido do nível nos pedestais;
+- o **tributo** do tipo dele: 8 × o nível novo de ametista, ferro, trigo, cobre, carvão vegetal, carvão, lã branca, melancia reluzente ou pó de blaze;
+- o **sacrifício**.
+
+| Nível | Pedestais (mais o tributo) | Sacrifício | Altar |
+|---|---|---|---|
+| II | 2 blocos de ferro, 16 lápis | 2 galinhas | I |
+| III | 2 blocos de ouro, 2 diamantes | 1 ovelha | I |
+| IV | 1 bloco de diamante, 1 Alma Desperta, 8 obsidianas | 2 vacas | II |
+| V | 1 estrela do Nether, 2 Almas Despertas, 1 Essência Primordial | 1 zumbi | II |
+
+Cada nível dá +35% de vida, +25% de dano e +2 blocos de alcance (Minerador: +1). O Espírito atira mais rápido e a Torre explode mais rápido. O Golem de Cobre anda mais rápido. No **nível III** os trabalhadores (Fazenda, Lenhador, Minerador e Pastor) ganham uma **mochila** de 27 espaços, usada quando não há baú ou ele está cheio. Clique no guardião com a mão vazia para abrir; a mochila vai junto para o Selo e cai no chão se ele morrer. No **nível V** o guardião brilha e se cura 2 pontos a cada 2 s.
+
+**Sacrifício:** o mob precisa estar vivo a até 5 blocos do altar, sem nome e sem dono. Não pode ser companheiro nem guardião. Laço ou armadilha ajudam. Na cerimônia ele para, sobe, gira junto com os itens, encolhe e se desfaz em almas na explosão. Se o altar for quebrado no meio, ele é solto.
+
+**Ritual de grupo:** a Bênção da Aliança precisa de 3 jogadores; o Arauto Desperto e a Lua Azul precisam de 2. Os outros ficam a até 6 blocos do altar, cada um com o catalisador na mão, que também é gasto.
+
+**Altar nível II:** o ritual **Despertar o Altar** sobe o altar de nível. Ele usa estrela do Nether na mão, 8 obsidianas choronas, 2 Almas Despertas, 8 blocos de lápis e 2 cristais do End, mais o sacrifício de 2 vacas. O altar ganha mais 8 pedestais a 5 blocos: (±5, 0), (0, ±5), (4, 3), (−4, −3), (3, −4) e (−3, 4). O item girando vira uma estrela do Nether, e o nível fica guardado no chunk.
+- Só funcionam no nível II: as Relíquias, a Reforja, o Arauto Desperto, a Lua Azul e os níveis IV e V dos guardiões.
+- A Estrela do Nether passou a pedir o sacrifício de 1 esqueleto wither. O Élitro pede 1 phantom e o Lich Desperto, 2 esqueletos.
+
+**Céu, território e altar** (nova aba do Grimório):
+
+| Ritual | Na mão → pedestais | Efeito |
+|---|---|---|
+| Chamar a Chuva | balde de água → 16 algas, 8 lápis | Tempestade por 10 min |
+| Céu Limpo | girassol → 4 pedras luminosas, 8 penas | Sem chuva por 20 min |
+| Chamar o Dia / a Noite | relógio → 32 tochas e 4 ouros / 8 bolsas de tinta e 2 blocos de carvão | Vira 1000 / 13000 |
+| Lua Azul (2 jogadores, altar II, só à noite) | bloco de lápis → 8 cristais de prismarinho, 8 bolsas de tinta brilhante, 1 Alma Desperta | Até o amanhecer: monstros mortos por jogadores têm 6% de soltar um material raro e 0,5% de soltar uma Alma Desperta; barra azul no topo |
+| Aura do Crescimento | 16 farinhas de osso → 8 fardos de feno, 4 esmeraldas, 8 blocos de musgo | 2 h: cada vez que uma planta do território cresce, cresce um estágio a mais |
+| Aura da Paz | estandarte branco → 2 maçãs douradas, 8 esmeraldas, 32 tochas | 2 h: monstros não nascem sozinhos no território |
+| Aura do Vigor | 16 açúcares → 4 blocos de redstone, 4 esmeraldas, 1 pé de coelho | 2 h: quem está no território ganha Pressa e Velocidade |
+| Bênção da Aliança (3 jogadores) | maçã dourada → 4 blocos de esmeralda, 1 totem, 8 garrafas de experiência | Força, Resistência e Regeneração por 30 min para quem está a até 12 blocos |
+
+As auras só funcionam com o altar dentro de um território e para quem pode construir nele. Elas ficam em `auras.yml` e valem mesmo com o servidor reiniciando.
+
+**Reforjar Relíquia** (altar II): a relíquia vai na mão. Os pedestais levam um livro encantado, 1 Alma Desperta e 4 blocos de lápis. O encantamento do livro entra na relíquia um nível acima do livro, até 2 acima do máximo normal, e tira o que não combina com ele (por exemplo, Fortuna no lugar de Toque Suave).
+
+**Ritual que sai errado:** se quem acendeu se afastar mais de 24 blocos, cair ou sair do jogo, ou se um pedestal usado for quebrado, o ritual falha.
+- Os ingredientes e o sacrifício se perdem.
+- O céu fica escuro de tinta e sai do altar uma **Aberração do Ritual**: um evocador de 60 de vida com 3 vexes.
+- Equipamento, relíquia e Selo voltam ao chão; o resto não.
+- Se o próprio altar for quebrado no meio, tudo volta, como antes.
+
+### Ferramentas, insumos e túneis (2.87)
+
+Cada guardião que trabalha precisa da **ferramenta** dele: clique nele com ela, e a antiga volta para você. A ferramenta define a **velocidade**: madeira 0,5, pedra 0,7, cobre 0,85, ferro 1, ouro 1,2, diamante 1,4 e netherite 1,8, com +15% por nível de Eficiência e +10% por nível do guardião. Ela **gasta durabilidade** (o Inquebrável vale) e, quando quebra, o guardião para e avisa o dono. A ferramenta vai junto para o Selo e cai no chão se ele morrer.
+
+O nome do guardião mostra o que falta, em vermelho: "⚠ sem picareta", "⚠ faltam 4 cercas e 3 tábuas no baú", "⚠ sem sementes no baú", "⚠ sem munição (fraco)". O clique com a mão vazia mostra um painel com vida, ferramenta e durabilidade, munição e o progresso do túnel.
+
+Os **insumos** saem do baú (ou barril) mais perto do posto e, do nível III em diante, também da mochila.
+
+| Guardião | Ferramenta | Insumos | O que passou a fazer |
+|---|---|---|---|
+| Golem Minerador | picareta | 4 cercas e 3 tábuas por sustentação, tochas | **Túnel de mineração** a partir do posto, na direção em que você olhava ao pôr o Selo (ou ao dar a ordem de posto com o Cetro). Detalhes abaixo |
+| Golem Lenhador | machado | mudas | Corta as árvores naturais e, sem árvore por perto, **planta floresta**: uma muda do baú a cada 4 blocos, longe de outras árvores. Junta do chão mudas, gravetos, maçãs e troncos |
+| Golem de Fazenda | enxada (melhor = mais longe) | sementes, farinha de osso | Colhe e replanta. **Planta** sementes do baú na terra arada vazia e **ara** a terra ao lado da plantação, só onde há água a até 4 blocos, então a plantação cresce a partir da sua. Também **aduba** as plantas com farinha de osso |
+| Pastor de Neve | tesoura | trigo, cenoura, sementes, baldes | Tosquia e junta do chão. A cada 30 s faz **2 animais procriarem** com a comida do baú (trigo para vaca, ovelha e cabra; cenoura para porco e coelho; sementes para galinha), até 8 + 2 × nível por tipo. A cada minuto **ordenha** uma vaca com um balde vazio do baú |
+| Golem Guardião | espada (opcional) | lingotes de ferro | A espada dá dano a mais: madeira e ouro +1, pedra e cobre +2, ferro +3, diamante +4, netherite +5, e +0,5 por nível de Afiação. Abaixo de 70% de vida, ele **se conserta** com um lingote do baú (+25), a cada 5 s |
+| Espírito Guardião | — | fragmento de ametista (4 raios) ou de eco (8 raios, 1,6× de dano) | Sem munição: metade do dano e atira na metade da velocidade |
+| Torre Arcana | — | pó de blaze (normal) ou carga de fogo (1,5× de dano, área 4,5) | Sem munição: metade do dano, área 2,5 e metade da velocidade |
+| Espírito Curandeiro | — | garrafa de mel ou melancia reluzente (5 curas cada) | Sem munição: cura 1 e não tira veneno. Com mel: 1 + nível, e tira veneno a partir do nível III. Com melancia: 2 + 1,5 × nível, e sempre tira veneno |
+| Golem de Cobre | — | — | Igual (o jogo controla quanto ele carrega) |
+
+Munição: clique no guardião com ela (todo o monte entra), ou deixe num baú a até 8 blocos do posto. Quando acaba, ele pega até 16 do baú.
+
+**O túnel do Minerador:**
+- **Corredor:** 3 de largura e 3 de altura. A cada 16 blocos, as últimas 5 fatias formam uma **câmara 5×5**.
+- **Sustentação:** a cada 4 blocos, duas colunas de cerca nas laterais e uma viga de 3 tábuas no teto. Sem cercas ou tábuas no baú, ele continua cavando e avisa.
+- **Tocha:** na parede da direita, a cada 8 blocos (na 2ª, 10ª, 18ª...).
+- **Ritmo:** um bloco por vez, no tempo da picareta. Com netherite e Eficiência V, uns 10 blocos de túnel por minuto.
+- **Segurança:** antes de cavar um bloco, tampa a lava em volta com pedregulho, a água com pedra, e o cascalho ou areia do teto com pedra.
+- **Minérios das paredes:** cada minério que fica à vista nas paredes, no teto e no chão é minerado e trocado por pedra (ardósia ou netherrack, conforme o lugar). Ele não segue o veio para dentro.
+- **Para sozinho** em rocha indestrutível, num bloco com coisas dentro (baú, fornalha...), numa estação, em território de outra pessoa, ou em obsidiana e detrito ancestral sem picareta de diamante.
+- **O que sai:** tudo vai para o baú perto do começo do túnel e depois para a mochila. Se não couber, pedregulho, terra, cascalho e outras pedras somem; o resto cai no chão.
+- **Comprimento por nível:** I 24, II 40, III 56, IV 72, V 96 blocos. Para subir de nível, ele vai para o Selo. Ponha-o de volta no mesmo lugar, olhando para o mesmo lado: ele passa depressa pelo trecho já aberto e continua. Com o Cetro, "ficar de posto aqui" começa um túnel novo na direção em que você olha.
+
+## Salas e encontros das masmorras (2.82)
+
+Novas instâncias podem sortear **Forjas** (oficinas nas laterais) e **Observatórios** (anéis no piso e pilares luminosos), além dos nove estilos anteriores. Os caminhos das portas continuam sendo abertos depois da decoração.
+
+Salas de combate além das primeiras podem ter três encontros: **Patrulha**, com a composição habitual; **Horda**, com até três criaturas extras por onda, 75% da vida e 85% do dano habitual; e **Sentinela**, com metade do grupo arredondada para cima e um líder luminoso com o dobro da vida e 15% mais dano. Todas respeitam o limite de 14 criaturas por onda. A alteração de dano vale para o atributo de ataque corpo a corpo. A primeira visita informa o nome temático, o andar e uma dica; cada jogador recebe o aviso uma vez por sala.
+
+Uma tesouraria nativa com espaço livre pode conter a **Sequência Rúnica**: leia a ordem indicada e clique nas runas I, II e III. Errar reinicia a sequência. O progresso é compartilhado pela equipe; concluir produz uma única recompensa extra junto das runas. É opcional e não bloqueia a conclusão da masmorra. Salas personalizadas não recebem esse desafio nem os novos cenários automáticos.
+
+As entradas das arenas nativas avisam que o chefe está adiante. O golpe marcado no chão tem aviso sonoro e 1,5 segundo para esquivar; é cancelado se o chefe morrer, a sala reiniciar ou a masmorra terminar. Seu dano fica restrito aos participantes presentes na arena.
+
+Configuração: `masmorra.encontros-variados`, `masmorra.enigma-runas` e `masmorra.avisos-salas`. As mudanças usam blocos e textos nativos: o pacote de recursos **2.81.0** continua compatível com o plugin **2.82.0**. Gere uma masmorra nova para ver os cenários e encontros sorteados.
+
+Testes automatizados verificam as seis ordens rúnicas, erro/reinício, conclusão única, limites dos encontros e nomes de todos os estilos/temas. Ainda falta validar no jogo: circulação pelos dois cenários, sequência com dois jogadores, prêmio único e cancelamento do golpe ao derrotar o chefe durante a preparação.
+
+## Estúdio e decoração (2.81)
+
+`/aparencia` (também `/estudio` e `/personalizar`) abre o estúdio: mochila, aljava ou capa nas costas, colar, oito cores para os enfeites, auras e rastros de passos. Há três combinações salvas: Exploração, Combate e Cidade. Clique direito para salvar; esquerdo para usar. Salvam enfeites e opções cosméticas, sem copiar equipamentos. Acessórios do corpo se escondem ao nadar, planar, dormir ou ficar invisível.
+
+O guarda-roupa agora tem **27 enfeites em nove categorias**: às seis anteriores somam-se Cabelo, Bigode e Brincos. Entraram seis penteados, dois bigodes e dois pares de brincos. Barba, cabelo, chifres e brincos podem ser usados juntos.
+
+`/decoracoes` (também `/decoracao` e `/moveis`) fabrica **15 ornamentos em quatro temas**, totalizando 60 variantes. As abas mostram Cripta, Caverna, Inferno e Gelo; cada receita informa o material gasto. Clique num bloco para colocar, clique na peça para girar e agache ao clicar para recolher. Só o dono ou um administrador pode manipular a peça, respeitando a proteção do território. Placas e estandartes renomeados na bigorna mostram o nome escolhido. São objetos decorativos: baús não armazenam e braseiros não causam dano. Limite de 48 peças por chunk.
+
+Salas novas geradas pelo plugin recebem adereços temáticos; salas de modelos construídos pelo jogador permanecem como estavam. Baús raros têm um efeito na primeira abertura. Masmorras e ornamentos próximos recebem partículas de ambiente.
+
+As magias ganham círculos de conjuração, orbes em movimento, impactos, pilar de fogo e um modelo giratório para o buraco negro. Invocações elementais recebem dez modelos, um por essência, via EMF/ETF. Armas de chefe, espadas de Caçador de rank S e elixires recebem texturas animadas. Os efeitos de dano e as receitas continuam sendo os das magias existentes. Os modelos temporários somem ao terminar, ao desconectar ou trocar de mundo; há limite global de 96 e de 12 por jogador.
+
+As opções `embelezamento.magias`, `personagens`, `cenarios` e `limite-animacoes` ficam no config. Para usar os visuais, instale **RPGAtributos-2.81.0.jar** no servidor e ative **RPGAtributos-recursos-2.81.0.zip** no cliente, acima dos demais pacotes de criaturas. EMF/ETF são necessários para os modelos de criaturas. O pacote manual antigo precisa ser desativado.
+
+Validação automatizada cobre geração dos modelos, referências de texturas, regras das invocações, quadros animados, limites de escala e gravação de combinações. **Ainda é necessária uma rodada dentro do Minecraft**, incluindo equipar/tirar capacete, salvar/carregar visuais, colocar/girar/recolher decoração, reiniciar o servidor e conjurar com vários jogadores. As prévias em `docs/` são renderizações dos modelos fora do jogo.
+
 ## Títulos
 
 `/titulos`: 127 títulos com requisitos (em páginas), por exemplo Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
@@ -1982,6 +2182,8 @@ Rubi, Safira, Esmeralda, Topázio, Ametista e Ônix, em 3 graus: **Bruta**, **La
 
 | Comando | O que faz |
 |---|---|
+| `/rpgadmin teste` | **Área de testes (2.88):** um mundo plano à parte (`rpg_teste`), no criativo, com uma cópia do seu inventário. Lá nada conta: XP de atributos e armas, títulos, conquistas (do plugin e do jogo), XP de Caçador, recordes e o limite de guardiões. Ao entrar, o plugin guarda em `teste/<uuid>.yml` o inventário, o baú do fim, XP, vida, fome, efeitos, posição, modo de jogo e todos os dados do plugin no jogador. Ao sair (o mesmo comando, outro teleporte ou entrar de novo depois de cair), tudo volta como estava. Masmorras abertas no teste também são teste. O mundo não tem monstros nascendo, chuva nem estruturas do plugin, e o inventário fica ao morrer. Quando o último testador sai, o mundo de testes é **apagado** (só a pasta `dimensions/minecraft/rpg_teste`, nunca o mundo principal) e nasce limpo na próxima vez; ao ligar o servidor sem ninguém testando, uma sobra também é apagada. O que fica em arquivo do servidor (territórios, colônias, dona de classe lendária) não volta |
+| `/rpgadmin teste limpar` | Na área de testes, remove criaturas e itens soltos a até 64 blocos |
 | `/rpgadmin set <jogador> <atributo> <nível>` | Define o nível de um atributo |
 | `/rpgadmin forjar [raridade]` | Forja o item da mão |
 | `/rpgadmin refino <0-10>` | Define o refino do item da mão |
@@ -2150,7 +2352,7 @@ Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, 
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.77.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.88.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

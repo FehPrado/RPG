@@ -40,6 +40,7 @@ public final class Reliquias {
             meta.setMaxStackSize(16);
             meta.getPersistentDataContainer().set(K, PersistentDataType.STRING, m.name() + ":" + indice);
         });
+        EquipamentoPortal.aplicarVisual(i);
         return i;
     }
 

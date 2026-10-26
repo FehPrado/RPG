@@ -198,6 +198,7 @@ public final class Masmorras implements Listener {
         for (Masmorra m : ativas.values()) if (m.participantes.contains(p.getUniqueId())) return m;
         return null;
     }
+    public Tema temaAtual(Player p) { Masmorra m = de(p); return m == null ? null : m.tema; }
 
     /** O dono, ou alguém da party dele, já tem uma masmorra em andamento? */
     private boolean ocupado(Player p) {
@@ -451,6 +452,7 @@ public final class Masmorras implements Listener {
         m.inicioMs = System.currentTimeMillis();
         m.duracaoMs = minutos * 60_000L;
         prepararObjetivo(m);
+        prepararRunas(m);
         Player dono = Bukkit.getPlayer(m.dono);
         if (m.publica) return; // o Portal do mundo cuida de quem entra
         Location estacao = origem.get(m.id);
@@ -788,6 +790,18 @@ public final class Masmorras implements Listener {
     private void atualizar(Masmorra m, Sala s, List<Player> presentes, long agora) {
         List<Player> naSala = new ArrayList<>();
         for (Player p : presentes) if (s.dentro(p.getLocation(), -0.5)) naSala.add(p);
+        if (plugin.getConfig().getBoolean("masmorra.avisos-salas", true)) for (Player p : naSala) if (s.visitantes.add(p.getUniqueId())) {
+            String dica = switch (s.tipo) {
+                case INICIO -> m.objetivo.descricao(); case COMBATE -> s.encontro.nome + ": " + s.encontro.dica;
+                case CHEFE -> "Arena do chefe: prepare-se antes de avançar.";
+                case TESOURO -> s == m.salaEnigma ? "Tesouros e uma sequência rúnica opcional." : "Procure suprimentos e tesouros.";
+                case MINA -> "Extraia os cristais de mana dos veios."; case ESCADA -> "Caminho para outro andar.";
+                case SECRETA -> "Você encontrou uma passagem escondida.";
+            };
+            p.sendMessage(Component.text("◆ " + ConteudoSalas.nome(m.tema, s) + " • Andar " + (s.nivel + 1), m.rank().cor())
+                    .append(Component.text("\n" + dica, NamedTextColor.GRAY)));
+            p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, .35f, 1.2f);
+        }
         switch (s.estado) {
             case AGUARDANDO -> {
                 if (s.tipo != TipoSala.COMBATE && s.tipo != TipoSala.CHEFE) {
@@ -936,6 +950,7 @@ public final class Masmorras implements Listener {
         s.onda++;
         int t = m.dificuldade.nivel();
         int quantos = Math.min(14, 3 + t + (int) Math.round((Math.max(1, jogadores) - 1) * 1.5) + s.onda - 1);
+        quantos = s.encontro.quantidade(quantos);
         List<EntityType> tipos = m.dificuldade.monstros();
         for (int i = 0; i < quantos; i++) {
             Location l;
@@ -951,10 +966,20 @@ public final class Masmorras implements Listener {
             // Ravager só um por onda (é grande).
             if (tipo == EntityType.RAVAGER && i > 0) tipo = EntityType.VINDICATOR;
             LivingEntity mob = monstro(m, l, tipo);
-            if (mob != null) s.mobs.add(mob.getUniqueId());
+            if (mob != null) {
+                multiplicar(mob, Attribute.MAX_HEALTH, s.encontro.vida(i));
+                AttributeInstance vida = mob.getAttribute(Attribute.MAX_HEALTH);
+                if (vida != null) mob.setHealth(vida.getValue());
+                multiplicar(mob, Attribute.ATTACK_DAMAGE, s.encontro.dano(i));
+                if (s.encontro == ConteudoSalas.Encontro.SENTINELA && i == 0) {
+                    mob.setGlowing(true);
+                    mundo.spawnParticle(Particle.ENCHANT, mob.getLocation().add(0, 1, 0), 20, .6, .8, .6, .05);
+                }
+                s.mobs.add(mob.getUniqueId());
+            }
         }
         for (Player p : naSala) {
-            p.sendActionBar(Component.text("⚔ Onda " + s.onda + "/" + ondas(m), NamedTextColor.RED));
+            p.sendActionBar(Component.text("⚔ " + s.encontro.nome + " • Onda " + s.onda + "/" + ondas(m), NamedTextColor.RED));
             p.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 0.5f, 1.4f);
         }
     }
@@ -991,6 +1016,11 @@ public final class Masmorras implements Listener {
             mob.setRemoveWhenFarAway(false);
             mob.setPersistent(false);
             mob.getPersistentDataContainer().set(K_MOB, PersistentDataType.STRING, m.id.toString());
+            String nomeVisual = br.rpgatributos.exploracao.ModelosMonstros.nome(tipo, m.tema);
+            if (nomeVisual != null) {
+                mob.customName(Component.text(nomeVisual, m.rank().cor()));
+                mob.setCustomNameVisible(false);
+            }
             equipar(mob, d);
         });
         mundo.spawnParticle(Particle.LARGE_SMOKE, l.clone().add(0, 1, 0), 15, 0.3, 0.5, 0.3, 0.02);
@@ -1292,6 +1322,62 @@ public final class Masmorras implements Listener {
         }
     }
 
+    /** Um desafio por instância, só em tesourarias nativas com três pontos realmente livres. */
+    private void prepararRunas(Masmorra m) {
+        if (!plugin.getConfig().getBoolean("masmorra.enigma-runas", true)) return;
+        List<Sala> candidatas = new ArrayList<>();
+        for (Sala s : m.salas) if (s.tipo == TipoSala.TESOURO && s.personalizada == null) candidatas.add(s);
+        Collections.shuffle(candidatas);
+        for (Sala s : candidatas) {
+            List<Block> pontos = new ArrayList<>();
+            for (int z = s.minZ + 3; z <= s.maxZ - 3 && pontos.size() < 3; z += 3) {
+                Block b = mundo.getBlockAt(s.maxX - 3, s.minY + 1, z);
+                if (b.isEmpty() && b.getRelative(0, 1, 0).isEmpty() && b.getRelative(0, -1, 0).getType().isSolid()
+                        && !m.monolitos.contains(b.getLocation()) && !m.reliquias.contains(b.getLocation())) pontos.add(b);
+            }
+            if (pontos.size() < 3) continue;
+            m.salaEnigma = s; m.enigma = new ConteudoSalas.Sequencia(new Random());
+            for (int i = 0; i < 3; i++) {
+                Block b = pontos.get(i); b.setType(Material.POLISHED_BLACKSTONE_BUTTON, false);
+                var dados = (org.bukkit.block.data.type.Switch) b.getBlockData();
+                dados.setAttachedFace(org.bukkit.block.data.FaceAttachable.AttachedFace.FLOOR); b.setBlockData(dados, false);
+                m.runas.put(b.getLocation(), i);
+                String rotulo = List.of("I","II","III").get(i);
+                mundo.spawn(b.getLocation().add(.5, .8, .5), org.bukkit.entity.TextDisplay.class, d -> {
+                    d.text(Component.text("✦ " + rotulo, NamedTextColor.AQUA)); d.setBillboard(org.bukkit.entity.Display.Billboard.CENTER);
+                    d.setPersistent(false); d.setSeeThrough(false); d.setViewRange(.6f);
+                });
+            }
+            Location pista = pontos.get(1).getLocation().add(-1.5, 2, .5);
+            mundo.spawn(pista, org.bukkit.entity.TextDisplay.class, d -> {
+                d.text(Component.text("Sequência rúnica\n" + m.enigma.pista(), NamedTextColor.GOLD)
+                        .append(Component.text("\nToque as três runas na ordem.\nDesafio opcional da equipe", NamedTextColor.GRAY)));
+                d.setBillboard(org.bukkit.entity.Display.Billboard.CENTER); d.setPersistent(false); d.setLineWidth(180); d.setSeeThrough(false); d.setViewRange(.7f);
+            });
+            return;
+        }
+    }
+
+    private void tocarRuna(Masmorra m, Player p, int runa) {
+        if (m.enigma == null || m.enigma.concluida() || m.estado != Masmorra.Estado.PRONTA) return;
+        long agora = System.currentTimeMillis();
+        if (agora < m.proximoToqueRuna) return;
+        m.proximoToqueRuna = agora + 400;
+        boolean acertou = m.enigma.tocar(runa);
+        p.playSound(p.getLocation(), acertou ? Sound.BLOCK_AMETHYST_BLOCK_CHIME : Sound.BLOCK_NOTE_BLOCK_BASS, .7f, .8f + m.enigma.progresso() * .25f);
+        for (Player o : presentes(m)) if (m.salaEnigma.dentro(o.getLocation(), -.5))
+            o.sendMessage(Component.text(acertou ? "✦ Runas: " + m.enigma.progresso() + "/3" : "A sequência se apagou. Comece novamente pela primeira runa.", acertou ? NamedTextColor.AQUA : NamedTextColor.YELLOW));
+        if (!m.enigma.concluida()) return;
+        // Marca concluída antes de criar a recompensa: nenhuma repetição ou recompensa por jogador.
+        Inventory premio = Bukkit.createInventory(null, 27);
+        Tesouro.encher(plugin, premio, m.dificuldade, 2, false, new Random(), true);
+        Location onde = m.runas.entrySet().stream().filter(e -> e.getValue() == runa).findFirst().orElseThrow().getKey().clone().add(.5, 1.1, .5);
+        for (ItemStack item : premio.getContents()) if (item != null && !item.isEmpty()) mundo.dropItemNaturally(onde, item);
+        mundo.spawnParticle(Particle.TOTEM_OF_UNDYING, onde, 40, .6, .7, .6, .1);
+        mundo.playSound(onde, Sound.UI_TOAST_CHALLENGE_COMPLETE, .8f, 1.2f);
+        for (Player o : presentes(m)) o.sendMessage(Component.text("✔ Sequência rúnica resolvida! O tesouro extra apareceu junto das runas.", NamedTextColor.GOLD));
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void aoClicarObjetivo(org.bukkit.event.player.PlayerInteractEvent e) {
         if (e.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK || e.getClickedBlock() == null || !ehMundo(e.getClickedBlock().getWorld())) return;
@@ -1300,6 +1386,13 @@ public final class Masmorras implements Listener {
         Masmorra m = de(p);
         if (m == null) return;
         Location l = b.getLocation();
+        Integer runa = m.runas.get(l);
+        if (runa != null) {
+            e.setCancelled(true);
+            if (e.getHand() == org.bukkit.inventory.EquipmentSlot.HAND && p.getLocation().distanceSquared(l.clone().add(.5, .5, .5)) <= 36)
+                tocarRuna(m, p, runa);
+            return;
+        }
         // 2.70: mímico (o baú) e Pilar de Bênção.
         if (m.mimicos.contains(l)) {
             e.setCancelled(true);
@@ -1422,12 +1515,18 @@ public final class Masmorras implements Listener {
         Particle.DustOptions vermelho = new Particle.DustOptions(org.bukkit.Color.fromRGB(0xD50000), 1.2f);
         UUID idChefe = chefe.getUniqueId();
         UUID idMasmorra = m.id;
+        for (Player p : naSala) {
+            p.sendActionBar(Component.text("⚠ Saia dos círculos! Golpe do chefe carregando...", NamedTextColor.RED));
+            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, .6f, .6f);
+        }
         plugin.getServer().getScheduler().runTaskTimer(plugin, new java.util.function.Consumer<org.bukkit.scheduler.BukkitTask>() {
             int passos;
 
             @Override
             public void accept(org.bukkit.scheduler.BukkitTask tarefa) {
-                if (!ativas.containsKey(idMasmorra)) { tarefa.cancel(); return; }
+                Entity autor = Bukkit.getEntity(idChefe);
+                if (!ativas.containsKey(idMasmorra) || m.estado != Masmorra.Estado.PRONTA || s.estado != Sala.Estado.LUTANDO
+                        || !idChefe.equals(s.chefe) || !(autor instanceof LivingEntity autorVivo) || !autorVivo.isValid() || autorVivo.isDead()) { tarefa.cancel(); return; }
                 passos++;
                 for (Location c : alvos) {
                     for (int i = 0; i < 20; i++) {
@@ -1436,13 +1535,14 @@ public final class Masmorras implements Listener {
                     }
                     if (passos % 2 == 0) mundo.spawnParticle(Particle.DUST, c, 6, raio / 2, 0, raio / 2, 0, vermelho);
                 }
-                if (passos < 6) return;
+                if (passos < 7) return;
                 tarefa.cancel();
                 Entity e = Bukkit.getEntity(idChefe);
                 for (Location c : alvos) {
                     mundo.spawnParticle(Particle.EXPLOSION, c.clone().add(0, 0.5, 0), 3, 0.8, 0.3, 0.8, 0);
                     mundo.playSound(c, Sound.ENTITY_GENERIC_EXPLODE, 0.8f, 1.2f);
                     for (Player p : mundo.getPlayers()) {
+                        if (!m.participantes.contains(p.getUniqueId()) || p.isDead() || !s.dentro(p.getLocation(), -.5)) continue;
                         Location pl = p.getLocation();
                         if (Math.abs(pl.getY() - c.getY()) < 2 && Math.hypot(pl.getX() - c.getX(), pl.getZ() - c.getZ()) <= raio) {
                             if (e instanceof LivingEntity vivo && vivo.isValid()) p.damage(dano, vivo);

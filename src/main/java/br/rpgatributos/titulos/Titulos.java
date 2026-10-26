@@ -122,6 +122,7 @@ public final class Titulos implements Listener {
 
     /** Soma ao contador e confere se algum título foi desbloqueado. */
     public void registrar(Player p, String id, int quantidade) {
+        if (br.rpgatributos.ModoTeste.ehTeste(p)) return; // 2.88: na área de testes nada conta
         Map<String, Integer> m = contadores(p);
         m.merge(id, quantidade, Integer::sum);
         salvarContadores(p, m);
@@ -132,6 +133,7 @@ public final class Titulos implements Listener {
 
     /** O contador passa a ser pelo menos {@code valor} (ex.: quantas magias secretas já descobriu). */
     public void definirMinimo(Player p, String id, int valor) {
+        if (br.rpgatributos.ModoTeste.ehTeste(p)) return;
         Map<String, Integer> m = contadores(p);
         if (m.getOrDefault(id, 0) >= valor) return;
         m.put(id, valor);

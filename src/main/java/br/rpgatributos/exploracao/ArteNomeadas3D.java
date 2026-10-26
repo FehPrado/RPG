@@ -374,9 +374,20 @@ public final class ArteNomeadas3D {
 
     /** As armas dos minérios sem nome: o mesmo 3D da molde (textura rpgatributos:item/{visual}_cores). */
     public static String modeloArsenal(String molde, String visual) {
+        return modeloPortal(molde, visual, 0);
+    }
+
+    public static String modeloPortal(String molde, String visual, int estilo) {
         List<Elemento> els = new ArrayList<>();
         double bx = 1.2, by = 1.2;
-        for (Peca p : pecas(molde, false)) {
+        List<Peca> pecas = pecas(molde, false);
+        if (estilo > 0) {
+            // Guarda, runas e espinhos dão uma silhueta própria até quando a arma base coincide.
+            double guarda = 2.0 + estilo * 0.35;
+            pecas.add(new Peca(5.0, 5.6, -guarda, guarda, -1.0, 1.0, 'g'));
+            for (int i = 0; i < estilo; i++) pecas.add(new Peca(7 + i * 1.6, 7.8 + i * 1.6, -0.4, 0.4, -1.3, -0.8, 'a'));
+        }
+        for (Peca p : pecas) {
             double tc = (p.t0() + p.t1()) / 2, vc = (p.v0() + p.v1()) / 2, wc = 8 + (p.w0() + p.w1()) / 2;
             double cx = bx + tc * R2 - vc * R2, cy = by + tc * R2 + vc * R2;
             double lt = (p.t1() - p.t0()) / 2, lv = (p.v1() - p.v0()) / 2, lw = (p.w1() - p.w0()) / 2;

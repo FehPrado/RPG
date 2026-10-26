@@ -3,6 +3,10 @@ package br.rpgatributos.masmorra;
 import br.rpgatributos.RPGAtributos;
 import br.rpgatributos.aventura.Chefe;
 import br.rpgatributos.forja.Raridade;
+import br.rpgatributos.exploracao.ArtePortal;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Equippable;
+import net.kyori.adventure.key.Key;
 import com.google.common.collect.ArrayListMultimap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -56,6 +60,7 @@ public final class EquipamentoPortal implements Listener {
     private static final NamespacedKey K_NI_MELHOR = new NamespacedKey("rpgatributos", "ni_melhor");
     public static final NamespacedKey K_CACADOR = new NamespacedKey("rpgatributos", "equip_cacador");
     public static final NamespacedKey K_ARMA_CHEFE = new NamespacedKey("rpgatributos", "arma_chefe");
+    public static final NamespacedKey K_ESTILO = new NamespacedKey("rpgatributos", "portal_estilo");
     static final TextColor COR = TextColor.color(0x9FD8F5);
 
     private final RPGAtributos plugin;
@@ -85,6 +90,7 @@ public final class EquipamentoPortal implements Listener {
             meta.getPersistentDataContainer().set(K_NI_MAX, PersistentDataType.INTEGER, max.ordinal());
             meta.getPersistentDataContainer().set(K_NI_MELHOR, PersistentDataType.BYTE, (byte) (melhor ? 1 : 0));
         });
+        aplicarVisual(i);
         return i;
     }
 
@@ -157,7 +163,7 @@ public final class EquipamentoPortal implements Listener {
         Peca(String nome, String sufixo) { this.nome = nome; this.sufixo = sufixo; }
     }
 
-    private static Material material(Rank r, Peca p) {
+    public static Material material(Rank r, Peca p) {
         String base = r.ordinal() <= Rank.D.ordinal() ? "IRON" : r.ordinal() <= Rank.B.ordinal() ? "DIAMOND" : "NETHERITE";
         return Material.matchMaterial(base + p.sufixo);
     }
@@ -173,8 +179,15 @@ public final class EquipamentoPortal implements Listener {
 
     /** Uma peça de Caçador do rank, já forjada. */
     public ItemStack pecaCacador(Rank r, Peca p) {
+        return pecaCacador(r, p, EstiloPortal.sortear());
+    }
+
+    public ItemStack pecaCacador(Rank r, Peca p, EstiloPortal estilo) {
         ItemStack base = new ItemStack(material(r, p));
-        base.editMeta(m -> m.getPersistentDataContainer().set(K_CACADOR, PersistentDataType.STRING, r.name()));
+        base.editMeta(m -> {
+            m.getPersistentDataContainer().set(K_CACADOR, PersistentDataType.STRING, r.name());
+            m.getPersistentDataContainer().set(K_ESTILO, PersistentDataType.STRING, estilo.id());
+        });
         return plugin.forja().forjar(null, base, raridade(r));
     }
 
@@ -193,7 +206,7 @@ public final class EquipamentoPortal implements Listener {
     // =====================================================================
 
     /** A arma de cada chefe: nome, base e o efeito ao acertar. */
-    private static Material baseArma(Chefe c) {
+    public static Material baseArma(Chefe c) {
         return switch (c) {
             case GOLEM -> Material.MACE;
             case RAINHA -> Material.DIAMOND_SWORD;
@@ -228,8 +241,15 @@ public final class EquipamentoPortal implements Listener {
 
     /** A arma do chefe, já forjada como Lendária. */
     public ItemStack armaDeChefe(Chefe c) {
+        return armaDeChefe(c, EstiloPortal.sortear());
+    }
+
+    public ItemStack armaDeChefe(Chefe c, EstiloPortal estilo) {
         ItemStack base = new ItemStack(baseArma(c));
-        base.editMeta(m -> m.getPersistentDataContainer().set(K_ARMA_CHEFE, PersistentDataType.STRING, c.name()));
+        base.editMeta(m -> {
+            m.getPersistentDataContainer().set(K_ARMA_CHEFE, PersistentDataType.STRING, c.name());
+            m.getPersistentDataContainer().set(K_ESTILO, PersistentDataType.STRING, estilo.id());
+        });
         return plugin.forja().forjar(null, base, Raridade.LENDARIO);
     }
 
@@ -238,6 +258,39 @@ public final class EquipamentoPortal implements Listener {
         String s = i.getPersistentDataContainer().get(K_ARMA_CHEFE, PersistentDataType.STRING);
         if (s == null) return null;
         try { return Chefe.valueOf(s); } catch (IllegalArgumentException e) { return null; }
+    }
+
+    private static Peca peca(Material tipo) {
+        for (Peca p : Peca.values()) if (tipo.name().endsWith(p.sufixo)) return p;
+        return null;
+    }
+
+    /** Identidade estável para itens novos e para atualizar equipamentos que já existiam. */
+    public static String visual(ItemStack item) {
+        if (item == null || item.isEmpty()) return null;
+        Chefe c = armaChefe(item);
+        EstiloPortal estilo = estilo(item);
+        if (c != null && br.rpgatributos.forja.Categoria.de(item.getType()) == br.rpgatributos.forja.Categoria.de(baseArma(c))) return ArtePortal.visual(c, estilo);
+        Rank r = rankCacador(item);
+        Peca p = peca(item.getType());
+        return r != null && p != null ? ArtePortal.visual(r, p, estilo) : ArtePortal.visualExtra(item);
+    }
+
+    public static EstiloPortal estilo(ItemStack item) {
+        return item == null || !item.hasItemMeta() ? EstiloPortal.CLASSICO
+                : EstiloPortal.porId(item.getPersistentDataContainer().get(K_ESTILO, PersistentDataType.STRING));
+    }
+
+    public static void aplicarVisual(ItemStack item) {
+        String id = visual(item);
+        if (id == null) return;
+        Key modelo = Key.key("rpgatributos", id);
+        if (!modelo.equals(item.getData(DataComponentTypes.ITEM_MODEL))) item.setData(DataComponentTypes.ITEM_MODEL, modelo);
+        Rank r = rankCacador(item);
+        if (r == null || peca(item.getType()) == Peca.ESPADA) return;
+        Equippable base = item.getData(DataComponentTypes.EQUIPPABLE);
+        Key equipamento = Key.key("rpgatributos", ArtePortal.equipamento(r, estilo(item)));
+        if (base != null && !equipamento.equals(base.assetId())) item.setData(DataComponentTypes.EQUIPPABLE, base.toBuilder().assetId(equipamento).build());
     }
 
     /**
@@ -269,6 +322,10 @@ public final class EquipamentoPortal implements Listener {
             lore.add(Component.text("◈ Arma de chefe: " + efeitoArma(c), c.cor()).decoration(TextDecoration.ITALIC, false));
         }
         meta.lore(lore);
+        EstiloPortal estilo = EstiloPortal.porId(pdc.get(K_ESTILO, PersistentDataType.STRING));
+        if (estilo != EstiloPortal.CLASSICO) {
+            meta.itemName(meta.itemName().append(Component.text(" · " + estilo.nome, COR)));
+        }
     }
 
     private static String nomePeca(Material tipo) {
@@ -281,19 +338,26 @@ public final class EquipamentoPortal implements Listener {
     // =====================================================================
 
     /** O bônus de Caçador (fração) de quem veste e segura as peças. */
-    private static double bonusCacador(Player p) {
-        double b = 0;
-        int armadura = 0;
-        for (ItemStack i : p.getInventory().getArmorContents()) {
-            Rank r = rankCacador(i);
-            if (r == null) continue;
-            b += (r.ordinal() + 1) * 0.01;
-            armadura++;
-        }
-        Rank arma = rankCacador(p.getInventory().getItemInMainHand());
-        if (arma != null) b += (arma.ordinal() + 1) * 0.01;
-        if (armadura >= 4) b *= 1.5;
-        return b;
+    private static double bonusCacador(Player p, ItemStack arma) {
+        ItemStack[] itens = p.getInventory().getArmorContents();
+        Rank[] armadura = new Rank[itens.length];
+        for (int n = 0; n < itens.length; n++) armadura[n] = rankCacador(itens[n]);
+        return calcularBonus(armadura, rankCacador(arma));
+    }
+
+    static double calcularBonus(Rank[] armadura, Rank arma) {
+        double bonus = 0;
+        int pecas = 0;
+        for (Rank r : armadura) if (r != null) { bonus += (r.ordinal() + 1) * 0.01; pecas++; }
+        if (arma != null) bonus += (arma.ordinal() + 1) * 0.01;
+        return pecas == 4 ? bonus * 1.5 : bonus;
+    }
+
+    static ItemStack armaDoAtaque(Entity fonte, Player atacante) {
+        if (fonte instanceof org.bukkit.entity.Trident t) return t.getItemStack();
+        if (fonte instanceof org.bukkit.entity.AbstractArrow flecha) return flecha.getWeapon();
+        if (fonte instanceof Projectile) return null;
+        return atacante.getInventory().getItemInMainHand();
     }
 
     private boolean doPortal(Entity e) {
@@ -306,22 +370,23 @@ public final class EquipamentoPortal implements Listener {
         Player atacante = d instanceof Player p ? p : d instanceof Projectile pr && pr.getShooter() instanceof Player p ? p : null;
         // Caçador: mais dano nos monstros dos portais, menos dano deles.
         if (atacante != null && doPortal(e.getEntity())) {
-            double b = bonusCacador(atacante);
+            double b = bonusCacador(atacante, armaDoAtaque(d, atacante));
             if (b > 0) e.setDamage(e.getDamage() * (1 + b));
         }
         if (e.getEntity() instanceof Player vitima) {
             Entity origem = d instanceof Projectile pr && pr.getShooter() instanceof Entity s ? s : d;
             if (doPortal(origem)) {
-                double b = bonusCacador(vitima);
+                double b = bonusCacador(vitima, vitima.getInventory().getItemInMainHand());
                 if (b > 0) e.setDamage(e.getDamage() * Math.max(0.5, 1 - b));
             }
         }
         // Armas de chefe.
-        if (atacante == null || !(e.getEntity() instanceof LivingEntity alvo)) return;
-        ItemStack arma = d instanceof org.bukkit.entity.Trident t ? t.getItemStack()
-                : d instanceof Projectile ? null : atacante.getInventory().getItemInMainHand();
+        if (atacante == null || !(e.getEntity() instanceof LivingEntity alvo) || alvo == atacante
+                || alvo instanceof org.bukkit.entity.ArmorStand) return;
+        if (!(d instanceof Projectile) && e.getCause() != org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK
+                && e.getCause() != org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) return;
+        ItemStack arma = armaDoAtaque(d, atacante);
         Chefe c = arma != null ? armaChefe(arma) : null;
-        if (c == null && d instanceof org.bukkit.entity.AbstractArrow && armaChefe(atacante.getInventory().getItemInMainHand()) == Chefe.LICH) c = Chefe.LICH;
         if (c == null) return;
         switch (c) {
             case GOLEM -> {

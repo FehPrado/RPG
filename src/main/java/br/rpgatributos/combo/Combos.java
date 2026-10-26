@@ -180,7 +180,7 @@ public final class Combos implements Listener, CommandExecutor {
     }
 
     public void darXp(Player p, TipoArma t, double qtd) {
-        if (qtd <= 0) return;
+        if (qtd <= 0 || br.rpgatributos.ModoTeste.ehTeste(p)) return;
         int antes = nivel(p, t);
         qtd *= 1 + estilo.rank(p).xp();
         p.getPersistentDataContainer().set(kXp.get(t), PersistentDataType.DOUBLE, xp(p, t) + qtd * cfg().multiplicadorXp);

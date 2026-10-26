@@ -393,7 +393,7 @@ public final class ModelosVisuais {
             int i = 1;
             for (String[] r : regras) {
                 b.append("models.").append(i).append('=').append(r[0]).append('\n');
-                b.append("name.").append(i).append("=regex:").append(ascii(r[1])).append('\n');
+                b.append("name.").append(i).append("=regex:").append(ascii(r[1].replace("\\", "\\\\"))).append('\n');
                 i++;
             }
             b.append("models.").append(i).append('=').append(padrao != null ? padrao : "1").append('\n');

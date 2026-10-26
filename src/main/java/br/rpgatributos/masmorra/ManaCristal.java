@@ -50,6 +50,7 @@ public final class ManaCristal {
                     Component.text("Sai dos monstros e baús dos portais.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.STRING, t.name());
         });
+        EquipamentoPortal.aplicarVisual(i);
         return i;
     }
 

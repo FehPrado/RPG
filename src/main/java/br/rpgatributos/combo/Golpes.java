@@ -2361,6 +2361,7 @@ public final class Golpes implements Listener {
                 for (int k = 0; k < 8; k++) {
                     double ang = Math.PI * 2 * k / 8;
                     Location pilar = l.clone().add(Math.cos(ang) * 3.5, 0, Math.sin(ang) * 3.5);
+                    plugin.animacoesMagicas().pilar(p, pilar, 24);
                     for (double y = 0; y < 3; y += 0.3) w.spawnParticle(Particle.FLAME, pilar.clone().add(0, y, 0), 3, 0.15, 0.05, 0.15, 0.01);
                     w.spawnParticle(Particle.LAVA, pilar, 3, 0.2, 0.1, 0.2, 0);
                 }

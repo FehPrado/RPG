@@ -268,7 +268,7 @@ public final class Estruturas implements Listener {
         Chunk c = e.getChunk();
         World w = c.getWorld();
         boolean nether = w.getEnvironment() == World.Environment.NETHER;
-        if ((w.getEnvironment() != World.Environment.NORMAL && !nether) || plugin.masmorras().ehMundo(w)) return;
+        if ((w.getEnvironment() != World.Environment.NORMAL && !nether) || plugin.masmorras().ehMundo(w) || br.rpgatributos.ModoTeste.ehTeste(w)) return;
         boolean novo = e.isNewChunk();
         if (!novo && plugin.settings().estrSoChunksNovos) return;
         var pdc = c.getPersistentDataContainer();

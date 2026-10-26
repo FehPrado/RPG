@@ -136,7 +136,7 @@ public final class Profundezas implements Listener {
     }
 
     private boolean mundoCerto(World w) {
-        return w.getEnvironment() == World.Environment.NORMAL && !plugin.masmorras().ehMundo(w);
+        return w.getEnvironment() == World.Environment.NORMAL && !plugin.masmorras().ehMundo(w) && !br.rpgatributos.ModoTeste.ehTeste(w);
     }
 
     /** Quantos corações a Penumbra pode roubar (config). */

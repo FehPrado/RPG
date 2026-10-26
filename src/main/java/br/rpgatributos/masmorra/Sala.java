@@ -35,6 +35,8 @@ public final class Sala {
     Gerador.Estilo estilo = Gerador.Estilo.SIMPLES;
     /** 2.70: tem um Pilar de Bênção num canto. */
     boolean pilar;
+    ConteudoSalas.Encontro encontro = ConteudoSalas.Encontro.PATRULHA;
+    final Set<UUID> visitantes = new HashSet<>();
 
     // Limites no mundo (com as paredes).
     int minX, minY, minZ, maxX, maxY, maxZ;

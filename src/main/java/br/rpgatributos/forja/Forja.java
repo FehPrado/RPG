@@ -442,6 +442,7 @@ public final class Forja {
             Incrustacoes.decorar(meta, tipo); // minério incrustado: a linha e o atributo voltam
         });
         Traje.vestir(item); // Traje: a textura dele no corpo de quem veste
+        br.rpgatributos.masmorra.EquipamentoPortal.aplicarVisual(item);
     }
 
     private List<Component> montarDescricao(Material tipo, Categoria cat, Tier tier, DadosForja d, br.rpgatributos.combo.Arsenal.Arma arma) {

@@ -130,6 +130,7 @@ public final class Recordes implements Listener, CommandExecutor {
     // =====================================================================
 
     private void tentar(Player p, String id, double valor) {
+        if (br.rpgatributos.ModoTeste.ehTeste(p)) return; // 2.88: recorde da área de testes não vale
         Recorde atual = recordes.get(id);
         if (atual != null && valor <= atual.valor()) return;
         boolean tomou = atual != null && !atual.quem().equals(p.getName());

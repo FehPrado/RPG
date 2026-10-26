@@ -63,6 +63,7 @@ public final class MagiaOculta implements Listener {
             m.setMaxStackSize(1);
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.BYTE, (byte) 1);
         });
+        EquipamentoPortal.aplicarVisual(i);
         return i;
     }
 

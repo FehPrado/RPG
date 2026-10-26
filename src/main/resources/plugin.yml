@@ -84,6 +84,16 @@ commands:
     usage: /guardaroupa
     aliases: [roupas, wardrobe]
     permission: rpg.chapeu
+  aparencia:
+    description: Cores, acessórios, auras, passos e combinações salvas do personagem.
+    usage: /aparencia
+    aliases: [estudio, personalizar]
+    permission: rpg.chapeu
+  decoracoes:
+    description: Fabrique e coloque ornamentos temáticos.
+    usage: /decoracoes
+    aliases: [decoracao, moveis]
+    permission: rpg.chapeu
   animais:
     description: Seus animais da fazenda (corações, comida e produtos do dia).
     usage: /animais

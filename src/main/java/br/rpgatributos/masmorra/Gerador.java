@@ -47,7 +47,7 @@ final class Gerador {
     private static final BlockFace[] DIRECOES = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
 
     /** O interior de uma sala. */
-    enum Estilo { SIMPLES, PILARES, ARENA, PONTE, BIBLIOTECA, ALAGADO, MEZANINO, CRIPTA, JARDIM }
+    enum Estilo { SIMPLES, PILARES, ARENA, PONTE, BIBLIOTECA, ALAGADO, MEZANINO, CRIPTA, JARDIM, FORJA, OBSERVATORIO }
 
     /** O jeito do corredor. */
     enum Corredor { RETO, PONTE, TUNEL }
@@ -120,6 +120,9 @@ final class Gerador {
         alturas(m, r);
         profundidades(m);
         tipos(m, r);
+        if (plugin.getConfig().getBoolean("masmorra.encontros-variados", true))
+            for (Sala s : m.salas) if (s.tipo == TipoSala.COMBATE && s.profundidade > 1)
+                s.encontro = ConteudoSalas.Encontro.values()[r.nextInt(ConteudoSalas.Encontro.values().length)];
 
         m.minX = Integer.MAX_VALUE;
         m.minZ = Integer.MAX_VALUE;
@@ -364,7 +367,7 @@ final class Gerador {
         for (int i = 0; i < minas && livres > MIN_LUTA; i++, livres--) resto.removeFirst().tipo = TipoSala.MINA;
 
         Estilo[] combate = {Estilo.PILARES, Estilo.ARENA, Estilo.PONTE, Estilo.BIBLIOTECA, Estilo.ALAGADO, Estilo.MEZANINO,
-                Estilo.CRIPTA, Estilo.JARDIM, Estilo.SIMPLES};
+                Estilo.CRIPTA, Estilo.JARDIM, Estilo.SIMPLES, Estilo.FORJA, Estilo.OBSERVATORIO};
         for (Sala s : m.salas) {
             s.estilo = switch (s.tipo) {
                 case COMBATE -> combate[r.nextInt(combate.length)];
@@ -421,6 +424,26 @@ final class Gerador {
         if (s.tipo == TipoSala.COMBATE && r.nextDouble() < 0.25) armadilhaNaSala(m, w, s, r);
         if (s.tipo == TipoSala.INICIO && s.entrada == null) s.entrada = s.centro(w);
         if (s.tipo == TipoSala.CHEFE && s.pontoChefe == null) s.pontoChefe = new Location(w, s.centroX, s.minY, s.centroZ);
+        if (s.tipo == TipoSala.CHEFE && s.personalizada == null) for (Sala.Porta porta : s.portas) {
+            int[] xz = naParede(s, porta, 0);
+            Location aviso = new Location(w, xz[0] + .5, porta.y() + 4.5, xz[1] + .5);
+            w.spawn(aviso, org.bukkit.entity.TextDisplay.class, d -> {
+                d.text(net.kyori.adventure.text.Component.text("☠ Arena do chefe\nPrepare-se antes de avançar", net.kyori.adventure.text.format.NamedTextColor.RED));
+                d.setBillboard(org.bukkit.entity.Display.Billboard.CENTER); d.setPersistent(false); d.setSeeThrough(false); d.setLineWidth(180); d.setViewRange(.8f);
+            });
+        }
+        if (modelo == null && s.tipo != TipoSala.ESCADA && plugin.getConfig().getBoolean("embelezamento.cenarios", true)) {
+            var o = switch (t) {
+                case CRIPTA -> br.rpgatributos.visual.ObjetoDecorativo.ESTANTE;
+                case CAVERNA, GELO -> br.rpgatributos.visual.ObjetoDecorativo.CRISTAL;
+                case INFERNO -> br.rpgatributos.visual.ObjetoDecorativo.BRASEIRO;
+            };
+            for (int x : new int[]{s.minX + 2, s.maxX - 2}) {
+                Location canto = new Location(w, x + .5, s.minY + 1, s.minZ + 2.5);
+                if (canto.getBlock().isPassable()) br.rpgatributos.visual.Decoracoes.criar(canto, o, t, false);
+            }
+            if (s.tipo == TipoSala.CHEFE) br.rpgatributos.visual.Decoracoes.criar(new Location(w, s.maxX - 2.5, s.minY + 1, s.maxZ - 2.5), br.rpgatributos.visual.ObjetoDecorativo.BANDEIRA, t, false);
+        }
     }
 
     /** Piso, paredes e teto; luz no teto em grade. */
@@ -583,6 +606,29 @@ final class Gerador {
                         if (w.getBlockAt(x + dx, y + dy, z + dz).isEmpty()) por(w, x + dx, y + dy, z + dz, Material.FLOWERING_AZALEA_LEAVES);
                     }
                 }
+            }
+            case FORJA -> {
+                // Oficinas laterais deixam o centro e os eixos das portas livres.
+                for (int x : new int[]{x0 + 2, x1 - 2}) for (int z : new int[]{z0 + 3, z1 - 3}) {
+                    por(w, x, y + 1, z, Material.BLAST_FURNACE);
+                    por(w, x, y + 2, z, t.pilar());
+                    por(w, x, y + 3, z, t.luz());
+                    por(w, x + (x < cx ? 1 : -1), y + 1, z, Material.ANVIL);
+                }
+                for (int z = z0 + 2; z <= z1 - 2; z++) {
+                    por(w, x0 + 1, y, z, t.destaque()); por(w, x1 - 1, y, z, t.destaque());
+                }
+            }
+            case OBSERVATORIO -> {
+                for (int x = x0 + 1; x < x1; x++) for (int z = z0 + 1; z < z1; z++) {
+                    double d = Math.hypot(x - cx, z - cz);
+                    if (Math.abs(d - 4) < .55 || Math.abs(d - 7) < .55) por(w, x, y, z, t.destaque());
+                }
+                for (int dx : new int[]{-6, 6}) for (int dz : new int[]{-6, 6}) {
+                    por(w, cx + dx, y + 1, cz + dz, t.pilar());
+                    por(w, cx + dx, y + 2, cz + dz, t.luz());
+                }
+                por(w, cx, s.maxY - 1, cz, t.luz());
             }
             case SIMPLES -> { }
         }
@@ -915,6 +961,8 @@ final class Gerador {
                             net.kyori.adventure.text.format.TextColor.color(0xFFC107), net.kyori.adventure.text.format.TextColor.color(0x4DD0E1)};
                     double[] mult = {1.0, 1.5, 2.2, 3.5};
                     bau.customName(net.kyori.adventure.text.Component.text(nomes[nivel], cores[nivel]));
+                    bau.getPersistentDataContainer().set(br.rpgatributos.visual.Decoracoes.K_RARIDADE, org.bukkit.persistence.PersistentDataType.INTEGER, nivel);
+                    if (plugin.getConfig().getBoolean("embelezamento.cenarios", true)) br.rpgatributos.visual.Decoracoes.criar(b.getLocation().add(.5, 0, .5), br.rpgatributos.visual.ObjetoDecorativo.BAU, m.tema, false);
                     bau.update();
                     int base = (int) Math.round((3 + m.dificuldade.nivel()) * mult[nivel]);
                     Tesouro.encher(plugin, bau.getBlockInventory(), m.dificuldade, Masmorras.rolagens(m, base), false, r, true);

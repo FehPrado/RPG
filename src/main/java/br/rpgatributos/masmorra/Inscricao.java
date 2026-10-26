@@ -93,6 +93,7 @@ public enum Inscricao {
             m.setEnchantmentGlintOverride(true);
             m.getPersistentDataContainer().set(K, PersistentDataType.STRING, name());
         });
+        EquipamentoPortal.aplicarVisual(i);
         return i;
     }
 

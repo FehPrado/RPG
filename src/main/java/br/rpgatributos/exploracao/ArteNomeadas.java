@@ -349,7 +349,7 @@ public final class ArteNomeadas {
             "owmo............",
             "ppo............."};
 
-    private static String[] molde(String nome) {
+    static String[] molde(String nome) {
         return switch (nome) {
             case "sabre" -> SABRE;
             case "larga" -> LARGA;
@@ -520,7 +520,7 @@ public final class ArteNomeadas {
     }
 
     /** Arco: madeira curvada para cima e à esquerda, corda na diagonal. {@code fase}: -1 parado, 0 a 2 puxando. */
-    private static String[] arco(int fase) {
+    static String[] arco(int fase) {
         char[][] g = vazio();
         curva(g, 2, 14, 1, 1, 14, 2, 'w', 'h');
         pix(g, 2, 14, 'a');
@@ -804,7 +804,7 @@ public final class ArteNomeadas {
         }
         for (org.bukkit.Material m : org.bukkit.Material.values()) {
             String n = m.name();
-            if (m.isLegacy() || !m.isItem() || !n.endsWith(fim) || (fim.equals("_AXE") && n.endsWith("_PICKAXE"))) continue;
+            if (m.isLegacy() || !n.endsWith(fim) || (fim.equals("_AXE") && n.endsWith("_PICKAXE"))) continue;
             l.add(n.toLowerCase(Locale.ROOT));
         }
         return l;

@@ -68,7 +68,11 @@ public enum Raro {
     AMBAR_INFERNAL("Âmbar Infernal", Material.GLOWSTONE_DUST, 0xFF9A1F,
             "Resina dos fungos gigantes, endurecida pelo calor.", "Incruste numa arma (Forja). O Ferreiro Piglin paga bem."),
     QUARTZO_NEGRO("Quartzo Negro", Material.QUARTZ, 0x4A4060,
-            "Cresce onde as almas se deitam, no vale de areia de almas.", "Incruste numa arma (Forja). O Ferreiro Piglin paga bem.");
+            "Cresce onde as almas se deitam, no vale de areia de almas.", "Incruste numa arma (Forja). O Ferreiro Piglin paga bem."),
+
+    // 2.84: o Altar da Convergência
+    ALMA_DESPERTA("Alma Desperta", Material.FIREWORK_STAR, 0xB388FF,
+            "O que sobra de um chefe que voltou mais forte.", "Cai dos chefes Despertos. Usada no Altar da Convergência.");
 
     /** Chave fixa (namespace do plugin) para não depender da instância do plugin. */
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "raro");

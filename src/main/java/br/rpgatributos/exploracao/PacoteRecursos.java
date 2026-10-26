@@ -186,6 +186,10 @@ public final class PacoteRecursos implements Listener {
 
     /** Itens feitos antes das texturas (gancho, cajado forjado, acessórios) ganham a marca. */
     public static ItemStack atualizar(ItemStack i) {
+        if (br.rpgatributos.masmorra.EquipamentoPortal.visual(i) != null) {
+            br.rpgatributos.masmorra.EquipamentoPortal.aplicarVisual(i);
+            return i;
+        }
         String id = idVisual(i);
         if (id == null) return i;
         Acessorio acessorio = Acessorio.de(i);
@@ -202,6 +206,8 @@ public final class PacoteRecursos implements Listener {
 
     private static String idVisual(ItemStack i) {
         if (i == null || i.isEmpty() || !i.hasItemMeta()) return null;
+        String portal = br.rpgatributos.masmorra.EquipamentoPortal.visual(i);
+        if (portal != null) return portal;
         if (Mobilidade.ehGancho(i)) return "gancho";
         if (i.getType() == Material.BREEZE_ROD && i.getPersistentDataContainer().has(K_FORJA)) return "cajado_arcano";
         Acessorio a = Acessorio.de(i);
@@ -359,6 +365,10 @@ public final class PacoteRecursos implements Listener {
         }
     }
 
+    public static byte[] exportar(File pasta) throws IOException {
+        return new PacoteRecursos(null).montar(pasta);
+    }
+
     private byte[] montar(File pasta) throws IOException {
         carregarPegadas(pasta);
         Map<String, byte[]> f = new LinkedHashMap<>();
@@ -411,7 +421,7 @@ public final class PacoteRecursos implements Listener {
         }
         // 2.51: o arsenal novo usa a base de espada de qualquer material (a arte está na de ferro).
         for (Material m : Material.values()) {
-            if (m.isLegacy() || !m.isItem() || !m.name().endsWith("_SWORD") || m == Material.IRON_SWORD) continue;
+            if (m.isLegacy() || !m.name().endsWith("_SWORD") || m == Material.IRON_SWORD) continue;
             for (br.rpgatributos.combo.Arsenal.Arma a : br.rpgatributos.combo.Arsenal.Arma.values()) caso(casos, m.name().toLowerCase(java.util.Locale.ROOT), a.visual());
         }
         // 2.47: cada carta tem o seu visual. No inventário e na mão, a moldura da raridade; numa
@@ -436,7 +446,7 @@ public final class PacoteRecursos implements Listener {
         // Espadas, machados e maça: a pegada muda com a postura (2ª marca), por cima do visual da lenda (1ª).
         for (Material m : Material.values()) {
             String n = m.name();
-            if (m.isLegacy() || !m.isItem() || !(n.endsWith("_SWORD") || n.endsWith("_AXE") || m == Material.MACE)) continue;
+            if (m.isLegacy() || !(n.endsWith("_SWORD") || n.endsWith("_AXE") || m == Material.MACE)) continue;
             String vanilla = n.toLowerCase(java.util.Locale.ROOT);
             List<String> lendas = casos.getOrDefault(vanilla, List.of());
             List<String> pegadas = new java.util.ArrayList<>(List.of("ofensiva", "defensiva", "agil"));
@@ -482,7 +492,7 @@ public final class PacoteRecursos implements Listener {
         // Arcos, bestas e varas com nome: modelos do jogo (mesma posição na mão), textura própria em cada fase.
         // Lanças e tridente com nome: no inventário o desenho, na mão o 3D; sem nome, igual ao jogo.
         for (Material m : Material.values()) {
-            if (m.isLegacy() || !m.isItem() || !m.name().endsWith("_SPEAR")) continue;
+            if (m.isLegacy() || !m.name().endsWith("_SPEAR")) continue;
             String vanilla = m.name().toLowerCase(java.util.Locale.ROOT);
             f.put("assets/minecraft/items/" + vanilla + ".json", texto(lancas(false, LANCA_DO_JOGO.formatted(vanilla, vanilla), ", \"swap_animation_scale\": 1.95")));
         }
@@ -563,11 +573,16 @@ public final class PacoteRecursos implements Listener {
         f.putAll(br.rpgatributos.domador.ModelosLendarios.arquivosDoPacote());
         // 2.55: modelos editados no Blockbench para moradores, chefes, bestas, companheiros, invocações e elites.
         ModelosVisuais.somar(f, new File(pasta, "modelos"));
+        ModelosMonstros.somar(f);
+        ModelosInvocacoes.somar(f);
         f.putAll(br.rpgatributos.raca.Enfeites.arquivosDoPacote());
         // Trajes (armaduras com nome): a textura no corpo de quem veste.
         f.putAll(ArteTrajes.arquivosDoPacote());
         // 2.64: conjuntos dos minerais (ícones e a armadura no corpo).
         f.putAll(ArteMinerais.arquivosDoPacote());
+        f.putAll(ArtePortal.arquivosDoPacote());
+        f.putAll(br.rpgatributos.visual.ArtesVisuais.arquivosDoPacote());
+        br.rpgatributos.visual.ArtesVisuais.animarItens(f);
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try (ZipOutputStream zip = new ZipOutputStream(bytes)) {
@@ -794,7 +809,7 @@ public final class PacoteRecursos implements Listener {
     }
 
     /** O arco do jogo: parado, ou puxando (3 fases pelo tempo puxando). */
-    private static String arcoPuxando(String base) {
+    static String arcoPuxando(String base) {
         return "{ \"type\": \"minecraft:condition\", \"property\": \"minecraft:using_item\", "
                 + "\"on_false\": { \"type\": \"minecraft:model\", \"model\": \"" + base + "\" }, "
                 + "\"on_true\": { \"type\": \"minecraft:range_dispatch\", \"property\": \"minecraft:use_duration\", \"scale\": 0.05, "

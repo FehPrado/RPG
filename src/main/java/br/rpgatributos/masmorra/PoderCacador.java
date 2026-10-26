@@ -37,6 +37,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -181,8 +183,6 @@ public final class PoderCacador implements Listener {
         for (Player p : Bukkit.getOnlinePlayers()) {
             Masmorra m = mas.ehMundo(p.getWorld()) ? mas.de(p) : null;
             vigor(p, m != null ? 2 * ArvoreCacador.grau(p, No.VIGOR) : 0);
-            efeito(p, PotionEffectType.NIGHT_VISION, m != null && Despertar.tem(p, Caracteristica.OLHOS_DE_GATO));
-            efeito(p, PotionEffectType.SPEED, m != null && Despertar.tem(p, Caracteristica.PES_LIGEIROS));
             if (m == null) continue;
             if (ArvoreCacador.grau(p, No.FARO) > 0) {
                 brilhar(p, m.segredos.keySet(), Color.fromRGB(0xFFD54F), 14, true);
@@ -202,15 +202,14 @@ public final class PoderCacador implements Listener {
         else if (p.getHealth() > inst.getValue()) p.setHealth(inst.getValue());
     }
 
-    /** Mantém (ou tira) um efeito "de fundo" nosso, sem mexer numa poção que o jogador bebeu. */
-    private static void efeito(Player p, PotionEffectType tipo, boolean quer) {
-        PotionEffect atual = p.getPotionEffect(tipo);
-        boolean nosso = atual != null && atual.isAmbient() && !atual.hasParticles() && atual.getAmplifier() == 0 && atual.getDuration() <= 400;
-        if (quer) {
-            if (atual == null || (nosso && atual.getDuration() < 300)) p.addPotionEffect(new PotionEffect(tipo, 400, 0, true, false, true));
-        } else if (nosso) {
-            p.removePotionEffect(tipo);
-        }
+    /** Soma os poderes aos passivos dos equipamentos, sem remover efeitos de outras fontes. */
+    public Map<PotionEffectType, Integer> efeitos(Player p) {
+        Masmorras mas = plugin.masmorras();
+        if (mas == null || !mas.ehMundo(p.getWorld()) || mas.de(p) == null) return Map.of();
+        Map<PotionEffectType, Integer> efeitos = new HashMap<>();
+        if (Despertar.tem(p, Caracteristica.OLHOS_DE_GATO)) efeitos.put(PotionEffectType.NIGHT_VISION, 0);
+        if (Despertar.tem(p, Caracteristica.PES_LIGEIROS)) efeitos.put(PotionEffectType.SPEED, 0);
+        return efeitos;
     }
 
     /** Partículas só para ele nos pontos perto (até 10 blocos), no máximo {@code limite}. */

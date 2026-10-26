@@ -86,6 +86,10 @@ public final class Masmorra {
     /** Para a nota da corrida: quando começou, quanto tempo tinha, mortes e segredos achados. */
     long inicioMs, duracaoMs;
     int mortes, segredosAchados;
+    final java.util.Map<Location, Integer> runas = new java.util.HashMap<>();
+    ConteudoSalas.Sequencia enigma;
+    Sala salaEnigma;
+    long proximoToqueRuna;
 
     /** Os tipos de armadilha. */
     enum Armadilha { ESPINHOS, FLECHAS, CHAMAS }

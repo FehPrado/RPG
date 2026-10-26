@@ -329,10 +329,12 @@ final class Feiticos {
         World w = origem.getWorld();
         Location pos = origem.clone();
         Vector dir = direcao.clone().normalize();
+        UUID visual = plugin.animacoesMagicas().orbe(p, pos, l.es, maxTicks + 4);
         new BukkitRunnable() {
             int t = 0;
             @Override
             public void run() {
+                if (!p.isOnline() || p.getWorld() != w || !pos.isChunkLoaded()) { plugin.animacoesMagicas().remover(visual); cancel(); return; }
                 if (teleguiado && t > 2) {
                     LivingEntity alvo = alvoNaFrente(p, pos, dir, 16);
                     if (alvo != null) {
@@ -343,15 +345,19 @@ final class Feiticos {
                 RayTraceResult r = w.rayTrace(pos, dir, velocidade, FluidCollisionMode.NEVER, true, 0.35,
                         e -> e instanceof LivingEntity && e != p && !(e instanceof ArmorStand) && e.isValid());
                 if (r != null) {
+                    plugin.animacoesMagicas().remover(visual);
+                    plugin.animacoesMagicas().impacto(p, r.getHitPosition().toLocation(w), l.es);
                     aoAcertar.accept(new Acerto(r.getHitPosition().toLocation(w), r.getHitEntity() instanceof LivingEntity le ? le : null,
                             r.getHitBlock(), r.getHitBlockFace()));
                     cancel();
                     return;
                 }
                 pos.add(dir.clone().multiply(velocidade));
+                plugin.animacoesMagicas().mover(visual, pos);
                 for (Essencia e : l.es) w.spawnParticle(Particle.DUST, pos, 3, 0.08, 0.08, 0.08, 0, e.poeira(1.3f));
                 if (l.estilo.particula() != null && t % 2 == 0) w.spawnParticle(l.estilo.particula(), pos, 1, 0.05, 0.05, 0.05, 0);
                 if (++t >= maxTicks || !pos.isChunkLoaded()) {
+                    plugin.animacoesMagicas().remover(visual);
                     aoAcertar.accept(new Acerto(pos.clone(), null, null, null));
                     cancel();
                 }
@@ -588,6 +594,7 @@ final class Feiticos {
      */
     void raio(Lance l, Receita receita, double custoPulso, boolean automatico, Runnable aoFim) {
         Player p = l.p;
+        plugin.animacoesMagicas().conjurar(p, l.es, Forma.RAIO, receita);
         Canal c = new Canal();
         c.raio = true;
         c.inicio = agora();
@@ -713,6 +720,7 @@ final class Feiticos {
         if (receita == Receita.SOMBRAS_GEMEAS) { principal = Essencia.SOMBRA; duracao = 600; qtd = 3; }
         if (receita == Receita.ESPIRITO_DA_FLORESTA) { principal = Essencia.VIDA; duracao = 900; }
         World w = onde.getWorld();
+        plugin.animacoesMagicas().invocacao(p, onde, l.es);
         for (int i = 0; i < qtd; i++) {
             LivingEntity ent;
             String nome;

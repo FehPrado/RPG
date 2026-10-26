@@ -188,12 +188,20 @@ public final class Elevadores implements Listener {
     public void aoPular(PlayerJumpEvent e) {
         if (!plugin.settings().confElevadores) return;
         Player p = e.getPlayer();
-        Block pe = embaixo(p);
-        if (pe == null) return;
+        Block pe = apoioDoPulo(e);
+        if (pe == null || !eh(pe)) return;
         Block destino = procurar(pe, 1);
         if (destino == null) return;
         e.setCancelled(true);
-        levar(p, destino);
+        // O Paper ainda reposiciona o jogador ao cancelar o salto. Transporte no tick seguinte.
+        Location origem = e.getFrom().clone();
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (!p.isOnline() || p.isDead() || p.isInsideVehicle() || p.isFlying()
+                    || p.getWorld() != origem.getWorld() || p.getLocation().distanceSquared(origem) > 2.25) return;
+            if (!eh(pe)) return;
+            Block atual = procurar(pe, 1);
+            if (atual != null) levar(p, atual);
+        });
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -208,9 +216,15 @@ public final class Elevadores implements Listener {
 
     /** O elevador em que o jogador está em pé (ou null). */
     private Block embaixo(Player p) {
+        Block b = blocoSob(p, p.getLocation());
+        return b != null && eh(b) ? b : null;
+    }
+
+    static Block apoioDoPulo(PlayerJumpEvent e) { return blocoSob(e.getPlayer(), e.getFrom()); }
+
+    private static Block blocoSob(Player p, Location origem) {
         if (p.isInsideVehicle() || p.isFlying()) return null;
-        Block b = p.getLocation().subtract(0, 0.2, 0).getBlock();
-        return eh(b) ? b : null;
+        return origem.clone().subtract(0, 0.2, 0).getBlock();
     }
 
     /** O próximo elevador na direção (1 = acima, -1 = abaixo) com 2 blocos livres em cima. */
@@ -231,7 +245,9 @@ public final class Elevadores implements Listener {
         Location para = destino.getLocation().add(0.5, 1, 0.5);
         para.setYaw(l.getYaw());
         para.setPitch(l.getPitch());
-        p.teleport(para);
+        if (!p.teleport(para)) return;
+        p.setVelocity(new org.bukkit.util.Vector());
+        p.setFallDistance(0);
         p.getWorld().spawnParticle(Particle.REVERSE_PORTAL, para.clone().add(0, 0.5, 0), 12, 0.3, 0.4, 0.3, 0.02);
         p.getWorld().playSound(para, Sound.BLOCK_PISTON_EXTEND, 0.5f, 1.6f);
     }

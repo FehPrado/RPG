@@ -36,6 +36,7 @@ public final class Enfeites {
 
     public static final NamespacedKey K_ENFEITE = new NamespacedKey("rpgatributos", "enfeite_cabeca");
     private static final TextColor COR = TextColor.color(0xFFD180);
+    public enum Categoria { BARBA, CHIFRES, ORELHAS, ROSTO, COROA, BARBATANAS, CABELO, BIGODE, BRINCOS }
 
     /** Uma caixa do modelo: de, até, se usa a cor de destaque (lado direito da textura) e uma rotação opcional. */
     private record Caixa(double[] de, double[] ate, boolean destaque, String eixo, double angulo, double[] origem) {
@@ -77,7 +78,94 @@ public final class Enfeites {
                 new Caixa(new double[]{3, 19, 3}, new double[]{13, 19.8, 4.5}, false),
                 new Caixa(new double[]{3, 19, 11.5}, new double[]{13, 19.8, 13}, false),
                 new Caixa(new double[]{3, 19, 4.5}, new double[]{4.5, 19.8, 11.5}, true),
-                new Caixa(new double[]{11.5, 19, 4.5}, new double[]{13, 19.8, 11.5}, true)));
+                new Caixa(new double[]{11.5, 19, 4.5}, new double[]{13, 19.8, 11.5}, true))),
+        BARBA_TRANCADA("barba_trancada", "Barba Trançada", Raca.ANAO, 0x633D25, 0xD8B352, List.of(
+                new Caixa(new double[]{3, -2, -1.7}, new double[]{13, 5, 0.4}, false),
+                new Caixa(new double[]{4, -8, -1.4}, new double[]{6, 1, 0.5}, false),
+                new Caixa(new double[]{10, -8, -1.4}, new double[]{12, 1, 0.5}, false),
+                new Caixa(new double[]{3.8, -5, -1.7}, new double[]{6.2, -3, 0.7}, true),
+                new Caixa(new double[]{9.8, -5, -1.7}, new double[]{12.2, -3, 0.7}, true))),
+        BARBA_BRANCA("barba_branca", "Barba do Ancião", Raca.ANAO, 0xE2E0D7, 0xAEBAC5, List.of(
+                new Caixa(new double[]{3, -2, -1.6}, new double[]{13, 5, 0.5}, false),
+                new Caixa(new double[]{5, -6, -1.3}, new double[]{11, -2, 0.3}, false),
+                new Caixa(new double[]{7, -10, -1}, new double[]{9, -6, 0.2}, true))),
+        CHIFRES_CURVOS("chifres_curvos", "Chifres Curvos", Raca.DRACONATO, 0x302535, 0xD5AF61, List.of(
+                new Caixa(new double[]{0, 13, 6}, new double[]{3, 19, 9}, false, "z", 22.5, new double[]{2, 15, 7}),
+                new Caixa(new double[]{-2, 18, 6.5}, new double[]{1, 22, 8.5}, true),
+                new Caixa(new double[]{13, 13, 6}, new double[]{16, 19, 9}, false, "z", -22.5, new double[]{14, 15, 7}),
+                new Caixa(new double[]{15, 18, 6.5}, new double[]{18, 22, 8.5}, true))),
+        CHIFRES_GELO("chifres_gelo", "Chifres de Cristal", Raca.DRACONATO, 0x64C8DF, 0xDAFAFF, List.of(
+                new Caixa(new double[]{2, 15, 6}, new double[]{5, 20, 9}, false),
+                new Caixa(new double[]{3, 20, 7}, new double[]{4, 25, 8}, true),
+                new Caixa(new double[]{11, 15, 6}, new double[]{14, 20, 9}, false),
+                new Caixa(new double[]{12, 20, 7}, new double[]{13, 25, 8}, true))),
+        ORELHAS_GATO("orelhas_gato", "Orelhas Felinas", Raca.FERA, 0x332D3D, 0xD497B0, List.of(
+                new Caixa(new double[]{1, 15, 6}, new double[]{6, 19, 9}, false),
+                new Caixa(new double[]{2, 19, 6.5}, new double[]{4, 22, 8.5}, true),
+                new Caixa(new double[]{10, 15, 6}, new double[]{15, 19, 9}, false),
+                new Caixa(new double[]{12, 19, 6.5}, new double[]{14, 22, 8.5}, true))),
+        OCULOS_REDONDOS("oculos_redondos", "Óculos do Estudioso", Raca.GNOMO, 0x8B683D, 0xC1E7F0, List.of(
+                new Caixa(new double[]{2, 9, -1.2}, new double[]{6, 13, -0.4}, false),
+                new Caixa(new double[]{10, 9, -1.2}, new double[]{14, 13, -0.4}, false),
+                new Caixa(new double[]{3, 10, -1.4}, new double[]{5, 12, -1.1}, true),
+                new Caixa(new double[]{11, 10, -1.4}, new double[]{13, 12, -1.1}, true),
+                new Caixa(new double[]{6, 10.5, -1}, new double[]{10, 11.5, -0.4}, false))),
+        MASCARA_SOMBRIA("mascara_sombria", "Máscara Sombria", Raca.ESPECTRAL, 0x282436, 0xA497D1, List.of(
+                new Caixa(new double[]{2, 2, -1.2}, new double[]{14, 7, 0}, false),
+                new Caixa(new double[]{6, 3, -1.5}, new double[]{10, 6, -1.2}, true))),
+        TAPA_OLHO("tapa_olho", "Tapa-olho do Aventureiro", Raca.HUMANO, 0x28222A, 0xAD8647, List.of(
+                new Caixa(new double[]{2, 9, -1.2}, new double[]{7, 13, 0}, false),
+                new Caixa(new double[]{0, 11, -0.6}, new double[]{16, 12, 0}, true))),
+        TIARA_LUNAR("tiara_lunar", "Tiara Lunar", Raca.ELFO, 0xBFCAD6, 0x9EE8FF, List.of(
+                new Caixa(new double[]{1, 13, -0.8}, new double[]{15, 14, 0.4}, false),
+                new Caixa(new double[]{7, 12, -1.2}, new double[]{9, 16, -0.4}, true))),
+        COROA_FERRO("coroa_ferro", "Coroa do Viajante", Raca.HUMANO, 0xA68C4B, 0xEBD889, List.of(
+                new Caixa(new double[]{0, 14, 0}, new double[]{16, 16, 2}, false),
+                new Caixa(new double[]{0, 14, 14}, new double[]{16, 16, 16}, false),
+                new Caixa(new double[]{0, 14, 2}, new double[]{2, 16, 14}, false),
+                new Caixa(new double[]{14, 14, 2}, new double[]{16, 16, 14}, false),
+                new Caixa(new double[]{2, 16, 0}, new double[]{4, 20, 2}, true),
+                new Caixa(new double[]{7, 16, 0}, new double[]{9, 21, 2}, true),
+                new Caixa(new double[]{12, 16, 0}, new double[]{14, 20, 2}, true))),
+        CABELO_CURTO("cabelo_curto", "Cabelo Curto", Raca.HUMANO, 0xB4966E, 0xE5CFA6, List.of(
+                new Caixa(new double[]{-.3, 13, -.3}, new double[]{16.3, 17, 16.3}, false),
+                new Caixa(new double[]{-.4, 8, 12}, new double[]{16.4, 14, 16.4}, true))),
+        CABELO_LONGO("cabelo_longo", "Cabelo Longo", Raca.HUMANO, 0xB4966E, 0xE5CFA6, List.of(
+                new Caixa(new double[]{-.4, 14, -.4}, new double[]{16.4, 17, 16.4}, false),
+                new Caixa(new double[]{-.5, -5, 12}, new double[]{16.5, 15, 17}, false),
+                new Caixa(new double[]{-1, 1, 5}, new double[]{1, 15, 14}, true),
+                new Caixa(new double[]{15, 1, 5}, new double[]{17, 15, 14}, true))),
+        MOICANO("moicano", "Moicano", Raca.HUMANO, 0xB4966E, 0xE5CFA6, List.of(
+                new Caixa(new double[]{6, 16, 1}, new double[]{10, 22, 15}, false),
+                new Caixa(new double[]{7, 22, 3}, new double[]{9, 25, 13}, true))),
+        TRANCA("tranca", "Trança Longa", Raca.HUMANO, 0xB4966E, 0xE5CFA6, List.of(
+                new Caixa(new double[]{-.2, 14, -.2}, new double[]{16.2, 17, 16.2}, false),
+                new Caixa(new double[]{5, -10, 15}, new double[]{11, 15, 19}, false),
+                new Caixa(new double[]{4.8, -7, 14.8}, new double[]{11.2, -5, 19.2}, true))),
+        COQUE("coque", "Coque do Viajante", Raca.HUMANO, 0xB4966E, 0xE5CFA6, List.of(
+                new Caixa(new double[]{-.2, 14, -.2}, new double[]{16.2, 17, 16.2}, false),
+                new Caixa(new double[]{4, 17, 10}, new double[]{12, 22, 18}, true))),
+        FRANJA("franja", "Franja Arcana", Raca.HUMANO, 0xB4966E, 0xE5CFA6, List.of(
+                new Caixa(new double[]{-.3, 14, -.8}, new double[]{16.3, 17, 16.3}, false),
+                new Caixa(new double[]{1, 10, -1}, new double[]{7, 15, 0}, true),
+                new Caixa(new double[]{9, 12, -1}, new double[]{15, 15, 0}, true))),
+        BIGODE_FINO("bigode_fino", "Bigode Fino", Raca.HUMANO, 0xB4966E, 0xE5CFA6, List.of(
+                new Caixa(new double[]{3, 5, -1}, new double[]{13, 6, .2}, false))),
+        BIGODE_NOBRE("bigode_nobre", "Bigode do Nobre", Raca.HUMANO, 0xB4966E, 0xE5CFA6, List.of(
+                new Caixa(new double[]{1, 5, -1}, new double[]{7, 7, 0}, false),
+                new Caixa(new double[]{9, 5, -1}, new double[]{15, 7, 0}, false),
+                new Caixa(new double[]{0, 6, -1}, new double[]{2, 9, 0}, true),
+                new Caixa(new double[]{14, 6, -1}, new double[]{16, 9, 0}, true))),
+        BRINCOS_ARGOLAS("brincos_argolas", "Argolas Douradas", Raca.HUMANO, 0xC5A355, 0xF3E2A0, List.of(
+                new Caixa(new double[]{-1, 4, 7}, new double[]{0, 9, 8}, false),
+                new Caixa(new double[]{16, 4, 7}, new double[]{17, 9, 8}, false),
+                new Caixa(new double[]{-1, 4, 7}, new double[]{1, 5, 8}, true),
+                new Caixa(new double[]{15, 4, 7}, new double[]{17, 5, 8}, true))),
+        BRINCOS_GEMA("brincos_gema", "Brincos de Gema", Raca.HUMANO, 0xC5A355, 0x9FDFFF, List.of(
+                new Caixa(new double[]{-1, 6, 7}, new double[]{0, 9, 8}, false),
+                new Caixa(new double[]{16, 6, 7}, new double[]{17, 9, 8}, false),
+                new Caixa(new double[]{-1.5, 3, 6.5}, new double[]{.5, 6, 8.5}, true),
+                new Caixa(new double[]{15.5, 3, 6.5}, new double[]{17.5, 6, 8.5}, true)));
 
         public final String id, nome;
         public final Raca raca;
@@ -94,6 +182,34 @@ public final class Enfeites {
         }
 
         public String modelo() { return "rpgatributos:enfeite_" + id; }
+        public Categoria categoria() {
+            return switch (this) {
+                case BARBA_ANA, BARBA_TRANCADA, BARBA_BRANCA -> Categoria.BARBA;
+                case CHIFRES_DRAGAO, CHIFRES_CURVOS, CHIFRES_GELO -> Categoria.CHIFRES;
+                case ORELHAS_ELFICAS, ORELHAS_LOBO, ORELHAS_GATO -> Categoria.ORELHAS;
+                case OCULOS_INVENTOR, OCULOS_REDONDOS, MASCARA_SOMBRIA, TAPA_OLHO -> Categoria.ROSTO;
+                case AUREOLA_ESPECTRAL, TIARA_LUNAR, COROA_FERRO -> Categoria.COROA;
+                case BARBATANAS -> Categoria.BARBATANAS;
+                case CABELO_CURTO, CABELO_LONGO, MOICANO, TRANCA, COQUE, FRANJA -> Categoria.CABELO;
+                case BIGODE_FINO, BIGODE_NOBRE -> Categoria.BIGODE;
+                case BRINCOS_ARGOLAS, BRINCOS_GEMA -> Categoria.BRINCOS;
+            };
+        }
+    }
+
+    public static Enfeite porId(String id) {
+        for (Enfeite e : Enfeite.values()) if (e.id.equals(id)) return e;
+        return null;
+    }
+
+    public static Enfeite de(ItemStack item) {
+        return item == null || item.isEmpty() || !item.hasItemMeta() ? null : porId(item.getPersistentDataContainer().get(K_ENFEITE, PersistentDataType.STRING));
+    }
+
+    public static List<Boolean> flags(java.util.Collection<Enfeite> enfeites) {
+        List<Boolean> flags = new ArrayList<>();
+        for (Enfeite e : Enfeite.values()) flags.add(enfeites.contains(e));
+        return flags;
     }
 
     /** O item do enfeite: vestível na cabeça, com o modelo 3D do pacote. */
@@ -107,7 +223,7 @@ public final class Enfeites {
             m.lore(List.of(
                     Component.text("Enfeite de cabeça (" + e.raca.nome() + ")", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                     Component.text("Clique direito para vestir, ou ponha no", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
-                    Component.text("Guarda-roupa por cima do capacete.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
+                    Component.text("Guarda-roupa para combinar com outros.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
             m.getPersistentDataContainer().set(K_ENFEITE, PersistentDataType.STRING, e.id);
         });
         return i;
@@ -141,9 +257,13 @@ public final class Enfeites {
         Map<String, byte[]> f = new LinkedHashMap<>();
         for (Enfeite e : Enfeite.values()) {
             f.put("assets/rpgatributos/items/enfeite_" + e.id + ".json",
-                    ("{ \"model\": { \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/enfeite/" + e.id + "\" } }").getBytes(StandardCharsets.UTF_8));
+                    ("{ \"model\": { \"type\": \"minecraft:model\", \"model\": \"rpgatributos:item/enfeite/" + e.id + "\",\"tints\":[{\"type\":\"minecraft:custom_model_data\",\"index\":0,\"default\":16777215}] } }").getBytes(StandardCharsets.UTF_8));
             f.put("assets/rpgatributos/models/item/enfeite/" + e.id + ".json", modelo(e).getBytes(StandardCharsets.UTF_8));
         }
+        List<String> modelos = new ArrayList<>();
+        for (Enfeite e : Enfeite.values()) modelos.add("{\"type\":\"minecraft:condition\",\"property\":\"minecraft:custom_model_data\",\"index\":" + e.ordinal()
+                + ",\"on_true\":{\"type\":\"minecraft:model\",\"model\":\"rpgatributos:item/enfeite/" + e.id + "\",\"tints\":[{\"type\":\"minecraft:custom_model_data\",\"index\":0,\"default\":16777215}]},\"on_false\":{\"type\":\"minecraft:empty\"}}");
+        f.put("assets/rpgatributos/items/enfeites_combinados.json", ("{\"model\":{\"type\":\"minecraft:composite\",\"models\":[" + String.join(",", modelos) + "]}}").getBytes(StandardCharsets.UTF_8));
         return f;
     }
 
@@ -163,7 +283,7 @@ public final class Enfeites {
             StringBuilder faces = new StringBuilder();
             for (String lado : new String[]{"north", "south", "east", "west", "up", "down"}) {
                 if (faces.length() > 0) faces.append(", ");
-                faces.append("\"").append(lado).append("\": { \"uv\": ").append(uv).append(", \"texture\": \"#t\" }");
+                faces.append("\"").append(lado).append("\": { \"uv\": ").append(uv).append(", \"texture\": \"#t\",\"tintindex\":0 }");
             }
             String rot = c.eixo() == null ? "" : ", \"rotation\": { \"angle\": " + n(c.angulo()) + ", \"axis\": \"" + c.eixo() + "\", \"origin\": " + vetor(c.origem()) + " }";
             els.add("{ \"from\": " + vetor(c.de()) + ", \"to\": " + vetor(c.ate()) + rot + ", \"faces\": { " + faces + " } }");

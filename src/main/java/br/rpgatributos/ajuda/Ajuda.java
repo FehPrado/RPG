@@ -544,6 +544,16 @@ public final class Ajuda implements Listener {
     private record Novidade(Material icone, String nome, String texto, String topico) { }
 
     private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.IRON_PICKAXE, "Guardiões com ferramenta e túneis",
+                    "Clique no guardião com a ferramenta dele: picareta, machado, enxada, tesoura ou espada. Quanto melhor, mais rápido. O Minerador cava túneis 3x3 com sustentações e tochas; a Fazenda ara e planta; o Pastor procria e ordenha; os de defesa usam munição.", "guardioesaltar"),
+            new Novidade(Material.EXPERIENCE_BOTTLE, "Guardiões com nível e altar nível II",
+                    "Guardiões sobem do nível I ao V no altar (tributo e sacrifício). Novos: Lenhador, Minerador, Pastor de Neve, Curandeiro e Torre Arcana. Cetro de Comando, mochila, rituais de céu e território, e o ritual que sai errado.", "guardioesaltar"),
+            new Novidade(Material.CARVED_PUMPKIN, "Guardiões e ajudantes",
+                    "No Altar da Convergência: Espírito Guardião, Golem Guardião, Golem de Fazenda e Golem de Cobre. Até 8 por jogador, e as Asas de Guardião fazem eles voarem.", "guardioesaltar"),
+            new Novidade(Material.WITHER_SKELETON_SKULL, "Chefes Despertos e relíquias",
+                    "O núcleo de um chefe no Altar da Convergência desperta a versão mais forte dele, que solta a Alma Desperta. Com ela: Élitro, Estrela do Nether e as 4 Relíquias da Convergência.", "convergencia"),
+            new Novidade(Material.RESPAWN_ANCHOR, "Altar da Convergência",
+                    "Um altar com até 8 pedestais: os ingredientes voam até o centro, o céu escurece, o chão treme e tudo explode. Transmute materiais raros e infunda equipamento além do limite.", "convergencia"),
             new Novidade(Material.SPYGLASS, "Mod de apoio 0.2.0",
                     "Quem usa o mod ganha telas novas nos menus, um HUD com recargas e mana, a roda de habilidades (segure V) e teclas para o Sistema, a Missão, a Loja e as classes.", "classes"),
             new Novidade(Material.SHIELD, "Um esquema só de classes",

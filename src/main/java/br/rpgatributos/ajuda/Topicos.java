@@ -261,6 +261,30 @@ public final class Topicos {
                 .ritual(Material.AMETHYST_BLOCK, "Bloco de ametista", br.rpgatributos.alquimia.Reagente.MERCURIO_VIVO.criar(1), 1, Material.GOLD_INGOT, 1)
                 .dica("O Mercúrio Vivo é feito na Bancada Alquímica.")
                 .ligados("alquimia", "runas").palavras("circulo pedra filosofal mercurio").pronto();
+        t("convergencia", MAGIA, "Altar da Convergência", Material.RESPAWN_ANCHOR)
+                .texto("Até 8 pedestais em volta do altar, a 3 blocos (4 em cruz e 4 na diagonal, 2+2), na mesma altura ou 1 acima ou abaixo. Pedestal: qualquer bloco lapidado (pedra, ardósia, quartzo, tufo, arenito...) ou pilar de quartzo ou púrpura.",
+                        "Clique num pedestal com um item para pôr nele (agachado: só 1); clique de novo para tirar. Com o catalisador na mão, clique no altar: 10 segundos de cerimônia e o resultado cai no centro.",
+                        "Transmutar: Eco, Lágrimas de Ghast, Náutilo, Molde de Netherite, Garrafas de Experiência, Varas de Blaze, Pérolas e Cascas de Shulker. Infundir: o equipamento na mão sobe 1 nível de encantamento além do normal (até 3 infusões por item).",
+                        "Raros: Totem, Maçã Dourada Encantada, Coração do Mar, Estrela do Nether, Élitro e Essência Primordial, e as 4 Relíquias da Convergência (Lâmina, Égide, Picareta e Arco), uma de cada por jogador.",
+                        "Invocações maiores: o núcleo de um chefe na mão desperta a versão Desperta dele (2,5x a vida, +50% de dano), com saque dobrado, Essência garantida e a Alma Desperta.",
+                        "Céu, território e altar: chamar chuva, céu limpo, dia ou noite, a Lua Azul (monstros soltam materiais raros), auras de 2 horas no território (Crescimento, Paz, Vigor) e a Bênção da Aliança (3 jogadores).",
+                        "Algumas receitas pedem um sacrifício: o mob vivo a até 5 blocos do altar sobe e se desfaz na explosão. Outras pedem vários jogadores com o catalisador na mão.",
+                        "Despertar o Altar (estrela do Nether e 2 vacas) sobe o altar para o nível II: mais 8 pedestais a 5 blocos e as receitas mais fortes (relíquias, Arauto, Lua Azul, níveis IV e V dos guardiões).",
+                        "Se quem acendeu se afastar mais de 24 blocos ou um pedestal usado quebrar, o ritual sai errado: os ingredientes se perdem e uma Aberração sai do altar.")
+                .dica("Mão vazia no altar abre o Grimório com todas as receitas, em abas; agachado conta os pedestais e mostra o nível.")
+                .ritual(Material.RESPAWN_ANCHOR, "Âncora de renascimento", Material.ENDER_EYE, 1, Material.DIAMOND, 1, Material.AMETHYST_SHARD, 4)
+                .ligados("transmutacao", "infusor", "guardioesaltar").palavras("altar convergencia pedestal ritual infundir infusao transmutar grimorio desperto alma reliquia elitro sacrificio chuva noite lua azul aura bencao nivel").pronto();
+        t("guardioesaltar", MAGIA, "Guardiões e ajudantes", Material.CARVED_PUMPKIN)
+                .texto("Feitos no Altar da Convergência (aba Guardiões). O ritual dá um Selo: com ele na mão, clique num bloco e o guardião fica ali, de posto. Até 8 por jogador.",
+                        "Defesa: Espírito Guardião (raios), Golem Guardião (golem de ferro), Torre Arcana (explosões de fogo em área) e Espírito Curandeiro (cura jogadores e guardiões).",
+                        "Trabalho: Golem de Fazenda (colhe e replanta), Golem Lenhador (derruba árvores e replanta), Golem Minerador (tira minérios à vista e deixa pedra), Pastor de Neve (tosquia, junta ovos e lã, traz os animais de volta) e Golem de Cobre (organiza baús).",
+                        "Níveis I a V: guarde o guardião no Selo, segure o Selo no altar com o pedido do nível, o tributo dele e um sacrifício (galinhas, ovelha, vacas, zumbi). Cada nível dá mais vida, força e alcance; no III os trabalhadores ganham mochila; no V brilham e se curam mais rápido.",
+                        "Asas de Guardião fazem voar; o Cetro de Comando faz o guardião seguir você ou ficar de posto onde está.",
+                        "Ferramenta: clique no guardião com ela (picareta no Minerador, machado no Lenhador, enxada na Fazenda, tesoura no Pastor, espada no Golem Guardião). Melhor ferramenta, mais rápido; ela gasta e quebra. Insumos (tábuas, cercas, tochas, sementes, farinha de osso, comida, baldes, lingotes) saem do baú perto do posto.",
+                        "Minerador: cava um túnel 3x3 na direção em que você olhava ao pôr o Selo, com sustentação a cada 4 blocos (4 cercas e 3 tábuas), tocha a cada 8 e uma câmara 5x5 a cada 16. Tampa lava, água e cascalho e pega os minérios das paredes. Túnel de 24 a 96 blocos, conforme o nível.",
+                        "Munição (Espírito: ametista ou eco; Torre: pó de blaze ou carga de fogo; Curandeiro: mel ou melancia reluzente): clique com ela ou deixe num baú perto. Sem munição eles continuam, mas fracos.")
+                .dica("Agachado, clique no seu guardião com a mão vazia para guardá-lo no Selo (nível, asas e mochila ficam). Sem agachar, abre a mochila (nível III+).")
+                .ligados("convergencia").palavras("guardiao guardioes golem fazenda colher cobre bau organizar sentinela espirito allay asas voar protetor lenhador arvore minerador minerio pastor ovelha curandeiro torre nivel cetro mochila sacrificio").pronto();
         t("deuses", MAGIA, "Deuses e fé", Material.CHISELED_QUARTZ_BLOCK)
                 .texto("Siga um dos 6 deuses. Oferendas e preces dão devoção; a fé sobe de 1 a 5 e libera um milagre.")
                 .ritual(Material.CHISELED_QUARTZ_BLOCK, "Quartzo entalhado", Material.GOLDEN_APPLE, 1, Material.CANDLE, 1)

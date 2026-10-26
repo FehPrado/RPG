@@ -93,7 +93,7 @@ public final class StatsManager {
     // ---------- ganhar XP ----------
 
     public void darXp(Player p, Skill s, double quantidade) {
-        if (quantidade <= 0) return;
+        if (quantidade <= 0 || ModoTeste.ehTeste(p)) return; // 2.88: na área de testes nada conta
         // O XP dos atributos da classe também sobe o nível da classe (mesmo com o atributo no máximo).
         plugin.classes().aoGanharXp(p, s, quantidade);
         plugin.deuses().aoGanharXp(p, s, quantidade);
