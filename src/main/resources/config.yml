@@ -521,6 +521,12 @@ vanilla-mais:
   raio-queima-arvore: true            # raio em árvore põe fogo nas folhas (se o fogo for permitido ali) e deixa carvão vegetal
   abelhas-polinizam: true             # 2.56: colmeia ou ninho de abelha com abelhas a até 8 blocos faz a plantação crescer mais rápido
   estante-viva: true                  # 2.58: olhando um livro na estante entalhada, a barra mostra o título; agachado + clique lê
+  bigorna-custo-maximo: 30            # 2.93: a bigorna nunca passa deste custo em níveis (sem "Caro demais"); 0 = como no jogo
+  consertar-bigorna: true             # 2.93: clique na bigorna lascada ou danificada com um bloco de ferro: volta um estágio
+  separar-encantamentos: true         # 2.93: rebolo com livro de vários encantamentos + livro comum: tira o primeiro para o livro comum
+  xp-em-garrafas: true                # 2.93: agachado, frasco vazio na mesa de encantamento: 11 pontos de XP viram 1 frasco de experiência
+  moldura-invisivel: true             # 2.93: tesoura numa moldura com item esconde a moldura (de novo, mostra); sem o item, ela reaparece
+  bater-na-porta: true                # 2.93: clique esquerdo com a mão vazia numa porta faz o som de batida
 
 # 2.57: conforto no dia a dia (cada um pode ser desligado)
 conforto:
@@ -530,6 +536,38 @@ conforto:
   portas-duplas: true                 # abrir uma porta de madeira abre a do lado (portões lado a lado também); agachado abre só uma
   elevadores: true                    # Elevador (bancada): pule para subir até o próximo, agache para descer (até 16 blocos)
   apito: true                         # Apito do Domador: chama seus companheiros e montarias a até 100 blocos (vêm andando)
+
+# 2.94: estradas (o plugin reconhece o piso; quem constrói é o jogador)
+estradas:
+  trilhas: true                       # grama, terra, podzol ou micélio muito pisados viram caminho de terra (em território, regra "Trilhas")
+  passos-para-trilha: 20              # passos no mesmo bloco (a pé 1, montado 2, carroça 3), sem passar uma hora esquecido
+  dias-para-sumir: 10                 # dias do jogo sem ninguém passar até a trilha voltar a ser grama (0 = nunca); caminho feito com pá não some
+  velocidade: true                    # andar ou cavalgar na estrada é mais rápido (lajes e escadas contam como o bloco delas)
+  bonus:
+    trilha: 0.05                      # caminho de terra
+    cascalho: 0.08                    # cascalho e barro compactado
+    calcada: 0.12                     # pedregulho, tijolos de todo tipo, ladrilhos e laje/escada de pedra
+    estrada-real: 0.15                # pedra polida, lisa ou cortada
+    pouso: 0.05                       # 2.95: a mais na estrada depois de descansar numa fogueira de acampamento na beira dela
+  pouso: true                         # 2.95: Fogueira de Acampamento a até 4 blocos da estrada = Pouso de Viajante (descansa em 15 s)
+  placas-de-direcao: true             # 2.95: placa com [direção] e o nome de um lugar mostra o rumo e a distância
+  rede: true                          # 2.96: placas [estrada] com o nome viram marcos; marcos ligados pelo piso formam a estrada
+  trecho-maximo: 160                  # 2.96: distância máxima entre dois marcos da mesma estrada (32 a 256)
+  caravanas: true                     # 2.96: colônias ligadas por estrada mandam caravanas com as sobras (voltam com esmeraldas)
+  caravana-minutos: 40                # 2.96: de quanto em quanto tempo sai uma caravana de cada colônia ligada
+  andarilhos: true                    # 2.98: de dia, gente andando nas estradas com nome (visitas, peregrino, mensageiro, mercador)
+  andarilhos-minutos: 4               # 2.98: espera mínima, por jogador, entre um andarilho e outro
+
+# 2.97: o mundo com vida
+mundo-vivo:
+  rotina-dos-animais: true            # o Comedouro é o celeiro: no fim da tarde os bichos da fazenda vão para perto dele; de manhã saem para o pasto
+  sons: true                          # lobos na lua cheia (florestas, taigas, neve), sapos no pântano à noite, sino da prefeitura ao amanhecer
+  bandos: true                        # bandos de animais atravessam o mapa rumo a uma estrutura que você não visitou; o líder que chega vira raro
+  bandos-minutos: 30                  # espera mínima, por jogador, entre um bando e outro
+
+# 2.99: mapas da Mesa do Cartógrafo
+mapas:
+  ativados: true                      # Mapa da Região, Mural, Mapa do Explorador e o Cartógrafo da colônia
 
 # 2.61: integração com o próprio jogo
 integracao:

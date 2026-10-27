@@ -544,6 +544,16 @@ public final class Ajuda implements Listener {
     private record Novidade(Material icone, String nome, String texto, String topico) { }
 
     private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.FILLED_MAP, "Mapas da região e do explorador",
+                    "Na Mesa do Cartógrafo: Mapa da Região, Mural para a parede e Mapa do Explorador, com estradas, colônias e caravanas desenhadas por cima. E o Cartógrafo, profissão nova da colônia.", "mapasregiao"),
+            new Novidade(Material.HAY_BLOCK, "Mundo vivo",
+                    "Os animais voltam para o Comedouro no fim da tarde, bandos atravessam o mapa (siga!), e as estradas ganham visitas, peregrinos, mensageiros e mercadores.", "mundovivo"),
+            new Novidade(Material.OAK_SIGN, "Estradas com nome e caravanas",
+                    "Placas [direção] mostram o rumo e a distância de um lugar. Placas [estrada] viram marcos: ligue duas colônias por uma estrada e saem caravanas com as sobras, que voltam com esmeraldas. Estrada escura atrai salteadores.", "estradas"),
+            new Novidade(Material.DIRT_PATH, "Estradas",
+                    "Grama muito pisada vira trilha sozinha, e trilha esquecida volta a ser grama. Na estrada você anda mais rápido: trilha +5%, cascalho +8%, calçada +12%, Estrada Real de pedra polida +15%. Vale também montado.", "estradas"),
+            new Novidade(Material.ANVIL, "Vanilla+: bigorna, rebolo e XP",
+                    "A bigorna não fica mais \"Caro demais\" (para em 30 níveis) e se conserta com bloco de ferro. No rebolo, separe os encantamentos de um livro. Agachado, guarde XP em frascos na mesa de encantamento. Tesoura deixa a moldura invisível, e a mão vazia bate na porta.", "vanilla"),
             new Novidade(Material.OBSIDIAN, "Círculo Arcano",
                     "Desenhe um pentagrama com velas e traço de redstone (ou blocos) em volta de uma obsidiana. Um círculo de luz se desenha no céu: pactos, tempestade, Fenda do Vazio, eclipse, lua de sangue e mais.", "circuloarcano"),
             new Novidade(Material.OAK_DOOR, "Colônia com cara de vila",

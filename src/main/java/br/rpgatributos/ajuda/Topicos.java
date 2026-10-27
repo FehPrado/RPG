@@ -476,12 +476,35 @@ public final class Topicos {
                         "Clique: a carga. Agachado + clique: solta (ou senta, com o Banco). Batendo, vira item de novo.",
                         "Melhorias, clicando com o item: bloco de ferro (rodas), baú (54 espaços), 3 lãs (toldo: monstros não quebram), lanterna (luz), alavanca (freio) e laje de madeira (banco).")
                 .ligados("utilidades", "companheiros").palavras("carroca carroça cavalo mula burro lhama camelo carga baú puxar laço").pronto();
+        t("estradas", MUNDO, "Estradas", Material.DIRT_PATH)
+                .texto("Grama muito pisada vira caminho de terra sozinha (montado conta o dobro, de carroça o triplo). Trilha que ninguém usa por 10 dias volta a ser grama.",
+                        "Na estrada você anda mais rápido, a pé ou montado: trilha +5%, cascalho +8%, calçada de pedregulho ou tijolo +12%, Estrada Real de pedra polida ou lisa +15%.",
+                        "Lajes e escadas contam como o bloco delas; ponte de madeira sobre água conta como cascalho. Pedra comum não conta.",
+                        "Placa com [direção] e o nome de um lugar (colônia, Pedra de Viagem pública, estrutura que você visitou) mostra o rumo e a distância.",
+                        "Placa com [estrada] e o nome, na beira do piso, é um marco. Marcos a até 160 blocos se ligam se dá para ir de um ao outro só pela estrada.",
+                        "Estrada que passa por duas colônias: o Mercador vende mais, a felicidade sobe e saem caravanas com as sobras, que voltam com esmeraldas.")
+                .dica("Estrada iluminada espanta os salteadores. Fogueira de Acampamento na beira da estrada é um Pouso de Viajante.")
+                .ligados("carroca", "territorio", "colonia").palavras("estrada trilha caminho terra cascalho calcada pedra polida rapido velocidade cavalo placa direcao marco caravana salteador pouso ponte").pronto();
+        t("mundovivo", MUNDO, "Mundo vivo", Material.HAY_BLOCK)
+                .texto("Rotina: o Comedouro é o celeiro. No fim da tarde toca um sino e os bichos da fazenda vão para perto dele; de manhã saem para o pasto.",
+                        "Bandos de cavalos, cabras, raposas, camelos, lhamas, papagaios ou lobos atravessam o mapa. Siga: eles vão para uma estrutura que você não conhece, e o líder vira raro.",
+                        "Nas estradas com marcos: visitas de outra colônia, peregrinos com notícias, mensageiros com pedidos e mercadores de estrada.")
+                .dica("Lobos ao longe na lua cheia, sapos no pântano e o sino da prefeitura ao amanhecer.")
+                .ligados("estradas", "colonia", "mapasregiao").palavras("rotina animais celeiro comedouro bando manada migracao lobos sapos sino peregrino mensageiro visita noticias").pronto();
+        t("mapasregiao", MUNDO, "Mapas da Região", Material.FILLED_MAP)
+                .texto("Mesa do Cartógrafo + mapa vazio: Mapa da Região. Agachado com 4 ou 9 mapas: Mural para a parede. Com bússola (e 1 mapa vazio no inventário): Mapa do Explorador.",
+                        "Por cima aparecem as estradas com nome, as colônias, as Pedras de Viagem públicas e as caravanas andando.",
+                        "O Mapa do Explorador se pinta sozinho por onde você anda com ele no inventário e marca as estruturas que você visitou.")
+                .dica("O Cartógrafo da colônia desenha mapas com os mapas vazios do depósito; às vezes um X numa estrutura que você não conhece.")
+                .ligados("estradas", "colonia", "mundovivo").palavras("mapa regiao mural parede explorador cartografo mesa bussola caravana").pronto();
         t("vanilla", MUNDO, "Vanilla+ e artefatos", Material.OAK_SAPLING)
                 .texto("Detalhes com cara de jogo normal: mudas que se plantam sozinhas, folhas que soltam graveto, cabeças de monstro, placa que mostra o baú, peixes pulando e gelo fino.",
                         "Abelhas polinizam: colmeia ou ninho com abelhas a até 8 blocos faz a plantação crescer mais rápido.",
                         "Estante viva: olhando um livro na estante entalhada, a barra mostra o título; agachado + clique lê sem tirar.",
+                        "Bigorna sem \"Caro demais\" (para em 30 níveis); bloco de ferro conserta a bigorna lascada. Rebolo: livro de vários encantamentos + livro comum separa um encantamento.",
+                        "Agachado, frasco vazio na mesa de encantamento: guarda XP em garrafa. Tesoura na moldura com item: moldura invisível. Mão vazia na porta: bate.",
                         "Artefatos de bancada: Garras de Escalada, Corda de Rapel, Pêndulo do Rabdomante, Cantil e Bolsa de Sementes.")
-                .ligados("minerais", "coletas").palavras("garras escalada corda rapel pendulo rabdomante cantil bolsa sementes muda graveto gelo").pronto();
+                .ligados("minerais", "coletas").palavras("garras escalada corda rapel pendulo rabdomante cantil bolsa sementes muda graveto gelo bigorna caro demais rebolo separar encantamento xp garrafa frasco moldura invisivel tesoura bater porta").pronto();
         t("estruturas", MUNDO, "Estruturas", Material.MOSSY_STONE_BRICKS)
                 .texto("18 tipos: 16 em terras novas (torres, minas, fortins, oásis, faróis, vilas saqueadas...) e 2 no mar (naufrágios e cidades submersas).",
                         "Alguns têm guardas, outros têm moradores que negociam.")

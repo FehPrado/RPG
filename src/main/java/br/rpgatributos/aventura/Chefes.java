@@ -805,6 +805,8 @@ public final class Chefes implements Listener {
                 .append(Component.text(" foi derrotado por ", NamedTextColor.GRAY))
                 .append(Component.text(nomes.isEmpty() ? "ninguém" : String.join(", ", nomes), NamedTextColor.YELLOW))
                 .append(Component.text("!", NamedTextColor.GRAY)));
+        // 2.98: os viajantes das estradas contam.
+        if (plugin.noticias() != null) plugin.noticias().registrar(a.nome() + " foi derrotado por " + (nomes.isEmpty() ? "ninguém" : String.join(", ", nomes)) + ".");
     }
 
     /** Esconde a barra e tira os lacaios. */

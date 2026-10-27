@@ -128,6 +128,12 @@ public final class Encontros implements Listener {
         };
         boolean dia = !br.rpgatributos.mundo.Ceu.noite(p.getWorld());
         if (t.equals("viajante") && !dia && tipo == null) t = "carroca";
+        // 2.96: na estrada, a luz manda: estrada iluminada espanta os bandidos; de noite, estrada escura os atrai.
+        if (tipo == null && br.rpgatributos.estrada.Pisos.nivelEm(br.rpgatributos.estrada.Pisos.debaixo(p)) > 0) {
+            boolean iluminada = p.getLocation().getBlock().getLightFromBlocks() >= 8;
+            if (iluminada && t.equals("bandidos")) t = dia ? "viajante" : "carroca";
+            else if (!iluminada && !dia && t.equals("estrela")) t = "bandidos";
+        }
         Location onde = lugar(p.getLocation(), t.equals("estrela") ? 25 : 12, t.equals("estrela") ? 40 : 20);
         if (onde == null) return null;
         return switch (t) {

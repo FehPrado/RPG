@@ -21,7 +21,9 @@ public enum Flag {
     REINO("Reino pode construir", Material.GOLDEN_HELMET, true,
             "Membros do seu reino constroem e mexem em tudo aqui, como membros."),
     PARTY("Party pode construir", Material.CAKE, true,
-            "Quem está na sua party constrói e mexe em tudo, como um membro.");
+            "Quem está na sua party constrói e mexe em tudo, como um membro."),
+    TRILHAS("Trilhas se formam", Material.DIRT_PATH, true,
+            "Grama muito pisada vira caminho de terra (e volta a ser grama se ninguém passar).");
 
     private final String nome;
     private final Material icone;

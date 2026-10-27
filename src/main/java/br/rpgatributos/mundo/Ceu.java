@@ -177,6 +177,7 @@ public final class Ceu implements Listener {
                 plugin.circulosMagicos().ceuParaTodos(w, br.rpgatributos.visual.CirculosMagicos.SANGUE, br.rpgatributos.visual.CirculosMagicos.ESCURO, 5, 2);
                 anunciar("☾ LUA DE SANGUE ☾", "Monstros mais fortes, mais Elites e o dobro de XP esta noite", NamedTextColor.DARK_RED,
                         Sound.ENTITY_WITHER_SPAWN);
+                plugin.noticias().registrar("Houve Lua de Sangue: dizem que os monstros vieram em dobro.");
             } else {
                 anunciar("☾ Lua Cheia", "Os monstros estão mais fortes... e há lobisomens por aí", NamedTextColor.GOLD, Sound.ENTITY_WOLF_GROWL);
             }

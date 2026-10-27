@@ -84,6 +84,17 @@ public final class PedrasDeViagem extends Estacao {
             World w = Bukkit.getWorld(mundo);
             return w == null ? null : new Location(w, x, y, z);
         }
+
+        public String nome() { return nome; }
+        public boolean publica() { return publica; }
+        public Location local() { return bloco(); }
+    }
+
+    /** 2.95: as pedras públicas (para as placas de direção das estradas). */
+    public List<Pedra> publicas() {
+        List<Pedra> l = new ArrayList<>();
+        for (Pedra p : pedras.values()) if (p.publica) l.add(p);
+        return l;
     }
 
     private static final class Tela implements InventoryHolder {

@@ -648,6 +648,8 @@ public final class Territorios implements Listener {
                 }
                 // Territórios salvos antes da regra "Reino pode construir" (2.25) ganham ela ligada, como os novos.
                 if (!s.getBoolean("regra-reino-vista")) t.flag(Flag.REINO, true);
+                // E os de antes das trilhas (2.94) ganham a regra ligada.
+                if (!s.getBoolean("regra-trilhas-vista")) t.flag(Flag.TRILHAS, true);
                 t.boasVindas(s.getString("boas-vindas"));
                 porDono.put(t.dono(), t);
             } catch (RuntimeException ex) {
@@ -685,6 +687,7 @@ public final class Territorios implements Listener {
             for (Flag f : t.flagsLigadas()) regras.add(f.id());
             y.set(base + "regras", regras);
             y.set(base + "regra-reino-vista", true);
+            y.set(base + "regra-trilhas-vista", true);
         }
         try {
             y.save(arquivo);

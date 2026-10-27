@@ -417,6 +417,71 @@ public final class Comandos implements TabExecutor {
                 return;
             }
             case "traje" -> { adminTraje(sender, args); return; }
+            case "estrada" -> {
+                // 2.96: rede de estradas e caravanas.
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                String op = args.length >= 2 ? args[1].toLowerCase(java.util.Locale.ROOT) : "lista";
+                br.rpgatributos.colonia.Colonia c = plugin.colonias().de(p.getUniqueId());
+                switch (op) {
+                    case "caravana" -> {
+                        if (c == null) { erro(sender, "Você não tem colônia."); return; }
+                        String r = plugin.rede().partir(c, null, true);
+                        if (r == null) erro(sender, "Sua colônia não está ligada a outra por estrada (veja /rpgadmin estrada lista).");
+                        else if (r.equals("sem sobras")) erro(sender, "O depósito não tem sobras para a caravana levar.");
+                        else ok(sender, "Saiu uma " + r + " (chega em 1 minuto).");
+                    }
+                    case "assalto" -> {
+                        if (c == null || !plugin.rede().assaltarAgora(c.dono())) erro(sender, "Nenhuma caravana da sua colônia na estrada.");
+                        else ok(sender, "Salteadores atacam a caravana (se ninguém estiver perto da mula, a carga se perde).");
+                    }
+                    default -> {
+                        ok(sender, plugin.rede().quantosMarcos() + " marco(s), " + plugin.rede().quantosTrechos() + " trecho(s), "
+                                + plugin.rede().quantasCaravanas() + " caravana(s) na estrada.");
+                        for (String s : plugin.rede().estradas()) sender.sendMessage(Component.text(" • " + s, NamedTextColor.GRAY));
+                        if (c != null) {
+                            var lig = plugin.rede().ligacoes(c);
+                            sender.sendMessage(Component.text(" Sua colônia: " + (lig.isEmpty() ? "nenhuma ligação." : lig.size() + " ligação(ões): " + String.join(", ", lig.values())), NamedTextColor.GRAY));
+                        }
+                    }
+                }
+                return;
+            }
+            case "bando" -> {
+                // 2.97: um bando agora, perto de você (no bioma certo; fora dele, cavalos).
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                String r = plugin.bandos().comecar(p, "admin");
+                if (r == null) erro(sender, "Não deu: precisa de chão carregado a uns 40 blocos.");
+                else ok(sender, r + " a caminho.");
+                return;
+            }
+            case "andarilho" -> {
+                // 2.98: alguém andando na estrada mais perto (até 64 blocos).
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                String tipo = args.length >= 2 ? args[1] : "peregrino";
+                String r = plugin.andarilhos().aparecerNaEstrada(p, tipo);
+                if (r == null) erro(sender, "Use perto (64 blocos) de uma estrada com marcos ligados. Tipos: peregrino, mensageiro, mercador, visita (a visita pede uma estrada entre 2 colônias).");
+                else ok(sender, r + " vem andando.");
+                return;
+            }
+            case "trilha" -> {
+                // 2.94: trilhas e pisos de estrada.
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                String op = args.length >= 2 ? args[1].toLowerCase(java.util.Locale.ROOT) : "";
+                if (op.equals("sumir")) {
+                    ok(sender, plugin.trilhas().envelhecer(p.getLocation().getChunk(), true) + " trilha(s) deste pedaço voltaram a ser grama.");
+                    return;
+                }
+                if (op.equals("info")) {
+                    int n = br.rpgatributos.estrada.Pisos.nivelEm(br.rpgatributos.estrada.Pisos.debaixo(p));
+                    ok(sender, "Piso: " + (n == 0 ? "não é estrada" : br.rpgatributos.estrada.Pisos.nome(n) + " (nível " + n + ")")
+                            + ". Trilhas anotadas neste pedaço: " + plugin.trilhas().anotadas(p.getLocation().getChunk()) + ".");
+                    return;
+                }
+                org.bukkit.block.Block alvo = p.getTargetBlockExact(6);
+                if (alvo == null || !plugin.trilhas().formar(alvo)) { erro(sender, "Olhe para grama, terra, podzol ou micélio com o de cima livre (até 6 blocos)."); return; }
+                ok(sender, "Trilha formada (anotada: some depois dos dias do config sem ninguém passar).");
+                return;
+            }
             case "carroca" -> {
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
                 entregar(p, args.length >= 2 && args[1].equalsIgnoreCase("completa") ? br.rpgatributos.detalhes.Carrocas.completa()
@@ -2147,7 +2212,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

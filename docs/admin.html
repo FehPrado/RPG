@@ -586,6 +586,10 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin estruturas</span> · <span class="cmd">esquecerestrutura</span></td><td>Lista as mais perto · tira a mais perto do registro (os blocos ficam)</td></tr>
       <tr><td><span class="cmd">/rpgadmin mercador</span></td><td>O Mercador Itinerante aparece perto de você</td></tr>
       <tr><td><span class="cmd">/rpgadmin encontro [carroca|bandidos|viajante|estrela]</span></td><td>Começa um encontro perto de você</td></tr>
+      <tr><td><span class="cmd">/rpgadmin estrada [lista|caravana|assalto]</span></td><td>A rede de estradas; manda uma caravana da sua colônia já (1 min); faz os salteadores atacarem a caravana na estrada</td></tr>
+      <tr><td><span class="cmd">/rpgadmin andarilho [peregrino|mensageiro|mercador|visita]</span></td><td>Alguém vem andando pela estrada mais perto (até 64 blocos)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin bando</span></td><td>Um bando passa perto de você agora</td></tr>
+      <tr><td><span class="cmd">/rpgadmin trilha [sumir|info]</span></td><td>Forma uma trilha no bloco que você olha; <code>sumir</code> volta as trilhas do pedaço; <code>info</code> mostra o piso</td></tr>
             <tr><td><span class="cmd">/rpgadmin tacho</span></td><td>Cria o Tacho do Artesão no vaso decorado que você olha</td></tr>
         <tr><td><span class="cmd">/rpgadmin artesanato &lt;tipo&gt; [qtd]</span></td><td>Dá queijo, queijo_de_cabra, maionese, geleia, conserva ou oleo_de_trufa</td></tr>
         <tr><td><span class="cmd">/rpgadmin trufa [qtd]</span></td><td>Dá trufas</td></tr>
@@ -1009,6 +1013,50 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Estábulo: jogue 1 sela e 1 porteira num fardo de feno (laço + sela é o Altar do Domador). Montado no cavalo, clique no estábulo → Guardar. Depois clique na baia para chamar.</li>
         <li>Pesque: a barra mostra o peso. Os recordes do servidor aparecem em <span class="cmd">/recordes</span> e no <span class="cmd">/peixes</span> (item ⚖).</li>
         <li>As montarias guardadas ficam em <code>estabulos.yml</code>; quebrar o estábulo solta todas.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Mundo vivo, andarilhos e mapas (2.97–2.99)</h3>
+      <ol>
+        <li>Rotina: faça um Comedouro, ponha vacas e ovelhas perto e use <code>/time set 12000</code>: toca o sino e elas vão para perto dele. <code>/time set 23500</code>: saem para o pasto.</li>
+        <li>Sons: <code>/time set 18000</code> num pântano (sapos). Na lua cheia, numa taiga, espere: lobos ao longe. Na prefeitura, <code>/time set 23400</code>: o sino toca duas vezes.</li>
+        <li><span class="cmd">/rpgadmin bando</span> de dia, em planície (ou qualquer bioma: cavalos). Siga o bando até a estrutura (ou 300 blocos): o líder vira raro. Dome um cavalo no caminho: ele fica.</li>
+        <li>Perto de uma estrada com marcos ligados: <span class="cmd">/rpgadmin andarilho peregrino</span> (notícias e Sorte), <code>mensageiro</code> (segure o que ele pede e clique), <code>mercador</code> (trocas) e <code>visita</code> (precisa de estrada entre 2 colônias). Afaste-se 72 blocos: somem.</li>
+        <li>Mesa do Cartógrafo: clique com 1 mapa vazio (Região), agachado com 4 mapas (Mural 2×2), com bússola + 1 mapa no inventário (Explorador). Segure o da Região e ande: terreno + estradas, colônias e a caravana (<span class="cmd">/rpgadmin estrada caravana</span>) em cima.</li>
+        <li>Ande uns 200 blocos com o Explorador no inventário (sem segurar) e abra: o caminho está pintado, e as estruturas visitadas marcadas. Reinicie o servidor: continua igual.</li>
+        <li>Cartógrafo: Mesa do Cartógrafo dentro da Biblioteca da colônia nível 3, um morador como Cartógrafo e mapas vazios no depósito; <code>/rpgadmin turnocolonia</code> algumas vezes.</li>
+        <li>Config: <code>mundo-vivo.*</code>, <code>estradas.andarilhos</code>, <code>andarilhos-minutos</code>, <code>mapas.ativados</code>. Os mapas ficam em <code>mapas.yml</code> e <code>mapas/</code>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Estradas: placas, marcos e caravanas (2.95–2.96)</h3>
+      <ol>
+        <li>Ponha uma placa com <code>[direção]</code> e o seu nome (ou o nome de uma Pedra de Viagem pública): ela vira "» Rumo « / nome / a N blocos" e fica encerada. Nome que não existe: aviso com os lugares perto.</li>
+        <li>Faça uma ponte de tábuas sobre um rio e passe nela: <span class="cmd">/rpgadmin trilha info</span> em cima diz "Cascalho".</li>
+        <li>Fogueira de Acampamento do lado de uma estrada: sente-se (escada ou /sentar). Em 15 s: Descansado + mensagem do Pouso de Viajante.</li>
+        <li>Duas colônias (outra conta, ou <code>/rpgadmin prefeitura</code>): ligue as duas com uma estrada de qualquer piso. Ponha placas <code>[estrada]</code> / <code>Estrada Real</code> na beira: na prefeitura de uma, a cada até 160 blocos e na prefeitura da outra. Cada uma deve dizer "ligado a 1 marco". Quebre um bloco no meio, clique no marco: perde a ligação; conserte e clique de novo.</li>
+        <li><span class="cmd">/rpgadmin estrada</span>: marcos, trechos e as ligações da sua colônia.</li>
+        <li>Ponha sobras no depósito (por exemplo, 3 packs de pedregulho) e use <span class="cmd">/rpgadmin estrada caravana</span>. Fique na estrada: a mula "Caravana da Colônia de..." passa andando. <span class="cmd">/rpgadmin estrada assalto</span>: salteadores atacam a mula; mate-os (2 esmeraldas) ou deixe a mula morrer (carga perdida). Sem assalto, em 1 min chegam as esmeraldas no depósito.</li>
+        <li>Config: <code>estradas.placas-de-direcao</code>, <code>pouso</code>, <code>rede</code>, <code>trecho-maximo</code>, <code>caravanas</code>, <code>caravana-minutos</code>, <code>bonus.pouso</code>. A rede fica em <code>estradas.yml</code>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Estradas (2.94)</h3>
+      <ol>
+        <li>Olhe para um bloco de grama e use <span class="cmd">/rpgadmin trilha</span>: vira caminho de terra (anotado). <span class="cmd">/rpgadmin trilha info</span> em cima dele: "Trilha (nível 1)" e 1 anotada.</li>
+        <li><span class="cmd">/rpgadmin trilha sumir</span>: as trilhas anotadas do pedaço voltam a ser grama. Caminho feito com pá não volta.</li>
+        <li>Ande de um lado para o outro numa faixa de grama (uns 20 passos por bloco; montado, 10): a trilha aparece com lascas de terra.</li>
+        <li>Faça 4 faixas (caminho, cascalho, pedregulho, andesito polido) e corra em cada uma: a velocidade sobe um pouco a cada nível. Monte num cavalo: o bônus vai para ele.</li>
+        <li>No menu do território, aba Regras: "Trilhas se formam" (ligada). Desligue e ande na grama: nada se forma.</li>
+        <li>Config: <code>estradas.trilhas</code>, <code>passos-para-trilha</code>, <code>dias-para-sumir</code>, <code>velocidade</code> e <code>bonus.*</code>.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Vanilla+ 3 (2.93)</h3>
+      <ol>
+        <li>Bigorna: junte duas peças muito trabalhadas (custo acima de 40 no jogo): o custo aparece como 30 e não sai "Caro demais". <code>vanilla-mais.bigorna-custo-maximo</code> (0 = como no jogo).</li>
+        <li><span class="cmd">/setblock ~1 ~ ~ damaged_anvil</span> e clique nela com um bloco de ferro: vira lascada; mais um, nova.</li>
+        <li>Rebolo: um livro com Eficiência e Inquebrável em cima e um livro comum embaixo. Pegue o resultado (clique ou Shift+clique): sai Eficiência, o de cima fica só com Inquebrável.</li>
+        <li>Com uns níveis de XP, agache e clique na mesa de encantamento com frascos vazios: cada clique gasta 11 pontos e dá 1 frasco de experiência. Sem XP suficiente, aparece o aviso na barra.</li>
+        <li>Ponha um item numa moldura e clique com tesoura: a moldura some. Tire o item: ela volta a aparecer.</li>
+        <li>Mão vazia, clique esquerdo numa porta de madeira e numa de ferro: duas batidas diferentes.</li>
+        <li>Cada um se desliga em <code>vanilla-mais</code>: <code>consertar-bigorna</code>, <code>separar-encantamentos</code>, <code>xp-em-garrafas</code>, <code>moldura-invisivel</code>, <code>bater-na-porta</code>.</li>
       </ol>
     </div>
     <div class="card"><h3>Artefatos e Vanilla+ 2 (2.49)</h3>

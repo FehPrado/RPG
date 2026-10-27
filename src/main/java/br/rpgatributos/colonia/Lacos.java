@@ -110,6 +110,9 @@ public final class Lacos implements Listener {
         h(Profissao.CONSTRUTOR, "uma cidade que ele ajudou a erguer e depois viu cair", "de altura, mesmo trabalhando nos andaimes",
                 "levantar uma torre que dê para ver de qualquer lugar do mapa", "a planta de uma casa só para ele, que nunca construiu",
                 "Mãos Firmes", "quedas tiram 3 de vida a menos", Material.BRICK, Material.COOKIE);
+        h(Profissao.CARTOGRAFO, "um navio de exploradores que nunca voltou para o porto", "de um lugar que não está em mapa nenhum",
+                "desenhar o mapa do mundo inteiro, de ponta a ponta", "um mapa em branco que o pai deixou, com só um X no meio",
+                "Pés na Estrada", "+5% de velocidade em qualquer estrada", Material.MAP, Material.COMPASS);
         h(Profissao.SOLDADO, "um exército que perdeu a última batalha", "de deixar alguém para trás de novo",
                 "ver a colônia em paz por uma estação inteira", "o elmo de um amigo que ele carrega sempre",
                 "Postura de Guarda", "+1 de armadura, para sempre", Material.BREAD, Material.IRON_NUGGET);

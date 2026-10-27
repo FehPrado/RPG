@@ -257,6 +257,16 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.detalhes.BarcoGrande barcoGrande;
     private br.rpgatributos.detalhes.Utilidades utilidades;
     private br.rpgatributos.detalhes.Carrocas carrocas;
+    private br.rpgatributos.estrada.Trilhas trilhas;
+    private br.rpgatributos.estrada.Velocidade velocidadeEstrada;
+    private br.rpgatributos.estrada.Placas placas;
+    private br.rpgatributos.estrada.Rede rede;
+    private br.rpgatributos.estrada.Andarilhos andarilhos;
+    private final br.rpgatributos.mundo.Noticias noticias = new br.rpgatributos.mundo.Noticias();
+    private br.rpgatributos.mundo.RotinaAnimais rotinaAnimais;
+    private br.rpgatributos.mundo.SonsDoMundo sonsDoMundo;
+    private br.rpgatributos.mundo.Bandos bandos;
+    private br.rpgatributos.mapa.Mapas mapasMundo;
     private br.rpgatributos.masmorra.EquipamentoPortal equipamentoPortal;
     private br.rpgatributos.masmorra.LojaSistema lojaSistema;
     private br.rpgatributos.masmorra.PoderCacador poderCacador;
@@ -352,6 +362,15 @@ public final class RPGAtributos extends JavaPlugin {
         barcoGrande = new br.rpgatributos.detalhes.BarcoGrande(this);
         utilidades = new br.rpgatributos.detalhes.Utilidades(this);
         carrocas = new br.rpgatributos.detalhes.Carrocas(this);
+        trilhas = new br.rpgatributos.estrada.Trilhas(this);
+        velocidadeEstrada = new br.rpgatributos.estrada.Velocidade(this);
+        placas = new br.rpgatributos.estrada.Placas(this);
+        rede = new br.rpgatributos.estrada.Rede(this);
+        andarilhos = new br.rpgatributos.estrada.Andarilhos(this);
+        rotinaAnimais = new br.rpgatributos.mundo.RotinaAnimais(this);
+        sonsDoMundo = new br.rpgatributos.mundo.SonsDoMundo(this);
+        bandos = new br.rpgatributos.mundo.Bandos(this);
+        mapasMundo = new br.rpgatributos.mapa.Mapas(this);
         equipamentoPortal = new br.rpgatributos.masmorra.EquipamentoPortal(this);
         lojaSistema = new br.rpgatributos.masmorra.LojaSistema(this);
         poderCacador = new br.rpgatributos.masmorra.PoderCacador(this);
@@ -518,7 +537,7 @@ public final class RPGAtributos extends JavaPlugin {
                 estacoes, ceu, maldicoes, portais, sombras, torre, obeliscos, combos, combos.golpes(), combos.posturas(), combos.ligacoes(), mobilidade, mochila, controle, deuses, santuariosDivinos, transmutacao, runas, mesasRunicas, pacote, mitrilo, mapas, arqueologia, enciclopedia, cronista,
                 talentos, evolucao,
                 forjadosEspeciais, itensDetalhes, natureza, assentos, fogueiras, bonecos, pedrasAmolar, bebedouros, comedouros, cabanasPesca, oficios, equipamentoMineral, ateliers, sonhos, trofeus,
-                mesasCartografo, lapides, recordes, diario,
+                mesasCartografo, lapides, recordes, diario, new br.rpgatributos.detalhes.Retoques(this),
                 canteiros, colmeias, barris, tachos, album, duelos, vanillaMais, artefatos, linhagens, estabulos, arsenal, aparar, fraquezas, cargaMontada, pescaLava, polinizacao, conforto, elevadores, apito, ceuEncantado, estantes, conquistas, livroReceitas, bausVanilla, vilasVanilla, ferrovias, velas, barcoGrande, cobre, boasvindas, mercador, encontros, flechas, frascos, segredos, menuRpg, placar, pomar, coletas, cultivos, criacao, estruturas, profundezas, visualDomador, lendarias, bestas, nian, combateMontado, canalApoio, iguarias, constelacoes, lacos, estruturas.vilas(), mineracao, nomeadas, ajuda, ajuda.dicas(), racas);
         locais.iniciar();
         masmorras.iniciar();
@@ -540,6 +559,14 @@ public final class RPGAtributos extends JavaPlugin {
         utilidades.registrar(getServer().getPluginManager());
         carrocas.registrarReceitas();
         getServer().getPluginManager().registerEvents(carrocas, this);
+        getServer().getPluginManager().registerEvents(trilhas, this);
+        getServer().getPluginManager().registerEvents(velocidadeEstrada, this);
+        getServer().getPluginManager().registerEvents(placas, this);
+        getServer().getPluginManager().registerEvents(rede, this);
+        getServer().getPluginManager().registerEvents(andarilhos, this);
+        getServer().getPluginManager().registerEvents(bandos, this);
+        mapasMundo.carregar();
+        rede.carregar();
         getServer().getPluginManager().registerEvents(new br.rpgatributos.masmorra.MagiaOculta(this), this);
         getServer().getPluginManager().registerEvents(equipamentoPortal, this);
         getServer().getPluginManager().registerEvents(lojaSistema, this);
@@ -669,6 +696,18 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, utilidades::tick, 1L, 1L);
         agenda.runTaskTimer(this, utilidades::segundo, 20L, 20L);
         agenda.runTaskTimer(this, carrocas::tick, 1L, 1L);
+        agenda.runTaskTimer(this, trilhas::tick, 4L, 4L);
+        agenda.runTaskTimer(this, trilhas::limpar, 6000L, 6000L);
+        agenda.runTaskTimer(this, trilhas::envelhecerCarregados, 12000L, 12000L);
+        agenda.runTaskTimer(this, velocidadeEstrada::tick, 4L, 4L);
+        agenda.runTaskTimer(this, rede::tick, 40L, 40L);
+        agenda.runTaskTimer(this, rede::validar, 6000L, 6000L);
+        agenda.runTaskTimer(this, andarilhos::tick, 20L, 20L);
+        agenda.runTaskTimer(this, rotinaAnimais::tick, 40L, 40L);
+        agenda.runTaskTimer(this, sonsDoMundo::tick, 200L, 200L);
+        agenda.runTaskTimer(this, bandos::tick, 40L, 40L);
+        agenda.runTaskTimer(this, mapasMundo::tick, 40L, 40L);
+        agenda.runTaskTimer(this, mapasMundo::salvarPixels, 6000L, 6000L);
         agenda.runTaskTimer(this, cobre::tick, 1L, 1L);
         // Efeitos passivos (itens forjados, conjuntos, títulos, núcleos): 1x por segundo.
         efeitos.registrarFonte(titulos::efeitos);
@@ -849,6 +888,14 @@ public final class RPGAtributos extends JavaPlugin {
         if (barcoGrande != null) barcoGrande.desligar();
         if (utilidades != null) utilidades.desligar();
         if (carrocas != null) carrocas.desligar();
+        if (velocidadeEstrada != null) velocidadeEstrada.desligar();
+        if (andarilhos != null) andarilhos.desligar();
+        if (bandos != null) bandos.desligar();
+        if (mapasMundo != null) mapasMundo.salvarPixels();
+        if (rede != null) {
+            rede.desligar();
+            rede.salvar();
+        }
         if (altarConvergencia != null) altarConvergencia.desligar();
         if (guardioes != null) guardioes.desligar();
         if (circuloArcano != null) circuloArcano.desligar();
@@ -995,6 +1042,13 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.ritual.RituaisMundo rituaisMundo() { return rituaisMundo; }
     public br.rpgatributos.ritual.Lembrancas lembrancas() { return lembrancas; }
     public br.rpgatributos.ritual.CirculoArcano circuloArcano() { return circuloArcano; }
+    public br.rpgatributos.estrada.Trilhas trilhas() { return trilhas; }
+    public br.rpgatributos.estrada.Placas placas() { return placas; }
+    public br.rpgatributos.estrada.Rede rede() { return rede; }
+    public br.rpgatributos.estrada.Andarilhos andarilhos() { return andarilhos; }
+    public br.rpgatributos.mundo.Noticias noticias() { return noticias; }
+    public br.rpgatributos.mundo.Bandos bandos() { return bandos; }
+    public br.rpgatributos.mapa.Mapas mapasMundo() { return mapasMundo; }
     public ModoTeste modoTeste() { return modoTeste; }
     public Classes classes() { return classes; }
     public Provas provas() { return provas; }

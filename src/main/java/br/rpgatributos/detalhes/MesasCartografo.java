@@ -104,6 +104,8 @@ public final class MesasCartografo extends Estacao {
 
     @Override
     protected void abrir(Player p, Block b, boolean agachado) {
+        // 2.99: mapa vazio = Mapa da Região (agachado com 4 ou 9 = Mural); bússola = Mapa do Explorador.
+        if (plugin.mapasMundo() != null && plugin.mapasMundo().aoUsarMesa(p, b, agachado)) return;
         ItemStack mapa = p.getInventory().getItemInMainHand();
         PersistentDataContainer pdc = mapa.isEmpty() || !mapa.hasItemMeta() ? null : mapa.getItemMeta().getPersistentDataContainer();
         if (pdc == null || !pdc.has(K_X)) {

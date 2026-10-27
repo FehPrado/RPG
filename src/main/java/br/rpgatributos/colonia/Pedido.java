@@ -56,7 +56,7 @@ public enum Pedido {
             s -> s.getType() == Material.LEAD),
     GLOWSTONE("4 pós de pedra luminosa", 4, Material.GLOWSTONE_DUST, "Meus frascos não brilham mais.", Set.of(Profissao.ALQUIMISTA),
             s -> s.getType() == Material.GLOWSTONE_DUST),
-    MAPA("1 mapa", 1, Material.MAP, "Quero conhecer as estradas do reino.", Set.of(Profissao.MERCADOR),
+    MAPA("1 mapa", 1, Material.MAP, "Quero conhecer as estradas do reino.", Set.of(Profissao.MERCADOR, Profissao.CARTOGRAFO),
             s -> s.getType() == Material.MAP || s.getType() == Material.FILLED_MAP),
     TINTA("3 bolsas de tinta", 3, Material.INK_SAC, "Minha tinta acabou no meio de um capítulo.", Set.of(Profissao.BIBLIOTECARIO),
             s -> s.getType() == Material.INK_SAC || s.getType() == Material.GLOW_INK_SAC),

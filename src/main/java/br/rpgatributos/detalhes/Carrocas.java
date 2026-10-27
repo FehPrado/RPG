@@ -545,7 +545,8 @@ public final class Carrocas implements Listener {
                 c.setVelocity(new Vector(v.getX() * 0.5, v.getY(), v.getZ() * 0.5));
                 continue;
             }
-            boolean estrada = ESTRADA.contains(lc.clone().add(0, -0.2, 0).getBlock().getType());
+            Material piso = lc.clone().add(0, -0.2, 0).getBlock().getType();
+            boolean estrada = ESTRADA.contains(piso) || br.rpgatributos.estrada.Pisos.nivelEm(lc.clone().add(0, -0.2, 0).getBlock()) > 0;
             // Velocidade de verdade (o chão freia o barco uns 22%: por isso a divisão logo abaixo).
             double max = m.contains(Melhoria.RODAS) && estrada ? 0.9 : estrada ? 0.7 : 0.6;
             Vector nova = falta.normalize().multiply(Math.min(max, dist * 0.3) / ATRITO);

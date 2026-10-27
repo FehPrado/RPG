@@ -41,13 +41,14 @@ public final class Fogueiras extends Estacao {
             Material.RABBIT, Material.COOKED_RABBIT, Material.COD, Material.COOKED_COD,
             Material.SALMON, Material.COOKED_SALMON, Material.POTATO, Material.BAKED_POTATO, Material.KELP, Material.DRIED_KELP);
 
-    private final NamespacedKey kDescansado;
+    private final NamespacedKey kDescansado, kPouso;
     private final Map<UUID, Integer> descanso = new HashMap<>();
     private int passos;
 
     public Fogueiras(RPGAtributos plugin) {
         super(plugin, "fogueiras", "fogueira_display");
         this.kDescansado = new NamespacedKey(plugin, "descansado_ate");
+        this.kPouso = new NamespacedKey(plugin, "pouso_ate");
     }
 
     @Override
@@ -146,6 +147,24 @@ public final class Fogueiras extends Estacao {
         return p.getPersistentDataContainer().getOrDefault(kDescansado, PersistentDataType.LONG, 0L);
     }
 
+    /** 2.95: até quando vale o bônus do Pouso de Viajante (descansou numa fogueira na beira da estrada). */
+    public long pousoAte(Player p) {
+        return p.getPersistentDataContainer().getOrDefault(kPouso, PersistentDataType.LONG, 0L);
+    }
+
+    /** Há piso de estrada a até 4 blocos da fogueira (no mesmo nível, um acima ou um abaixo)? */
+    private static boolean naBeiraDaEstrada(Location fogo) {
+        Block f = fogo.getBlock();
+        for (int dx = -4; dx <= 4; dx++) {
+            for (int dz = -4; dz <= 4; dz++) {
+                for (int dy = -2; dy <= 0; dy++) {
+                    if (br.rpgatributos.estrada.Pisos.nivelEm(f.getRelative(dx, dy, dz)) > 0) return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public double multiplicadorXp(Player p) {
         return System.currentTimeMillis() < descansadoAte(p) ? 1 + plugin.settings().detDescansadoXp : 1;
     }
@@ -163,9 +182,15 @@ public final class Fogueiras extends Estacao {
             } else {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 120, 0, true, false, true));
                 int s = descanso.merge(p.getUniqueId(), 5, Integer::sum);
-                if (s >= 30 && System.currentTimeMillis() >= descansadoAte(p) - 60_000) {
+                boolean pouso = plugin.settings().estradaPouso && naBeiraDaEstrada(perto);
+                if (s >= (pouso ? 15 : 30) && System.currentTimeMillis() >= descansadoAte(p) - 60_000) {
                     long ate = System.currentTimeMillis() + plugin.settings().detDescansadoMinutos * 60_000L;
                     p.getPersistentDataContainer().set(kDescansado, PersistentDataType.LONG, ate);
+                    if (pouso) {
+                        p.getPersistentDataContainer().set(kPouso, PersistentDataType.LONG, ate);
+                        p.sendMessage(Component.text("♨ Pouso de Viajante: ", COR, TextDecoration.BOLD)
+                                .append(Component.text("na estrada você anda mais " + Math.round(plugin.settings().estradaBonusPouso * 100) + "% rápido enquanto estiver Descansado.", NamedTextColor.GRAY)));
+                    }
                     descanso.remove(p.getUniqueId());
                     p.playSound(p.getLocation(), Sound.BLOCK_CAMPFIRE_CRACKLE, 1f, 0.8f);
                     p.sendMessage(Component.text("♨ Descansado! ", COR, TextDecoration.BOLD)

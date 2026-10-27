@@ -358,7 +358,7 @@ Como em Harvest Moon e Stardew Valley. **Agachado + clique com a mão vazia** nu
 - **Um território por jogador** (com as expansões dele). Clique no Marco (ou `/territorio`) para o menu:
   - **Mapa:** os chunks em volta, coloridos (seu, de amigo, de outro, livre). Clique num livre para reivindicar; shift + clique num seu para liberar.
   - **Membros:** constroem e mexem em tudo. A **party** do dono também (regra "Party pode construir").
-  - **Regras:** PvP, portas para visitantes, baús para visitantes, monstros nascem, explosões, fogo, reino e party ("Reino pode construir": membros do seu reino constroem aqui).
+  - **Regras:** PvP, portas para visitantes, baús para visitantes, monstros nascem, explosões, fogo, reino e party ("Reino pode construir": membros do seu reino constroem aqui) e trilhas (2.94: "Trilhas se formam", grama muito pisada vira caminho).
   - **Mostrar bordas:** partículas nas bordas por 20 segundos.
   - **Placa de boas-vindas (2.57):** `/territorio boasvindas <frase>` (até 60 letras). Quem entra no seu território lê a frase em cima do aviso de território. `apagar` tira.
   - Segurando outro estandarte, clique na bandeira do menu para trocar.
@@ -393,6 +393,7 @@ Um jeito simples de ter uma vila com moradores trabalhando, no estilo Minecoloni
 | Ferreiro | Forja do Ferreiro | Conserta equipamentos do depósito e funde minérios brutos | 3 |
 | Tratador | Altar do Domador | Couro, lã, ovos, penas e carne | 3 |
 | Bibliotecário | Atril | 3 canas → papel; 3 papéis + 1 couro → livro; 1 livro + 4 lápis-lazúli → **livro encantado** ao acaso (o nível do encantamento sobe com o do bibliotecário; do nível 7 em diante, às vezes um raro como Remendo) | 3 |
+| Cartógrafo (2.99) | Mesa do Cartógrafo (a estação, não a mesa comum) | Com **mapas vazios** no depósito, de vez em quando desenha um **Mapa da Região** da colônia ou um **Mapa de Estrutura** (até uma estrutura que o dono ainda não visitou, com um X) |
 | Alquimista | Bancada Alquímica | Pó Arcano e Óleo de Peixe | 4 |
 
 Cada morador precisa do **seu** posto: 2 fazendeiros precisam de 2 composteiras.
@@ -438,6 +439,7 @@ São **5 capítulos** (3, 8, 14, 21 e 30 pontos). Em cada um ele conta um pedaç
 | Alquimista | Gota a Mais: poções duram 25% mais |
 | Mercador | Olho para o Valor: 5% de chance de esmeralda ao derrotar monstros |
 | Bibliotecário | Leitura Atenta: +25% de experiência |
+| Cartógrafo | Pés na Estrada: +5% de velocidade em qualquer estrada |
 | Construtor | Mãos Firmes: quedas tiram 3 de vida a menos |
 | Soldado | Postura de Guarda: +1 de armadura |
 | Arqueiro | Olho Firme: +10% de dano com flechas |
@@ -509,6 +511,7 @@ O Quartel novo tem o pátio de treino dentro da área, então pede menos piso co
 | Mercador | Mercado | Mesa de cartografia | 2 |
 | Cozinheiro | Taverna | Cozinha (faça o ritual no defumador) | 2 |
 | Bibliotecário | Biblioteca | Atril | 3 |
+| Cartógrafo | Biblioteca | Mesa do Cartógrafo | 3 |
 | Soldado, Arqueiro, Cavaleiro | Quartel | Alvo (4 vagas cada) | 2 |
 | Ferreiro | Ferraria | Forja do Ferreiro (ritual na bigorna) | 3 |
 | Tratador | Estábulo | Altar do Domador (ritual no fardo de feno) | 3 |
@@ -1682,6 +1685,12 @@ Pequenas melhorias com cara de jogo normal, sem item nem textura nova (cada uma 
 - **2.49:** **ovelhas de cores misturadas** (pais de cores que o jogo não mistura: 30% de o filhote sair a cor do meio); **animais seguem de longe** (veem a comida na sua mão a 16 blocos, no jogo são 10); **suporte de armadura com braços** (todos, inclusive os que já existiam; agachado + graveto liga e desliga, e o desligado fica assim); **escadas de mão mais rápidas**; **lanternas rangem na chuva** quando penduradas ao ar livre; **raio queima árvore** (folhas pegam fogo, se o fogo for permitido ali, e sobra carvão vegetal no pé).
 - **2.56: abelhas polinizam:** colmeia ou ninho de abelha com abelhas (dentro ou voando perto) a até 8 blocos faz trigo, cenoura, batata, beterraba, frutas silvestres, caules de melão e abóbora, tocha-flor e jarro crescerem mais rápido (40% de chance de um estágio a mais), com pólen no ar. `vanilla-mais.abelhas-polinizam`.
 - **2.58: estante viva:** olhando para um livro numa **estante entalhada**, a barra mostra o título e o autor (livro encantado: os encantamentos). **Agachado + clique direito** no livro abre para ler sem tirar da estante (rascunhos também). A estante vira uma biblioteca. `vanilla-mais.estante-viva`.
+- **2.93: bigorna sem "Caro demais":** o custo da bigorna para em **30 níveis** (`vanilla-mais.bigorna-custo-maximo`; 0 deixa como no jogo). Dá para continuar melhorando a mesma peça para sempre.
+- **2.93: consertar a bigorna:** clique numa bigorna **danificada** ou **lascada** com um **bloco de ferro** na mão: ela volta um estágio (danificada → lascada → nova). Em território alheio, só quem pode construir ali. `vanilla-mais.consertar-bigorna`.
+- **2.93: separar encantamentos:** no **rebolo**, ponha um **livro encantado com 2 ou mais encantamentos** e um **livro comum**: sai um livro só com o **primeiro** encantamento, e o livro de cima fica com os outros. Repita até separar todos. Não gasta XP nem devolve XP. `vanilla-mais.separar-encantamentos`.
+- **2.93: XP em garrafas:** **agachado**, clique na **mesa de encantamento** com um **frasco vazio**: 11 pontos de XP viram **1 frasco de experiência** (um por clique). Arremessado, ele devolve de 3 a 11 pontos, como no jogo, então guardar perde um pouco. `vanilla-mais.xp-em-garrafas`.
+- **2.93: moldura invisível:** clique com uma **tesoura** numa moldura **com item**: a moldura some e só o item fica à vista (gasta 1 de durabilidade). Tesoura de novo: ela volta. Se o item sair, a moldura reaparece sozinha. `vanilla-mais.moldura-invisivel`.
+- **2.93: bater na porta:** clique esquerdo com a **mão vazia** numa porta faz o som de batida (madeira ou ferro), para quem está do outro lado ouvir. `vanilla-mais.bater-na-porta`.
 
 ### Conforto no dia a dia (2.57)
 
@@ -1768,6 +1777,68 @@ Cada uma pode ser desligada em `utilidades:` no config.
 | Banco | 1 laje de madeira | leva uma pessoa sentada em cima da carga |
 
 - **Visual:** sem mod, é o barco com baú de abeto. Com EMF + ETF, vira uma carroça com 4 rodas e sem remos (2.67.1; ela se chama "Carroça", com o nome escondido, e o modelo vale por esse nome).
+
+### Estradas (2.94–2.98)
+
+Quem constrói a estrada é o jogador, com os blocos que quiser; o plugin reconhece o piso. Tudo se desliga em `estradas` no config.
+
+- **Trilhas que se formam:** grama, terra, terra grossa, podzol, micélio ou terra enraizada **muito pisados** viram **caminho de terra**. Cada vez que você pisa num bloco conta 1 passo (montado, 2; de carroça, 3); com **20 passos** no mesmo bloco, sem ficar uma hora esquecido, a trilha aparece (o mato de cima some; com flor ou bloco em cima, não forma). Assim os caminhos que todo mundo usa se desenham sozinhos.
+- **Trilha esquecida volta a ser grama:** se ninguém passar por ela em **10 dias do jogo**, ela volta a ser o bloco de antes. Só as trilhas que nasceram sozinhas somem; caminho feito com pá fica para sempre.
+- **Em território:** a regra **"Trilhas se formam"** (ligada por padrão, também nos territórios antigos) deixa o dono desligar.
+- **Mais rápido na estrada** (a pé ou montado; o bônus vai para a montaria):
+
+| Piso | Blocos | Velocidade |
+|---|---|---|
+| Trilha | caminho de terra | +5% |
+| Cascalho | cascalho, barro compactado | +8% |
+| Calçada | pedregulho (e musgoso), pedregulho de ardósia, tijolos de todo tipo, ladrilhos, laje e escada de pedra | +12% |
+| Estrada Real | pedra polida (andesito, diorito, granito, ardósia, pedra-negra, tufo...), pedra lisa e arenito cortado | +15% |
+
+  Lajes e escadas contam como o bloco delas. Pedra comum inteira não conta (senão as cavernas seriam estradas). Pulando, o bônus continua; nadando, voando ou planando, sai.
+- A **Carroça** também reconhece todos esses pisos como estrada (as Rodas de ferro rendem neles).
+- **2.95: pontes e neve.** Tábua, laje ou escada de madeira com **água ou vão embaixo** é ponte e conta como cascalho (+8%); no chão, como piso de casa, não conta. Camada de neve por cima não apaga a estrada: vale o piso de baixo.
+- **2.95: placa de direção.** Escreva `[direção]` na primeira linha e o nome de um lugar nas outras. Valem as **colônias** ("Colônia de Fulano" ou só "Fulano"), as **Pedras de Viagem públicas** e as **estruturas que você já visitou**. A placa se reescreve com o **rumo** (Norte, Nordeste...), o nome e a **distância contada da própria placa** ("» Nordeste « / Colônia de Ana / a 340 blocos") e fica encerada. Nome errado: a placa avisa e mostra os lugares mais perto. Nada aparece na tela; é só a placa. `estradas.placas-de-direcao`.
+- **2.95: Pouso de Viajante.** Uma **Fogueira de Acampamento** a até 4 blocos de um piso de estrada vira pouso: sentado perto dela, você fica Descansado em **15 s** (em vez de 30) e, enquanto estiver Descansado, anda **+5%** a mais na estrada. `estradas.pouso` e `estradas.bonus.pouso`.
+- **2.96: marcos e estradas com nome.** Uma placa com `[estrada]` na primeira linha e o **nome** nas duas seguintes, a até 2 blocos do piso, é um **marco**. Ao pôr um marco, o plugin procura os marcos da **mesma estrada** a até **160 blocos** e confere se dá para ir de um ao outro **só pisando em estrada** (trilha, cascalho, calçada, Estrada Real ou ponte; subindo e descendo 1 bloco, também na diagonal). Achou: o trecho fica ligado. A placa vira "═ Estrada ═ / nome / marco nº 3" e fica encerada.
+  - **Clique no marco:** confere os trechos dele de novo (completou a estrada? clique) e mostra quantos marcos estão ligados, o comprimento, a **iluminação** (quanto do caminho tem luz de tocha, lanterna etc.), as colônias por onde ela passa e o rumo dos marcos vizinhos.
+  - Quebrar a placa tira o marco da estrada.
+- **2.96: colônias ligadas.** Se uma estrada contínua passa por **duas colônias** (marco dentro da colônia ou a até 48 blocos da prefeitura), elas ficam ligadas:
+  - o **Mercador** vende 1 lote a mais por colônia ligada (até +2);
+  - a **felicidade** sobe (+5 por ligação, até +10: os moradores se visitam);
+  - saem **caravanas**: a cada 40 min, uma caravana leva as **sobras do depósito** (2 + nível da colônia em lotes, como o Mercador) para a outra colônia e **volta com esmeraldas** (1,5 por lote) para o depósito de origem. A colônia de destino ganha um pouco de felicidade (dia de feira). Nada vai de um jogador para outro: a carga sai e volta para a mesma colônia.
+  - **Assaltos:** a chance vai de 3% a 35% e cai com a **iluminação** da estrada e com **soldados** na colônia. Se ninguém estiver perto, a carga se perde. Se alguém estiver perto da caravana, ela aparece **andando pela estrada** (uma mula com carga e o nome da colônia) e o assalto vira luta: **salteadores** atacam a mula. Mate todos e a caravana segue (quem defendeu ganha 2 esmeraldas); se a mula morrer, a carga se perde.
+- **2.96: encontros na estrada.** Andando numa estrada **iluminada**, os bandidos dão lugar a um viajante ou a uma carroça; de noite, numa estrada **escura**, a estrela cadente vira bandidos.
+
+- **2.98: gente nas estradas.** De dia, perto de uma estrada com marcos ligados, às vezes alguém vem andando por ela (aldeões que não ficam salvos no mundo e somem quando ninguém está perto). Clique para falar:
+  - **Visita** (estrada que passa por 2 colônias): um morador de verdade de uma colônia, com o nome e a roupa dele, indo visitar a outra.
+  - **Peregrino:** conta as **notícias** do mundo (chefes derrotados, caravanas, Lua de Sangue, bandos...) e dá a **Bênção do Caminho** (Sorte por 5 min, uma vez por peregrino).
+  - **Mensageiro:** pede uma coisa para a viagem (6 pães, 16 tochas, 3 couros...). Segure e clique: paga em esmeraldas.
+  - **Mercador de Estrada:** 3 trocas sorteadas de coisas de estrada (andesito polido para calçar, lanternas, mapa vazio, placas, pão; compra cascalho e couro).
+  - **Visita na praça:** na prefeitura de uma colônia ligada, às vezes há um morador da outra colônia de visita, parado na praça por uns minutos.
+  - `estradas.andarilhos` e `andarilhos-minutos`.
+
+### Mundo vivo (2.97)
+
+Tudo se desliga em `mundo-vivo` no config.
+
+- **Rotina dos animais:** o **Comedouro** vira o celeiro. No fim da tarde ele toca um **sino de vaca** e os bichos da fazenda a até 24 blocos (vaca, ovelha, porco, galinha, cabra, coelho) vão para perto dele; de noite, quem se afasta volta. Com o comedouro debaixo de um teto, eles dormem cobertos (e o afeto não cai no inverno). De manhã, cada um sai para um pedaço de pasto a céu aberto. Bichos no laço, montados, companheiros e guardiões ficam de fora.
+- **Sons do mundo:** na **lua cheia**, em florestas, taigas, neve e montanhas, ouvem-se lobos ao longe (o 26.3 não tem mais o uivo; é o ganido grave do lobo). De noite, nos **pântanos**, um coro de sapos. Ao **amanhecer**, o sino da prefeitura de cada colônia toca duas vezes.
+- **Bandos que atravessam o mapa:** quem explora de dia, a céu aberto e fora de território, às vezes vê passar um bando do bioma: **manada de cavalos** (planície, savana), **rebanho de cabras-monteses** (montanha), **alcateia** (taiga e neve no inverno), **raposas** (floresta, taiga), **camelos** (deserto), **lhamas** (badlands) ou **papagaios** (selva). O bando anda num rumo, para a **estrutura mais perto que você ainda não visitou** (até 800 blocos), ou só para longe. **Siga o bando:** ao chegar, o líder vira um **animal raro** (de Ouro ou de Neve) e fica ali; os outros se espalham. Os bichos do bando somem se ninguém estiver perto, menos os que você domar no caminho. No máximo um bando a cada 30 min por jogador.
+
+### Mapas (2.99)
+
+Feitos na **Mesa do Cartógrafo** (a estação: mesa de cartografia + bússola + 3 papéis). `mapas.ativados`.
+
+| Na mão, clique na mesa | Sai |
+|---|---|
+| 1 mapa vazio | **Mapa da Região**: 1024 blocos em volta da mesa |
+| Agachado, 4 ou 9 mapas vazios | **Mural** 2×2 ou 3×3: mapas de 512 blocos, lado a lado, com o nome "linha, coluna" |
+| Bússola (e 1 mapa vazio no inventário) | **Mapa do Explorador**: 2048 blocos |
+
+- **Por cima do mapa**, o plugin desenha sozinho as **estradas com nome** (marrom), as **colônias** (bandeira com o nome), as **Pedras de Viagem públicas** e as **caravanas** andando (marcador azul; X vermelho quando estão sendo assaltadas). O terreno do Mapa da Região e do Mural se desenha como no jogo: segure e ande pela área. Pendurado na parede, o mural continua mostrando as caravanas se mexendo.
+- **Mapa do Explorador:** se preenche sozinho por onde você anda com ele **no inventário** (não precisa segurar), uns 64 blocos em volta. Marca as **estruturas que você já visitou**, as colônias, as estradas e a sua seta.
+- **Cartógrafo da colônia:** profissão nova (nível 3 da colônia; posto: Mesa do Cartógrafo, dentro da Biblioteca). Com mapas vazios no depósito, de vez em quando desenha um Mapa da Região da colônia ou um **Mapa de Estrutura** com um X numa estrutura que o dono ainda não visitou (até 1500 blocos). O Laço dele ensina **Pés na Estrada** (+5% na estrada).
+- O desenho por cima fica anotado em `mapas.yml` (e os pixels do Explorador em `mapas/<id>.bin`) e volta quando o servidor liga.
 
 ### Artefatos de utilidade (2.49)
 
@@ -2440,6 +2511,10 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 | `/rpgadmin conjuntomineral <ambar/jade/perola/gelo/pedra_sangue/magma/quartzo_negro> [forjar]` | As 9 peças de um conjunto dos minerais (forjadas, se pedir) |
 | `/rpgadmin utilidade <chave/regador/bancada/balde_gelo/trena/cinto/todas>` | Os itens das utilidades do dia a dia |
 | `/rpgadmin carroca [completa]` | A Carroça (completa = com todas as melhorias) |
+| `/rpgadmin estrada [lista\|caravana\|assalto]` | Marcos, trechos e estradas; `caravana` manda já uma caravana da sua colônia (chega em 1 min); `assalto` faz os salteadores atacarem a caravana que está na estrada |
+| `/rpgadmin andarilho [peregrino\|mensageiro\|mercador\|visita]` | Alguém vem andando pela estrada mais perto (até 64 blocos) |
+| `/rpgadmin bando` | Um bando passa perto de você agora (fora do bioma certo, cavalos) |
+| `/rpgadmin trilha [sumir\|info]` | Forma uma trilha no bloco que você olha; `sumir` volta agora as trilhas do pedaço; `info` mostra o piso e quantas trilhas há no pedaço |
 | `/rpgadmin cristal <e..s> [cacada/saque/monolitos]` | Um Cristal de Portal |
 | `/rpgadmin cristalmana` | 4 Cristais de Mana de cada tamanho |
 | `/rpgadmin grimoriooculto` | O Grimório Oculto (zera a magia e a recarga) |
@@ -2493,7 +2568,7 @@ Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, 
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.92.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.99.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

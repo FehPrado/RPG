@@ -1171,6 +1171,34 @@ public final class Estruturas implements Listener {
         return d;
     }
 
+    /** 2.95: um lugar com nome e posição (para as placas de direção das estradas). */
+    public record Lugar(String nome, String mundo, int x, int z) { }
+
+    /** As estruturas que o jogador já visitou, com o nome delas (ou o do tipo). */
+    public List<Lugar> visitadas(UUID quem) {
+        List<Lugar> l = new ArrayList<>();
+        for (Sitio s : sitios) {
+            if (s.visitantes.contains(quem)) l.add(new Lugar(s.nome != null && !s.nome.isBlank() ? s.nome : s.tipo.nome(), s.mundo, s.x, s.z));
+        }
+        return l;
+    }
+
+    /** 2.97: a estrutura mais perto (até {@code raio}) que o jogador ainda não visitou, ou null (para onde os bandos vão). */
+    public Lugar naoVisitadaMaisPerto(UUID quem, Location daqui, double raio) {
+        Sitio melhor = null;
+        double best = raio * raio;
+        for (Sitio s : sitios) {
+            if (!s.mundo.equals(daqui.getWorld().getName()) || s.visitantes.contains(quem)) continue;
+            if (s.tipo == Estrutura.CIDADE_SUBMERSA) continue;
+            double d2 = s.distancia2(daqui);
+            if (d2 < best) {
+                best = d2;
+                melhor = s;
+            }
+        }
+        return melhor == null ? null : new Lugar(melhor.nome != null && !melhor.nome.isBlank() ? melhor.nome : melhor.tipo.nome(), melhor.mundo, melhor.x, melhor.z);
+    }
+
     public record PistaSonho(String id, Estrutura tipo, String nome, int x, int z) { }
 
     /** A estrutura mais perto (até 3000 blocos) que o jogador nunca visitou nem sonhou. */

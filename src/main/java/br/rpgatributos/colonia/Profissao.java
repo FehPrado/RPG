@@ -36,6 +36,8 @@ public enum Profissao {
             "Faz papel, livros e, com lápis-lazúli, livros encantados."),
     CONSTRUTOR("Construtor", Material.BRICKS, 0xD7A86E, Villager.Profession.LEATHERWORKER, 1, Material.CRAFTING_TABLE, Posto.BLOCO,
             "Ergue as construções dos projetos da Prefeitura, bloco a bloco, com o material do baú da obra."),
+    CARTOGRAFO("Cartógrafo", Material.FILLED_MAP, 0xD7B98E, Villager.Profession.CARTOGRAPHER, 3, Material.CARTOGRAPHY_TABLE, Posto.MESA_CARTOGRAFO,
+            "Desenha Mapas da Região e, às vezes, um mapa até uma estrutura que você não conhece (gasta mapas vazios do depósito)."),
     SOLDADO("Soldado", Material.IRON_SWORD, 0xFF5555, Villager.Profession.NONE, 2, Material.TARGET, Posto.QUARTEL,
             "Veste a armadura e luta de espada: defende a colônia e vai à guerra."),
     ARQUEIRO("Arqueiro", Material.BOW, 0xFFAA00, Villager.Profession.NONE, 3, Material.TARGET, Posto.QUARTEL,
@@ -49,7 +51,7 @@ public enum Profissao {
     public boolean soldado() { return this == SOLDADO || this == ARQUEIRO || this == CAVALEIRO; }
 
     /** Que tipo de posto a profissão precisa. */
-    public enum Posto { NENHUM, BLOCO, COZINHA, FORJA, ALTAR_DOMADOR, BANCADA_ALQUIMICA, QUARTEL }
+    public enum Posto { NENHUM, BLOCO, COZINHA, FORJA, ALTAR_DOMADOR, BANCADA_ALQUIMICA, QUARTEL, MESA_CARTOGRAFO }
 
     private final String nome;
     private final Material icone;
@@ -102,6 +104,7 @@ public enum Profissao {
             case ALTAR_DOMADOR -> "Altar do Domador";
             case BANCADA_ALQUIMICA -> "Bancada Alquímica";
             case QUARTEL -> "Alvo";
+            case MESA_CARTOGRAFO -> "Mesa do Cartógrafo";
         };
     }
 
@@ -112,7 +115,7 @@ public enum Profissao {
     public Planta.Efeito construcao() {
         return switch (this) {
             case FAZENDEIRO -> Planta.Efeito.FAZENDA;
-            case BIBLIOTECARIO -> Planta.Efeito.BIBLIOTECA;
+            case BIBLIOTECARIO, CARTOGRAFO -> Planta.Efeito.BIBLIOTECA;
             case SOLDADO, ARQUEIRO, CAVALEIRO -> Planta.Efeito.QUARTEL;
             case CONSTRUTOR -> Planta.Efeito.OFICINA;
             case LENHADOR -> Planta.Efeito.CABANA_LENHADOR;

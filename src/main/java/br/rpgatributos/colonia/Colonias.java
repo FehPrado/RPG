@@ -111,7 +111,7 @@ public final class Colonias implements Listener {
     private static final int[] P_CIDADAOS = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43, 46, 47};
     private static final int P_FECHAR = 49;
     /** Profissões no menu do morador: as de trabalho nas duas fileiras de cima, as de guerra embaixo. */
-    private static final int[] C_PROFISSOES = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 30, 31, 32};
+    private static final int[] C_PROFISSOES = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 30, 31, 32};
     private static final int P_EXERCITO = 22;
     private static final int P_PROJETOS = 20, P_OBRAS = 24;
     private static final int C_INFO = 4;
@@ -551,7 +551,7 @@ public final class Colonias implements Listener {
                     case ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL -> plugin.forjas().eh(b) ? Profissao.FERREIRO : null;
                     case HAY_BLOCK -> plugin.altaresDomador().eh(b) ? Profissao.TRATADOR : null;
                     case TARGET -> Profissao.SOLDADO;
-                    case CARTOGRAPHY_TABLE -> Profissao.MERCADOR;
+                    case CARTOGRAPHY_TABLE -> plugin.mesasCartografo().eh(b) ? Profissao.CARTOGRAFO : Profissao.MERCADOR;
                     case LECTERN -> Profissao.BIBLIOTECARIO;
                     case CRAFTING_TABLE -> Profissao.CONSTRUTOR;
                     default -> null;
@@ -655,7 +655,8 @@ public final class Colonias implements Listener {
             moradia = c.camas >= c.cidadaos.size() ? 15 : -20;
         }
         double alvo = 50 + moradia + 25 * c.alimentados - (c.alimentados < 0.5 ? 25 : 0)
-                + (c.comeuPratos ? 15 : 0) + humorDaColonia(c);
+                + (c.comeuPratos ? 15 : 0) + humorDaColonia(c)
+                + (plugin.rede() == null ? 0 : 5 * Math.min(2, plugin.rede().ligacoes(c).size())); // 2.96: visitas pela estrada
         c.felicidade += (Math.max(0, Math.min(100, alvo)) - c.felicidade) * 0.3;
         pedidos(c);
 
@@ -989,6 +990,14 @@ public final class Colonias implements Listener {
                 if (esmeraldas <= 0) return null;
                 l.add(new ItemStack(Material.EMERALD, esmeraldas));
             }
+            case CARTOGRAFO -> {
+                // 2.99: desenha um mapa de vez em quando (gasta um mapa vazio do depósito).
+                if (contar(c, simples(Material.MAP)) < 1 || rnd().nextDouble() >= 0.12 + 0.03 * ci.nivel) return null;
+                ItemStack mapa = plugin.mapasMundo().paraCartografo(c);
+                if (mapa == null) return null;
+                tirar(c, simples(Material.MAP), 1);
+                l.add(mapa);
+            }
             case BIBLIOTECARIO -> {
                 if (contar(c, simples(Material.BOOK)) >= 1 && contar(c, simples(Material.LAPIS_LAZULI)) >= 4) {
                     tirar(c, simples(Material.BOOK), 1);
@@ -1059,7 +1068,13 @@ public final class Colonias implements Listener {
 
     /** Vende a sobra do depósito, a que tiver mais sobrando primeiro. @return as esmeraldas ganhas. */
     private int vender(Colonia c, Colonia.Cidadao ci, double mult) {
-        int teto = quantidade(1, 1 + ci.nivel / 3, mult);
+        // 2.96: cada colônia ligada por estrada é mais um lugar para vender (até +2).
+        int estradas = plugin.rede() == null ? 0 : Math.min(2, plugin.rede().ligacoes(c).size());
+        return venderSobras(c, quantidade(1, 1 + ci.nivel / 3, mult) + estradas);
+    }
+
+    /** Tira do depósito as sobras (o que passa da reserva) em até {@code teto} lotes; devolve quantos lotes saíram. Usado pelo Mercador e pela caravana. */
+    public int venderSobras(Colonia c, int teto) {
         Map<Material, Integer> tem = contarPorTipo(c, s -> preco(s.getType()) > 0 && Ingrediente.simples(s));
         List<Map.Entry<Material, Integer>> sobras = new ArrayList<>(tem.entrySet());
         sobras.sort((a, b) -> Integer.compare((b.getValue() - reserva(b.getKey())) / preco(b.getKey()),
