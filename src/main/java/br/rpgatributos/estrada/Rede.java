@@ -671,7 +671,14 @@ public final class Rede implements Listener {
 
     private void avisar(UUID dono, Component msg) {
         Player p = Bukkit.getPlayer(dono);
-        if (p != null) p.sendMessage(msg);
+        if (p != null) {
+            p.sendMessage(msg);
+            return;
+        }
+        // Colônia de teste (dono inventado): o aviso vai para quem está na área de testes.
+        Colonia c = plugin.colonias().de(dono);
+        World w = c == null ? null : c.world();
+        if (w != null && br.rpgatributos.ModoTeste.ehTeste(w)) for (Player t : w.getPlayers()) t.sendMessage(msg);
     }
 
     /** A mula aparece só quando alguém está a até 48 blocos do ponto da rota; anda até o ponto seguinte. */
@@ -744,6 +751,68 @@ public final class Rede implements Listener {
             if (c != null && !cv.perdida) plugin.colonias().depositar(c, new ItemStack(Material.EMERALD, (int) Math.round(cv.lotes * 1.5)));
         }
         caravanas.clear();
+    }
+
+    /**
+     * 2.99.1: põe um marco numa placa já colocada (o cenário da área de testes), como se alguém escrevesse {@code [estrada]}.
+     * @return quantos marcos ele ligou, ou -1 se a placa não está na beira de um piso de estrada.
+     */
+    public int marcar(Block placa, String nome) {
+        if (!(placa.getState() instanceof org.bukkit.block.Sign s)) return -1;
+        Block pe = acharPe(placa);
+        if (pe == null) return -1;
+        Marco antigo = marcos.get(id(placa));
+        if (antigo != null) remover(antigo);
+        Marco m = new Marco(nome, placa.getWorld().getName(), placa.getX(), placa.getY(), placa.getZ(), pe.getX(), pe.getY(), pe.getZ());
+        marcos.put(m.id(), m);
+        int ligados = 0;
+        for (Marco o : vizinhosPossiveis(m)) {
+            Trecho t = verificar(m, o);
+            if (t != null) {
+                trechos.add(t);
+                ligados++;
+            }
+        }
+        int numero = (int) marcos.values().stream().filter(x -> x.chave().equals(m.chave())).count();
+        String[] n = Placas.duasLinhas(nome);
+        var frente = s.getSide(org.bukkit.block.sign.Side.FRONT);
+        frente.line(0, Component.text("═ Estrada ═", COR, TextDecoration.BOLD));
+        frente.line(1, Component.text(n[0], NamedTextColor.BLACK));
+        frente.line(2, Component.text(n[1], NamedTextColor.BLACK));
+        frente.line(3, Component.text("marco nº " + numero, NamedTextColor.DARK_GRAY));
+        s.setWaxed(true);
+        s.update();
+        ligacoesEm = 0;
+        salvar();
+        return ligados;
+    }
+
+    /** 2.99.1: os marcos e as caravanas de um mundo que deixou de existir (o de testes) saem da rede. */
+    public int esquecerMundo(String mundo) {
+        int antes = marcos.size();
+        for (Iterator<Marco> it = marcos.values().iterator(); it.hasNext(); ) {
+            Marco m = it.next();
+            if (!m.mundo.equals(mundo)) continue;
+            it.remove();
+            trechos.removeIf(t -> t.liga(m.id()));
+        }
+        for (Iterator<Caravana> it = caravanas.iterator(); it.hasNext(); ) {
+            Caravana cv = it.next();
+            if (cv.rota.isEmpty() || !cv.rota.getFirst().getWorld().getName().equals(mundo)) continue;
+            tirarMula(cv);
+            for (UUID id : cv.salteadores) {
+                Entity e = Bukkit.getEntity(id);
+                if (e != null) e.remove();
+            }
+            proxima.remove(cv.origem);
+            it.remove();
+        }
+        int n = antes - marcos.size();
+        if (n > 0) {
+            ligacoesEm = 0;
+            salvar();
+        }
+        return n;
     }
 
     /** A cada 5 minutos: marcos cuja placa sumiu saem da rede. */

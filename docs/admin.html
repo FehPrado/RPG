@@ -587,7 +587,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin mercador</span></td><td>O Mercador Itinerante aparece perto de você</td></tr>
       <tr><td><span class="cmd">/rpgadmin encontro [carroca|bandidos|viajante|estrela]</span></td><td>Começa um encontro perto de você</td></tr>
       <tr><td><span class="cmd">/rpgadmin estrada [lista|caravana|assalto]</span></td><td>A rede de estradas; manda uma caravana da sua colônia já (1 min); faz os salteadores atacarem a caravana na estrada</td></tr>
-      <tr><td><span class="cmd">/rpgadmin andarilho [peregrino|mensageiro|mercador|visita]</span></td><td>Alguém vem andando pela estrada mais perto (até 64 blocos)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin andarilho [peregrino|mensageiro|mercador|visita|praca]</span></td><td>Alguém vem andando pela estrada mais perto (até 64 blocos); <code>praca</code>: um visitante na prefeitura de uma colônia ligada a até 40 blocos</td></tr>
+      <tr><td><span class="cmd">/rpgadmin teste estrada</span></td><td>Na área de testes: duas colônias de teste (Aurora e Brisa) com depósito cheio, ligadas por uma Estrada Real iluminada com marcos. Você mexe nelas como dono; tudo some com o mundo de testes</td></tr>
       <tr><td><span class="cmd">/rpgadmin bando</span></td><td>Um bando passa perto de você agora</td></tr>
       <tr><td><span class="cmd">/rpgadmin trilha [sumir|info]</span></td><td>Forma uma trilha no bloco que você olha; <code>sumir</code> volta as trilhas do pedaço; <code>info</code> mostra o piso</td></tr>
             <tr><td><span class="cmd">/rpgadmin tacho</span></td><td>Cria o Tacho do Artesão no vaso decorado que você olha</td></tr>
@@ -698,7 +699,8 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Teste à vontade. Masmorras abertas a partir do teste também são teste.</li>
         <li><code>/rpgadmin teste</code> de novo: tudo volta exatamente como estava, e o que você pegou ou ganhou lá some.</li>
         <li>Saiu por outro caminho (<code>/tp</code>, <code>/spawn</code>, portal) ou o servidor caiu no meio? Ao trocar de mundo ou entrar de novo, tudo é devolvido do mesmo jeito.</li>
-        <li><code>/rpgadmin teste limpar</code>: remove criaturas e itens soltos a até 64 blocos de você (só dentro do teste).</li>
+        <li><code>/rpgadmin teste limpar</code>: remove criaturas e itens soltos a até 64 blocos de você (só dentro do teste; os moradores das colônias de teste ficam).</li>
+        <li><code>/rpgadmin teste estrada</code> (2.99.1): duas colônias de teste ligadas por estrada, para testar caravanas, assaltos e visitas (veja o card das Estradas). Quando o mundo de testes é apagado, as colônias e os marcos dele também saem dos arquivos.</li>
         <li>Quando o último testador sai, o mundo de testes é apagado (só a pasta <code>dimensions/minecraft/rpg_teste</code>; o mundo principal, o Nether, o End e as masmorras não são tocados) e nasce limpo na próxima vez.</li>
       </ol>
       <p>Cuidados:</p>
@@ -1032,6 +1034,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Ponha uma placa com <code>[direção]</code> e o seu nome (ou o nome de uma Pedra de Viagem pública): ela vira "» Rumo « / nome / a N blocos" e fica encerada. Nome que não existe: aviso com os lugares perto.</li>
         <li>Faça uma ponte de tábuas sobre um rio e passe nela: <span class="cmd">/rpgadmin trilha info</span> em cima diz "Cascalho".</li>
         <li>Fogueira de Acampamento do lado de uma estrada: sente-se (escada ou /sentar). Em 15 s: Descansado + mensagem do Pouso de Viajante.</li>
+        <li><b>Atalho (2.99.1):</b> dentro de <code>/rpgadmin teste</code>, olhe para onde a estrada deve ir e use <span class="cmd">/rpgadmin teste estrada</span>. Aurora fica atrás de você e Brisa à frente (90 blocos), com 2 moradores cada e o depósito cheio de trigo, pedregulho e toras. Em 2 s chega "Estrada de Teste ligada". Daí: <code>/rpgadmin estrada caravana</code> (sai da colônia mais perto), <code>/rpgadmin estrada assalto</code>, <code>/rpgadmin andarilho visita</code> e, perto de uma prefeitura, <code>/rpgadmin andarilho praca</code>. A Prefeitura das duas abre para você como se fosse o dono. Rodar de novo desfaz e monta outra vez.</li>
         <li>Duas colônias (outra conta, ou <code>/rpgadmin prefeitura</code>): ligue as duas com uma estrada de qualquer piso. Ponha placas <code>[estrada]</code> / <code>Estrada Real</code> na beira: na prefeitura de uma, a cada até 160 blocos e na prefeitura da outra. Cada uma deve dizer "ligado a 1 marco". Quebre um bloco no meio, clique no marco: perde a ligação; conserte e clique de novo.</li>
         <li><span class="cmd">/rpgadmin estrada</span>: marcos, trechos e as ligações da sua colônia.</li>
         <li>Ponha sobras no depósito (por exemplo, 3 packs de pedregulho) e use <span class="cmd">/rpgadmin estrada caravana</span>. Fique na estrada: a mula "Caravana da Colônia de..." passa andando. <span class="cmd">/rpgadmin estrada assalto</span>: salteadores atacam a mula; mate-os (2 esmeraldas) ou deixe a mula morrer (carga perdida). Sem assalto, em 1 min chegam as esmeraldas no depósito.</li>

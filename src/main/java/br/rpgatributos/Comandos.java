@@ -377,6 +377,12 @@ public final class Comandos implements TabExecutor {
                     else ok(sender, n + " criatura(s) e item(ns) removidos.");
                     return;
                 }
+                if (args.length >= 2 && args[1].equalsIgnoreCase("estrada")) {
+                    // 2.99.1: duas colônias de teste ligadas por estrada.
+                    String r = plugin.modoTeste().montarEstrada(p);
+                    if (r != null) erro(sender, r);
+                    return;
+                }
                 plugin.modoTeste().alternar(p);
                 return;
             }
@@ -422,6 +428,16 @@ public final class Comandos implements TabExecutor {
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
                 String op = args.length >= 2 ? args[1].toLowerCase(java.util.Locale.ROOT) : "lista";
                 br.rpgatributos.colonia.Colonia c = plugin.colonias().de(p.getUniqueId());
+                if (ModoTeste.ehTeste(p.getWorld())) {
+                    // 2.99.1: na área de testes vale a colônia (de teste) mais perto.
+                    double melhor = Double.MAX_VALUE;
+                    for (br.rpgatributos.colonia.Colonia x : plugin.colonias().todas()) {
+                        Location l = x.prefeitura();
+                        if (l == null || l.getWorld() != p.getWorld()) continue;
+                        double d = l.distanceSquared(p.getLocation());
+                        if (d < melhor) { melhor = d; c = x; }
+                    }
+                }
                 switch (op) {
                     case "caravana" -> {
                         if (c == null) { erro(sender, "Você não tem colônia."); return; }
@@ -459,7 +475,7 @@ public final class Comandos implements TabExecutor {
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
                 String tipo = args.length >= 2 ? args[1] : "peregrino";
                 String r = plugin.andarilhos().aparecerNaEstrada(p, tipo);
-                if (r == null) erro(sender, "Use perto (64 blocos) de uma estrada com marcos ligados. Tipos: peregrino, mensageiro, mercador, visita (a visita pede uma estrada entre 2 colônias).");
+                if (r == null) erro(sender, "Use perto (64 blocos) de uma estrada com marcos ligados. Tipos: peregrino, mensageiro, mercador, visita (a visita pede uma estrada entre 2 colônias) e praca (perto da prefeitura de uma colônia ligada).");
                 else ok(sender, r + " vem andando.");
                 return;
             }

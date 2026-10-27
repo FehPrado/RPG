@@ -97,6 +97,7 @@ public final class ModoTeste implements Listener {
         if (arquivos != null) for (File f : arquivos) {
             try { ATIVOS.add(java.util.UUID.fromString(f.getName().replace(".yml", ""))); } catch (IllegalArgumentException ignorado) { }
         }
+        if (ATIVOS.isEmpty()) esquecerDados();
         // No Paper 26 os mundos extras ficam em <mundo>/dimensions/minecraft/<nome>, ao lado do overworld.
         File dir = new File(Bukkit.getWorlds().getFirst().getWorldFolder().getParentFile(), MUNDO);
         if (!dir.isDirectory()) dir = new File(Bukkit.getWorldContainer(), MUNDO);
@@ -114,8 +115,16 @@ public final class ModoTeste implements Listener {
             File dir = w.getWorldFolder();
             if (!Bukkit.unloadWorld(w, false)) return;
             apagarPasta(dir);
+            esquecerDados();
             plugin.getLogger().info("Área de testes vazia: o mundo " + MUNDO + " foi apagado.");
         }, 20L);
+    }
+
+    /** 2.99.1: o que foi guardado sobre o mundo de testes (colônias de teste, marcos de estrada) vai embora com ele. */
+    private void esquecerDados() {
+        int c = plugin.colonias().esquecerMundo(MUNDO);
+        int m = plugin.rede().esquecerMundo(MUNDO);
+        if (c + m > 0) plugin.getLogger().info("Área de testes: " + c + " colônia(s) e " + m + " marco(s) de estrada esquecidos.");
     }
 
     private void apagarPasta(File dir) {
@@ -178,12 +187,102 @@ public final class ModoTeste implements Listener {
         p.sendMessage(Component.text("⚗ Você saiu da área de testes. Tudo voltou como estava.", COR));
     }
 
+    // =====================================================================
+    //  Cenário: duas colônias ligadas por estrada (2.99.1)
+    // =====================================================================
+
+    private static final String[] VILAS = {"Aurora", "Brisa"};
+
+    /**
+     * {@code /rpgadmin teste estrada}: duas colônias de teste (Aurora e Brisa, a 90 blocos uma da outra), cada uma
+     * com depósito cheio de sobras, ligadas por uma Estrada Real iluminada com um marco em cada ponta.
+     * A estrada segue para onde o jogador olha, passando por ele. @return o aviso de erro, ou null.
+     */
+    public String montarEstrada(Player p) {
+        World w = p.getWorld();
+        if (!ehTeste(w)) return "Só dentro da área de testes (/rpgadmin teste).";
+        // Montado de novo: as colônias de antes saem (a prefeitura delas some e os moradores também).
+        for (String nome : VILAS) {
+            br.rpgatributos.colonia.Colonia velha = plugin.colonias().de(idVila(nome));
+            if (velha == null) continue;
+            for (br.rpgatributos.colonia.Colonia.Cidadao ci : velha.cidadaos()) {
+                Entity e = Bukkit.getEntity(ci.entidade());
+                if (e != null) e.remove();
+            }
+            Location l = velha.prefeitura();
+            if (l != null) {
+                plugin.prefeituras().remover(l, false); // a colônia acaba junto com a prefeitura
+                l.getBlock().setType(org.bukkit.Material.AIR);
+            }
+        }
+        org.bukkit.block.BlockFace f = p.getFacing();
+        int dx = f.getModX(), dz = f.getModZ();
+        int lx = -dz, lz = dx; // para o lado (esquerda de quem olha)
+        int x0 = p.getLocation().getBlockX(), z0 = p.getLocation().getBlockZ();
+        int y = w.getHighestBlockYAt(x0, z0);
+        java.util.function.BiFunction<Integer, Integer, org.bukkit.block.Block> em =
+                (t, lado) -> w.getBlockAt(x0 + dx * t + lx * lado, y, z0 + dz * t + lz * lado);
+        // A estrada: 3 de largura, de -48 a 48, com lanternas a cada 8 blocos do outro lado.
+        for (int t = -48; t <= 48; t++) {
+            for (int lado = -1; lado <= 1; lado++) {
+                org.bukkit.block.Block b = em.apply(t, lado);
+                b.setType(org.bukkit.Material.POLISHED_ANDESITE, false);
+                b.getRelative(0, 1, 0).setType(org.bukkit.Material.AIR, false);
+                b.getRelative(0, 2, 0).setType(org.bukkit.Material.AIR, false);
+            }
+            if (t % 8 == 0) {
+                org.bukkit.block.Block poste = em.apply(t, -2).getRelative(0, 1, 0);
+                poste.setType(org.bukkit.Material.COBBLESTONE_WALL);
+                poste.getRelative(0, 1, 0).setType(org.bukkit.Material.LANTERN);
+            }
+        }
+        // As duas colônias, uma em cada ponta, do lado de cá da estrada.
+        org.bukkit.block.Block[] marcos = new org.bukkit.block.Block[2];
+        for (int i = 0; i < 2; i++) {
+            int t = i == 0 ? -45 : 45;
+            org.bukkit.block.Block sino = em.apply(t, 5).getRelative(0, 1, 0);
+            sino.setType(org.bukkit.Material.BELL);
+            org.bukkit.block.Block bau = em.apply(t + 2, 5).getRelative(0, 1, 0);
+            bau.setType(org.bukkit.Material.CHEST);
+            if (bau.getState(false) instanceof org.bukkit.block.Chest ch) { // sem cópia: os itens vão direto para o baú
+                for (int k = 0; k < 6; k++) ch.getBlockInventory().addItem(new ItemStack(org.bukkit.Material.WHEAT, 64));
+                for (int k = 0; k < 6; k++) ch.getBlockInventory().addItem(new ItemStack(org.bukkit.Material.COBBLESTONE, 64));
+                for (int k = 0; k < 2; k++) ch.getBlockInventory().addItem(new ItemStack(org.bukkit.Material.OAK_LOG, 64));
+            }
+            plugin.prefeituras().criar(sino, null);
+            plugin.colonias().fundarTeste(idVila(VILAS[i]), VILAS[i], sino, bau);
+            plugin.prefeituras().atualizarDisplays(sino.getLocation());
+            org.bukkit.block.Block placa = em.apply(i == 0 ? -43 : 43, 2).getRelative(0, 1, 0);
+            placa.setType(org.bukkit.Material.OAK_SIGN);
+            marcos[i] = placa;
+        }
+        // Os marcos esperam a luz das lanternas assentar (a iluminação entra na conta do trecho).
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            int ligados = 0;
+            for (org.bukkit.block.Block m : marcos) ligados = Math.max(ligados, plugin.rede().marcar(m, "Estrada de Teste"));
+            p.sendMessage(Component.text(ligados > 0
+                    ? "✔ Estrada de Teste ligada: Colônia de Aurora ↔ Colônia de Brisa."
+                    : "⚠ Os marcos não se ligaram; clique num deles para conferir.", ligados > 0 ? COR : NamedTextColor.GOLD));
+        }, 40L);
+        p.sendMessage(Component.text("⚗ Cenário de estrada montado", COR, TextDecoration.BOLD));
+        p.sendMessage(Component.text("Aurora fica atrás de você e Brisa à frente (90 blocos), cada uma com 2 moradores e um depósito com sobras. "
+                + "Na prefeitura delas você mexe como dono. Teste: /rpgadmin estrada caravana (da colônia mais perto), "
+                + "/rpgadmin estrada assalto, /rpgadmin andarilho visita e /rpgadmin andarilho praca. Tudo some quando a área de testes é apagada.", NamedTextColor.GRAY));
+        return null;
+    }
+
+    private static java.util.UUID idVila(String nome) {
+        return java.util.UUID.nameUUIDFromBytes(("rpg_teste:" + nome).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+
     /** {@code /rpgadmin teste limpar}: tira criaturas (menos jogadores) e itens soltos a até 64 blocos. */
     public int limpar(Player p) {
         if (!ehTeste(p)) return -1;
         int n = 0;
+        org.bukkit.NamespacedKey morador = new org.bukkit.NamespacedKey(plugin, "cidadao_colonia");
         for (Entity e : p.getNearbyEntities(64, 64, 64)) {
-            if (e instanceof Player) continue;
+            // Os moradores das colônias de teste ficam (sem eles a colônia esvazia).
+            if (e instanceof Player || e.getPersistentDataContainer().has(morador)) continue;
             e.remove();
             n++;
         }

@@ -165,7 +165,7 @@ public final class Colonias implements Listener {
 
     /** Jogador ligado à colônia: o dono, um membro do território ou do reino do dono. */
     public boolean daColonia(Player p, Colonia c) {
-        if (p.getUniqueId().equals(c.dono)) return true;
+        if (p.getUniqueId().equals(c.dono) || deTeste(p, c)) return true;
         Territorio t = territorio(c);
         if (t != null && t.membro(p.getUniqueId())) return true;
         return plugin.reinos().aliados(p.getUniqueId(), c.dono);
@@ -235,7 +235,7 @@ public final class Colonias implements Listener {
     }
 
     boolean gerencia(Player p, Colonia c) {
-        if (p.getUniqueId().equals(c.dono)) return true;
+        if (p.getUniqueId().equals(c.dono) || deTeste(p, c)) return true;
         Territorio t = territorio(c);
         return t != null && plugin.territorios().gerencia(p, t);
     }
@@ -254,6 +254,40 @@ public final class Colonias implements Listener {
         dono.sendMessage(Component.text("⌂ Colônia fundada! ", Prefeituras.COR)
                 .append(Component.text("Coloque camas, baús (defina o depósito na Prefeitura) e os postos de trabalho por perto.", NamedTextColor.GRAY)));
         salvar();
+    }
+
+    /**
+     * 2.99.1: uma colônia de teste (área de testes), com dono inventado, para ligar duas colônias por estrada.
+     * O baú vira o depósito. Some com {@link #esquecerMundo} quando o mundo de testes é apagado.
+     */
+    public Colonia fundarTeste(UUID dono, String nome, Block sino, Block bau) {
+        Colonia c = new Colonia(dono, nome, sino.getWorld().getName(), sino.getX(), sino.getY(), sino.getZ());
+        porDono.put(c.dono, c);
+        c.proximaChegada = System.currentTimeMillis() + CHEGADA_MS;
+        for (int i = 0; i < 2; i++) chegar(c);
+        if (bau != null) c.depositos.add(bau.getLocation());
+        varrer(c);
+        salvar();
+        return c;
+    }
+
+    /** 2.99.1: as colônias de um mundo que deixou de existir (o de testes) saem da lista, sem aviso. */
+    public int esquecerMundo(String mundo) {
+        int n = 0;
+        for (Colonia c : List.copyOf(porDono.values())) {
+            if (!c.mundo.equals(mundo)) continue;
+            obras.encerrar(c);
+            for (Colonia.Cidadao ci : c.cidadaos) cidadaos.remove(ci.entidade);
+            porDono.remove(c.dono);
+            n++;
+        }
+        if (n > 0) salvar();
+        return n;
+    }
+
+    /** Colônia de teste: quem está na área de testes mexe nela como se fosse dono. */
+    private static boolean deTeste(Player p, Colonia c) {
+        return c.mundo.equals(br.rpgatributos.ModoTeste.MUNDO) && br.rpgatributos.ModoTeste.ehTeste(p);
     }
 
     void aoPerderPrefeitura(Location l) {

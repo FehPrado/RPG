@@ -127,14 +127,17 @@ public final class Andarilhos implements Listener {
             World w = p.getWorld();
             if (p.getGameMode() == GameMode.SPECTATOR || w.getEnvironment() != World.Environment.NORMAL || w.getTime() > 12000) continue;
             if (agora < espera.getOrDefault(p.getUniqueId(), 0L) || rnd().nextDouble() >= 0.3) continue;
-            if (aparecerNaPraca(p) || aparecerNaEstrada(p, null) != null) {
+            if (aparecerNaPraca(p, false) || aparecerNaEstrada(p, null) != null) {
                 espera.put(p.getUniqueId(), agora + plugin.settings().estradaAndarilhosMinutos * 60_000L);
             }
         }
     }
 
-    /** Alguém aparece na estrada perto do jogador ({@code tipo}: "visita", "peregrino", "mensageiro", "mercador" ou null). @return o que apareceu, ou null. */
+    /** Alguém aparece na estrada perto do jogador ({@code tipo}: "visita", "peregrino", "mensageiro", "mercador", "praca" ou null). @return o que apareceu, ou null. */
     public String aparecerNaEstrada(Player p, String forcado) {
+        if ("praca".equalsIgnoreCase(forcado) || "praça".equalsIgnoreCase(forcado)) {
+            return aparecerNaPraca(p, true) ? "Um visitante de outra colônia" : null;
+        }
         Rede.Perto perto = plugin.rede().pertoDaEstrada(p.getLocation(), forcado != null ? 64 : 24);
         if (perto == null || perto.pontos().size() < 4) return null;
         Tipo tipo;
@@ -191,12 +194,12 @@ public final class Andarilhos implements Listener {
     }
 
     /** Um visitante parado na praça (prefeitura) de uma colônia ligada por estrada. */
-    private boolean aparecerNaPraca(Player p) {
+    private boolean aparecerNaPraca(Player p, boolean agora) {
         for (Colonia c : plugin.colonias().todas()) {
             Location pref = c.prefeitura();
             if (pref == null || pref.getWorld() != p.getWorld() || pref.distanceSquared(p.getLocation()) > 40 * 40) continue;
             Map<UUID, String> lig = plugin.rede().ligacoes(c);
-            if (lig.isEmpty() || rnd().nextDouble() >= 0.5) return false;
+            if (lig.isEmpty() || (!agora && rnd().nextDouble() >= 0.5)) return false;
             for (Andarilho a : ativos.values()) if (a.tipo == Tipo.PRACA && ("Colônia de " + c.nomeDono()).equals(a.destino)) return false;
             List<UUID> ds = new ArrayList<>(lig.keySet());
             Colonia de = plugin.colonias().de(ds.get(rnd().nextInt(ds.size())));
