@@ -77,7 +77,12 @@ public final class ModoTeste implements Listener {
     private World mundo() {
         World w = Bukkit.getWorld(MUNDO);
         if (w != null) return w;
-        w = new WorldCreator(MUNDO).type(WorldType.FLAT).generateStructures(false).createWorld();
+        // 2.99.2: o chão fica na altura de sempre (grama em y 64), com pedra embaixo. No plano padrão a grama
+        // ficava em -61, colado no fundo do mundo, e as obras da colônia não cabiam (pedem 4 blocos de fundação).
+        String camadas = "{\"layers\":[{\"block\":\"minecraft:bedrock\",\"height\":1},{\"block\":\"minecraft:stone\",\"height\":124},"
+                + "{\"block\":\"minecraft:dirt\",\"height\":3},{\"block\":\"minecraft:grass_block\",\"height\":1}],"
+                + "\"biome\":\"minecraft:plains\",\"structure_overrides\":[]}";
+        w = new WorldCreator(MUNDO).type(WorldType.FLAT).generatorSettings(camadas).generateStructures(false).createWorld();
         if (w == null) return null;
         w.setGameRule(GameRule.KEEP_INVENTORY, true);
         w.setGameRule(GameRule.DO_MOB_SPAWNING, false);

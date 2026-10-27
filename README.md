@@ -2394,7 +2394,7 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 
 | Comando | O que faz |
 |---|---|
-| `/rpgadmin teste` | **Área de testes (2.88):** um mundo plano à parte (`rpg_teste`), no criativo, com uma cópia do seu inventário. Lá nada conta: XP de atributos e armas, títulos, conquistas (do plugin e do jogo), XP de Caçador, recordes e o limite de guardiões. Ao entrar, o plugin guarda em `teste/<uuid>.yml` o inventário, o baú do fim, XP, vida, fome, efeitos, posição, modo de jogo e todos os dados do plugin no jogador. Ao sair (o mesmo comando, outro teleporte ou entrar de novo depois de cair), tudo volta como estava. Masmorras abertas no teste também são teste. O mundo não tem monstros nascendo, chuva nem estruturas do plugin, e o inventário fica ao morrer. Quando o último testador sai, o mundo de testes é **apagado** (só a pasta `dimensions/minecraft/rpg_teste`, nunca o mundo principal) e nasce limpo na próxima vez; ao ligar o servidor sem ninguém testando, uma sobra também é apagada. O que fica em arquivo do servidor (territórios, colônias, dona de classe lendária) não volta |
+| `/rpgadmin teste` | **Área de testes (2.88):** um mundo plano à parte (`rpg_teste`), no criativo, com uma cópia do seu inventário. Lá nada conta: XP de atributos e armas, títulos, conquistas (do plugin e do jogo), XP de Caçador, recordes e o limite de guardiões. Ao entrar, o plugin guarda em `teste/<uuid>.yml` o inventário, o baú do fim, XP, vida, fome, efeitos, posição, modo de jogo e todos os dados do plugin no jogador. Ao sair (o mesmo comando, outro teleporte ou entrar de novo depois de cair), tudo volta como estava. Masmorras abertas no teste também são teste. O mundo não tem monstros nascendo, chuva nem estruturas do plugin, e o inventário fica ao morrer. O chão é plano na altura de sempre (grama em y 64, pedra embaixo; 2.99.2), então as obras da colônia cabem. Quando o último testador sai, o mundo de testes é **apagado** (só a pasta `dimensions/minecraft/rpg_teste`, nunca o mundo principal) e nasce limpo na próxima vez; ao ligar o servidor sem ninguém testando, uma sobra também é apagada. O que fica em arquivo do servidor (territórios, colônias, dona de classe lendária) não volta |
 | `/rpgadmin teste limpar` | Na área de testes, remove criaturas e itens soltos a até 64 blocos (os moradores das colônias de teste ficam) |
 | `/rpgadmin teste estrada` | **2.99.1:** na área de testes, monta duas colônias de teste (Aurora e Brisa, a 90 blocos) com depósito cheio de sobras, ligadas por uma Estrada Real iluminada com um marco em cada ponta, passando por você na direção em que olha. Nas colônias de teste você mexe como dono. Elas e os marcos somem quando o mundo de testes é apagado |
 | `/rpgadmin set <jogador> <atributo> <nível>` | Define o nível de um atributo |
@@ -2569,7 +2569,7 @@ Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, 
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.99.1.jar`.
+3. O plugin fica em `target/RPGAtributos-2.99.2.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 
