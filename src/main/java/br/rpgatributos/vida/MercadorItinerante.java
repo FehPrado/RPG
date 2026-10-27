@@ -101,6 +101,13 @@ public final class MercadorItinerante implements Listener {
         return l.subList(0, Math.min(6, l.size()));
     }
 
+    /** 2.89: o mercador está no mundo agora? */
+    public boolean presente() {
+        if (ativo == null) return false;
+        Entity e = Bukkit.getEntity(ativo);
+        return e != null && e.isValid() && System.currentTimeMillis() <= ate;
+    }
+
     /** A cada minuto. */
     public void tick() {
         long agora = System.currentTimeMillis();

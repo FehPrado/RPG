@@ -156,6 +156,11 @@ public final class Despertar {
                 Component.text(c.nome + " (" + c.raridade.nome + ")", c.raridade.cor, TextDecoration.BOLD),
                 Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(3500), Duration.ofMillis(800))));
         p.playSound(p.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1f, 1.2f);
+        // 2.92: o Despertar abre um círculo na cor da característica, com feixe e outro no céu.
+        var circulos = org.bukkit.plugin.java.JavaPlugin.getPlugin(br.rpgatributos.RPGAtributos.class).circulosMagicos();
+        org.bukkit.Color corDespertar = br.rpgatributos.visual.CirculosMagicos.cor(c.raridade.cor);
+        circulos.seguindo(p, 2.8, 70, corDespertar, org.bukkit.Color.fromRGB(0x40C4FF), 7, 3, 24);
+        circulos.ceuEm(p.getLocation().add(0, 26, 0), 8, 90, corDespertar, org.bukkit.Color.fromRGB(0x40C4FF), 7, 3);
         List<Component> linhas = new ArrayList<>();
         for (Caracteristica n : novas) {
             linhas.add(Component.text("Característica: ", NamedTextColor.WHITE)

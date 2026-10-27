@@ -1,0 +1,129 @@
+# Projeto de construção da colônia (estilo vila, 2.90).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Poço da Praça"
+descricao:
+  - "Poço de pedra com telhadinho, bancos e flores."
+  - "Cada praça deixa a colônia mais feliz (até 2)."
+icone: WATER_BUCKET
+nivel: 1
+efeito: PRACA
+legenda:
+  "A": "grass_block"
+  "B": "cobblestone"
+  "C": "stone_bricks"
+  "D": "water"
+  "E": "allium"
+  "F": "spruce_stairs[facing=north,half=bottom]"
+  "G": "azure_bluet"
+  "H": "poppy"
+  "I": "dandelion"
+  "J": "mossy_stone_bricks"
+  "K": "spruce_stairs[facing=west,half=bottom]"
+  "L": "spruce_fence"
+  "M": "spruce_stairs[facing=east,half=bottom]"
+  "N": "cornflower"
+  "O": "oxeye_daisy"
+  "P": "spruce_stairs[facing=south,half=bottom]"
+  "Q": "lantern[hanging=false]"
+  "R": "lantern[hanging=true]"
+  "S": "iron_chain[axis=y]"
+  "T": "dark_oak_slab[type=top]"
+  "U": "dark_oak_stairs[facing=south,half=bottom,shape=outer_right]"
+  "V": "dark_oak_stairs[facing=south,half=bottom]"
+  "W": "dark_oak_stairs[facing=south,half=bottom,shape=outer_left]"
+  "X": "dark_oak_stairs[facing=east,half=bottom]"
+  "Y": "dark_oak_stairs[facing=west,half=bottom]"
+  "Z": "dark_oak_stairs[facing=north,half=bottom,shape=outer_left]"
+  "a": "dark_oak_stairs[facing=north,half=bottom]"
+  "b": "dark_oak_stairs[facing=north,half=bottom,shape=outer_right]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 15
+    luz: 1
+  - blocos: 40
+    luz: 3
+  - blocos: 80
+    luz: 6
+camadas:
+  # 0
+  - - "AAAAAAAAA"
+    - "ABCBBCBBA"
+    - "ACCCCCCCA"
+    - "ABCDDDCBA"
+    - "ABCDDDCBA"
+    - "ACCDDDCCA"
+    - "ABCCCCCBA"
+    - "ABCBBCBBA"
+    - "AAAAAAAAA"
+  # 1
+  - - "E...F...G"
+    - ".H.....I."
+    - "..CJCJC.."
+    - "..JDDDJ.."
+    - "KLCDDDCLM"
+    - "..JDDDJ.."
+    - "..CJCJC.."
+    - ".N.....O."
+    - "H...P...I"
+  # 2
+  - - "........."
+    - "........."
+    - "..L...L.."
+    - "........."
+    - ".Q..R..Q."
+    - "........."
+    - "..L...L.."
+    - "........."
+    - "........."
+  # 3
+  - - "........."
+    - "........."
+    - "..L...L.."
+    - "........."
+    - "....S...."
+    - "........."
+    - "..L...L.."
+    - "........."
+    - "........."
+  # 4
+  - - "........."
+    - "........."
+    - "..TTTTT.."
+    - "..TTTTT.."
+    - "..TTTTT.."
+    - "..TTTTT.."
+    - "..TTTTT.."
+    - "........."
+    - "........."
+  # 5
+  - - "........."
+    - ".UVVVVVW."
+    - ".X.....Y."
+    - ".X.....Y."
+    - ".X.....Y."
+    - ".X.....Y."
+    - ".X.....Y."
+    - ".Zaaaaab."
+    - "........."
+  # 6
+  - - "........."
+    - "........."
+    - "..UVVVW.."
+    - "..X...Y.."
+    - "..X...Y.."
+    - "..X...Y.."
+    - "..Zaaab.."
+    - "........."
+    - "........."
+  # 7
+  - - "........."
+    - "........."
+    - "........."
+    - "...UVW..."
+    - "...X.Y..."
+    - "...Zab..."
+    - "........."
+    - "........."
+    - "........."

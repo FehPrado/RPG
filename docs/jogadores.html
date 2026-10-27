@@ -293,6 +293,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <tr><td><b>Santuário dos Deuses</b></td><td>Quartzo entalhado</td><td>1 maçã dourada + 1 vela</td><td>Seguir um deus, oferendas, milagres</td></tr>
       <tr><td><b>Círculo de Transmutação</b></td><td>Bloco de ametista</td><td>1 Mercúrio Vivo + 1 lingote de ouro</td><td>Transformar materiais</td></tr>
       <tr><td><b>Altar da Convergência</b></td><td>Âncora de renascimento</td><td>1 olho do ender + 1 diamante + 4 fragmentos de ametista</td><td>Rituais com pedestais: transmutar, infundir, raros, chefes Despertos e guardiões</td></tr>
+      <tr><td><b>Círculo Arcano</b></td><td>Obsidiana no centro de um pentagrama (velas + traço)</td><td>1 olho do ender + 4 pós de pedra luminosa</td><td>Pactos, tempestade, Fenda do Vazio, conjurações, eclipse, lua de sangue, banimento</td></tr>
       <tr><td><b>Mesa Rúnica</b></td><td>Tufo entalhado</td><td>4 fragmentos de ametista + 1 bloco de lápis</td><td>Gravar runas</td></tr>
     </tbody></table></div>
     <p class="muted">O Altar e o Obelisco usam a mesma obsidiana chorona: o que você jogar decide qual dos dois ela vira (e um bloco nunca vira os dois).</p></div>
@@ -628,6 +629,8 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
       <p>Pegue o <b>grimório</b> no infusor (1 livro). Uma magia = <b>1 a 4 essências</b> do seu corpo + <b>uma forma</b> + até <b>2 modificadores</b>. Toda combinação funciona.</p>
       <p><b>10 essências:</b> Fogo, Gelo, Vento, Água, Vida, Terra, Sombra, Vazio, Energia, Natureza.</p>
       <p><b>Formas:</b> Toque, Projétil, Aura, Corpo, Criação, <b>Raio</b> (segure o clique), <b>Sopro</b> (cone), <b>Chuva</b> (área do céu), <b>Invocação</b> (um elemental luta por você) e <b>Encantar arma</b>.</p>
+      <p><b>Círculos mágicos:</b> toda magia desenha um círculo de luz, como os dos rituais, com anel duplo, runas e a figura do elemento no meio. Fogo é um triângulo, Gelo um hexagrama, Vento uma estrela de 8 pontas, Água um pentágono, Vida um hexágono, Terra um quadrado, Sombra um pentagrama, Vazio um heptagrama, Energia um decagrama e Natureza uma estrela de 7 pontas. Projéteis, toques, sopros e raios abrem o círculo na sua frente; aura e corpo, no chão em volta de você; criação e invocação, no alvo; chuva, no céu sobre a área. Canalizando, o círculo cresce com a carga.</p>
+      <p><b>Círculos pelo mundo:</b> os mesmos círculos aparecem em outros momentos. O golpe marcado do chefe é um pentagrama que enche até a hora do golpe: saia antes de fechar. Os portais abrem com um círculo gigante no céu na cor do rank, dá para ver de longe. Também há círculos nas habilidades de classe, no Levante-se, nas Pedras de Viagem, ao subir de nível, renascer, subir de rank e despertar, nas peças Lendárias e Míticas da Forja, nas preces e milagres (com a figura de cada deus), nas constelações, na Lua Azul, no Eclipse, na Lua de Sangue, no Marco, na captura da guerra e nos guardiões.</p>
       <p><b>Modificadores:</b> Rápida, Ampliar, Dividir, Teleguiado, Canalizar, Ricochete, Persistente, Mina, Eco e Potente.</p>
     </div>
     <div class="card"><h3>Reações elementais</h3>
@@ -891,6 +894,46 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Munição:</b> o Espírito usa fragmentos de ametista (ou de eco, mais forte), a Torre usa pó de blaze (ou carga de fogo) e o Curandeiro usa garrafas de mel (ou melancia reluzente). Clique com ela ou deixe no baú. Sem munição eles continuam, mas fracos.</li>
       </ul>
       <p>Jogadores não ferem guardiões, e eles não atacam companheiros de ninguém. Eles se curam devagar com o tempo.</p>
+      <p><b>Mais cinco guardiões:</b></p>
+      <ul>
+        <li><b>Golem Pescador</b> (abóbora entalhada; 4 blocos de ferro, 1 vara de pesca, 16 bacalhaus, 1 baú): com uma vara, pesca do posto na água mais perto e guarda no baú. Peixe, às vezes lixo e às vezes tesouro. Isca no baú (carne podre, olho de aranha ou sementes) deixa mais rápido.</li>
+        <li><b>Abelha Apicultora</b> (favo de mel; 1 colmeia, 2 blocos de mel, 8 dentes-de-leão, 1 fogueira): com uma tesoura, acalma as colmeias cheias com fumaça e tira o mel: garrafas de mel se houver garrafas vazias no baú, senão favos. No nível III, faz as colmeias com flores perto encherem.</li>
+        <li><b>Golem Ferreiro</b> (abóbora entalhada; 6 blocos de ferro, 1 bigorna, 1 alto-forno, 1 rebolo): com uma bigorna perto, conserta o que está gasto no baú usando o material de cada item (lingotes, diamantes, tábuas, linha...). No nível III, também conserta as ferramentas dos seus outros guardiões.</li>
+        <li><b>Espírito Coletor</b> (bloco musical; 2 blocos de ametista, 4 funis, 2 baús, 4 pérolas do Fim): junta os itens caídos perto do posto e guarda cada um no baú que já tem aquele item. No nível III, arruma o baú mais perto nos outros.</li>
+        <li><b>Vigia</b> (luneta; 1 sino, 4 lâmpadas de redstone, 2 blocos de ferro, 16 penas): quando chega um monstro ou alguém que não pode construir ali, toca os sinos, acende as lâmpadas, faz o intruso brilhar e avisa você.</li>
+      </ul>
+      <p><b>Fundir Guardiões</b> (altar nível II; 1 Alma Desperta, 4 blocos de ametista, 1 bloco de diamante): o Selo da mão fica com o corpo e o trabalho, e o Selo do pedestal empresta a função dele. O do pedestal precisa ser de <b>apoio</b>: Espírito, Torre, Curandeiro, Vigia ou Ferreiro. Exemplos: Golem de Fazenda + Curandeiro (colhe e cura), Lenhador + Torre (corta e explode monstros). O fundido fica com o maior nível e 25% mais vida. Dois que usam munição não se fundem.</p>
+    </div>
+    <div class="card"><h3>Altar nível III e rituais novos</h3>
+      <p><b>Transferir Encantamentos:</b> segure o item que vai receber. Num pedestal, o item encantado; nos outros, 1 livro, 2 blocos de lápis e 8 garrafas de experiência. Os encantamentos que servem passam para o da mão, e a origem volta sem eles. Maldições ficam onde estão.</p>
+      <p><b>Trazer de Volta:</b> quando um companheiro morre, cai a <b>coleira</b> dele. Segure a coleira (ou uma etiqueta com o nome exato dele). Nos pedestais: 2 maçãs douradas, 2 lágrimas de ghast, 4 blocos de osso e 8 melancias reluzentes. Ele volta com o nível e a evolução, mas sem o que caiu no chão quando morreu (sela, armadura, componentes).</p>
+      <p><b>Ascender o Altar</b> (altar II; 2 estrelas do Nether na mão; 4 Almas Despertas, 1 Essência Primordial, 1 sinalizador, 16 obsidianas choronas, 4 cristais do End, 8 fragmentos de eco; sacrifício: 2 endermen): o altar sobe para o <b>nível III</b>. Ganha mais 8 pedestais a 7 blocos (4 em cruz e 4 na diagonal, 5+5), somando 24. As lendárias do nível III:</p>
+      <ul>
+        <li><b>Ovo do Dragão</b> (cabeça de dragão na mão): um segundo ovo.</li>
+        <li><b>Tridente da Convergência:</b> Penetração VII, Lealdade IV e Condutividade.</li>
+        <li><b>Maça da Convergência:</b> Densidade VII e Explosão de Vento III.</li>
+        <li><b>Botas da Convergência:</b> Proteção VI, Peso-Pena VI, Passos Profundos III e Velocidade das Almas IV.</li>
+      </ul>
+      <p>As três relíquias novas são uma por jogador.</p>
+      <p><b>Rituais de mundo novos:</b></p>
+      <ul>
+        <li><b>Chuva de Meteoros</b> (luneta na mão; altar II): por 1 minuto, meteoritos caem em volta do altar. Quebre as pedras para pegar o que trazem.</li>
+        <li><b>Abrir um Portal</b> (olho do ender): um portal do seu rank de Caçador abre perto do altar, e você tem 30 s para entrar antes dos outros. Um a cada 6 horas.</li>
+        <li><b>Chamar o Mercador</b> (16 esmeraldas): o Mercador Itinerante arma a tenda perto de você na hora.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Círculo Arcano</h3>
+      <div class="ritual"><span class="b">Obsidiana com o pentagrama</span><span class="mais">+</span><span class="i">1 olho do ender</span><span class="mais">+</span><span class="i">4 pós de pedra luminosa</span></div>
+      <p>Desenhe um <b>pentagrama</b> no chão em volta de uma obsidiana. Ponha <b>velas acesas nas 5 pontas</b>, a 5 blocos do centro: uma 5 blocos ao norte, duas 5 ao lado e 2 ao norte, e duas 3 ao lado e 4 ao sul. Depois, faça o <b>traço da estrela</b> ligando cada ponta à segunda seguinte. O traço pode ser pó de redstone ou blocos no piso, como obsidiana, pedra-negra, tijolos do Nether, ametista ou lã preta/vermelha/roxa.</p>
+      <p><b>Ritual:</b> jogue as oferendas dentro do círculo e clique na obsidiana com o catalisador. O traço acende ponta por ponta e um <b>círculo gigante de luz com a estrela se desenha no céu</b>, gira cada vez mais rápido e desce num feixe. Fique a até 16 blocos e não apague as velas: se o pentagrama quebrar, o ritual se volta contra você.</p>
+      <ul>
+        <li><b>Pactos</b> (1 hora, um por vez): <b>Força</b> (+25% de dano, 2 corações a menos), <b>Sombra</b> (invisível e veloz no escuro, fraco ao sol), <b>Fortuna</b> (sorte, pressa e desconto, sempre com fome).</li>
+        <li><b>Tempestade Arcana:</b> por 2 minutos, raios caem nos monstros perto do círculo.</li>
+        <li><b>Fenda do Vazio:</b> 3 ondas de criaturas e o Guardião da Fenda; selada, deixa tesouro (pode ter Alma Desperta e até élitro).</li>
+        <li><b>Corcel Espectral</b> (cavalo esqueleto, seu companheiro) e <b>Espíritos Aliados</b> (3 vexes do seu lado por 3 minutos).</li>
+        <li><b>Eclipse</b> (de dia), <b>Lua de Sangue</b> (à noite), <b>Banimento</b> (os monstros perto somem e não nascem por 10 minutos) e <b>Revelação Astral</b> (tudo brilha e as estrelas apontam uma estrutura que você não viu).</li>
+      </ul>
+      <p>Mão vazia na obsidiana abre o grimório com o que cada ritual pede; agachado, confere o desenho.</p>
     </div>
     <div class="card"><h3>Runas</h3>
       <div class="ritual"><span class="b">Tufo entalhado</span><span class="mais">+</span><span class="i">4 fragmentos de ametista</span><span class="mais">+</span><span class="i">1 bloco de lápis</span></div>
@@ -1515,6 +1558,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Agachado + clique na cerca:</b> girar, mudar de lugar, ver o contorno e os materiais, trazer do depósito.</li>
         <li>Ponha um <b>baú dentro da cerca</b> (fora da obra): o <b>Construtor</b> livre vem, limpa o terreno e ergue tudo bloco a bloco.</li>
         <li>16 projetos: Casa, Fazenda, Poço da Praça, <b>Torre de Vigia</b> (aumenta o território 3×3 chunks em volta dela), Armazém, Biblioteca, Quartel e a construção de cada profissão.</li>
+        <li><b>Projetos de vila:</b> todos com cara de vila medieval, com enxaimel, telhados com beiral, chaminés que soltam fumaça, venezianas e tudo mobiliado. A Casa é um sobrado com 4 camas e varanda, a Torre tem sacada e sino, o Mercado tem bancas de toldo listrado, a Mina tem uma torre de içar. Pedem mais material, mas a maioria já sai pronta no nível II. As construções antigas continuam valendo.</li>
         <li><b>Do seu jeito</b> (botão direito no projeto): você constrói na área cercada e pede a <b>vistoria</b>. Precisa ter o mínimo do nível 1 (blocos, camas, portas, luz, teto...).</li>
         <li>Cada construção pronta tem uma <b>placa</b>: clique abre o menu dela; quebrar (2 vezes) desfaz a construção.</li>
         <li><b>Cada profissão tem a sua construção</b> (Oficina do Construtor, Fazenda, Cabana do Lenhador, Cabana do Pescador, Mina, Mercado, Taverna, Biblioteca, Quartel, Ferraria, Estábulo, Laboratório): o posto só vale <b>dentro</b> dela, e cada nível dá +10% de produção.</li>

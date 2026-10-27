@@ -516,6 +516,9 @@ public final class Reinos implements Listener {
                 continue;
             }
             float f = Math.min(1, prog / (float) cfg().gueCapturaSeg);
+            // 2.92: em volta do Marco, um círculo na cor do atacante que enche com a captura.
+            br.rpgatributos.visual.CirculosMagicos.desenharUmaVez(marco.clone().add(0.5, 0.1, 0.5), RAIO_CAPTURA, prog * 0.2,
+                    br.rpgatributos.visual.CirculosMagicos.cor(atacante.cor), org.bukkit.Color.WHITE, 4, 1, f, true);
             barra.name(Component.text("⚔ " + atacante.nome + " capturando o Marco de " + t.nomeDono()
                     + (defensores > 0 && atacantes > 0 ? " (disputado!)" : ""), atacante.cor));
             barra.progress(f);

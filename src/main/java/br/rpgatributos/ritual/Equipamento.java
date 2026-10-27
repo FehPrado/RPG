@@ -44,8 +44,9 @@ final class Equipamento {
             case MINERADOR -> "picareta";
             case LENHADOR -> "machado";
             case FAZENDA -> "enxada";
-            case PASTOR -> "tesoura";
+            case PASTOR, APICULTOR -> "tesoura";
             case FERRO -> "espada";
+            case PESCADOR -> "vara de pesca";
             default -> null;
         };
     }
@@ -57,8 +58,9 @@ final class Equipamento {
             case MINERADOR -> n.endsWith("_PICKAXE");
             case LENHADOR -> n.endsWith("_AXE");
             case FAZENDA -> n.endsWith("_HOE");
-            case PASTOR -> i.getType() == Material.SHEARS;
+            case PASTOR, APICULTOR -> i.getType() == Material.SHEARS;
             case FERRO -> n.endsWith("_SWORD");
+            case PESCADOR -> i.getType() == Material.FISHING_ROD;
             default -> false;
         };
     }
@@ -127,18 +129,26 @@ final class Equipamento {
     // =====================================================================
 
     static Container bauPerto(Location posto, double raio) {
-        Container melhor = null;
-        double d = raio * raio;
-        int cx = posto.getBlockX() >> 4, cz = posto.getBlockZ() >> 4;
-        for (int x = cx - 1; x <= cx + 1; x++) for (int z = cz - 1; z <= cz + 1; z++) {
+        List<Container> l = bausPerto(posto, raio);
+        return l.isEmpty() ? null : l.getFirst();
+    }
+
+    /** 2.89: todos os baús e barris a até {@code raio} do posto, do mais perto ao mais longe. */
+    static List<Container> bausPerto(Location posto, double raio) {
+        List<Container> l = new ArrayList<>();
+        int cx = posto.getBlockX() >> 4, cz = posto.getBlockZ() >> 4, alc = Math.max(1, (int) Math.ceil(raio / 16));
+        for (int x = cx - alc; x <= cx + alc; x++) for (int z = cz - alc; z <= cz + alc; z++) {
             if (!posto.getWorld().isChunkLoaded(x, z)) continue;
             for (BlockState s : posto.getWorld().getChunkAt(x, z).getTileEntities(false)) {
                 if (!(s instanceof Container c) || !(s.getType() == Material.CHEST || s.getType() == Material.BARREL || s.getType() == Material.TRAPPED_CHEST)) continue;
-                double dd = s.getLocation().add(0.5, 0, 0.5).distanceSquared(posto);
-                if (dd < d) { d = dd; melhor = c; }
+                if (s.getLocation().add(0.5, 0, 0.5).distanceSquared(posto) < raio * raio) l.add(c);
             }
         }
-        return melhor;
+        l.sort(java.util.Comparator.comparingDouble(c -> c.getLocation().add(0.5, 0, 0.5).distanceSquared(posto)));
+        // As duas metades de um baú duplo são o mesmo inventário: fica só uma.
+        java.util.Set<Location> vistos = new java.util.HashSet<>();
+        l.removeIf(c -> !vistos.add(c.getInventory().getLocation()));
+        return l;
     }
 
     /** Os inventários de onde o guardião tira e onde guarda: o baú do posto e a mochila (nível III+). */

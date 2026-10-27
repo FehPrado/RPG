@@ -456,15 +456,30 @@ No estilo MineColonies: a colônia cresce com construções que os **Construtore
 5. Um **Construtor** livre (posto: bancada de trabalho; um posto por Construtor) vai até lá, **limpa o terreno** (o que sai vai para o baú da obra), tapa buracos sob o piso e **ergue a construção** de dia, tirando tudo do baú. Se faltar algo, ele avisa quanto falta e espera.
 6. Pronta, a cerca some e a construção entra na lista da Prefeitura → **⚒ Obras**.
 
-| Projeto | Tamanho | Nível | O que faz |
+**Projetos de vila (2.90).** Os 16 projetos foram refeitos no estilo de uma vila medieval: base de pedregulho e musgo, enxaimel de carvalho escuro com bétula, telhados de duas águas com beiral, chaminés com fumaça de verdade (fogueira acesa no topo), venezianas, lanternas e interior mobiliado. Eles pedem mais material que os antigos. A maioria já sai pronta no **nível II**; a Fazenda, a Biblioteca e a Ferraria saem no **III**, e a Mina sai no I.
+
+Os projetos antigos (as caixas de 7×7, com os ids `casa`, `oficina`...) continuam valendo para as construções que já foram feitas com eles, mas não aparecem mais no menu. Os novos têm id com `_vila` (`casa_vila`, `oficina_vila`...).
+
+| Projeto | Tamanho | Nível da colônia | Como é |
 |---|---|---|---|
-| Casa | 7×7 | 1 | 2 camas, janelas, porta e lanterna |
-| Fazenda | 9×9 | 1 | Plantação cercada com água, trigo e a composteira do Fazendeiro |
-| Poço da Praça | 5×5 | 1 | Deixa a colônia mais feliz (+5 cada, até 2) |
-| Torre de Vigia | 5×5, 12 de altura | 1 | **Aumenta o território**: soma os chunks em volta dela (3×3, `territorio.raio-torre-de-vigia`, +1 de raio por nível), além do limite normal |
-| Armazém | 7×7 | 2 | 7 baús que viram depósito da colônia |
-| Biblioteca | 9×9 | 2 | Estantes e 2 atris (postos do Bibliotecário) |
-| Quartel | 9×7 | 2 | 4 camas e 2 alvos (8 vagas de soldado) |
+| Casa | 11×11, 13 de altura | 1 | Sobrado de enxaimel com 4 camas, lareira, mesa, varanda coberta com banco e chaminé |
+| Oficina do Construtor | 13×11 | 1 | Galpão de barro e abeto com bancadas, cortador, andaime e um telheiro com toras empilhadas |
+| Fazenda | 15×13 | 1 | Canteiros de trigo, cenoura, batata e beterraba com 2 canais de água, espantalho, composteiras e postes de luz, tudo cercado |
+| Poço da Praça | 9×9 | 1 | Poço de pedra com telhado em pirâmide, lanterna na corrente, bancos e flores |
+| Torre de Vigia | 9×9, 24 de altura | 1 | Base de pedra, corpo de enxaimel, escada de mão até a sacada com sino e telhado pontudo |
+| Cabana do Lenhador | 12×10 | 1 | Cabana de toras de abeto com telheiro, pilha de toras, cepo e chaminé |
+| Cabana do Pescador | 11×12 | 1 | Palafita de bétula com deque, barris, caldeirão e varal |
+| Armazém | 13×13 | 2 | Galpão com portão duplo, prateleiras de baús e barris e fardos de feno |
+| Biblioteca | 13×13, 14 de altura | 2 | Salão de 2 andares com estantes até o teto, mezanino, janelões e 3 atris |
+| Quartel | 15×13 | 2 | Alojamento de pedra com 4 camas e um pátio de treino cercado, com alvos e bonecos de palha |
+| Mina | 13×12 | 2 | Casa da mina de pedra, trilhos e uma torre de içar com corrente sobre o poço |
+| Mercado | 15×12 | 2 | Salão com arcada, 3 bancas de toldo listrado, balcão e a mesa de cartografia |
+| Taverna | 13×13, 14 de altura | 2 | 2 andares com balcão de barris, 4 mesas, lareira, quartos em cima e placa pendurada |
+| Ferraria | 12×11 | 3 | Forja de pedra com frente aberta, grande chaminé de tijolos, bigornas, alto-forno e água de têmpera |
+| Estábulo | 13×13 | 3 | Celeiro com portão grande, baias, sótão de feno e cocho |
+| Laboratório | 11×11, 15 de altura | 4 | Ardósia com torrinha de cúpula de cobre, suportes de poções, mesa de encantamento e jardim de ervas |
+
+O Quartel novo tem o pátio de treino dentro da área, então pede menos piso coberto (50%, 55% e 60%).
 
 **Do seu jeito (botão direito no projeto):** em vez do desenho pronto, você mesmo constrói. A cerca marca a área (agachado + clique: **área maior/menor**, até +6 de cada lado, e girar a entrada). Construa lá dentro e peça a **vistoria** no menu da cerca: se atender o **mínimo do nível 1**, vira construção da colônia e a cerca some. O menu mostra, nível por nível, o que já tem (✔) e o que falta (✖).
 
@@ -2078,6 +2093,132 @@ Munição: clique no guardião com ela (todo o monte entra), ou deixe num baú a
 - **O que sai:** tudo vai para o baú perto do começo do túnel e depois para a mochila. Se não couber, pedregulho, terra, cascalho e outras pedras somem; o resto cai no chão.
 - **Comprimento por nível:** I 24, II 40, III 56, IV 72, V 96 blocos. Para subir de nível, ele vai para o Selo. Ponha-o de volta no mesmo lugar, olhando para o mesmo lado: ele passa depressa pelo trecho já aberto e continua. Com o Cetro, "ficar de posto aqui" começa um túnel novo na direção em que você olha.
 
+### Guardiões novos, fusão, altar nível III e rituais (2.89)
+
+**Cinco guardiões novos.** Sobem do I ao V como os outros, com o tributo deles.
+
+| Guardião | Na mão → pedestais | Precisa | O que faz |
+|---|---|---|---|
+| Golem Pescador | abóbora entalhada → 4 blocos de ferro, 1 vara de pesca, 16 bacalhaus, 1 baú | vara de pesca; isca no baú (carne podre, olho de aranha ou sementes), opcional | Pesca do posto na água aberta mais perto, a até 8 blocos (+2 por nível): um peixe a cada 20 s no nível I. O encantamento Isca tira 3 s por nível, e a isca do baú, mais 25%. Sai peixe (bacalhau, salmão, baiacu, tropical), às vezes lixo e às vezes tesouro (etiqueta, sela, náutilo, arco, vara ou livro encantados). Sorte do Mar e a isca dão mais tesouro. Gasta a vara e solta um pouco de XP |
+| Abelha Apicultora (abelha) | favo de mel → 1 colmeia, 2 blocos de mel, 8 dentes-de-leão, 1 fogueira | tesoura; garrafas no baú, opcional | Voa até as colmeias e ninhos cheios a até 12 blocos e os acalma com fumaça, então as abelhas não saem bravas. Com garrafa vazia no baú, tira uma garrafa de mel; sem garrafa, 3 favos (e aí gasta a tesoura). No nível III, **poliniza**: a cada minuto, uma colmeia com flores a até 4 blocos ganha mel |
+| Golem Ferreiro | abóbora entalhada → 6 blocos de ferro, 1 bigorna, 1 alto-forno, 1 rebolo | bigorna a até 3 blocos do posto; baú perto | Conserta o que estiver gasto no baú, 25% da durabilidade por material, a cada 3 s. Usa o material de cada item: tábuas, pedregulho, couro, lingote de ferro, ouro ou cobre, diamante, fragmento de netherite, linha (arco, besta, vara), membrana (élitro), prismarinho (tridente), vara de breeze (maça). A bigorna gasta como no jogo (12%, menos 2% por nível) até quebrar. No **nível III**, também conserta as ferramentas dos seus outros guardiões a até 16 blocos. As peças que só a bigorna conserta com o próprio mineral (conjuntos minerais) ficam de fora |
+| Espírito Coletor (allay) | bloco musical → 2 blocos de ametista, 4 funis, 2 baús, 4 pérolas do Fim | um baú perto | Voa até os itens caídos a até 12 blocos e guarda cada um no baú que já tem aquele item. Se nenhum tem, guarda no mais perto, e depois na mochila. Não pega item com dono (o resultado do altar), item jogado por alguém há menos de 1 minuto, nem o que está em cima de estações. No nível III, a cada 30 s **organiza**: tira até 8 montes do baú mais perto (a "entrada") e leva para o baú que já guarda aquele item |
+| Vigia (papagaio) | luneta → 1 sino, 4 lâmpadas de redstone, 2 blocos de ferro, 16 penas | — | Olha a até 16 blocos do posto (+2 por nível). Quando chega um monstro ou um **estranho**, que é quem não pode construir ali, toca os sinos de verdade e acende as lâmpadas de redstone e de cobre até 20 s depois que o último sai. Também marca os intrusos (eles brilham através das paredes) e avisa você por mensagem. No nível III, manda seus Golens Guardiões para cima dos monstros; no nível IV, os monstros ficam lentos |
+
+**Fundir Guardiões** (aba Guardiões, altar nível II): na mão vai o Selo do guardião que fica com o corpo e o trabalho. No pedestal vai o Selo de um guardião de **apoio**: Espírito, Torre, Curandeiro, Vigia ou Ferreiro. Os outros pedestais levam 1 Alma Desperta, 4 blocos de ametista e 1 bloco de diamante.
+- O fundido faz as duas coisas: um Golem de Fazenda + Curandeiro colhe e cura quem está perto, e um Lenhador + Torre corta árvores e explode monstros. A função de apoio acontece de onde ele estiver, sem sair do trabalho.
+- Ele fica com o **maior nível** dos dois e **25% mais vida**. O nome mostra os dois ("Golem de Fazenda + Espírito Curandeiro").
+- Não se fundem: dois do mesmo tipo, o Golem de Cobre, um Selo que já é fundido, dois que usam munição (Espírito, Torre e Curandeiro) e um Selo de pedestal com itens na mochila. Se o de apoio estiver na mão e o trabalhador no pedestal, o altar avisa para trocar.
+- A munição do Selo de apoio passa para o fundido.
+
+**Transferir Encantamentos** (aba Infundir): na mão vai o item que vai **receber**. Num pedestal vai o item encantado (a origem); nos outros, 1 livro (a ponte), 2 blocos de lápis e 8 garrafas de experiência.
+- Passam os encantamentos que o item da mão aceita, que não brigam com os dele e que sobem de nível. Maldições ficam.
+- A origem volta junto, sem os encantamentos que passaram.
+- Relíquias da Convergência não entram, nem como origem nem como destino.
+- Se o ritual sair errado, a origem volta, mas os encantamentos se perdem.
+
+**Trazer de Volta** (aba Invocações): quando um companheiro morre, cai a **Coleira de \<nome\>** junto com os componentes. Ela guarda a lembrança dele, com tipo, nome, variante, nível e evolução. As 10 lembranças mais recentes de cada dono ficam em `lembrancas.yml`.
+- Com a coleira na mão (ou uma etiqueta renomeada com o nome exato do companheiro), os pedestais levam 2 maçãs douradas, 2 lágrimas de ghast, 4 blocos de osso e 8 melancias reluzentes.
+- Ele volta do altar com vida cheia, **sem** o que caiu quando morreu (sela, armadura, baú, componentes, alforje e ferradura).
+- Só o dono traz de volta, e precisa ter vaga de companheiro.
+- As montarias lendárias não deixam coleira (têm o próprio jeito de voltar).
+- A coleira serve uma vez. Se o ritual falhar, ela volta.
+
+**Altar nível III:** o ritual **Ascender o Altar** precisa do altar nível II.
+- **Na mão:** 2 estrelas do Nether.
+- **Nos pedestais:** 4 Almas Despertas, 1 Essência Primordial, 1 sinalizador, 16 obsidianas choronas, 4 cristais do End e 8 fragmentos de eco.
+- **Sacrifício:** 2 endermen.
+- **Resultado:** mais 8 pedestais a 7 blocos, em (±7, 0), (0, ±7) e (±5, ±5), somando 24. O item girando vira um sinalizador. `/rpgadmin convergencia <1-3>` olhando para um altar muda o nível dele.
+
+As lendárias do nível III:
+
+| Receita | Na mão | Pedestais | Resultado |
+|---|---|---|---|
+| Ovo do Dragão | cabeça de dragão | 4 cristais do End, 8 bafos de dragão, 2 Almas Despertas, 1 Essência Primordial, 32 obsidianas; sacrifício: 2 endermen | Um segundo ovo do dragão |
+| Tridente da Convergência | tridente | 3 Almas, 2 Essências, 1 estrela do Nether, 1 coração do mar, 32 cristais de prismarinho | Penetração VII, Lealdade IV, Condutividade, Inquebrável V, Remendo |
+| Maça da Convergência | maça | 3 Almas, 2 Essências, 1 estrela do Nether, 1 núcleo pesado, 8 varas de breeze | Densidade VII, Explosão de Vento III, Inquebrável V, Remendo |
+| Botas da Convergência | botas de netherite | 3 Almas, 2 Essências, 1 estrela do Nether, 16 membranas de phantom, 4 pés de coelho | Proteção VI, Peso-Pena VI, Passos Profundos III, Velocidade das Almas IV, Inquebrável V, Remendo |
+
+As três relíquias são uma por jogador, como as do nível II.
+
+**Rituais de mundo novos** (aba Céu, território e altar):
+
+| Ritual | Na mão → pedestais | Efeito |
+|---|---|---|
+| Chuva de Meteoros (altar II) | luneta → 16 blocos de magma, 2 blocos de ferro, 1 bloco de ouro, 8 cargas de fogo | 12 meteoros, um a cada 5 s, de 12 a 40 blocos do altar. Os meteoritos (blocos de magma) podem cair no território de quem chamou, e quebrá-los dá o mesmo saque da chuva do céu. Só no mundo normal |
+| Abrir um Portal | olho do ender → 8 obsidianas, 4 blocos de ametista, 4 pérolas do Fim, 2 blocos de lápis | Um portal do seu rank de Caçador abre num chão livre a 6–9 blocos do altar (5% de sair Vermelho). Você tem 30 s para entrar antes dos outros. Um a cada 6 horas por jogador |
+| Chamar o Mercador | 16 esmeraldas → 2 laços, 4 fardos de feno, 1 bloco de esmeralda | O Mercador Itinerante arma a tenda perto de você na hora. Se ele já estiver no mundo, o altar recusa; se não achar lugar, as esmeraldas voltam |
+
+## Círculos mágicos (2.91–2.92)
+
+Toda magia desenha um círculo de partículas no mesmo traço dos rituais: anel de fora na cor do primeiro elemento, anel de dentro branco girando ao contrário, 12 marcas de runa entre os anéis e, no meio, a figura do elemento (do segundo, se a magia tiver dois): Fogo triângulo, Gelo hexagrama, Vento estrela de 8 pontas, Água pentágono, Vida hexágono, Terra quadrado, Sombra pentagrama, Vazio heptagrama, Energia decagrama e Natureza estrela de 7 pontas. É só visual (não muda dano, alcance nem colisão) e não precisa do pacote de texturas.
+
+| Forma | Onde | Tamanho | Quanto tempo |
+|---|---|---|---|
+| Projétil, Toque, Sopro, Proibida | De pé, 1,3 bloco à frente dos olhos, virado para onde você olha | 1,1 (Sopro 1,4) | 0,7 s |
+| Receitas secretas | Na frente e outro no chão em volta de você | 1,6 e 2,2 | 1 s |
+| Raio | Na frente, seguindo o olhar | 1,0 | Enquanto o feixe dura |
+| Canalizar | Na frente, crescendo com a carga | até 1,6 | Enquanto você segura |
+| Aura / Corpo / Encantar arma | No chão, seguindo você | 2,6 / 1,5 / 1,1 | 1,7 s / 1,2 s / 0,9 s |
+| Criação / Invocação | No chão do bloco olhado | 1,4 / 1,8 | 1,2 s / 2 s |
+| Chuva | No céu, 8 blocos acima da área | raio da chuva + 1 | Enquanto a chuva cai |
+
+Cada jogador tem no máximo 6 círculos ao mesmo tempo (96 no servidor). Desliga com `embelezamento.circulos-magicos: false`. A runa do pacote de texturas da 2.81 continua junto.
+
+**2.92: círculos no resto do jogo** (desliga com `embelezamento.circulos-sistemas: false`):
+
+| Onde | Como é |
+|---|---|
+| Golpe marcado do chefe (masmorras) | No lugar do anel simples, um pentagrama vermelho com um anel de carga que cresce do centro e chega na borda na hora do golpe (1,75 s) |
+| Reforços do chefe e ondas da Fenda | Cada criatura sai de um pentagrama pequeno no chão |
+| Invocar Mortos (chefes do Altar) | Pentagrama de 3 blocos em volta do chefe |
+| Habilidade de classe | Círculo de 1,7 bloco na cor da classe: quadrado nas básicas, hexagrama nas avançadas e ocultas, estrela de 8 nas lendárias |
+| Levante-se (Soberano) | Círculo roxo escuro com feixe curto embaixo de cada corpo |
+| Portal abrindo | Círculo gigante no céu, 22 blocos acima, na cor do rank (E triângulo, D quadrado, C pentágono, B hexagrama, A heptagrama, S estrela de 8; Vermelho pentagrama escuro), visto de longe por 8 s, e outro no chão com feixe |
+| Pedras de Viagem | Círculo de partida enquanto a viagem carrega e outro na chegada |
+| Nível de atributo | Círculo pequeno na cor do atributo; a cada 10 níveis, maior e com feixe |
+| Renascer | Círculo dourado de 3,2 blocos com feixe de 30 e outro no céu |
+| Rank de Caçador e Despertar | Círculo na cor do rank (ou da característica) com feixe; o Despertar também no céu |
+| Forja | Peça Lendária: hexagrama; Mítica: estrela de 8 com feixe, em volta do ferreiro |
+| Prece e milagre | Círculo na cor do deus com a figura dele (Ferrum quadrado, Sylva estrela de 7, Maris pentágono, Bellum triângulo, Arcanus hexagrama, Mortis pentagrama); o milagre é maior, com feixe e outro no céu |
+| Constelação vista pela luneta | As estrelas acendem uma a uma e se ligam no céu, na direção em que você olha (só você vê) |
+| Lua Azul, Eclipse, Lua de Sangue | Um círculo enorme no céu sobre cada jogador do mundo quando o evento começa |
+| Marco do território criado | Círculo de 6 blocos com feixe |
+| Captura do Marco na guerra | Círculo do tamanho da área de captura, na cor do reino atacante, que enche com a captura |
+| Guardião posto | Círculo onde ele aparece (estrela de 8 se for fundido) |
+
+## Círculo Arcano (2.90)
+
+Um pentagrama desenhado no chão em volta de uma **obsidiana** (o centro):
+- **Velas acesas nas 5 pontas**, a 5 blocos do centro: (0, −5), (5, −2), (3, 4), (−3, 4) e (−5, −2), com o −5 para o norte. A vela pode estar no piso ou em cima de um bloco.
+- **O traço da estrela**, ligando cada ponta à segunda seguinte (33 casas). Vale pó de redstone em cima do piso ou blocos no próprio piso: obsidiana (chorona também), pedra-negra (polida, tijolos, dourada), tijolos do Nether (e vermelhos), bloco de redstone, ametista, areia e terra das almas, pedra luminosa, luz-cogumelo, nylium carmesim, magma, concreto ou lã preta, vermelha ou roxa. Bastam 85% do traço.
+
+Jogue **1 olho do ender e 4 pós de pedra luminosa** na obsidiana: o círculo desperta. Se o desenho estiver incompleto, a mensagem diz quantas velas e casas faltam. `/rpgadmin pentagrama` desenha um pronto em volta do bloco olhado.
+
+**Ritual:** jogue as oferendas dentro do círculo (a até 5 blocos do centro) e clique na obsidiana com o catalisador.
+- O traço acende ponta por ponta, com chamas azuis nas velas.
+- Um **círculo gigante de luz** se desenha no céu, 16 blocos acima: anel duplo, a estrela e um anelzinho em cada ponta, crescendo e girando cada vez mais rápido. Um feixe liga o céu ao chão, com trovões.
+- Depois de 6 s, um clarão, e o ritual acontece.
+- Se quem acendeu se afastar mais de 16 blocos, ou uma vela apagar, ou o traço quebrar, o ritual **se volta contra você**: as oferendas se perdem, saem 4 vexes e você fica com Murchidão por 8 s.
+- Mão vazia na obsidiana abre o grimório; agachado, confere o desenho.
+- Parado, o círculo desenha um anel fraco no céu quando alguém está perto.
+
+| Ritual | Na mão | No círculo | Efeito |
+|---|---|---|---|
+| Pacto da Força | 2 varas de blaze | 16 carnes podres, 8 ossos, 8 redstone | 1 h: +25% de dano corpo a corpo; preço: −2 corações |
+| Pacto da Sombra | 1 fragmento de eco | 4 membranas de phantom, 8 bolsas de tinta, 4 areias das almas | 1 h: no escuro (noite ou luz ≤ 8), Invisibilidade e Velocidade; preço: sob o sol, Fraqueza |
+| Pacto da Fortuna | 8 esmeraldas | 8 lingotes de ouro, 1 pé de coelho, 16 lápis | 1 h: Sorte II, Pressa e Herói da Vila II; preço: Fome o tempo todo |
+| Tempestade Arcana | 1 para-raios | 8 lingotes de cobre, 2 varas de breeze, 8 pós de pedra luminosa | Tempestade de 5 min; por 2 min, raios (12 de dano e fogo) nos monstros a até 48 blocos |
+| Fenda do Vazio | 4 pérolas do Fim | 8 obsidianas, 8 frutas do coro, 2 fragmentos de eco | Uma fenda sobre o círculo solta 3 ondas (endermites e vexes; endermen e vexes; phantoms e endermen) e o **Guardião da Fenda** (enderman 1,6× maior, 160 de vida). Selada: pérolas, eco, cascas de shulker, Fragmentos de Forja, 25% de Alma Desperta e 10% de élitro. Fecha sozinha, sem tesouro, em 4 min. Uma por vez no servidor |
+| Conjurar Corcel Espectral | sela | 4 blocos de osso, 8 areias das almas, 4 cenouras douradas | Um cavalo esqueleto selado e domado, que vira seu companheiro se houver vaga |
+| Conjurar Espíritos Aliados | lágrima de ghast | 8 penas, 8 pós de pedra luminosa, 4 areias das almas | 3 vexes com espada lutam ao seu lado por 3 min, só contra monstros |
+| Chamar o Eclipse | relógio | 4 blocos de carvão, 16 bolsas de tinta, 4 obsidianas | De dia, no mundo principal: o eclipse do céu (2,5 min) |
+| Chamar a Lua de Sangue | 2 blocos de redstone | 16 carnes podres, 16 ossos, 4 olhos de aranha | À noite, no mundo principal: Lua de Sangue até o amanhecer |
+| Banimento | lanterna das almas | 16 farinhas de osso, 8 pós de pedra luminosa, 1 vela branca | Os monstros a até 32 blocos se desfazem (chefes e monstros com nome ficam) e nenhum nasce sozinho a até 48 blocos por 10 min |
+| Revelação Astral | luneta | 4 bolsas de tinta brilhante, 8 fragmentos de ametista, 1 olho do ender | Por 1 min, toda criatura a até 96 blocos brilha; Visão Noturna por 5 min; e o rumo e a distância da estrutura mais perto que você ainda não viu |
+
+Os pactos ficam no jogador (um por vez) e valem mesmo se ele sair e voltar. Os modificadores da Força voltam a cada 2 s e saem quando o pacto acaba. Títulos contam `rituais_circulo` e `fendas_seladas`.
+
 ## Salas e encontros das masmorras (2.82)
 
 Novas instâncias podem sortear **Forjas** (oficinas nas laterais) e **Observatórios** (anéis no piso e pilares luminosos), além dos nove estilos anteriores. Os caminhos das portas continuam sendo abertos depois da decoração.
@@ -2352,7 +2493,7 @@ Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, 
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.88.0.jar`.
+3. O plugin fica em `target/RPGAtributos-2.92.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

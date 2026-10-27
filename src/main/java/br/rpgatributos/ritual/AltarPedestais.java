@@ -64,9 +64,11 @@ public final class AltarPedestais extends Estacao {
 
     public static final TextColor COR = TextColor.color(0xB388FF);
     private static final Color ROXO = Color.fromRGB(0xB388FF);
-    /** Onde ficam os pedestais: a primeira volta (4 em cruz e 4 nas diagonais) e a segunda (nível II). */
+    /** Onde ficam os pedestais: a primeira volta (4 em cruz e 4 nas diagonais), a segunda (nível II) e a terceira (nível III). */
     private static final int[][] LUGARES = {{3, 0}, {-3, 0}, {0, 3}, {0, -3}, {2, 2}, {2, -2}, {-2, 2}, {-2, -2},
-            {5, 0}, {-5, 0}, {0, 5}, {0, -5}, {4, 3}, {-4, -3}, {3, -4}, {-3, 4}};
+            {5, 0}, {-5, 0}, {0, 5}, {0, -5}, {4, 3}, {-4, -3}, {3, -4}, {-3, 4},
+            {7, 0}, {-7, 0}, {0, 7}, {0, -7}, {5, 5}, {5, -5}, {-5, 5}, {-5, -5}};
+    private static final int LONGE_PEDESTAL = 7;
     private static final double RAIO_SACRIFICIO = 5, RAIO_GRUPO = 6;
     public static final Set<Material> PEDESTAIS = EnumSet.of(
             Material.CHISELED_STONE_BRICKS, Material.CHISELED_DEEPSLATE, Material.CHISELED_QUARTZ_BLOCK,
@@ -115,7 +117,7 @@ public final class AltarPedestais extends Estacao {
     }
 
     private int lugares(Location altar) {
-        return nivel(altar) >= 2 ? LUGARES.length : 8;
+        return Math.min(LUGARES.length, 8 * nivel(altar));
     }
 
     // =====================================================================
@@ -154,7 +156,8 @@ public final class AltarPedestais extends Estacao {
 
     @Override
     protected ItemStack itemFlutuante(Location bloco) {
-        return new ItemStack(nivel(bloco) >= 2 ? Material.NETHER_STAR : Material.END_CRYSTAL);
+        int n = nivel(bloco);
+        return new ItemStack(n >= 3 ? Material.BEACON : n >= 2 ? Material.NETHER_STAR : Material.END_CRYSTAL);
     }
 
     @Override
@@ -176,10 +179,11 @@ public final class AltarPedestais extends Estacao {
 
     @Override
     protected Component nome(Location bloco) {
-        if (nivel(bloco) < 2) return nome();
-        return Component.text("✦ Altar da Convergência · II ✦", COR, TextDecoration.BOLD)
+        int n = nivel(bloco);
+        if (n < 2) return nome();
+        return Component.text("✦ Altar da Convergência · " + ReceitaRitual.romano(n) + " ✦", COR, TextDecoration.BOLD)
                 .append(Component.newline())
-                .append(Component.text("16 pedestais: ingredientes neles, catalisador na mão", NamedTextColor.GRAY));
+                .append(Component.text(lugares(bloco) + " pedestais: ingredientes neles, catalisador na mão", NamedTextColor.GRAY));
     }
 
     @Override
@@ -246,7 +250,7 @@ public final class AltarPedestais extends Estacao {
         for (Location l : carregadas()) {
             if (l.getWorld() != b.getWorld() || Math.abs(b.getY() - l.getBlockY()) > 1) continue;
             int dx = b.getX() - l.getBlockX(), dz = b.getZ() - l.getBlockZ();
-            if (Math.abs(dx) > 5 || Math.abs(dz) > 5) continue;
+            if (Math.abs(dx) > LONGE_PEDESTAL || Math.abs(dz) > LONGE_PEDESTAL) continue;
             int n = lugares(l);
             for (int k = 0; k < n; k++) {
                 if (LUGARES[k][0] == dx && LUGARES[k][1] == dz && b.equals(pedestal(l, k))) return l;
@@ -352,7 +356,7 @@ public final class AltarPedestais extends Estacao {
             }
             if (!perto) continue;
             Location c = l.clone().add(0.5, 1, 0.5);
-            for (Entity e : l.getWorld().getNearbyEntities(c, 6, 3, 6)) {
+            for (Entity e : l.getWorld().getNearbyEntities(c, LONGE_PEDESTAL + 1, 3, LONGE_PEDESTAL + 1)) {
                 if (!(e instanceof ItemDisplay d) || !d.getPersistentDataContainer().has(kPedestal)) continue;
                 Block topo = d.getLocation().clone().subtract(0, 1.25, 0).getBlock();
                 if (!PEDESTAIS.contains(topo.getType())) { soltar(d); continue; } // o pedestal sumiu (pistão, explosão)
@@ -451,10 +455,16 @@ public final class AltarPedestais extends Estacao {
             if (onde == null) continue;
             ReceitaRitual.Extra ex = r.extra();
             String imp = r.impedimento().apply(mao);
-            if (imp == null && ex.nivelAltar() > nivel(altar)) imp = r.nome() + " precisa do altar nível II (ritual Despertar o Altar).";
+            if (imp == null && ex.nivelAltar() > nivel(altar)) {
+                imp = r.nome() + " precisa do altar nível " + ReceitaRitual.romano(ex.nivelAltar())
+                        + (ex.nivelAltar() >= 3 ? " (ritual Ascender o Altar)." : " (ritual Despertar o Altar).");
+            }
             if (imp == null && r.unica() && jaFez(p, r)) imp = "Você já fez a " + r.nome() + ": é uma por jogador.";
             if (imp == null && r.desperto() != null && plugin.chefes().ocupado(altar)) imp = "Já tem um chefe lutando neste altar.";
-            if (imp == null && ex.efeito() != null) imp = ex.efeito().impedimento(plugin, altar, p);
+            if (imp == null && ex.efeito() != null) imp = ex.efeito().impedimento(plugin, altar, p, mao);
+            List<ItemStack> peds = new ArrayList<>();
+            for (int k = 0; k < onde.length; k++) peds.add(itens.get(onde[k]).getItemStack());
+            if (imp == null && ex.porque() != null) imp = ex.porque().apply(mao, peds);
             List<LivingEntity> vitimas = List.of();
             if (imp == null && ex.sacrificio() != null) {
                 vitimas = sacrificaveis(altar, ex.sacrificio());
@@ -473,13 +483,12 @@ public final class AltarPedestais extends Estacao {
             }
             ItemStack previa = null;
             if (imp == null && ex.comPedestais() != null) {
-                List<ItemStack> peds = new ArrayList<>();
-                for (int k = 0; k < onde.length; k++) peds.add(itens.get(onde[k]).getItemStack());
                 previa = ex.comPedestais().apply(mao, peds);
                 if (previa == null) imp = "Os itens dos pedestais não servem nesse " + r.nomeCatalisador() + ".";
             }
             if (imp != null) { erro = imp; continue; }
-            iniciar(p, altar, r, mao, topos, itens, onde, vitimas, grupo, previa);
+            List<ItemStack> sobras = ex.sobras() == null ? List.of() : ex.sobras().apply(mao, peds);
+            iniciar(p, altar, r, mao, topos, itens, onde, vitimas, grupo, previa, sobras);
             return;
         }
         if (erro != null) p.sendMessage(Component.text("✖ " + erro, NamedTextColor.RED));
@@ -521,7 +530,7 @@ public final class AltarPedestais extends Estacao {
     }
 
     private void iniciar(Player p, Location altar, ReceitaRitual r, ItemStack mao, List<Block> topos, List<ItemDisplay> itens, int[] onde,
-                         List<LivingEntity> vitimas, List<Player> grupo, ItemStack previa) {
+                         List<LivingEntity> vitimas, List<Player> grupo, ItemStack previa, List<ItemStack> sobras) {
         ItemStack catalisador = tirarDaMao(p, r.qtdCatalisador());
         List<ItemStack> doGrupo = new ArrayList<>();
         for (Player o : grupo) {
@@ -547,6 +556,7 @@ public final class AltarPedestais extends Estacao {
         Cerimonia c = new Cerimonia(this, altar, p.getUniqueId(), r, catalisador, resultado, origens, gastos);
         c.sacrificios(vitimas);
         c.grupo(grupo, doGrupo);
+        c.sobras(sobras);
         cerimonias.put(altar, c);
         c.comecar();
         p.sendMessage(Component.text("✦ O ritual " + r.nome() + " começou... não se afaste e não deixe quebrarem os pedestais.", r.categoria().cor));

@@ -367,7 +367,7 @@ public final class Comandos implements TabExecutor {
             case "estacao", "festival", "clima", "ceu", "maldicao" -> { adminMundo(sender, sub, args); return; }
             case "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre" -> { adminFaseC(sender, sub, args); return; }
             case "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas" -> { adminCombos(sender, sub, args); return; }
-            case "santuariodivino", "circulo", "convergencia", "selo", "mesarunica", "devocao", "pedrafilosofal", "runa" -> { adminFe(sender, sub, args); return; }
+            case "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "mesarunica", "devocao", "pedrafilosofal", "runa" -> { adminFe(sender, sub, args); return; }
             case "teste" -> {
                 // 2.88: a área de testes (nada conta lá dentro).
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
@@ -1454,6 +1454,17 @@ public final class Comandos implements TabExecutor {
     }
 
     private void adminFe(CommandSender sender, String sub, String[] args) {
+        if (sub.equals("pentagrama")) {
+            // 2.90: desenha o pentagrama pronto em volta do bloco olhado e desperta o Círculo Arcano.
+            if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+            Block b = p.getTargetBlockExact(8);
+            if (b == null) { erro(sender, "Olhe para o chão onde fica o centro (até 8 blocos)."); return; }
+            if (plugin.ehEstacao(b)) { erro(sender, "Esse bloco já é uma estação."); return; }
+            br.rpgatributos.ritual.CirculoArcano.desenhar(b);
+            plugin.circuloArcano().criar(b, p);
+            ok(sender, "Círculo Arcano pronto (velas e traço de redstone a 5 blocos).");
+            return;
+        }
         if (sub.equals("selo")) {
             if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
             String qual = args.length >= 2 ? args[1].toUpperCase() : "";
@@ -1466,7 +1477,11 @@ public final class Comandos implements TabExecutor {
                 for (br.rpgatributos.ritual.Guardioes.Tipo x : br.rpgatributos.ritual.Guardioes.Tipo.values()) if (x.name().equals(qual)) t = x;
                 item = t == null ? null : br.rpgatributos.ritual.Guardioes.selo(t, nivel, false);
             }
-            if (item == null) { erro(sender, "Use: /rpgadmin selo <espirito|ferro|fazenda|cobre|lenhador|minerador|pastor|curandeiro|torre|asas|cetro> [nível 1-5]"); return; }
+            if (item == null) {
+                erro(sender, "Use: /rpgadmin selo <" + java.util.Arrays.stream(br.rpgatributos.ritual.Guardioes.Tipo.values())
+                        .map(x -> x.name().toLowerCase()).collect(java.util.stream.Collectors.joining("|")) + "|asas|cetro> [nível 1-5]");
+                return;
+            }
             p.getInventory().addItem(item);
             ok(sender, "Pronto.");
             return;
@@ -1505,6 +1520,13 @@ public final class Comandos implements TabExecutor {
                     default -> Material.CHISELED_TUFF;
                 };
                 if (b == null || b.getType() != precisa) { erro(sender, "Olhe para " + precisa.name().toLowerCase() + " (até 6 blocos)."); return; }
+                if (sub.equals("convergencia") && args.length >= 2 && plugin.altarConvergencia().eh(b)) {
+                    // 2.89: /rpgadmin convergencia <1-3> olhando para um altar muda o nível dele.
+                    int n = Math.max(1, Math.min(3, quantidade(args, 1, 1)));
+                    plugin.altarConvergencia().definirNivel(b.getLocation(), n);
+                    ok(sender, "Altar agora no nível " + n + " (" + (8 * n) + " pedestais).");
+                    return;
+                }
                 if (plugin.ehEstacao(b)) { erro(sender, "Esse bloco já é uma estação."); return; }
                 switch (sub) {
                     case "santuariodivino" -> plugin.santuariosDivinos().criar(b, p);
@@ -2125,7 +2147,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();
@@ -2235,7 +2257,7 @@ public final class Comandos implements TabExecutor {
                             "tesouros", "especies_peixe", "criaturas_marinhas", "gema_perfeita", "alquimias", "elixires", "acessorios"));
                 } else if (args.length == 2 && !List.of("reload", "infusor", "forjaferreiro", "altar", "cozinha", "reciclagem", "adubo",
                         "marco", "ignorar", "altardomador", "portalmasmorra", "fecharmasmorras", "santuario", "prova",
-                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "teste", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companheironivel", "modelos", "arcoiris", "estrelacadente", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
+                        "pedraviagem", "locais", "bancadaalquimica", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "pacote", "companheironivel", "modelos", "arcoiris", "estrelacadente", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estruturas", "esquecerestrutura").contains(sub)) {
                     return null;
                 } else if (args.length == 3 && List.of("set", "addxp", "reset").contains(sub)) {
                     for (Skill s : Skill.values()) op.add(s.id());

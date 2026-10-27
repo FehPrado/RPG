@@ -154,6 +154,9 @@ public final class Marcos extends Estacao {
         w.spawnParticle(Particle.TOTEM_OF_UNDYING, c, 60, 0.5, 0.8, 0.5, 0.3);
         w.playSound(c, Sound.BLOCK_BEACON_ACTIVATE, 1f, 1f);
         w.playSound(c, Sound.ITEM_GOAT_HORN_SOUND_0, 1f, 1.2f);
+        // 2.92: um círculo grande em volta do Marco, com feixe para o céu.
+        plugin.circulosMagicos().chaoEm(b.getLocation().add(0.5, 1, 0.5), 6, 80, br.rpgatributos.visual.CirculosMagicos.cor(Territorios.COR),
+                br.rpgatributos.visual.CirculosMagicos.OURO, 4, 1, 26);
         if (quem == null) return;
         Territorio t = plugin.territorios().de(quem.getUniqueId());
         int chunks = t == null ? 0 : t.chunks().size();

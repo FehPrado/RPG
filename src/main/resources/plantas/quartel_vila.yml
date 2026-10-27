@@ -1,0 +1,205 @@
+# Projeto de construção da colônia (estilo vila, 2.90).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Quartel"
+descricao:
+  - "Alojamento de pedra com 4 camas e um pátio"
+  - "de treino com alvos e bonecos."
+icone: TARGET
+nivel: 2
+efeito: QUARTEL
+legenda:
+  "A": "grass_block"
+  "B": "stone_bricks"
+  "C": "dirt_path"
+  "D": "coarse_dirt"
+  "E": "spruce_fence"
+  "F": "mossy_stone_bricks"
+  "G": "red_bed[facing=north,part=head]"
+  "H": "chest[facing=south]"
+  "I": "smithing_table"
+  "J": "hay_block[axis=y]"
+  "K": "red_bed[facing=north,part=foot]"
+  "L": "grindstone[face=floor,facing=west]"
+  "M": "barrel[facing=west]"
+  "N": "spruce_fence_gate[facing=east,open=false]"
+  "O": "spruce_door[facing=north,half=lower,hinge=left]"
+  "P": "lantern[hanging=false]"
+  "Q": "target"
+  "R": "iron_bars"
+  "S": "spruce_door[facing=north,half=upper,hinge=left]"
+  "T": "lantern[hanging=true]"
+  "U": "carved_pumpkin[facing=west]"
+  "V": "red_wall_banner[facing=south]"
+  "W": "spruce_stairs[facing=west,half=top]"
+  "X": "spruce_stairs[facing=east,half=top]"
+  "Y": "dark_oak_log[axis=y]"
+  "Z": "dark_oak_log[axis=x]"
+  "a": "dark_oak_log[axis=z]"
+  "b": "spruce_stairs[facing=east,half=bottom]"
+  "c": "spruce_stairs[facing=west,half=bottom]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 70
+    camas: 2
+    portas: 1
+    luz: 1
+    coberto: 50
+    itens:
+      target: 1
+  - blocos: 120
+    camas: 4
+    portas: 1
+    luz: 2
+    coberto: 55
+    itens:
+      target: 2
+  - blocos: 200
+    camas: 6
+    portas: 1
+    luz: 3
+    coberto: 60
+    itens:
+      target: 4
+camadas:
+  # 0
+  - - "AAAAAAAAAAAAAAA"
+    - "ABBBBBBBBCCDCCA"
+    - "ABBBBBBBBCDCCDA"
+    - "ABBBBBBBBDCCDCA"
+    - "ABBBBBBBBCCDCCA"
+    - "ABBBBBBBBCDCCDA"
+    - "ABBBBBBBBDCCDCA"
+    - "ABBBBBBBBCCDCCA"
+    - "ABBBBBBBBCDCCDA"
+    - "AAAAAAAAADCCDCA"
+    - "AAAAAAAAACCDCCA"
+    - "AAAAAAAAACDCCDA"
+    - "AAAAAAAAAAAAAAA"
+  # 1
+  - - ".........EEEEEE"
+    - ".BBBBBBBB.....E"
+    - ".FGHG..IB.E..JE"
+    - ".BK.K..LB.....E"
+    - ".B......B.....E"
+    - ".BGHG...F....JE"
+    - ".BK.K..MB.....N"
+    - ".B......B.....E"
+    - ".FBFOFBFB..E..E"
+    - "..............E"
+    - "...........E..E"
+    - "..............E"
+    - ".........EEEEEE"
+  # 2
+  - - "..............."
+    - ".FBFBFBFB......"
+    - ".B......B.P..Q."
+    - ".R......R......"
+    - ".B......F......"
+    - ".B......B....Q."
+    - ".R......B......"
+    - ".F......B......"
+    - ".BRBSBRBB..J..."
+    - "..............."
+    - "...........J..."
+    - "..............."
+    - "..............."
+  # 3
+  - - "..............."
+    - ".BBBBBBBB......"
+    - ".B......B......"
+    - ".B......F......"
+    - ".B..T...B......"
+    - ".B......B......"
+    - ".F......B......"
+    - ".B......B......"
+    - ".BBBBBBBB..U..."
+    - "...V.V........."
+    - "...........U..."
+    - "..............."
+    - "..............."
+  # 4
+  - - "W........X....."
+    - "WYZZZZZZYX....."
+    - "Wa......aX....."
+    - "Wa......aX....."
+    - "Wa......aX....."
+    - "Wa......aX....."
+    - "Wa......aX....."
+    - "Wa......aX....."
+    - "WYZZZZZZYX....."
+    - "W........X....."
+    - "..............."
+    - "..............."
+    - "..............."
+  # 5
+  - - "b........c....."
+    - "bBBBBBBBBc....."
+    - "b........c....."
+    - "b........c....."
+    - "b........c....."
+    - "b........c....."
+    - "b........c....."
+    - "b........c....."
+    - "bBBBBBBBBc....."
+    - "b........c....."
+    - "..............."
+    - "..............."
+    - "..............."
+  # 6
+  - - ".b......c......"
+    - ".bBBBBBBc......"
+    - ".b......c......"
+    - ".b......c......"
+    - ".b......c......"
+    - ".b......c......"
+    - ".b......c......"
+    - ".b......c......"
+    - ".bBBBBBBc......"
+    - ".b......c......"
+    - "..............."
+    - "..............."
+    - "..............."
+  # 7
+  - - "..b....c......."
+    - "..bBBBBc......."
+    - "..b....c......."
+    - "..b....c......."
+    - "..b....c......."
+    - "..b....c......."
+    - "..b....c......."
+    - "..b....c......."
+    - "..bBBBBc......."
+    - "..b....c......."
+    - "..............."
+    - "..............."
+    - "..............."
+  # 8
+  - - "...b..c........"
+    - "...bBBc........"
+    - "...b..c........"
+    - "...b..c........"
+    - "...b..c........"
+    - "...b..c........"
+    - "...b..c........"
+    - "...b..c........"
+    - "...bBBc........"
+    - "...b..c........"
+    - "..............."
+    - "..............."
+    - "..............."
+  # 9
+  - - "....bc........."
+    - "....bc........."
+    - "....bc........."
+    - "....bc........."
+    - "....bc........."
+    - "....bc........."
+    - "....bc........."
+    - "....bc........."
+    - "....bc........."
+    - "....bc........."
+    - "..............."
+    - "..............."
+    - "..............."

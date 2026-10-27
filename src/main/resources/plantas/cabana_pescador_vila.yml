@@ -1,0 +1,184 @@
+# Projeto de construção da colônia (estilo vila, 2.90).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Cabana do Pescador"
+descricao:
+  - "Palafita com deque, barris e varal de peixe."
+  - "Construa perto da água."
+icone: FISHING_ROD
+nivel: 1
+efeito: CABANA_PESCADOR
+legenda:
+  "A": "grass_block"
+  "B": "spruce_log[axis=y]"
+  "C": "spruce_planks"
+  "D": "spruce_stairs[facing=north,half=bottom]"
+  "E": "birch_planks"
+  "F": "barrel[facing=up]"
+  "G": "chest[facing=south]"
+  "H": "cyan_bed[facing=north,part=head]"
+  "I": "cyan_bed[facing=north,part=foot]"
+  "J": "cyan_carpet"
+  "K": "spruce_door[facing=north,half=lower,hinge=left]"
+  "L": "spruce_fence"
+  "M": "cauldron"
+  "N": "glass_pane"
+  "O": "spruce_door[facing=north,half=upper,hinge=left]"
+  "P": "lantern[hanging=false]"
+  "Q": "spruce_stairs[facing=west,half=top]"
+  "R": "spruce_stairs[facing=east,half=top]"
+  "S": "lantern[hanging=true]"
+  "T": "spruce_stairs[facing=east,half=bottom]"
+  "U": "spruce_stairs[facing=west,half=bottom]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 40
+    portas: 1
+    luz: 1
+    coberto: 70
+    itens:
+      barrel: 1
+  - blocos: 80
+    portas: 1
+    luz: 2
+    coberto: 80
+    itens:
+      barrel: 1
+  - blocos: 140
+    portas: 1
+    luz: 3
+    coberto: 85
+    itens:
+      barrel: 2
+camadas:
+  # 0
+  - - "AAAAAAAAAAA"
+    - "AABAAAAABAA"
+    - "AAAAAAAAAAA"
+    - "AAAAAAAAAAA"
+    - "AAAAAAAAAAA"
+    - "AAAAAAAAAAA"
+    - "AABAAAAABAA"
+    - "AAAAAAAAAAA"
+    - "AAAAAAAAAAA"
+    - "AAAAAAAAAAA"
+    - "AABAAAAABAA"
+    - "AAAAAAAAAAA"
+  # 1
+  - - "..........."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - "..CCCCCCC.."
+    - ".....D....."
+  # 2
+  - - "..........."
+    - "..BEEBEEB.."
+    - "..EFG..HE.."
+    - "..E....IE.."
+    - "..B.....B.."
+    - "..EJ....E.."
+    - "..BEEKEEB.."
+    - "..L....LL.."
+    - "..LF....L.."
+    - "..LF...ML.."
+    - "..L.L.L.L.."
+    - "..........."
+  # 3
+  - - "..........."
+    - "..BEENEEB.."
+    - "..E.....E.."
+    - "..N.....N.."
+    - "..B.....B.."
+    - "..E.....E.."
+    - "..BNEOENB.."
+    - ".......L..."
+    - "..........."
+    - "..........."
+    - "..P.....P.."
+    - "..........."
+  # 4
+  - - ".Q.......R."
+    - ".QBEEBEEBR."
+    - ".QE.....ER."
+    - ".QE..S..ER."
+    - ".QB.....BR."
+    - ".QE.....ER."
+    - ".QBEEBEEBR."
+    - ".Q.......R."
+    - "..........."
+    - "..........."
+    - "..........."
+    - "..........."
+  # 5
+  - - ".T.......U."
+    - ".TEEEEEEEU."
+    - ".T.......U."
+    - ".T.......U."
+    - ".T.......U."
+    - ".T.......U."
+    - ".TEEEEEEEU."
+    - ".T.......U."
+    - "..........."
+    - "..........."
+    - "..........."
+    - "..........."
+  # 6
+  - - "..T.....U.."
+    - "..TEEEEEU.."
+    - "..T.....U.."
+    - "..T.....U.."
+    - "..T.....U.."
+    - "..T.....U.."
+    - "..TEEEEEU.."
+    - "..T.....U.."
+    - "..........."
+    - "..........."
+    - "..........."
+    - "..........."
+  # 7
+  - - "...T...U..."
+    - "...TEEEU..."
+    - "...T...U..."
+    - "...T...U..."
+    - "...T...U..."
+    - "...T...U..."
+    - "...TEEEU..."
+    - "...T...U..."
+    - "..........."
+    - "..........."
+    - "..........."
+    - "..........."
+  # 8
+  - - "....T.U...."
+    - "....TEU...."
+    - "....T.U...."
+    - "....T.U...."
+    - "....T.U...."
+    - "....T.U...."
+    - "....TEU...."
+    - "....T.U...."
+    - "..........."
+    - "..........."
+    - "..........."
+    - "..........."
+  # 9
+  - - ".....C....."
+    - ".....C....."
+    - ".....C....."
+    - ".....C....."
+    - ".....C....."
+    - ".....C....."
+    - ".....C....."
+    - ".....C....."
+    - "..........."
+    - "..........."
+    - "..........."
+    - "..........."

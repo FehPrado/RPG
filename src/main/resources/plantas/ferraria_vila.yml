@@ -1,0 +1,209 @@
+# Projeto de construção da colônia (estilo vila, 2.90).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Ferraria"
+descricao:
+  - "Forja de pedra com grande chaminé, bigornas,"
+  - "alto-forno e água de têmpera."
+icone: ANVIL
+nivel: 3
+efeito: FERRARIA
+legenda:
+  "A": "grass_block"
+  "B": "cobblestone"
+  "C": "gravel"
+  "D": "stone_bricks"
+  "E": "mossy_stone_bricks"
+  "F": "smithing_table"
+  "G": "grindstone[face=floor,facing=south]"
+  "H": "bricks"
+  "I": "blast_furnace[facing=south,lit=false]"
+  "J": "chest[facing=east]"
+  "K": "magma_block"
+  "L": "spruce_door[facing=west,half=lower,hinge=left]"
+  "M": "cracked_stone_bricks"
+  "N": "anvil[facing=east]"
+  "O": "barrel[facing=east]"
+  "P": "water_cauldron[level=3]"
+  "Q": "spruce_fence"
+  "R": "dark_oak_log[axis=y]"
+  "S": "furnace[facing=south,lit=false]"
+  "T": "spruce_door[facing=west,half=upper,hinge=left]"
+  "U": "iron_bars"
+  "V": "lantern[hanging=false]"
+  "W": "deepslate_tile_stairs[facing=west,half=top]"
+  "X": "deepslate_tile_stairs[facing=east,half=top]"
+  "Y": "lantern[hanging=true]"
+  "Z": "dark_oak_log[axis=x]"
+  "a": "deepslate_tile_stairs[facing=east,half=bottom]"
+  "b": "deepslate_tile_stairs[facing=west,half=bottom]"
+  "c": "deepslate_tiles"
+  "d": "campfire[lit=true,signal_fire=false,facing=north]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 40
+    portas: 1
+    luz: 1
+    coberto: 70
+    itens:
+      anvil: 1
+  - blocos: 80
+    portas: 1
+    luz: 2
+    coberto: 80
+    itens:
+      anvil: 1
+      furnace: 1
+  - blocos: 140
+    portas: 1
+    luz: 3
+    coberto: 85
+    itens:
+      anvil: 2
+      furnace: 1
+camadas:
+  # 0
+  - - "AAAAAAAAAAAA"
+    - "ABBBBBBBBBAA"
+    - "ABBBCBBCBBAA"
+    - "ABBCBBCBBBAA"
+    - "ABCBBCBBCBAA"
+    - "ABBBCBBCBBAA"
+    - "ABBCBBCBBBBA"
+    - "ABCBBCBBCBAA"
+    - "ABBBBBBBBBAA"
+    - "AAAAACAAAAAA"
+    - "AAAAACAAAAAA"
+  # 1
+  - - "............"
+    - ".DDEDDDEDD.."
+    - ".DFG.HIH.D.."
+    - ".DJ...K..L.."
+    - ".M..N....D.."
+    - ".D.....N.D.."
+    - ".DO.....PDQ."
+    - ".D.......D.."
+    - ".R..R.R..R.."
+    - "............"
+    - "............"
+  # 2
+  - - "............"
+    - ".DEDDDEDDD.."
+    - ".D...SHS.D.."
+    - ".M.......T.."
+    - ".U.......D.."
+    - ".U.......D.."
+    - ".D.......DV."
+    - ".D.......D.."
+    - ".R..R.R..R.."
+    - "............"
+    - "............"
+  # 3
+  - - "............"
+    - ".DDDDEDDDD.."
+    - ".M...HHH.D.."
+    - ".D.......D.."
+    - ".D.......D.."
+    - ".D.......D.."
+    - ".D.......D.."
+    - ".M.......D.."
+    - ".R..R.R..R.."
+    - "............"
+    - "............"
+  # 4
+  - - "W.........X."
+    - "WMDDEDDDEDX."
+    - "WD...HHH.DX."
+    - "WD.......DX."
+    - "WD.Y...Y.DX."
+    - "WD.......DX."
+    - "WM.......DX."
+    - "WD.......DX."
+    - "WZZZZZZZZZX."
+    - "W.........X."
+    - "............"
+  # 5
+  - - "a.........b."
+    - "aDDDDDHDDDb."
+    - "a.........b."
+    - "a.........b."
+    - "a.........b."
+    - "a.........b."
+    - "a.........b."
+    - "a.........b."
+    - "aDDDDDDDDDb."
+    - "a.........b."
+    - "............"
+  # 6
+  - - ".a.......b.."
+    - ".aDDDDHDDb.."
+    - ".a.......b.."
+    - ".a.......b.."
+    - ".a.......b.."
+    - ".a.......b.."
+    - ".a.......b.."
+    - ".a.......b.."
+    - ".aDDDDDDDb.."
+    - ".a.......b.."
+    - "............"
+  # 7
+  - - "..a.....b..."
+    - "..aDDDHDb..."
+    - "..a.....b..."
+    - "..a.....b..."
+    - "..a.....b..."
+    - "..a.....b..."
+    - "..a.....b..."
+    - "..a.....b..."
+    - "..aDDDDDb..."
+    - "..a.....b..."
+    - "............"
+  # 8
+  - - "...a...b...."
+    - "...aDDHb...."
+    - "...a...b...."
+    - "...a...b...."
+    - "...a...b...."
+    - "...a...b...."
+    - "...a...b...."
+    - "...a...b...."
+    - "...aDDDb...."
+    - "...a...b...."
+    - "............"
+  # 9
+  - - "....a.b....."
+    - "....aDH....."
+    - "....a.b....."
+    - "....a.b....."
+    - "....a.b....."
+    - "....a.b....."
+    - "....a.b....."
+    - "....a.b....."
+    - "....aDb....."
+    - "....a.b....."
+    - "............"
+  # 10
+  - - ".....c......"
+    - ".....cH....."
+    - ".....c......"
+    - ".....c......"
+    - ".....c......"
+    - ".....c......"
+    - ".....c......"
+    - ".....c......"
+    - ".....c......"
+    - ".....c......"
+    - "............"
+  # 11
+  - - "............"
+    - "......d....."
+    - "............"
+    - "............"
+    - "............"
+    - "............"
+    - "............"
+    - "............"
+    - "............"
+    - "............"
+    - "............"

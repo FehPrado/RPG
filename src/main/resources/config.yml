@@ -561,6 +561,8 @@ tag:
 
 embelezamento:
   magias: true                       # modelos temporários de conjuração, projéteis e impactos
+  circulos-magicos: true             # 2.91: círculos de partículas das magias (frente, chão e céu)
+  circulos-sistemas: true            # 2.92: círculos de portais, chefes, classes, nível, deuses, céu, Marco, guerra e guardiões
   personagens: true                 # acessórios no corpo, auras e rastros
   cenarios: true                     # partículas de ambiente e dos ornamentos próximos
   limite-animacoes: 96               # limite global (16 a 256); até 12 por jogador

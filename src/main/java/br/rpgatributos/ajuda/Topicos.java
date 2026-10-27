@@ -256,35 +256,49 @@ public final class Topicos {
                 .texto("Grave uma runa num item: chama, gelo, salto duplo, vampirismo e outras.")
                 .ritual(Material.CHISELED_TUFF, "Tufo entalhado", Material.AMETHYST_SHARD, 4, Material.LAPIS_BLOCK, 1)
                 .ligados("magias", "transmutacao").palavras("gravar mesa runica").pronto();
+        t("circuloarcano", MAGIA, "Círculo Arcano (pentagrama)", Material.OBSIDIAN)
+                .texto("Desenhe um pentagrama no chão em volta de uma obsidiana: velas acesas nas 5 pontas, a 5 blocos do centro, em (0,-5), (5,-2), (3,4), (-3,4) e (-5,-2), contando a partir da obsidiana (o -5 é para o norte). O traço da estrela liga cada ponta à segunda seguinte.",
+                        "O traço pode ser pó de redstone em cima do piso ou blocos no próprio piso: obsidiana, pedra-negra, tijolos do Nether, ametista, areia das almas, pedra luminosa, concreto ou lã preta, vermelha ou roxa. Basta 85% do traço.",
+                        "Jogue 1 olho do ender e 4 pós de pedra luminosa na obsidiana: o círculo desperta. Para um ritual, jogue as oferendas dentro do círculo e clique na obsidiana com o catalisador.",
+                        "O traço acende ponta por ponta, um círculo gigante de luz com a estrela se desenha no céu, gira cada vez mais rápido e desce num feixe. Se você se afastar mais de 16 blocos ou o pentagrama quebrar, o ritual se volta contra você.",
+                        "Pactos de 1 hora, um por vez: Força (+25% de dano, 2 corações a menos), Sombra (invisível e veloz no escuro, fraco ao sol) e Fortuna (sorte, pressa e desconto, mas sempre com fome).",
+                        "Tempestade Arcana (raios nos monstros), Fenda do Vazio (3 ondas e o Guardião da Fenda, com tesouro), Corcel Espectral, Espíritos Aliados, Eclipse, Lua de Sangue, Banimento (some com os monstros e protege 10 minutos) e Revelação Astral.")
+                .dica("Mão vazia na obsidiana abre o grimório com todos os rituais; agachado, confere o desenho.")
+                .ritual(Material.OBSIDIAN, "Obsidiana (com o pentagrama)", Material.ENDER_EYE, 1, Material.GLOWSTONE_DUST, 4)
+                .ligados("convergencia", "transmutacao").palavras("pentagrama circulo arcano vela pacto tempestade fenda vazio eclipse lua sangue banimento revelacao conjurar corcel espirito").pronto();
         t("transmutacao", MAGIA, "Transmutação", Material.AMETHYST_BLOCK)
                 .texto("Transforme materiais em outros mais raros. A Pedra Filosofal melhora tudo.")
                 .ritual(Material.AMETHYST_BLOCK, "Bloco de ametista", br.rpgatributos.alquimia.Reagente.MERCURIO_VIVO.criar(1), 1, Material.GOLD_INGOT, 1)
                 .dica("O Mercúrio Vivo é feito na Bancada Alquímica.")
                 .ligados("alquimia", "runas").palavras("circulo pedra filosofal mercurio").pronto();
         t("convergencia", MAGIA, "Altar da Convergência", Material.RESPAWN_ANCHOR)
-                .texto("Até 8 pedestais em volta do altar, a 3 blocos (4 em cruz e 4 na diagonal, 2+2), na mesma altura ou 1 acima ou abaixo. Pedestal: qualquer bloco lapidado (pedra, ardósia, quartzo, tufo, arenito...) ou pilar de quartzo ou púrpura.",
+                .texto("Até 8 pedestais em volta do altar (16 no nível II, 24 no III), a 3 blocos (4 em cruz e 4 na diagonal, 2+2), na mesma altura ou 1 acima ou abaixo. Pedestal: qualquer bloco lapidado (pedra, ardósia, quartzo, tufo, arenito...) ou pilar de quartzo ou púrpura.",
                         "Clique num pedestal com um item para pôr nele (agachado: só 1); clique de novo para tirar. Com o catalisador na mão, clique no altar: 10 segundos de cerimônia e o resultado cai no centro.",
-                        "Transmutar: Eco, Lágrimas de Ghast, Náutilo, Molde de Netherite, Garrafas de Experiência, Varas de Blaze, Pérolas e Cascas de Shulker. Infundir: o equipamento na mão sobe 1 nível de encantamento além do normal (até 3 infusões por item).",
+                        "Transmutar: Eco, Lágrimas de Ghast, Náutilo, Molde de Netherite, Garrafas de Experiência, Varas de Blaze, Pérolas e Cascas de Shulker. Infundir: o equipamento na mão sobe 1 nível de encantamento além do normal (até 3 infusões por item). Transferir Encantamentos: o item encantado vai num pedestal (com um livro, a ponte) e os encantamentos dele passam para o da mão; a origem volta sem eles.",
                         "Raros: Totem, Maçã Dourada Encantada, Coração do Mar, Estrela do Nether, Élitro e Essência Primordial, e as 4 Relíquias da Convergência (Lâmina, Égide, Picareta e Arco), uma de cada por jogador.",
                         "Invocações maiores: o núcleo de um chefe na mão desperta a versão Desperta dele (2,5x a vida, +50% de dano), com saque dobrado, Essência garantida e a Alma Desperta.",
-                        "Céu, território e altar: chamar chuva, céu limpo, dia ou noite, a Lua Azul (monstros soltam materiais raros), auras de 2 horas no território (Crescimento, Paz, Vigor) e a Bênção da Aliança (3 jogadores).",
+                        "Trazer de Volta: quando um companheiro morre, cai a coleira dele. Com ela na mão (ou uma etiqueta com o nome dele), o ritual traz ele de volta com o nível e a evolução.",
+                        "Céu, território e altar: chamar chuva, céu limpo, dia ou noite, a Lua Azul (monstros soltam materiais raros), auras de 2 horas no território (Crescimento, Paz, Vigor) e a Bênção da Aliança (3 jogadores). E também: Chuva de Meteoros em volta do altar, Abrir um Portal do seu rank (um a cada 6 horas) e Chamar o Mercador.",
                         "Algumas receitas pedem um sacrifício: o mob vivo a até 5 blocos do altar sobe e se desfaz na explosão. Outras pedem vários jogadores com o catalisador na mão.",
                         "Despertar o Altar (estrela do Nether e 2 vacas) sobe o altar para o nível II: mais 8 pedestais a 5 blocos e as receitas mais fortes (relíquias, Arauto, Lua Azul, níveis IV e V dos guardiões).",
+                        "Ascender o Altar (2 estrelas do Nether, sinalizador e 2 endermen) sobe para o nível III: mais 8 pedestais a 7 blocos (4 em cruz e 4 na diagonal, 5+5) e as lendárias: Ovo do Dragão e o Tridente, a Maça e as Botas da Convergência.",
                         "Se quem acendeu se afastar mais de 24 blocos ou um pedestal usado quebrar, o ritual sai errado: os ingredientes se perdem e uma Aberração sai do altar.")
                 .dica("Mão vazia no altar abre o Grimório com todas as receitas, em abas; agachado conta os pedestais e mostra o nível.")
                 .ritual(Material.RESPAWN_ANCHOR, "Âncora de renascimento", Material.ENDER_EYE, 1, Material.DIAMOND, 1, Material.AMETHYST_SHARD, 4)
-                .ligados("transmutacao", "infusor", "guardioesaltar").palavras("altar convergencia pedestal ritual infundir infusao transmutar grimorio desperto alma reliquia elitro sacrificio chuva noite lua azul aura bencao nivel").pronto();
+                .ligados("transmutacao", "infusor", "guardioesaltar").palavras("altar convergencia pedestal ritual infundir infusao transmutar grimorio desperto alma reliquia elitro sacrificio chuva noite lua azul aura bencao nivel transferir encantamento coleira reviver companheiro meteoro portal mercador dragao tridente maca botas").pronto();
         t("guardioesaltar", MAGIA, "Guardiões e ajudantes", Material.CARVED_PUMPKIN)
                 .texto("Feitos no Altar da Convergência (aba Guardiões). O ritual dá um Selo: com ele na mão, clique num bloco e o guardião fica ali, de posto. Até 8 por jogador.",
                         "Defesa: Espírito Guardião (raios), Golem Guardião (golem de ferro), Torre Arcana (explosões de fogo em área) e Espírito Curandeiro (cura jogadores e guardiões).",
                         "Trabalho: Golem de Fazenda (colhe e replanta), Golem Lenhador (derruba árvores e replanta), Golem Minerador (tira minérios à vista e deixa pedra), Pastor de Neve (tosquia, junta ovos e lã, traz os animais de volta) e Golem de Cobre (organiza baús).",
+                        "Novos: Golem Pescador (vara; pesca na água perto do posto, com isca no baú pesca mais rápido), Abelha Apicultora (tesoura; tira o mel das colmeias cheias com fumaça: garrafas, se tiver garrafas no baú, ou favos), Golem Ferreiro (bigorna perto; conserta o que está no baú com o material de cada item; no nível III, as ferramentas dos seus guardiões), Espírito Coletor (junta o que cai e guarda no baú que já tem aquele item) e Vigia (toca os sinos, acende as lâmpadas, marca e avisa quando chega monstro ou estranho).",
+                        "Fundir Guardiões (altar nível II): o Selo da mão fica com o corpo e o trabalho, e o do pedestal empresta a função dele, se for de apoio (Espírito, Torre, Curandeiro, Vigia ou Ferreiro). Fica com o maior nível e 25% mais vida. Dois que usam munição não se fundem.",
                         "Níveis I a V: guarde o guardião no Selo, segure o Selo no altar com o pedido do nível, o tributo dele e um sacrifício (galinhas, ovelha, vacas, zumbi). Cada nível dá mais vida, força e alcance; no III os trabalhadores ganham mochila; no V brilham e se curam mais rápido.",
                         "Asas de Guardião fazem voar; o Cetro de Comando faz o guardião seguir você ou ficar de posto onde está.",
                         "Ferramenta: clique no guardião com ela (picareta no Minerador, machado no Lenhador, enxada na Fazenda, tesoura no Pastor, espada no Golem Guardião). Melhor ferramenta, mais rápido; ela gasta e quebra. Insumos (tábuas, cercas, tochas, sementes, farinha de osso, comida, baldes, lingotes) saem do baú perto do posto.",
                         "Minerador: cava um túnel 3x3 na direção em que você olhava ao pôr o Selo, com sustentação a cada 4 blocos (4 cercas e 3 tábuas), tocha a cada 8 e uma câmara 5x5 a cada 16. Tampa lava, água e cascalho e pega os minérios das paredes. Túnel de 24 a 96 blocos, conforme o nível.",
                         "Munição (Espírito: ametista ou eco; Torre: pó de blaze ou carga de fogo; Curandeiro: mel ou melancia reluzente): clique com ela ou deixe num baú perto. Sem munição eles continuam, mas fracos.")
                 .dica("Agachado, clique no seu guardião com a mão vazia para guardá-lo no Selo (nível, asas e mochila ficam). Sem agachar, abre a mochila (nível III+).")
-                .ligados("convergencia").palavras("guardiao guardioes golem fazenda colher cobre bau organizar sentinela espirito allay asas voar protetor lenhador arvore minerador minerio pastor ovelha curandeiro torre nivel cetro mochila sacrificio").pronto();
+                .ligados("convergencia").palavras("guardiao guardioes golem fazenda colher cobre bau organizar sentinela espirito allay asas voar protetor lenhador arvore minerador minerio pastor ovelha curandeiro torre nivel cetro mochila sacrificio pescador pesca abelha apicultor mel colmeia ferreiro consertar bigorna coletor vigia alarme sino lampada fundir fusao").pronto();
         t("deuses", MAGIA, "Deuses e fé", Material.CHISELED_QUARTZ_BLOCK)
                 .texto("Siga um dos 6 deuses. Oferendas e preces dão devoção; a fé sobe de 1 a 5 e libera um milagre.")
                 .ritual(Material.CHISELED_QUARTZ_BLOCK, "Quartzo entalhado", Material.GOLDEN_APPLE, 1, Material.CANDLE, 1)
@@ -549,7 +563,8 @@ public final class Topicos {
                 .ritual(Material.LODESTONE, "Magnetita", Material.WHITE_BANNER, 1, Material.EMERALD, 4)
                 .cmd("territorio").ligados("colonia", "reino").palavras("marco protecao chunk expansao").pronto();
         t("colonia", COMUNIDADE, "Colônia", Material.BELL)
-                .texto("Moradores de verdade trabalham para você no seu território inteiro, guardando o que produzem nos baús de depósito.")
+                .texto("Moradores de verdade trabalham para você no seu território inteiro, guardando o que produzem nos baús de depósito.",
+                        "Projetos de vila (2.90): sobrado, oficina, fazenda, poço, torre de vigia, cabanas, armazém, biblioteca, quartel, mina, mercado, taverna, ferraria, estábulo e laboratório, com enxaimel, telhado de duas águas, chaminés e interior mobiliado. A maioria já sai pronta no nível II.")
                 .ritual(Material.BELL, "Sino (no seu território)", Material.EMERALD_BLOCK, 1, Material.RED_BED, 1)
                 .dica("Cada morador precisa do seu posto: composteira, barril, cortador de pedras...")
                 .cmd("colonia").ligados("territorio", "reino").palavras("prefeitura morador vila exercito soldado").pronto();

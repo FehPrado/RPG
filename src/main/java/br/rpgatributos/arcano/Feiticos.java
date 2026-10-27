@@ -168,6 +168,9 @@ final class Feiticos {
     //  Clique segurado (Canalizar e Raio)
     // =====================================================================
 
+    /** 2.91: tem um raio ou uma canalização em andamento (para o círculo mágico saber quando sumir)? */
+    boolean segurando(Player p) { return canais.containsKey(p.getUniqueId()); }
+
     /** O jogador está segurando o clique de um raio ou canalização? Então só renova e não lança outra. */
     boolean continuar(Player p) {
         Canal c = canais.get(p.getUniqueId());
@@ -551,6 +554,7 @@ final class Feiticos {
         World w = centro.getWorld();
         List<Essencia> lista = new ArrayList<>(l.es);
         w.playSound(centro, Sound.WEATHER_RAIN_ABOVE, 1f, 1.2f);
+        plugin.circulosMagicos().ceu(p, centro.clone().add(0, 8, 0), l.es, dur, raio + 1);
         new BukkitRunnable() {
             int t = 0;
             @Override

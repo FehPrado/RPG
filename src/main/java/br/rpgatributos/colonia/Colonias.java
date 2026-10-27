@@ -192,7 +192,7 @@ public final class Colonias implements Listener {
     String nomePosto(Profissao p) {
         if (!trabalhoNasConstrucoes() || p.construcao() == null) return p.nomePosto();
         String casa = p.construcao().name();
-        for (Planta pl : obras.plantas().todas()) if (pl.efeito() == p.construcao()) { casa = pl.nome(); break; }
+        for (Planta pl : obras.plantas().visiveis()) if (pl.efeito() == p.construcao()) { casa = pl.nome(); break; }
         if (p == Profissao.CONSTRUTOR) return casa + " (1 Construtor trabalha sem ela)";
         return p.nomePosto() + " dentro de: " + casa;
     }

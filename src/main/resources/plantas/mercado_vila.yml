@@ -1,0 +1,200 @@
+# Projeto de construção da colônia (estilo vila, 2.90).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Mercado"
+descricao:
+  - "Salão com bancas de toldo listrado, balcão"
+  - "e a mesa de cartografia do Mercador."
+icone: EMERALD
+nivel: 2
+efeito: MERCADO
+legenda:
+  "A": "grass_block"
+  "B": "stone_bricks"
+  "C": "polished_andesite"
+  "D": "dark_oak_log[axis=y]"
+  "E": "birch_planks"
+  "F": "spruce_fence"
+  "G": "barrel[facing=south]"
+  "H": "chest[facing=south]"
+  "I": "spruce_planks"
+  "J": "spruce_door[facing=east,half=lower,hinge=left]"
+  "K": "composter[level=0]"
+  "L": "spruce_stairs[facing=east,half=bottom]"
+  "M": "cartography_table"
+  "N": "pumpkin"
+  "O": "hay_block[axis=y]"
+  "P": "melon"
+  "Q": "potted_red_tulip"
+  "R": "barrel[facing=up]"
+  "S": "cake[bites=0]"
+  "T": "glass_pane"
+  "U": "spruce_door[facing=east,half=upper,hinge=left]"
+  "V": "potted_cactus"
+  "W": "lantern[hanging=false]"
+  "X": "red_wool"
+  "Y": "white_wool"
+  "Z": "yellow_wool"
+  "a": "blue_wool"
+  "b": "spruce_stairs[facing=south,half=top]"
+  "c": "lantern[hanging=true]"
+  "d": "dark_oak_stairs[facing=north,half=top]"
+  "e": "dark_oak_log[axis=x]"
+  "f": "dark_oak_log[axis=z]"
+  "g": "dark_oak_stairs[facing=south,half=top]"
+  "h": "dark_oak_stairs[facing=south,half=bottom]"
+  "i": "dark_oak_stairs[facing=north,half=bottom]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 40
+    portas: 1
+    luz: 1
+    coberto: 70
+    itens:
+      cartography_table: 1
+  - blocos: 80
+    portas: 1
+    luz: 2
+    coberto: 80
+    itens:
+      cartography_table: 1
+      chest: 2
+  - blocos: 140
+    portas: 1
+    luz: 3
+    coberto: 85
+    itens:
+      cartography_table: 2
+      chest: 2
+camadas:
+  # 0
+  - - "AAAAAAAAAAAAAAA"
+    - "ABBBBBBBBBBBBBA"
+    - "ABCBCBCBCBCBCBA"
+    - "ABBCBCBCBCBCBBA"
+    - "ABCBCBCBCBCBCBA"
+    - "ABBCBCBCBCBCBBA"
+    - "ABCBCBCBCBCBCBA"
+    - "ABBCBCBCBCBCBBA"
+    - "ABCBCBCBCBCBCBA"
+    - "ABBBBBBBBBBBBBA"
+    - "AAAAAAAAAAAAAAA"
+    - "AAAAAAAAAAAAAAA"
+  # 1
+  - - "..............."
+    - ".DEEEDEEEDEEED."
+    - ".EFGF.FHF.FHFE."
+    - ".EIII.III.IIIE."
+    - ".E...........E."
+    - ".D...........D."
+    - ".JK..LMIII..NE."
+    - ".EO.........PE."
+    - ".E...........E."
+    - ".D...D...D...D."
+    - "..............."
+    - "..............."
+  # 2
+  - - "..............."
+    - ".DEEEDEEEDEEED."
+    - ".EF.F.F.F.F.FE."
+    - ".EFQF.FRF.FSFE."
+    - ".T...........T."
+    - ".D...........D."
+    - ".U......VW...T."
+    - ".E...........E."
+    - ".E...........E."
+    - ".D...D...D...D."
+    - "..............."
+    - "..............."
+  # 3
+  - - "..............."
+    - ".DEEEDEEEDEEED."
+    - ".EXYX.ZYZ.aYaE."
+    - ".EXYX.ZYZ.aYaE."
+    - ".E...........E."
+    - ".D...........D."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".DbbbDbbbDbbbD."
+    - "...c.......c..."
+    - "..............."
+  # 4
+  - - "ddddddddddddddd"
+    - ".DeeeeeeeeeeeD."
+    - ".f...........f."
+    - ".f...........f."
+    - ".f...........f."
+    - ".f...........f."
+    - ".f..c.....c..f."
+    - ".f...........f."
+    - ".f...........f."
+    - ".DeeeeeeeeeeeD."
+    - "ggggggggggggggg"
+    - "..............."
+  # 5
+  - - "hhhhhhhhhhhhhhh"
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - "iiiiiiiiiiiiiii"
+    - "..............."
+  # 6
+  - - "..............."
+    - "hhhhhhhhhhhhhhh"
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - "iiiiiiiiiiiiiii"
+    - "..............."
+    - "..............."
+  # 7
+  - - "..............."
+    - "..............."
+    - "hhhhhhhhhhhhhhh"
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - "iiiiiiiiiiiiiii"
+    - "..............."
+    - "..............."
+    - "..............."
+  # 8
+  - - "..............."
+    - "..............."
+    - "..............."
+    - "hhhhhhhhhhhhhhh"
+    - ".E...........E."
+    - ".E...........E."
+    - ".E...........E."
+    - "iiiiiiiiiiiiiii"
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+  # 9
+  - - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "hhhhhhhhhhhhhhh"
+    - ".E...........E."
+    - "iiiiiiiiiiiiiii"
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."

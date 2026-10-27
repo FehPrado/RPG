@@ -150,6 +150,8 @@ public final class Conjuracao {
             pf.recargas.put(m.chave(), agora + 20 * 60);
             feiticos.raio(new Feiticos.Lance(p, pf, m.essencias(), pot, m.mods()), r, custo * 0.12, false,
                     () -> pf.recargas.put(m.chave(), Bukkit.getCurrentTick() + recarga));
+            // O círculo fica na frente enquanto o raio durar (segue o olhar).
+            plugin.circulosMagicos().frente(p, m.essencias(), 20 * 30, 1.0, true, false, () -> feiticos.segurando(p));
             depoisDeLancar(p, pf, m, false);
             return;
         }
@@ -157,6 +159,8 @@ public final class Conjuracao {
         if (m.tem(Modificador.CANALIZAR) && Modificador.CANALIZAR.serveEm(m.forma())) {
             arc.gastarMana(p, pf, custo);
             pf.recargas.put(m.chave(), agora + 20 * 60);
+            // Canalizando, o círculo cresce na frente com a carga.
+            plugin.circulosMagicos().frente(p, m.essencias(), 100, 1.6, true, true, () -> feiticos.segurando(p));
             feiticos.canalizar(p, pot, potFinal -> {
                 boolean ok = executar(p, pf, m, potFinal);
                 if (!ok) arc.darMana(p, custo); // não deu (sem alvo...): devolve a mana
@@ -178,6 +182,7 @@ public final class Conjuracao {
         Receita r = m.receita();
         boolean ok = r != null ? receita(p, pf, r, pot, lance) : feiticos.executar(lance, m.forma());
         if (ok) plugin.animacoesMagicas().conjurar(p, m.essencias(), m.forma(), r);
+        if (ok) plugin.circulosMagicos().conjurar(p, m.essencias(), m.forma(), r != null);
         if (ok && r == null && m.tem(Modificador.ECO) && Modificador.ECO.serveEm(m.forma())) feiticos.eco(lance, m.forma());
         return ok;
     }

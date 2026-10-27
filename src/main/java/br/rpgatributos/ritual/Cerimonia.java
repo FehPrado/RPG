@@ -68,6 +68,7 @@ final class Cerimonia {
     private final List<Double> escalaVitimas = new ArrayList<>();
     private List<Player> grupo = List.of();
     private List<ItemStack> doGrupo = List.of();
+    private List<ItemStack> sobras = List.of();
     private ItemDisplay nucleo;
     private BukkitTask tarefa;
     private int t;
@@ -114,6 +115,15 @@ final class Cerimonia {
     void grupo(List<Player> jogadores, List<ItemStack> catalisadores) {
         this.grupo = jogadores;
         this.doGrupo = catalisadores;
+    }
+
+    /** O que volta junto com o resultado (a origem de um Transferir, sem os encantamentos). */
+    void sobras(List<ItemStack> itens) {
+        this.sobras = itens;
+    }
+
+    private void soltarSobras(Location l) {
+        for (ItemStack s : sobras) w.dropItem(l, s, i -> i.setOwner(dono));
     }
 
     private ItemDisplay exibir(Location l, ItemStack item, float escala) {
@@ -413,7 +423,7 @@ final class Cerimonia {
         ReceitaRitual.Efeito efeito = receita.extra().efeito();
         if (efeito != null) {
             // Ritual no mundo: o efeito acontece e não sobra item.
-            efeito.aplicar(altar.plugin(), bloco, p, grupo);
+            efeito.aplicar(altar.plugin(), bloco, p, grupo, catalisador);
             altar.concluida(this, dono, receita);
             return;
         }
@@ -434,6 +444,7 @@ final class Cerimonia {
             i.setOwner(dono);
         });
         w.spawnParticle(Particle.END_ROD, it.getLocation(), 20, 0.2, 0.2, 0.2, 0.05);
+        soltarSobras(l);
         altar.concluida(this, dono, receita);
     }
 
@@ -460,6 +471,7 @@ final class Cerimonia {
         consumirVitimas();
         Location l = centro.clone().add(0, 0.5, 0);
         if (receita.devolveCatalisadorAoFalhar()) w.dropItemNaturally(l, catalisador);
+        soltarSobras(l); // a origem de um Transferir volta, mas os encantamentos se perderam
         w.spawnParticle(Particle.SQUID_INK, l, 120, 1.5, 1.5, 1.5, 0.1);
         w.spawnParticle(Particle.EXPLOSION_EMITTER, l, 1);
         w.strikeLightningEffect(l);
@@ -497,6 +509,7 @@ final class Cerimonia {
         // Sem chefe nem efeito com o servidor desligando: quem acendeu recebe o catalisador de volta.
         boolean semItem = receita.desperto() != null || receita.extra().efeito() != null || resultado == null;
         w.dropItem(centro.clone().add(0, 0.5, 0), semItem ? catalisador : resultado);
+        if (!semItem) soltarSobras(centro.clone().add(0, 0.5, 0));
     }
 
     private void parar() {

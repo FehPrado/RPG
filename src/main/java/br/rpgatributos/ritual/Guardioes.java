@@ -20,6 +20,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Allay;
+import org.bukkit.entity.Bee;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.CopperGolem;
 import org.bukkit.entity.Enemy;
@@ -27,6 +28,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
+import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowman;
@@ -70,6 +72,8 @@ import java.util.UUID;
  * um clique num bloco põe o guardião ali, e esse lugar vira o posto dele. Cada guardião tem nível
  * de I a V (sobe no altar, com o Selo na mão, tributo e sacrifício). As Asas fazem ele voar e o
  * Cetro de Comando faz ele seguir você ou ficar de posto onde está.
+ * 2.89: Pescador, Apicultora, Ferreiro, Coletor e Vigia; e a fusão, em que um guardião ganha a
+ * função de apoio de outro (Espírito, Torre, Curandeiro, Vigia ou Ferreiro).
  */
 public final class Guardioes implements Listener {
 
@@ -94,7 +98,17 @@ public final class Guardioes implements Listener {
         CURANDEIRO("Espírito Curandeiro", "glistering_melon_slice", Material.GLISTERING_MELON_SLICE, Material.GLISTERING_MELON_SLICE, 40,
                 "Cura jogadores e guardiões por perto a cada 2 segundos."),
         TORRE("Torre Arcana", "blaze_rod", Material.BLAZE_ROD, Material.BLAZE_POWDER, 80,
-                "Fica parada e lança explosões de fogo arcano nos grupos de inimigos a até 14 blocos.");
+                "Fica parada e lança explosões de fogo arcano nos grupos de inimigos a até 14 blocos."),
+        PESCADOR("Golem Pescador", "fishing_rod", Material.FISHING_ROD, Material.COD, 80,
+                "Pesca na água perto do posto e guarda o peixe no baú. Usa vara; com isca no baú, pesca mais rápido e acha mais tesouro."),
+        APICULTOR("Abelha Apicultora", "honeycomb", Material.HONEYCOMB, Material.HONEYCOMB, 30,
+                "Acalma as colmeias cheias com fumaça e tira o mel: favos (com a tesoura) ou garrafas de mel (com garrafas no baú)."),
+        FERREIRO("Golem Ferreiro", "anvil", Material.ANVIL, Material.IRON_INGOT, 120,
+                "Conserta as ferramentas, armas e armaduras do baú do posto, gastando o material de cada uma. Precisa de uma bigorna perto."),
+        COLETOR("Espírito Coletor", "hopper", Material.HOPPER, Material.REDSTONE, 30,
+                "Junta os itens caídos perto do posto e guarda cada um no baú que já tem aquele item."),
+        VIGIA("Vigia", "spyglass", Material.SPYGLASS, Material.GLOWSTONE_DUST, 30,
+                "Quando um monstro ou um estranho chega, toca os sinos, acende as lâmpadas, marca o intruso e avisa você.");
 
         public final String nome, modelo, descricao;
         public final Material icone, tributo;
@@ -110,10 +124,18 @@ public final class Guardioes implements Listener {
         }
 
         /** Trabalha e guarda o que pega (tem mochila a partir do nível III). */
-        boolean trabalhador() { return this == FAZENDA || this == LENHADOR || this == MINERADOR || this == PASTOR; }
+        boolean trabalhador() {
+            return this == FAZENDA || this == LENHADOR || this == MINERADOR || this == PASTOR
+                    || this == PESCADOR || this == APICULTOR || this == FERREIRO || this == COLETOR;
+        }
 
-        /** Sem IA do jogo: o plugin move (espíritos e a torre). */
-        boolean semIa() { return this == ESPIRITO || this == CURANDEIRO || this == TORRE; }
+        /** Sem IA do jogo: o plugin move (espíritos, torre, abelha, coletor e vigia). */
+        boolean semIa() {
+            return this == ESPIRITO || this == CURANDEIRO || this == TORRE || this == APICULTOR || this == COLETOR || this == VIGIA;
+        }
+
+        /** 2.89: faz o trabalho dele sem sair do lugar, então pode emprestar a função numa fusão. */
+        boolean apoio() { return this == ESPIRITO || this == TORRE || this == CURANDEIRO || this == VIGIA || this == FERREIRO; }
 
         static Tipo de(String s) {
             try { return s == null ? null : valueOf(s); } catch (IllegalArgumentException e) { return null; }
@@ -130,6 +152,8 @@ public final class Guardioes implements Listener {
     static final NamespacedKey K_NIVEL = new NamespacedKey("rpgatributos", "guardiao_nivel");
     static final NamespacedKey K_MODO = new NamespacedKey("rpgatributos", "guardiao_modo");
     static final NamespacedKey K_MOCHILA = new NamespacedKey("rpgatributos", "guardiao_mochila");
+    /** 2.89: a função de apoio que o guardião ganhou numa fusão (no Selo e no guardião). */
+    static final NamespacedKey K_APOIO = new NamespacedKey("rpgatributos", "guardiao_apoio");
 
     private final RPGAtributos plugin;
     private final Trabalhos trabalhos;
@@ -197,12 +221,14 @@ public final class Guardioes implements Listener {
     private static void descreverSelo(ItemStack i) {
         Tipo t = tipoSelo(i);
         int nivel = nivelSelo(i);
+        Tipo apoio = apoioSelo(i);
         i.editMeta(m -> {
             boolean asas = m.getPersistentDataContainer().has(K_ASAS);
-            m.itemName(Component.text("Selo: " + t.nome + " · Nv. " + ReceitaRitual.romano(nivel), COR));
+            m.itemName(Component.text("Selo: " + t.nome + (apoio != null ? " + " + apoio.nome : "") + " · Nv. " + ReceitaRitual.romano(nivel), COR));
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text(t.descricao, NamedTextColor.GRAY));
-            lore.add(Component.text("Nível " + ReceitaRitual.romano(nivel) + ": " + (int) vidaMax(t, nivel) + " de vida"
+            if (apoio != null) lore.add(Component.text("✦ Fundido: também " + apoio.descricao.substring(0, 1).toLowerCase() + apoio.descricao.substring(1), COR));
+            lore.add(Component.text("Nível " + ReceitaRitual.romano(nivel) + ": " + (int) (vidaMax(t, nivel) * (apoio != null ? FUSAO_VIDA : 1)) + " de vida"
                     + (t.trabalhador() && nivel >= 3 ? ", com mochila" : "") + (nivel >= 5 ? ", brilha e se cura mais rápido" : ""), NamedTextColor.AQUA));
             lore.add(Component.empty());
             lore.add(Component.text("Clique num bloco para pôr o guardião ali.", NamedTextColor.YELLOW));
@@ -257,6 +283,70 @@ public final class Guardioes implements Listener {
         return i.getItemMeta().getPersistentDataContainer().getOrDefault(K_NIVEL, PersistentDataType.INTEGER, 1);
     }
 
+    static Tipo apoioSelo(ItemStack i) {
+        if (i == null || i.isEmpty() || !i.hasItemMeta()) return null;
+        return Tipo.de(i.getItemMeta().getPersistentDataContainer().get(K_APOIO, PersistentDataType.STRING));
+    }
+
+    // ---------- 2.89: fusão ----------
+
+    static final double FUSAO_VIDA = 1.25;
+
+    /** Por que esses dois Selos não se fundem (o da mão fica com o corpo), ou null se podem. */
+    static String porqueNaoFunde(ItemStack mao, ItemStack pedestal) {
+        Tipo corpo = tipoSelo(mao), apoio = tipoSelo(pedestal);
+        if (corpo == null || apoio == null) return "Precisa de um Selo na mão e outro no pedestal.";
+        if (apoioSelo(mao) != null || apoioSelo(pedestal) != null) return "Um desses Selos já é de um guardião fundido.";
+        if (corpo == Tipo.COBRE || apoio == Tipo.COBRE) return "O Golem de Cobre não se funde (ele trabalha com o baú de cobre do jogo).";
+        if (corpo == apoio) return "Os dois são do mesmo tipo: funda guardiões diferentes.";
+        if (!apoio.apoio()) {
+            return corpo.apoio() ? "Troque de lugar: o " + apoio.nome + " vai na mão e o " + corpo.nome + " no pedestal."
+                    : "O Selo do pedestal precisa ser de apoio: Espírito, Torre, Curandeiro, Vigia ou Ferreiro.";
+        }
+        if (Equipamento.municoes(corpo) != null && Equipamento.municoes(apoio) != null) {
+            return "O " + corpo.nome + " e o " + apoio.nome + " usam munição: não cabem num corpo só.";
+        }
+        if (pedestal.getItemMeta().getPersistentDataContainer().has(K_MOCHILA)) return "Esvazie a mochila do Selo do pedestal antes.";
+        return null;
+    }
+
+    /** O Selo fundido: corpo do da mão, função de apoio do outro, o maior nível (e a munição do apoio, se tinha). */
+    static ItemStack fundir(ItemStack mao, ItemStack pedestal) {
+        if (porqueNaoFunde(mao, pedestal) != null) return null;
+        ItemStack r = mao.clone();
+        r.setAmount(1);
+        PersistentDataContainer dp = pedestal.getItemMeta().getPersistentDataContainer();
+        r.editMeta(m -> {
+            PersistentDataContainer d = m.getPersistentDataContainer();
+            d.set(K_APOIO, PersistentDataType.STRING, tipoSelo(pedestal).name());
+            d.set(K_NIVEL, PersistentDataType.INTEGER, Math.max(nivelSelo(mao), nivelSelo(pedestal)));
+            if (dp.has(K_ASAS)) d.set(K_ASAS, PersistentDataType.BYTE, (byte) 1);
+            if (!d.has(Equipamento.K_MUNICAO) && dp.has(Equipamento.K_MUNICAO)) {
+                d.set(Equipamento.K_MUNICAO, PersistentDataType.STRING, dp.get(Equipamento.K_MUNICAO, PersistentDataType.STRING));
+                d.set(Equipamento.K_MUNICAO_QTD, PersistentDataType.INTEGER, dp.getOrDefault(Equipamento.K_MUNICAO_QTD, PersistentDataType.INTEGER, 0));
+            }
+        });
+        descreverSelo(r);
+        return r;
+    }
+
+    static Tipo apoio(Entity e) {
+        return Tipo.de(e.getPersistentDataContainer().get(K_APOIO, PersistentDataType.STRING));
+    }
+
+    /** A munição que o guardião usa (a dele ou a da função de apoio). */
+    static Material[] municoesDe(Entity g) {
+        Tipo t = tipo(g), a = apoio(g);
+        Material[] m = t == null ? null : Equipamento.municoes(t);
+        return m != null || a == null ? m : Equipamento.municoes(a);
+    }
+
+    /** O tipo que gasta a munição (o próprio ou o de apoio). */
+    static Tipo tipoMunicao(Entity g) {
+        Tipo t = tipo(g);
+        return t != null && Equipamento.municoes(t) != null ? t : apoio(g);
+    }
+
     private static boolean tem(ItemStack i, NamespacedKey k) {
         return i != null && !i.isEmpty() && i.hasItemMeta() && i.getItemMeta().getPersistentDataContainer().has(k);
     }
@@ -301,7 +391,8 @@ public final class Guardioes implements Listener {
             case TORRE -> 14;
             case CURANDEIRO -> 6;
             case MINERADOR -> 4;
-            case FERRO -> 12;
+            case FERRO, APICULTOR, COLETOR -> 12;
+            case VIGIA -> 16;
             default -> 8;
         };
         return base + (t == Tipo.MINERADOR ? 1 : 2) * (nivel - 1);
@@ -354,13 +445,17 @@ public final class Guardioes implements Listener {
         byte[] ferramenta = dados.get(Equipamento.K_FERRAMENTA, PersistentDataType.BYTE_ARRAY);
         String municao = dados.get(Equipamento.K_MUNICAO, PersistentDataType.STRING);
         int municaoQtd = dados.getOrDefault(Equipamento.K_MUNICAO_QTD, PersistentDataType.INTEGER, 0);
+        Tipo apoio = apoioSelo(selo);
         selo.setAmount(selo.getAmount() - 1);
-        LivingEntity g = criar(t, onde.getLocation().add(0.5, 0, 0.5), p, asas, nivel);
+        LivingEntity g = criar(t, onde.getLocation().add(0.5, 0, 0.5), p, asas, nivel, apoio);
         if (mochila != null) g.getPersistentDataContainer().set(K_MOCHILA, PersistentDataType.BYTE_ARRAY, mochila);
         if (ferramenta != null) g.getPersistentDataContainer().set(Equipamento.K_FERRAMENTA, PersistentDataType.BYTE_ARRAY, ferramenta);
         if (municao != null) Equipamento.definirMunicao(g, Material.matchMaterial(municao), municaoQtd);
         if (t == Tipo.MINERADOR) Escavacao.comecar(g, p.getFacing());
         Location l = g.getLocation();
+        // 2.92: o guardião aparece de um círculo (com duas figuras de apoio, se for fundido).
+        plugin.circulosMagicos().chaoEm(l, 1.6, 34, br.rpgatributos.visual.CirculosMagicos.cor(COR),
+                br.rpgatributos.visual.CirculosMagicos.BRANCO, apoio != null ? 8 : 6, apoio != null ? 3 : 1, 4);
         l.getWorld().spawnParticle(Particle.END_ROD, l.clone().add(0, 1, 0), 40, 0.4, 0.8, 0.4, 0.05);
         l.getWorld().playSound(l, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 1.3f);
         p.sendMessage(Component.text("✦ " + t.nome + " (nível " + ReceitaRitual.romano(nivel) + ") está de guarda aqui ("
@@ -374,8 +469,16 @@ public final class Guardioes implements Listener {
             p.sendMessage(Component.text("✦ Ele vai cavar um túnel 3x3 para " + direcao(p.getFacing()) + ", até " + Escavacao.comprimentoMax(nivel)
                     + " blocos. Ponha cercas, tábuas e tochas no baú perto dele para as sustentações.", NamedTextColor.GRAY));
         }
-        if (Equipamento.municoes(t) != null) {
-            Material[] m = Equipamento.municoes(t);
+        if (t == Tipo.FERREIRO || apoio == Tipo.FERREIRO) {
+            p.sendMessage(Component.text("✦ Ponha uma bigorna e um baú perto dele: no baú, os itens gastos e o material para consertar "
+                    + "(lingotes, diamantes, tábuas, linha...).", NamedTextColor.GRAY));
+        }
+        if (t == Tipo.PESCADOR) {
+            p.sendMessage(Component.text("✦ Ele pesca na água a até " + (int) alcance(t, nivel, asas) + " blocos. Isca no baú (carne podre, olho de aranha "
+                    + "ou sementes) deixa mais rápido.", NamedTextColor.GRAY));
+        }
+        if (municoesDe(g) != null) {
+            Material[] m = municoesDe(g);
             p.sendMessage(Component.text("✦ Munição: clique nele com " + ReceitaRitual.bonito(m[0]).toLowerCase() + " (ou "
                     + ReceitaRitual.bonito(m[1]).toLowerCase() + ", mais forte), ou deixe num baú perto. Sem munição ele fica fraco.", NamedTextColor.GRAY));
         }
@@ -394,12 +497,17 @@ public final class Guardioes implements Listener {
         return criar(t, l, dono, asas, 1);
     }
 
-    /** Cria o guardião (também usado pelos testes e pelo comando de admin). */
     public LivingEntity criar(Tipo t, Location l, Player dono, boolean asas, int nivel) {
+        return criar(t, l, dono, asas, nivel, null);
+    }
+
+    /** Cria o guardião (também usado pelos testes e pelo comando de admin). {@code apoio}: a função ganha numa fusão. */
+    public LivingEntity criar(Tipo t, Location l, Player dono, boolean asas, int nivel, Tipo apoio) {
         World w = l.getWorld();
         java.util.function.Consumer<LivingEntity> marcar = g -> {
             PersistentDataContainer pdc = g.getPersistentDataContainer();
             pdc.set(K_TIPO, PersistentDataType.STRING, t.name());
+            if (apoio != null) pdc.set(K_APOIO, PersistentDataType.STRING, apoio.name());
             if (dono != null) pdc.set(K_DONO, PersistentDataType.STRING, dono.getUniqueId().toString());
             definirPosto(g, l);
             pdc.set(K_NIVEL, PersistentDataType.INTEGER, nivel);
@@ -408,22 +516,38 @@ public final class Guardioes implements Listener {
             g.setRemoveWhenFarAway(false);
         };
         LivingEntity g = switch (t) {
-            case ESPIRITO, CURANDEIRO -> w.spawn(l.clone().add(0, 0.5, 0), Allay.class, a -> {
+            case ESPIRITO, CURANDEIRO, COLETOR -> w.spawn(l.clone().add(0, 0.5, 0), Allay.class, a -> {
                 marcar.accept(a);
                 a.setAI(false);
                 a.setCanDuplicate(false);
-                base(a, Attribute.SCALE, t == Tipo.ESPIRITO ? 1.4 : 1.0);
+                base(a, Attribute.SCALE, t == Tipo.ESPIRITO ? 1.4 : t == Tipo.COLETOR ? 0.9 : 1.0);
             });
             case TORRE -> w.spawn(l.clone().add(0, 0.5, 0), Blaze.class, b -> {
                 marcar.accept(b);
                 b.setAI(false);
                 base(b, Attribute.SCALE, 1.3);
             });
-            case FERRO, FAZENDA, LENHADOR, MINERADOR -> w.spawn(l, IronGolem.class, gol -> {
+            case APICULTOR -> w.spawn(l.clone().add(0, 0.5, 0), Bee.class, b -> {
+                marcar.accept(b);
+                b.setAI(false);
+                b.setAnger(0);
+                base(b, Attribute.SCALE, 1.4);
+            });
+            case VIGIA -> w.spawn(l.clone().add(0, 0.5, 0), Parrot.class, pa -> {
+                marcar.accept(pa);
+                pa.setAI(false);
+                pa.setVariant(Parrot.Variant.BLUE);
+                base(pa, Attribute.SCALE, 1.3);
+            });
+            case FERRO, FAZENDA, LENHADOR, MINERADOR, PESCADOR, FERREIRO -> w.spawn(l, IronGolem.class, gol -> {
                 marcar.accept(gol);
                 gol.setPlayerCreated(true);
-                if (t != Tipo.FERRO) base(gol, Attribute.SCALE, t == Tipo.MINERADOR ? 0.65 : 0.7);
-                else base(gol, Attribute.KNOCKBACK_RESISTANCE, 1);
+                switch (t) {
+                    case FERRO -> base(gol, Attribute.KNOCKBACK_RESISTANCE, 1);
+                    case MINERADOR -> base(gol, Attribute.SCALE, 0.65);
+                    case FERREIRO -> base(gol, Attribute.SCALE, 0.85);
+                    default -> base(gol, Attribute.SCALE, 0.7);
+                }
             });
             case PASTOR -> w.spawn(l, Snowman.class, s -> {
                 marcar.accept(s);
@@ -445,8 +569,9 @@ public final class Guardioes implements Listener {
     }
 
     private static void aplicarNivel(LivingEntity g, Tipo t, int nivel, String nomeDono) {
-        base(g, Attribute.MAX_HEALTH, vidaMax(t, nivel));
-        g.setHealth(vidaMax(t, nivel));
+        double vida = vidaMax(t, nivel) * (apoio(g) != null ? FUSAO_VIDA : 1);
+        base(g, Attribute.MAX_HEALTH, vida);
+        g.setHealth(vida);
         AttributeInstance dano = g.getAttribute(Attribute.ATTACK_DAMAGE);
         if (dano != null) dano.setBaseValue(dano.getDefaultValue() * forca(nivel));
         if (t == Tipo.COBRE) {
@@ -463,7 +588,9 @@ public final class Guardioes implements Listener {
 
     private static Component nomeBase(Entity g, Tipo t) {
         String dono = g.getPersistentDataContainer().get(K_NOME_DONO, PersistentDataType.STRING);
-        return Component.text("⛨ " + (dono == null ? "" : dono + ": ") + t.nome + " · Nv. " + ReceitaRitual.romano(nivel(g)), COR);
+        Tipo a = apoio(g);
+        return Component.text("⛨ " + (dono == null ? "" : dono + ": ") + t.nome + (a != null ? " + " + a.nome : "")
+                + " · Nv. " + ReceitaRitual.romano(nivel(g)), COR);
     }
 
     /** O último aviso mostrado no nome de cada guardião (para só mexer no nome quando muda). */
@@ -481,7 +608,7 @@ public final class Guardioes implements Listener {
 
     /** Aviso dos guardiões de defesa: munição e espada. */
     private static String avisoDefesa(LivingEntity g, Tipo t) {
-        if (Equipamento.municoes(t) != null && Equipamento.municaoQtd(g) <= 0) return "⚠ sem munição (fraco)";
+        if (municoesDe(g) != null && Equipamento.municaoQtd(g) <= 0) return "⚠ sem munição (fraco)";
         if (t == Tipo.FERRO && Equipamento.ferramenta(g) == null) return "sem espada";
         return null;
     }
@@ -572,7 +699,7 @@ public final class Guardioes implements Listener {
                     + (antiga != null ? ". A antiga voltou para você." : "."), COR));
             return;
         }
-        Material[] municoes = Equipamento.municoes(t);
+        Material[] municoes = municoesDe(g);
         if (meu && municoes != null && !mao.isEmpty() && (mao.getType() == municoes[0] || mao.getType() == municoes[1])) {
             e.setCancelled(true);
             Material atual = Equipamento.municao(g);
@@ -596,7 +723,7 @@ public final class Guardioes implements Listener {
         }
         LivingEntity v = (LivingEntity) g;
         String quem = dono == null ? "ninguém" : Bukkit.getOfflinePlayer(dono).getName();
-        StringBuilder painel = new StringBuilder("⛨ " + t.nome + " Nv. " + ReceitaRitual.romano(nivel(g)) + " de " + quem + " · ❤ "
+        StringBuilder painel = new StringBuilder("⛨ " + t.nome + (apoio(g) != null ? " + " + apoio(g).nome : "") + " Nv. " + ReceitaRitual.romano(nivel(g)) + " de " + quem + " · ❤ "
                 + (int) Math.ceil(v.getHealth()) + "/" + (int) v.getAttribute(Attribute.MAX_HEALTH).getValue());
         ItemStack ferramenta = Equipamento.ferramenta(g);
         if (Equipamento.ferramentaDoTipo(t) != null) {
@@ -622,8 +749,10 @@ public final class Guardioes implements Listener {
         byte[] ferramenta = dados.get(Equipamento.K_FERRAMENTA, PersistentDataType.BYTE_ARRAY);
         String municao = dados.get(Equipamento.K_MUNICAO, PersistentDataType.STRING);
         int municaoQtd = Equipamento.municaoQtd(g);
+        Tipo apoio = apoio(g);
         selo.editMeta(m -> {
             PersistentDataContainer s = m.getPersistentDataContainer();
+            if (apoio != null) s.set(K_APOIO, PersistentDataType.STRING, apoio.name());
             if (mochila != null) s.set(K_MOCHILA, PersistentDataType.BYTE_ARRAY, mochila);
             if (ferramenta != null) s.set(Equipamento.K_FERRAMENTA, PersistentDataType.BYTE_ARRAY, ferramenta);
             if (municao != null && municaoQtd > 0) {
@@ -641,6 +770,7 @@ public final class Guardioes implements Listener {
     }
 
     private void esquecer(Entity g) {
+        apagarLampadas(g.getUniqueId());
         carregados.remove(g.getUniqueId());
         trabalhos.esquecer(g.getUniqueId());
         proximoTiro.remove(g.getUniqueId());
@@ -756,7 +886,9 @@ public final class Guardioes implements Listener {
 
     @EventHandler
     public void aoDescarregarEntidades(EntitiesUnloadEvent e) {
-        for (Entity en : e.getEntities()) carregados.remove(en.getUniqueId());
+        for (Entity en : e.getEntities()) {
+            if (carregados.remove(en.getUniqueId())) apagarLampadas(en.getUniqueId());
+        }
     }
 
     static boolean alvoValido(Entity e) {
@@ -786,15 +918,18 @@ public final class Guardioes implements Listener {
                     case TORRE -> torre(g, nivel, true);
                     case CURANDEIRO -> { manterNoPosto(g, asas); if (ciclo % 20 == 0) curar(g, nivel); }
                     case FERRO -> { ferro((IronGolem) g, asas, nivel); if (ciclo % 50 == 0) consertar((IronGolem) g); }
-                    case FAZENDA, LENHADOR, MINERADOR, PASTOR -> {
+                    case FAZENDA, LENHADOR, MINERADOR, PASTOR, PESCADOR, APICULTOR, FERREIRO, COLETOR -> {
                         if (!seguindo(g)) {
                             String aviso = trabalhos.trabalhar((Mob) g, t, asas, nivel, ciclo);
                             if (aviso != null || ciclo % 10 == 0) estado(g, t, aviso);
                         }
                     }
+                    case VIGIA -> { manterNoPosto(g, asas); if (ciclo % 10 == 0) vigiar(g, nivel); }
                     case COBRE -> { }
                 }
             }
+            Tipo apoio = apoio(g);
+            if (apoio != null) apoiar(g, apoio, asas, nivel);
             if (!t.trabalhador() && ciclo % 10 == 0) estado(g, t, avisoDefesa(g, t));
             if (asas && ciclo % 3 == 0) asasVisuais(g);
             double max = g.getAttribute(Attribute.MAX_HEALTH).getValue();
@@ -877,6 +1012,11 @@ public final class Guardioes implements Listener {
                 g.teleport(centro);
             }
         }
+        raioArcano(g, alvo, asas, nivel);
+    }
+
+    /** O tiro do Espírito (também o de um guardião fundido com ele). */
+    private void raioArcano(LivingEntity g, LivingEntity alvo, boolean asas, int nivel) {
         boolean semMunicao = Equipamento.municaoQtd(g) <= 0;
         long espera = (1500 - 150 * (nivel - 1)) * (semMunicao ? 2L : 1L);
         if (alvo == null || !podeAtirar(g, espera) || !g.hasLineOfSight(alvo)) return;
@@ -900,7 +1040,7 @@ public final class Guardioes implements Listener {
         if (ciclo % 5 != 0) return;
         LivingEntity alvo = inimigoPerto(g.getLocation(), alcance(Tipo.TORRE, nivel, false));
         if (alvo == null) return;
-        g.teleport(g.getLocation().setDirection(alvo.getLocation().toVector().subtract(g.getLocation().toVector())));
+        if (tipo(g) == Tipo.TORRE) g.teleport(g.getLocation().setDirection(alvo.getLocation().toVector().subtract(g.getLocation().toVector())));
         long espera = (3000 - 300 * (nivel - 1)) * (Equipamento.municaoQtd(g) <= 0 ? 2L : 1L);
         if (!podeAtirar(g, espera) || !g.hasLineOfSight(alvo)) return;
         int modo = Equipamento.disparar(g, Tipo.TORRE, posto(g));
@@ -988,6 +1128,123 @@ public final class Guardioes implements Listener {
         if (alvo == null && ciclo % 20 == 0 && g.getLocation().distanceSquared(posto) > 6 * 6) {
             g.getPathfinder().moveTo(posto, 1.0);
         }
+    }
+
+    // =====================================================================
+    //  2.89: função de apoio (fusão) e o Vigia
+    // =====================================================================
+
+    /** A função emprestada por uma fusão, feita de onde o guardião está (sem andar por ela). */
+    private void apoiar(LivingEntity g, Tipo apoio, boolean asas, int nivel) {
+        switch (apoio) {
+            case ESPIRITO -> {
+                if (ciclo % 5 == 0) raioArcano(g, inimigoPerto(g.getLocation(), alcance(Tipo.ESPIRITO, nivel, false)), false, nivel);
+            }
+            case TORRE -> torre(g, nivel, false);
+            case CURANDEIRO -> { if (ciclo % 20 == 0) curar(g, nivel); }
+            case VIGIA -> { if (ciclo % 10 == 0) vigiar(g, nivel); }
+            case FERREIRO -> {
+                String aviso = trabalhos.ferreiro((Mob) g, nivel, ciclo, false);
+                if (aviso != null && !tipo(g).trabalhador() && ciclo % 10 == 0) estado(g, tipo(g), aviso);
+            }
+            default -> { }
+        }
+    }
+
+    /** Até quando o alarme de cada Vigia está tocando. */
+    private final Map<UUID, Long> alarmeAte = new HashMap<>();
+    /** As lâmpadas que cada Vigia acendeu (para apagar no fim do alarme). */
+    private final Map<UUID, List<Block>> lampadas = new HashMap<>();
+
+    /** O Vigia olha em volta do posto: monstros e quem não pode construir ali disparam o alarme. */
+    private void vigiar(LivingEntity g, int nivel) {
+        Location c = posto(g);
+        double r = alcance(Tipo.VIGIA, nivel, temAsas(g));
+        UUID dono = dono(g);
+        List<LivingEntity> intrusos = new ArrayList<>();
+        for (Entity e : c.getWorld().getNearbyEntities(c, r, Math.min(r, 12), r)) {
+            if (alvoValido(e)) intrusos.add((LivingEntity) e);
+            else if (e instanceof Player p && dono != null && !p.getUniqueId().equals(dono)
+                    && (p.getGameMode() == org.bukkit.GameMode.SURVIVAL || p.getGameMode() == org.bukkit.GameMode.ADVENTURE)
+                    && !plugin.territorios().podeConstruir(p, c.getBlock())) intrusos.add(p);
+        }
+        long agora = System.currentTimeMillis();
+        UUID id = g.getUniqueId();
+        if (intrusos.isEmpty()) {
+            if (agora > alarmeAte.getOrDefault(id, 0L)) apagarLampadas(id);
+            return;
+        }
+        // Marca os intrusos (brilham através das paredes); a partir do nível IV, os monstros ficam lentos.
+        for (LivingEntity i : intrusos) {
+            i.addPotionEffect(new org.bukkit.potion.PotionEffect(PotionEffectType.GLOWING, 40 + 20 * nivel, 0, false, false));
+            if (nivel >= 4 && !(i instanceof Player)) i.addPotionEffect(new org.bukkit.potion.PotionEffect(PotionEffectType.SLOWNESS, 60, 0, false, true));
+        }
+        // A partir do nível III, chama os Golens Guardiões do mesmo dono para cima dos monstros.
+        if (nivel >= 3) {
+            for (Entity e : c.getWorld().getNearbyEntities(c, r + 8, 8, r + 8)) {
+                if (tipo(e) != Tipo.FERRO || !java.util.Objects.equals(dono(e), dono) || !(e instanceof IronGolem golem) || golem.getTarget() != null) continue;
+                for (LivingEntity i : intrusos) if (!(i instanceof Player)) { golem.setTarget(i); break; }
+            }
+        }
+        boolean novo = agora > alarmeAte.getOrDefault(id, 0L);
+        alarmeAte.put(id, agora + 20_000);
+        g.getWorld().spawnParticle(Particle.NOTE, g.getLocation().add(0, g.getHeight() + 0.3, 0), 3, 0.3, 0.2, 0.3, 1);
+        if (novo) tocarAlarme(g, c, r, intrusos, dono);
+    }
+
+    private void tocarAlarme(LivingEntity g, Location c, double r, List<LivingEntity> intrusos, UUID dono) {
+        World w = c.getWorld();
+        w.playSound(c, Sound.BLOCK_BELL_USE, 2f, 1f);
+        w.playSound(g.getLocation(), Sound.ENTITY_PARROT_IMITATE_PILLAGER, 1.5f, 1.2f);
+        int cx = c.getBlockX() >> 4, cz = c.getBlockZ() >> 4, alc = (int) Math.ceil(r / 16);
+        // Os sinos de verdade tocam.
+        for (int x = cx - alc; x <= cx + alc; x++) for (int z = cz - alc; z <= cz + alc; z++) {
+            if (!w.isChunkLoaded(x, z)) continue;
+            for (org.bukkit.block.BlockState s : w.getChunkAt(x, z).getTileEntities(false)) {
+                if (s instanceof org.bukkit.block.Bell sino && s.getLocation().distanceSquared(c) <= r * r) sino.ring();
+            }
+        }
+        // As lâmpadas de redstone e de cobre acendem até o alarme acabar.
+        List<Block> acesas = lampadas.computeIfAbsent(g.getUniqueId(), k -> new ArrayList<>());
+        int ri = (int) r;
+        Block centro = c.getBlock();
+        for (int x = -ri; x <= ri; x++) for (int y = -6; y <= 6; y++) for (int z = -ri; z <= ri; z++) {
+            Block b = centro.getRelative(x, y, z);
+            if (!(b.getType() == Material.REDSTONE_LAMP || b.getType().name().endsWith("COPPER_BULB"))) continue;
+            if (!(b.getBlockData() instanceof org.bukkit.block.data.Lightable luz) || luz.isLit()) continue;
+            luz.setLit(true);
+            b.setBlockData(luz, false);
+            acesas.add(b);
+        }
+        // O dono fica sabendo.
+        Player p = dono == null ? null : Bukkit.getPlayer(dono);
+        if (p != null) {
+            long monstros = intrusos.stream().filter(i -> !(i instanceof Player)).count();
+            List<String> nomes = intrusos.stream().filter(i -> i instanceof Player).map(i -> ((Player) i).getName()).toList();
+            String quem = (monstros > 0 ? monstros + " monstro" + (monstros > 1 ? "s" : "") : "")
+                    + (monstros > 0 && !nomes.isEmpty() ? " e " : "") + (nomes.isEmpty() ? "" : String.join(", ", nomes));
+            p.sendMessage(Component.text("🔔 Vigia: " + quem + " perto do posto (" + c.getBlockX() + " " + c.getBlockY() + " " + c.getBlockZ() + ").",
+                    NamedTextColor.GOLD));
+            p.playSound(p.getLocation(), Sound.BLOCK_BELL_USE, 0.6f, 1.4f);
+        }
+    }
+
+    private void apagarLampadas(UUID vigia) {
+        alarmeAte.remove(vigia);
+        List<Block> l = lampadas.remove(vigia);
+        if (l == null) return;
+        for (Block b : l) {
+            if (!b.getWorld().isChunkLoaded(b.getX() >> 4, b.getZ() >> 4)) continue;
+            if (b.getBlockData() instanceof org.bukkit.block.data.Lightable luz && luz.isLit()) {
+                luz.setLit(false);
+                b.setBlockData(luz, true); // com física: se tiver energia de verdade, ela acende de novo
+            }
+        }
+    }
+
+    /** Servidor desligando: as lâmpadas do alarme apagam. */
+    public void desligar() {
+        for (UUID id : List.copyOf(lampadas.keySet())) apagarLampadas(id);
     }
 
     /** Asas de partículas nas costas (sem entidade nenhuma seguindo o guardião). */

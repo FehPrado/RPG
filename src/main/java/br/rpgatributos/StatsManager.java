@@ -129,6 +129,10 @@ public final class StatsManager {
                 Component.text(s.icone() + " " + s.nome(), s.cor()),
                 Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(1800), Duration.ofMillis(500))));
         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
+        // 2.92: um círculo na cor do atributo; a cada 10 níveis, maior e com feixe.
+        boolean marco = nivel % 10 == 0;
+        plugin.circulosMagicos().seguindo(p, marco ? 2.4 : 1.3, marco ? 50 : 24, br.rpgatributos.visual.CirculosMagicos.cor(s.cor()),
+                br.rpgatributos.visual.CirculosMagicos.OURO, marco ? 8 : 4, marco ? 3 : 1, marco ? 14 : 0);
         p.sendMessage(Component.text("✦ ", NamedTextColor.GOLD)
                 .append(Component.text(s.nome(), s.cor()))
                 .append(Component.text(" subiu para o nível " + nivel + "! ", NamedTextColor.YELLOW))

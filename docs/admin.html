@@ -437,9 +437,10 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin obelisco</span></td><td>Obsidiana chorona</td><td>Obelisco da Torre</td></tr>
       <tr><td><span class="cmd">/rpgadmin santuariodivino</span></td><td>Quartzo entalhado</td><td>Santuário dos Deuses</td></tr>
       <tr><td><span class="cmd">/rpgadmin circulo</span></td><td>Bloco de ametista</td><td>Círculo de Transmutação</td></tr>
-      <tr><td><span class="cmd">/rpgadmin convergencia</span></td><td>Âncora de renascimento</td><td>Altar da Convergência</td></tr>
-      <tr><td><span class="cmd">/rpgadmin selo &lt;tipo|asas|cetro&gt; [nível]</span></td><td>(item na mão)</td><td>Selo de guardião ou Asas de Guardião</td></tr>
+      <tr><td><span class="cmd">/rpgadmin convergencia [1-3]</span></td><td>Âncora de renascimento</td><td>Altar da Convergência (com número, olhando um altar pronto: muda o nível)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin selo &lt;tipo|asas|cetro&gt; [nível]</span></td><td>(item na mão)</td><td>Selo de guardião (espirito, ferro, fazenda, cobre, lenhador, minerador, pastor, curandeiro, torre, pescador, apicultor, ferreiro, coletor, vigia), Asas ou Cetro</td></tr>
       <tr><td><span class="cmd">/rpgadmin mesarunica</span></td><td>Tufo entalhado</td><td>Mesa Rúnica</td></tr>
+      <tr><td><span class="cmd">/rpgadmin pentagrama</span></td><td>(qualquer bloco olhado)</td><td>Desenha o pentagrama pronto (obsidiana, traço de redstone, 5 velas acesas) e desperta o Círculo Arcano</td></tr>
     </tbody></table></div></div>
   </div>
 </section>
@@ -653,6 +654,31 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 <section class="secao" id="testes">
   <h2><span class="ico">✅</span>Roteiro de testes rápido</h2>
   <div class="grade">
+    <div class="card"><h3>Vila nova e Círculo Arcano (2.90)</h3>
+      <ol>
+        <li><b>Projetos de vila:</b> Prefeitura → 📜 Projetos mostra os 16 novos (Casa 11×11, Torre 9×9 com 24 de altura...). Ponha a Casa e um baú com os materiais: o Construtor ergue o sobrado. Construções antigas continuam na lista de Obras com o desenho antigo.</li>
+        <li><b>Círculo:</b> olhe para o chão e use <code>/rpgadmin pentagrama</code> (obsidiana, traço de redstone e 5 velas acesas). Ou desenhe à mão e jogue 1 olho do ender + 4 pós de pedra luminosa na obsidiana. Apague uma vela e jogue de novo: a mensagem diz o que falta.</li>
+        <li><b>Ritual:</b> jogue 8 lingotes de cobre, 2 varas de breeze e 8 pós de pedra luminosa dentro do círculo, segure um para-raios e clique na obsidiana. Olhe para cima: o círculo de luz com a estrela se desenha no céu. Depois, a Tempestade Arcana cai nos monstros.</li>
+        <li><b>Falha:</b> comece outro ritual e se afaste mais de 16 blocos (ou apague uma vela): saem 4 vexes e você leva Murchidão.</li>
+        <li><b>Fenda do Vazio:</b> 4 pérolas na mão; 8 obsidianas, 8 frutas do coro e 2 ecos no círculo. Vença as 3 ondas e o Guardião: o tesouro cai no círculo.</li>
+        <li><b>Pacto da Força:</b> 2 varas de blaze; 16 carnes podres, 8 ossos e 8 redstone. A vida máxima cai 2 corações e o dano sobe; depois de 1 hora, tudo volta. Um segundo pacto é recusado enquanto o primeiro vale.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Guardiões novos, fusão e altar III (2.89)</h3>
+      <p>Tudo dentro de <code>/rpgadmin teste</code>. Monte um altar com <code>/rpgadmin convergencia</code> e, olhando para ele, <code>/rpgadmin convergencia 3</code> (nível III, 24 pedestais).</p>
+      <ol>
+        <li><b>Pescador:</b> <code>/rpgadmin selo pescador</code> perto de uma poça, baú ao lado com carne podre; clique nele com uma vara. A cada ~20 s cai peixe no baú (mais rápido com Isca e com a carne podre). Sem água por perto, o nome avisa.</li>
+        <li><b>Apicultora:</b> colmeia cheia (abelhas trabalhando ou espere), baú com 1 garrafa vazia, <code>/rpgadmin selo apicultor</code> e uma tesoura. Ela voa até a colmeia, solta fumaça e guarda 1 garrafa de mel; na próxima, 3 favos.</li>
+        <li><b>Ferreiro:</b> bigorna a até 3 blocos, baú com uma picareta de ferro gasta e 3 lingotes. <code>/rpgadmin selo ferreiro 3</code>: a picareta volta inteira. Sem material, o nome mostra "⚠ falta …". No nível III ele também conserta a ferramenta de outro guardião seu por perto.</li>
+        <li><b>Coletor:</b> dois baús, um com 1 pedregulho. <code>/rpgadmin selo coletor</code>, jogue terra e pedregulho no chão (espere 1 min, ou deixe cair de um bloco quebrado): o pedregulho vai para o baú do pedregulho; a terra, para o mais perto.</li>
+        <li><b>Vigia:</b> lâmpada de redstone e sino perto, <code>/rpgadmin selo vigia</code>. Chame um zumbi (ovo): o sino toca, a lâmpada acende, o zumbi brilha e chega o aviso "🔔 Vigia". Uns 20 s depois que ele sai, a lâmpada apaga.</li>
+        <li><b>Fusão:</b> <code>/rpgadmin selo fazenda 2</code> na mão e <code>/rpgadmin selo curandeiro 3</code> num pedestal, mais 1 Alma Desperta, 4 blocos de ametista e 1 bloco de diamante (altar II+). Sai "Selo: Golem de Fazenda + Espírito Curandeiro · Nv. III". Teste também as recusas: Torre + Curandeiro (munição), Fazenda + Lenhador (não é de apoio).</li>
+        <li><b>Transferir:</b> espada de diamante na mão; espada de ferro com Inquebrável III e Maldição do Desaparecimento num pedestal, mais 1 livro, 2 blocos de lápis e 8 garrafas de experiência. A de diamante ganha Inquebrável III; a de ferro volta só com a maldição.</li>
+        <li><b>Trazer de Volta:</b> faça um companheiro e deixe ele morrer (<code>/kill @e[type=wolf,limit=1,sort=nearest]</code>). Cai a "Coleira de …". Com ela na mão, 2 maçãs douradas, 2 lágrimas de ghast, 4 blocos de osso e 8 melancias reluzentes: ele volta do altar com o mesmo nome, cor e evolução. Uma etiqueta renomeada com o nome dele também serve.</li>
+        <li><b>Rituais de mundo:</b> Chuva de Meteoros (luneta; meteoros em volta do altar por 1 min), Abrir um Portal (olho do ender; portal do seu rank a uns 8 blocos; um a cada 6 h) e Chamar o Mercador (16 esmeraldas).</li>
+        <li><b>Lendárias (nível III):</b> por exemplo, a Maça da Convergência: maça na mão; 3 Almas, 2 Essências, 1 estrela do Nether, 1 núcleo pesado e 8 varas de breeze.</li>
+      </ol>
+    </div>
     <div class="card"><h3>Área de testes (2.88)</h3>
       <p><code>/rpgadmin teste</code> leva você a um mundo plano à parte (<code>rpg_teste</code>), no criativo, com uma cópia do seu inventário. Lá dentro <b>nada conta</b>:</p>
       <ul>

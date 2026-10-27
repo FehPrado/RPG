@@ -315,9 +315,24 @@ public final class Deuses implements Listener, CommandExecutor {
         darDevocao(p, 15);
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 600, 0));
         p.getWorld().spawnParticle(Particle.ENCHANT, p.getLocation().add(0, 1.5, 0), 60, 0.5, 0.8, 0.5, 0.5);
+        int[] fig = figura(d);
+        plugin.circulosMagicos().seguindo(p, 1.8, 50, br.rpgatributos.visual.CirculosMagicos.cor(d.cor()),
+                br.rpgatributos.visual.CirculosMagicos.BRANCO, fig[0], fig[1], 0);
         p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 0.8f, 1.6f);
         p.sendMessage(Component.text(d.simbolo() + " Você reza para " + d.nome() + ". (+15 devoção, Regeneração por 30 s)", d.cor()));
         return null;
+    }
+
+    /** 2.92: a figura do círculo de cada deus. */
+    static int[] figura(Deus d) {
+        return switch (d) {
+            case FERRUM -> new int[]{4, 1};   // quadrado, a bigorna
+            case SYLVA -> new int[]{7, 2};    // estrela de 7 pontas
+            case MARIS -> new int[]{5, 1};    // pentágono
+            case BELLUM -> new int[]{3, 1};   // triângulo, a lança
+            case ARCANUS -> new int[]{6, 2};  // hexagrama
+            case MORTIS -> new int[]{5, 2};   // pentagrama
+        };
     }
 
     public long recargaMilagre(Player p) {
@@ -333,6 +348,11 @@ public final class Deuses implements Listener, CommandExecutor {
         p.getPersistentDataContainer().set(kMilagre, PersistentDataType.LONG, agora() + MILAGRE_MS);
         World w = p.getWorld();
         Location l = p.getLocation();
+        // 2.92: o milagre abre o círculo do deus no chão (com feixe) e outro grande no céu.
+        int[] fig = figura(d);
+        org.bukkit.Color corDeus = br.rpgatributos.visual.CirculosMagicos.cor(d.cor());
+        plugin.circulosMagicos().chaoEm(l, 3.6, 70, corDeus, br.rpgatributos.visual.CirculosMagicos.OURO, fig[0], fig[1], 22);
+        plugin.circulosMagicos().ceuEm(l.clone().add(0, 24, 0), 9, 90, corDeus, br.rpgatributos.visual.CirculosMagicos.OURO, fig[0], fig[1]);
         switch (d) {
             case FERRUM -> {
                 List<ItemStack> itens = new ArrayList<>(List.of(p.getInventory().getArmorContents()));

@@ -194,6 +194,10 @@ public final class Renascimento implements CommandExecutor {
         plugin.titulos().verificar(p);
 
         p.getWorld().strikeLightningEffect(p.getLocation());
+        // 2.92: renascer abre um círculo grande com feixe e outro no céu.
+        plugin.circulosMagicos().seguindo(p, 3.2, 80, br.rpgatributos.visual.CirculosMagicos.OURO, br.rpgatributos.visual.CirculosMagicos.BRANCO, 8, 3, 30);
+        plugin.circulosMagicos().ceuEm(p.getLocation().add(0, 30, 0), 9, 100, br.rpgatributos.visual.CirculosMagicos.OURO,
+                br.rpgatributos.visual.CirculosMagicos.BRANCO, 8, 3);
         p.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, p.getLocation().add(0, 1, 0), 120, 0.6, 1, 0.6, 0.5);
         p.getWorld().spawnParticle(Particle.END_ROD, p.getLocation().add(0, 1, 0), 60, 0.4, 1.2, 0.4, 0.08);
         p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);

@@ -177,6 +177,8 @@ public final class Astronomia implements CommandExecutor {
                 Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(3000), Duration.ofMillis(800))));
         p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1f, 1.4f);
         p.getWorld().spawnParticle(Particle.END_ROD, p.getEyeLocation().add(0, 3, 0), 40, 2, 1, 2, 0.02);
+        // 2.92: as estrelas da constelação se ligam no céu, na direção em que você olha (só você vê).
+        plugin.circulosMagicos().constelacao(p, c.ordinal(), br.rpgatributos.visual.CirculosMagicos.cor(COR));
         if (nova) p.sendMessage(Component.text("✦ " + c.nome() + " entrou no seu diário (" + vistas.size() + "/12). /estrelas", COR));
     }
 

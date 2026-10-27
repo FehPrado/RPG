@@ -1492,8 +1492,12 @@ public final class Masmorras implements Listener {
             int reforcos = 2 + m.dificuldade.nivel() + s.fase;
             List<EntityType> tipos = m.dificuldade.monstros();
             for (int i = 0; i < reforcos; i++) {
-                LivingEntity mob = monstro(m, pontoLivre(s, naSala), tipos.get(rnd().nextInt(tipos.size())));
+                Location onde = pontoLivre(s, naSala);
+                LivingEntity mob = monstro(m, onde, tipos.get(rnd().nextInt(tipos.size())));
                 if (mob != null) s.mobs.add(mob.getUniqueId());
+                // 2.92: os reforços saem de um pentagrama no chão.
+                plugin.circulosMagicos().chaoEm(onde, 1.1, 24, br.rpgatributos.visual.CirculosMagicos.SANGUE,
+                        br.rpgatributos.visual.CirculosMagicos.ESCURO, 5, 2, 0);
             }
             s.proximoGolpe = agora + 2500;
         }
@@ -1528,12 +1532,10 @@ public final class Masmorras implements Listener {
                 if (!ativas.containsKey(idMasmorra) || m.estado != Masmorra.Estado.PRONTA || s.estado != Sala.Estado.LUTANDO
                         || !idChefe.equals(s.chefe) || !(autor instanceof LivingEntity autorVivo) || !autorVivo.isValid() || autorVivo.isDead()) { tarefa.cancel(); return; }
                 passos++;
+                // 2.92: o círculo de runas enche até a hora do golpe (o anel de carga chega na borda).
                 for (Location c : alvos) {
-                    for (int i = 0; i < 20; i++) {
-                        double a = Math.PI * 2 * i / 20;
-                        mundo.spawnParticle(Particle.DUST, c.getX() + Math.cos(a) * raio, c.getY(), c.getZ() + Math.sin(a) * raio, 1, 0, 0, 0, 0, vermelho);
-                    }
-                    if (passos % 2 == 0) mundo.spawnParticle(Particle.DUST, c, 6, raio / 2, 0, raio / 2, 0, vermelho);
+                    br.rpgatributos.visual.CirculosMagicos.desenharUmaVez(c, raio, passos * 0.15, vermelho.getColor(),
+                            org.bukkit.Color.fromRGB(0xFF8A80), 5, 2, passos / 7.0, false);
                 }
                 if (passos < 7) return;
                 tarefa.cancel();

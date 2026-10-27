@@ -65,6 +65,9 @@ public final class Cacador {
                     Component.text("Rank de Caçador: " + depois.name(), depois.cor(), TextDecoration.BOLD),
                     Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(3000), Duration.ofMillis(800))));
             p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1.4f);
+            // 2.92: o Sistema marca o rank novo com um círculo azul e o feixe.
+            org.bukkit.plugin.java.JavaPlugin.getPlugin(br.rpgatributos.RPGAtributos.class).circulosMagicos().seguindo(p, 2.4, 60,
+                    br.rpgatributos.visual.CirculosMagicos.cor(depois.cor()), org.bukkit.Color.fromRGB(0x40C4FF), 6, 2, 18);
             // 2.72/2.73: pontos novos na Árvore de Caçador e, nos ranks D, B e S, uma característica.
             JanelaSistema.mostrar(p, "Rank novo",
                     Component.text("Você agora é um caçador de " + depois.nome() + ".", depois.cor()),

@@ -269,6 +269,12 @@ public final class Forja {
         if (cat == null) return base;
         int nivel = ferreiro == null ? 0 : plugin.stats().getNivel(ferreiro, Skill.FERRARIA);
         Raridade r = forcada != null ? forcada : sortearRaridade(nivel);
+        // 2.92: peça Lendária ou Mítica forjada abre um círculo de runas em volta do ferreiro.
+        if (ferreiro != null && r.ordinal() >= Raridade.LENDARIO.ordinal()) {
+            boolean mitico = r == Raridade.MITICO;
+            plugin.circulosMagicos().seguindo(ferreiro, mitico ? 2.6 : 2, mitico ? 60 : 44, br.rpgatributos.visual.CirculosMagicos.cor(r.cor()),
+                    br.rpgatributos.visual.CirculosMagicos.OURO, mitico ? 8 : 6, mitico ? 3 : 2, mitico ? 16 : 8);
+        }
         // 2.62: a carga do raio (para-raios de cobre) também ajuda.
         double cargaDoRaio = forcada == null && ferreiro != null && r != Raridade.MITICO && plugin.cobre() != null ? plugin.cobre().gastarCarga(ferreiro) : 0;
         // Ferreiro e Mestre Forjador: chance de sair uma raridade acima.

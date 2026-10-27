@@ -544,6 +544,14 @@ public final class Ajuda implements Listener {
     private record Novidade(Material icone, String nome, String texto, String topico) { }
 
     private static final List<Novidade> NOVIDADES = List.of(
+            new Novidade(Material.OBSIDIAN, "Círculo Arcano",
+                    "Desenhe um pentagrama com velas e traço de redstone (ou blocos) em volta de uma obsidiana. Um círculo de luz se desenha no céu: pactos, tempestade, Fenda do Vazio, eclipse, lua de sangue e mais.", "circuloarcano"),
+            new Novidade(Material.OAK_DOOR, "Colônia com cara de vila",
+                    "Os 16 projetos da colônia foram refeitos: enxaimel, telhados, chaminés, varandas e interior mobiliado. A maioria já sai pronta no nível II.", "colonia"),
+            new Novidade(Material.SPYGLASS, "5 guardiões novos e a fusão",
+                    "Pescador, Abelha Apicultora, Golem Ferreiro (conserta na bigorna), Espírito Coletor (guarda cada item no baú certo) e Vigia (alarme, sinos e lâmpadas). Funda dois guardiões num só, com as duas funções.", "guardioesaltar"),
+            new Novidade(Material.BEACON, "Altar nível III e rituais novos",
+                    "24 pedestais e as lendárias: Ovo do Dragão, Tridente, Maça e Botas da Convergência. Transferir Encantamentos, Trazer de Volta um companheiro morto, Chuva de Meteoros, Abrir um Portal e Chamar o Mercador.", "convergencia"),
             new Novidade(Material.IRON_PICKAXE, "Guardiões com ferramenta e túneis",
                     "Clique no guardião com a ferramenta dele: picareta, machado, enxada, tesoura ou espada. Quanto melhor, mais rápido. O Minerador cava túneis 3x3 com sustentações e tochas; a Fazenda ara e planta; o Pastor procria e ordenha; os de defesa usam munição.", "guardioesaltar"),
             new Novidade(Material.EXPERIENCE_BOTTLE, "Guardiões com nível e altar nível II",

@@ -1,0 +1,223 @@
+# Projeto de construção da colônia (estilo vila, 2.90).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Mina"
+descricao:
+  - "Casa da mina com cortador de pedras, trilhos"
+  - "e uma torre de içar sobre o poço."
+icone: IRON_PICKAXE
+nivel: 2
+efeito: MINA
+legenda:
+  "A": "grass_block"
+  "B": "cobblestone"
+  "C": "gravel"
+  "D": "stripped_spruce_log[axis=y]"
+  "E": "andesite"
+  "F": "mossy_cobblestone"
+  "G": "stonecutter[facing=south]"
+  "H": "chest[facing=south]"
+  "I": "blast_furnace[facing=south,lit=false]"
+  "J": "rail[shape=north_south]"
+  "K": "barrel[facing=west]"
+  "L": "spruce_log[axis=y]"
+  "M": "coal_block"
+  "N": "raw_iron_block"
+  "O": "raw_copper_block"
+  "P": "spruce_fence"
+  "Q": "spruce_door[facing=north,half=lower,hinge=left]"
+  "R": "barrel[facing=up]"
+  "S": "glass_pane"
+  "T": "spruce_door[facing=north,half=upper,hinge=left]"
+  "U": "iron_ore"
+  "V": "wall_torch[facing=south]"
+  "W": "cobblestone_stairs[facing=west,half=top]"
+  "X": "cobblestone_stairs[facing=east,half=top]"
+  "Y": "lantern[hanging=true]"
+  "Z": "cobblestone_stairs[facing=east,half=bottom]"
+  "a": "cobblestone_stairs[facing=west,half=bottom]"
+  "b": "spruce_planks"
+  "c": "iron_chain[axis=y]"
+  "d": "spruce_log[axis=x]"
+  "e": "spruce_log[axis=z]"
+  "f": "spruce_slab[type=bottom]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 40
+    portas: 1
+    luz: 1
+    coberto: 70
+    itens:
+      stonecutter: 1
+  - blocos: 80
+    portas: 1
+    luz: 2
+    coberto: 80
+    itens:
+      stonecutter: 1
+      chest: 1
+  - blocos: 140
+    portas: 1
+    luz: 3
+    coberto: 85
+    itens:
+      stonecutter: 2
+      chest: 1
+camadas:
+  # 0
+  - - "AAAAAAAAAAAAA"
+    - "ABBBBBBBBAAAA"
+    - "ABBBBBBBBAAAA"
+    - "ABBBBBBBBBBBA"
+    - "ABBBBBBBBB.BA"
+    - "ABBBBBBBBBBBA"
+    - "ABBBBBBBBAAAA"
+    - "ABBBBBBBBACAA"
+    - "ABBBBBBBBACAA"
+    - "AAAACAAAAAAAA"
+    - "AAAACAAAAAAAA"
+    - "AAAAAAAAAAAAA"
+  # 1
+  - - "............."
+    - ".DEFBBBED...."
+    - ".EGHI...B...."
+    - ".F....JKBL.L."
+    - ".B....J.F...."
+    - ".BM...J.EL.L."
+    - ".BNO..J.BP.P."
+    - ".E......B.J.."
+    - ".DBBQEBBD.J.."
+    - ".........B.R."
+    - "............."
+    - "............."
+  # 2
+  - - "............."
+    - ".DBFBEBFD...."
+    - ".B......B...."
+    - ".F......EL.L."
+    - ".S......F...."
+    - ".E......BL.L."
+    - ".B......B...."
+    - ".F......B...."
+    - ".DSETBBSD...."
+    - ".........U..."
+    - "............."
+    - "............."
+  # 3
+  - - "............."
+    - ".DBEBBBFD...."
+    - ".B......B...."
+    - ".E......BL.L."
+    - ".B......F...."
+    - ".B......BL.L."
+    - ".B......E...."
+    - ".F......B...."
+    - ".DBBFBEBD...."
+    - "...V.V......."
+    - "............."
+    - "............."
+  # 4
+  - - "W........X..."
+    - "WDBFBBEFDX..."
+    - "WB......BX..."
+    - "WF......BL.L."
+    - "WB..Y...EXY.."
+    - "WB......BL.L."
+    - "WE......BX..."
+    - "WF......BX..."
+    - "WDBBEBBBDX..."
+    - "W........X..."
+    - "............."
+    - "............."
+  # 5
+  - - "Z........a..."
+    - "Zbbbbbbbba..."
+    - "Z........a..."
+    - "Z........L.L."
+    - "Z........ac.."
+    - "Z........L.L."
+    - "Z........a..."
+    - "Z........a..."
+    - "Zbbbbbbbba..."
+    - "Z........a..."
+    - "............."
+    - "............."
+  # 6
+  - - ".Z......a...."
+    - ".Zbbbbbba...."
+    - ".Z......a...."
+    - ".Z......aL.L."
+    - ".Z......a.c.."
+    - ".Z......aL.L."
+    - ".Z......a...."
+    - ".Z......a...."
+    - ".Zbbbbbba...."
+    - ".Z......a...."
+    - "............."
+    - "............."
+  # 7
+  - - "..Z....a....."
+    - "..Zbbbba....."
+    - "..Z....a....."
+    - "..Z....a.ddd."
+    - "..Z....a..e.."
+    - "..Z....a.ddd."
+    - "..Z....a....."
+    - "..Z....a....."
+    - "..Zbbbba....."
+    - "..Z....a....."
+    - "............."
+    - "............."
+  # 8
+  - - "...Z..a......"
+    - "...Zbba......"
+    - "...Z..a......"
+    - "...Z..a......"
+    - "...Z..a..fff."
+    - "...Z..a......"
+    - "...Z..a......"
+    - "...Z..a......"
+    - "...Zbba......"
+    - "...Z..a......"
+    - "............."
+    - "............."
+  # 9
+  - - "....Za......."
+    - "....Za......."
+    - "....Za......."
+    - "....Za......."
+    - "....Za......."
+    - "....Za......."
+    - "....Za......."
+    - "....Za......."
+    - "....Za......."
+    - "....Za......."
+    - "............."
+    - "............."
+  # 10
+  - - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+  # 11
+  - - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."

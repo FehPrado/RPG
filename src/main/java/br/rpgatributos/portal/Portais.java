@@ -399,6 +399,15 @@ public final class Portais implements Listener, CommandExecutor {
         World w = c.getWorld();
         w.strikeLightningEffect(c);
         w.playSound(c, Sound.BLOCK_END_PORTAL_SPAWN, 3f, 0.7f);
+        // 2.92: um círculo gigante na cor do rank aparece no céu (visto de longe) e outro no chão do portal.
+        org.bukkit.Color corRank = br.rpgatributos.visual.CirculosMagicos.cor(cor(p));
+        int[] fig = vermelho ? new int[]{5, 2} : switch (r) {
+            case E -> new int[]{3, 1}; case D -> new int[]{4, 1}; case C -> new int[]{5, 1};
+            case B -> new int[]{6, 2}; case A -> new int[]{7, 3}; default -> new int[]{8, 3};
+        };
+        plugin.circulosMagicos().ceuEm(c.clone().add(0, 22, 0), r == Rank.S || vermelho ? 11 : 8, 160, corRank,
+                vermelho ? br.rpgatributos.visual.CirculosMagicos.ESCURO : br.rpgatributos.visual.CirculosMagicos.BRANCO, fig[0], fig[1]);
+        plugin.circulosMagicos().chaoEm(c, 2.6, 80, corRank, br.rpgatributos.visual.CirculosMagicos.BRANCO, fig[0], fig[1], 22);
         plugin.getServer().broadcast(Component.text("⛩ Um ", COR)
                 .append(Component.text(nome(p), cor(p), TextDecoration.BOLD))
                 .append(Component.text(" se abriu em " + p.onde() + "! Ele transborda em " + tempo(p.transbordaEm - agora)

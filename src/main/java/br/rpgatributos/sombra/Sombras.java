@@ -241,6 +241,9 @@ public final class Sombras implements Listener, CommandExecutor {
             World w = c.onde.getWorld();
             w.spawnParticle(Particle.SCULK_SOUL, c.onde.clone().add(0, 0.5, 0), 25, 0.4, 0.6, 0.4, 0.04);
             w.spawnParticle(Particle.SQUID_INK, c.onde.clone().add(0, 0.2, 0), 20, 0.5, 0.1, 0.5, 0.02);
+            // 2.92: a sombra sobe de um círculo escuro embaixo do corpo.
+            plugin.circulosMagicos().chaoEm(c.onde.getBlock().getLocation().add(0.5, 0, 0.5), 1.3, 30,
+                    br.rpgatributos.visual.CirculosMagicos.cor(COR), br.rpgatributos.visual.CirculosMagicos.ESCURO, 5, 2, 3);
             if (emCampo(p.getUniqueId()).size() < max && invocar(p, c.soldado, ex.size() - 1, c.onde, nivel) != null) levantados++;
             else guardados++;
         }

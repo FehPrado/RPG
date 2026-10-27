@@ -1308,7 +1308,7 @@ public final class Obras implements Listener {
                 Component.empty(),
                 Component.text("Obras ao mesmo tempo: " + c.obras.size() + " / " + maxObras(c), NamedTextColor.WHITE)), false));
         int i = 0;
-        for (Planta pl : plantas.todas()) {
+        for (Planta pl : plantas.visiveis()) {
             if (i >= SLOTS_LISTA.length) break;
             boolean liberada = c.nivel >= pl.nivel();
             List<Component> lore = new ArrayList<>();

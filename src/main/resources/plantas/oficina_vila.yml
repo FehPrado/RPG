@@ -1,0 +1,182 @@
+# Projeto de construção da colônia (estilo vila, 2.90).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Oficina do Construtor"
+descricao:
+  - "Galpão do Construtor com bancadas, andaime"
+  - "e um telheiro com madeira empilhada."
+icone: CRAFTING_TABLE
+nivel: 1
+efeito: OFICINA
+legenda:
+  "A": "grass_block"
+  "B": "spruce_planks"
+  "C": "dirt_path"
+  "D": "mossy_cobblestone"
+  "E": "cobblestone"
+  "F": "spruce_log[axis=y]"
+  "G": "crafting_table"
+  "H": "smithing_table"
+  "I": "chest[facing=south]"
+  "J": "oak_log[axis=z]"
+  "K": "stonecutter[facing=west]"
+  "L": "lectern[facing=east,has_book=false]"
+  "M": "barrel[facing=west]"
+  "N": "scaffolding[bottom=false,distance=0]"
+  "O": "stripped_spruce_log[axis=x]"
+  "P": "spruce_door[facing=north,half=lower,hinge=left]"
+  "Q": "spruce_door[facing=north,half=lower,hinge=right]"
+  "R": "packed_mud"
+  "S": "spruce_door[facing=north,half=upper,hinge=left]"
+  "T": "spruce_door[facing=north,half=upper,hinge=right]"
+  "U": "glass_pane"
+  "V": "lantern[hanging=true]"
+  "W": "spruce_stairs[facing=north,half=top]"
+  "X": "spruce_slab[type=bottom]"
+  "Y": "spruce_stairs[facing=south,half=top]"
+  "Z": "spruce_stairs[facing=south,half=bottom]"
+  "a": "spruce_stairs[facing=north,half=bottom]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 40
+    portas: 1
+    luz: 1
+    coberto: 70
+    itens:
+      crafting_table: 1
+  - blocos: 80
+    portas: 1
+    luz: 2
+    coberto: 80
+    itens:
+      crafting_table: 1
+      chest: 1
+  - blocos: 140
+    portas: 1
+    luz: 3
+    coberto: 85
+    itens:
+      crafting_table: 2
+      chest: 1
+camadas:
+  # 0
+  - - "AAAAAAAAAAAAA"
+    - "ABBBBBBBBCCCA"
+    - "ABBBBBBBBCCCA"
+    - "ABBBBBBBBCCCA"
+    - "ABBBBBBBBCCCA"
+    - "ABBBBBBBBCCCA"
+    - "ABBBBBBBBCCCA"
+    - "ABBBBBBBBCCCA"
+    - "ABBBBBBBBCCCA"
+    - "AAAAAAAAAAAAA"
+    - "AAAAAAAAAAAAA"
+  # 1
+  - - "............."
+    - ".DEEEEDEE..F."
+    - ".EGGH.IIE.J.."
+    - ".E......D.J.."
+    - ".E.....KE.JF."
+    - ".EL....ME...."
+    - ".DN.....E.O.."
+    - ".E......E.B.."
+    - ".EEDPQEED..F."
+    - "............."
+    - "............."
+  # 2
+  - - "............."
+    - ".FRRFRRFF..F."
+    - ".R......R.J.."
+    - ".R......R.J.."
+    - ".F......F.JF."
+    - ".R......R...."
+    - ".RN.....R...."
+    - ".F......F...."
+    - ".FRRSTRFF..F."
+    - "............."
+    - "............."
+  # 3
+  - - "............."
+    - ".FRRFRRFF..F."
+    - ".R......R...."
+    - ".R......R...."
+    - ".U......F..F."
+    - ".U......R.V.."
+    - ".R......R...."
+    - ".F......F...."
+    - ".FURFRRUF..F."
+    - "............."
+    - "............."
+  # 4
+  - - "WWWWWWWWWXXX."
+    - ".FRRFRRFFXXX."
+    - ".R......RXXX."
+    - ".R......RXXX."
+    - ".F..V...BXXX."
+    - ".R......RXXX."
+    - ".R......RXXX."
+    - ".F......FXXX."
+    - ".FRRFRRFFXXX."
+    - "YYYYYYYYYXXX."
+    - "............."
+  # 5
+  - - "ZZZZZZZZZZ..."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - "aaaaaaaaaa..."
+    - "............."
+  # 6
+  - - "............."
+    - "ZZZZZZZZZZ..."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - "aaaaaaaaaa..."
+    - "............."
+    - "............."
+  # 7
+  - - "............."
+    - "............."
+    - "ZZZZZZZZZZ..."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - ".R......R...."
+    - "aaaaaaaaaa..."
+    - "............."
+    - "............."
+    - "............."
+  # 8
+  - - "............."
+    - "............."
+    - "............."
+    - "ZZZZZZZZZZ..."
+    - ".R......R...."
+    - ".R......R...."
+    - "aaaaaaaaaa..."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+  # 9
+  - - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "ZZZZZZZZZZ..."
+    - "aaaaaaaaaa..."
+    - "............."
+    - "............."
+    - "............."
+    - "............."
+    - "............."

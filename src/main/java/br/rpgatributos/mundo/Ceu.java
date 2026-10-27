@@ -174,6 +174,7 @@ public final class Ceu implements Listener {
         if (fase(w) == 0) {
             if (rnd().nextDouble() < plugin.settings().ceuChanceSangue) {
                 luaDeSangue = true;
+                plugin.circulosMagicos().ceuParaTodos(w, br.rpgatributos.visual.CirculosMagicos.SANGUE, br.rpgatributos.visual.CirculosMagicos.ESCURO, 5, 2);
                 anunciar("☾ LUA DE SANGUE ☾", "Monstros mais fortes, mais Elites e o dobro de XP esta noite", NamedTextColor.DARK_RED,
                         Sound.ENTITY_WITHER_SPAWN);
             } else {
@@ -238,7 +239,28 @@ public final class Ceu implements Listener {
         double a = rnd().nextDouble(Math.PI * 2), d = rnd().nextDouble(30, 80);
         int x = (int) (p.getLocation().getX() + Math.cos(a) * d), z = (int) (p.getLocation().getZ() + Math.sin(a) * d);
         if (!w.isChunkLoaded(x >> 4, z >> 4)) return;
-        Block chao = w.getHighestBlockAt(x, z);
+        cair(w, w.getHighestBlockAt(x, z), b -> plugin.territorios().em(b.getLocation()) == null);
+    }
+
+    /**
+     * 2.89: a Chuva de Meteoros do Altar da Convergência. 12 meteoros, um a cada 5 s, de 12 a 40
+     * blocos do altar; os meteoritos podem ficar no território de quem chamou.
+     */
+    public void meteorosEm(Location centro, java.util.UUID quem) {
+        World w = centro.getWorld();
+        int[] n = {0};
+        plugin.getServer().getScheduler().runTaskTimer(plugin, tarefa -> {
+            if (++n[0] > 12 || !centro.isChunkLoaded()) { tarefa.cancel(); return; }
+            double a = rnd().nextDouble(Math.PI * 2), d = rnd().nextDouble(12, 40);
+            int x = (int) (centro.getX() + Math.cos(a) * d), z = (int) (centro.getZ() + Math.sin(a) * d);
+            if (!w.isChunkLoaded(x >> 4, z >> 4)) return;
+            cair(w, w.getHighestBlockAt(x, z), b -> plugin.territorios().em(b.getLocation()) == null
+                    || plugin.territorios().podeConstruir(quem, b.getLocation()));
+        }, 20L, 100L);
+    }
+
+    /** O meteoro cai do céu em cima do {@code chao}; se {@code pode}, vira um meteorito (bloco de magma). */
+    private void cair(World w, Block chao, java.util.function.Predicate<Block> pode) {
         Location alvo = chao.getLocation().add(0.5, 1, 0.5);
         Location ceu = alvo.clone().add(rnd().nextDouble(-20, 20), 70, rnd().nextDouble(-20, 20));
         Vector passo = alvo.toVector().subtract(ceu.toVector()).multiply(1 / 30.0);
@@ -252,7 +274,7 @@ public final class Ceu implements Listener {
                 w.spawnParticle(Particle.EXPLOSION_EMITTER, alvo, 1);
                 w.playSound(alvo, Sound.ENTITY_GENERIC_EXPLODE, 2f, 0.6f);
                 Block b = alvo.getBlock();
-                if (b.isEmpty() && !chao.isLiquid() && plugin.territorios().em(b.getLocation()) == null) {
+                if (b.isEmpty() && !chao.isLiquid() && pode.test(b)) {
                     b.setType(Material.MAGMA_BLOCK);
                     meteoritos.put(b.getLocation(), System.currentTimeMillis() + 20 * 60_000L);
                 }
@@ -279,6 +301,7 @@ public final class Ceu implements Listener {
 
     public void comecarEclipse(World w) {
         eclipse = true;
+        plugin.circulosMagicos().ceuParaTodos(w, org.bukkit.Color.fromRGB(0x6A1B9A), org.bukkit.Color.fromRGB(0xFFB74D), 6, 2);
         eclipseAte = segundos + 150;
         w.setTime(18000);
         ultimaHora = 18000;
@@ -400,6 +423,7 @@ public final class Ceu implements Listener {
 
     public void forcarLuaDeSangue() {
         luaDeSangue = true;
+        plugin.circulosMagicos().ceuParaTodos(mundo(), br.rpgatributos.visual.CirculosMagicos.SANGUE, br.rpgatributos.visual.CirculosMagicos.ESCURO, 5, 2);
         anunciar("☾ LUA DE SANGUE ☾", "Monstros mais fortes, mais Elites e o dobro de XP esta noite", NamedTextColor.DARK_RED, Sound.ENTITY_WITHER_SPAWN);
     }
 

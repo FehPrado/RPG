@@ -166,6 +166,7 @@ public final class RPGAtributos extends JavaPlugin {
     private Acessorios acessorios;
     private GuardaRoupa guardaRoupa;
     private br.rpgatributos.visual.AnimacoesMagicas animacoesMagicas;
+    private br.rpgatributos.visual.CirculosMagicos circulosMagicos;
     private br.rpgatributos.visual.Decoracoes decoracoes;
     private br.rpgatributos.visual.Embelezamento embelezamento;
     private Colonias colonias;
@@ -266,6 +267,8 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.ritual.AltarPedestais altarConvergencia;
     private br.rpgatributos.ritual.Guardioes guardioes;
     private br.rpgatributos.ritual.RituaisMundo rituaisMundo;
+    private br.rpgatributos.ritual.Lembrancas lembrancas;
+    private br.rpgatributos.ritual.CirculoArcano circuloArcano;
     private ModoTeste modoTeste;
     private br.rpgatributos.detalhes.Cobre cobre;
     private br.rpgatributos.ajuda.Boasvindas boasvindas;
@@ -359,6 +362,8 @@ public final class RPGAtributos extends JavaPlugin {
         altarConvergencia = new br.rpgatributos.ritual.AltarPedestais(this);
         guardioes = new br.rpgatributos.ritual.Guardioes(this);
         rituaisMundo = new br.rpgatributos.ritual.RituaisMundo(this);
+        lembrancas = new br.rpgatributos.ritual.Lembrancas(this);
+        circuloArcano = new br.rpgatributos.ritual.CirculoArcano(this);
         modoTeste = new ModoTeste(this);
         cobre = new br.rpgatributos.detalhes.Cobre(this);
         boasvindas = new br.rpgatributos.ajuda.Boasvindas(this);
@@ -411,6 +416,7 @@ public final class RPGAtributos extends JavaPlugin {
         acessorios = new Acessorios(this);
         guardaRoupa = new GuardaRoupa(this);
         animacoesMagicas = new br.rpgatributos.visual.AnimacoesMagicas(this);
+        circulosMagicos = new br.rpgatributos.visual.CirculosMagicos(this);
         decoracoes = new br.rpgatributos.visual.Decoracoes(this);
         embelezamento = new br.rpgatributos.visual.Embelezamento(this);
         colonias = new Colonias(this);
@@ -545,6 +551,8 @@ public final class RPGAtributos extends JavaPlugin {
         getServer().getPluginManager().registerEvents(altarConvergencia, this);
         getServer().getPluginManager().registerEvents(guardioes, this);
         getServer().getPluginManager().registerEvents(rituaisMundo, this);
+        getServer().getPluginManager().registerEvents(lembrancas, this);
+        getServer().getPluginManager().registerEvents(circuloArcano, this);
         getServer().getPluginManager().registerEvents(modoTeste, this);
         modoTeste.iniciar();
         elevadores.iniciar();
@@ -707,6 +715,8 @@ public final class RPGAtributos extends JavaPlugin {
         guardioes.iniciar();
         agenda.runTaskTimer(this, guardioes::tick, 2L, 2L);
         agenda.runTaskTimer(this, rituaisMundo::tick, 100L, 100L);
+        circuloArcano.iniciar();
+        agenda.runTaskTimer(this, circuloArcano::tick, 5L, 5L);
         agenda.runTaskTimer(this, masmorras::construir, 1L, 1L);
         agenda.runTaskTimer(this, masmorras::tickPortais, 5L, 5L);
         agenda.runTaskTimer(this, masmorras::tick, 10L, 10L);
@@ -727,6 +737,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, guardaRoupa::tick, 40L, 40L);
         registrar(decoracoes, embelezamento);
         agenda.runTaskTimer(this, animacoesMagicas::tick, 2L, 2L);
+        agenda.runTaskTimer(this, circulosMagicos::tick, 2L, 2L);
         agenda.runTaskTimer(this, embelezamento::tick, 2L, 2L);
         // Colônias: Prefeituras (5 ticks) e turnos de trabalho (1 segundo).
         prefeituras.iniciar();
@@ -839,8 +850,11 @@ public final class RPGAtributos extends JavaPlugin {
         if (utilidades != null) utilidades.desligar();
         if (carrocas != null) carrocas.desligar();
         if (altarConvergencia != null) altarConvergencia.desligar();
+        if (guardioes != null) guardioes.desligar();
+        if (circuloArcano != null) circuloArcano.desligar();
         if (guardaRoupa != null) guardaRoupa.desfazerTodos();
         if (animacoesMagicas != null) animacoesMagicas.parar();
+        if (circulosMagicos != null) circulosMagicos.parar();
         if (embelezamento != null) embelezamento.parar();
         if (racas != null) racas.asas().fecharTodas();
         if (acessorios != null) acessorios.apagarTodas();
@@ -979,6 +993,8 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.ritual.AltarPedestais altarConvergencia() { return altarConvergencia; }
     public br.rpgatributos.ritual.Guardioes guardioes() { return guardioes; }
     public br.rpgatributos.ritual.RituaisMundo rituaisMundo() { return rituaisMundo; }
+    public br.rpgatributos.ritual.Lembrancas lembrancas() { return lembrancas; }
+    public br.rpgatributos.ritual.CirculoArcano circuloArcano() { return circuloArcano; }
     public ModoTeste modoTeste() { return modoTeste; }
     public Classes classes() { return classes; }
     public Provas provas() { return provas; }
@@ -992,6 +1008,7 @@ public final class RPGAtributos extends JavaPlugin {
     public Acessorios acessorios() { return acessorios; }
     public GuardaRoupa guardaRoupa() { return guardaRoupa; }
     public br.rpgatributos.visual.AnimacoesMagicas animacoesMagicas() { return animacoesMagicas; }
+    public br.rpgatributos.visual.CirculosMagicos circulosMagicos() { return circulosMagicos; }
     public br.rpgatributos.visual.Decoracoes decoracoes() { return decoracoes; }
     public br.rpgatributos.visual.Embelezamento embelezamento() { return embelezamento; }
     public Colonias colonias() { return colonias; }
@@ -1084,7 +1101,7 @@ public final class RPGAtributos extends JavaPlugin {
                 || fogueiras.eh(b) || bonecos.eh(b) || pedrasAmolar.eh(b) || bebedouros.eh(b) || comedouros.eh(b) || estabulos.eh(b) || trofeus.eh(b) || mesasCartografo.eh(b)
                 || canteiros.eh(b) || colmeias.eh(b) || barris.eh(b) || tachos.eh(b) || cabanasPesca.eh(b) || ateliers.eh(b)
                 || (mesasInscricao != null && mesasInscricao.eh(b)) || (muraisReliquias != null && muraisReliquias.eh(b))
-                || (altarConvergencia != null && altarConvergencia.eh(b));
+                || (altarConvergencia != null && altarConvergencia.eh(b)) || (circuloArcano != null && circuloArcano.eh(b));
     }
 
     /**

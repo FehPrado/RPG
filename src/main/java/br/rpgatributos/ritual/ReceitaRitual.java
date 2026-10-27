@@ -58,16 +58,22 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
         }
     }
 
-    /** O que um pedestal precisa ter: um item comum do jogo ou um material raro do plugin. */
-    public record Ingrediente(Material material, Raro raro, int qtd) {
+    /**
+     * O que um pedestal precisa ter: um item comum do jogo, um material raro do plugin ou (2.89)
+     * qualquer item que passe no {@code teste} (um item encantado, um Selo...).
+     */
+    public record Ingrediente(Material material, Raro raro, int qtd, Predicate<ItemStack> teste, String nomeTeste) {
+        Ingrediente(Material material, Raro raro, int qtd) { this(material, raro, qtd, null, null); }
+
         boolean serve(ItemStack i) {
             if (i == null || i.isEmpty() || i.getAmount() < qtd) return false;
+            if (teste != null) return teste.test(i);
             if (raro != null) return Raro.de(i) == raro;
             return i.getType() == material && (!i.hasItemMeta() || i.getItemMeta().getPersistentDataContainer().getKeys().isEmpty());
         }
 
         String nomeBonito() {
-            return qtd + "x " + (raro != null ? raro.nome() : bonito(material));
+            return qtd + "x " + (teste != null ? nomeTeste : raro != null ? raro.nome() : bonito(material));
         }
     }
 
@@ -79,24 +85,38 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
         void aplicar(RPGAtributos plugin, Location altar, Player quem, List<Player> grupo);
 
         default String impedimento(RPGAtributos plugin, Location altar, Player quem) { return null; }
+
+        /** 2.89: os efeitos que dependem do catalisador (a coleira do companheiro) usam estes. */
+        default void aplicar(RPGAtributos plugin, Location altar, Player quem, List<Player> grupo, ItemStack catalisador) {
+            aplicar(plugin, altar, quem, grupo);
+        }
+
+        default String impedimento(RPGAtributos plugin, Location altar, Player quem, ItemStack catalisador) {
+            return impedimento(plugin, altar, quem);
+        }
     }
 
     /**
      * @param comPedestais resultado que depende do que estava nos pedestais (na ordem dos ingredientes)
-     * @param nivelAltar   nível mínimo do altar (2 = com a segunda volta de pedestais)
+     * @param nivelAltar   nível mínimo do altar (2 = segunda volta de pedestais, 3 = terceira)
      * @param jogadores    quantos jogadores, cada um com o catalisador na mão
      * @param oculta       não aparece no Grimório (as elevações de guardião, mostradas de forma resumida)
+     * @param porque       por que os pedestais não servem para esse catalisador (ou null se servem)
+     * @param sobras       itens que voltam junto com o resultado (o item de onde saíram os encantamentos)
      */
     public record Extra(Sacrificio sacrificio, Efeito efeito, BiFunction<ItemStack, List<ItemStack>, ItemStack> comPedestais,
-                        int nivelAltar, int jogadores, boolean oculta) {
-        static final Extra NADA = new Extra(null, null, null, 1, 1, false);
+                        int nivelAltar, int jogadores, boolean oculta, BiFunction<ItemStack, List<ItemStack>, String> porque,
+                        BiFunction<ItemStack, List<ItemStack>, List<ItemStack>> sobras) {
+        static final Extra NADA = new Extra(null, null, null, 1, 1, false, null, null);
 
-        Extra sac(EntityType t, int q, String nome) { return new Extra(new Sacrificio(t, q, nome), efeito, comPedestais, nivelAltar, jogadores, oculta); }
-        Extra efeito(Efeito e) { return new Extra(sacrificio, e, comPedestais, nivelAltar, jogadores, oculta); }
-        Extra comPedestais(BiFunction<ItemStack, List<ItemStack>, ItemStack> f) { return new Extra(sacrificio, efeito, f, nivelAltar, jogadores, oculta); }
-        Extra nivel(int n) { return new Extra(sacrificio, efeito, comPedestais, n, jogadores, oculta); }
-        Extra grupo(int n) { return new Extra(sacrificio, efeito, comPedestais, nivelAltar, n, oculta); }
-        Extra escondida() { return new Extra(sacrificio, efeito, comPedestais, nivelAltar, jogadores, true); }
+        Extra sac(EntityType t, int q, String nome) { return new Extra(new Sacrificio(t, q, nome), efeito, comPedestais, nivelAltar, jogadores, oculta, porque, sobras); }
+        Extra efeito(Efeito e) { return new Extra(sacrificio, e, comPedestais, nivelAltar, jogadores, oculta, porque, sobras); }
+        Extra comPedestais(BiFunction<ItemStack, List<ItemStack>, ItemStack> f) { return new Extra(sacrificio, efeito, f, nivelAltar, jogadores, oculta, porque, sobras); }
+        Extra nivel(int n) { return new Extra(sacrificio, efeito, comPedestais, n, jogadores, oculta, porque, sobras); }
+        Extra grupo(int n) { return new Extra(sacrificio, efeito, comPedestais, nivelAltar, n, oculta, porque, sobras); }
+        Extra escondida() { return new Extra(sacrificio, efeito, comPedestais, nivelAltar, jogadores, true, porque, sobras); }
+        Extra porque(BiFunction<ItemStack, List<ItemStack>, String> f) { return new Extra(sacrificio, efeito, comPedestais, nivelAltar, jogadores, oculta, f, sobras); }
+        Extra sobras(BiFunction<ItemStack, List<ItemStack>, List<ItemStack>> f) { return new Extra(sacrificio, efeito, comPedestais, nivelAltar, jogadores, oculta, porque, f); }
     }
 
     ReceitaRitual com(Extra e) {
@@ -106,7 +126,8 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
 
     /** Se falhar, o catalisador volta (equipamento, relíquia, selo): só os pedestais se perdem. */
     boolean devolveCatalisadorAoFalhar() {
-        return categoria == Categoria.INFUNDIR || unica || extra.comPedestais() != null || extra.oculta();
+        return categoria == Categoria.INFUNDIR || unica || extra.comPedestais() != null || extra.oculta()
+                || (categoria == Categoria.INVOCAR && extra.efeito() != null);
     }
 
     public static final NamespacedKey K_INFUSOES = new NamespacedKey("rpgatributos", "infusoes_altar");
@@ -199,6 +220,11 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
 
     /** Relíquia única: o item na mão vira uma peça lendária com encantamentos acima do normal. */
     private static ReceitaRitual reliquia(String nome, Material base, Map<Enchantment, Integer> encantos, String desc, Ingrediente... peds) {
+        return reliquia(nome, base, encantos, desc, 2, peds);
+    }
+
+    private static ReceitaRitual reliquia(String nome, Material base, Map<Enchantment, Integer> encantos, String desc, int nivelAltar,
+                                          Ingrediente... peds) {
         return new ReceitaRitual(nome, Categoria.RARO, base, s -> s.getType() == base && !s.getPersistentDataContainer().has(K_RELIQUIA),
                 bonito(base), 1, List.of(peds),
                 s -> {
@@ -219,7 +245,82 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
                         m.getPersistentDataContainer().set(K_RELIQUIA, PersistentDataType.STRING, nome);
                     });
                     return r;
-                }, s -> null, desc, null, true, Extra.NADA.nivel(2));
+                }, s -> null, desc, null, true, Extra.NADA.nivel(nivelAltar));
+    }
+
+    // =====================================================================
+    //  2.89: transferir encantamentos, fundir guardiões, trazer de volta
+    // =====================================================================
+
+    /** Os encantamentos da origem que o alvo pode receber (sem maldição, sem briga, só os que sobem de nível). */
+    static Map<Enchantment, Integer> transferiveis(ItemStack alvo, ItemStack origem) {
+        Map<Enchantment, Integer> m = new LinkedHashMap<>();
+        ItemStack tipo = new ItemStack(alvo.getType());
+        for (Map.Entry<Enchantment, Integer> en : origem.getEnchantments().entrySet()) {
+            Enchantment e = en.getKey();
+            if (e.isCursed() || !e.canEnchantItem(tipo) || en.getValue() <= alvo.getEnchantmentLevel(e)) continue;
+            boolean briga = false;
+            for (Enchantment outro : alvo.getEnchantments().keySet()) if (outro != e && outro.conflictsWith(e)) briga = true;
+            for (Enchantment outro : m.keySet()) if (outro.conflictsWith(e)) briga = true;
+            if (!briga) m.put(e, en.getValue());
+        }
+        return m;
+    }
+
+    /**
+     * Transferir: os encantamentos do item no pedestal passam para o da mão. O livro é a ponte;
+     * a origem volta junto, sem os encantamentos que passaram.
+     */
+    private static ReceitaRitual transferir() {
+        Predicate<ItemStack> origem = s -> !s.getEnchantments().isEmpty() && !s.getPersistentDataContainer().has(K_RELIQUIA);
+        return new ReceitaRitual("Transferir Encantamentos", Categoria.INFUNDIR, Material.BOOK,
+                s -> s.getType().getMaxStackSize() == 1 && s.getType() != Material.ENCHANTED_BOOK && !s.getPersistentDataContainer().has(K_RELIQUIA),
+                "O item que vai receber os encantamentos", 1,
+                List.of(new Ingrediente(null, null, 1, origem, "Item encantado (a origem)"), i(Material.BOOK, 1),
+                        i(Material.LAPIS_BLOCK, 2), i(Material.EXPERIENCE_BOTTLE, 8)),
+                s -> s.clone(), s -> null,
+                "Os encantamentos do item no pedestal passam para o da mão (o livro é a ponte). A origem volta sem eles.", null, false,
+                Extra.NADA
+                        .porque((s, peds) -> transferiveis(s, peds.getFirst()).isEmpty()
+                                ? "Nenhum encantamento desse item serve (ou sobe de nível) no " + bonito(s.getType()).toLowerCase() + "." : null)
+                        .comPedestais((s, peds) -> {
+                            Map<Enchantment, Integer> m = transferiveis(s, peds.getFirst());
+                            if (m.isEmpty()) return null;
+                            ItemStack r = s.clone();
+                            r.setAmount(1);
+                            m.forEach(r::addUnsafeEnchantment);
+                            return r;
+                        })
+                        .sobras((s, peds) -> {
+                            ItemStack o = peds.getFirst().clone();
+                            o.setAmount(1);
+                            for (Enchantment e : transferiveis(s, peds.getFirst()).keySet()) o.removeEnchantment(e);
+                            return List.of(o);
+                        }));
+    }
+
+    /** Fundir: o Selo da mão (corpo e trabalho) recebe a função de apoio do Selo do pedestal. */
+    private static ReceitaRitual fundir() {
+        return new ReceitaRitual("Fundir Guardiões", Categoria.GUARDIAO, Material.LODESTONE, s -> Guardioes.tipoSelo(s) != null,
+                "O Selo do guardião que fica com o corpo", 1,
+                List.of(new Ingrediente(null, null, 1, s -> Guardioes.tipoSelo(s) != null, "Selo do guardião de apoio"),
+                        r(Raro.ALMA_DESPERTA, 1), i(Material.AMETHYST_BLOCK, 4), i(Material.DIAMOND_BLOCK, 1)),
+                s -> s.clone(), s -> null,
+                "Dois viram um: o corpo e o trabalho do Selo da mão, mais a função do outro (Espírito, Torre, Curandeiro, Vigia ou Ferreiro). "
+                        + "Fica com o maior nível e 25% mais vida.", null, false,
+                Extra.NADA.nivel(2)
+                        .porque((s, peds) -> Guardioes.porqueNaoFunde(s, peds.getFirst()))
+                        .comPedestais((s, peds) -> Guardioes.fundir(s, peds.getFirst())));
+    }
+
+    /** Trazer de volta: a coleira (ou uma etiqueta com o nome) traz o companheiro morto, com o nível e a evolução dele. */
+    private static ReceitaRitual trazerDeVolta() {
+        return new ReceitaRitual("Trazer de Volta", Categoria.INVOCAR, Material.LEAD, Lembrancas::serveDeCatalisador,
+                "A coleira do companheiro (ou etiqueta com o nome dele)", 1,
+                List.of(i(Material.GOLDEN_APPLE, 2), i(Material.GHAST_TEAR, 2), i(Material.BONE_BLOCK, 4), i(Material.GLISTERING_MELON_SLICE, 8)),
+                s -> null, s -> null,
+                "O companheiro que morreu volta do altar com o nível e a evolução (os componentes ficaram no chão quando ele morreu).",
+                null, false, Extra.NADA.efeito(Lembrancas.efeito()));
     }
 
     /**
@@ -370,6 +471,7 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
             infundir("Arco Certeiro", Enchantment.POWER, 7, "Arco",
                     "Força +1 (até VII).", i(Material.ARROW, 32), i(Material.STRING, 16), i(Material.GLOWSTONE_DUST, 16)),
             eterna(),
+            transferir(),
 
             // Raros: itens que o jogo quase não dá, e as relíquias (uma de cada por jogador, altar nível II).
             raro("Totem da Imortalidade", Material.GOLD_BLOCK, 1, Material.TOTEM_OF_UNDYING, () -> new ItemStack(Material.TOTEM_OF_UNDYING),
@@ -405,6 +507,28 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
                     r(Raro.ALMA_DESPERTA, 2), r(Raro.ESSENCIA_PRIMORDIAL, 1), i(Material.SPECTRAL_ARROW, 32), i(Material.BREEZE_ROD, 4)),
             reforjar(),
 
+            // 2.89: lendárias do altar nível III (24 pedestais).
+            raro("Ovo do Dragão", Material.DRAGON_HEAD, 1, Material.DRAGON_EGG, () -> new ItemStack(Material.DRAGON_EGG),
+                    "Um segundo ovo, chocado no ponto onde tudo se encontra.", i(Material.END_CRYSTAL, 4), i(Material.DRAGON_BREATH, 8),
+                    r(Raro.ALMA_DESPERTA, 2), r(Raro.ESSENCIA_PRIMORDIAL, 1), i(Material.OBSIDIAN, 32))
+                    .com(Extra.NADA.nivel(3).sac(EntityType.ENDERMAN, 2, "2 endermen")),
+            reliquia("Tridente da Convergência", Material.TRIDENT,
+                    enc(Enchantment.IMPALING, 7, Enchantment.LOYALTY, 4, Enchantment.CHANNELING, 1, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1),
+                    "O mar e o céu respondem ao mesmo chamado.", 3,
+                    r(Raro.ALMA_DESPERTA, 3), r(Raro.ESSENCIA_PRIMORDIAL, 2), i(Material.NETHER_STAR, 1), i(Material.HEART_OF_THE_SEA, 1),
+                    i(Material.PRISMARINE_CRYSTALS, 32)),
+            reliquia("Maça da Convergência", Material.MACE,
+                    enc(Enchantment.DENSITY, 7, Enchantment.WIND_BURST, 3, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1),
+                    "Quanto mais alto o salto, mais fundo o golpe.", 3,
+                    r(Raro.ALMA_DESPERTA, 3), r(Raro.ESSENCIA_PRIMORDIAL, 2), i(Material.NETHER_STAR, 1), i(Material.HEAVY_CORE, 1),
+                    i(Material.BREEZE_ROD, 8)),
+            reliquia("Botas da Convergência", Material.NETHERITE_BOOTS,
+                    enc(Enchantment.PROTECTION, 6, Enchantment.FEATHER_FALLING, 6, Enchantment.DEPTH_STRIDER, 3, Enchantment.SOUL_SPEED, 4,
+                            Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1),
+                    "Nenhum chão é longe demais.", 3,
+                    r(Raro.ALMA_DESPERTA, 3), r(Raro.ESSENCIA_PRIMORDIAL, 2), i(Material.NETHER_STAR, 1), i(Material.PHANTOM_MEMBRANE, 16),
+                    i(Material.RABBIT_FOOT, 4)),
+
             // Invocações maiores: o chefe Desperto (a oferenda do Altar Ritualístico, reforçada).
             invocar(Chefe.GOLEM, "Golem Ancestral Desperto", i(Material.IRON_BLOCK, 8), i(Material.CARVED_PUMPKIN, 1), i(Material.DIAMOND, 2)),
             invocar(Chefe.RAINHA, "Rainha Aracnídea Desperta", i(Material.SPIDER_EYE, 16), i(Material.STRING, 32), i(Material.FERMENTED_SPIDER_EYE, 4)),
@@ -414,6 +538,7 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
             invocar(Chefe.TEMPESTADE, "Tempestade Viva Desperta", i(Material.BREEZE_ROD, 6), i(Material.WIND_CHARGE, 16), i(Material.FEATHER, 16)),
             invocar(Chefe.ARAUTO, "Arauto do Fim Desperto", i(Material.NETHER_STAR, 1), i(Material.ECHO_SHARD, 8), i(Material.DRAGON_BREATH, 2), i(Material.END_CRYSTAL, 1))
                     .com(Extra.NADA.nivel(2).grupo(2).sac(EntityType.ENDERMAN, 1, "1 enderman")),
+            trazerDeVolta(),
 
             // Guardiões e ajudantes: o Selo põe o guardião onde você clicar.
             selo(Guardioes.Tipo.ESPIRITO, Material.ENDER_EYE, i(Material.AMETHYST_BLOCK, 4), i(Material.BLAZE_ROD, 4), i(Material.REDSTONE_BLOCK, 2), i(Material.IRON_BLOCK, 2)),
@@ -426,10 +551,16 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
             selo(Guardioes.Tipo.CURANDEIRO, Material.GLISTERING_MELON_SLICE, i(Material.AMETHYST_BLOCK, 2), i(Material.GOLDEN_APPLE, 2), i(Material.GHAST_TEAR, 1), i(Material.HONEY_BOTTLE, 4)),
             selo(Guardioes.Tipo.TORRE, Material.BLAZE_ROD, i(Material.AMETHYST_BLOCK, 4), i(Material.MAGMA_BLOCK, 8), i(Material.FIRE_CHARGE, 16), i(Material.OBSIDIAN, 8))
                     .com(Extra.NADA.sac(EntityType.BLAZE, 1, "1 blaze")),
+            selo(Guardioes.Tipo.PESCADOR, Material.CARVED_PUMPKIN, i(Material.IRON_BLOCK, 4), i(Material.FISHING_ROD, 1), i(Material.COD, 16), i(Material.CHEST, 1)),
+            selo(Guardioes.Tipo.APICULTOR, Material.HONEYCOMB, i(Material.BEEHIVE, 1), i(Material.HONEY_BLOCK, 2), i(Material.DANDELION, 8), i(Material.CAMPFIRE, 1)),
+            selo(Guardioes.Tipo.FERREIRO, Material.CARVED_PUMPKIN, i(Material.IRON_BLOCK, 6), i(Material.ANVIL, 1), i(Material.BLAST_FURNACE, 1), i(Material.GRINDSTONE, 1)),
+            selo(Guardioes.Tipo.COLETOR, Material.NOTE_BLOCK, i(Material.AMETHYST_BLOCK, 2), i(Material.HOPPER, 4), i(Material.CHEST, 2), i(Material.ENDER_PEARL, 4)),
+            selo(Guardioes.Tipo.VIGIA, Material.SPYGLASS, i(Material.BELL, 1), i(Material.REDSTONE_LAMP, 4), i(Material.IRON_BLOCK, 2), i(Material.FEATHER, 16)),
             guardiao("Asas de Guardião", Material.PHANTOM_MEMBRANE, 4, Material.ELYTRA, Guardioes::asas,
                     "Clique no seu guardião com elas: ele passa a voar.", i(Material.FEATHER, 32), i(Material.BREEZE_ROD, 2), i(Material.AMETHYST_SHARD, 8)),
             guardiao("Cetro de Comando", Material.BLAZE_ROD, 1, Material.BLAZE_ROD, Guardioes::cetro,
                     "Clique no seu guardião: ele passa a seguir você, ou fica de posto onde está.", i(Material.AMETHYST_SHARD, 8), i(Material.GOLD_INGOT, 4), i(Material.STRING, 4)),
+            fundir(),
 
             // Céu, território e altar.
             mundo("Chamar a Chuva", Material.WATER_BUCKET, 1, Material.WATER_BUCKET, "Uma tempestade por 10 minutos.",
@@ -455,7 +586,22 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
             mundo("Despertar o Altar", Material.NETHER_STAR, 1, Material.END_CRYSTAL,
                     "O altar sobe para o nível II: uma segunda volta de 8 pedestais (a 5 blocos) e as receitas mais fortes.",
                     RituaisMundo.despertarAltar(), i(Material.CRYING_OBSIDIAN, 8), r(Raro.ALMA_DESPERTA, 2), i(Material.LAPIS_BLOCK, 8), i(Material.END_CRYSTAL, 2))
-                    .com(Extra.NADA.efeito(RituaisMundo.despertarAltar()).sac(EntityType.COW, 2, "2 vacas"))));
+                    .com(Extra.NADA.efeito(RituaisMundo.despertarAltar()).sac(EntityType.COW, 2, "2 vacas")),
+            mundo("Ascender o Altar", Material.NETHER_STAR, 2, Material.BEACON,
+                    "O altar sobe para o nível III: uma terceira volta de 8 pedestais (a 7 blocos) e as receitas lendárias.",
+                    RituaisMundo.ascenderAltar(), r(Raro.ALMA_DESPERTA, 4), r(Raro.ESSENCIA_PRIMORDIAL, 1), i(Material.BEACON, 1),
+                    i(Material.CRYING_OBSIDIAN, 16), i(Material.END_CRYSTAL, 4), i(Material.ECHO_SHARD, 8))
+                    .com(Extra.NADA.efeito(RituaisMundo.ascenderAltar()).nivel(2).sac(EntityType.ENDERMAN, 2, "2 endermen")),
+            mundo("Chuva de Meteoros", Material.SPYGLASS, 1, Material.MAGMA_BLOCK,
+                    "Por 1 minuto, meteoritos caem em volta do altar (de 12 a 40 blocos). Quebre as pedras para pegar o que trazem.",
+                    RituaisMundo.meteoros(), i(Material.MAGMA_BLOCK, 16), i(Material.IRON_BLOCK, 2), i(Material.GOLD_BLOCK, 1), i(Material.FIRE_CHARGE, 8))
+                    .com(Extra.NADA.efeito(RituaisMundo.meteoros()).nivel(2)),
+            mundo("Abrir um Portal", Material.ENDER_EYE, 1, Material.END_PORTAL_FRAME,
+                    "Um portal do seu rank de caçador se abre perto do altar (5% de sair Vermelho). Você tem 30 s para entrar antes dos outros. Um a cada 6 horas.",
+                    RituaisMundo.portal(), i(Material.OBSIDIAN, 8), i(Material.AMETHYST_BLOCK, 4), i(Material.ENDER_PEARL, 4), i(Material.LAPIS_BLOCK, 2)),
+            mundo("Chamar o Mercador", Material.EMERALD, 16, Material.LEAD,
+                    "O Mercador Itinerante arma a tenda perto de você agora.",
+                    RituaisMundo.mercador(), i(Material.LEAD, 2), i(Material.HAY_BLOCK, 4), i(Material.EMERALD_BLOCK, 1))));
         l.addAll(elevacoes());
         return List.copyOf(l);
     }
@@ -469,7 +615,7 @@ public record ReceitaRitual(String nome, Categoria categoria, Material icone,
         for (Ingrediente g : pedestais) l.add(Component.text(" • " + g.nomeBonito(), NamedTextColor.WHITE));
         if (extra.sacrificio() != null) l.add(Component.text("Sacrifício: " + extra.sacrificio().nome() + " (a até 5 blocos do altar)", NamedTextColor.RED));
         if (extra.jogadores() > 1) l.add(Component.text(extra.jogadores() + " jogadores, cada um com o catalisador na mão.", NamedTextColor.GOLD));
-        if (extra.nivelAltar() > 1) l.add(Component.text("Precisa do altar nível II.", NamedTextColor.LIGHT_PURPLE));
+        if (extra.nivelAltar() > 1) l.add(Component.text("Precisa do altar nível " + romano(extra.nivelAltar()) + ".", NamedTextColor.LIGHT_PURPLE));
         if (unica) l.add(Component.text("Uma por jogador.", NamedTextColor.LIGHT_PURPLE));
         if (desperto != null) l.add(Component.text("O chefe aparece em cima do altar: prepare-se.", NamedTextColor.RED));
         if (nome.startsWith("Elevar guardião")) {

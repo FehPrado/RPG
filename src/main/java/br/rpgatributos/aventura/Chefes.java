@@ -483,6 +483,9 @@ public final class Chefes implements Listener {
                 for (int i = 0; i < 2; i++) lacaio(a, EntityType.SKELETON, ao(l, 3));
                 w.spawnParticle(Particle.SCULK_SOUL, l, 40, 2, 0.5, 2, 0.02);
                 w.playSound(l, Sound.ENTITY_EVOKER_PREPARE_SUMMON, 1.5f, 0.7f);
+                // 2.92: os mortos sobem de um pentagrama em volta do chefe.
+                plugin.circulosMagicos().chaoEm(l.getBlock().getLocation().add(0.5, 0, 0.5), 3.2, 30,
+                        br.rpgatributos.visual.CirculosMagicos.SOMBRA, br.rpgatributos.visual.CirculosMagicos.SANGUE, 5, 2, 0);
             }
             case RAIO_SOMBRIO -> {
                 feixe(boss.getEyeLocation(), alvo.getEyeLocation(), Particle.SCULK_SOUL);

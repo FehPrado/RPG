@@ -770,6 +770,10 @@ public final class Classes implements Listener {
         if (arc != null) plugin.arcano().gastarMana(p, arc, h.mana());
         recargas.computeIfAbsent(p.getUniqueId(), k -> new HashMap<>()).put(h, System.currentTimeMillis() + h.recarga() * 1000L);
         p.sendActionBar(Component.text(c.simbolo() + " " + h.nome() + "!", c.cor(), TextDecoration.BOLD));
+        // 2.92: o círculo da classe no chão (quadrado nas básicas, hexagrama nas avançadas, estrela de 8 nas lendárias).
+        int[] fig = switch (c.tier()) { case BASICA -> new int[]{4, 1}; case LENDARIA -> new int[]{8, 3}; default -> new int[]{6, 2}; };
+        plugin.circulosMagicos().seguindo(p, 1.7, 22, br.rpgatributos.visual.CirculosMagicos.cor(c.cor()),
+                br.rpgatributos.visual.CirculosMagicos.BRANCO, fig[0], fig[1], 0);
     }
 
     // =====================================================================

@@ -1,0 +1,114 @@
+# Projeto de construção da colônia (estilo vila, 2.90).
+# Camadas de baixo (0 = chão) para cima. Em cada camada a 1ª linha é o FUNDO e a última é a FRENTE (entrada).
+# Na legenda, "south" é o lado da entrada. '.' = ar (o Construtor limpa) e '~' = não mexe.
+nome: "Fazenda"
+descricao:
+  - "Canteiros com canais de água, espantalho,"
+  - "composteiras e postes de luz."
+icone: WHEAT
+nivel: 1
+efeito: FAZENDA
+legenda:
+  "A": "grass_block"
+  "B": "farmland[moisture=7]"
+  "C": "dirt_path"
+  "D": "water"
+  "E": "oak_fence"
+  "F": "wheat[age=7]"
+  "G": "carrots[age=7]"
+  "H": "potatoes[age=7]"
+  "I": "beetroots[age=3]"
+  "J": "lily_pad"
+  "K": "composter[level=0]"
+  "L": "barrel[facing=up]"
+  "M": "hay_block[axis=y]"
+  "N": "oak_fence_gate[facing=south,open=false]"
+  "O": "carved_pumpkin[facing=south]"
+  "P": "lantern[hanging=false]"
+# Níveis: o mínimo de cada nível (o 1º é o que precisa ter quem constrói do seu jeito).
+# blocos = blocos firmes construídos; coberto = % do piso com teto; altura = do chão até o bloco mais alto.
+niveis:
+  - blocos: 10
+    itens:
+      farmland: 16
+      composter: 1
+  - blocos: 20
+    itens:
+      farmland: 40
+      composter: 1
+  - blocos: 40
+    luz: 2
+    itens:
+      farmland: 80
+      composter: 2
+camadas:
+  # 0
+  - - "AAAAAAAAAAAAAAA"
+    - "ABBBBBBCBBBBBBA"
+    - "ABBBDBBCBBDBBBA"
+    - "ABBBDBBCBBDBBBA"
+    - "ABBBDBBCBBDBBBA"
+    - "ABBBDBBCBBDBBBA"
+    - "ABBBDBBCBBDBBBA"
+    - "ABBBDBBCBBDBBBA"
+    - "ABBBDBBCBBDBBBA"
+    - "ABBBDBBCBBDBBBA"
+    - "ABBBBBBCBBBBBBA"
+    - "ACAACAACAACAACA"
+    - "AAAAAAACAAAAAAA"
+  # 1
+  - - "EEEEEEEEEEEEEEE"
+    - "EFFFGGG.HHIIIIE"
+    - "EFFFJGG.HHJIIIE"
+    - "EFFF.GG.HH.IIIE"
+    - "EFFF.GG.HH.IIIE"
+    - "EFFF.GG.HH.IIIE"
+    - "EFFF.GGEHH.IIIE"
+    - "EFFF.GG.HH.IIIE"
+    - "EFFF.GG.HH.IIIE"
+    - "EFFF.GG.HH.IIIE"
+    - "EFFFGGG.HHIIIIE"
+    - "EKL.E.....E.MKE"
+    - "EEEEEEENEEEEEEE"
+  # 2
+  - - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "......EME......"
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "....E.....E...."
+    - "..............."
+  # 3
+  - - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - ".......O......."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "....P.....P...."
+    - "..............."
+  # 4
+  - - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."
+    - "..............."

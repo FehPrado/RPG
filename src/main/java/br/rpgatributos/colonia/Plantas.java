@@ -28,8 +28,16 @@ import java.util.Map;
 public final class Plantas {
 
     /** Projetos que vêm com o plugin (arquivo plantas/&lt;id&gt;.yml dentro do jar). */
-    private static final List<String> PADRAO = List.of("casa", "oficina", "fazenda", "poco", "torre_de_vigia", "cabana_lenhador",
-            "cabana_pescador", "armazem", "biblioteca", "quartel", "mina", "mercado", "taverna", "ferraria", "estabulo", "laboratorio");
+    private static final List<String> PADRAO = List.of("casa_vila", "oficina_vila", "fazenda_vila", "poco_vila", "torre_de_vigia_vila",
+            "cabana_lenhador_vila", "cabana_pescador_vila", "armazem_vila", "biblioteca_vila", "quartel_vila", "mina_vila", "mercado_vila",
+            "taverna_vila", "ferraria_vila", "estabulo_vila", "laboratorio_vila");
+    /**
+     * 2.90: os projetos antigos (as caixas de 7x7). Continuam valendo para as construções que já foram
+     * feitas com eles (a obra guarda o projeto e o tamanho dele), mas não aparecem mais para construir.
+     */
+    private static final java.util.Set<String> ANTIGAS = java.util.Set.of("casa", "oficina", "fazenda", "poco", "torre_de_vigia",
+            "cabana_lenhador", "cabana_pescador", "armazem", "biblioteca", "quartel", "mina", "mercado", "taverna", "ferraria", "estabulo",
+            "laboratorio");
 
     private final RPGAtributos plugin;
     private final NamespacedKey kProjeto, kLivre;
@@ -82,6 +90,9 @@ public final class Plantas {
     public Planta de(String id) { return id == null ? null : porId.get(id.toLowerCase(Locale.ROOT)); }
 
     public Collection<Planta> todas() { return Collections.unmodifiableCollection(porId.values()); }
+
+    /** Os projetos que aparecem para construir (sem os antigos). */
+    public List<Planta> visiveis() { return porId.values().stream().filter(p -> !ANTIGAS.contains(p.id())).toList(); }
 
     // =====================================================================
     //  O item do projeto

@@ -363,6 +363,9 @@ public final class PedrasDeViagem extends Estacao {
         cancelar(p.getUniqueId());
         Location inicio = p.getLocation();
         int[] falta = {plugin.settings().viaEsperaSeg * 4};
+        // 2.92: um círculo de partida no chão enquanto a viagem carrega.
+        plugin.circulosMagicos().chaoEm(inicio, 1.8, falta[0] * 5, br.rpgatributos.visual.CirculosMagicos.cor(COR),
+                br.rpgatributos.visual.CirculosMagicos.BRANCO, 6, 1, 4);
         BukkitTask t = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             if (!p.isOnline() || !p.getWorld().equals(inicio.getWorld()) || p.getLocation().distanceSquared(inicio) > 1) {
                 cancelar(p.getUniqueId());
@@ -383,6 +386,8 @@ public final class PedrasDeViagem extends Estacao {
                 p.setLevel(p.getLevel() - custo);
             }
             p.teleport(agora);
+            plugin.circulosMagicos().chaoEm(agora, 1.8, 30, br.rpgatributos.visual.CirculosMagicos.cor(COR),
+                    br.rpgatributos.visual.CirculosMagicos.BRANCO, 6, 1, 6);
             p.getWorld().playSound(agora, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1.2f);
             p.getWorld().spawnParticle(Particle.REVERSE_PORTAL, agora.clone().add(0, 1, 0), 50, 0.4, 0.8, 0.4, 0.05);
             plugin.titulos().registrar(p, "viagens", 1);
