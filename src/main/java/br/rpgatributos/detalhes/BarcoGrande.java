@@ -13,6 +13,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,9 +41,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Transformation;
+import org.bukkit.util.Vector;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 
@@ -62,8 +66,9 @@ import java.util.UUID;
  *       e viram junto, sem atraso);</li>
  *   <li>os 4 bancos de trás são assentos invisíveis que o plugin leva junto com o barco a cada tick.</li>
  * </ul>
- * A Vela de Barco também vai nele: o mastro fica num dos bancos (com vela, 4 lugares). Ele pode ser
- * amarrado com laço, como os outros barcos, e puxar ou ser puxado num comboio.
+ * 3.0: cada banco é um encaixe (veja {@link MelhoriasBarco}): assento de gente ou de bicho, o mastro
+ * da vela (banco 1) ou um baú de convés. Ele pode ser amarrado com laço, como os outros barcos, e
+ * puxar ou ser puxado num comboio.
  * <p>As peças não são salvas: quando o barco carrega de novo, o plugin monta outra vez.
  */
 public final class BarcoGrande implements Listener {
@@ -71,6 +76,8 @@ public final class BarcoGrande implements Listener {
     public static final NamespacedKey CHAVE = new NamespacedKey("rpgatributos", "barco_grande");
     private static final NamespacedKey K_PARTE = new NamespacedKey("rpgatributos", "barco_grande_parte");
     private static final NamespacedKey K_ASSENTO = new NamespacedKey("rpgatributos", "barco_grande_assento");
+    /** O baú desenhado num banco (guarda o número do banco). */
+    private static final NamespacedKey K_BAU_DISPLAY = new NamespacedKey("rpgatributos", "barco_grande_bau");
     private static final TextColor COR = TextColor.color(0xC9A26B);
 
     /** Passageiro do barco (que não é o primeiro) fica 0,1875 acima e 0,6 para trás do centro. */
@@ -82,6 +89,7 @@ public final class BarcoGrande implements Listener {
     private static final double ALTURA_ASSENTO = 0.55;
 
     private final RPGAtributos plugin;
+    private final MelhoriasBarco melhorias;
     /** Barco → os assentos ocupados (null = livre). */
     private final Map<UUID, ItemDisplay[]> assentos = new HashMap<>();
     /** Os Barcos Grandes montados (para as peças virarem junto com o barco). */
@@ -89,6 +97,11 @@ public final class BarcoGrande implements Listener {
 
     public BarcoGrande(RPGAtributos plugin) {
         this.plugin = plugin;
+        this.melhorias = new MelhoriasBarco(plugin);
+    }
+
+    public MelhoriasBarco melhorias() {
+        return melhorias;
     }
 
     // =====================================================================
@@ -99,14 +112,23 @@ public final class BarcoGrande implements Listener {
         ItemStack i = new ItemStack(Material.SPRUCE_BOAT);
         i.editMeta(m -> {
             m.itemName(Component.text("Barco Grande", COR));
-            m.lore(List.of(
-                    Component.text("Leva 5 pessoas: quem pilota e 4 nos bancos.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
-                    Component.text("Com a Vela de Barco, o mastro ocupa um banco.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
-                    Component.text("Agachado + clique com a mão vazia: recolhe.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
             m.setMaxStackSize(1);
             m.getPersistentDataContainer().set(CHAVE, PersistentDataType.BYTE, (byte) 1);
         });
+        escreverLore(i);
         return i;
+    }
+
+    /** As linhas do item: o básico e o que ele leva. */
+    private static void escreverLore(ItemStack i) {
+        i.editMeta(m -> {
+            List<Component> l = new ArrayList<>();
+            l.add(Component.text("Leva 5: quem pilota e 4 nos bancos.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            l.add(Component.text("Bancos viram mastro, baú ou lugar de bicho.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            l.addAll(MelhoriasBarco.resumo(m.getPersistentDataContainer()));
+            l.add(Component.text("Agachado + mão vazia no barco: menu.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
+            m.lore(l);
+        });
     }
 
     public static boolean eItem(ItemStack i) {
@@ -128,6 +150,7 @@ public final class BarcoGrande implements Listener {
         r.setIngredient('B', new RecipeChoice.MaterialChoice(barcos));
         r.setIngredient('P', new RecipeChoice.MaterialChoice(org.bukkit.Tag.PLANKS));
         Bukkit.addRecipe(r);
+        melhorias.registrarReceitas();
     }
 
     // =====================================================================
@@ -151,15 +174,14 @@ public final class BarcoGrande implements Listener {
         Location l = r.getHitPosition().toLocation(p.getWorld());
         l.setYaw(p.getLocation().getYaw());
         l.setPitch(0);
+        ItemStack mao = e.getHand() == EquipmentSlot.OFF_HAND ? p.getInventory().getItemInOffHand() : p.getInventory().getItemInMainHand();
         Boat b = (Boat) p.getWorld().spawnEntity(l, EntityType.SPRUCE_BOAT);
         b.getPersistentDataContainer().set(CHAVE, PersistentDataType.BYTE, (byte) 1);
+        MelhoriasBarco.copiar(mao.getPersistentDataContainer(), b.getPersistentDataContainer());
         montar(b);
-        if (p.getGameMode() != GameMode.CREATIVE) {
-            ItemStack mao = e.getHand() == EquipmentSlot.OFF_HAND ? p.getInventory().getItemInOffHand() : p.getInventory().getItemInMainHand();
-            mao.setAmount(mao.getAmount() - 1);
-        }
+        if (p.getGameMode() != GameMode.CREATIVE) mao.setAmount(mao.getAmount() - 1);
         p.playSound(l, Sound.ENTITY_BOAT_PADDLE_WATER, 1f, 0.8f);
-        p.sendActionBar(Component.text("⛵ Barco Grande na água: clique para subir (5 lugares).", COR));
+        p.sendActionBar(Component.text("⛵ Barco Grande na água: clique para subir (" + lugares(b) + " lugares).", COR));
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -167,7 +189,7 @@ public final class BarcoGrande implements Listener {
         if (eItem(e.getItem())) e.setCancelled(true);
     }
 
-    /** Pede as peças (convés, bordas, bancos, mastro e a área de clique) presas ao barco. */
+    /** Pede as peças (convés, bordas, bancos, mastro, baús e a área de clique) presas ao barco. */
     private void montar(Boat b) {
         tirarPecas(b);
         World w = b.getWorld();
@@ -182,7 +204,10 @@ public final class BarcoGrande implements Listener {
         pecas.add(bloco(w, l, borda, -0.9f, 0.05f, -3.25f, 1.8f, 0.75f, 0.15f));      // popa
         pecas.add(bloco(w, l, tabua, -0.75f, 0.4f, -1.55f, 1.5f, 0.1f, 0.4f));        // banco da frente
         pecas.add(bloco(w, l, tabua, -0.75f, 0.4f, -2.6f, 1.5f, 0.1f, 0.4f));         // banco de trás
-        if (Velas.temVela(b)) pecas.add(mastro(w, l));
+        if (Velas.temVela(b)) pecas.add(mastro(w, l, b));
+        for (int banco : MelhoriasBarco.baus(b.getPersistentDataContainer())) pecas.add(bau(w, l, banco));
+        if (MelhoriasBarco.tem(b, MelhoriasBarco.Peca.REDE)) pecas.add(bloco(w, l, Material.COBWEB.createBlockData(), -0.6f, 0.05f, -3.55f, 1.2f, 0.4f, 0.3f));
+        if (MelhoriasBarco.tem(b, MelhoriasBarco.Peca.ANCORA)) pecas.add(bloco(w, l, Material.ANVIL.createBlockData(), 0.45f, 0.4f, -0.2f, 0.35f, 0.35f, 0.35f));
         pecas.add(w.spawn(l, Interaction.class, i -> {
             i.setInteractionWidth(2.4f);
             i.setInteractionHeight(1.0f);
@@ -208,15 +233,29 @@ public final class BarcoGrande implements Listener {
         });
     }
 
-    private static ItemDisplay mastro(World w, Location l) {
+    /** O mastro com a vela (o estandarte do dono, se ele pôs um). */
+    private static ItemDisplay mastro(World w, Location l, Boat b) {
         double[] m = BANCOS[BANCO_DO_MASTRO];
         return w.spawn(l, ItemDisplay.class, d -> {
-            d.setItemStack(new ItemStack(Material.WHITE_BANNER));
+            d.setItemStack(Velas.bandeira(b));
             d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
             d.setTransformation(new Transformation(new Vector3f((float) m[0], 1.5f - PRESO_Y, (float) m[1] - PRESO_Z), new AxisAngle4f(),
                     new Vector3f(1.6f, 1.6f, 1.6f), new AxisAngle4f()));
             marcar(d);
             d.getPersistentDataContainer().set(Velas.K_DISPLAY, PersistentDataType.BYTE, (byte) 1);
+        });
+    }
+
+    /** O baú de convés desenhado em cima do banco. */
+    private static ItemDisplay bau(World w, Location l, int banco) {
+        double[] m = BANCOS[banco];
+        return w.spawn(l, ItemDisplay.class, d -> {
+            d.setItemStack(new ItemStack(Material.CHEST));
+            d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
+            d.setTransformation(new Transformation(new Vector3f((float) m[0], 0.78f - PRESO_Y, (float) m[1] - PRESO_Z),
+                    new AxisAngle4f((float) Math.PI, 0, 1, 0), new Vector3f(0.62f, 0.62f, 0.62f), new AxisAngle4f()));
+            marcar(d);
+            d.getPersistentDataContainer().set(K_BAU_DISPLAY, PersistentDataType.INTEGER, banco);
         });
     }
 
@@ -240,35 +279,102 @@ public final class BarcoGrande implements Listener {
         }
     }
 
-    private static Player piloto(Boat b) {
+    static Player piloto(Boat b) {
         List<Entity> l = b.getPassengers();
         return !l.isEmpty() && l.getFirst() instanceof Player p ? p : null;
     }
 
-    private int aBordo(Boat b) {
+    /** Quantos estão a bordo (o piloto e quem está nos bancos, gente ou bicho). */
+    private int lotacao(Boat b) {
         int n = piloto(b) != null ? 1 : 0;
         ItemDisplay[] a = assentos.get(b.getUniqueId());
         if (a != null) for (ItemDisplay d : a) if (d != null && d.isValid() && !d.getPassengers().isEmpty()) n++;
         return n;
     }
 
-    private int lugares(Boat b) {
-        return Velas.temVela(b) ? 4 : 5;
+    /** Os jogadores a bordo (piloto e bancos). */
+    public List<Player> aBordo(Boat b) {
+        List<Player> l = new ArrayList<>();
+        Player pi = piloto(b);
+        if (pi != null) l.add(pi);
+        ItemDisplay[] a = assentos.get(b.getUniqueId());
+        if (a != null) for (ItemDisplay d : a) if (d != null && d.isValid()) for (Entity x : d.getPassengers()) if (x instanceof Player p) l.add(p);
+        return l;
     }
 
-    /** Desmonta o barco e devolve o item (e a vela) para quem recolheu, ou no chão. */
+    /** Os bichos sentados nos bancos. */
+    List<Entity> bichos(Boat b) {
+        List<Entity> l = new ArrayList<>();
+        ItemDisplay[] a = assentos.get(b.getUniqueId());
+        if (a != null) for (ItemDisplay d : a) if (d != null && d.isValid()) for (Entity x : d.getPassengers()) if (!(x instanceof Player)) l.add(x);
+        return l;
+    }
+
+    /** O banco não é assento (mastro ou baú). */
+    private static boolean fechado(Boat b, int banco) {
+        return banco == BANCO_DO_MASTRO && Velas.temVela(b) || MelhoriasBarco.baus(b.getPersistentDataContainer()).contains(banco);
+    }
+
+    private int lugares(Boat b) {
+        int n = 1;
+        for (int i = 0; i < BANCOS.length; i++) if (!fechado(b, i)) n++;
+        return n;
+    }
+
+    /** O barco virando item, com tudo o que leva. */
+    private ItemStack comoItem(Boat b) {
+        ItemStack i = item();
+        i.editMeta(m -> MelhoriasBarco.copiar(b.getPersistentDataContainer(), m.getPersistentDataContainer()));
+        escreverLore(i);
+        return i;
+    }
+
+    /** Desmonta o barco e devolve o item (com as melhorias e os baús dentro) para quem recolheu, ou no chão. */
     private void recolher(Boat b, Player quem) {
-        boolean vela = Velas.temVela(b);
+        melhorias.fecharBaus(b);
+        ItemStack it = comoItem(b);
         desfazer(b);
         Location l = b.getLocation();
         b.remove();
-        List<ItemStack> itens = new ArrayList<>(List.of(item()));
-        if (vela) itens.add(Velas.item());
-        for (ItemStack i : itens) {
-            if (quem != null) for (ItemStack s : quem.getInventory().addItem(i).values()) l.getWorld().dropItem(quem.getLocation(), s);
-            else l.getWorld().dropItemNaturally(l, i);
-        }
+        if (quem != null) for (ItemStack s : quem.getInventory().addItem(it).values()) l.getWorld().dropItem(quem.getLocation(), s);
+        else l.getWorld().dropItemNaturally(l, it);
         l.getWorld().playSound(l, Sound.ENTITY_ITEM_PICKUP, 1f, 0.8f);
+    }
+
+    boolean recolherPeloMenu(Boat b, Player p) {
+        if (lotacao(b) > 0) {
+            p.sendActionBar(Component.text("⛵ Tem gente ou bicho a bordo: todos precisam descer para recolher o barco.", NamedTextColor.RED));
+            return false;
+        }
+        recolher(b, p);
+        return true;
+    }
+
+    /**
+     * O casco chegou a zero: o barco afunda. Quem estava a bordo cai na água; o que estava nos
+     * baús boia, e o barco (sem os baús, com o resto das melhorias) boia também.
+     */
+    public void afundar(Boat b, String motivo) {
+        Location l = b.getLocation();
+        World w = l.getWorld();
+        List<Player> gente = aBordo(b);
+        List<ItemStack> soltos = new ArrayList<>(melhorias.esvaziarBaus(b));
+        PersistentDataContainer pdc = b.getPersistentDataContainer();
+        List<Integer> baus = MelhoriasBarco.baus(pdc);
+        for (int i = 0; i < baus.size(); i++) soltos.add(new ItemStack(Material.CHEST));
+        pdc.remove(MelhoriasBarco.K_BAUS);
+        pdc.remove(MelhoriasBarco.K_ANCORADO);
+        pdc.set(MelhoriasBarco.K_VIDA, PersistentDataType.INTEGER, 1);
+        soltos.add(comoItem(b));
+        desfazer(b);
+        b.eject();
+        b.remove();
+        for (ItemStack i : soltos) w.dropItemNaturally(l.clone().add(0, 0.6, 0), i);
+        w.playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 0.6f, 1.6f);
+        w.playSound(l, Sound.ENTITY_PLAYER_SPLASH_HIGH_SPEED, 1f, 0.8f);
+        w.spawnParticle(Particle.BLOCK, l.clone().add(0, 0.5, 0), 60, 1.2, 0.4, 1.2, Material.SPRUCE_PLANKS.createBlockData());
+        for (Player p : gente) p.showTitle(net.kyori.adventure.title.Title.title(Component.text("⛵ O barco afundou!", NamedTextColor.RED, TextDecoration.BOLD),
+                Component.text(motivo + ". Pegue o que está boiando.", NamedTextColor.GRAY)));
     }
 
     /** Tira as peças e os assentos (quem estava sentado desce). */
@@ -279,11 +385,68 @@ public final class BarcoGrande implements Listener {
             d.remove();
         }
         tirarPecas(b);
+        melhorias.esquecer(b.getUniqueId());
     }
 
     // =====================================================================
-    //  Subir, a vela e o laço
+    //  Peças que entram e saem com o barco montado
     // =====================================================================
+
+    void porBau(Boat b, int banco) {
+        b.addPassenger(bau(b.getWorld(), b.getLocation(), banco));
+        moverAreaDeCliqueParaOFim(b);
+    }
+
+    void tirarBau(Boat b, int banco) {
+        for (Entity x : List.copyOf(b.getPassengers())) {
+            Integer n = x.getPersistentDataContainer().get(K_BAU_DISPLAY, PersistentDataType.INTEGER);
+            if (n != null && n == banco) {
+                b.removePassenger(x);
+                x.remove();
+            }
+        }
+    }
+
+    /** Põe a vela de novo (com o estandarte atual). */
+    void trocarVela(Boat b) {
+        for (Entity x : List.copyOf(b.getPassengers())) {
+            if (x.getPersistentDataContainer().has(Velas.K_DISPLAY)) {
+                b.removePassenger(x);
+                x.remove();
+            }
+        }
+        if (Velas.temVela(b)) {
+            b.addPassenger(mastro(b.getWorld(), b.getLocation(), b));
+            moverAreaDeCliqueParaOFim(b);
+        }
+    }
+
+    void tirarVela(Boat b, Player p) {
+        PersistentDataContainer pdc = b.getPersistentDataContainer();
+        pdc.remove(Velas.CHAVE);
+        byte[] est = pdc.get(MelhoriasBarco.K_ESTANDARTE, PersistentDataType.BYTE_ARRAY);
+        pdc.remove(MelhoriasBarco.K_ESTANDARTE);
+        trocarVela(b);
+        for (ItemStack s : p.getInventory().addItem(Velas.item()).values()) p.getWorld().dropItem(p.getLocation(), s);
+        if (est != null) for (ItemStack s : p.getInventory().addItem(ItemStack.deserializeBytes(est)).values()) p.getWorld().dropItem(p.getLocation(), s);
+        p.playSound(b.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 0.8f);
+    }
+
+    // =====================================================================
+    //  Subir, a vela, os baús e o laço
+    // =====================================================================
+
+    /** O Barco Grande da entidade: o do banco onde ela está (ou o próprio barco, para o piloto); ou null. */
+    public Boat barcoDe(Entity e) {
+        Entity v = e.getVehicle();
+        if (v instanceof Boat b && eBarcoGrande(b)) return b;
+        if (v != null && v.getPersistentDataContainer().has(K_ASSENTO)) {
+            for (Map.Entry<UUID, ItemDisplay[]> en : assentos.entrySet()) {
+                for (ItemDisplay d : en.getValue()) if (d == v && Bukkit.getEntity(en.getKey()) instanceof Boat b) return b;
+            }
+        }
+        return null;
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void aoClicar(PlayerInteractEntityEvent e) {
@@ -297,8 +460,24 @@ public final class BarcoGrande implements Listener {
             if (areaDeClique) e.setCancelled(true);
             return;
         }
-        if (p.getVehicle() == b || (p.getVehicle() != null && p.getVehicle().getPersistentDataContainer().has(K_ASSENTO))) return;
         ItemStack mao = p.getInventory().getItemInMainHand();
+
+        // O baú do convés: abre para quem está a bordo ou de fora.
+        int bau = bauMirado(p, b);
+        if (bau >= 0 && !(p.isSneaking() && mao.getType().isAir())) {
+            e.setCancelled(true);
+            melhorias.abrirBau(p, b, bau);
+            return;
+        }
+        boolean aBordo = barcoDe(p) == b;
+        if (aBordo) {
+            if (p.isSneaking() && mao.getType().isAir()) {
+                e.setCancelled(true);
+                melhorias.abrirMenu(p, b);
+            }
+            return;
+        }
+        if (p.getVehicle() != null && p.getVehicle().getPersistentDataContainer().has(K_ASSENTO)) return;
 
         // Laço: no casco, o jogo cuida; na área de clique, o plugin faz o mesmo que o jogo.
         if (mao.getType() == Material.LEAD && !p.isSneaking()) {
@@ -317,39 +496,54 @@ public final class BarcoGrande implements Listener {
 
         if (Velas.eVela(mao) && !Velas.temVela(b)) {
             e.setCancelled(true);
+            if (MelhoriasBarco.baus(b.getPersistentDataContainer()).contains(BANCO_DO_MASTRO)) {
+                p.sendActionBar(Component.text("⛵ O banco do mastro tem um baú: tire o baú pelo menu do barco.", NamedTextColor.RED));
+                return;
+            }
             if (ocupado(b, BANCO_DO_MASTRO)) {
                 p.sendActionBar(Component.text("⛵ O banco do mastro está ocupado: peça para a pessoa trocar de lugar.", NamedTextColor.RED));
                 return;
             }
             if (p.getGameMode() != GameMode.CREATIVE) mao.setAmount(mao.getAmount() - 1);
             b.getPersistentDataContainer().set(Velas.CHAVE, PersistentDataType.BYTE, (byte) 1);
-            b.addPassenger(mastro(b.getWorld(), b.getLocation()));
-            moverAreaDeCliqueParaOFim(b);
+            trocarVela(b);
             p.playSound(b.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 1.2f);
-            p.sendActionBar(Component.text("⛵ Vela posta: o mastro ocupa um banco (4 lugares). Reme para a frente na água.", COR));
+            p.sendActionBar(Component.text("⛵ Vela posta: o mastro ocupa um banco (" + lugares(b) + " lugares). Reme para a frente na água.", COR));
+            return;
+        }
+        if (!mao.getType().isAir() && melhorias.instalar(p, b, mao, this)) {
+            e.setCancelled(true);
             return;
         }
         if (p.isSneaking() && mao.getType().isAir()) {
             e.setCancelled(true);
-            if (Velas.temVela(b)) {
-                b.getPersistentDataContainer().remove(Velas.CHAVE);
-                for (Entity x : List.copyOf(b.getPassengers())) {
-                    if (x.getPersistentDataContainer().has(Velas.K_DISPLAY)) {
-                        b.removePassenger(x);
-                        x.remove();
-                    }
-                }
-                for (ItemStack s : p.getInventory().addItem(Velas.item()).values()) p.getWorld().dropItem(p.getLocation(), s);
-                p.playSound(b.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 0.8f);
-            } else if (aBordo(b) > 0) {
-                p.sendActionBar(Component.text("⛵ Tem gente a bordo: todos precisam descer para recolher o barco.", NamedTextColor.RED));
-            } else {
-                recolher(b, p);
-            }
+            melhorias.abrirMenu(p, b);
             return;
         }
         e.setCancelled(true);
+        if (embarcarBichos(p, b) > 0) return;
         embarcar(p, b);
+    }
+
+    /** O banco do baú para onde o jogador está olhando (ou -1). */
+    private int bauMirado(Player p, Boat b) {
+        List<Integer> baus = MelhoriasBarco.baus(b.getPersistentDataContainer());
+        if (baus.isEmpty()) return -1;
+        Location olho = p.getEyeLocation();
+        Vector dir = olho.getDirection();
+        int melhor = -1;
+        double menor = 0.5 * 0.5;
+        for (int i : baus) {
+            Vector c = posicao(b, i).add(0, 0.2, 0).toVector().subtract(olho.toVector());
+            double t = c.dot(dir);
+            if (t < 0 || t > 6) continue;
+            double d2 = c.clone().subtract(dir.clone().multiply(t)).lengthSquared();
+            if (d2 < menor) {
+                menor = d2;
+                melhor = i;
+            }
+        }
+        return melhor;
     }
 
     /** Agachado com barcos amarrados em si: passa o laço deles para este barco (o comboio). */
@@ -374,7 +568,7 @@ public final class BarcoGrande implements Listener {
         }
     }
 
-    private boolean ocupado(Boat b, int banco) {
+    boolean ocupado(Boat b, int banco) {
         ItemDisplay[] a = assentos.get(b.getUniqueId());
         return a != null && a[banco] != null && a[banco].isValid() && !a[banco].getPassengers().isEmpty();
     }
@@ -383,25 +577,78 @@ public final class BarcoGrande implements Listener {
         if (piloto(b) == null) {
             b.addPassenger(p);
             pilotoNaFrente(b);
-            p.sendActionBar(Component.text("⛵ Você pilota o Barco Grande: " + aBordo(b) + " de " + lugares(b) + " lugares.", COR));
+            p.sendActionBar(Component.text("⛵ Você pilota o Barco Grande: " + lotacao(b) + " de " + lugares(b) + " lugares.", COR));
             return;
         }
+        if (sentar(p, b)) {
+            p.sendActionBar(Component.text("⛵ Você sentou no Barco Grande: " + lotacao(b) + " de " + lugares(b) + " lugares.", COR));
+            return;
+        }
+        p.sendActionBar(Component.text("⛵ O Barco Grande está cheio.", NamedTextColor.RED));
+    }
+
+    /** Senta a entidade (gente ou bicho) no primeiro banco livre. */
+    private boolean sentar(Entity quem, Boat b) {
         ItemDisplay[] a = assentos.computeIfAbsent(b.getUniqueId(), k -> new ItemDisplay[BANCOS.length]);
         for (int i = 0; i < BANCOS.length; i++) {
-            if (i == BANCO_DO_MASTRO && Velas.temVela(b)) continue;
-            if (ocupado(b, i)) continue;
+            if (fechado(b, i) || ocupado(b, i)) continue;
             if (a[i] != null) a[i].remove();
             ItemDisplay s = b.getWorld().spawn(posicao(b, i), ItemDisplay.class, d -> {
                 d.setPersistent(false);
                 d.setTeleportDuration(2);
                 d.getPersistentDataContainer().set(K_ASSENTO, PersistentDataType.BYTE, (byte) 1);
             });
-            s.addPassenger(p);
+            s.addPassenger(quem);
             a[i] = s;
-            p.sendActionBar(Component.text("⛵ Você sentou no Barco Grande: " + aBordo(b) + " de " + lugares(b) + " lugares.", COR));
-            return;
+            return true;
         }
-        p.sendActionBar(Component.text("⛵ O Barco Grande está cheio.", NamedTextColor.RED));
+        return false;
+    }
+
+    /**
+     * Quem clica no barco com bichos no laço (companheiro do Domador, cachorro, gato...) põe os
+     * bichos a bordo, um por banco livre; os laços voltam para a mão.
+     */
+    private int embarcarBichos(Player p, Boat b) {
+        int n = 0;
+        for (Entity x : p.getNearbyEntities(10, 5, 10)) {
+            if (!(x instanceof LivingEntity le) || x instanceof Player || x instanceof Boat || !le.isLeashed() || le.getLeashHolder() != p) continue;
+            if (le.getVehicle() != null) continue;
+            if (!sentar(le, b)) {
+                p.sendActionBar(Component.text("⛵ Não há banco livre para o bicho.", NamedTextColor.RED));
+                break;
+            }
+            le.setLeashHolder(null);
+            if (p.getGameMode() != GameMode.CREATIVE) for (ItemStack s : p.getInventory().addItem(new ItemStack(Material.LEAD)).values()) p.getWorld().dropItem(p.getLocation(), s);
+            n++;
+        }
+        if (n > 0) {
+            b.getWorld().playSound(b.getLocation(), Sound.ENTITY_WOLF_AMBIENT, 0.6f, 1.2f);
+            p.sendActionBar(Component.text("⛵ " + (n == 1 ? "O bicho subiu" : n + " bichos subiram") + " no barco. Clique de novo para subir você.", COR));
+        }
+        return n;
+    }
+
+    /** Põe os bichos de volta na água ao lado do barco. */
+    int desembarcarBichos(Boat b) {
+        int n = 0;
+        ItemDisplay[] a = assentos.get(b.getUniqueId());
+        if (a == null) return 0;
+        for (int i = 0; i < a.length; i++) {
+            ItemDisplay d = a[i];
+            if (d == null || !d.isValid()) continue;
+            for (Entity x : List.copyOf(d.getPassengers())) {
+                if (x instanceof Player) continue;
+                d.removePassenger(x);
+                x.teleport(b.getLocation().add(0, 0.8, 0));
+                n++;
+            }
+            if (d.getPassengers().isEmpty()) {
+                d.remove();
+                a[i] = null;
+            }
+        }
+        return n;
     }
 
     /** Diferença de ângulo entre -180 e 180. */
@@ -450,24 +697,27 @@ public final class BarcoGrande implements Listener {
         e.setCancelled(true);
         Boat b = (Boat) e.getVehicle();
         Player quem = e.getAttacker() instanceof Player p ? p : null;
-        if (quem != null && aBordo(b) > 0) {
-            quem.sendActionBar(Component.text("⛵ Tem gente a bordo: todos precisam descer para recolher o barco.", NamedTextColor.RED));
+        if (quem != null && lotacao(b) > 0) {
+            quem.sendActionBar(Component.text("⛵ Tem gente ou bicho a bordo: todos precisam descer para recolher o barco.", NamedTextColor.RED));
             return;
         }
+        if (quem == null) return; // só gente recolhe o barco (bichos, flechas e raios não)
         b.eject();
-        recolher(b, null);
+        recolher(b, quem);
     }
 
     @EventHandler
     public void aoSumir(EntityRemoveFromWorldEvent e) {
         if (!eBarcoGrande(e.getEntity())) return;
         Boat b = (Boat) e.getEntity();
+        melhorias.fecharBaus(b);
         ItemDisplay[] a = assentos.remove(b.getUniqueId());
         if (a != null) for (ItemDisplay d : a) if (d != null) {
             d.eject();
             d.remove();
         }
         for (Entity x : List.copyOf(b.getPassengers())) if (x.getPersistentDataContainer().has(K_PARTE)) x.remove();
+        melhorias.esquecer(b.getUniqueId());
     }
 
     @EventHandler
@@ -487,23 +737,34 @@ public final class BarcoGrande implements Listener {
 
     /** Na saída: as peças não ficam salvas no mundo. */
     public void desligar() {
+        melhorias.desligar();
         for (World w : Bukkit.getWorlds()) {
             for (Boat b : w.getEntitiesByClass(Boat.class)) if (eBarcoGrande(b)) desfazer(b);
         }
+    }
+
+    /** Os Barcos Grandes montados agora (para a rede, a âncora e os perigos do mar). */
+    public List<Boat> montados() {
+        List<Boat> l = new ArrayList<>();
+        for (UUID u : montados) if (Bukkit.getEntity(u) instanceof Boat b && b.isValid()) l.add(b);
+        return l;
     }
 
     // =====================================================================
     //  Os bancos andam com o barco
     // =====================================================================
 
-    /** A cada tick: leva os assentos ocupados para o lugar do banco. */
+    /** A cada tick: leva os assentos ocupados para o lugar do banco; segura o barco ancorado; a rede (1x por segundo). */
     public void tick() {
+        boolean segundo = Bukkit.getCurrentTick() % 20 == 0;
         // O jogo vira as peças quando o piloto rema para o lado; aqui elas acertam o resto (empurrões, comandos).
         for (Iterator<UUID> it = montados.iterator(); it.hasNext(); ) {
             if (!(Bukkit.getEntity(it.next()) instanceof Boat b) || !b.isValid()) {
                 it.remove();
                 continue;
             }
+            melhorias.segurar(b);
+            if (segundo) melhorias.puxarRede(b);
             float yaw = b.getLocation().getYaw();
             for (Entity x : b.getPassengers()) {
                 if (x instanceof Display && x.getPersistentDataContainer().has(K_PARTE) && Math.abs(giro(x.getLocation().getYaw() - yaw)) > 0.5f) {

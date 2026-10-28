@@ -80,6 +80,12 @@ public final class Velas implements Listener {
         return b.getPersistentDataContainer().has(CHAVE);
     }
 
+    /** 3.0: o pano da vela: o estandarte que o dono pôs nela, ou o branco. */
+    static ItemStack bandeira(Boat b) {
+        byte[] est = b.getPersistentDataContainer().get(MelhoriasBarco.K_ESTANDARTE, PersistentDataType.BYTE_ARRAY);
+        return est != null ? ItemStack.deserializeBytes(est) : new ItemStack(Material.WHITE_BANNER);
+    }
+
     // =====================================================================
     //  Pôr e tirar
     // =====================================================================
@@ -99,11 +105,22 @@ public final class Velas implements Listener {
             b.getPersistentDataContainer().set(CHAVE, PersistentDataType.BYTE, (byte) 1);
             montarVela(b);
             p.playSound(b.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 1.2f);
-            p.sendActionBar(Component.text("⛵ Vela posta: reme para a frente na água. Agachado + clique tira.", COR));
+            p.sendActionBar(Component.text("⛵ Vela posta: reme para a frente na água. Um estandarte clicado vira o pano. Agachado + clique tira.", COR));
+        } else if (org.bukkit.Tag.ITEMS_BANNERS.isTagged(mao.getType()) && temVela(b)) {
+            // 3.0: o estandarte vira o pano da vela (o anterior volta para a mão).
+            e.setCancelled(true);
+            byte[] antes = b.getPersistentDataContainer().get(MelhoriasBarco.K_ESTANDARTE, PersistentDataType.BYTE_ARRAY);
+            b.getPersistentDataContainer().set(MelhoriasBarco.K_ESTANDARTE, PersistentDataType.BYTE_ARRAY, mao.asOne().serializeAsBytes());
+            if (p.getGameMode() != org.bukkit.GameMode.CREATIVE) mao.setAmount(mao.getAmount() - 1);
+            if (antes != null) for (ItemStack s : p.getInventory().addItem(ItemStack.deserializeBytes(antes)).values()) p.getWorld().dropItem(p.getLocation(), s);
+            for (Entity x : b.getPassengers()) if (x instanceof ItemDisplay d && d.getPersistentDataContainer().has(K_DISPLAY)) d.setItemStack(bandeira(b));
+            p.playSound(b.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 1.3f);
         } else if (p.isSneaking() && mao.getType().isAir() && temVela(b)) {
             e.setCancelled(true);
+            byte[] est = b.getPersistentDataContainer().get(MelhoriasBarco.K_ESTANDARTE, PersistentDataType.BYTE_ARRAY);
             tirarVela(b);
             for (ItemStack s : p.getInventory().addItem(item()).values()) p.getWorld().dropItem(p.getLocation(), s);
+            if (est != null) for (ItemStack s : p.getInventory().addItem(ItemStack.deserializeBytes(est)).values()) p.getWorld().dropItem(p.getLocation(), s);
             p.playSound(b.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 0.8f);
         }
     }
@@ -111,7 +128,7 @@ public final class Velas implements Listener {
     /** A vela vai como passageira do barco (anda junto, sem ser teleportada). */
     private static void montarVela(Boat b) {
         ItemDisplay d = b.getWorld().spawn(b.getLocation(), ItemDisplay.class, x -> {
-            ItemStack bandeira = new ItemStack(Material.WHITE_BANNER);
+            ItemStack bandeira = bandeira(b);
             x.setItemStack(bandeira);
             x.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
             x.setTransformation(new Transformation(new Vector3f(0, 1.1f, -0.2f), new AxisAngle4f(), new Vector3f(1.6f, 1.6f, 1.6f), new AxisAngle4f()));
@@ -123,6 +140,7 @@ public final class Velas implements Listener {
 
     private static void tirarVela(Boat b) {
         b.getPersistentDataContainer().remove(CHAVE);
+        b.getPersistentDataContainer().remove(MelhoriasBarco.K_ESTANDARTE);
         for (Entity x : b.getPassengers()) {
             if (x instanceof ItemDisplay d && d.getPersistentDataContainer().has(K_DISPLAY)) {
                 b.removePassenger(d);
@@ -149,8 +167,10 @@ public final class Velas implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void aoQuebrar(VehicleDestroyEvent e) {
         if (!(e.getVehicle() instanceof Boat b) || !temVela(b) || BarcoGrande.eBarcoGrande(b)) return;
+        byte[] est = b.getPersistentDataContainer().get(MelhoriasBarco.K_ESTANDARTE, PersistentDataType.BYTE_ARRAY);
         tirarVela(b);
         b.getWorld().dropItemNaturally(b.getLocation(), item());
+        if (est != null) b.getWorld().dropItemNaturally(b.getLocation(), ItemStack.deserializeBytes(est));
     }
 
     // =====================================================================

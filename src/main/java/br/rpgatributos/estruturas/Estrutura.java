@@ -73,7 +73,18 @@ public enum Estrutura {
     FORJA_PIGLIN("Forja dos Piglins", "a", 0xFFB300, "Ouro, fogo e um ferreiro que só confia em quem paga.",
             6, 6, 3, 8, b -> b.contains("crimson") || b.contains("wastes")),
     PRIMEIRO_PORTAL("Primeiro Portal em Ruínas", "o", 0xB388FF, "Foi por aqui que alguém abriu, pela primeira vez, o caminho entre os mundos.",
-            2, 5, 3, 10, b -> !b.contains("basalt"));
+            2, 5, 3, 10, b -> !b.contains("basalt")),
+    // ---------------- 3.0: o mar aberto (na superfície, longe da costa; veja MarAberto) ----------------
+    ILHOTA("Ilhota", "a", 0xFFE082, "Areia, uma palmeira e o mar até onde a vista alcança.",
+            6, 7, 0, 12, b -> b.contains("ocean") && !b.contains("frozen")),
+    NAVIO_PIRATA("Navio Pirata", "o", 0xC62828, "Bandeira negra no mastro. Eles já te viram.",
+            3, 7, 0, 16, b -> b.contains("ocean") && !b.contains("frozen")),
+    ICEBERG("Iceberg", "o", 0xB3E5FC, "Uma montanha de gelo à deriva. Tem alguém lá dentro.",
+            5, 6, 0, 14, b -> b.contains("frozen") || b.contains("cold")),
+    BARCO_MERCANTE("Barco Mercante", "o", 0x81D4FA, "Um mercador ancorado no meio do mar. Vende o que serve para navegar.",
+            4, 5, 0, 12, b -> b.contains("ocean") && !b.contains("frozen")),
+    ILHA_TARTARUGA("Ilha-Tartaruga", "a", 0x66BB6A, "Uma ilha redonda demais. E ela respira.",
+            2, 7, 0, 8, b -> (b.contains("warm") || b.contains("lukewarm") || b.equals("ocean") || b.equals("deep_ocean")));
 
     private final String nome, artigo, frase;
     private final TextColor cor;
@@ -112,7 +123,7 @@ public enum Estrutura {
     }
 
     public boolean aceita(String bioma) {
-        if (this == FAROL || this == VILA_PESCADORES || submersa() || nether()) return this.bioma.test(bioma); // o farol e a vila de pescadores são na praia; os do mar, no mar
+        if (this == FAROL || this == VILA_PESCADORES || submersa() || nether() || marAberto()) return this.bioma.test(bioma); // o farol e a vila de pescadores são na praia; os do mar, no mar
         return !agua(bioma) && this.bioma.test(bioma);
     }
 
@@ -124,6 +135,16 @@ public enum Estrutura {
     /** Fica no fundo do mar. */
     public boolean submersa() {
         return this == NAUFRAGIO || this == CIDADE_SUBMERSA;
+    }
+
+    /** 3.0: boia na superfície do mar aberto (o y dela é a água da superfície). */
+    public boolean marAberto() {
+        return this == ILHOTA || this == NAVIO_PIRATA || this == ICEBERG || this == BARCO_MERCANTE || this == ILHA_TARTARUGA;
+    }
+
+    /** É do mar (nasce em chunk de oceano). */
+    public boolean doMar() {
+        return submersa() || marAberto();
     }
 
     /** Construída sobre palafitas: aceita água rasa no chão e não aterra nada. */
@@ -138,20 +159,30 @@ public enum Estrutura {
     }
 
     public boolean temMorador() {
-        return this == CABANA_DO_EREMITA || this == OASIS || this == CABANA_DA_BRUXA;
+        return this == CABANA_DO_EREMITA || this == OASIS || this == CABANA_DA_BRUXA || this == BARCO_MERCANTE;
     }
 
-    /** Sorteia pelo peso entre as do mundo normal ou, com {@code nether}, entre as do Nether. */
-    public static Estrutura sortear(Random r, boolean nether) {
+    /**
+     * Sorteia pelo peso: com {@code nether}, entre as do Nether; com {@code mar} (3.0: chunk de
+     * oceano), entre as do mar; senão, entre as de terra.
+     */
+    public static Estrutura sortear(Random r, boolean nether, boolean mar) {
         int total = 0;
-        for (Estrutura e : values()) if (e.nether() == nether) total += e.peso;
+        for (Estrutura e : values()) if (serve(e, nether, mar)) total += e.peso;
+        if (total <= 0) return nether ? FORJA_PIGLIN : TORRE_DE_VIGIA;
         int v = r.nextInt(total);
         for (Estrutura e : values()) {
-            if (e.nether() != nether) continue;
+            if (!serve(e, nether, mar)) continue;
             v -= e.peso;
             if (v < 0) return e;
         }
         return nether ? FORJA_PIGLIN : TORRE_DE_VIGIA;
+    }
+
+    private static boolean serve(Estrutura e, boolean nether, boolean mar) {
+        if (e.peso <= 0) return false;
+        if (nether) return e.nether();
+        return !e.nether() && e.doMar() == mar;
     }
 
     public static Estrutura porId(String s) {

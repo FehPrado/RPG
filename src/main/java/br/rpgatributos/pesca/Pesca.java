@@ -256,7 +256,9 @@ public final class Pesca implements Listener {
         if (PEIXES.contains(tipo)) {
             // 3) Peixe raro, se o lugar/horário/clima deixar. No buraco no gelo e perto da cabana, mais chance.
             PeixeRaro.Contexto ctx = contexto(onde);
-            double extra = (ctx.gelo() ? 0.05 : 0) + (plugin.cabanasPesca().perto(onde) ? 0.04 : 0) + plugin.oficios().bonusPesca(p);
+            // 3.0: no cardume do mar aberto, mais peixe raro e peixe em dobro.
+            boolean cardume = plugin.cardumes() != null && plugin.cardumes().em(onde);
+            double extra = (ctx.gelo() ? 0.05 : 0) + (plugin.cabanasPesca().perto(onde) ? 0.04 : 0) + plugin.oficios().bonusPesca(p) + (cardume ? 0.06 : 0);
             if (rnd().nextDouble() < chanceRaro(nivel) + sorteDoMar + extra) {
                 PeixeRaro raro = sortearPeixe(ctx, nivel);
                 if (raro != null) {
@@ -274,7 +276,7 @@ public final class Pesca implements Listener {
             }
             // 4) Peixe comum: qualidade e chance de vir dois.
             ItemStack peixe = pego.clone();
-            if (rnd().nextDouble() < nivel * cfg().pesChanceDupla) peixe.setAmount(peixe.getAmount() + 1);
+            if (rnd().nextDouble() < nivel * cfg().pesChanceDupla + (cardume ? 0.3 : 0)) peixe.setAmount(peixe.getAmount() + 1);
             Qualidade qc = Qualidade.sortear(fracao(p));
             qc.aplicar(peixe);
             PesoPeixe.pesar(plugin, p, peixe, null, qc, fracao(p));
@@ -287,6 +289,42 @@ public final class Pesca implements Listener {
             plugin.stats().darXp(p, Skill.PESCA, cfg().pesXpLixo);
         }
         titulos.registrar(p, "peixes", 1);
+    }
+
+    /**
+     * 3.0: o que a Rede de Pesca do Barco Grande pega numa passada. Sem tesouro nem criatura;
+     * o peixe raro vem com metade da chance da vara (mais no cardume). {@code dono} é quem
+     * pilota (pode ser null: barco puxado no comboio só pega peixe comum).
+     */
+    public ItemStack pescaDaRede(Player dono, Location onde, boolean cardume) {
+        int nivel = dono == null ? 0 : nivel(dono);
+        double fr = dono == null ? 0 : fracao(dono);
+        PeixeRaro.Contexto ctx = contexto(onde);
+        if (dono != null && rnd().nextDouble() < chanceRaro(nivel) * 0.5 + (cardume ? 0.06 : 0)) {
+            PeixeRaro raro = sortearPeixe(ctx, nivel);
+            if (raro != null) {
+                Qualidade q = Qualidade.sortear(fr);
+                ItemStack i = raro.criar(1, q);
+                PesoPeixe.pesar(plugin, dono, i, raro, q, fr);
+                if (marcarVisto(dono, raro)) dono.sendMessage(Component.text("⚓ A rede trouxe um " + raro.nome() + " (novo no Diário do Pescador)!", COR));
+                if (dono.getGameMode() != GameMode.CREATIVE) plugin.stats().darXp(dono, Skill.PESCA, raro.xp() * 0.5);
+                plugin.titulos().registrar(dono, "peixes_raros", 1);
+                plugin.titulos().registrar(dono, "peixes", 1);
+                return i;
+            }
+        }
+        int x = rnd().nextInt(100);
+        Material m = !ctx.oceano() ? (x < 70 ? Material.COD : Material.SALMON)
+                : x < 55 ? Material.COD : x < 80 ? Material.SALMON : x < 94 ? Material.TROPICAL_FISH : Material.PUFFERFISH;
+        ItemStack peixe = new ItemStack(m, cardume && rnd().nextBoolean() ? 2 : 1);
+        Qualidade q = Qualidade.sortear(fr);
+        q.aplicar(peixe);
+        if (dono != null) {
+            PesoPeixe.pesar(plugin, dono, peixe, null, q, fr);
+            if (dono.getGameMode() != GameMode.CREATIVE) plugin.stats().darXp(dono, Skill.PESCA, cfg().pesXpPeixe * 0.5);
+            plugin.titulos().registrar(dono, "peixes", 1);
+        }
+        return peixe;
     }
 
     private PeixeRaro sortearPeixe(PeixeRaro.Contexto c, int nivel) {

@@ -139,6 +139,11 @@ public final class Sonhos implements Listener {
             case VILA_ELFICA -> "Duas árvores enormes, uma rosa e uma verde, e alguém tecendo debaixo delas.";
             case FORJA_PIGLIN -> "Ouro derretendo atrás de uma grade, e um piglin que batia na bigorna cantando.";
             case PRIMEIRO_PORTAL -> "Uma moldura de obsidiana partida no meio do calor, e uma pedra que chorava o seu nome.";
+            case ILHOTA -> "Uma praia pequena no meio do mar, uma palmeira e alguém acenando com um pano branco.";
+            case NAVIO_PIRATA -> "Uma bandeira negra no horizonte, e canhões virando devagar na sua direção: o " + (nome == null ? "navio" : nome) + ".";
+            case ICEBERG -> "Uma montanha de gelo à deriva, e lá dentro alguém olhando pela luneta, parado há anos.";
+            case BARCO_MERCANTE -> "Um toldo listrado balançando num barco ancorado. O mercador sabia o seu nome.";
+            case ILHA_TARTARUGA -> "Uma ilha redonda que subia e descia, como se estivesse dormindo.";
         };
     }
 

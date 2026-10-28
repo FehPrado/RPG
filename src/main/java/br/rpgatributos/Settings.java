@@ -121,6 +121,9 @@ public final class Settings {
     public final boolean confColher, confOrdenar, confRepor, confPortas, confElevadores, confApito;
     public final String manualUrl;
     public final boolean bausVanilla, vilasVanilla, ferrovias, velas, barcoGrande, cobre, comecoGuiado, conjuntosMinerais;
+    /** 3.0 "Mundo e Mar". */
+    public final double marEstruturas, marKrakenChance, marFantasmaChance;
+    public final boolean marCardumes, marBaleias, marTempestade, marKraken, marFantasma;
     public final boolean utilChave, utilFunil, utilRegador, utilLanterna, utilBancada, utilBalde, utilTrena, utilCinto, carroca;
     public final double vanillaCabecaChance;
     public final int profAltura, profPenumbraMaxima;
@@ -453,6 +456,14 @@ public final class Settings {
         ferrovias = c.getBoolean("integracao.ferrovias", true);
         velas = c.getBoolean("integracao.barco-a-vela", true);
         barcoGrande = c.getBoolean("integracao.barco-grande", true);
+        marEstruturas = Math.max(0, c.getDouble("mar.estruturas-no-oceano", 1.5));
+        marCardumes = c.getBoolean("mar.cardumes", true);
+        marBaleias = c.getBoolean("mar.baleias", true);
+        marTempestade = c.getBoolean("mar.tempestade-no-mar", true);
+        marKraken = c.getBoolean("mar.kraken", true);
+        marKrakenChance = Math.max(0, Math.min(1, c.getDouble("mar.kraken-chance-por-minuto", 0.02)));
+        marFantasma = c.getBoolean("mar.navio-fantasma", true);
+        marFantasmaChance = Math.max(0, Math.min(1, c.getDouble("mar.navio-fantasma-chance-por-minuto", 0.04)));
         conjuntosMinerais = c.getBoolean("forja.conjuntos-dos-minerais", true);
         utilChave = c.getBoolean("utilidades.chave-de-construtor", true);
         utilFunil = c.getBoolean("utilidades.funil-com-filtro", true);

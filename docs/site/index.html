@@ -162,7 +162,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 2.99</small></a>
+  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 3.0</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: adaga, cantil, /pets)…" aria-label="Buscar no manual"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 <div class="layout">
@@ -210,18 +210,19 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   <a href="#reinos">👑 Reinos e guerra</a>
   <div class="grupo">Referência</div>
   <a href="#colecao">▦ Coleção de itens</a>
+  <a href="#mar">🌊 Mundo e Mar</a>
 </nav>
 
 <main id="conteudo">
 <div class="hero"><div>
-    <p class="rotulo">Manual do jogador · versão 2.99</p>
+    <p class="rotulo">Manual do jogador · versão 3.0</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
       <span class="chip"><b>13</b>atributos</span>
       <span class="chip"><b>24</b>classes</span>
       <span class="chip"><b>28</b>estações</span>
-      <span class="chip"><b>19</b>estruturas</span>
+      <span class="chip"><b>24</b>estruturas</span>
       <span class="chip"><b>50</b>magias secretas</span>
       <span class="chip"><b>12</b>lendas</span>
     </div>
@@ -1474,7 +1475,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
         <li><b>Ferrovias:</b> em trilho reto o carrinho corre o dobro. Um sino ao lado do trilho toca quando você passa (estação).</li>
         <li><b>Barco a vela:</b> lã em cruz e 2 gravetos fazem a Vela; clique num barco e reme para a frente. No barco comum, a vela ocupa o 2º lugar.</li>
         <li><b>O vento (2.66):</b> sopra de um lado e muda 4 vezes por dia. Com vento por trás o barco a vela voa; de lado vai bem; de frente, quase só no remo. Chuva e Ventania deixam o vento mais forte. Veja de onde ele vem no <code>/calendario</code> e na barra enquanto veleja.</li>
-        <li><b>Barco Grande (2.63):</b> 7 tábuas e 2 barcos (barcos no meio). Leva <b>5 pessoas</b>: o primeiro pilota, os outros clicam no barco e sentam nos bancos. Com a Vela, o mastro ocupa um banco (4 pessoas). Agachado + clique com a mão vazia recolhe.</li>
+        <li><b>Barco Grande (2.63):</b> 7 tábuas e 2 barcos (barcos no meio). Leva <b>5 pessoas</b>: o primeiro pilota, os outros clicam no barco e sentam nos bancos. Com a Vela, o mastro ocupa um banco (4 pessoas). Desde a 3.0 leva baús, bichos, rede, âncora e casco reforçado: veja <a href="#mar">Mundo e Mar</a>.</li>
         <li><b>Comboio:</b> laço num barco e, agachado, clique em outro barco: ficam amarrados. O barco a vela puxa os de trás.</li>
         <li><b>Para-raios:</b> depois de um raio, ele solta faíscas. Clique: fica ligeiro e a próxima peça forjada tem mais chance de sair mais rara.</li>
         <li><b>Reciclagem automática:</b> funil em cima da Bancada de Reciclagem e baú embaixo dela.</li>
@@ -2724,10 +2725,71 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   </div>
 </section>
 
+<section class="secao" id="mar">
+  <h2><span class="ico">🌊</span>Mundo e Mar</h2>
+  <p class="intro">Na 3.0 o mar deixou de ser só caminho: o Barco Grande vira a casa de quem navega, o mar aberto ganha lugares para achar e perigos de verdade.</p>
+  <div class="grade">
+    <div class="card largo"><h3>⛵ O Barco Grande melhorado</h3>
+      <p>Cada um dos 4 bancos é um encaixe: assento, mastro (com a vela), <b>baú</b> ou lugar de <b>bicho</b>. Clique o item no barco para instalar.</p>
+      <div class="tabela"><table><thead><tr><th>Melhoria</th><th>Como fazer</th><th>O que faz</th></tr></thead><tbody>
+        <tr><td>Baú de convés (até 2)</td><td>Um baú comum clicado no barco</td><td>27 espaços; clique no baú para abrir. Ao recolher o barco, o conteúdo vai junto no item</td></tr>
+        <tr><td>Bicho a bordo</td><td>Segure o bicho no laço e clique no barco</td><td>Ele senta num banco e anda junto (companheiro, cachorro, gato...)</td></tr>
+        <tr><td>Casco Reforçado</td><td>Ferro e tábuas em xadrez (IPI / PIP / IPI)</td><td>Casco de 100 em vez de 40 e metade do dano</td></tr>
+        <tr><td>Rede de Pesca</td><td>8 linhas em volta de uma vara</td><td>Navegando, pesca sozinha e guarda no baú (no cardume, muito mais)</td></tr>
+        <tr><td>Âncora</td><td>Corrente, ferro e um bloco de ferro</td><td>Baixada, o barco fica parado no lugar</td></tr>
+        <tr><td>Estandarte na vela</td><td>Um estandarte clicado no barco com vela</td><td>A vela leva o seu desenho (vale no barco pequeno também)</td></tr>
+      </tbody></table></div>
+      <ul>
+        <li><b>Agachado + mão vazia</b> no barco: o menu (vela, baús, âncora, rede, casco, bichos e recolher).</li>
+        <li>O <b>casco tem vida</b>: Kraken, canhões, raios e ondas tiram. <b>Tábuas</b> clicadas consertam (+4). Zerou, o barco <b>afunda</b> e tudo boia.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>🏝 Ilhotas</h3>
+      <p>Areia e palmeiras no mar aberto, com uma de três histórias:</p>
+      <ul>
+        <li><b>O náufrago:</b> dê qualquer comida a ele e ganhe 2 Cartas Náuticas e uma pista.</li>
+        <li><b>O esconderijo pirata:</b> um X vermelho na areia... cave. Piratas esqueletos guardam.</li>
+        <li><b>A ilha das aves:</b> ninhos, papagaios e um barril com penas, ovos e Ninho de Pássaro.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>☠ Navio Pirata</h3>
+      <p>Ancorado longe da costa. Os <b>canhões atiram</b> em quem chega perto (no Barco Grande, tiram casco) e a tripulação aparece no convés.</p>
+      <p>Derrube o <b>capitão</b>: os canhões calam e ele deixa um <b>mapa do tesouro raro</b>, ouro e esmeraldas.</p>
+    </div>
+    <div class="card"><h3>🐢 Ilha-Tartaruga</h3>
+      <p>Uma ilha redonda demais, com um baú lá no alto. <b>Cavar nela ou acender fogo</b> acorda a <b>Tartaruga Ancestral</b>: investidas e uma onda que empurra e bate nos barcos.</p>
+      <p>Vencida: escamas, conchas de náutilo, esmeraldas, Pedra de Proteção e às vezes um Coração do Mar.</p>
+    </div>
+    <div class="card"><h3>🧊 Icebergs e 🛶 Barco Mercante</h3>
+      <p><b>Iceberg</b> (mares gelados): ursos do gelo e, no túnel, o <b>explorador congelado</b>; o baú dele está atrás de gelo azul, com o diário e uma Carta Náutica.</p>
+      <p><b>Barco Mercante:</b> um mercador ancorado que vende Rede, Âncora, Casco Reforçado, Vela, Barco Grande, Cartas Náuticas e luneta.</p>
+    </div>
+    <div class="card"><h3>🗺 Carta Náutica</h3>
+      <p>Clique com ela: marca o lugar do mar mais perto que você <b>ainda não visitou</b> (naufrágio, cidade submersa, farol, ilhota, navio pirata...), com direção e distância.</p>
+    </div>
+    <div class="card"><h3>🐟 Cardumes e baleias</h3>
+      <p>Manchas de água fervendo de peixe no mar aberto, perto de quem navega. Pescando dentro: <b>+6% de peixe raro</b> e <b>+30% de vir em dobro</b>; a rede do barco pega muito mais.</p>
+      <p>Os cardumes grandes do mar fundo têm uma <b>baleia</b>: o jato de água dela se vê de longe.</p>
+    </div>
+    <div class="card"><h3>🐙 Kraken</h3>
+      <p>No <b>mar fundo</b>, à noite ou na trovoada, pode cercar o seu barco. <b>Corte os 4 tentáculos</b> (eles apertam o casco e agarram quem está na água): aí o corpo sobe e apanha. Cuidado com a tinta.</p>
+    </div>
+    <div class="card"><h3>👻 Navio Fantasma</h3>
+      <p>Em noite de <b>lua nova</b> ou de <b>neblina</b>, surge perto de quem navega, com marujos fantasmas e o <b>Capitão Fantasma</b>. Ao amanhecer, some sem deixar rastro.</p>
+    </div>
+    <div class="card"><h3>⛈ Tempestade no mar</h3>
+      <p>Na trovoada, quem está de barco no mar sente: <b>ondas</b> empurram, <b>raios</b> caem por perto (às vezes no barco) e <b>destroços</b> boiam com carga de outros navios.</p>
+    </div>
+    <div class="card"><h3>🏅 Títulos do mar</h3>
+      <p><b>Terror dos Piratas</b> (3 capitães), <b>Caçador de Kraken</b>, <b>Despertador de Ilhas</b> (Tartaruga Ancestral) e <b>Exorcista do Mar</b> (Capitão Fantasma).</p>
+    </div>
+  </div>
+</section>
+
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 2.99 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 3.0 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

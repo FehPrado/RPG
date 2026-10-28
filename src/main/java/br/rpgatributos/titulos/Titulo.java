@@ -176,7 +176,12 @@ public enum Titulo {
     MESTRE_CURTIDOR("Mestre Curtidor", 0xC08A5A, Requisito.contador("pecas_costuradas", 12, "Costurar 12 peças de armadura leve"), Bonus.armadura(1)),
     SONHADOR("Sonhador", 0xB39DDB, Requisito.contador("sonhos", 10, "Ter 10 sonhos com lugares desconhecidos"), Bonus.xpTudo(0.03)),
     COLETOR_DA_ESTACAO("Coletor da Estação", 0x7CB342, Requisito.contador("coletas", 100, "Pegar 100 coisas para colher pelo mundo"), Bonus.xpSkill(Skill.AGRICULTURA, 0.1)),
-    LAVRADOR_DAS_ESTACOES("Lavrador das Estações", 0xE53935, Requisito.contador("colheitas_estacao", 50, "Colher 50 plantações da estação"), Bonus.xpSkill(Skill.AGRICULTURA, 0.15));
+    LAVRADOR_DAS_ESTACOES("Lavrador das Estações", 0xE53935, Requisito.contador("colheitas_estacao", 50, "Colher 50 plantações da estação"), Bonus.xpSkill(Skill.AGRICULTURA, 0.15)),
+    // 3.0 "Mundo e Mar"
+    TERROR_DOS_PIRATAS("Terror dos Piratas", 0xC62828, Requisito.contador("capitaes_piratas", 3, "Derrotar 3 capitães de navios piratas"), new Bonus().comDano(1)),
+    CACADOR_DE_KRAKEN("Caçador de Kraken", 0x7E57C2, Requisito.contador("kraken", 1, "Vencer o Kraken em alto-mar"), Bonus.vida(2)),
+    DESPERTADOR_DE_ILHAS("Despertador de Ilhas", 0x66BB6A, Requisito.contador("tartaruga_ancestral", 1, "Vencer a Tartaruga Ancestral"), Bonus.armadura(1)),
+    EXORCISTA_DO_MAR("Exorcista do Mar", 0xB0BEC5, Requisito.contador("capitao_fantasma", 1, "Derrotar o Capitão Fantasma de um navio fantasma"), Bonus.xpTudo(0.03));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(

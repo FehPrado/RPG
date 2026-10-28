@@ -383,6 +383,12 @@ public final class Comandos implements TabExecutor {
                     if (r != null) erro(sender, r);
                     return;
                 }
+                if (args.length >= 2 && args[1].equalsIgnoreCase("mar")) {
+                    // 3.0: um mar de teste com as estruturas do mar aberto.
+                    String r = plugin.modoTeste().montarMar(p);
+                    if (r != null) erro(sender, r);
+                    return;
+                }
                 plugin.modoTeste().alternar(p);
                 return;
             }
@@ -460,6 +466,28 @@ public final class Comandos implements TabExecutor {
                         }
                     }
                 }
+                return;
+            }
+            case "mar" -> {
+                // 3.0 "Mundo e Mar": cardumes, Kraken, Navio Fantasma, tempestade e os itens do barco.
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                String op = args.length >= 2 ? args[1].toLowerCase(java.util.Locale.ROOT) : "";
+                if (op.equals("itens")) {
+                    entregar(p, br.rpgatributos.detalhes.BarcoGrande.item());
+                    entregar(p, br.rpgatributos.detalhes.Velas.item());
+                    for (br.rpgatributos.detalhes.MelhoriasBarco.Peca pc : br.rpgatributos.detalhes.MelhoriasBarco.Peca.values()) entregar(p, pc.item());
+                    entregar(p, new ItemStack(Material.CHEST, 2));
+                    entregar(p, new ItemStack(Material.WHITE_BANNER));
+                    entregar(p, br.rpgatributos.estruturas.MarAberto.cartaNautica(3));
+                    ok(sender, "Barco Grande, vela, casco reforçado, rede, âncora, 2 baús, um estandarte e 3 Cartas Náuticas.");
+                    return;
+                }
+                if (op.isEmpty()) {
+                    ok(sender, plugin.oceano().resumo() + ".");
+                    sender.sendMessage(Component.text(" Use: /rpgadmin mar <cardume|cardumegrande|kraken|fantasma|fantasmasumir|tempestade|itens|limpar>", NamedTextColor.GRAY));
+                    return;
+                }
+                ok(sender, plugin.oceano().admin(p, op));
                 return;
             }
             case "bando" -> {
@@ -2228,7 +2256,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "mar", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

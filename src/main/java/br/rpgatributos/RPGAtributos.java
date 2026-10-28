@@ -255,6 +255,7 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.detalhes.Ferrovias ferrovias;
     private br.rpgatributos.detalhes.Velas velas;
     private br.rpgatributos.detalhes.BarcoGrande barcoGrande;
+    private br.rpgatributos.mar.Oceano oceano;
     private br.rpgatributos.detalhes.Utilidades utilidades;
     private br.rpgatributos.detalhes.Carrocas carrocas;
     private br.rpgatributos.estrada.Trilhas trilhas;
@@ -360,6 +361,7 @@ public final class RPGAtributos extends JavaPlugin {
         ferrovias = new br.rpgatributos.detalhes.Ferrovias(this);
         velas = new br.rpgatributos.detalhes.Velas(this);
         barcoGrande = new br.rpgatributos.detalhes.BarcoGrande(this);
+        oceano = new br.rpgatributos.mar.Oceano(this);
         utilidades = new br.rpgatributos.detalhes.Utilidades(this);
         carrocas = new br.rpgatributos.detalhes.Carrocas(this);
         trilhas = new br.rpgatributos.estrada.Trilhas(this);
@@ -564,6 +566,10 @@ public final class RPGAtributos extends JavaPlugin {
         getServer().getPluginManager().registerEvents(placas, this);
         getServer().getPluginManager().registerEvents(rede, this);
         getServer().getPluginManager().registerEvents(andarilhos, this);
+        getServer().getPluginManager().registerEvents(barcoGrande.melhorias(), this);
+        getServer().getPluginManager().registerEvents(estruturas.marAberto(), this);
+        getServer().getPluginManager().registerEvents(oceano, this);
+        oceano.carregar();
         getServer().getPluginManager().registerEvents(bandos, this);
         mapasMundo.carregar();
         rede.carregar();
@@ -693,6 +699,8 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, boasvindas::tick, 20L, 20L);
         agenda.runTaskTimer(this, velas::tick, 1L, 1L);
         agenda.runTaskTimer(this, barcoGrande::tick, 1L, 1L);
+        agenda.runTaskTimer(this, oceano::tick, 2L, 2L);
+        agenda.runTaskTimer(this, oceano::segundo, 20L, 20L);
         agenda.runTaskTimer(this, utilidades::tick, 1L, 1L);
         agenda.runTaskTimer(this, utilidades::segundo, 20L, 20L);
         agenda.runTaskTimer(this, carrocas::tick, 1L, 1L);
@@ -886,6 +894,8 @@ public final class RPGAtributos extends JavaPlugin {
     public void onDisable() {
         if (menus != null) menus.fecharTodos();
         if (barcoGrande != null) barcoGrande.desligar();
+        if (oceano != null) oceano.desligar();
+        if (estruturas != null) estruturas.marAberto().desligar();
         if (utilidades != null) utilidades.desligar();
         if (carrocas != null) carrocas.desligar();
         if (velocidadeEstrada != null) velocidadeEstrada.desligar();
@@ -1045,6 +1055,9 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.estrada.Trilhas trilhas() { return trilhas; }
     public br.rpgatributos.estrada.Placas placas() { return placas; }
     public br.rpgatributos.estrada.Rede rede() { return rede; }
+    public br.rpgatributos.detalhes.BarcoGrande barcoGrande() { return barcoGrande; }
+    public br.rpgatributos.mar.Oceano oceano() { return oceano; }
+    public br.rpgatributos.mar.Cardumes cardumes() { return oceano == null ? null : oceano.cardumes(); }
     public br.rpgatributos.estrada.Andarilhos andarilhos() { return andarilhos; }
     public br.rpgatributos.mundo.Noticias noticias() { return noticias; }
     public br.rpgatributos.mundo.Bandos bandos() { return bandos; }

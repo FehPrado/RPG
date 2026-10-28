@@ -460,7 +460,7 @@ public final class Topicos {
                         "Baús das estruturas do próprio jogo às vezes trazem itens do servidor. No menu dos moradores, Conversar abre perguntas conforme o laço.",
                         "Vilas do jogo: aldeões com nome; o sino chama todos para a praça; a cada 3 dias é dia de feira (trocas 20% mais baratas).",
                         "Trilho reto: o carrinho corre o dobro; um sino ao lado do trilho toca quando você passa. Vela de Barco (lã em cruz + 2 gravetos): clique num barco e reme; o vento por trás dá mais velocidade, de frente quase nada (veja o vento no /calendario).",
-                        "Barco Grande (7 tábuas + 2 barcos): 5 lugares, ou 4 com a Vela. Comboio: laço num barco e, agachado, clique em outro barco: ficam amarrados.",
+                        "Barco Grande (7 tábuas + 2 barcos): 5 lugares, com baús, rede, âncora e casco reforçado (veja o tópico do barco). Comboio: laço num barco e, agachado, clique em outro barco: ficam amarrados.",
                         "Para-raios atingido solta faíscas: clique para ficar ligeiro e forjar com mais chance de raridade. Funil em cima da Bancada de Reciclagem e baú embaixo: ela recicla sozinha.")
                 .ligados("vanilla", "conforto", "vilas").palavras("conquista avanco receita livro bau loot conversar aldeao sino feira trilho carrinho ferrovia vela barco grande comboio para raios cobre reciclagem funil").pronto();
         t("utilidades", MUNDO, "Utilidades do dia a dia", Material.PAPER)
@@ -521,7 +521,29 @@ public final class Topicos {
                         "Cidade Submersa: rara, no mar profundo. Templo de Maris, casas, arquivo com a história, cofre e guardas afogados.",
                         "No santuário do templo acorda o Sumo-Sacerdote. Ele guarda o Coração da cidade (um condutor).")
                 .dica("Ponha o Coração bem no meio da moldura do altar: a cidade desperta. Leve poção de respiração.")
-                .ligados("estruturas", "deuses", "pesca").palavras("naufragio navio cidade submersa mar oceano templo maris condutor coracao sacerdote").pronto();
+                .ligados("estruturas", "deuses", "pesca", "maraberto").palavras("naufragio navio cidade submersa mar oceano templo maris condutor coracao sacerdote").pronto();
+        t("barco", MUNDO, "O Barco Grande e as melhorias", Material.SPRUCE_BOAT)
+                .texto("Barco Grande (7 tábuas + 2 barcos): quem pilota e 4 bancos. Cada banco vira assento, mastro (da vela), baú ou lugar de bicho.",
+                        "Baú de convés: clique um baú comum no barco (até 2). Clique no baú para abrir; ao recolher o barco, o que está dentro vai junto.",
+                        "Bicho a bordo: segure o bicho no laço e clique no barco. Casco Reforçado (ferro e tábuas), Rede de Pesca (linha e vara), Âncora (corrente, ferro e bloco de ferro): clique o item no barco.",
+                        "A rede pesca sozinha enquanto você navega e guarda no baú. A âncora baixada deixa o barco parado. Um estandarte clicado vira o pano da vela.",
+                        "O casco tem vida: Kraken, canhões, raios e ondas tiram. Tábuas consertam (+4). Chegou a zero, o barco afunda e tudo boia.")
+                .dica("Agachado + mão vazia no barco: o menu (âncora, rede, baús, bichos, casco e recolher).")
+                .ligados("maraberto", "perigosmar", "integracao").palavras("barco grande vela bau conves rede pesca ancora casco reforcado estandarte bicho lobo afundar consertar tabua").pronto();
+        t("maraberto", MUNDO, "O mar aberto", Material.HEART_OF_THE_SEA)
+                .texto("Longe da costa: ilhotas (o náufrago, o esconderijo pirata com o X na areia, a ilha das aves), icebergs, barcos mercantes e a Ilha-Tartaruga.",
+                        "Navio Pirata ancorado: os canhões atiram em quem chega perto. Derrube o capitão: os canhões calam e ele deixa um mapa do tesouro.",
+                        "Ilha-Tartaruga: tem tesouro no alto, mas cavar ou acender fogo nela acorda a Tartaruga Ancestral.",
+                        "Cardumes: água fervendo de peixe no mar aberto. Pescar ali dá mais peixe raro e em dobro; a rede do barco pega muito mais. Baleias acompanham os grandes.",
+                        "Carta Náutica (do náufrago, do mercador do mar e dos baús): clique com ela e ela marca o lugar do mar mais perto que você ainda não viu.")
+                .dica("Leve comida: o náufrago troca as cartas do barco dele por qualquer coisa de comer.")
+                .ligados("barco", "perigosmar", "mar", "pesca").palavras("ilhota naufrago pirata navio canhao capitao iceberg mercador tartaruga cardume baleia carta nautica tesouro").pronto();
+        t("perigosmar", MUNDO, "Perigos do mar", Material.INK_SAC)
+                .texto("Kraken: no mar fundo, à noite ou na tempestade, ele cerca o barco. Corte os 4 tentáculos e o corpo sobe; aí ele apanha (cuidado com a tinta).",
+                        "Navio Fantasma: em noite de lua nova ou de neblina, surge perto de quem navega, com marujos fantasmas e o Capitão Fantasma. Some ao amanhecer.",
+                        "Tempestade no mar: na trovoada, ondas empurram o barco, raios caem por perto e destroços de outros navios boiam com carga.")
+                .dica("O Casco Reforçado leva metade do dano. Leve tábuas para consertar no meio do mar.")
+                .ligados("barco", "maraberto", "ceu").palavras("kraken tentaculo navio fantasma capitao lua nova neblina tempestade trovoada raio onda destrocos").pronto();
         t("ceu", MUNDO, "Ilhas do Céu", Material.FEATHER)
                 .texto("Arquipélagos raros lá no alto: Jardim Suspenso, Observatório Antigo, Forja dos Ventos ou Ninho do Guardião.",
                         "No chão, um pouco ao lado da ilha, fica a Plataforma de Vento: pise na placa e ela te lança até lá.",

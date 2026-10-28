@@ -129,7 +129,8 @@ public final class ModoTeste implements Listener {
     private void esquecerDados() {
         int c = plugin.colonias().esquecerMundo(MUNDO);
         int m = plugin.rede().esquecerMundo(MUNDO);
-        if (c + m > 0) plugin.getLogger().info("Área de testes: " + c + " colônia(s) e " + m + " marco(s) de estrada esquecidos.");
+        int e = plugin.estruturas().esquecerMundo(MUNDO);
+        if (c + m + e > 0) plugin.getLogger().info("Área de testes: " + c + " colônia(s), " + m + " marco(s) de estrada e " + e + " estrutura(s) esquecidos.");
     }
 
     private void apagarPasta(File dir) {
@@ -203,6 +204,65 @@ public final class ModoTeste implements Listener {
      * com depósito cheio de sobras, ligadas por uma Estrada Real iluminada com um marco em cada ponta.
      * A estrada segue para onde o jogador olha, passando por ele. @return o aviso de erro, ou null.
      */
+    /**
+     * 3.0: um mar de teste à frente do jogador (120 x 120, 19 de fundo) com as estruturas do mar
+     * aberto: as três ilhotas, a Ilha-Tartaruga, o iceberg, o barco mercante e o navio pirata. A
+     * água é posta aos poucos (umas fileiras por tick); as estruturas vêm no fim.
+     */
+    public String montarMar(Player p) {
+        World w = p.getWorld();
+        if (!ehTeste(w)) return "Só dentro da área de testes (/rpgadmin teste).";
+        org.bukkit.block.BlockFace f = p.getFacing();
+        int dx = f.getModX(), dz = f.getModZ();
+        if (dx == 0 && dz == 0) return "Olhe para um dos lados (norte, sul, leste ou oeste).";
+        int topo = w.getHighestBlockYAt(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
+        int cx = p.getLocation().getBlockX() + dx * 64, cz = p.getLocation().getBlockZ() + dz * 64;
+        int fundo = topo - 18;
+        p.sendMessage(Component.text("🌊 Enchendo o mar de teste... (uns segundos)", NamedTextColor.AQUA));
+        new org.bukkit.scheduler.BukkitRunnable() {
+            int x = cx - 60;
+
+            @Override
+            public void run() {
+                for (int fila = 0; fila < 8 && x < cx + 60; fila++, x++) {
+                    for (int z = cz - 60; z < cz + 60; z++) {
+                        w.getBlockAt(x, fundo - 1, z).setType(org.bukkit.Material.SAND, false);
+                        for (int y = fundo; y <= topo; y++) w.getBlockAt(x, y, z).setType(org.bukkit.Material.WATER, false);
+                        for (int y = topo + 1; y <= topo + 3; y++) {
+                            org.bukkit.block.Block b = w.getBlockAt(x, y, z);
+                            if (!b.getType().isAir()) b.setType(org.bukkit.Material.AIR, false);
+                        }
+                    }
+                }
+                if (x < cx + 60) return;
+                cancel();
+                // As estruturas: (lado, frente) a partir do centro do mar.
+                int lx = -dz, lz = dx;
+                Object[][] obras = {
+                        {br.rpgatributos.estruturas.Estrutura.ILHOTA, -38, -38, 0},
+                        {br.rpgatributos.estruturas.Estrutura.ILHOTA, 0, -38, 1},
+                        {br.rpgatributos.estruturas.Estrutura.ILHOTA, 38, -38, 2},
+                        {br.rpgatributos.estruturas.Estrutura.ILHA_TARTARUGA, -38, 2, -1},
+                        {br.rpgatributos.estruturas.Estrutura.ICEBERG, 0, 2, -1},
+                        {br.rpgatributos.estruturas.Estrutura.BARCO_MERCANTE, 38, 2, -1},
+                        {br.rpgatributos.estruturas.Estrutura.NAVIO_PIRATA, 0, 40, -1}};
+                int feitas = 0;
+                for (Object[] o : obras) {
+                    int la = (Integer) o[1], fr = (Integer) o[2];
+                    int ox = cx + lx * la + dx * fr, oz = cz + lz * la + dz * fr;
+                    String erro = plugin.estruturas().construirEm(w, ox, oz, (br.rpgatributos.estruturas.Estrutura) o[0], (Integer) o[3]);
+                    if (erro == null) feitas++;
+                }
+                if (p.isOnline()) {
+                    p.sendMessage(Component.text("🌊 Mar de teste pronto: " + feitas + " estrutura(s). Ilhotas na primeira fila (náufrago, pirata, aves),"
+                            + " depois Ilha-Tartaruga, iceberg e barco mercante; o navio pirata fica no fundo (os canhões atiram).", NamedTextColor.AQUA));
+                    p.sendMessage(Component.text("   Itens do barco: /rpgadmin mar itens · Cardume, Kraken, fantasma, tempestade: /rpgadmin mar", NamedTextColor.GRAY));
+                }
+            }
+        }.runTaskTimer(plugin, 1L, 1L);
+        return null;
+    }
+
     public String montarEstrada(Player p) {
         World w = p.getWorld();
         if (!ehTeste(w)) return "Só dentro da área de testes (/rpgadmin teste).";

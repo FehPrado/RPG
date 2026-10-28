@@ -309,3 +309,138 @@ Ideias de jogos, mangás e manhwas, adaptadas ao que já existe. Página complet
 | Navios e tripulação | Sea of Thieves | Navio conduzido pela party contra monstros do mar | ★★★ | G |
 
 **Sugestão de começo:** sessão de teste da 2.38–2.42, depois Paredes de Palavras, Esferas do Dragão e Frutas Proibidas.
+
+---
+
+## Single player profundo (27/10/2026)
+
+Ideias para quem joga sozinho sentir um mundo mais fundo. Solo Leveling já está coberto: Portal Vermelho, Loja do Sistema, Missão Diária, Ranks, Monarca, Câmara das Estátuas e Ilha das Formigas.
+
+**Recusadas pelo dono do servidor (não sugerir de novo):** Votos, Maldição do Abismo, Mestres de armas, Caçadas com rastros, Mensagem na garrafa, Segredos de Korok, Museu do Curador, Casa aconchegante, Geoglifos, Hall da Fama, Corrida, todo o pilar Project Zomboid (feridas, infecção, resfriado, comida que estraga, dieta, barulho, barricadas, livros de habilidade, traços do personagem, Arauto), Incidente de Teletransporte e Aventureiros rivais.
+
+### Aprovadas
+
+**Mushoku Tensei — magia que cresce com você**
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| Ranks de magia | Maestria do elemento vira Iniciante → Intermediário → Avançado → Santo → Rei → Imperador → Deus, com título e anúncio | ★★ | P |
+| Conjuração silenciosa | A magia muito usada fica "decorada": sai mais rápido e custa menos | ★★ | P |
+| Treino de mana | Esvaziar a mana até o zero dá um pouco de mana máxima permanente (limite por dia e teto) | ★★ | P |
+| Olhos Demoníacos | Olhos raríssimos para equipar: Previsão (mostra o próximo golpe do inimigo), Mana (revela invisíveis e baús) | ★★★ | M |
+| Discípulo | Você ensina magia a um morador da colônia; ele sobe de nível e vira o mago defensor da vila | ★★ | M |
+
+**Overgeared — forja com história**
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| Fusão de armas | Duas armas com nome + material raro = uma terceira que herda parte dos bônus, com nome e história próprios | ★★★ | M |
+| Cadernos do Ferreiro Antigo | Páginas achadas no mundo ensinam técnicas de forja (+1 encaixe de gema, têmpera dupla, reparo perfeito) | ★★ | M |
+| Atributos ocultos | Vontade, Instinto, Dignidade: crescem com feitos (vencer com 1 coração, fugir da morte) e só aparecem quando você os descobre | ★★★ | M |
+
+**O mundo reage a você**
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| Nêmesis | O monstro que te matou ganha nome, fica mais forte e volta; vingança dá loot e título | ★★★ | M |
+| Enquanto você esteve fora | Ao entrar: resumo do que a colônia produziu, ataques, caravanas, estação e portais | ★★ | P |
+| Escudeiro | Morador com Laço completo pode te acompanhar: luta, carrega loot e comenta | ★★★ | M |
+| Fama nas vilas | Seus feitos correm: vilas dão desconto, pedidos especiais e festa quando você chega; maldades fecham portas | ★★ | M |
+| Monstros Únicos | Uma criatura única por bioma; quem vencer primeiro fica gravado na Enciclopédia | ★★ | M |
+
+**Fora do padrão**
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| Armas com humor | A arma com nome tem personalidade: comenta no chat, tem ciúme quando você usa outra, se anima em luta difícil e fica emburrada esquecida no baú; feliz, rende um pouco mais | ★★ | P |
+| ⏸ Backlog — Encolher e o Povo Miúdo (Homem-Formiga) | Elixir ou anel que diminui você de verdade (atributo de tamanho, com velocidade, pulo, alcance e queda ajustados). Pequeno, você entra em tocas e troncos ocos; no menor tamanho, encolher mais te leva a um mundo próprio, o Microverso, construído em escala normal mas com cara de gigante (grama como árvores, grãos de areia como pedras, migalhas, gotas d'água, ácaros e formigas como monstros, mini cidades do Povo Miúdo). O lugar onde você encolheu escolhe a região de lá; crescer te devolve ao mesmo ponto. Mais fundo ainda: o Reino Quântico, com gravidade baixa e ilhas de partículas | ★★★ | G |
+| Ecologia | Caçar demais uma espécie numa região faz ela sumir e um predador aparecer; poupar deixa voltar. Vale para monstros: limpar os zumbis abre espaço para algo pior | ★★ | M |
+| Magia que seca a terra | Muita magia no mesmo lugar esgota a mana do solo: plantas murcham, a grama fica cinza e a magia rende menos ali; o lugar se recupera com o tempo (blocos anotados e devolvidos, como a neve do inverno) | ★★ | M |
+
+### A decidir
+
+**Desafio pessoal (sugeridas antes, sem resposta)**
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| Vida Única | Título e bônus de XP enquanto não morrer; registra quantos dias durou | ★★ | P |
+| Masmorra Hardcore | Morreu, perde o que pegou na masmorra; venceu, loot em dobro e título | ★★ | P |
+
+**Sugestões novas**
+
+| Ideia | Referência | O que é | Impacto | Esforço |
+|---|---|---|---|---|
+| Encantamento recitado | Mushoku Tensei | O contrário da silenciosa: escrever o encantamento da magia no chat logo antes de lançar dá +30% de potência | ★★ | P |
+| Escolas de magia | Mushoku Tensei | Cura, Barreira e Desintoxicação viram trilhas próprias de magia de apoio, com os mesmos ranks | ★★ | M |
+| Três Escolas de Espada | Mushoku Tensei | Deus da Espada (golpes rápidos), Deus da Água (contra-ataque) e Deus do Norte (truques), com ranks Iniciante → Deus, por cima das posturas | ★★★ | M |
+| Inspiração do ferreiro | Overgeared | Estado raro "Inspirado" (depois de um feito, ao amanhecer, num evento): a próxima forja sobe um grau de raridade | ★★ | P |
+| Armas que crescem | Overgeared / Bleach | Arma com nome ganha XP por uso, sobe de nível, revela linhas novas da história e ganha bônus | ★★★ | M |
+| Escultura | Overgeared | Cinzel para esculpir estátuas dos chefes que você venceu; na colônia, cada estátua dá um bônus na área | ★★ | M |
+| Mundo se adapta | — | Se você usa muito um elemento ou arma, monstros de elite começam a nascer resistentes a ele; variar compensa | ★★ | P |
+| Canções de taverna | — | Bardos nas vilas cantam seus feitos (chefes, lendas, Nêmesis vingado); combina com a Fama | ★ | P |
+
+**Sugestão de ordem (aprovadas):** (1) Ranks de magia, Conjuração silenciosa, Treino de mana, Enquanto você esteve fora; (2) Atributos ocultos, Nêmesis, Fusão de armas, Cadernos do Ferreiro; (3) Olhos Demoníacos, Fama nas vilas, Monstros Únicos; (4) Discípulo e Escudeiro (moradores que agem com você).
+
+---
+
+## Nether (27/10/2026)
+
+**O que já existe:** minérios Cristal de Magma (deltas e ermos), Âmbar Infernal (florestas) e Quartzo Negro (vale das almas); Forja dos Piglins com o Ferreiro Piglin (Lança de Basalto); Primeiro Portal em Ruínas (Chave, relíquia); Pesca na lava com a Vara Ígnea (2.56); calor da Temperatura; tema INFERNO nas masmorras; itens do plugin nos baús das fortalezas e bastiões; balde de água que vira gelo.
+
+**Ideias por bioma**
+
+| Ideia | Bioma | O que é | Impacto | Esforço |
+|---|---|---|---|---|
+| Feira dos Piglins | Ermos | Acampamento itinerante que aparece perto de quem explora o Nether: piglins trocam ouro por itens raros do Nether; sem ouro no corpo, a feira vira emboscada | ★★ | M |
+| Rei Hoglin | Floresta Carmesim | Hoglin gigante liderando uma manada; vencer dá a Presa do Rei (material da Forja) | ★★ | M |
+| Fungos cultiváveis | Florestas | Fungos carmesim e distorcido com variedades no Canteiro (brilhante, venenoso, saltador) para Cozinha e Alquimia | ★ | P |
+| Torre do Andarilho | Floresta Distorcida | Torre de fungo gigante com endermen antigos que guardam o caminho para o End vivo | ★★ | M |
+| Almas penadas | Vale das Almas | Fantasmas de aventureiros presos; recolhidos com a Lanterna das Almas viram ingrediente de Alquimia, oferenda a Mortis e sombras extras para o Soberano | ★★★ | M |
+| Erupções | Deltas de Basalto | Evento local: bombas de magma caem do teto e deixam Cristal de Magma exposto; quem fica perto se queima | ★★ | P |
+
+**Estruturas do jogo com tempero RPG**
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| Coração da Fortaleza | Cada fortaleza ganha uma sala do Senhor das Chamas (blaze grande com fases), vencido uma vez por fortaleza | ★★★ | M |
+| Rei Piglin do Bastião | Um piglin bruto chefe guarda o tesouro do bastião; vencido, os piglins daquele bastião ficam neutros | ★★ | M |
+
+**Sistemas**
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| Strider no Domador | Vincular e evoluir striders como montaria de lava (sela de basalto, mais rápido, carrega um passageiro) | ★★ | P |
+
+---
+
+## Oceano (27/10/2026) — feito na 3.0 "Mundo e Mar"
+
+**O que já existe:** Naufrágios com diário e carga, Cidades Submersas (raras, uma por região de 3000 blocos, Sumo-Sacerdote), Vila de Pescadores, Farol, ostras com pérolas, 21 peixes raros, Tesouros do Mar e criaturas que mordem a isca, raça Povo do Mar. O problema: quase tudo está no fundo ou na costa; quem navega pelo mar aberto não encontra nada. Mergulho continua só vanilla (escolha da 2.29).
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| ✅ Cardumes (3.0) | Manchas de peixe na superfície (água agitada e pássaros mergulhando) em mar aberto: pescar ali dá mais peixe raro; mudam de lugar com a estação | ★★ | P |
+| ✅ Ilhotas (3.0) | Pequenas ilhas geradas no mar aberto: ilha do náufrago (NPC com história e pedido), esconderijo pirata com tesouro, ilha das aves com ninhos raros | ★★★ | M |
+| ✅ Navio Pirata ancorado (3.0) | Navio inteiro de blocos ancorado longe da costa, com tripulação, canhões (bolas de fogo) e o Capitão como chefe; o mapa dele leva a um tesouro | ★★★ | M |
+| ✅ Navio Fantasma (3.0) | Só em noites de lua nova com neblina: um navio fantasma surge no mar com tripulação de esqueletos; some ao amanhecer (blocos devolvidos) | ★★★ | M |
+| ✅ Kraken (3.0) | Lula gigante que ataca barcos no mar profundo: tentáculos (lulas grandes) agarram e afundam o barco; chefe do mar com loot próprio | ★★★ | M |
+| ✅ Ilha-Tartaruga (3.0) | Uma ilha que na verdade é uma tartaruga gigante dormindo; cavar fundo ou acender fogo a acorda (chefe) | ★★ | M |
+| ✅ Tempestade no mar (3.0) | Tempestade em alto-mar: raios mais frequentes, ondas que empurram o barco e destroços que boiam com itens | ★★ | P |
+| ✅ Icebergs (3.0) | Blocos de gelo flutuando nos mares gelados, com ursos polares, um explorador congelado e tesouro preso no gelo | ★ | P |
+| ✅ Barco mercante (3.0) | Mercador ancorado no mar aberto vendendo iscas, mapas de naufrágio e cartas náuticas | ★ | P |
+| ✅ Baleias (3.0) | Baleias (criaturas grandes) migrando pelo mar aberto; seguir uma leva a um cardume grande ou a uma ilhota | ★★ | P |
+
+**✅ Barco Grande melhorado (3.0 "Mundo e Mar")**
+
+Cada banco do Barco Grande (4) vira um encaixe: assento, mastro, baú ou companheiro. Melhorias são itens clicados no barco (como a vela); agachado com a mão vazia tira.
+
+| Melhoria | O que faz |
+|---|---|
+| Baú de convés (até 2) | 27 espaços cada, guardados no barco; ao recolher, o conteúdo vai dentro do item |
+| Companheiro a bordo | Bicho no laço (companheiro do Domador ou pet) embarca num banco e anda sentado |
+| Casco reforçado | Aguenta Kraken, piratas e tempestade sem afundar |
+| Rede de pesca | Pesca sozinha enquanto navega (mais nos Cardumes); peixes vão para o baú |
+| Âncora | Barco parado não deriva nem é empurrado |
+| Vela com estandarte | Clicar um estandarte na vela: o mastro leva o seu desenho |
+
+Canhão de proa ficou de fora.

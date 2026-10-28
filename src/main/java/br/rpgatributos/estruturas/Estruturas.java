@@ -141,6 +141,7 @@ public final class Estruturas implements Listener {
     final CidadesSubmersas cidades;
     final IlhasDoCeu ilhas;
     private final Vilas vilas;
+    final MarAberto marAberto;
     private final File arquivo;
     private final NamespacedKey kChunk, kPoco, kAltar;
     final List<Sitio> sitios = new ArrayList<>();
@@ -157,6 +158,7 @@ public final class Estruturas implements Listener {
         this.cidades = new CidadesSubmersas(plugin, this, projetos);
         this.ilhas = new IlhasDoCeu(plugin, this, projetos);
         this.vilas = new Vilas(plugin, this);
+        this.marAberto = new MarAberto(plugin, this, projetos);
         this.arquivo = new File(plugin.getDataFolder(), "estruturas.yml");
         this.kChunk = new NamespacedKey(plugin, "estrutura_v1");
         this.kPoco = new NamespacedKey(plugin, "poco_desejo_dia");
@@ -170,6 +172,11 @@ public final class Estruturas implements Listener {
     /** As vilas com vários moradores (o listener dos NPCs). */
     public Vilas vilas() {
         return vilas;
+    }
+
+    /** 3.0: o mar aberto (ilhotas, navios, icebergs, a Ilha-Tartaruga e a Carta Náutica). */
+    public MarAberto marAberto() {
+        return marAberto;
     }
 
     /** A estrutura pelo id (ou null). */
@@ -279,17 +286,19 @@ public final class Estruturas implements Listener {
             ilhas.talvez(c);
         }
         Random r =new Random(w.getSeed() ^ (c.getX() * 0x9E3779B97F4A7C15L) ^ (c.getZ() * 0xC2B2AE3D27D4EB4FL) ^ 0x57A0L);
+        int x = c.getX() * 16 + 8, z = c.getZ() * 16 + 8;
+        // 3.0: chunk de oceano sorteia entre as estruturas do mar (o mar aberto é grande: um pouco mais de chance).
+        boolean mar = !nether && w.getBiome(x, w.getSeaLevel() - 1, z).getKey().getKey().contains("ocean");
         // No Nether a viagem rende 8x: metade da chance, para não ficar uma estrutura em cada esquina.
-        if (r.nextDouble() >= plugin.settings().estrChance * (nether ? 0.5 : 1)) return;
+        if (r.nextDouble() >= plugin.settings().estrChance * (nether ? 0.5 : mar ? plugin.settings().marEstruturas : 1)) return;
         // Até 3 tipos diferentes: se o chão não serve para um, talvez sirva para outro.
         List<Estrutura> tipos = new ArrayList<>();
         for (int i = 0; i < 12 && tipos.size() < 3; i++) {
-            Estrutura t = Estrutura.sortear(r, nether);
+            Estrutura t = Estrutura.sortear(r, nether, mar);
             if (!tipos.contains(t)) tipos.add(t);
         }
         int rot = r.nextInt(4);
         long semente = r.nextLong();
-        int x = c.getX() * 16 + 8, z = c.getZ() * 16 + 8;
         plugin.getServer().getScheduler().runTask(plugin, () -> {
             if (!c.isLoaded()) return;
             for (Estrutura t : tipos) if (construir(w, x, z, t, rot, new Random(semente), false, !novo) != null) return;
@@ -462,8 +471,9 @@ public final class Estruturas implements Listener {
         for (int dx = -raio; dx <= raio; dx++) {
             for (int dz = -raio; dz <= raio; dz++) {
                 Block g = t.nether() ? chaoNether(w, x + dx, z + dz, pisoNether)
-                        : t.submersa() ? fundoDoMar(w, x + dx, z + dz, 7) : t.palafita() ? superficie(w, x + dx, z + dz) : chao(w, x + dx, z + dz);
-                if (g == null && !forcar) return recusa(t.submersa() ? "mar raso" : "água ou lava");
+                        : t.submersa() ? fundoDoMar(w, x + dx, z + dz, 7) : t.marAberto() ? MarAberto.superficie(w, x + dx, z + dz, 5)
+                        : t.palafita() ? superficie(w, x + dx, z + dz) : chao(w, x + dx, z + dz);
+                if (g == null && !forcar) return recusa(t.submersa() || t.marAberto() ? "mar raso" : "água ou lava");
                 int h = g != null ? g.getY() : t.nether() ? pisoNether : w.getHighestBlockYAt(x + dx, z + dz);
                 if (g != null) tipos.merge(g.getType(), 1, Integer::sum);
                 alt[dx + raio][dz + raio] = h;
@@ -515,7 +525,7 @@ public final class Estruturas implements Listener {
         for (int dx = -raio; dx <= raio; dx++) {
             for (int dz = -raio; dz <= raio; dz++) {
                 int gx = x + dx, gz = z + dz, h = alt[dx + raio][dz + raio];
-                if (!t.palafita()) {
+                if (!t.palafita() && !t.marAberto()) {
                     for (int yy = h + 1; yy < y0; yy++) w.getBlockAt(gx, yy, gz).setType(sub, false);
                     w.getBlockAt(gx, y0, gz).setType(sup, false);
                 }
@@ -552,9 +562,12 @@ public final class Estruturas implements Listener {
             s.nome = Mar.Navio.values()[s.fundo].nome(r);
             s.pista = cidades.pista(w, x, z);
         }
+        if (t == Estrutura.ILHOTA) s.fundo = varianteForcada >= 0 ? varianteForcada : r.nextInt(3); // 0 náufrago, 1 esconderijo pirata, 2 ilha das aves
+        if (t == Estrutura.NAVIO_PIRATA) s.nome = Mar.Navio.PIRATA.nome(r);
         Obra obra = new Obra(w, x, y0, z, rot, r);
         obra.submersa = t.submersa();
-        projetos.construir(s, obra);
+        if (t.marAberto()) marAberto.construir(s, obra);
+        else projetos.construir(s, obra);
         sitios.add(s);
         salvar();
         plugin.getLogger().info("Estrutura nova: " + t.nome() + " em " + w.getName() + " " + x + " " + y0 + " " + z);
@@ -643,12 +656,14 @@ public final class Estruturas implements Listener {
                         }
                         case CIDADE_SUBMERSA -> cidades.tick(s, w, p, jogando, d2, dy);
                         case ILHA_DO_CEU -> ilhas.tick(s, w, p, jogando, d2, dy);
+                        case ILHOTA, NAVIO_PIRATA, ICEBERG, ILHA_TARTARUGA -> marAberto.tick(s, w, p, jogando, d2);
                         default -> { }
                     }
                 }
             }
             cidades.poderes(ciclo);
             ilhas.poderes(ciclo);
+            marAberto.esconderBarras();
         }
         if (sujo && ciclo % 15 == 0) salvar();
     }
@@ -664,6 +679,7 @@ public final class Estruturas implements Listener {
             case NAUFRAGIO -> s.nome != null ? "Naufrágio do " + s.nome : s.tipo.nome();
             case CIDADE_SUBMERSA -> s.nome != null ? s.nome + ", a Cidade Submersa" : s.tipo.nome();
             case ILHA_DO_CEU -> IlhasDoCeu.titulo(s);
+            case NAVIO_PIRATA -> s.nome != null ? "Navio Pirata " + s.nome : s.tipo.nome();
             default -> s.tipo.nome();
         };
         p.showTitle(Title.title(Component.text("⌂ " + titulo, s.tipo.cor(), TextDecoration.BOLD),
@@ -672,6 +688,7 @@ public final class Estruturas implements Listener {
         p.playSound(p.getLocation(), Sound.BLOCK_BELL_RESONATE, 0.6f, 0.7f);
         plugin.diario().marco(p, "estrutura_" + s.tipo.id(), "Encontrou " + s.tipo.comArtigoIndefinido());
         plugin.titulos().registrar(p, "estruturas", 1);
+        if (s.tipo.marAberto()) marAberto.descobriu(p, s);
         if (s.tipo == Estrutura.SANTUARIO_ESQUECIDO && s.deus != null) {
             p.sendMessage(Component.text(s.deus.simbolo() + " Um santuário antigo de " + s.deus.nome() + ", " + s.deus.titulo()
                     + ". Leia a inscrição no púlpito.", s.deus.cor()));
@@ -973,6 +990,8 @@ public final class Estruturas implements Listener {
                 if (quem != null) plugin.diario().marco(quem, "capitao_fortim", "Derrotou o Capitão Esquecido de um fortim");
             }
             case "sacerdote" -> cidades.sacerdoteMorreu(e, v.substring(0, v.indexOf(':')));
+            case "pirata" -> marAberto.capitaoMorreu(e, v.substring(0, v.indexOf(':')));
+            case "tartaruga" -> marAberto.tartarugaMorreu(e, v.substring(0, v.indexOf(':')));
             case "ventos" -> ilhas.guardiaoMorreu(e, v.substring(0, v.indexOf(':')));
             case "guardiao" -> {
                 e.getDrops().add(plugin.arqueologia().reliquiaAleatoria());
@@ -997,6 +1016,7 @@ public final class Estruturas implements Listener {
         return switch (s.tipo) {
             case OASIS -> "Mercador " + NOMES_NOMADE[i];
             case CABANA_DA_BRUXA -> "Bruxa " + NOMES_BRUXA[i];
+            case BARCO_MERCANTE -> MarAberto.MERCADORES[i];
             default -> "Eremita " + NOMES_EREMITA[Math.floorMod(s.id.hashCode(), NOMES_EREMITA.length)];
         };
     }
@@ -1005,6 +1025,7 @@ public final class Estruturas implements Listener {
         return switch (t) {
             case OASIS -> Ruinas.NOMADE;
             case CABANA_DA_BRUXA -> Ruinas.BRUXA;
+            case BARCO_MERCANTE -> MarAberto.MERCADOR;
             default -> Projetos.EREMITA;
         };
     }
@@ -1057,6 +1078,8 @@ public final class Estruturas implements Listener {
                 if (s.tipo == Estrutura.OASIS) {
                     m.setVillagerType(Villager.Type.DESERT);
                     m.setProfession(Villager.Profession.LEATHERWORKER);
+                } else if (s.tipo == Estrutura.BARCO_MERCANTE) {
+                    m.setProfession(Villager.Profession.FISHERMAN);
                 } else {
                     m.setProfession(Villager.Profession.CLERIC);
                 }
@@ -1104,6 +1127,16 @@ public final class Estruturas implements Listener {
                 l.add(new Oferta(Frascos.criar(Frascos.Tipo.values()[r.nextInt(Frascos.Tipo.values().length)], 3), 9, 2));
                 l.add(new Oferta(ervas[r.nextInt(ervas.length)].criar(3), 4, 4));
                 l.add(new Oferta(new ItemStack(Material.GLOWSTONE), 6, 2));
+            }
+            case BARCO_MERCANTE -> {
+                // 3.0: o que serve no mar.
+                l.add(new Oferta(br.rpgatributos.detalhes.MelhoriasBarco.Peca.REDE.item(), 12, 1));
+                l.add(new Oferta(br.rpgatributos.detalhes.MelhoriasBarco.Peca.ANCORA.item(), 10, 1));
+                l.add(new Oferta(br.rpgatributos.detalhes.MelhoriasBarco.Peca.CASCO.item(), 14, 1));
+                l.add(new Oferta(br.rpgatributos.detalhes.Velas.item(), 5, 2));
+                l.add(new Oferta(br.rpgatributos.detalhes.BarcoGrande.item(), 16, 1));
+                l.add(new Oferta(MarAberto.cartaNautica(2), 6, 3));
+                l.add(new Oferta(new ItemStack(Material.SPYGLASS), 8, 1));
             }
             default -> {
                 l.add(new Oferta(ervas[r.nextInt(ervas.length)].criar(3), 4, 4));
@@ -1484,10 +1517,37 @@ public final class Estruturas implements Listener {
 
     /** Pelo console: {@code /rpgadmin estrutura <tipo> <mundo> <x> <z>}. */
     public String construirEm(World w, int x, int z, Estrutura t) {
+        return construirEm(w, x, z, t, -1);
+    }
+
+    /** 3.0: com a variação escolhida (a ilhota: 0 náufrago, 1 pirata, 2 aves; -1 = sorteada). */
+    public String construirEm(World w, int x, int z, Estrutura t, int variante) {
         if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(w, x, z);
         if (t == Estrutura.ILHA_DO_CEU) return ilhas.fundarAqui(w, x, z);
-        Sitio s =construir(w, x, z, t, ThreadLocalRandom.current().nextInt(4), new Random(), true, true);
-        return s == null ? "Não deu para construir aqui (fundo demais para a mina?)." : null;
+        varianteForcada = variante;
+        try {
+            Sitio s = construir(w, x, z, t, ThreadLocalRandom.current().nextInt(4), new Random(), true, true);
+            return s == null ? "Não deu para construir aqui (fundo demais para a mina?)." : null;
+        } finally {
+            varianteForcada = -1;
+        }
+    }
+
+    /** Para o comando de teste montar cada ilhota com a história certa. */
+    private int varianteForcada = -1;
+
+    /** 3.0: há estrutura a menos de {@code raio} blocos (o Navio Fantasma não surge em cima de uma). */
+    public boolean temEstruturaPerto(Location l, double raio) {
+        return perto(l.getWorld(), l.getBlockX(), l.getBlockZ(), raio) != null;
+    }
+
+    /** 3.0: a área de testes foi apagada: as estruturas de lá saem do registro. */
+    public int esquecerMundo(String mundo) {
+        int antes = sitios.size();
+        sitios.removeIf(s -> s.mundo.equals(mundo));
+        int n = antes - sitios.size();
+        if (n > 0) salvar();
+        return n;
     }
 
     public List<String> listar(Location l, int max) {

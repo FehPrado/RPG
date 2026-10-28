@@ -619,3 +619,14 @@ utilidades:
   trena: true                         # mede entre dois blocos e desenha a caixa
   cinto-de-ferramentas: true          # a ferramenta certa vem para a mão ao bater no bloco
   carroca: true                       # 2.67: carroça puxada por cavalo/mula/burro/lhama/camelo, com melhorias
+
+# 3.0 "Mundo e Mar": o mar aberto
+mar:
+  estruturas-no-oceano: 1.5           # chance de estrutura num chunk de oceano (x a chance normal): ilhotas, navios, icebergs...
+  cardumes: true                      # manchas de peixe no mar aberto: pescar ali rende mais (e a rede do barco também)
+  baleias: true                       # baleias aparecem nos cardumes grandes e soltam um jato de água que se vê de longe
+  tempestade-no-mar: true             # na trovoada o mar aberto fica bravo: raios perto dos barcos, ondas e destroços boiando
+  kraken: true                        # o Kraken ataca barcos no mar fundo, à noite ou na tempestade
+  kraken-chance-por-minuto: 0.02      # por jogador navegando no mar fundo nessas horas
+  navio-fantasma: true                # na lua nova (ou na neblina), um navio fantasma surge à noite perto de quem navega
+  navio-fantasma-chance-por-minuto: 0.04

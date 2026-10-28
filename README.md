@@ -18,6 +18,7 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **combos de arma**: 3 cliques com a arma na mão soltam golpes (42 no total), com Vigor e proficiência por tipo de arma;
 - **fé e mistério**: seis deuses com santuários, oferendas e milagres, constelações observadas pela luneta, transmutação alquímica e runas gravadas nos equipamentos;
 - **exploração**: **Ilhas do Céu** (lançado por uma Plataforma de Vento) e as **Profundezas** escuras com Raízes de Luz e a Penumbra, Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
+- **mundo e mar (3.0)**: o **Barco Grande** ganha baús de convés, lugar para bicho, **rede de pesca**, **âncora** e **casco reforçado**; o **mar aberto** ganha ilhotas, navio pirata com canhões, icebergs, barco mercante, a **Ilha-Tartaruga**, **cardumes** e **baleias**; e perigos: o **Kraken**, o **Navio Fantasma** e a **tempestade no mar**;
 - **progressão extra**: **talentos** em 4 árvores, **renascer** com bônus permanente (até ★★★★★) e **evolução dos companheiros** (Lobo → Lobo Alfa → Lobo das Sombras);
 - **detalhes do dia a dia**: barco, carrinho, vara, élitro e armadura de cavalo forjados, Boneco de Treino, Pedra de Amolar, Fogueira de Acampamento (sentar e descansar), Bebedouro, troféus de chefe, túmulo ao morrer, animais raros, ninhos, recordes e o Diário de Viagem;
 - **vida no mundo**: Barril de Envelhecimento, apicultura, Canteiro de Ervas, Álbum de Cartas com Duelo de Cartas (contra moradores e jogadores), Mercador Itinerante, encontros na estrada, segredos, flechas especiais e frascos de arremesso;
@@ -1716,7 +1717,7 @@ Coisas que aproveitam o que o jogo já tem. Tudo pode ser desligado em `integrac
 - **Ferrovias:** em trilho reto e plano (8 blocos ou mais), o carrinho com gente acelera até o **dobro da velocidade** e volta ao normal antes das curvas. Um **sino ao lado do trilho** vira estação: toca quando o carrinho passa.
 - **Barco a vela:** a **Vela de Barco** (lã em cruz com 2 gravetos) vai num barco comum com um clique. A vela ocupa o segundo lugar do barco; agachado + clique (mão vazia) tira.
 - **O vento (2.66):** sopra de um lado e muda 4 vezes por dia de jogo (a virada é aos poucos). Remando para a frente com vela, o vento **por trás** dá a velocidade máxima, **de lado** a metade e **de frente** quase nada (sobra o remo). A força vem do tempo: **fraco** com tempo bom, **bom** na chuva e **forte** na Ventania (que ainda empurra o barco um pouco para o lado do vento). A vela gira para pegar o vento, a barra mostra "Vento a favor / de lado / contra", e o vento aparece no `/calendario` e no placar (quando você está num barco). Os projéteis desviados pela Ventania seguem esse mesmo vento.
-- **Barco Grande (2.63):** 7 tábuas e 2 barcos comuns na bancada (`PBP / PBP / PPP`, barcos no meio). Clique na água com ele: aparece um barco comprido de abeto com convés, bordas e 2 bancos. Leva **5 pessoas**: o primeiro a subir pilota, os outros sentam nos 4 bancos (é só clicar no barco). Com a Vela de Barco, o mastro ocupa um banco (**4 pessoas**) e ele corre como o barco a vela. Agachado + clique com a mão vazia tira a vela; sem vela e sem ninguém a bordo, recolhe o barco (volta o item).
+- **Barco Grande (2.63):** 7 tábuas e 2 barcos comuns na bancada (`PBP / PBP / PPP`, barcos no meio). Clique na água com ele: aparece um barco comprido de abeto com convés, bordas e 2 bancos. Leva **5 pessoas**: o primeiro a subir pilota, os outros sentam nos 4 bancos (é só clicar no barco). Com a Vela de Barco, o mastro ocupa um banco (**4 pessoas**) e ele corre como o barco a vela. **3.0:** os bancos também levam baús e bichos, e o barco ganha rede, âncora e casco reforçado; agachado + clique com a mão vazia abre o **menu do barco** (veja **Mundo e Mar**).
 - **Comboio de barcos (2.63):** do próprio jogo: ponha o laço num barco e, agachado, clique em outro barco: o primeiro fica amarrado no segundo. Um barco a vela puxa os de trás (2 pessoas em cada, ou baús nos barcos com baú). O Barco Grande também entra no comboio, puxando ou sendo puxado.
 - **Para-raios guarda o raio:** quando um raio cai num para-raios, ele solta faíscas por 15 minutos. Clique nele para pegar a carga: Pressa II e Velocidade por 3 minutos, e a próxima peça forjada (em até 30 minutos) tem **+8% de chance de sair uma raridade acima**.
 - **Começo guiado:** quem entra pela primeira vez recebe uma janela de boas-vindas com 3 primeiros passos (raça, Jornada, Manual). Com 30 minutos de jogo, uma janela sobre Forja, classe e companheiro; com 2 horas, sobre party, território, colônia e reino. Quem desligou as dicas (`/guia dicas`) não recebe as duas últimas.
@@ -1877,6 +1878,53 @@ Feitos na bancada; as Garras, a Corda e a Bolsa gastam **Vigor**.
 
 - **`/rpg`:** o menu central, com os próximos passos, as categorias e a Jornada (veja "Interface: /rpg, Guia e Jornada").
 - **`/placar`:** liga ou desliga um placar do lado da tela com nível, vigor, mana, estação, lua, hora, Descansado e pontos de talento.
+## Mundo e Mar (3.0)
+
+O mar deixa de ser só caminho: o barco vira casa de quem navega, o mar aberto ganha lugares para achar e perigos de verdade.
+
+### O Barco Grande melhorado
+
+Cada um dos 4 bancos do Barco Grande é um **encaixe**: assento, mastro (o banco 1, quando há vela), **baú de convés** ou **lugar de bicho**. As melhorias são itens: clique o item no barco para instalar.
+
+| Melhoria | Como fazer | O que faz |
+|---|---|---|
+| Baú de convés (até 2) | Um **baú comum** clicado no barco | 27 espaços cada. Clique no baú desenhado para abrir (de fora ou a bordo). Ao recolher o barco, **o conteúdo vai dentro do item**, como numa shulker |
+| Bicho a bordo | Segure o bicho **no laço** e clique no barco | O bicho (companheiro do Domador, cachorro, gato...) senta num banco livre e anda junto; o laço volta para a mão. Clique de novo para subir você |
+| Casco Reforçado | `IPI / PIP / IPI` (ferro e tábuas) | O casco aguenta **100** em vez de 40 e leva **metade do dano** |
+| Rede de Pesca | 8 linhas em volta de 1 vara de pescar | Navegando, pesca sozinha (a cada ~24 blocos; no cardume, a cada ~8 e sempre) e guarda no baú do barco. Pesca alta de quem pilota ajuda a vir peixe raro |
+| Âncora | `_C_ / _I_ / IBI` (corrente, ferro, bloco de ferro) | Baixada (pelo menu), o barco fica parado no lugar |
+| Estandarte na vela | Um **estandarte** clicado no barco com vela | O pano da vela vira o seu estandarte (vale também no barco pequeno com vela) |
+
+- **Casco:** o Barco Grande tem vida. Kraken, balas de canhão, raios e ondas tiram; **tábuas** clicadas no barco consertam (+4 cada). Chegou a zero, o barco **afunda**: todos caem na água, o que estava nos baús boia e o barco (sem os baús, com o resto das melhorias) boia também.
+- **Menu do barco:** agachado + clique com a mão vazia (de fora ou a bordo): tirar a vela ou o estandarte, tirar o último baú (o conteúdo vem junto), **baixar/levantar a âncora** (agachado: tirar a âncora), tirar a rede ou o reforço, **desembarcar os bichos** e **recolher o barco** (ninguém a bordo).
+- Golpes de monstro, flecha ou raio não recolhem mais o barco: só um jogador batendo nele.
+
+### O mar aberto
+
+Nos chunks de oceano, as estruturas são sorteadas só entre as do mar (com um pouco mais de chance, `mar.estruturas-no-oceano`). Na superfície, longe da costa:
+
+| Estrutura | Onde | O que tem |
+|---|---|---|
+| Ilhota | Oceanos (menos os gelados) | Areia, palmeiras e uma de 3 histórias: o **náufrago** (dê qualquer comida a ele e ganhe 2 Cartas Náuticas e uma pista), o **esconderijo pirata** (um X vermelho na areia, o baú enterrado embaixo e piratas esqueletos) e a **ilha das aves** (ninhos, papagaios e um barril com penas, ovos e Ninho de Pássaro) |
+| Navio Pirata | Oceanos (menos os gelados) | Navio inteiro ancorado, com nome. **Canhões** atiram em quem chega a ~38 blocos (bolas de fogo que não queimam nem quebram blocos; no Barco Grande, tiram casco). A tripulação (piratas com besta e espada) aparece a ~34 blocos. **Derrubar o capitão** cala os canhões e dá um **mapa do tesouro raro**, ouro e esmeraldas |
+| Iceberg | Mares gelados e frios | Montanha de gelo à deriva, ursos do gelo e, no túnel, o **explorador congelado** atrás de um gelo transparente; o baú dele (atrás de gelo azul) tem o diário com uma pista, bússola e Carta Náutica |
+| Barco Mercante | Oceanos (menos os gelados) | Um mercador ancorado sob um toldo listrado: vende Rede, Âncora, Casco Reforçado, Vela, Barco Grande, Cartas Náuticas e luneta (5 ofertas por dia) |
+| Ilha-Tartaruga | Oceanos quentes, mornos e comuns | Uma ilha redonda demais, com cabeça, nadadeiras e um baú no alto. **Cavar nela ou acender fogo** acorda a **Tartaruga Ancestral** (400 de vida, investida e onda que empurra e bate nos barcos). Vencida, deixa escamas de tartaruga, conchas de náutilo, esmeraldas, Pedra de Proteção e às vezes um Coração do Mar; a ilha volta a dormir para sempre |
+
+- **Carta Náutica:** clique com ela e ela marca o lugar do mar mais perto que você ainda não visitou (naufrágio, cidade submersa, farol, vila de pescadores ou as estruturas acima), com direção e distância. Vem do náufrago, do mercador do mar, do explorador congelado, do capitão pirata e dos destroços da tempestade.
+- **Cardumes:** a água ferve de peixe em manchas no mar aberto, perto de quem navega ou nada (até 2 por perto, mudam de lugar a cada poucos minutos). Pescar dentro: **+6% de peixe raro** e **+30% de vir em dobro**. A Rede de Pesca pega muito mais ali.
+- **Baleias:** os cardumes grandes, no mar fundo, trazem uma baleia; o **jato de água** dela se vê de longe e marca onde está o cardume.
+
+### Perigos do mar
+
+- **Kraken:** no **mar fundo**, à noite ou na trovoada, pode cercar o barco de quem navega (2% por minuto, no máximo um a cada 30 min). Primeiro só os **4 tentáculos** aparecem: apertam o casco do Barco Grande, arrancam quem rema no barco pequeno e agarram quem está na água. **Cortados os quatro, o corpo sobe** e só então apanha; ele cospe tinta (cegueira) e um tentáculo volta a crescer de vez em quando. Vencido: muita tinta (comum e brilhante), conchas, cristais de prismarinho, esmeraldas, 2 Pérolas Negras e às vezes um Coração do Mar. Some se todos se afastarem ou depois de 7 minutos.
+- **Navio Fantasma:** em noite de **lua nova** ou de **neblina**, surge a uns 40 blocos de quem navega no mar (4% por minuto, no máximo um por hora), com marujos fantasmas e o **Capitão Fantasma** (200 de vida). O capitão deixa ouro, esmeraldas, fragmentos de eco e às vezes Mapa Rasgado ou Página de Lenda. **Ao amanhecer, o navio some**: cada bloco volta a ser o que era (fica anotado em `mar.yml`, então some mesmo se o servidor reiniciar).
+- **Tempestade no mar:** na trovoada, para quem está de barco no mar: **ondas** empurram o barco de lado, **raios** caem por perto (e de vez em quando no próprio barco: dano em quem está a bordo e no casco do Barco Grande) e **destroços** de outros navios boiam com carga (tábuas, linha, papel, trigo, ferro, ouro, esmeralda, frascos de experiência e até uma Carta Náutica).
+
+Títulos: **Terror dos Piratas** (3 capitães piratas), **Caçador de Kraken**, **Despertador de Ilhas** (Tartaruga Ancestral) e **Exorcista do Mar** (Capitão Fantasma).
+
+No `config.yml`, a seção `mar:` liga e desliga cada parte (cardumes, baleias, tempestade, Kraken, Navio Fantasma) e ajusta as chances.
+
 ## Pesca
 
 Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
@@ -2322,7 +2370,7 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 
 ## Títulos
 
-`/titulos`: 127 títulos com requisitos (em páginas), por exemplo Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 131 títulos com requisitos (em páginas), por exemplo Terror dos Piratas, Caçador de Kraken, Despertador de Ilhas, Exorcista do Mar, Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -2397,6 +2445,7 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 | `/rpgadmin teste` | **Área de testes (2.88):** um mundo plano à parte (`rpg_teste`), no criativo, com uma cópia do seu inventário. Lá nada conta: XP de atributos e armas, títulos, conquistas (do plugin e do jogo), XP de Caçador, recordes e o limite de guardiões. Ao entrar, o plugin guarda em `teste/<uuid>.yml` o inventário, o baú do fim, XP, vida, fome, efeitos, posição, modo de jogo e todos os dados do plugin no jogador. Ao sair (o mesmo comando, outro teleporte ou entrar de novo depois de cair), tudo volta como estava. Masmorras abertas no teste também são teste. O mundo não tem monstros nascendo, chuva nem estruturas do plugin, e o inventário fica ao morrer. O chão é plano na altura de sempre (grama em y 64, pedra embaixo; 2.99.2), então as obras da colônia cabem. Quando o último testador sai, o mundo de testes é **apagado** (só a pasta `dimensions/minecraft/rpg_teste`, nunca o mundo principal) e nasce limpo na próxima vez; ao ligar o servidor sem ninguém testando, uma sobra também é apagada. O que fica em arquivo do servidor (territórios, colônias, dona de classe lendária) não volta |
 | `/rpgadmin teste limpar` | Na área de testes, remove criaturas e itens soltos a até 64 blocos (os moradores das colônias de teste ficam) |
 | `/rpgadmin teste estrada` | **2.99.1:** na área de testes, monta duas colônias de teste (Aurora e Brisa, a 90 blocos) com depósito cheio de sobras, ligadas por uma Estrada Real iluminada com um marco em cada ponta, passando por você na direção em que olha. Nas colônias de teste você mexe como dono. Elas e os marcos somem quando o mundo de testes é apagado |
+| `/rpgadmin teste mar` | **3.0:** na área de testes, enche um **mar de teste** à sua frente (120 x 120, 19 de fundo) e monta as estruturas do mar aberto: as 3 ilhotas (náufrago, pirata, aves), a Ilha-Tartaruga, o iceberg, o barco mercante e, no fundo, o navio pirata (os canhões atiram). Lá dentro, cardumes, Kraken e tempestade funcionam como no oceano. As estruturas somem do registro quando o mundo de testes é apagado |
 | `/rpgadmin set <jogador> <atributo> <nível>` | Define o nível de um atributo |
 | `/rpgadmin forjar [raridade]` | Forja o item da mão |
 | `/rpgadmin refino <0-10>` | Define o refino do item da mão |
@@ -2515,6 +2564,8 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 | `/rpgadmin estrada [lista\|caravana\|assalto]` | Marcos, trechos e estradas; `caravana` manda já uma caravana da sua colônia (na área de testes, da colônia mais perto; chega em 1 min); `assalto` faz os salteadores atacarem a caravana que está na estrada |
 | `/rpgadmin andarilho [peregrino\|mensageiro\|mercador\|visita\|praca]` | Alguém vem andando pela estrada mais perto (até 64 blocos); `praca`: um visitante na prefeitura de uma colônia ligada a até 40 blocos de você |
 | `/rpgadmin bando` | Um bando passa perto de você agora (fora do bioma certo, cavalos) |
+| `/rpgadmin mar [cardume\|cardumegrande\|kraken\|fantasma\|fantasmasumir\|tempestade\|itens\|limpar]` | **3.0:** sem nada, mostra cardumes, Kraken e Navio Fantasma; `cardume`/`cardumegrande` (com baleia) aqui; `kraken` sobe em volta do seu barco (precisa de 8 blocos de água); `fantasma` ergue o Navio Fantasma a uns 40 blocos à frente (`fantasmasumir` desfaz); `tempestade`: trovoada por 5 min; `itens`: Barco Grande, vela, casco reforçado, rede, âncora, 2 baús, estandarte e 3 Cartas Náuticas; `limpar` tira tudo |
+| `/rpgadmin estrutura <ilhota\|navio_pirata\|iceberg\|barco_mercante\|ilha_tartaruga>` | **3.0:** as estruturas do mar aberto à sua frente (mire na água: ela fica na superfície) |
 | `/rpgadmin trilha [sumir\|info]` | Forma uma trilha no bloco que você olha; `sumir` volta agora as trilhas do pedaço; `info` mostra o piso e quantas trilhas há no pedaço |
 | `/rpgadmin cristal <e..s> [cacada/saque/monolitos]` | Um Cristal de Portal |
 | `/rpgadmin cristalmana` | 4 Cristais de Mana de cada tamanho |
@@ -2569,7 +2620,7 @@ Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, 
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-2.99.2.jar`.
+3. O plugin fica em `target/RPGAtributos-3.0.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 
