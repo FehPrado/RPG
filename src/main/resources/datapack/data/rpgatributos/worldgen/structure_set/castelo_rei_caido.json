@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517006, "separation": 18, "spacing": 48 },
+  "structures": [ { "structure": "rpgatributos:castelo_rei_caido", "weight": 1 } ]
+}

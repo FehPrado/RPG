@@ -62,7 +62,7 @@ public final class Tempestade {
             } else if (r.nextDouble() < 0.012) {
                 w.strikeLightningEffect(l);
                 for (Player o : BarcoGrande.eBarcoGrande(b) ? plugin.barcoGrande().aBordo(b) : java.util.List.of(p)) {
-                    if (o.getGameMode() != GameMode.CREATIVE) o.damage(3);
+                    if (o.getGameMode() != GameMode.CREATIVE) o.damage(3, br.rpgatributos.datapack.Mortes.fonte("tempestade", null));
                 }
                 if (BarcoGrande.eBarcoGrande(b)) plugin.barcoGrande().melhorias().danificar(b, 8, "Um raio atingiu o barco");
             }

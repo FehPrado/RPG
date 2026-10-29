@@ -1,0 +1,14 @@
+{
+  "anvil_cost": 8,
+  "description": { "text": "Vigor" },
+  "effects": {
+    "minecraft:attributes": [ { "id": "rpgatributos:enchantment.vigor", "attribute": "minecraft:max_health",
+      "operation": "add_value", "amount": { "type": "minecraft:linear", "base": 2.0, "per_level_above_first": 2.0 } } ]
+  },
+  "max_cost": { "base": 70, "per_level_above_first": 15 },
+  "max_level": 3,
+  "min_cost": { "base": 20, "per_level_above_first": 15 },
+  "slots": [ "chest" ],
+  "supported_items": "#minecraft:enchantable/chest_armor",
+  "weight": 1
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": { "type": "minecraft:uniform", "min": 4, "max": 7 },
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:iron_ingot", "weight": 18, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 4, "max": 12 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:gold_ingot", "weight": 12, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 2, "max": 8 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:coal", "weight": 14, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 6, "max": 16 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:netherite_scrap", "weight": 3 },
+        { "type": "minecraft:item", "name": "minecraft:netherite_upgrade_smithing_template", "weight": 2 },
+        { "type": "minecraft:item", "name": "minecraft:diamond_pickaxe", "weight": 4, "functions": [ { "function": "minecraft:enchant_with_levels", "levels": { "type": "minecraft:uniform", "min": 20, "max": 39 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:iron_axe", "weight": 8, "functions": [ { "function": "minecraft:enchant_with_levels", "levels": { "type": "minecraft:uniform", "min": 20, "max": 39 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:lava_bucket", "weight": 6 },
+        { "type": "minecraft:item", "name": "minecraft:anvil", "weight": 4 }
+      ]
+    }
+  ],
+  "random_sequence": "rpgatributos:chests/cidade_ana_forja"
+}

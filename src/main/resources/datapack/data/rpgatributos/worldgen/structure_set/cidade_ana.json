@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517003, "separation": 20, "spacing": 52 },
+  "structures": [ { "structure": "rpgatributos:cidade_ana", "weight": 1 } ]
+}

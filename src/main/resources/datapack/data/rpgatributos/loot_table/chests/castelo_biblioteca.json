@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": { "type": "minecraft:uniform", "min": 4, "max": 7 },
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:book", "weight": 18, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 2, "max": 6 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:book", "weight": 12, "functions": [ { "function": "minecraft:enchant_randomly" } ] },
+        { "type": "minecraft:item", "name": "minecraft:paper", "weight": 14, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 4, "max": 10 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:map", "weight": 8 },
+        { "type": "minecraft:item", "name": "minecraft:experience_bottle", "weight": 12, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 3, "max": 8 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:ink_sac", "weight": 10, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 2, "max": 5 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:writable_book", "weight": 6 }
+      ]
+    }
+  ],
+  "random_sequence": "rpgatributos:chests/castelo_biblioteca"
+}

@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 3.0</small></div></div>
+  <div class="marca"><div class="selo">🛠</div><div><b>RPGAtributos</b><small>Painel do Admin · versão 3.1</small></div></div>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar comando ou opção (ex.: portal, guerra)…" aria-label="Buscar"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 
@@ -136,9 +136,10 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="grade">
     <div class="card"><h3>Instalar</h3>
       <ol>
-        <li>Coloque <code>RPGAtributos-2.69.x.jar</code> em <code>plugins/</code>.</li>
+        <li>Coloque <code>RPGAtributos-3.1.x.jar</code> em <code>plugins/</code>.</li>
         <li>Deixe <b>só uma versão</b> do plugin na pasta.</li>
         <li>Reinicie o servidor (evite <code>/reload</code>).</li>
+        <li><b>3.1:</b> no primeiro início o plugin coloca o datapack dele em <code>&lt;mundo&gt;/datapacks/rpgatributos</code> e avisa no console. <b>Reinicie mais uma vez</b> para os encantamentos e as mensagens de morte valerem.</li>
       </ol>
     </div>
     <div class="card"><h3>Mod de apoio (2.43, opcional)</h3>
@@ -156,6 +157,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Opções novas entram sozinhas no <code>config.yml</code>, sem mudar o que você já configurou.</li>
         <li>Config muito antigo (v1) é guardado como <code>config-antigo-v1.yml</code> e um novo é criado. Os níveis dos jogadores continuam iguais.</li>
         <li>Depois de editar o config: <span class="cmd">/rpgadmin reload</span>.</li>
+        <li>Datapack embutido (3.1): quando uma versão nova muda o datapack, o plugin troca a pasta <code>datapacks/rpgatributos</code> sozinho e avisa no console que precisa reiniciar mais uma vez. Não edite essa pasta: ela é refeita.</li>
       </ul>
     </div>
     <div class="card"><h3>Compilar</h3>
@@ -190,6 +192,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><code>recordes.yml</code></td><td>Recordes do servidor e as placas de recordes</td></tr>
       <tr><td><code>pomares.yml</code></td><td>Árvores frutíferas e as frutas penduradas</td></tr>
       <tr><td><code>estruturas.yml</code></td><td>Estruturas prontas já construídas (tipo, lugar, quem visitou, guardas, eremita). Também as do mar aberto (3.0): ilhotas, navio pirata (capitão vencido), iceberg, barco mercante e Ilha-Tartaruga (dormindo, acordada ou vencida)</td></tr>
+      <tr><td><code>&lt;mundo&gt;/datapacks/rpgatributos</code></td><td>3.1: o datapack do plugin (encantamentos, tipos de dano e as estruturas grandes com os baús, a escavação e o Coliseu), copiado do jar; <code>.versao</code> guarda qual versão está lá. Não edite: é refeito quando muda</td></tr>
       <tr><td><code>mar.yml</code></td><td>3.0: o Navio Fantasma que está no mar e o que havia em cada bloco antes dele (para ele sumir mesmo se o servidor reiniciar). Melhorias e baús do Barco Grande ficam no próprio barco (ou no item)</td></tr>
       <tr><td><code>profundezas.yml</code></td><td>Raízes de Luz das profundezas (lugar e se estão acesas). A Penumbra de cada jogador fica no próprio jogador</td></tr>
       <tr><td><code>pacote/RPGAtributos-recursos.zip</code></td><td>Pacote de recursos gerado a cada início (pode apagar: ele é refeito)</td></tr>
@@ -602,7 +605,9 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
       <tr><td><span class="cmd">/rpgadmin teste estrada</span></td><td>Na área de testes: duas colônias de teste (Aurora e Brisa) com depósito cheio, ligadas por uma Estrada Real iluminada com marcos. Você mexe nelas como dono; tudo some com o mundo de testes</td></tr>
       <tr><td><span class="cmd">/rpgadmin teste mar</span></td><td><b>3.0:</b> na área de testes, enche um mar de teste à sua frente (120 × 120, 19 de fundo) com as 3 ilhotas, a Ilha-Tartaruga, o iceberg, o barco mercante e o navio pirata. As estruturas saem do registro quando o mundo de testes é apagado</td></tr>
       <tr><td><span class="cmd">/rpgadmin mar [cardume|cardumegrande|kraken|fantasma|fantasmasumir|tempestade|itens|limpar]</span></td><td><b>3.0:</b> sem nada, o resumo; cardume (ou grande, com baleia) aqui; o Kraken em volta do seu barco (8 blocos de água); o Navio Fantasma a 40 blocos à frente (<code>fantasmasumir</code> desfaz); trovoada por 5 min; <code>itens</code>: Barco Grande, vela, casco, rede, âncora, 2 baús, estandarte e 3 Cartas Náuticas; <code>limpar</code> tira tudo</td></tr>
+      <tr><td><span class="cmd">/rpgadmin encanto [id|todos] [nível]</span></td><td><b>3.1:</b> livros com os encantamentos do RPG (sem nada: um de cada, no nível máximo). Ids: roubo_de_vida, golpe_lunar, ceifador, sifao_de_mana, saltador, passo_ligeiro, vigor, braco_longo, veio_generoso, flecha_gelida, maldicao_do_peso, corrente_de_trovao, estilhaco_de_gelo, lamina_do_vento, flecha_explosiva, onda_de_choque, passos_de_brasa, trilha_florida. Se o datapack ainda não carregou, avisa para reiniciar</td></tr>
       <tr><td><span class="cmd">/rpgadmin estrutura &lt;ilhota|navio_pirata|iceberg|barco_mercante|ilha_tartaruga&gt;</span></td><td><b>3.0:</b> as estruturas do mar aberto à sua frente (na superfície da água)</td></tr>
+      <tr><td><span class="cmd">/rpgadmin estrutura &lt;arvore_mundo|colosso_caido|cidade_ana|ossada_dragao|coliseu|castelo_rei_caido&gt;</span></td><td><b>3.1:</b> as estruturas grandes à sua frente, pelo molde do datapack (o plugin anota e elas ganham chefe). No mundo elas só nascem sozinhas em terreno novo; <code>/locate structure rpgatributos:&lt;nome&gt;</code> mostra a mais perto</td></tr>
       <tr><td><span class="cmd">/rpgadmin bando</span></td><td>Um bando passa perto de você agora</td></tr>
       <tr><td><span class="cmd">/rpgadmin trilha [sumir|info]</span></td><td>Forma uma trilha no bloco que você olha; <code>sumir</code> volta as trilhas do pedaço; <code>info</code> mostra o piso</td></tr>
             <tr><td><span class="cmd">/rpgadmin tacho</span></td><td>Cria o Tacho do Artesão no vaso decorado que você olha</td></tr>
@@ -1044,6 +1049,26 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
         <li>Quebre um bloco da Ilha-Tartaruga: "A ilha se mexeu!" e a Tartaruga Ancestral aparece na frente da cabeça (barra de vida).</li>
         <li>De barco no mar: <span class="cmd">/rpgadmin mar kraken</span>. Bater no corpo não adianta; corte os 4 tentáculos e ele sobe. <span class="cmd">/rpgadmin mar tempestade</span>: ondas, raios e destroços. À noite, <span class="cmd">/rpgadmin mar fantasma</span>: o navio surge; <code>/time set 0</code> e ele some (ou <code>fantasmasumir</code>).</li>
         <li>Fora do teste, num mundo novo, navegue pelo oceano: as estruturas do mar aparecem em chunks novos de oceano (<span class="cmd">/rpgadmin estruturas</span> lista as mais perto).</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Estruturas grandes e encantamentos de luta (3.1)</h3>
+      <ol>
+        <li>Num lugar aberto e longe da base: <span class="cmd">/rpgadmin estrutura arvore_mundo</span> (as outras: <code>colosso_caido</code>, <code>cidade_ana</code>, <code>ossada_dragao</code>, <code>coliseu</code>, <code>castelo_rei_caido</code>). Ela aparece à sua frente, já anotada.</li>
+        <li>Árvore-Mundo: suba a escada em caracol até a vila da copa; desça até a câmara das raízes (sobrevivência): o Guardião das Raízes e 4 Raízes Vivas aparecem, com barra de vida.</li>
+        <li>Colosso: entre pelo peito; a Sentinela acorda perto do Coração. Cidade Anã: desça a escada; no salão aparecem o Rei da Montanha e 4 guardas. Castelo: chegue no pátio (5 cavaleiros) e entre no torreão (o Rei Caído; na metade da vida ele chama 3 cavaleiros).</li>
+        <li>Ossada: à noite (<code>/time set 14000</code>), chegue perto: o Espírito do Dragão desce. Use um pincel na areia suspeita.</li>
+        <li>Coliseu: entre na arena no sobrevivência: os 4 spawners começam; vencidos, soltam chaves. Use a chave no cofre do camarote: título Campeão do Coliseu.</li>
+        <li>Encantamentos: <span class="cmd">/rpgadmin encanto</span> dá os 18 livros. Corrente de Trovão (às vezes o raio cai e salta), Estilhaço de Gelo no machado, Flecha Explosiva na besta, Onda de Choque (pule de 5+ blocos perto de monstros), Passos de Brasa (corra), Trilha Florida (ande na grama).</li>
+        <li>Num servidor com <code>generate-structures=false</code> (ou mundo criado assim), elas nunca nascem sozinhas; o comando acima funciona do mesmo jeito.</li>
+      </ol>
+    </div>
+    <div class="card"><h3>Encantamentos do RPG (3.1)</h3>
+      <ol>
+        <li>Na primeira vez com a 3.1, o console diz "Datapack do RPGAtributos colocado em ...". Reinicie. <span class="cmd">/rpgadmin encanto</span>: 11 livros (se disser para reiniciar, o datapack ainda não carregou).</li>
+        <li>Numa mesa de encantamento com 15 estantes, encante espadas, botas, calças, picaretas e arcos: às vezes sai Golpe Lunar, Ceifador, Saltador, Passo Ligeiro, Braço Longo, Veio Generoso ou Flecha Gélida.</li>
+        <li>Na bigorna, junte o livro de Vigor III num peitoral e vista: 3 corações a mais. Saltador II nas botas: pulo mais alto. Passo Ligeiro II: mais rápido.</li>
+        <li>Golpe Lunar numa espada: de dia o dano é o normal; à noite (<code>/time set 14000</code>) solta brilhos e bate mais. Sifão de Mana: a mana sobe a cada golpe.</li>
+        <li>Morra para o Kraken (<span class="cmd">/rpgadmin mar kraken</span>, na água perto dos tentáculos): o chat diz "foi arrastado para o fundo pelo Kraken".</li>
       </ol>
     </div>
     <div class="card"><h3>Mundo vivo, andarilhos e mapas (2.97–2.99)</h3>

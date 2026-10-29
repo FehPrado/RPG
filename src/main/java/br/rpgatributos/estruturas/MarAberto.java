@@ -785,7 +785,7 @@ public final class MarAberto implements Listener {
                 plugin.barcoGrande().melhorias().danificar(b, 7, "Uma bala de canhão acertou o casco");
                 barco = true;
             } else if (x instanceof Player p && p.getGameMode() != org.bukkit.GameMode.CREATIVE && p.getGameMode() != org.bukkit.GameMode.SPECTATOR) {
-                p.damage(5);
+                p.damage(5, br.rpgatributos.datapack.Mortes.fonte("canhao", e.getEntity().getShooter() instanceof Entity atirador ? atirador : null));
                 p.setVelocity(p.getLocation().toVector().subtract(l.toVector()).setY(0).normalize().multiply(0.6).setY(0.35));
             }
         }
@@ -940,7 +940,7 @@ public final class MarAberto implements Listener {
         for (Player o : w.getPlayers()) {
             if (o.getGameMode() == org.bukkit.GameMode.CREATIVE || o.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
             if (o.getLocation().distanceSquared(c) <= 6 * 6) {
-                o.damage(6, t);
+                o.damage(6, br.rpgatributos.datapack.Mortes.fonte("tartaruga", t));
                 o.setVelocity(o.getLocation().toVector().subtract(c.toVector()).setY(0).normalize().multiply(1.1).setY(0.45));
             }
         }

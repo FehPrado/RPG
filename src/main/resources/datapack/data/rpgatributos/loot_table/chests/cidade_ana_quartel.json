@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": { "type": "minecraft:uniform", "min": 4, "max": 6 },
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:iron_helmet", "weight": 8, "functions": [ { "function": "minecraft:enchant_randomly" } ] },
+        { "type": "minecraft:item", "name": "minecraft:iron_chestplate", "weight": 6, "functions": [ { "function": "minecraft:enchant_randomly" } ] },
+        { "type": "minecraft:item", "name": "minecraft:iron_axe", "weight": 8, "functions": [ { "function": "minecraft:enchant_randomly" } ] },
+        { "type": "minecraft:item", "name": "minecraft:crossbow", "weight": 6, "functions": [ { "function": "minecraft:enchant_randomly" } ] },
+        { "type": "minecraft:item", "name": "minecraft:bread", "weight": 16, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 3, "max": 8 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:cooked_beef", "weight": 12, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 2, "max": 6 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:arrow", "weight": 12, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 8, "max": 20 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:shield", "weight": 6 }
+      ]
+    }
+  ],
+  "random_sequence": "rpgatributos:chests/cidade_ana_quartel"
+}

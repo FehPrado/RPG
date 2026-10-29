@@ -1,0 +1,11 @@
+{
+  "anvil_cost": 4,
+  "description": { "text": "Onda de Choque" },
+  "effects": {},
+  "max_cost": { "base": 60, "per_level_above_first": 12 },
+  "max_level": 3,
+  "min_cost": { "base": 12, "per_level_above_first": 12 },
+  "slots": [ "feet" ],
+  "supported_items": "#minecraft:enchantable/foot_armor",
+  "weight": 2
+}

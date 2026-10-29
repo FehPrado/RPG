@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517005, "separation": 18, "spacing": 50 },
+  "structures": [ { "structure": "rpgatributos:coliseu", "weight": 1 } ]
+}

@@ -19,6 +19,7 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **fé e mistério**: seis deuses com santuários, oferendas e milagres, constelações observadas pela luneta, transmutação alquímica e runas gravadas nos equipamentos;
 - **exploração**: **Ilhas do Céu** (lançado por uma Plataforma de Vento) e as **Profundezas** escuras com Raízes de Luz e a Penumbra, Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
 - **mundo e mar (3.0)**: o **Barco Grande** ganha baús de convés, lugar para bicho, **rede de pesca**, **âncora** e **casco reforçado**; o **mar aberto** ganha ilhotas, navio pirata com canhões, icebergs, barco mercante, a **Ilha-Tartaruga**, **cardumes** e **baleias**; e perigos: o **Kraken**, o **Navio Fantasma** e a **tempestade no mar**;
+- **encantamentos e estruturas grandes (3.1)**: 18 encantamentos de verdade (Golpe Lunar, Corrente de Trovão, Estilhaço de Gelo, Flecha Explosiva, Onda de Choque...) na mesa, nos livros, nos baús e com os aldeões, e **6 estruturas gigantes** geradas com o mundo (Árvore-Mundo, Colosso Caído, Cidade Anã, Ossada do Dragão, Coliseu, Castelo do Rei Caído), tudo por um **datapack que vai dentro do plugin**;
 - **progressão extra**: **talentos** em 4 árvores, **renascer** com bônus permanente (até ★★★★★) e **evolução dos companheiros** (Lobo → Lobo Alfa → Lobo das Sombras);
 - **detalhes do dia a dia**: barco, carrinho, vara, élitro e armadura de cavalo forjados, Boneco de Treino, Pedra de Amolar, Fogueira de Acampamento (sentar e descansar), Bebedouro, troféus de chefe, túmulo ao morrer, animais raros, ninhos, recordes e o Diário de Viagem;
 - **vida no mundo**: Barril de Envelhecimento, apicultura, Canteiro de Ervas, Álbum de Cartas com Duelo de Cartas (contra moradores e jogadores), Mercador Itinerante, encontros na estrada, segredos, flechas especiais e frascos de arremesso;
@@ -1925,6 +1926,52 @@ Títulos: **Terror dos Piratas** (3 capitães piratas), **Caçador de Kraken**, 
 
 No `config.yml`, a seção `mar:` liga e desliga cada parte (cardumes, baleias, tempestade, Kraken, Navio Fantasma) e ajusta as chances.
 
+## Encantamentos do RPG (3.1)
+
+O plugin agora traz um **datapack embutido**: ele vai dentro do jar e o plugin o coloca sozinho na pasta do mundo (veja **Instalar**). Com ele, o RPG ganha **18 encantamentos de verdade** (11 do RPG e 7 de luta com efeito): aparecem na **mesa de encantamento**, em **livros**, nos **baús**, com os **aldeões** e com o **Bibliotecário** da colônia, e juntam na **bigorna** como os do jogo.
+
+| Encantamento | Onde vai | Níveis | O que faz | Como se acha |
+|---|---|---|---|---|
+| **Golpe Lunar** | Espada, lança, machado | I–III | À noite, +1 de dano por nível; na **lua cheia**, +2; na **Lua de Sangue**, +2,5 | Mesa |
+| **Ceifador** | Espada, lança, machado | I–III | +1 de XP por nível em cada monstro abatido | Mesa |
+| **Saltador** | Botas | I–II | Pulo mais alto e +1,5 bloco de queda sem dano por nível | Mesa |
+| **Passo Ligeiro** | Calças | I–II | +6% de velocidade por nível | Mesa |
+| **Braço Longo** | Picareta, machado, pá, enxada, tesoura | I–II | Alcança blocos 1 bloco mais longe por nível | Mesa |
+| **Veio Generoso** | Picareta, machado, pá, enxada | I–III | +1 de XP por nível em cada minério que solta XP | Mesa |
+| **Flecha Gélida** | Arco | I–II | A flecha deixa o alvo lento (Lentidão I/II, 3–4,5 s) | Mesa |
+| **Roubo de Vida** | Espada, lança, machado | I–III | 8% / 14% / 20% de chance de o golpe curar você (2 corações) | Raro: baús, aldeões, Bibliotecário nível 7+ |
+| **Sifão de Mana** | Espada, lança, machado | I–III | Cada golpe corpo a corpo devolve 1,5 de mana por nível | Raro |
+| **Vigor** | Peitoral | I–III | +1 coração máximo por nível | Raro |
+| **Maldição do Peso** | Qualquer armadura | I | −8% de velocidade. Não sai no rebolo | Maldição: baús |
+| **Lâmina do Vento** | Espada, lança | I–II | Empurra muito mais longe, com uma rajada de vento no golpe | Mesa |
+| **Estilhaço de Gelo** | Machado | I–III | 12% / 20% / 28% de chance de o golpe estourar em gelo: quem está a 3 blocos fica lento e congelando, e leva dano de frio | Mesa |
+| **Flecha Explosiva** | Besta | I–III | A flecha explode onde acerta (sem quebrar blocos) | Mesa |
+| **Onda de Choque** | Botas | I–III | Cair de 4 blocos ou mais: menos dano de queda, e os monstros em volta levam dano e são empurrados | Mesa |
+| **Trilha Florida** | Botas | I | Flores nascem por onde você anda na grama (não junta com Passos de Brasa nem Passos Gelados) | Mesa |
+| **Corrente de Trovão** | Espada, lança, machado | I–III | 7% / 12% / 17% de chance de um raio cair no alvo (só o clarão: não queima nada nem acerta você) e saltar para até 1 monstro por nível | Raro |
+| **Passos de Brasa** | Botas | I–II | Correndo, deixa um rastro de fogo e faíscas; imune ao chão que queima (magma, fogueira); no II, incendeia os monstros por quem você passa | Raro |
+
+**Mensagens de morte:** quem morre para o Kraken, para um canhão pirata, para a Tartaruga Ancestral ou para um raio da tempestade no mar ganha uma mensagem própria no chat ("Fulano foi arrastado para o fundo pelo Kraken").
+
+Admin: `/rpgadmin encanto [id|todos] [nível]` dá os livros.
+
+## Estruturas grandes (3.1)
+
+Seis construções gigantes que o **próprio jogo gera junto com o mundo**, pelo datapack do plugin. Por isso elas só aparecem em **terreno novo** (longe do que já foi explorado), passam por vários chunks e aparecem no `/locate structure rpgatributos:<nome>`. O plugin reconhece cada uma quando ela nasce e dá vida: guardas, um chefe, títulos e o título de quem descobre.
+
+| Estrutura | Onde nasce | O que tem | Chefe (título) |
+|---|---|---|---|
+| **Árvore-Mundo** | Florestas | Árvore de uns 100 blocos: tronco oco com **escada em caracol**, janelas, uma **vila na copa** (3 casinhas com baú, ligadas por passarelas), flores de esporo e, lá embaixo, a **câmara das raízes** com o tesouro | **Guardião das Raízes** (devastador, 260 de vida) e 4 Raízes Vivas (**Amigo das Raízes**) |
+| **Colosso Caído** | Planícies, savanas, campinas | Estátua gigante deitada, meio enterrada, com uma espada cravada ao lado. Entra-se pela rachadura do peito ou pelo buraco do lado; o **Coração do Colosso** pulsa no peito e um baú espera na cabeça | **Sentinela do Colosso** (golem de ferro gigante, 300) (**Quebra-Colosso**) |
+| **Cidade Anã de Pedra Funda** | Montanhas | Na superfície, só a casa do portão. Uma escada em caracol desce uns 35 blocos até o **grande salão** com pilares e o trono; em volta, **forja** com canal de lava, **mina** com trilhos e minério, **quartel** e o **tesouro** | **Rei da Montanha** (280) com 4 Guardas Anões (**Regicida da Montanha**) |
+| **Ossada do Dragão** | Badlands e deserto | Esqueleto de dragão num sítio de escavação: costelas, asas abertas no chão, crânio e o acampamento dos escavadores. **Areia e cascalho suspeitos** para o pincel (ossos, ouro, esmeraldas, cacos de cerâmica, às vezes uma cabeça de dragão) | À noite, o **Espírito do Dragão** (fantasma gigante, 220) e Ossos Errantes; volta a cada noite, no máximo a cada 15 min (**Caçador de Dragões**) |
+| **Coliseu** | Planícies, savanas, campinas, deserto | Arena oval com arquibancada, portões com grade e estátuas. Na arena, **4 spawners de desafio** (gladiadores, arqueiros, feras e campeões; também no modo ameaçador da Má Sorte) que soltam **chaves**; no camarote do imperador, o **cofre** | Abrir o cofre com a chave: **Campeão do Coliseu** |
+| **Castelo do Rei Caído** | Planícies, florestas, taiga, campinas | Muralha em ruínas com 4 torres (uma desabada), portão com grade, pátio com poço e o torreão: **sala do trono** embaixo, biblioteca em cima | 5 Cavaleiros Esquecidos no pátio; na sala do trono, o **Rei Caído** (esqueleto wither, 320), que chama mais 3 cavaleiros na metade da vida (**Algoz do Rei Caído**) |
+
+Os baús delas têm saque próprio (e, como os baús do jogo, às vezes itens do RPG). Cada chefe aparece **uma vez** por estrutura (o da Ossada, uma vez por noite) e deixa saque raro.
+
+Admin: `/rpgadmin estrutura arvore_mundo` (ou `colosso_caido`, `cidade_ana`, `ossada_dragao`, `coliseu`, `castelo_rei_caido`) põe uma à sua frente, em qualquer lugar. Também dá para usar `/place structure rpgatributos:<nome>` do jogo (aí o plugin só a reconhece se o jogo a tiver gerado sozinho).
+
 ## Pesca
 
 Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
@@ -2370,7 +2417,7 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 
 ## Títulos
 
-`/titulos`: 131 títulos com requisitos (em páginas), por exemplo Terror dos Piratas, Caçador de Kraken, Despertador de Ilhas, Exorcista do Mar, Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 137 títulos com requisitos (em páginas), por exemplo Amigo das Raízes, Quebra-Colosso, Regicida da Montanha, Caçador de Dragões, Campeão do Coliseu, Algoz do Rei Caído, Terror dos Piratas, Caçador de Kraken, Despertador de Ilhas, Exorcista do Mar, Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -2620,7 +2667,7 @@ Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, 
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-3.0.0.jar`.
+3. O plugin fica em `target/RPGAtributos-3.1.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 
@@ -2630,6 +2677,7 @@ Ao ligar, o plugin faz um **backup diário** dos seus `.yml` em `plugins/RPGAtri
 
 1. Coloque o `.jar` em `plugins/` e reinicie.
 2. Deixe **só uma versão** do plugin na pasta.
+3. **Datapack embutido (3.1):** ao ligar, o plugin coloca o datapack dele em `<mundo>/datapacks/rpgatributos` e avisa no console. **Reinicie mais uma vez** para os encantamentos e as mensagens de morte valerem (o jogo lê os datapacks antes dos plugins). O mesmo vale quando uma versão nova mudar o datapack: o plugin troca sozinho e avisa. Não edite essa pasta: ela é refeita quando muda.
 
 ## Bom saber
 

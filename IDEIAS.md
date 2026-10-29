@@ -444,3 +444,61 @@ Cada banco do Barco Grande (4) vira um encaixe: assento, mastro, baú ou companh
 | Vela com estandarte | Clicar um estandarte na vela: o mastro leva o seu desenho |
 
 Canhão de proa ficou de fora.
+
+---
+
+## Dimensões (28/10/2026)
+
+Pedido: "um mod com foguete que vai para a lua, cada lua com uma coisa diferente". Fica **no plugin** (regra: sem mod e sem datapack); cada dimensão é um mundo próprio criado pelo plugin, com gerador de terreno nosso. Também abre caminho para ideias que já estavam esperando: **Além do Primeiro Portal** (Chave do Primeiro Portal, 2.64) e o **Microverso** (⏸ backlog).
+
+### A base (fazer primeiro)
+
+| Parte | O que faz |
+|---|---|
+| Dimensão | Cada uma define: id, nome, gerador de terreno (ChunkGenerator nosso), ambiente (céu normal ou do Fim), borda (2–3 mil blocos), estruturas e monstros próprios |
+| Regras do lugar | Gravidade, pulo e queda (atributos do jogador, voltam ao sair), ar (barra de oxigênio ou não), hora fixa (sempre noite, sempre crepúsculo), clima fixo, se dá para construir e quebrar, se monstros do jogo nascem |
+| Passagens | Como se entra: foguete, portal, ritual, morte, encolher. Ao entrar guarda o ponto de volta no jogador; a saída devolve para lá (ou para a cama/spawn se não der) |
+| Morte lá dentro | Cada dimensão escolhe: renasce em casa, renasce no último ponto seguro dela (andar da torre, camada do abismo) ou regra especial (Mundo das Almas) |
+| Progresso | Por jogador: visitou, andar mais alto, camada mais funda, luas visitadas (títulos e conquistas) |
+| Leveza | O mundo só carrega quando alguém entra e descarrega vazio depois de alguns minutos |
+| Admin e testes | `/rpgadmin dimensao <id> ir · sair · info · recriar`; config `dimensoes.<id>.ativa`; dentro da área de testes nada conta |
+
+### Dimensões propostas
+
+| Dimensão | Como se entra | O que é | Impacto | Esforço |
+|---|---|---|---|---|
+| **As Luas** (5) | Foguete numa plataforma de lançamento; a lua depende do céu na hora | Gravidade baixa, oxigênio e traje, céu sempre de noite. **Prateada** (lua cheia e fases comuns: crateras, prata lunar, a primeira), **Escura** (lua nova: sem luz, caçadores no escuro, magia mais forte), **Vermelha** (Lua de Sangue: ruínas de uma civilização antiga e um chefe), **de Cristal** (Lua Azul, rara: cristais para rituais e encantos), **Sombria** (só no eclipse: o melhor loot, tempo contado). O foguete tem níveis e melhora com os materiais das luas | ★★★ | G |
+| **Mundo das Almas** | Morrer com chance (ou com a Lanterna das Almas), ou ritual com Mortis | Mundo cinza e silencioso. Você é uma alma: corre mais e é mais leve, mas não constrói. Encontra almas de aventureiros (Almas penadas do Nether), lembranças de companheiros mortos (liga com "Trazer de Volta") e o Barqueiro. Sair pela Porta da Volta devolve você ao corpo, sem perder os itens | ★★★ | G |
+| **O Abismo** | Uma rachadura rara no mundo (ou nas Profundezas) | Um mundo que é só ele, usando a altura inteira do Minecraft (do teto, y 320, ao fundo, y −64: ~380 blocos). Em cima, um planalto; cortando tudo, um **cânion-rachadura** comprido que desce até o fundo. As paredes descem por camadas de ~75 blocos, cada uma um bioma: borda com vento e ninhos, floresta pendurada nas paredes, campo de cristais, mar de fungos e a cidade dos que caíram, o fundo escuro. Pontes naturais, cavernas nas paredes e bordas para descansar. Descer é fácil; subir você constrói (cordas, elevadores, pontos de descanso). Se um dia quiser mais fundo: um buraco no fundo leva a um segundo mundo-abismo, emendado na queda. **Sem** a Maldição do Abismo (recusada) | ★★★ | G |
+| Além do Primeiro Portal | Chave do Primeiro Portal | O Nether antigo, antes de queimar (já anotado na 2.64) | ★★ | G |
+| Microverso | Encolher | ⏸ Backlog (seção Fora do padrão) | ★★★ | G |
+| Mundo dos Sonhos | Dormir com um item (ou ritual) | Ilhas soltas no ar, cores estranhas, escadas que não levam a lugar nenhum; levar dano acorda você. Liga com as visões dos Sonhos | ★★ | G |
+| Reino Feérico | Círculo de cogumelos numa noite de lua cheia | Floresta de crepúsculo eterno; fadas que fazem trocas com pegadinha, e comida de lá que dá poder mas prende você até cumprir um pedido | ★★ | G |
+| O Passado | Ritual com uma relíquia | O mesmo mundo na época dos deuses: a civilização das ruínas ainda viva, guerreiros antigos e o que hoje é relíquia ainda novo | ★★★ | G |
+
+Torre de Babel saiu: já temos a Torre Infinita.
+
+**A decidir:** quais dimensões entram e qual vem primeiro depois da base.
+
+### Datapack embutido — o que mais dá para fazer (28/10/2026)
+
+Feito na **3.1**: o datapack vai dentro do jar e o plugin o coloca na pasta do mundo (um reinício na primeira vez e quando ele muda).
+
+| Ideia | O que é | Impacto | Esforço |
+|---|---|---|---|
+| ✅ Encantamentos próprios (3.1) | 11 encantamentos de verdade (mesa, livros, baús, aldeões, Bibliotecário, bigorna): Golpe Lunar, Ceifador, Saltador, Passo Ligeiro, Braço Longo, Veio Generoso, Flecha Gélida, Roubo de Vida, Sifão de Mana, Vigor e Maldição do Peso | ★★★ | M |
+| ✅ Mensagens de morte (3.1) | Tipos de dano próprios (Kraken, canhão, Tartaruga, tempestade) com mensagem em português | ★ | P |
+| Variantes de bichos | Lobos, gatos, vacas, porcos, galinhas e sapos com pelagens nossas por bioma (lobo da lua, do abismo...); precisa de arte no pacote | ★★ | M |
+| Quadros e discos | Pinturas com arte nossa (chefes, luas, estações) e discos de música; precisa de arte e som no pacote | ★ | M |
+| Estandartes, potes, acabamentos de armadura | Desenhos novos (brasão do reino, símbolo de cada deus) | ★ | P |
+| Telas de diálogo | Janelas com texto e botões para NPCs (náufrago, foguete, colônia) | ★★ | M |
+| Trocas dos aldeões | Itens do RPG nas trocas normais e listas próprias para os nossos mercadores | ★★ | M |
+| Estruturas e árvores do jogo | Construções e formações que nascem com o mundo (aparecem no /locate); só em chunks novos | ★★ | G |
+| Atmosfera das dimensões | Céu, neblina, partículas, música e relógio próprios em cada dimensão | ★★★ | junto das dimensões |
+
+### Feito na 3.1 (28/10/2026): luta e estruturas grandes
+
+- ✅ **7 encantamentos de luta** (datapack + plugin): Corrente de Trovão, Estilhaço de Gelo, Lâmina do Vento, Flecha Explosiva, Onda de Choque, Passos de Brasa e Trilha Florida.
+- ✅ **6 estruturas grandes geradas pelo jogo** (moldes .nbt feitos por código; só em terreno novo; `/locate`): Árvore-Mundo, Colosso Caído, Cidade Anã de Pedra Funda, Ossada do Dragão (arqueologia), Coliseu (spawners de desafio próprios e cofre) e Castelo do Rei Caído, cada uma com chefe e título.
+- Telão com vídeo: descartado pelo dono do servidor.
+- **Black Clover** (próximo, a decidir): Cerimônia do Grimório (trevo de 3/4/5 folhas e afinidade), grimório que cresce, antimagia com espadas, Mana Skin/Zone/Method, Ki, Esquadrões dos Cavaleiros Mágicos com Estrelas e patentes até Rei Mago, Exame no Coliseu, Magia de Combinação, Floresta das Bruxas, Demônios e o Submundo (dimensão). Nomes próprios, inspirados no anime.

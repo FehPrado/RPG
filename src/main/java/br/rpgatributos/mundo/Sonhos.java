@@ -144,6 +144,12 @@ public final class Sonhos implements Listener {
             case ICEBERG -> "Uma montanha de gelo à deriva, e lá dentro alguém olhando pela luneta, parado há anos.";
             case BARCO_MERCANTE -> "Um toldo listrado balançando num barco ancorado. O mercador sabia o seu nome.";
             case ILHA_TARTARUGA -> "Uma ilha redonda que subia e descia, como se estivesse dormindo.";
+            case ARVORE_MUNDO -> "Uma árvore tão alta que a copa sumia nas nuvens. Lá embaixo, as raízes respiravam.";
+            case COLOSSO_CAIDO -> "Um gigante de pedra deitado na grama, de olhos abertos para o céu. O peito dele ainda batia.";
+            case CIDADE_ANA -> "Uma escada que girava para dentro da montanha, e um trono de pedra esperando lá no fundo.";
+            case OSSADA_DRAGAO -> "Costelas enormes saindo da areia, e uma sombra com asas voando por cima delas à noite.";
+            case COLISEU -> "Uma arena de pedra e uma plateia que não existia mais, gritando o seu nome.";
+            case CASTELO_REI_CAIDO -> "Um castelo em ruínas e um rei de ossos sentado no trono, com a coroa torta na cabeça.";
         };
     }
 

@@ -1,0 +1,14 @@
+{
+  "anvil_cost": 4,
+  "description": { "text": "Passo Ligeiro" },
+  "effects": {
+    "minecraft:attributes": [ { "id": "rpgatributos:enchantment.passo_ligeiro", "attribute": "minecraft:movement_speed",
+      "operation": "add_multiplied_base", "amount": { "type": "minecraft:linear", "base": 0.06, "per_level_above_first": 0.06 } } ]
+  },
+  "max_cost": { "base": 60, "per_level_above_first": 12 },
+  "max_level": 2,
+  "min_cost": { "base": 15, "per_level_above_first": 12 },
+  "slots": [ "legs" ],
+  "supported_items": "#minecraft:enchantable/leg_armor",
+  "weight": 2
+}

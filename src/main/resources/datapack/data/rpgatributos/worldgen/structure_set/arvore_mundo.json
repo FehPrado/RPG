@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517001, "separation": 20, "spacing": 56 },
+  "structures": [ { "structure": "rpgatributos:arvore_mundo", "weight": 1 } ]
+}

@@ -1,0 +1,17 @@
+{
+  "anvil_cost": 4,
+  "description": { "text": "Saltador" },
+  "effects": {
+    "minecraft:attributes": [
+      { "id": "rpgatributos:enchantment.saltador", "attribute": "minecraft:jump_strength", "operation": "add_value",
+        "amount": { "type": "minecraft:linear", "base": 0.07, "per_level_above_first": 0.07 } },
+      { "id": "rpgatributos:enchantment.saltador_queda", "attribute": "minecraft:safe_fall_distance", "operation": "add_value",
+        "amount": { "type": "minecraft:linear", "base": 1.5, "per_level_above_first": 1.5 } } ]
+  },
+  "max_cost": { "base": 50, "per_level_above_first": 10 },
+  "max_level": 2,
+  "min_cost": { "base": 10, "per_level_above_first": 10 },
+  "slots": [ "feet" ],
+  "supported_items": "#minecraft:enchantable/foot_armor",
+  "weight": 3
+}

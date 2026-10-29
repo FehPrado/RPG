@@ -1,0 +1,15 @@
+{
+  "anvil_cost": 4,
+  "description": { "text": "Lâmina do Vento" },
+  "effects": {
+    "minecraft:knockback": [ { "effect": { "type": "minecraft:add",
+      "value": { "type": "minecraft:linear", "base": 1.5, "per_level_above_first": 1.0 } } } ]
+  },
+  "exclusive_set": "minecraft:knockback",
+  "max_cost": { "base": 55, "per_level_above_first": 18 },
+  "max_level": 2,
+  "min_cost": { "base": 8, "per_level_above_first": 18 },
+  "slots": [ "mainhand" ],
+  "supported_items": "#minecraft:enchantable/melee_weapon",
+  "weight": 3
+}

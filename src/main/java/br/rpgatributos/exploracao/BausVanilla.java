@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 /**
- * Itens do plugin nos baús das estruturas do jogo (2.61): vilas, templos, minas, fortalezas, cidades
+ * Itens do plugin nos baús das estruturas do jogo (2.61; 3.1: também as estruturas grandes do datapack): vilas, templos, minas, fortalezas, cidades
  * do End e as outras ganham, com chance, coisas do RPGAtributos que combinam com o lugar (minerais,
  * relíquias, tomos, cartas, páginas de lenda, fragmentos). Só no primeiro saque de cada baú.
  */
@@ -73,12 +73,20 @@ public final class BausVanilla implements Listener {
         };
     }
 
+    /** 3.1: os baús das estruturas grandes (datapack do plugin) e o cofre do Coliseu. */
+    private List<Extra> extrasGigantes(String tabela) {
+        if (!tabela.startsWith("chests/") && !tabela.startsWith("coliseu/")) return List.of();
+        return List.of(new Extra(0.35, reliquia()), new Extra(0.25, tomo()), new Extra(0.20, raro(Raro.PAGINA_DE_LENDA, Raro.FRAGMENTO_DE_FORJA)),
+                new Extra(0.25, carta()));
+    }
+
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void aoGerarSaque(LootGenerateEvent e) {
         if (!plugin.settings().bausVanilla) return;
         var chave = e.getLootTable().getKey();
-        if (!chave.getNamespace().equals("minecraft")) return;
-        List<Extra> l = extras(chave.getKey());
+        boolean nosso = chave.getNamespace().equals("rpgatributos");
+        if (!nosso && !chave.getNamespace().equals("minecraft")) return;
+        List<Extra> l = nosso ? extrasGigantes(chave.getKey()) : extras(chave.getKey());
         if (l.isEmpty()) return;
         List<ItemStack> saque = new java.util.ArrayList<>(e.getLoot());
         boolean mudou = false;

@@ -162,7 +162,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 3.0</small></a>
+  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 3.1</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: adaga, cantil, /pets)…" aria-label="Buscar no manual"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 <div class="layout">
@@ -211,11 +211,13 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   <div class="grupo">Referência</div>
   <a href="#colecao">▦ Coleção de itens</a>
   <a href="#mar">🌊 Mundo e Mar</a>
+  <a href="#encantos">✨ Encantamentos</a>
+  <a href="#gigantes">🏰 Estruturas grandes</a>
 </nav>
 
 <main id="conteudo">
 <div class="hero"><div>
-    <p class="rotulo">Manual do jogador · versão 3.0</p>
+    <p class="rotulo">Manual do jogador · versão 3.1</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -2786,10 +2788,66 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   </div>
 </section>
 
+<section class="secao" id="encantos">
+  <h2><span class="ico">✨</span>Encantamentos do RPG</h2>
+  <p class="intro">Na 3.1 o RPG ganhou 18 encantamentos de verdade (7 deles de luta, com efeito): saem na mesa de encantamento, em livros, nos baús, com os aldeões e com o Bibliotecário da colônia, e juntam na bigorna como os do jogo.</p>
+  <div class="grade">
+    <div class="card largo"><h3>📖 Os encantamentos</h3>
+      <div class="tabela"><table><thead><tr><th>Encantamento</th><th>Onde vai</th><th>O que faz</th><th>Onde achar</th></tr></thead><tbody>
+        <tr><td>Golpe Lunar I–III</td><td>Espada, lança, machado</td><td>À noite, +1 de dano por nível; na lua cheia +2; na Lua de Sangue +2,5</td><td>Mesa</td></tr>
+        <tr><td>Ceifador I–III</td><td>Espada, lança, machado</td><td>+1 de XP por nível em cada monstro abatido</td><td>Mesa</td></tr>
+        <tr><td>Saltador I–II</td><td>Botas</td><td>Pula mais alto e cai de 1,5 bloco mais alto sem dano, por nível</td><td>Mesa</td></tr>
+        <tr><td>Passo Ligeiro I–II</td><td>Calças</td><td>+6% de velocidade por nível</td><td>Mesa</td></tr>
+        <tr><td>Braço Longo I–II</td><td>Ferramentas</td><td>Alcança blocos 1 bloco mais longe por nível</td><td>Mesa</td></tr>
+        <tr><td>Veio Generoso I–III</td><td>Picareta, machado, pá, enxada</td><td>+1 de XP por nível nos minérios que dão XP</td><td>Mesa</td></tr>
+        <tr><td>Flecha Gélida I–II</td><td>Arco</td><td>A flecha deixa o alvo lento</td><td>Mesa</td></tr>
+        <tr><td>Roubo de Vida I–III</td><td>Espada, lança, machado</td><td>8% / 14% / 20% de chance de o golpe curar 2 corações</td><td>Raro: baús, aldeões, Bibliotecário nível 7+</td></tr>
+        <tr><td>Sifão de Mana I–III</td><td>Espada, lança, machado</td><td>Cada golpe devolve 1,5 de mana por nível</td><td>Raro</td></tr>
+        <tr><td>Vigor I–III</td><td>Peitoral</td><td>+1 coração máximo por nível</td><td>Raro</td></tr>
+        <tr><td>Maldição do Peso</td><td>Armaduras</td><td>8% mais lento; não sai no rebolo</td><td>Baús</td></tr>
+        <tr><td>Lâmina do Vento I–II</td><td>Espada, lança</td><td>Empurra muito mais longe, com uma rajada no golpe</td><td>Mesa</td></tr>
+        <tr><td>Estilhaço de Gelo I–III</td><td>Machado</td><td>Às vezes o golpe estoura em gelo: quem está perto fica lento e congelando</td><td>Mesa</td></tr>
+        <tr><td>Flecha Explosiva I–III</td><td>Besta</td><td>A flecha explode onde acerta, sem quebrar blocos</td><td>Mesa</td></tr>
+        <tr><td>Onda de Choque I–III</td><td>Botas</td><td>Cair de alto: menos dano, e os monstros em volta voam longe</td><td>Mesa</td></tr>
+        <tr><td>Trilha Florida</td><td>Botas</td><td>Flores nascem por onde você anda na grama</td><td>Mesa</td></tr>
+        <tr><td>Corrente de Trovão I–III</td><td>Espada, lança, machado</td><td>Às vezes um raio cai no alvo e salta para outros monstros</td><td>Raro</td></tr>
+        <tr><td>Passos de Brasa I–II</td><td>Botas</td><td>Correndo, rastro de fogo; imune a magma; no II, incendeia os monstros</td><td>Raro</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>☠ Mortes com nome</h3>
+      <p>Morrer para o Kraken, para um canhão pirata, para a Tartaruga Ancestral ou para um raio da tempestade no mar dá uma mensagem própria no chat.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="gigantes">
+  <h2><span class="ico">🏰</span>Estruturas grandes</h2>
+  <p class="intro">Na 3.1, seis construções gigantes nascem junto com o mundo. Só aparecem em terreno novo, longe do que já foi explorado. Cada uma tem um chefe e um título.</p>
+  <div class="grade">
+    <div class="card largo"><h3>🗺 As seis</h3>
+      <div class="tabela"><table><thead><tr><th>Estrutura</th><th>Onde</th><th>O que tem</th><th>Título</th></tr></thead><tbody>
+        <tr><td>Árvore-Mundo</td><td>Florestas</td><td>Uns 100 blocos de altura, tronco oco com escada em caracol, vila na copa e a câmara das raízes com o Guardião das Raízes</td><td>Amigo das Raízes</td></tr>
+        <tr><td>Colosso Caído</td><td>Planícies, savanas, campinas</td><td>Estátua deitada; entre pela rachadura do peito. O Coração do Colosso acorda a Sentinela</td><td>Quebra-Colosso</td></tr>
+        <tr><td>Cidade Anã de Pedra Funda</td><td>Montanhas</td><td>A casa do portão em cima; a escada desce até o salão do Rei da Montanha, com forja, mina, quartel e tesouro</td><td>Regicida da Montanha</td></tr>
+        <tr><td>Ossada do Dragão</td><td>Badlands, deserto</td><td>Esqueleto gigante num sítio de escavação: use o pincel na areia suspeita. À noite, o Espírito do Dragão</td><td>Caçador de Dragões</td></tr>
+        <tr><td>Coliseu</td><td>Planícies, savanas, campinas, deserto</td><td>Arena com 4 spawners de desafio que dão chaves; o cofre fica no camarote do imperador</td><td>Campeão do Coliseu</td></tr>
+        <tr><td>Castelo do Rei Caído</td><td>Planícies, florestas, taiga</td><td>Muralha, torres, cavaleiros no pátio e o Rei Caído no trono (que chama ajuda na metade da vida)</td><td>Algoz do Rei Caído</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>💡 Dicas</h3>
+      <ul>
+        <li>Os baús têm saque próprio e, às vezes, itens do RPG.</li>
+        <li>Cada chefe aparece uma vez por estrutura; o da Ossada volta a cada noite.</li>
+        <li>Leve um pincel para a Ossada: dá até cabeça de dragão.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 3.0 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 3.1 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

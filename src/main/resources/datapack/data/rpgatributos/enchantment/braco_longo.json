@@ -1,0 +1,14 @@
+{
+  "anvil_cost": 4,
+  "description": { "text": "Braço Longo" },
+  "effects": {
+    "minecraft:attributes": [ { "id": "rpgatributos:enchantment.braco_longo", "attribute": "minecraft:block_interaction_range",
+      "operation": "add_value", "amount": { "type": "minecraft:linear", "base": 1.0, "per_level_above_first": 1.0 } } ]
+  },
+  "max_cost": { "base": 65, "per_level_above_first": 15 },
+  "max_level": 2,
+  "min_cost": { "base": 15, "per_level_above_first": 15 },
+  "slots": [ "mainhand" ],
+  "supported_items": "#minecraft:enchantable/mining",
+  "weight": 2
+}

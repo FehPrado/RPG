@@ -309,6 +309,15 @@ public final class Topicos {
                 .cmd("estrelas").ligados("deuses", "estacoes").palavras("estrelas constelacao luneta").pronto();
 
         // ===================== Ofícios =====================
+        t("encantos", MAGIA, "Encantamentos do RPG", Material.ENCHANTED_BOOK)
+                .texto("18 encantamentos novos, de verdade: saem na mesa de encantamento, em livros, nos baús, com os aldeões e com o Bibliotecário, e juntam na bigorna.",
+                        "Na mesa: Golpe Lunar (mais dano à noite, o dobro na lua cheia), Ceifador (mais XP dos monstros), Saltador (pula mais alto, cai sem dano de mais alto), Passo Ligeiro (calças, mais rápido), Braço Longo (ferramentas, alcança blocos mais longe), Veio Generoso (mais XP dos minérios) e Flecha Gélida (arco, a flecha deixa lento).",
+                        "Raros (baús, aldeões, Bibliotecário nível 7+): Roubo de Vida (às vezes o golpe cura você), Sifão de Mana (cada golpe devolve mana) e Vigor (peitoral, +1 coração máximo por nível).",
+                        "De luta, na mesa: Lâmina do Vento (empurra longe), Estilhaço de Gelo (machado: às vezes congela quem está perto), Flecha Explosiva (besta), Onda de Choque (botas: cair de alto empurra os monstros) e Trilha Florida (botas: flores por onde passa).",
+                        "De luta, raros: Corrente de Trovão (às vezes um raio cai no alvo e salta para outros monstros) e Passos de Brasa (botas: rastro de fogo correndo).",
+                        "Maldição do Peso: aparece em livros e armaduras dos baús e deixa você mais lento. Como as maldições do jogo, não sai no rebolo.")
+                .dica("Na Lua de Sangue o Golpe Lunar bate ainda mais forte.")
+                .ligados("magias", "forja").palavras("encantamento encantar livro mesa bigorna golpe lunar ceifador saltador passo ligeiro braco longo veio generoso flecha gelida roubo vida sifao mana vigor maldicao peso lamina vento estilhaco gelo explosiva onda choque trilha florida corrente trovao passos brasa").pronto();
         t("forja", OFICIOS, "Forja do Ferreiro", Material.ANVIL)
                 .texto("Armas, ferramentas e armaduras feitas nela saem forjadas: de Comum a Mítico, com bônus e efeitos.",
                         "Agachado + clique: refino.")
@@ -538,6 +547,13 @@ public final class Topicos {
                         "Carta Náutica (do náufrago, do mercador do mar e dos baús): clique com ela e ela marca o lugar do mar mais perto que você ainda não viu.")
                 .dica("Leve comida: o náufrago troca as cartas do barco dele por qualquer coisa de comer.")
                 .ligados("barco", "perigosmar", "mar", "pesca").palavras("ilhota naufrago pirata navio canhao capitao iceberg mercador tartaruga cardume baleia carta nautica tesouro").pronto();
+        t("gigantes", MUNDO, "Estruturas grandes", Material.OAK_SAPLING)
+                .texto("Seis construções gigantes que nascem com o mundo, só em terreno novo (longe do que já foi explorado).",
+                        "Árvore-Mundo (florestas): tronco oco com escada, vila na copa e o Guardião das Raízes lá embaixo. Colosso Caído (planícies): estátua deitada com o Coração no peito e a Sentinela.",
+                        "Cidade Anã (montanhas): a casa do portão em cima e uma escada até o salão do Rei da Montanha, com forja, mina e tesouro. Ossada do Dragão (badlands e deserto): areia suspeita para o pincel e, à noite, o Espírito do Dragão.",
+                        "Coliseu: lute contra os spawners de desafio da arena, pegue a chave e abra o cofre do camarote. Castelo do Rei Caído: cavaleiros no pátio e o rei no trono.")
+                .dica("Cada uma dá um título: Amigo das Raízes, Quebra-Colosso, Regicida da Montanha, Caçador de Dragões, Campeão do Coliseu e Algoz do Rei Caído.")
+                .ligados("estruturas", "titulos").palavras("arvore mundo colosso caido cidade ana anao ossada dragao coliseu arena castelo rei caido escavacao pincel trono chefe gigante").pronto();
         t("perigosmar", MUNDO, "Perigos do mar", Material.INK_SAC)
                 .texto("Kraken: no mar fundo, à noite ou na tempestade, ele cerca o barco. Corte os 4 tentáculos e o corpo sobe; aí ele apanha (cuidado com a tinta).",
                         "Navio Fantasma: em noite de lua nova ou de neblina, surge perto de quem navega, com marujos fantasmas e o Capitão Fantasma. Some ao amanhecer.",

@@ -181,7 +181,14 @@ public enum Titulo {
     TERROR_DOS_PIRATAS("Terror dos Piratas", 0xC62828, Requisito.contador("capitaes_piratas", 3, "Derrotar 3 capitães de navios piratas"), new Bonus().comDano(1)),
     CACADOR_DE_KRAKEN("Caçador de Kraken", 0x7E57C2, Requisito.contador("kraken", 1, "Vencer o Kraken em alto-mar"), Bonus.vida(2)),
     DESPERTADOR_DE_ILHAS("Despertador de Ilhas", 0x66BB6A, Requisito.contador("tartaruga_ancestral", 1, "Vencer a Tartaruga Ancestral"), Bonus.armadura(1)),
-    EXORCISTA_DO_MAR("Exorcista do Mar", 0xB0BEC5, Requisito.contador("capitao_fantasma", 1, "Derrotar o Capitão Fantasma de um navio fantasma"), Bonus.xpTudo(0.03));
+    EXORCISTA_DO_MAR("Exorcista do Mar", 0xB0BEC5, Requisito.contador("capitao_fantasma", 1, "Derrotar o Capitão Fantasma de um navio fantasma"), Bonus.xpTudo(0.03)),
+    // ---------------- 3.1: as estruturas grandes ----------------
+    AMIGO_DAS_RAIZES("Amigo das Raízes", 0x66BB6A, Requisito.contador("guardiao_raizes", 1, "Vencer o Guardião das Raízes da Árvore-Mundo"), Bonus.vida(2)),
+    QUEBRA_COLOSSO("Quebra-Colosso", 0xB0BEC5, Requisito.contador("sentinela_colosso", 1, "Derrubar a Sentinela do Colosso Caído"), Bonus.armadura(1)),
+    REGICIDA_DA_MONTANHA("Regicida da Montanha", 0xFFB74D, Requisito.contador("rei_montanha", 1, "Derrotar o Rei da Montanha na Cidade Anã"), new Bonus().comDano(1)),
+    CACADOR_DE_DRAGOES("Caçador de Dragões", 0xCE93D8, Requisito.contador("espirito_dragao", 1, "Vencer o Espírito do Dragão na Ossada"), Bonus.xpTudo(0.03)),
+    CAMPEAO_DO_COLISEU("Campeão do Coliseu", 0xE57373, Requisito.contador("campeao_coliseu", 1, "Abrir o cofre do imperador no Coliseu"), new Bonus().comDano(1)),
+    ALGOZ_DO_REI_CAIDO("Algoz do Rei Caído", 0x9575CD, Requisito.contador("rei_caido", 1, "Tirar o Rei Caído do trono"), Bonus.vida(2));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(

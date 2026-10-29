@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517004, "separation": 16, "spacing": 44 },
+  "structures": [ { "structure": "rpgatributos:ossada_dragao", "weight": 1 } ]
+}

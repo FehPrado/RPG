@@ -1,0 +1,14 @@
+{
+  "anvil_cost": 4,
+  "description": { "text": "Veio Generoso" },
+  "effects": {
+    "minecraft:block_experience": [ { "effect": { "type": "minecraft:add",
+      "value": { "type": "minecraft:linear", "base": 1.0, "per_level_above_first": 1.0 } } } ]
+  },
+  "max_cost": { "base": 60, "per_level_above_first": 9 },
+  "max_level": 3,
+  "min_cost": { "base": 10, "per_level_above_first": 9 },
+  "slots": [ "mainhand" ],
+  "supported_items": "#minecraft:enchantable/mining_loot",
+  "weight": 3
+}

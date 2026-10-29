@@ -1,0 +1,14 @@
+{
+  "anvil_cost": 8,
+  "description": { "text": "Maldição do Peso" },
+  "effects": {
+    "minecraft:attributes": [ { "id": "rpgatributos:enchantment.maldicao_do_peso", "attribute": "minecraft:movement_speed",
+      "operation": "add_multiplied_base", "amount": -0.08 } ]
+  },
+  "max_cost": { "base": 50, "per_level_above_first": 0 },
+  "max_level": 1,
+  "min_cost": { "base": 25, "per_level_above_first": 0 },
+  "slots": [ "any" ],
+  "supported_items": "#minecraft:enchantable/armor",
+  "weight": 1
+}

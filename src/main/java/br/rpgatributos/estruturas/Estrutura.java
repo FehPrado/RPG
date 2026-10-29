@@ -84,7 +84,20 @@ public enum Estrutura {
     BARCO_MERCANTE("Barco Mercante", "o", 0x81D4FA, "Um mercador ancorado no meio do mar. Vende o que serve para navegar.",
             4, 5, 0, 12, b -> b.contains("ocean") && !b.contains("frozen")),
     ILHA_TARTARUGA("Ilha-Tartaruga", "a", 0x66BB6A, "Uma ilha redonda demais. E ela respira.",
-            2, 7, 0, 8, b -> (b.contains("warm") || b.contains("lukewarm") || b.equals("ocean") || b.equals("deep_ocean")));
+            2, 7, 0, 8, b -> (b.contains("warm") || b.contains("lukewarm") || b.equals("ocean") || b.equals("deep_ocean"))),
+    // ---------------- 3.1: as grandes, do datapack (o jogo gera com o mundo; veja Gigantes) ----------------
+    ARVORE_MUNDO("Árvore-Mundo", "a", 0x66BB6A, "Ela já era velha quando o mundo era novo. Algo dorme nas raízes.",
+            0, 30, 0, 0, b -> true),
+    COLOSSO_CAIDO("Colosso Caído", "o", 0xB0BEC5, "Um gigante de pedra que caiu e nunca mais levantou. O coração ainda bate.",
+            0, 34, 0, 0, b -> true),
+    CIDADE_ANA("Cidade Anã de Pedra Funda", "a", 0xFFB74D, "Os anões cavaram fundo demais. O rei nunca deixou o salão.",
+            0, 24, 0, 0, b -> true),
+    OSSADA_DRAGAO("Ossada do Dragão", "a", 0xE8E2CC, "Os ossos de um dragão antigo. À noite, o espírito dele volta.",
+            0, 31, 0, 0, b -> true),
+    COLISEU("Coliseu", "o", 0xE57373, "A arena ainda espera os lutadores. E a plateia, os vencedores.",
+            0, 29, 0, 0, b -> true),
+    CASTELO_REI_CAIDO("Castelo do Rei Caído", "o", 0x9575CD, "O rei morreu sentado no trono. Ninguém contou isso a ele.",
+            0, 22, 0, 0, b -> true);
 
     private final String nome, artigo, frase;
     private final TextColor cor;
@@ -140,6 +153,11 @@ public enum Estrutura {
     /** 3.0: boia na superfície do mar aberto (o y dela é a água da superfície). */
     public boolean marAberto() {
         return this == ILHOTA || this == NAVIO_PIRATA || this == ICEBERG || this == BARCO_MERCANTE || this == ILHA_TARTARUGA;
+    }
+
+    /** 3.1: vem do datapack (o jogo gera junto com o mundo; o plugin só reconhece e dá vida). */
+    public boolean gigante() {
+        return this == ARVORE_MUNDO || this == COLOSSO_CAIDO || this == CIDADE_ANA || this == OSSADA_DRAGAO || this == COLISEU || this == CASTELO_REI_CAIDO;
     }
 
     /** É do mar (nasce em chunk de oceano). */

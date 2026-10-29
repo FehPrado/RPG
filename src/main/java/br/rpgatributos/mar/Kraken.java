@@ -197,7 +197,7 @@ public final class Kraken {
                     if (r.nextInt(2) == 0) plugin.barcoGrande().melhorias().danificar(alvo, 3, "O Kraken aperta o casco");
                 } else if (r.nextInt(5) == 0 && !alvo.getPassengers().isEmpty() && alvo.getPassengers().getFirst() instanceof Player remador) {
                     alvo.removePassenger(remador);
-                    remador.damage(4);
+                    remador.damage(4, br.rpgatributos.datapack.Mortes.fonte("kraken", null));
                     remador.setVelocity(new Vector(0, -0.5, 0));
                     remador.sendActionBar(Component.text("🐙 O Kraken te arrancou do barco!", COR));
                 }
@@ -205,7 +205,7 @@ public final class Kraken {
             for (Player p : perto) {
                 if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) continue;
                 if (p.getLocation().distanceSquared(lt) > 3.2 * 3.2) continue;
-                p.damage(3, t);
+                p.damage(3, br.rpgatributos.datapack.Mortes.fonte("kraken", t));
                 if (p.isInWater()) {
                     p.setVelocity(new Vector(0, -0.45, 0));
                     p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 40, 1));

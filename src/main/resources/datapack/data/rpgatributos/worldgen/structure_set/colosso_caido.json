@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517002, "separation": 18, "spacing": 48 },
+  "structures": [ { "structure": "rpgatributos:colosso_caido", "weight": 1 } ]
+}

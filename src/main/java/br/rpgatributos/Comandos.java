@@ -468,6 +468,33 @@ public final class Comandos implements TabExecutor {
                 }
                 return;
             }
+            case "encanto" -> {
+                // 3.1: livros com os encantamentos do datapack.
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                if (br.rpgatributos.datapack.Encantos.carregados() == 0) {
+                    erro(sender, "O datapack ainda não carregou: reinicie o servidor uma vez.");
+                    return;
+                }
+                String id = args.length >= 2 ? args[1].toLowerCase(java.util.Locale.ROOT) : "todos";
+                for (String[] e : br.rpgatributos.datapack.Encantos.TODOS) {
+                    if (!id.equals("todos") && !id.equals(e[0])) continue;
+                    org.bukkit.enchantments.Enchantment enc = br.rpgatributos.datapack.Encantos.pegar(e[0]);
+                    if (enc == null) continue;
+                    int nivel = enc.getMaxLevel();
+                    if (args.length >= 3) try { nivel = Math.max(1, Math.min(nivel, Integer.parseInt(args[2]))); } catch (NumberFormatException ignored) { }
+                    final int n = nivel;
+                    ItemStack livro = new ItemStack(Material.ENCHANTED_BOOK);
+                    livro.editMeta(org.bukkit.inventory.meta.EnchantmentStorageMeta.class, m -> m.addStoredEnchant(enc, n, true));
+                    entregar(p, livro);
+                    if (!id.equals("todos")) {
+                        ok(sender, "Livro de " + e[1] + " " + n + ".");
+                        return;
+                    }
+                }
+                if (id.equals("todos")) ok(sender, "Um livro de cada encantamento do RPG, no nível máximo.");
+                else erro(sender, "Encantamentos: " + String.join(", ", br.rpgatributos.datapack.Encantos.ids()) + " (ou todos).");
+                return;
+            }
             case "mar" -> {
                 // 3.0 "Mundo e Mar": cardumes, Kraken, Navio Fantasma, tempestade e os itens do barco.
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
@@ -2256,7 +2283,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "mar", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "mar", "encanto", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

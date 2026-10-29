@@ -6,7 +6,7 @@
 
     <groupId>br.rpgatributos</groupId>
     <artifactId>RPGAtributos</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -46,14 +46,16 @@
                 <filtering>true</filtering>
                 <excludes>
                     <exclude>modelos/**</exclude>
+                    <exclude>datapack/**</exclude>
                 </excludes>
             </resource>
-            <!-- Modelos e texturas binárias: copiados sem filtro, para não estragar os PNGs. -->
+            <!-- Modelos e texturas binárias e o datapack das dimensões: copiados sem filtro. -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
                 <includes>
                     <include>modelos/**</include>
+                    <include>datapack/**</include>
                 </includes>
             </resource>
         </resources>

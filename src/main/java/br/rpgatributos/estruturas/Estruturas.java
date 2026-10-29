@@ -142,6 +142,7 @@ public final class Estruturas implements Listener {
     final IlhasDoCeu ilhas;
     private final Vilas vilas;
     final MarAberto marAberto;
+    private final Gigantes gigantes;
     private final File arquivo;
     private final NamespacedKey kChunk, kPoco, kAltar;
     final List<Sitio> sitios = new ArrayList<>();
@@ -159,6 +160,7 @@ public final class Estruturas implements Listener {
         this.ilhas = new IlhasDoCeu(plugin, this, projetos);
         this.vilas = new Vilas(plugin, this);
         this.marAberto = new MarAberto(plugin, this, projetos);
+        this.gigantes = new Gigantes(plugin, this);
         this.arquivo = new File(plugin.getDataFolder(), "estruturas.yml");
         this.kChunk = new NamespacedKey(plugin, "estrutura_v1");
         this.kPoco = new NamespacedKey(plugin, "poco_desejo_dia");
@@ -177,6 +179,11 @@ public final class Estruturas implements Listener {
     /** 3.0: o mar aberto (ilhotas, navios, icebergs, a Ilha-Tartaruga e a Carta Náutica). */
     public MarAberto marAberto() {
         return marAberto;
+    }
+
+    /** 3.1: as estruturas grandes do datapack (o listener dos chefes e do cofre do Coliseu). */
+    public org.bukkit.event.Listener gigantes() {
+        return gigantes;
     }
 
     /** A estrutura pelo id (ou null). */
@@ -225,6 +232,19 @@ public final class Estruturas implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, ilhas::retomar, 120L);
     }
 
+    void sujar() {
+        sujo = true;
+    }
+
+    /** 3.1: uma estrutura grande que o jogo acabou de gerar (uma vez só: o id vem do lugar). */
+    void anotarGigante(World w, Estrutura t, int x, int y, int z) {
+        String id = t.id() + "_" + x + "_" + z;
+        if (sitio(id) != null) return;
+        sitios.add(new Sitio(id, t, w.getName(), x, y, z, 0));
+        sujo = true;
+        plugin.getLogger().info("Estrutura nova: " + t.nome() + " em " + w.getName() + " " + x + " " + y + " " + z);
+    }
+
     void adicionar(Sitio s) {
         sitios.add(s);
         salvar();
@@ -232,7 +252,7 @@ public final class Estruturas implements Listener {
 
     public void salvar() {
         YamlConfiguration y = new YamlConfiguration();
-        for (Sitio s : sitios) {
+        for (Sitio s : new ArrayList<>(sitios)) {
             String b = "sitios." + s.id + ".";
             y.set(b + "tipo", s.tipo.id());
             y.set(b + "mundo", s.mundo);
@@ -277,6 +297,8 @@ public final class Estruturas implements Listener {
         boolean nether = w.getEnvironment() == World.Environment.NETHER;
         if ((w.getEnvironment() != World.Environment.NORMAL && !nether) || plugin.masmorras().ehMundo(w) || br.rpgatributos.ModoTeste.ehTeste(w)) return;
         boolean novo = e.isNewChunk();
+        // 3.1: as estruturas grandes o próprio jogo gera (datapack); aqui só se anota onde ficaram.
+        if (novo && !nether) gigantes.aoNascer(c);
         if (!novo && plugin.settings().estrSoChunksNovos) return;
         var pdc = c.getPersistentDataContainer();
         if (pdc.has(kChunk)) return;
@@ -657,6 +679,7 @@ public final class Estruturas implements Listener {
                         case CIDADE_SUBMERSA -> cidades.tick(s, w, p, jogando, d2, dy);
                         case ILHA_DO_CEU -> ilhas.tick(s, w, p, jogando, d2, dy);
                         case ILHOTA, NAVIO_PIRATA, ICEBERG, ILHA_TARTARUGA -> marAberto.tick(s, w, p, jogando, d2);
+                        case ARVORE_MUNDO, COLOSSO_CAIDO, CIDADE_ANA, OSSADA_DRAGAO, COLISEU, CASTELO_REI_CAIDO -> gigantes.tick(s, w, p, jogando, d2, dy);
                         default -> { }
                     }
                 }
@@ -993,6 +1016,7 @@ public final class Estruturas implements Listener {
             case "pirata" -> marAberto.capitaoMorreu(e, v.substring(0, v.indexOf(':')));
             case "tartaruga" -> marAberto.tartarugaMorreu(e, v.substring(0, v.indexOf(':')));
             case "ventos" -> ilhas.guardiaoMorreu(e, v.substring(0, v.indexOf(':')));
+            case "raizes", "colosso", "reianao", "dragao", "reicaido" -> gigantes.morreu(e, v.substring(0, v.indexOf(':')), v.substring(v.indexOf(':') + 1));
             case "guardiao" -> {
                 e.getDrops().add(plugin.arqueologia().reliquiaAleatoria());
                 if (r.nextDouble() < 0.4) e.getDrops().add(Raro.PAGINA_DE_LENDA.criar(1));
@@ -1509,6 +1533,7 @@ public final class Estruturas implements Listener {
             default -> 0;
         };
         Location l = p.getLocation().add(f.getDirection().multiply(t.raio() + 3));
+        if (t.gigante()) return construirGigante(p.getWorld(), l.getBlockX() + (int) Math.round(f.getDirection().getX() * Gigantes.tamanho(t)[0] / 2.0), l.getBlockZ() + (int) Math.round(f.getDirection().getZ() * Gigantes.tamanho(t)[2] / 2.0), t);
         if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(p.getWorld(), l.getBlockX(), l.getBlockZ());
         if (t == Estrutura.ILHA_DO_CEU) return ilhas.fundarAqui(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockZ() - Ilha.PLATAFORMA);
         Sitio s = construir(p.getWorld(), l.getBlockX(), l.getBlockZ(), t, rot, new Random(), true, true);
@@ -1522,6 +1547,7 @@ public final class Estruturas implements Listener {
 
     /** 3.0: com a variação escolhida (a ilhota: 0 náufrago, 1 pirata, 2 aves; -1 = sorteada). */
     public String construirEm(World w, int x, int z, Estrutura t, int variante) {
+        if (t.gigante()) return construirGigante(w, x, z, t);
         if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(w, x, z);
         if (t == Estrutura.ILHA_DO_CEU) return ilhas.fundarAqui(w, x, z);
         varianteForcada = variante;
@@ -1531,6 +1557,20 @@ public final class Estruturas implements Listener {
         } finally {
             varianteForcada = -1;
         }
+    }
+
+    /**
+     * 3.1: põe uma estrutura grande com o molde do datapack, centrada em (x, z), e anota. O jogo só
+     * as gera sozinho em terreno novo; isto é para o admin e a área de testes.
+     */
+    private String construirGigante(World w, int x, int z, Estrutura t) {
+        int[] tam = Gigantes.tamanho(t);
+        int chao = w.getHighestBlockYAt(x, z, HeightMap.WORLD_SURFACE);
+        int y = chao + 1 - Gigantes.superficie(t);
+        String cmd = "execute in " + w.getKey() + " run place template rpgatributos:" + t.id() + " " + (x - tam[0] / 2) + " " + y + " " + (z - tam[2] / 2);
+        if (!Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd)) return "O jogo não aceitou o molde (o datapack carregou? reinicie o servidor).";
+        anotarGigante(w, t, x, chao + 1, z);
+        return null;
     }
 
     /** Para o comando de teste montar cada ilhota com a história certa. */
