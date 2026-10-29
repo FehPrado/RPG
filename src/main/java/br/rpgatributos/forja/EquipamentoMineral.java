@@ -39,6 +39,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class EquipamentoMineral implements Listener {
 
     private static final NamespacedKey K_VIDA = new NamespacedKey("rpgatributos", "mineral_vida");
+    private static final NamespacedKey K_EMPURRAO = new NamespacedKey("rpgatributos", "mineral_empurrao");
 
     private final RPGAtributos plugin;
     private int segundos;
@@ -67,6 +68,7 @@ public final class EquipamentoMineral implements Listener {
             int jade = pecas(v, ConjuntoMineral.JADE), sangue = pecas(v, ConjuntoMineral.PEDRA_SANGUE);
             double vida = (jade >= 4 ? 4 : jade >= 2 ? 2 : 0) - (sangue >= 4 ? 2 : 0);
             modificador(p, Attribute.MAX_HEALTH, K_VIDA, vida);
+            modificador(p, Attribute.KNOCKBACK_RESISTANCE, K_EMPURRAO, pecas(v, ConjuntoMineral.FERRO_NEGRO) >= 2 ? 0.6 : 0);
             if (v.isEmpty() || p.getGameMode() == GameMode.SPECTATOR) continue;
             int ambar = pecas(v, ConjuntoMineral.AMBAR);
             if (ambar >= 2) efeito(p, PotionEffectType.LUCK, ambar >= 4 ? 1 : 0);
@@ -80,6 +82,17 @@ public final class EquipamentoMineral implements Listener {
             if (pecas(v, ConjuntoMineral.GELO) >= 2 && p.getFreezeTicks() > 0) p.setFreezeTicks(0);
             if (pecas(v, ConjuntoMineral.MAGMA) >= 4) efeito(p, PotionEffectType.FIRE_RESISTANCE, 0);
             if (pecas(v, ConjuntoMineral.QUARTZO_NEGRO) >= 4 && p.getEyeLocation().getBlock().getLightLevel() < 7) efeito(p, PotionEffectType.STRENGTH, 0);
+            // 3.3: os conjuntos do Abismo.
+            if (pecas(v, ConjuntoMineral.ANTIGO) >= 4) efeito(p, PotionEffectType.JUMP_BOOST, 0);
+            if (pecas(v, ConjuntoMineral.ABISSAL) >= 2 && p.getEyeLocation().getBlock().getLightLevel() < 7) efeito(p, PotionEffectType.NIGHT_VISION, 0);
+            if (pecas(v, ConjuntoMineral.ABISSAL) >= 4 && plugin.arcano() != null) plugin.arcano().darMana(p, 1);
+            int esporo = pecas(v, ConjuntoMineral.ESPORO);
+            if (esporo >= 2 && p.hasPotionEffect(PotionEffectType.POISON)) p.removePotionEffect(PotionEffectType.POISON);
+            if (esporo >= 4 && segundos % 6 == 0) {
+                AttributeInstance max = p.getAttribute(Attribute.MAX_HEALTH);
+                if (max != null && p.getHealth() < max.getValue() && !p.isDead()) p.setHealth(Math.min(max.getValue(), p.getHealth() + 1));
+            }
+            if (pecas(v, ConjuntoMineral.FERRO_NEGRO) >= 4) efeito(p, PotionEffectType.RESISTANCE, 0);
         }
     }
 
@@ -112,6 +125,11 @@ public final class EquipamentoMineral implements Listener {
         switch (e.getCause()) {
             case FIRE, FIRE_TICK, LAVA, HOT_FLOOR, CAMPFIRE -> {
                 if (pecas(vestidos(p), ConjuntoMineral.MAGMA) >= 2) e.setDamage(e.getDamage() * 0.7);
+            }
+            case FALL -> {
+                int antigo = pecas(vestidos(p), ConjuntoMineral.ANTIGO);
+                if (antigo >= 4 && p.getFallDistance() <= 12) e.setCancelled(true);
+                else if (antigo >= 2) e.setDamage(e.getDamage() * 0.6);
             }
             default -> { }
         }

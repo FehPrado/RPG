@@ -1,0 +1,21 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": { "default": { "max_delay": 18000, "min_delay": 6000, "sound": "minecraft:music.nether.warped_forest" } },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": { "ambient": [ { "type": "minecraft:bat", "count": 4, "weight": 10 } ], "axolotls": [], "creature": [], "misc": [], "monster": [ { "type": "minecraft:zombie", "count": 3, "weight": 60 }, { "type": "minecraft:slime", "count": 3, "weight": 60 }, { "type": "minecraft:witch", "count": 1, "weight": 20 } ], "underground_water_creature": [], "water_ambient": [], "water_creature": [] }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": { "argument": [ { "particle": { "type": "minecraft:warped_spore" }, "probability": 0.02 } ], "modifier": "append" },
+    "minecraft:visual/fog_color": "#2f5a5a",
+    "minecraft:visual/sky_color": "#5a7a7a"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": { "water_color": "#2a3a6a" },
+  "features": [ [], [], [  ], [], [], [], [], [], [], [ "rpgatributos:abismo/cogumelos_gigantes", "rpgatributos:abismo/cogumelos_marrons", "rpgatributos:abismo/cogumelos_vermelhos", "rpgatributos:abismo/liquen" ], [] ],
+  "has_precipitation": false,
+  "temperature": 0.6
+}

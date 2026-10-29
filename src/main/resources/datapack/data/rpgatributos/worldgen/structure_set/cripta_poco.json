@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517016, "separation": 10, "spacing": 34 },
+  "structures": [ { "structure": "rpgatributos:cripta_poco", "weight": 1 } ]
+}

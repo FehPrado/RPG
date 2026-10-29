@@ -162,7 +162,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 3.1</small></a>
+  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 3.4</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: adaga, cantil, /pets)…" aria-label="Buscar no manual"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 <div class="layout">
@@ -213,11 +213,14 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   <a href="#mar">🌊 Mundo e Mar</a>
   <a href="#encantos">✨ Encantamentos</a>
   <a href="#gigantes">🏰 Estruturas grandes</a>
+  <a href="#achados">🧭 Achados pelo caminho</a>
+  <a href="#telas">💬 Menu rápido e conversas</a>
+  <a href="#abismo">🕳 O Abismo</a>
 </nav>
 
 <main id="conteudo">
 <div class="hero"><div>
-    <p class="rotulo">Manual do jogador · versão 3.1</p>
+    <p class="rotulo">Manual do jogador · versão 3.4</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -2457,7 +2460,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
     </div>
     <div class="card"><h3>Altar da Convergência</h3>
       <div class="ritual"><span class="b">Âncora de renascimento</span><span class="mais">+</span><span class="i">1 olho do ender</span><span class="mais">+</span><span class="i">1 diamante</span><span class="mais">+</span><span class="i">4 fragmentos de ametista</span></div>
-      <p>Monte até <b>8 pedestais</b> a 3 blocos do altar: 4 em cruz e 4 na diagonal (2+2). Pedestal é qualquer bloco <b>lapidado</b> (pedra, ardósia, quartzo, tufo, arenito...) ou pilar de quartzo/púrpura, na mesma altura do altar ou 1 acima/abaixo. Clique num pedestal com um item para pôr nele (agachado: só 1); clique de novo para tirar.</p>
+      <p>Monte até <b>8 pedestais</b> a 3 blocos do altar: 4 em cruz e 4 na diagonal (2+2). Pedestal é um bloco <b>talhado</b>, o que tem desenho (tijolos de pedra talhados, ardósia, quartzo, tufo, arenito talhados...; tijolo comum não serve) ou pilar de quartzo/púrpura, na mesma altura do altar ou 1 acima/abaixo. Clique num pedestal com um item para pôr nele (agachado: só 1); clique de novo para tirar.</p>
       <p>Com o <b>catalisador</b> na mão, clique no altar: em 10 segundos os itens sobem, giram cada vez mais rápido, o céu escurece, caem raios, o chão treme e tudo explode no centro. O resultado cai brilhando, e só quem acendeu pega.</p>
       <p><b>Transmutar:</b> Fragmentos de Eco, Lágrimas de Ghast, Conchas de Náutilo, Molde de Netherite, Garrafas de Experiência, Varas de Blaze, Pérolas do Fim e Cascas de Shulker. <b>Infundir:</b> segure o equipamento e ele sobe 1 nível além do normal: Afiação até VII, Aspecto Flamejante IV, Saque V, Proteção VI, Peso-Pena VI, Eficiência VII, Fortuna V, Força VII ou Eterna (Inquebrável + Remendo). No máximo 3 infusões por item. Mão vazia no altar abre o <b>Grimório</b> com tudo, em abas.</p>
       <p><b>Raros e únicos:</b> Totem da Imortalidade, Maçã Dourada Encantada, Coração do Mar, Estrela do Nether, Élitro e Essência Primordial. E as 4 <b>Relíquias da Convergência</b>, uma de cada por jogador: Lâmina (Afiação VII, Saque IV...), Égide (Proteção VI, Espinhos III), Picareta (Eficiência VII, Fortuna V) e Arco (Força VII, Infinidade).</p>
@@ -2844,10 +2847,96 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   </div>
 </section>
 
+<section class="secao" id="achados">
+  <h2><span class="ico">🧭</span>Achados pelo caminho</h2>
+  <p class="intro">Na 3.2, oito estruturas pequenas aparecem pelo mundo (em terreno novo), várias com escavação para o pincel.</p>
+  <div class="grade">
+    <div class="card largo"><h3>🗺 As oito</h3>
+      <div class="tabela"><table><thead><tr><th>Estrutura</th><th>Onde</th><th>O que tem</th></tr></thead><tbody>
+        <tr><td>Acampamento de Caçadores</td><td>Florestas, taigas</td><td>Barracas, fogueira, varal de couro e o barril dos caçadores</td></tr>
+        <tr><td>Estátua Quebrada</td><td>Planícies, campinas, savanas</td><td>As pernas no pedestal, a cabeça caída e cascalho para escavar</td></tr>
+        <tr><td>Arco Antigo</td><td>Deserto, badlands, savanas</td><td>Um portão de arenito meio caído, com areia para escavar</td></tr>
+        <tr><td>Santuário do Rio</td><td>Rios</td><td>Pavilhão sobre estacas com velas e o baú das oferendas</td></tr>
+        <tr><td>Cadafalso</td><td>Planícies, taigas, florestas</td><td>A forca, a gaiola e um baú debaixo do palanque</td></tr>
+        <tr><td>Cripta do Poço</td><td>Planícies, florestas, taigas</td><td>Desça a escada do poço seco: túmulos, velas, baú e chão para escavar</td></tr>
+        <tr><td>Caravana Perdida</td><td>Planícies, savanas, deserto</td><td>Carroça tombada, barris com carga e os ossos do boi</td></tr>
+        <tr><td>Sítio de Escavação</td><td>Deserto, badlands, planícies</td><td>Uma vala com andaimes e o fundo cheio de areia e cascalho suspeitos</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>🖌 Escavação</h3>
+      <p>Use o pincel do jogo. Além de pepitas, esmeraldas e cacos de cerâmica, saem <b>relíquias, tomos, páginas de lenda, mapas rasgados e cartas</b> do RPG.</p>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="telas">
+  <h2><span class="ico">💬</span>Menu rápido e conversas</h2>
+  <p class="intro">Na 3.2 o RPG usa as telas de diálogo do jogo: uma janela com texto e botões.</p>
+  <div class="grade">
+    <div class="card"><h3>⚡ Menu do RPG</h3>
+      <p>A tecla de <b>Ações Rápidas</b> (Opções → Controles) e o botão novo no <b>menu de pausa</b> abrem atalhos: Menu do RPG, Atributos, Guia, Manual, Grimório, Talentos, Títulos, Missões, Diário, Crônicas, Álbum e Classe.</p>
+    </div>
+    <div class="card"><h3>🗣 Conversas</h3>
+      <ul>
+        <li><b>Náufrago:</b> a história dele e o botão Dar comida (procura na mochila).</li>
+        <li><b>Cronista:</b> capítulo, tarefa e progresso; Entregar o capítulo e Ler as Crônicas.</li>
+        <li><b>Mensageiro da estrada:</b> o pedido e o botão Entregar.</li>
+        <li><b>Renascer:</b> confirmação numa janela antes de zerar os atributos.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secao" id="abismo">
+  <h2><span class="ico">🕳</span>O Abismo</h2>
+  <p class="intro">Na 3.3 chegou a primeira dimensão: um planalto cortado por rachaduras com mais de 1.100 blocos de queda.</p>
+  <div class="grade">
+    <div class="card"><h3>🚪 Entrar e sair</h3>
+      <ul>
+        <li><b>Entrar:</b> pule numa <b>Fenda do Abismo</b>, uma rachadura rara no mundo normal, com ametista e obsidiana chorona. A queda não machuca.</li>
+        <li><b>Sair:</b> agache 2 segundos no seu <b>Rasgo de Volta</b> (ardósia reforçada com obsidiana chorona em volta), onde você chegou. Pedras de Viagem também funcionam.</li>
+        <li><b>Morrer lá:</b> renasce em casa; os itens ficam num túmulo, lá dentro. Cama não funciona.</li>
+      </ul>
+    </div>
+    <div class="card largo"><h3>⬇ As cinco camadas</h3>
+      <div class="tabela"><table><thead><tr><th>Camada</th><th>Altura</th><th>Como é</th></tr></thead><tbody>
+        <tr><td>1. Borda dos Ventos</td><td>planalto até y 120</td><td>Grama, árvores esparsas e cinzas no ar</td></tr>
+        <tr><td>2. Floresta Pendurada</td><td>y 120 a −120</td><td>Musgo, cipós brilhantes, flores de esporo</td></tr>
+        <tr><td>3. Campos de Cristal</td><td>y −120 a −400</td><td>Calcita, geodos de ametista, estalactites</td></tr>
+        <tr><td>4. Mar de Fungos</td><td>y −400 a −700</td><td>Micélio e cogumelos gigantes</td></tr>
+        <tr><td>5. O Fundo</td><td>y −700 a −960</td><td>Sculk, escuro e cinza</td></tr>
+      </tbody></table></div>
+      <p>Na 3.4 chegaram as ruínas dos Antigos, as peças do foguete, os minerais com os conjuntos e o Vigia do Fundo (veja abaixo).</p>
+    </div>
+    <div class="card"><h3>💣 Abra a sua cratera</h3>
+      <p><b>Carga Abissal</b> (bancada): bloco de ametista em cima; obsidiana chorona, TNT e obsidiana chorona no meio; olho do ender embaixo. Clique no chão em campo aberto e se afaste: ela pulsa, explode (sem quebrar nada) e abre uma Fenda do Abismo ali.</p>
+    </div>
+    <div class="card largo"><h3>🏛 As ruínas dos Antigos</h3>
+      <p>Cavadas nas paredes das rachaduras, com varanda sobre o vazio. Cada uma tem um capítulo do <b>Diário dos Antigos</b> no atril e uma <b>peça do foguete</b> no baú.</p>
+      <div class="tabela"><table><thead><tr><th>Ruína</th><th>Camada</th><th>Peça</th></tr></thead><tbody>
+        <tr><td>Posto de Observação</td><td>1</td><td>Planta do Foguete</td></tr>
+        <tr><td>Elevador Antigo</td><td>2</td><td>Casco do Foguete</td></tr>
+        <tr><td>Laboratório de Cristal</td><td>3</td><td>Núcleo de Navegação</td></tr>
+        <tr><td>Refúgio dos que Caíram</td><td>4</td><td>Tanque de Combustível</td></tr>
+        <tr><td>Hangar dos Antigos</td><td>5 (no chão do Fundo)</td><td>Motor do Foguete, com o <b>Vigia do Fundo</b> (warden de 400 de vida)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card largo"><h3>⛏ Minerais e conjuntos do Abismo</h3>
+      <div class="tabela"><table><thead><tr><th>Mineral</th><th>Camada</th><th>Conjunto: 2 peças</th><th>4 peças</th></tr></thead><tbody>
+        <tr><td>Cobre dos Antigos</td><td>1 e 2</td><td>−40% de dano de queda</td><td>Salto I, sem dano de queda até 12 blocos</td></tr>
+        <tr><td>Cristal Abissal</td><td>3</td><td>Visão Noturna no escuro</td><td>+1 de mana por segundo</td></tr>
+        <tr><td>Esporo Fóssil</td><td>4</td><td>Veneno não pega</td><td>Meio coração a cada 6 s</td></tr>
+        <tr><td>Ferro Negro</td><td>5</td><td>Não é empurrado</td><td>Resistência I</td></tr>
+      </tbody></table></div>
+      <p>Os conjuntos (armadura e ferramentas) saem na bancada, como os de ferro, com o mineral no lugar do lingote.</p>
+    </div>
+  </div>
+</section>
+
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 3.1 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 3.4 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

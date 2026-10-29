@@ -272,7 +272,7 @@ public final class Topicos {
                 .dica("O Mercúrio Vivo é feito na Bancada Alquímica.")
                 .ligados("alquimia", "runas").palavras("circulo pedra filosofal mercurio").pronto();
         t("convergencia", MAGIA, "Altar da Convergência", Material.RESPAWN_ANCHOR)
-                .texto("Até 8 pedestais em volta do altar (16 no nível II, 24 no III), a 3 blocos (4 em cruz e 4 na diagonal, 2+2), na mesma altura ou 1 acima ou abaixo. Pedestal: qualquer bloco lapidado (pedra, ardósia, quartzo, tufo, arenito...) ou pilar de quartzo ou púrpura.",
+                .texto("Até 8 pedestais em volta do altar (16 no nível II, 24 no III), a 3 blocos (4 em cruz e 4 na diagonal, 2+2), na mesma altura ou 1 acima ou abaixo. Pedestal: bloco talhado, o que tem desenho (tijolos de pedra talhados, ardósia, quartzo, tufo, arenito talhados...) ou pilar de quartzo ou púrpura. Tijolo comum não serve.",
                         "Clique num pedestal com um item para pôr nele (agachado: só 1); clique de novo para tirar. Com o catalisador na mão, clique no altar: 10 segundos de cerimônia e o resultado cai no centro.",
                         "Transmutar: Eco, Lágrimas de Ghast, Náutilo, Molde de Netherite, Garrafas de Experiência, Varas de Blaze, Pérolas e Cascas de Shulker. Infundir: o equipamento na mão sobe 1 nível de encantamento além do normal (até 3 infusões por item). Transferir Encantamentos: o item encantado vai num pedestal (com um livro, a ponte) e os encantamentos dele passam para o da mão; a origem volta sem eles.",
                         "Raros: Totem, Maçã Dourada Encantada, Coração do Mar, Estrela do Nether, Élitro e Essência Primordial, e as 4 Relíquias da Convergência (Lâmina, Égide, Picareta e Arco), uma de cada por jogador.",
@@ -554,6 +554,28 @@ public final class Topicos {
                         "Coliseu: lute contra os spawners de desafio da arena, pegue a chave e abra o cofre do camarote. Castelo do Rei Caído: cavaleiros no pátio e o rei no trono.")
                 .dica("Cada uma dá um título: Amigo das Raízes, Quebra-Colosso, Regicida da Montanha, Caçador de Dragões, Campeão do Coliseu e Algoz do Rei Caído.")
                 .ligados("estruturas", "titulos").palavras("arvore mundo colosso caido cidade ana anao ossada dragao coliseu arena castelo rei caido escavacao pincel trono chefe gigante").pronto();
+        t("abismo", MUNDO, "O Abismo", Material.CRYING_OBSIDIAN)
+                .texto("Uma dimensão nova: um planalto cortado por rachaduras com mais de 1.100 blocos de queda, em 5 camadas (Borda dos Ventos, Floresta Pendurada, Campos de Cristal, Mar de Fungos e O Fundo).",
+                        "Entrada: pule numa Fenda do Abismo, uma rachadura rara no mundo normal com ametista e obsidiana chorona. A queda não machuca.",
+                        "Saída: agache 2 segundos em cima do seu Rasgo de Volta, onde você chegou. Pedras de Viagem também funcionam lá.",
+                        "Morrendo lá, você renasce em casa e os itens ficam num túmulo, lá dentro. Cama não funciona no Abismo.",
+                        "Carga Abissal (bancada: ametista em cima, obsidiana chorona, TNT e obsidiana chorona no meio, olho do ender embaixo): clique no chão e se afaste. Ela abre uma Fenda do Abismo ali.",
+                        "Ruínas dos Antigos nas paredes das rachaduras: Posto, Elevador, Laboratório e Refúgio, uma por camada, e o Hangar no Fundo. Cada uma tem um capítulo do Diário e uma peça do foguete; o Motor fica com o Vigia do Fundo.",
+                        "Minerais: Cobre dos Antigos (camadas 1 e 2), Cristal Abissal (3), Esporo Fóssil (4) e Ferro Negro (5). Cada um faz um conjunto de armadura e ferramentas na bancada, como o ferro.")
+                .dica("Leve um planador, Saltador nas botas e muitos blocos: subir de volta é com você.")
+                .ligados("achados", "gigantes").palavras("abismo dimensao fenda rasgo volta camada borda ventos floresta pendurada cristal fungos fundo queda carga abissal cratera antigos ruina diario foguete peca motor vigia cobre antigo esporo fossil ferro negro").pronto();
+        t("telas", MUNDO, "Menu rápido e conversas", Material.WRITABLE_BOOK)
+                .texto("A tecla de Ações Rápidas do jogo (Opções, Controles) e o botão novo no menu de pausa abrem o Menu do RPG, com atalhos para os comandos principais.",
+                        "O náufrago, o Cronista e o mensageiro da estrada conversam numa janela com botões: dar comida, entregar o capítulo, entregar o pedido.",
+                        "Renascer pede confirmação numa janela antes de zerar os atributos.")
+                .dica("Nos botões de entregar, o item sai da mochila: não precisa estar na mão.")
+                .ligados("achados", "integracao").palavras("menu rapido acoes rapidas pausa tela conversa dialogo botao naufrago cronista mensageiro renascer").pronto();
+        t("achados", MUNDO, "Achados pelo caminho", Material.BRUSH)
+                .texto("Oito estruturas pequenas nascem com o mundo, só em terreno novo: acampamento de caçadores, estátua quebrada, arco antigo, santuário do rio, cadafalso, cripta do poço, caravana perdida e sítio de escavação.",
+                        "Estátua, arco, cripta e o sítio de escavação têm areia ou cascalho suspeito: use o pincel do jogo.",
+                        "Da escavação saem coisas do jogo e do RPG: relíquias, tomos, páginas de lenda, mapas rasgados e cartas.")
+                .dica("O Sítio de Escavação tem o fundo da vala inteiro para escavar. Leve mais de um pincel.")
+                .ligados("gigantes", "estruturas", "arqueologia").palavras("achado caminho acampamento cacador estatua arco santuario rio cadafalso forca cripta poco caravana sitio escavacao pincel arqueologia").pronto();
         t("perigosmar", MUNDO, "Perigos do mar", Material.INK_SAC)
                 .texto("Kraken: no mar fundo, à noite ou na tempestade, ele cerca o barco. Corte os 4 tentáculos e o corpo sobe; aí ele apanha (cuidado com a tinta).",
                         "Navio Fantasma: em noite de lua nova ou de neblina, surge perto de quem navega, com marujos fantasmas e o Capitão Fantasma. Some ao amanhecer.",

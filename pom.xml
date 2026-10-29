@@ -6,7 +6,7 @@
 
     <groupId>br.rpgatributos</groupId>
     <artifactId>RPGAtributos</artifactId>
-    <version>3.1.0</version>
+    <version>3.4.0</version>
     <packaging>jar</packaging>
 
     <properties>

@@ -167,6 +167,16 @@ public final class Renascimento implements CommandExecutor {
                 .clickEvent(ClickEvent.runCommand("/renascer confirmar"))
                 .hoverEvent(HoverEvent.showText(Component.text("Não dá para desfazer.", NamedTextColor.RED)))
                 .append(Component.text("  (vale por 30 s)", NamedTextColor.DARK_GRAY)));
+        // 3.2: a mesma pergunta numa tela de confirmação.
+        List<Component> texto = new ArrayList<>();
+        texto.add(Component.text("Seus atributos voltam ao nível 0 e os talentos são devolvidos. Para sempre, você ganha:", NamedTextColor.GRAY));
+        texto.addAll(bonusPorVez());
+        texto.add(Component.text("Itens, classes, lendas, companheiros, títulos e o resto continuam com você.", NamedTextColor.DARK_GRAY));
+        br.rpgatributos.visual.Telas.confirmar(p, Component.text("☀ Renascer (" + n + "/" + cfg().renMaximo + ")", COR, TextDecoration.BOLD),
+                texto, "☀ Renascer agora", "Ainda não", q -> {
+                    confirmarAte.put(q.getUniqueId(), System.currentTimeMillis() + 30_000);
+                    confirmar(q);
+                });
     }
 
     private void confirmar(Player p) {

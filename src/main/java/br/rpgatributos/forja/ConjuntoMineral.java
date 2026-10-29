@@ -69,7 +69,20 @@ public enum ConjuntoMineral implements ArteTrajes.Paleta {
             "Picareta: funde o minério (ferro, ouro e cobre saem em lingote)."),
     QUARTZO_NEGRO("Quartzo Negro", Raro.QUARTZO_NEGRO, 0x9A8ABF, Traje.Estilo.PLACAS,
             0xFF4A4060, 0xFF8A7FA8, 0xFF221C30, 0xFFD4AF37, 0xFFB39DDB,
-            "Os piglins não atacam você.", "Força I no escuro.", null);
+            "Os piglins não atacam você.", "Força I no escuro.", null),
+    // 3.3: os minerais do Abismo, um conjunto por camada.
+    ANTIGO("Antigo", Raro.COBRE_ANTIGO, 0xC8703A, Traje.Estilo.PLACAS,
+            0xFFC8703A, 0xFFF2A36A, 0xFF7A3A14, 0xFF4E9A7E, 0xFFFFD8B0,
+            "Queda: −40% de dano.", "Salto I e nenhum dano de queda de até 12 blocos.", null),
+    ABISSAL("Abissal", Raro.CRISTAL_ABISSAL, 0x8A5AE0, Traje.Estilo.ESCAMAS,
+            0xFF6A3ED0, 0xFFB898FF, 0xFF2A0E5A, 0xFFD4AF37, 0xFFD8C0FF,
+            "Visão Noturna no escuro.", "+1 de mana por segundo.", null),
+    ESPORO("Esporo", Raro.ESPORO_FOSSIL, 0x3AB0A0, Traje.Estilo.TECIDO,
+            0xFF2A8A80, 0xFF8AE8D8, 0xFF0E3A3A, 0xFF5A4A3A, 0xFFB8FFE8,
+            "Veneno não pega em você.", "Recupera meio coração a cada 6 segundos.", null),
+    FERRO_NEGRO("Ferro Negro", Raro.FERRO_NEGRO, 0x5A5A7E, Traje.Estilo.PLACAS,
+            0xFF2A2A38, 0xFF6A6A8A, 0xFF0A0A10, 0xFF8A2A2A, 0xFFB8B8E0,
+            "Não é empurrado pelos golpes.", "Resistência I.", null);
 
     /** As 9 peças, cada uma com a base de ferro do jogo. */
     public enum Peca {

@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517018, "separation": 10, "spacing": 32 },
+  "structures": [ { "structure": "rpgatributos:sitio_escavacao", "weight": 1 } ]
+}

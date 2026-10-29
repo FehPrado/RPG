@@ -78,7 +78,12 @@ public final class Mineracao implements Listener {
         // 2.56: os minerais do Nether (no fim, porque o chunk guarda o número de cada um)
         CRISTAL_DE_MAGMA("Cristal de Magma", 13, 0.45, 10, 110, 2, 4),
         AMBAR_INFERNAL("Âmbar Infernal", 19, 0.40, 10, 110, 2, 4),
-        QUARTZO_NEGRO("Quartzo Negro", 21, 0.40, 10, 110, 2, 4);
+        QUARTZO_NEGRO("Quartzo Negro", 21, 0.40, 10, 110, 2, 4),
+        // 3.3: os minerais do Abismo (um por camada; sempre no fim, pelo mesmo motivo)
+        COBRE_ANTIGO("Cobre dos Antigos", 23, 0.60, -120, 230, 2, 5),
+        CRISTAL_ABISSAL("Cristal Abissal", 25, 0.55, -400, -120, 2, 4),
+        ESPORO_FOSSIL("Esporo Fóssil", 27, 0.55, -700, -400, 2, 4),
+        FERRO_NEGRO("Ferro Negro", 29, 0.50, -950, -700, 2, 4);
 
         final String nome;
         /** Bits do bloco de cogumelo marrom (sempre com a face de baixo: a natureza nunca faz isso). */
@@ -280,6 +285,11 @@ public final class Mineracao implements Listener {
         Random r = new Random(w.getSeed() ^ (c.getX() * 734287L) ^ (c.getZ() * 912931L) ^ 0x6E1A2L);
         // Perto de territórios ninguém mexe no chão.
         if (plugin.territorios().em(w.getName(), c.getX(), c.getZ()) != null) return;
+        // 3.3: o Abismo tem os minerais dele, um por camada.
+        if (br.rpgatributos.dimensao.Dimensoes.de(w) == br.rpgatributos.dimensao.Dimensoes.Dimensao.ABISMO) {
+            mineraisDoAbismo(c, r);
+            return;
+        }
         if (w.getEnvironment() == World.Environment.NETHER) {
             if (r.nextDouble() < Tipo.PEDRA_SANGUE.chance) veios(c, r, Tipo.PEDRA_SANGUE, m -> m == Material.NETHERRACK);
             c.getPersistentDataContainer().set(kNether, PersistentDataType.BYTE, (byte) 1);
@@ -301,6 +311,14 @@ public final class Mineracao implements Listener {
         if ((bioma.contains("swamp") || bioma.contains("mangrove")) && r.nextDouble() < Tipo.TURFA.chance) turfa(c, r);
         if (bioma.contains("ocean") && !bioma.contains("frozen") && r.nextDouble() < Tipo.PEROLA.chance) ostras(c, r);
         if (r.nextDouble() < 0.04) geodo(c, r);
+    }
+
+    /** 3.3: os minerais do Abismo, cada um na sua camada (veja Tipo: a altura de cada um). */
+    private void mineraisDoAbismo(Chunk c, Random r) {
+        if (r.nextDouble() < Tipo.COBRE_ANTIGO.chance) veios(c, r, Tipo.COBRE_ANTIGO, m -> m == Material.STONE || m == Material.MOSS_BLOCK || m == Material.ROOTED_DIRT);
+        if (r.nextDouble() < Tipo.CRISTAL_ABISSAL.chance) veios(c, r, Tipo.CRISTAL_ABISSAL, m -> m == Material.CALCITE || m == Material.DEEPSLATE || m == Material.STONE);
+        if (r.nextDouble() < Tipo.ESPORO_FOSSIL.chance) veios(c, r, Tipo.ESPORO_FOSSIL, m -> m == Material.DEEPSLATE || m == Material.MYCELIUM || m == Material.DIRT);
+        if (r.nextDouble() < Tipo.FERRO_NEGRO.chance) veios(c, r, Tipo.FERRO_NEGRO, m -> m == Material.DEEPSLATE || m == Material.BLACKSTONE || m == Material.SCULK);
     }
 
     /** 2.56: um mineral para cada bioma do Nether (Cristal de Magma, Âmbar Infernal, Quartzo Negro). */
@@ -471,6 +489,10 @@ public final class Mineracao implements Listener {
             case CRISTAL_DE_MAGMA -> { drops.add(Raro.CRISTAL_DE_MAGMA.criar(1 + extra)); xp = 40; }
             case AMBAR_INFERNAL -> { drops.add(Raro.AMBAR_INFERNAL.criar(1 + extra)); xp = 40; }
             case QUARTZO_NEGRO -> { drops.add(Raro.QUARTZO_NEGRO.criar(1 + extra)); xp = 45; }
+            case COBRE_ANTIGO -> { drops.add(Raro.COBRE_ANTIGO.criar(1 + extra)); xp = 40; }
+            case CRISTAL_ABISSAL -> { drops.add(Raro.CRISTAL_ABISSAL.criar(1 + extra)); xp = 50; }
+            case ESPORO_FOSSIL -> { drops.add(Raro.ESPORO_FOSSIL.criar(1 + extra)); xp = 55; }
+            case FERRO_NEGRO -> { drops.add(Raro.FERRO_NEGRO.criar(1 + extra)); xp = 65; }
             case TURFA -> { drops.add(turfa(2 + r.nextInt(2) + extra)); xp = 8; }
             case PEROLA -> {
                 if (r.nextDouble() < 0.6) drops.add(Raro.PEROLA.criar(1 + extra));
@@ -495,6 +517,7 @@ public final class Mineracao implements Listener {
         if (p.getGameMode() != GameMode.CREATIVE) plugin.stats().darXp(p, Skill.MINERACAO, xp);
         if (t != Tipo.CRISTAL_BRUTO && t != Tipo.TURFA) plugin.titulos().registrar(p, "minerais_bioma", 1);
         if (t == Tipo.CRISTAL_DE_MAGMA || t == Tipo.AMBAR_INFERNAL || t == Tipo.QUARTZO_NEGRO) plugin.titulos().registrar(p, "minerais_nether", 1);
+        if (t == Tipo.COBRE_ANTIGO || t == Tipo.CRISTAL_ABISSAL || t == Tipo.ESPORO_FOSSIL || t == Tipo.FERRO_NEGRO) plugin.titulos().registrar(p, "minerais_abismo", 1);
     }
 
     // =====================================================================
@@ -734,6 +757,10 @@ public final class Mineracao implements Listener {
             case CRISTAL_DE_MAGMA -> new int[]{0x4A4A4E, 0x3C3C40, 0x58585C}; // basalto
             case AMBAR_INFERNAL -> new int[]{0x6E2A2A, 0x5A1E1E, 0x823434};   // netherrack
             case QUARTZO_NEGRO -> new int[]{0x4A3A2E, 0x3E3026, 0x564436};    // terra de almas
+            case COBRE_ANTIGO -> new int[]{0x7E7E7E, 0x6E6E6E, 0x8E8E8E};      // pedra
+            case CRISTAL_ABISSAL -> new int[]{0xE6E2DA, 0xD6D2CA, 0xF2EEE8};   // calcita
+            case ESPORO_FOSSIL -> new int[]{0x4A4A52, 0x3E3E46, 0x56565E};     // ardósia
+            case FERRO_NEGRO -> new int[]{0x2A2530, 0x221E28, 0x343040};       // pedra-negra
         };
         int[] pedra = switch (t) {
             case AMBAR -> new int[]{0x5A2E06, 0xB0600E, 0xF2A33A, 0xFFD27F};
@@ -746,6 +773,10 @@ public final class Mineracao implements Listener {
             case CRISTAL_DE_MAGMA -> new int[]{0x6E1A00, 0xC2410C, 0xFF7A1F, 0xFFD27F};
             case AMBAR_INFERNAL -> new int[]{0x5A2400, 0xB85A0E, 0xFF9A1F, 0xFFE08A};
             case QUARTZO_NEGRO -> new int[]{0x14101E, 0x2E2840, 0x4A4060, 0x9A8CC0};
+            case COBRE_ANTIGO -> new int[]{0x2E6E5A, 0x4E9A7E, 0xC8703A, 0xF2A36A};
+            case CRISTAL_ABISSAL -> new int[]{0x2A0E5A, 0x5A2EB0, 0x8A5AE0, 0xD8C0FF};
+            case ESPORO_FOSSIL -> new int[]{0x0E3A3A, 0x1E6E6A, 0x3AB0A0, 0xB8FFE8};
+            case FERRO_NEGRO -> new int[]{0x08080C, 0x1E1E2A, 0x3A3A4E, 0x8A8AB0};
         };
         for (int y = 0; y < 16; y++) {
             for (int x = 0; x < 16; x++) img.setRGB(x, y, 0xFF000000 | base[r.nextInt(3)]);

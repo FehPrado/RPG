@@ -97,7 +97,38 @@ public enum Estrutura {
     COLISEU("Coliseu", "o", 0xE57373, "A arena ainda espera os lutadores. E a plateia, os vencedores.",
             0, 29, 0, 0, b -> true),
     CASTELO_REI_CAIDO("Castelo do Rei Caído", "o", 0x9575CD, "O rei morreu sentado no trono. Ninguém contou isso a ele.",
-            0, 22, 0, 0, b -> true);
+            0, 22, 0, 0, b -> true),
+    // ---------------- 3.2: as pequenas do datapack (pelo caminho; várias com escavação) ----------------
+    ACAMPAMENTO_CACADORES("Acampamento de Caçadores", "o", 0x8D6E63, "Couro secando, fogo aceso. Os caçadores saíram atrás de algo grande.",
+            0, 7, 0, 0, b -> true),
+    ESTATUA_QUEBRADA("Estátua Quebrada", "a", 0xB0BEC5, "Só as pernas ficaram em pé. A cabeça olha para você do chão.",
+            0, 6, 0, 0, b -> true),
+    ARCO_ANTIGO("Arco Antigo", "o", 0xFFE082, "Um portão sem muralha, de um reino que ninguém lembra.",
+            0, 7, 0, 0, b -> true),
+    SANTUARIO_RIO("Santuário do Rio", "o", 0x4FC3F7, "Velas acesas sobre a água. Alguém ainda deixa oferendas aqui.",
+            0, 5, 0, 0, b -> true),
+    CADAFALSO("Cadafalso", "o", 0x6D4C41, "A corda balança sozinha. Dizem que o condenado era inocente.",
+            0, 5, 0, 0, b -> true),
+    CRIPTA_POCO("Cripta do Poço", "a", 0x78909C, "O poço não tem água. Tem uma escada.",
+            0, 5, 0, 0, b -> true),
+    CARAVANA_PERDIDA("Caravana Perdida", "a", 0xA1887F, "A carroça virou e ninguém voltou para buscar a carga.",
+            0, 7, 0, 0, b -> true),
+    SITIO_ESCAVACAO("Sítio de Escavação", "o", 0xD7CCC8, "Alguém começou a cavar aqui e largou tudo pela metade.",
+            0, 8, 0, 0, b -> true),
+    // ---------------- 3.3: a entrada do Abismo (datapack) ----------------
+    FENDA_ABISMO("Fenda do Abismo", "a", 0x9575CD, "Uma rachadura que não tem fundo. Dá para ouvir o vento lá embaixo.",
+            0, 9, 0, 0, b -> true),
+    // ---------------- 3.3: as ruínas dos Antigos no Abismo (o plugin constrói; veja dimensao.Antigos) ----------------
+    ANTIGOS_POSTO("Posto de Observação dos Antigos", "o", 0xC8703A, "Cobre que não enferruja, olhando para o céu.",
+            0, 8, 0, 0, b -> true),
+    ANTIGOS_ELEVADOR("Elevador Antigo", "o", 0x4E9A7E, "Os cabos romperam. A cabine ficou presa na rocha.",
+            0, 8, 0, 0, b -> true),
+    ANTIGOS_LABORATORIO("Laboratório de Cristal", "o", 0x8A5AE0, "Os cristais aqui ainda sussurram.",
+            0, 8, 0, 0, b -> true),
+    ANTIGOS_REFUGIO("Refúgio dos que Caíram", "o", 0x3AB0A0, "Eles não quiseram subir nunca mais.",
+            0, 8, 0, 0, b -> true),
+    ANTIGOS_HANGAR("Hangar dos Antigos", "o", 0x5A5A7E, "Aqui eles ligaram o motor. E algo acordou.",
+            0, 9, 0, 0, b -> true);
 
     private final String nome, artigo, frase;
     private final TextColor cor;
@@ -158,6 +189,17 @@ public enum Estrutura {
     /** 3.1: vem do datapack (o jogo gera junto com o mundo; o plugin só reconhece e dá vida). */
     public boolean gigante() {
         return this == ARVORE_MUNDO || this == COLOSSO_CAIDO || this == CIDADE_ANA || this == OSSADA_DRAGAO || this == COLISEU || this == CASTELO_REI_CAIDO;
+    }
+
+    /** 3.2: as pequenas do datapack (só a descoberta e o saque; sem chefe). */
+    public boolean pequenaDoDatapack() {
+        return this == ACAMPAMENTO_CACADORES || this == ESTATUA_QUEBRADA || this == ARCO_ANTIGO || this == SANTUARIO_RIO
+                || this == CADAFALSO || this == CRIPTA_POCO || this == CARAVANA_PERDIDA || this == SITIO_ESCAVACAO || this == FENDA_ABISMO;
+    }
+
+    /** Quem constrói é o jogo, pelo datapack (o plugin só reconhece e anota). */
+    public boolean doDatapack() {
+        return gigante() || pequenaDoDatapack();
     }
 
     /** É do mar (nasce em chunk de oceano). */

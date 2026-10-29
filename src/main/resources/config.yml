@@ -630,3 +630,8 @@ mar:
   kraken-chance-por-minuto: 0.02      # por jogador navegando no mar fundo nessas horas
   navio-fantasma: true                # na lua nova (ou na neblina), um navio fantasma surge à noite perto de quem navega
   navio-fantasma-chance-por-minuto: 0.04
+
+# 3.3: as dimensões do datapack. Uma dimensão posta não sai mais do mundo; "ativa: false" só fecha a entrada.
+dimensoes:
+  abismo:
+    ativa: true

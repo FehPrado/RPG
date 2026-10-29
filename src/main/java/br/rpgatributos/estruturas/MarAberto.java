@@ -1074,30 +1074,69 @@ public final class MarAberto implements Listener {
         e.setCancelled(true);
         if (e.getHand() != EquipmentSlot.HAND) return;
         Player p = e.getPlayer();
-        Sitio s = est.sitio(id);
-        String nome = "Náufrago " + NAUFRAGOS[Math.floorMod(id.hashCode(), NAUFRAGOS.length)];
-        ItemStack mao = p.getInventory().getItemInMainHand();
+        conversarNaufrago(p, id, e.getRightClicked().getWorld());
+    }
+
+    private static String nomeNaufrago(String id) {
+        return "Náufrago " + NAUFRAGOS[Math.floorMod(id.hashCode(), NAUFRAGOS.length)];
+    }
+
+    private static boolean atendido(Player p, String id) {
         String ja = p.getPersistentDataContainer().getOrDefault(K_ATENDIDO, PersistentDataType.STRING, "");
-        boolean atendido = List.of(ja.split(",")).contains(id);
-        String fala;
-        if (atendido) {
-            fala = "Obrigado de novo pela comida. Quando passar um barco, eu grito!";
-        } else if (mao.getType().isEdible()) {
-            if (p.getGameMode() != org.bukkit.GameMode.CREATIVE) mao.setAmount(mao.getAmount() - 1);
-            p.getPersistentDataContainer().set(K_ATENDIDO, PersistentDataType.STRING, ja.isEmpty() ? id : ja + "," + id);
-            for (ItemStack sobra : p.getInventory().addItem(cartaNautica(2)).values()) p.getWorld().dropItem(p.getLocation(), sobra);
-            String rumo = s == null ? null : rumo(e.getRightClicked().getWorld(), s.x, s.z, EnumSet.of(Estrutura.NAVIO_PIRATA, Estrutura.ILHA_TARTARUGA, Estrutura.NAUFRAGIO), 3000, s);
-            fala = "Comida de verdade! Tome, as cartas do meu barco. " + (rumo != null ? "Da última vez que vi terra firme... não, era um navio, " + rumo + "." : "Não sei ler, mas parecem importantes.");
-            p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
-            plugin.diario().marco(p, "naufrago", "Deu comida a um náufrago numa ilhota");
-        } else {
-            String[] linhas = {"Faz quarenta e um dias que só como coco. Você não teria... comida?",
-                    "Meu barco virou numa tempestade. Os peixes aqui riem de mim.",
-                    "Se me trouxer algo de comer, te dou as cartas do meu barco."};
-            fala = linhas[ThreadLocalRandom.current().nextInt(linhas.length)];
+        return List.of(ja.split(",")).contains(id);
+    }
+
+    private static Component fala(String texto) {
+        return Component.text("\"" + texto + "\"", NamedTextColor.WHITE);
+    }
+
+    /** 3.2: o náufrago conversa numa tela, com a história e o botão de dar comida. */
+    private void conversarNaufrago(Player p, String id, World w) {
+        Component titulo = Component.text("🏝 " + nomeNaufrago(id), Estrutura.ILHOTA.cor(), TextDecoration.BOLD);
+        ItemStack coco = new ItemStack(Material.COCOA_BEANS);
+        if (atendido(p, id)) {
+            br.rpgatributos.visual.Telas.conversa(p, titulo, coco, List.of(fala("Obrigado de novo pela comida. Quando passar um barco, eu grito!")),
+                    List.of(br.rpgatributos.visual.Telas.Opcao.de("Como você veio parar aqui?", null, q -> historiaNaufrago(q, id, w))));
+            return;
         }
-        p.sendMessage(Component.text(nome + ": ", Estrutura.ILHOTA.cor(), TextDecoration.BOLD)
-                .append(Component.text("\"" + fala + "\"", NamedTextColor.GRAY).decoration(TextDecoration.BOLD, false)));
+        String[] linhas = {"Faz quarenta e um dias que só como coco. Você não teria... comida?",
+                "Meu barco virou numa tempestade. Os peixes aqui riem de mim.",
+                "Se me trouxer algo de comer, te dou as cartas do meu barco."};
+        br.rpgatributos.visual.Telas.conversa(p, titulo, coco, List.of(fala(linhas[ThreadLocalRandom.current().nextInt(linhas.length)])), List.of(
+                br.rpgatributos.visual.Telas.Opcao.de("🍞 Dar comida", "Ele troca por 2 Cartas Náuticas do barco dele", q -> darComida(q, id, w)),
+                br.rpgatributos.visual.Telas.Opcao.de("Como você veio parar aqui?", null, q -> historiaNaufrago(q, id, w))));
+    }
+
+    private void historiaNaufrago(Player p, String id, World w) {
+        Component titulo = Component.text("🏝 " + nomeNaufrago(id), Estrutura.ILHOTA.cor(), TextDecoration.BOLD);
+        br.rpgatributos.visual.Telas.conversa(p, titulo, new ItemStack(Material.OAK_BOAT), List.of(
+                        fala("Eu levava especiarias para o outro lado do mar. Uma noite o céu ficou verde, as ondas viraram montanhas..."),
+                        fala("Acordei aqui, abraçado num barril. Do barco, só sobraram as cartas de navegação. Eu nunca aprendi a ler."),
+                        Component.text("Ele olha para o horizonte em silêncio.", NamedTextColor.GRAY)),
+                atendido(p, id) ? List.of() : List.of(br.rpgatributos.visual.Telas.Opcao.de("🍞 Dar comida", "Ele troca por 2 Cartas Náuticas do barco dele", q -> darComida(q, id, w))));
+    }
+
+    /** Dá a primeira comida da mochila (ou da mão) ao náufrago, uma vez por náufrago. */
+    private void darComida(Player p, String id, World w) {
+        if (atendido(p, id)) return;
+        ItemStack comida = p.getInventory().getItemInMainHand().getType().isEdible() ? p.getInventory().getItemInMainHand() : null;
+        if (comida == null) for (ItemStack i : p.getInventory().getStorageContents()) if (i != null && i.getType().isEdible()) { comida = i; break; }
+        Component titulo = Component.text("🏝 " + nomeNaufrago(id), Estrutura.ILHOTA.cor(), TextDecoration.BOLD);
+        if (comida == null) {
+            br.rpgatributos.visual.Telas.conversa(p, titulo, new ItemStack(Material.COCOA_BEANS), List.of(fala("Você também não tem nada de comer? Ai, ai...")), List.of());
+            return;
+        }
+        if (p.getGameMode() != org.bukkit.GameMode.CREATIVE) comida.setAmount(comida.getAmount() - 1);
+        String ja = p.getPersistentDataContainer().getOrDefault(K_ATENDIDO, PersistentDataType.STRING, "");
+        p.getPersistentDataContainer().set(K_ATENDIDO, PersistentDataType.STRING, ja.isEmpty() ? id : ja + "," + id);
+        for (ItemStack sobra : p.getInventory().addItem(cartaNautica(2)).values()) p.getWorld().dropItem(p.getLocation(), sobra);
+        Sitio s = est.sitio(id);
+        String rumo = s == null ? null : rumo(w, s.x, s.z, EnumSet.of(Estrutura.NAVIO_PIRATA, Estrutura.ILHA_TARTARUGA, Estrutura.NAUFRAGIO), 3000, s);
+        p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
+        plugin.diario().marco(p, "naufrago", "Deu comida a um náufrago numa ilhota");
+        br.rpgatributos.visual.Telas.conversa(p, titulo, cartaNautica(2), List.of(
+                fala("Comida de verdade! Tome, as cartas do meu barco."),
+                fala(rumo != null ? "Da última vez que vi terra firme... não, era um navio, " + rumo + "." : "Não sei ler, mas parecem importantes.")), List.of());
     }
 
     /** Quem achou a estrutura do mar: avisos curtos de como ela funciona. */

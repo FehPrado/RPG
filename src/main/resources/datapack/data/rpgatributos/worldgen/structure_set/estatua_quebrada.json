@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517012, "separation": 10, "spacing": 32 },
+  "structures": [ { "structure": "rpgatributos:estatua_quebrada", "weight": 1 } ]
+}

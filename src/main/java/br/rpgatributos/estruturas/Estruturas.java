@@ -236,6 +236,11 @@ public final class Estruturas implements Listener {
         sujo = true;
     }
 
+    /** 3.3: uma ruína dos Antigos que o plugin acabou de construir no Abismo. */
+    public void anotarRuina(World w, Estrutura t, int x, int y, int z) {
+        anotarGigante(w, t, x, y, z);
+    }
+
     /** 3.1: uma estrutura grande que o jogo acabou de gerar (uma vez só: o id vem do lugar). */
     void anotarGigante(World w, Estrutura t, int x, int y, int z) {
         String id = t.id() + "_" + x + "_" + z;
@@ -679,7 +684,7 @@ public final class Estruturas implements Listener {
                         case CIDADE_SUBMERSA -> cidades.tick(s, w, p, jogando, d2, dy);
                         case ILHA_DO_CEU -> ilhas.tick(s, w, p, jogando, d2, dy);
                         case ILHOTA, NAVIO_PIRATA, ICEBERG, ILHA_TARTARUGA -> marAberto.tick(s, w, p, jogando, d2);
-                        case ARVORE_MUNDO, COLOSSO_CAIDO, CIDADE_ANA, OSSADA_DRAGAO, COLISEU, CASTELO_REI_CAIDO -> gigantes.tick(s, w, p, jogando, d2, dy);
+                        case ARVORE_MUNDO, COLOSSO_CAIDO, CIDADE_ANA, OSSADA_DRAGAO, COLISEU, CASTELO_REI_CAIDO, FENDA_ABISMO, ANTIGOS_HANGAR -> gigantes.tick(s, w, p, jogando, d2, dy);
                         default -> { }
                     }
                 }
@@ -712,6 +717,7 @@ public final class Estruturas implements Listener {
         plugin.diario().marco(p, "estrutura_" + s.tipo.id(), "Encontrou " + s.tipo.comArtigoIndefinido());
         plugin.titulos().registrar(p, "estruturas", 1);
         if (s.tipo.marAberto()) marAberto.descobriu(p, s);
+        if (s.tipo.name().startsWith("ANTIGOS_")) plugin.titulos().registrar(p, "ruinas_antigos", 1);
         if (s.tipo == Estrutura.SANTUARIO_ESQUECIDO && s.deus != null) {
             p.sendMessage(Component.text(s.deus.simbolo() + " Um santuário antigo de " + s.deus.nome() + ", " + s.deus.titulo()
                     + ". Leia a inscrição no púlpito.", s.deus.cor()));
@@ -1016,7 +1022,7 @@ public final class Estruturas implements Listener {
             case "pirata" -> marAberto.capitaoMorreu(e, v.substring(0, v.indexOf(':')));
             case "tartaruga" -> marAberto.tartarugaMorreu(e, v.substring(0, v.indexOf(':')));
             case "ventos" -> ilhas.guardiaoMorreu(e, v.substring(0, v.indexOf(':')));
-            case "raizes", "colosso", "reianao", "dragao", "reicaido" -> gigantes.morreu(e, v.substring(0, v.indexOf(':')), v.substring(v.indexOf(':') + 1));
+            case "raizes", "colosso", "reianao", "dragao", "reicaido", "vigia" -> gigantes.morreu(e, v.substring(0, v.indexOf(':')), v.substring(v.indexOf(':') + 1));
             case "guardiao" -> {
                 e.getDrops().add(plugin.arqueologia().reliquiaAleatoria());
                 if (r.nextDouble() < 0.4) e.getDrops().add(Raro.PAGINA_DE_LENDA.criar(1));
@@ -1533,7 +1539,7 @@ public final class Estruturas implements Listener {
             default -> 0;
         };
         Location l = p.getLocation().add(f.getDirection().multiply(t.raio() + 3));
-        if (t.gigante()) return construirGigante(p.getWorld(), l.getBlockX() + (int) Math.round(f.getDirection().getX() * Gigantes.tamanho(t)[0] / 2.0), l.getBlockZ() + (int) Math.round(f.getDirection().getZ() * Gigantes.tamanho(t)[2] / 2.0), t);
+        if (t.doDatapack()) return construirGigante(p.getWorld(), l.getBlockX() + (int) Math.round(f.getDirection().getX() * Gigantes.tamanho(t)[0] / 2.0), l.getBlockZ() + (int) Math.round(f.getDirection().getZ() * Gigantes.tamanho(t)[2] / 2.0), t);
         if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(p.getWorld(), l.getBlockX(), l.getBlockZ());
         if (t == Estrutura.ILHA_DO_CEU) return ilhas.fundarAqui(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockZ() - Ilha.PLATAFORMA);
         Sitio s = construir(p.getWorld(), l.getBlockX(), l.getBlockZ(), t, rot, new Random(), true, true);
@@ -1547,7 +1553,7 @@ public final class Estruturas implements Listener {
 
     /** 3.0: com a variação escolhida (a ilhota: 0 náufrago, 1 pirata, 2 aves; -1 = sorteada). */
     public String construirEm(World w, int x, int z, Estrutura t, int variante) {
-        if (t.gigante()) return construirGigante(w, x, z, t);
+        if (t.doDatapack()) return construirGigante(w, x, z, t);
         if (t == Estrutura.CIDADE_SUBMERSA) return cidades.fundarAqui(w, x, z);
         if (t == Estrutura.ILHA_DO_CEU) return ilhas.fundarAqui(w, x, z);
         varianteForcada = variante;
@@ -1575,6 +1581,12 @@ public final class Estruturas implements Listener {
 
     /** Para o comando de teste montar cada ilhota com a história certa. */
     private int varianteForcada = -1;
+
+    /** 3.3: o lugar fica dentro de uma Fenda do Abismo (abaixo da borda dela). */
+    public boolean naFenda(Location l) {
+        Sitio s = perto(l.getWorld(), l.getBlockX(), l.getBlockZ(), 12);
+        return s != null && s.tipo == Estrutura.FENDA_ABISMO && l.getY() < s.y - 2;
+    }
 
     /** 3.0: há estrutura a menos de {@code raio} blocos (o Navio Fantasma não surge em cima de uma). */
     public boolean temEstruturaPerto(Location l, double raio) {

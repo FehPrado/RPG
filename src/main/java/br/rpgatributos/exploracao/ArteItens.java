@@ -1121,6 +1121,25 @@ final class ArteItens {
             "...oooooooooo...",
             "................"};
 
+    /** 3.3: o Motor do Foguete dos Antigos (cilindro de cobre com o bocal). */
+    private static final String[] MOTOR = {
+            "................",
+            "......oooo......",
+            ".....ohmmdo.....",
+            "....ohmaamdo....",
+            "....ohmccmdo....",
+            "....ohmaamdo....",
+            "....orrrrrro....",
+            "....ohmmmmdo....",
+            "....ohmaamdo....",
+            "....orrrrrro....",
+            ".....odmmdo.....",
+            "....oddmmddo....",
+            "...oddmmmmddo...",
+            "...offyffyffo...",
+            "....oyfyyfyo....",
+            "................"};
+
     private static final String[] NUCLEO_FERRO = {
             "................",
             "................",
@@ -1272,6 +1291,28 @@ final class ArteItens {
                 c('o', 0xFF4A1A00, 'd', 0xFFB85A0E, 'm', 0xFFFF9A1F, 'h', 0xFFFFE08A, 'w', 0xFFFFF4D6)));
         l.add(new Arte("quartz", "raro_quartzo_negro", GEMA_BRUTA,
                 c('p', 0xFF2E2840, 'q', 0xFF14101E, 'w', 0xFFE6DEFF, 'o', 0xFF0A0810, 'd', 0xFF2E2840, 'm', 0xFF4A4060, 'h', 0xFF9A8CC0, 'a', 0xFFE6DEFF)));
+        // 3.3: minerais do Abismo.
+        l.add(new Arte("raw_copper", "raro_cobre_antigo", GEMA_BRUTA,
+                c('p', 0xFF4E9A7E, 'q', 0xFF2E6E5A, 'w', 0xFFFFE0C0, 'o', 0xFF3A1A08, 'd', 0xFF8A4A1E, 'm', 0xFFC8703A, 'h', 0xFFF2A36A, 'a', 0xFFFFD8B0)));
+        l.add(new Arte("amethyst_shard", "raro_cristal_abissal", CRISTAL,
+                c('o', 0xFF1A0640, 'd', 0xFF5A2EB0, 'm', 0xFF8A5AE0, 'h', 0xFFD8C0FF, 'w', 0xFFF4EEFF, 'a', 0xFFB898FF)));
+        l.add(new Arte("glow_ink_sac", "raro_esporo_fossil", GEMA_BRUTA,
+                c('p', 0xFF4A4A52, 'q', 0xFF2A2A30, 'w', 0xFFE0FFF6, 'o', 0xFF0A2A2A, 'd', 0xFF1E6E6A, 'm', 0xFF3AB0A0, 'h', 0xFFB8FFE8, 'a', 0xFFE0FFF6)));
+        l.add(new Arte("netherite_scrap", "raro_ferro_negro", FRAGMENTO,
+                c('o', 0xFF060608, 'd', 0xFF1E1E2A, 'm', 0xFF3A3A4E, 'h', 0xFF8A8AB0, 'a', 0xFFB8B8E0)));
+        // 3.3: as peças do foguete dos Antigos e a Carga Abissal.
+        l.add(new Arte("paper", "peca_planta", PAGINA,
+                c('o', 0xFF0E2A5A, 'b', 0xFF2E6EC8, 'w', 0xFF1E4E9A, 'k', 0xFFB8E0FF, 'a', 0xFFE0F4FF, 'c', 0xFFFFFFFF)));
+        l.add(new Arte("iron_ingot", "peca_casco", NUCLEO_FERRO,
+                c('o', 0xFF3A1A08, 'h', 0xFFF2A36A, 'm', 0xFFC8703A, 'd', 0xFF8A4A1E, 'r', 0xFF4E9A7E, 'a', 0xFF6EC8A8, 'c', 0xFFB8FFE8)));
+        l.add(new Arte("heart_of_the_sea", "peca_nucleo", ORBE,
+                c('o', 0xFF3A1A08, 'w', BRANCO, 'h', 0xFFD8C0FF, 'a', 0xFF8A5AE0, 'b', 0xFF5A2EB0, 'c', 0xFFC8703A, 's', 0xFFB898FF)));
+        l.add(new Arte("bucket", "peca_tanque", FRASCO_ALTO,
+                c('o', 0xFF1E2A1E, 'c', 0xFFC8703A, 'g', 0xFFE0FFF6, 'l', 0xFF3AB0A0, 'w', BRANCO, 'a', 0xFFB8FFE8, 'd', 0xFF1E6E6A)));
+        l.add(new Arte("firework_star", "peca_motor", MOTOR,
+                c('o', 0xFF1A0E06, 'h', 0xFFF2A36A, 'm', 0xFFC8703A, 'd', 0xFF7A3A14, 'r', 0xFF4E9A7E, 'a', 0xFF8A5AE0, 'c', 0xFFD8C0FF, 'f', 0xFFFF7A1F, 'y', 0xFFFFD27F)));
+        l.add(new Arte("tnt", "carga_abissal", BRASA,
+                c('o', 0xFF0A0614, 'd', 0xFF2A0E5A, 'm', 0xFF5A2EB0, 'a', 0xFF8A5AE0, 'c', 0xFFD8C0FF, 'f', 0xFF9575CD, 'y', 0xFFE6DEFF)));
         l.add(new Arte("coal", "turfa", FRAGMENTO,
                 c('o', 0xFF1E140C, 'd', 0xFF3A2816, 'm', 0xFF5A4026, 'h', 0xFF7A5A36, 'a', 0xFF6B8E3A)));
         l.add(new Arte("brush", "cinzel", CINZEL,

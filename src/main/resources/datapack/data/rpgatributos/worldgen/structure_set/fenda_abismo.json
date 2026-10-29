@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517021, "separation": 20, "spacing": 56 },
+  "structures": [ { "structure": "rpgatributos:fenda_abismo", "weight": 1 } ]
+}

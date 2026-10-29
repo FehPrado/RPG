@@ -150,6 +150,20 @@ public final class Sonhos implements Listener {
             case OSSADA_DRAGAO -> "Costelas enormes saindo da areia, e uma sombra com asas voando por cima delas à noite.";
             case COLISEU -> "Uma arena de pedra e uma plateia que não existia mais, gritando o seu nome.";
             case CASTELO_REI_CAIDO -> "Um castelo em ruínas e um rei de ossos sentado no trono, com a coroa torta na cabeça.";
+            case ACAMPAMENTO_CACADORES -> "Duas barracas e uma fogueira acesa, mas ninguém por perto. Pegadas grandes saindo para a mata.";
+            case ESTATUA_QUEBRADA -> "Uma cabeça de pedra caída na grama, olhando para você, e pedaços enterrados em volta.";
+            case ARCO_ANTIGO -> "Um portão de arenito sozinho no meio do nada, com runas que brilhavam ao pôr do sol.";
+            case SANTUARIO_RIO -> "Um telhadinho sobre estacas no meio do rio, e velas que não apagavam com o vento.";
+            case CADAFALSO -> "Uma forca de madeira escura e uma gaiola vazia. Alguém gritava que era inocente.";
+            case CRIPTA_POCO -> "Um poço seco com uma escada para baixo, e velas acesas lá no fundo.";
+            case CARAVANA_PERDIDA -> "Uma carroça tombada na estrada, barris espalhados e ossos de boi ao lado.";
+            case SITIO_ESCAVACAO -> "Uma vala quadrada cheia de andaimes, e um pincel largado em cima de algo que brilhava.";
+            case FENDA_ABISMO -> "Uma rachadura roxa no chão, e um vento que subia lá do fundo chamando o seu nome.";
+            case ANTIGOS_POSTO -> "Uma sala de cobre verde pendurada na parede de um abismo, e uma luneta apontada para a lua.";
+            case ANTIGOS_ELEVADOR -> "Correntes que desciam para o escuro, e uma cabine presa na rocha balançando.";
+            case ANTIGOS_LABORATORIO -> "Cristais roxos sussurrando numa sala branca, e um aro de cobre girando sozinho.";
+            case ANTIGOS_REFUGIO -> "Uma fogueira azul entre cogumelos gigantes, e gente que não queria mais subir.";
+            case ANTIGOS_HANGAR -> "Um motor enorme no fundo de tudo, e algo cego que ouvia cada passo seu.";
         };
     }
 

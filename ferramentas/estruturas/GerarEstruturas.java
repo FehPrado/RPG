@@ -296,7 +296,7 @@ public class GerarEstruturas {
         m.fill(24, 2, 16, 24, 2, 22, "red_carpet");
         // Forja: canal de lava, bigornas, altos-fornos, barris.
         m.fill(42, 1, 17, 43, 1, 31, "lava[level=0]");
-        for (int z = 18; z <= 30; z += 3) { m.set(39, 2, z, "anvil[facing=east]"); m.set(46, 2, z, "blast_furnace[facing=west,lit=true]"); m.set(46, 3, z, "chain[axis=y,waterlogged=false]"); }
+        for (int z = 18; z <= 30; z += 3) { m.set(39, 2, z, "anvil[facing=east]"); m.set(46, 2, z, "blast_furnace[facing=west,lit=true]"); m.set(46, 3, z, "iron_chain[axis=y,waterlogged=false]"); }
         m.barril(39, 2, 31, L + "cidade_ana_forja");
         m.set(40, 2, 17, "smithing_table");
         // Mina: trilhos e minério nas paredes.

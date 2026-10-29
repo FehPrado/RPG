@@ -257,6 +257,8 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.detalhes.BarcoGrande barcoGrande;
     private br.rpgatributos.mar.Oceano oceano;
     private br.rpgatributos.datapack.Encantos encantos;
+    private br.rpgatributos.dimensao.Dimensoes dimensoes;
+    private br.rpgatributos.dimensao.Antigos antigos;
     private br.rpgatributos.detalhes.Utilidades utilidades;
     private br.rpgatributos.detalhes.Carrocas carrocas;
     private br.rpgatributos.estrada.Trilhas trilhas;
@@ -579,6 +581,13 @@ public final class RPGAtributos extends JavaPlugin {
         encantos = new br.rpgatributos.datapack.Encantos(this);
         getServer().getPluginManager().registerEvents(encantos, this);
         getServer().getPluginManager().registerEvents(new br.rpgatributos.datapack.Mortes(), this);
+        getServer().getPluginManager().registerEvents(new br.rpgatributos.datapack.TrocaDeSaque(this), this);
+        dimensoes = new br.rpgatributos.dimensao.Dimensoes(this);
+        getServer().getPluginManager().registerEvents(dimensoes, this);
+        dimensoes.preparar();
+        antigos = new br.rpgatributos.dimensao.Antigos(this);
+        getServer().getPluginManager().registerEvents(antigos, this);
+        antigos.registrarReceitas();
         getServer().getPluginManager().registerEvents(oceano, this);
         oceano.carregar();
         getServer().getPluginManager().registerEvents(bandos, this);
@@ -713,6 +722,7 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, oceano::tick, 2L, 2L);
         agenda.runTaskTimer(this, oceano::segundo, 20L, 20L);
         agenda.runTaskTimer(this, encantos::tick, 4L, 4L);
+        agenda.runTaskTimer(this, dimensoes::segundo, 20L, 20L);
         agenda.runTaskTimer(this, utilidades::tick, 1L, 1L);
         agenda.runTaskTimer(this, utilidades::segundo, 20L, 20L);
         agenda.runTaskTimer(this, carrocas::tick, 1L, 1L);
@@ -1069,6 +1079,8 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.estrada.Rede rede() { return rede; }
     public br.rpgatributos.detalhes.BarcoGrande barcoGrande() { return barcoGrande; }
     public br.rpgatributos.mar.Oceano oceano() { return oceano; }
+    public br.rpgatributos.dimensao.Dimensoes dimensoes() { return dimensoes; }
+    public br.rpgatributos.dimensao.Antigos antigos() { return antigos; }
     public br.rpgatributos.mar.Cardumes cardumes() { return oceano == null ? null : oceano.cardumes(); }
     public br.rpgatributos.estrada.Andarilhos andarilhos() { return andarilhos; }
     public br.rpgatributos.mundo.Noticias noticias() { return noticias; }

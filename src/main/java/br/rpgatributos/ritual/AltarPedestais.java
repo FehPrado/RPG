@@ -54,7 +54,7 @@ import java.util.UUID;
 
 /**
  * 2.83: o Altar da Convergência. Uma âncora de renascimento com 1 olho do fim, 1 diamante e
- * 4 fragmentos de ametista jogados em cima vira o altar; até 8 pedestais (blocos lapidados,
+ * 4 fragmentos de ametista jogados em cima vira o altar; até 8 pedestais (blocos talhados,
  * a 3 blocos de distância) seguram os ingredientes. Com o catalisador na mão, um clique no
  * altar começa a cerimônia: os itens voam dos pedestais, giram e explodem no centro.
  * 2.86: o altar nível II ganha mais 8 pedestais (a 5 blocos), e algumas receitas pedem um
@@ -198,7 +198,7 @@ public final class AltarPedestais extends Estacao {
         quem.showTitle(Title.title(Component.text("✦ Altar da Convergência ✦", COR, TextDecoration.BOLD),
                 Component.text("Agora coloque pedestais a 3 blocos dele", NamedTextColor.GRAY),
                 Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(3000), Duration.ofMillis(600))));
-        quem.sendMessage(Component.text("✦ Pedestais: blocos lapidados (pedra, ardósia, quartzo, tufo...) ou pilares de quartzo/púrpura, "
+        quem.sendMessage(Component.text("✦ Pedestais: blocos talhados, os com desenho (tijolos de pedra talhados, ardósia, quartzo, tufo...) ou pilares de quartzo/púrpura, "
                 + "a 3 blocos do altar em cruz ou 2+2 na diagonal, na mesma altura (ou 1 acima/abaixo). Até 8.", COR));
         quem.sendMessage(Component.text("✦ Clique num pedestal com um item para pôr nele (agachado: só 1). Clique de novo para tirar. "
                 + "Mão vazia no altar abre o Grimório.", NamedTextColor.GRAY));

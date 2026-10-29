@@ -12,7 +12,9 @@
         { "type": "minecraft:item", "name": "minecraft:danger_pottery_sherd", "weight": 5 },
         { "type": "minecraft:item", "name": "minecraft:diamond", "weight": 3 },
         { "type": "minecraft:item", "name": "minecraft:dragon_breath", "weight": 4 },
-        { "type": "minecraft:item", "name": "minecraft:dragon_head", "weight": 1 }
+        { "type": "minecraft:item", "name": "minecraft:dragon_head", "weight": 1 },
+        { "type": "minecraft:item", "name": "minecraft:paper", "weight": 6, "functions": [ { "function": "minecraft:set_custom_data", "tag": "{PublicBukkitValues:{\"rpgatributos:troca\":\"reliquia\"}}" } ] },
+        { "type": "minecraft:item", "name": "minecraft:paper", "weight": 3, "functions": [ { "function": "minecraft:set_custom_data", "tag": "{PublicBukkitValues:{\"rpgatributos:troca\":\"pagina\"}}" } ] }
       ]
     }
   ],

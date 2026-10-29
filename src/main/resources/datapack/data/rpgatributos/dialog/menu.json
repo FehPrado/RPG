@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:multi_action",
+  "title": { "text": "⚔ RPGAtributos", "color": "gold", "bold": true },
+  "external_title": { "text": "⚔ Menu do RPG" },
+  "body": { "type": "minecraft:plain_message", "contents": { "text": "Atalhos do RPG. Este menu abre pela tecla de Ações Rápidas e pelo menu de pausa.", "color": "gray" } },
+  "can_close_with_escape": true,
+  "pause": false,
+  "after_action": "close",
+  "columns": 2,
+  "actions": [
+    { "label": { "text": "Menu do RPG" }, "tooltip": { "text": "Tudo do RPGAtributos num lugar só" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "rpg" } }
+,
+    { "label": { "text": "Atributos" }, "tooltip": { "text": "Seus níveis e o XP de cada atributo" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "atributos" } }
+,
+    { "label": { "text": "Guia" }, "tooltip": { "text": "O guia do jogo, passo a passo" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "guia" } }
+,
+    { "label": { "text": "Manual" }, "tooltip": { "text": "O manual completo numa janela" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "manual" } }
+,
+    { "label": { "text": "Grimório" }, "tooltip": { "text": "Suas magias" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "grimorio" } }
+,
+    { "label": { "text": "Talentos" }, "tooltip": { "text": "As 4 árvores de talentos" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "talentos" } }
+,
+    { "label": { "text": "Títulos" }, "tooltip": { "text": "Os títulos e o que falta para cada um" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "titulos" } }
+,
+    { "label": { "text": "Missões" }, "tooltip": { "text": "As missões da semana e as diárias" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "missoes" } }
+,
+    { "label": { "text": "Diário" }, "tooltip": { "text": "O que você já fez nesta aventura" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "diario" } }
+,
+    { "label": { "text": "Crônicas" }, "tooltip": { "text": "A campanha do Cronista" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "cronista" } }
+,
+    { "label": { "text": "Álbum" }, "tooltip": { "text": "Suas cartas" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "album" } }
+,
+    { "label": { "text": "Classe" }, "tooltip": { "text": "Sua classe e as habilidades" }, "width": 150, "action": { "type": "minecraft:run_command", "command": "classe" } }
+  ],
+  "exit_action": { "label": { "text": "Fechar" }, "width": 200 }
+}

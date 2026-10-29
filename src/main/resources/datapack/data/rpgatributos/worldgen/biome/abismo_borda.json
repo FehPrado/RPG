@@ -1,0 +1,21 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": { "default": { "max_delay": 18000, "min_delay": 6000, "sound": "minecraft:music.overworld.jagged_peaks" } },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": { "ambient": [ { "type": "minecraft:bat", "count": 4, "weight": 10 } ], "axolotls": [], "creature": [], "misc": [], "monster": [ { "type": "minecraft:zombie", "count": 2, "weight": 60 }, { "type": "minecraft:skeleton", "count": 2, "weight": 60 }, { "type": "minecraft:spider", "count": 2, "weight": 40 } ], "underground_water_creature": [], "water_ambient": [], "water_creature": [] }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": { "argument": [ { "particle": { "type": "minecraft:white_ash" }, "probability": 0.006 } ], "modifier": "append" },
+    "minecraft:visual/fog_color": "#8a9ac0",
+    "minecraft:visual/sky_color": "#7a8fb8"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": { "water_color": "#2a3a6a" },
+  "features": [ [], [], [  ], [], [], [], [], [], [], [ "minecraft:patch_grass_plain", "minecraft:trees_plains", "rpgatributos:abismo/trepadeiras", "rpgatributos:abismo/liquen" ], [] ],
+  "has_precipitation": false,
+  "temperature": 0.6
+}

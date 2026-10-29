@@ -1,0 +1,4 @@
+{
+  "placement": { "type": "minecraft:random_spread", "salt": 31517017, "separation": 9, "spacing": 30 },
+  "structures": [ { "structure": "rpgatributos:caravana_perdida", "weight": 1 } ]
+}

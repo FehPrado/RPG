@@ -310,24 +310,47 @@ public final class Andarilhos implements Listener {
         }
     }
 
+    /** 3.2: o mensageiro conversa numa tela; o botão entrega o pedido direto da mochila. */
     private void mensageiro(Player p, Andarilho a, Component nome) {
         Pedido pd = a.pedido;
+        Component titulo = Component.text("✉ " + a.quem, COR);
+        ItemStack icone = new ItemStack(Material.WRITABLE_BOOK);
         if (a.atendidos.contains(p.getUniqueId())) {
-            p.sendMessage(nome.append(Component.text("Obrigado de novo! A carta vai chegar a tempo.", NamedTextColor.GRAY)));
+            br.rpgatributos.visual.Telas.conversa(p, titulo, icone,
+                    List.of(Component.text("\"Obrigado de novo! A carta vai chegar a tempo.\"", NamedTextColor.WHITE)), List.of());
             return;
         }
-        ItemStack mao = p.getInventory().getItemInMainHand();
-        if (mao.getType() == pd.item() && mao.getAmount() >= pd.qtd() && !mao.hasItemMeta()) {
-            mao.setAmount(mao.getAmount() - pd.qtd());
-            p.getInventory().addItem(new ItemStack(Material.EMERALD, pd.esmeraldas())).values().forEach(s -> p.getWorld().dropItem(p.getLocation(), s));
-            p.giveExp(15);
-            a.atendidos.add(p.getUniqueId());
-            p.sendMessage(nome.append(Component.text("Era bem disso que eu precisava! Tome " + pd.esmeraldas() + " esmeralda(s).", NamedTextColor.GREEN)));
-            p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
-        } else {
-            p.sendMessage(nome.append(Component.text("Levo cartas até o fim da estrada. Você teria " + pd.nome()
-                    + " para a viagem? (segure na mão e clique em mim)", NamedTextColor.GRAY)));
+        br.rpgatributos.visual.Telas.conversa(p, titulo, new ItemStack(pd.item()), List.of(
+                Component.text("\"Levo cartas até o fim da estrada. Você teria " + pd.nome() + " para a viagem?\"", NamedTextColor.WHITE),
+                Component.text("Paga " + pd.esmeraldas() + " esmeralda(s) e um pouco de experiência.", NamedTextColor.GRAY)), List.of(
+                br.rpgatributos.visual.Telas.Opcao.de("Entregar " + pd.nome(), "Sai da sua mochila", q -> entregarPedido(q, a))));
+    }
+
+    private void entregarPedido(Player p, Andarilho a) {
+        Pedido pd = a.pedido;
+        if (a.atendidos.contains(p.getUniqueId())) return;
+        // Só itens comuns (sem nome nem encantamento) contam.
+        int tem = 0;
+        for (ItemStack i : p.getInventory().getStorageContents()) if (i != null && i.getType() == pd.item() && !i.hasItemMeta()) tem += i.getAmount();
+        Component titulo = Component.text("✉ " + a.quem, COR);
+        if (tem < pd.qtd()) {
+            br.rpgatributos.visual.Telas.conversa(p, titulo, new ItemStack(pd.item()), List.of(
+                    Component.text("\"Hmm, aí não tem " + pd.nome() + ". Se achar, estou por aqui.\"", NamedTextColor.WHITE)), List.of());
+            return;
         }
+        int falta = pd.qtd();
+        for (ItemStack i : p.getInventory().getStorageContents()) {
+            if (falta <= 0 || i == null || i.getType() != pd.item() || i.hasItemMeta()) continue;
+            int tira = Math.min(falta, i.getAmount());
+            i.setAmount(i.getAmount() - tira);
+            falta -= tira;
+        }
+        p.getInventory().addItem(new ItemStack(Material.EMERALD, pd.esmeraldas())).values().forEach(s -> p.getWorld().dropItem(p.getLocation(), s));
+        p.giveExp(15);
+        a.atendidos.add(p.getUniqueId());
+        p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
+        br.rpgatributos.visual.Telas.conversa(p, titulo, new ItemStack(Material.EMERALD, pd.esmeraldas()), List.of(
+                Component.text("\"Era bem disso que eu precisava! Tome " + pd.esmeraldas() + " esmeralda(s).\"", NamedTextColor.GREEN)), List.of());
     }
 
     private void mercador(Player p) {

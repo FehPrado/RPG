@@ -20,6 +20,9 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **exploração**: **Ilhas do Céu** (lançado por uma Plataforma de Vento) e as **Profundezas** escuras com Raízes de Luz e a Penumbra, Enciclopédia do Mundo, o minério **mitrilo** no fundo do mundo, **mapas do tesouro** com X de verdade, **arqueologia** com relíquias e a campanha **As Crônicas do Mundo** contada pelo Cronista;
 - **mundo e mar (3.0)**: o **Barco Grande** ganha baús de convés, lugar para bicho, **rede de pesca**, **âncora** e **casco reforçado**; o **mar aberto** ganha ilhotas, navio pirata com canhões, icebergs, barco mercante, a **Ilha-Tartaruga**, **cardumes** e **baleias**; e perigos: o **Kraken**, o **Navio Fantasma** e a **tempestade no mar**;
 - **encantamentos e estruturas grandes (3.1)**: 18 encantamentos de verdade (Golpe Lunar, Corrente de Trovão, Estilhaço de Gelo, Flecha Explosiva, Onda de Choque...) na mesa, nos livros, nos baús e com os aldeões, e **6 estruturas gigantes** geradas com o mundo (Árvore-Mundo, Colosso Caído, Cidade Anã, Ossada do Dragão, Coliseu, Castelo do Rei Caído), tudo por um **datapack que vai dentro do plugin**;
+- **achados pelo caminho (3.2)**: 8 estruturas pequenas geradas com o mundo (acampamento de caçadores, estátua quebrada, arco antigo, santuário do rio, cadafalso, cripta do poço, caravana perdida e sítio de escavação), com **escavação** que dá relíquias, tomos, páginas e cartas do RPG;
+- **telas de conversa (3.2)**: menu do RPG na tecla de Ações Rápidas e no menu de pausa, e NPCs (náufrago, Cronista, mensageiro) conversando numa janela com botões;
+- **o Abismo (3.3–3.4)**: a primeira dimensão, com mais de 1.100 blocos de queda em 5 camadas, entrada pela Fenda do Abismo (ou pela sua própria cratera, com a Carga Abissal), ruínas dos Antigos com o Diário e as peças do foguete, 4 minerais com conjuntos de armadura e o Vigia do Fundo;
 - **progressão extra**: **talentos** em 4 árvores, **renascer** com bônus permanente (até ★★★★★) e **evolução dos companheiros** (Lobo → Lobo Alfa → Lobo das Sombras);
 - **detalhes do dia a dia**: barco, carrinho, vara, élitro e armadura de cavalo forjados, Boneco de Treino, Pedra de Amolar, Fogueira de Acampamento (sentar e descansar), Bebedouro, troféus de chefe, túmulo ao morrer, animais raros, ninhos, recordes e o Diário de Viagem;
 - **vida no mundo**: Barril de Envelhecimento, apicultura, Canteiro de Ervas, Álbum de Cartas com Duelo de Cartas (contra moradores e jogadores), Mercador Itinerante, encontros na estrada, segredos, flechas especiais e frascos de arremesso;
@@ -1972,6 +1975,90 @@ Os baús delas têm saque próprio (e, como os baús do jogo, às vezes itens do
 
 Admin: `/rpgadmin estrutura arvore_mundo` (ou `colosso_caido`, `cidade_ana`, `ossada_dragao`, `coliseu`, `castelo_rei_caido`) põe uma à sua frente, em qualquer lugar. Também dá para usar `/place structure rpgatributos:<nome>` do jogo (aí o plugin só a reconhece se o jogo a tiver gerado sozinho).
 
+## Achados pelo caminho (3.2)
+
+Oito estruturas pequenas que o jogo gera aos montes junto com o mundo (só em terreno novo), para toda viagem render alguma coisa. Várias têm **escavação**: areia e cascalho suspeitos para o pincel.
+
+| Estrutura | Onde | O que tem |
+|---|---|---|
+| **Acampamento de Caçadores** | Florestas e taigas | Duas barracas, fogueira com bancos, varal de couro e o barril dos caçadores |
+| **Estátua Quebrada** | Planícies, campinas, savanas, florestas | Pedestal com as pernas da estátua, a cabeça caída e **cascalho para escavar** em volta |
+| **Arco Antigo** | Deserto, badlands, savanas, planícies | Um portão de arenito sozinho, meio desabado, com **areia para escavar** |
+| **Santuário do Rio** | Rios | Pavilhão sobre estacas no meio da água, com velas, lanternas e o baú das oferendas |
+| **Cadafalso** | Planícies, taigas, florestas, campinas | A forca, a gaiola e um baú debaixo do palanque |
+| **Cripta do Poço** | Planícies, florestas, taigas, campinas | Um poço seco com escada de mão até uma cripta com túmulos, velas, baú e **chão para escavar** |
+| **Caravana Perdida** | Planícies, savanas, deserto, badlands | Carroça tombada, barris com carga e os ossos do boi |
+| **Sítio de Escavação** | Deserto, badlands, planícies, savanas, campinas | Uma vala com andaimes, barracas e o **fundo cheio de areia e cascalho suspeitos** |
+
+**O que sai da escavação:** coisas do jogo (pepitas, esmeraldas, cacos de cerâmica, às vezes diamante) e **coisas do RPG**: relíquias da Arqueologia, tomos, páginas de lenda, mapas rasgados e cartas do Álbum. A Ossada do Dragão também passou a dar relíquias e páginas. Os baús têm saque próprio e às vezes itens do RPG, como os das estruturas grandes.
+
+Elas entram no Diário ao serem descobertas e aparecem nos Sonhos. Admin: `/rpgadmin estrutura <acampamento_cacadores|estatua_quebrada|arco_antigo|santuario_rio|cadafalso|cripta_poco|caravana_perdida|sitio_escavacao>` põe uma à sua frente; `/locate structure rpgatributos:<nome>` acha a mais perto.
+
+## Telas de conversa (3.2)
+
+O jogo agora tem **telas de diálogo** (uma janela com texto e botões), e o RPG passou a usá-las:
+
+- **Menu do RPG:** a tecla de **Ações Rápidas** do jogo (veja em Opções → Controles) e o botão novo no **menu de pausa** abrem um menu com atalhos: Menu do RPG, Atributos, Guia, Manual, Grimório, Talentos, Títulos, Missões, Diário, Crônicas, Álbum e Classe. Vem no datapack do plugin.
+- **Náufrago:** clicar nele abre a conversa, com a história dele e o botão **Dar comida**, que procura comida na sua mochila (não precisa mais estar na mão).
+- **Cronista:** a conversa mostra o capítulo, a tarefa e o progresso, com os botões **Entregar o capítulo** (quando pronto) e **Ler as Crônicas** (o livro de sempre).
+- **Mensageiro da estrada:** diz o que precisa e quanto paga; o botão **Entregar** tira da mochila.
+- **Renascer:** além da mensagem no chat, abre uma tela de confirmação com tudo o que muda.
+
+Cada botão vale uma vez e por até 10 minutos.
+
+## O Abismo (3.3)
+
+A primeira **dimensão** do RPG: um mundo próprio, feito pelo datapack do plugin, com **mais de 1.100 blocos de queda**. Por cima, um **planalto** de grama; cortando o planalto, **rachaduras gigantes** (de 80 a 100 blocos de largura) que descem até o fundo, com cavernas e saliências nas paredes. Borda de **5 mil blocos**.
+
+**Como entrar:** a **Fenda do Abismo** é uma rachadura rara no mundo normal (planícies, florestas, taigas, savanas, deserto, badlands, campinas e montanhas), com ametista e obsidiana chorona nas paredes. **Pule dentro**: você não leva dano da queda e chega ao Abismo. `/locate structure rpgatributos:fenda_abismo` mostra a mais perto. Como as outras estruturas do datapack, ela só nasce em terreno novo.
+
+**Como sair:** você chega ao lado do seu **Rasgo de Volta** (ardósia reforçada com obsidiana chorona em volta). **Agache em cima dele por 2 segundos** e volte para perto de onde entrou. O Rasgo é seu: entrando de novo, você chega nele. As **Pedras de Viagem** também funcionam lá dentro (com o custo de outro mundo).
+
+**Morrer lá dentro:** você renasce em casa e os itens ficam num **túmulo**, lá no Abismo, onde você caiu. Cama não funciona lá.
+
+**As cinco camadas** (cada uma com céu, neblina, partículas e música próprias; uma mensagem avisa quando você entra numa nova):
+
+| Camada | Altura | Como é |
+|---|---|---|
+| **1. Borda dos Ventos** | do planalto até y 120 | Grama, árvores esparsas, trepadeiras e cinzas no ar |
+| **2. Floresta Pendurada** | y 120 a −120 | Musgo, cipós com frutas brilhantes, flores de esporo e raízes nas paredes |
+| **3. Campos de Cristal** | y −120 a −400 | Calcita, geodos de ametista e estalactites |
+| **4. Mar de Fungos** | y −400 a −700 | Micélio e cogumelos gigantes, esporos no ar |
+| **5. O Fundo** | y −700 até o fundo (−960) | Sculk, pedra-negra no teto, escuro e cinza |
+
+
+Admin: `/rpgadmin dimensao abismo` (entra), `/rpgadmin dimensao sair`, `/rpgadmin dimensao info`; `/rpgadmin estrutura fenda_abismo` põe uma Fenda à sua frente. No config, `dimensoes.abismo.ativa: false` fecha a entrada (a dimensão continua no mundo: o jogo não deixa tirar).
+
+### O Abismo por dentro (3.4)
+
+**Abrir a sua cratera:** a **Carga Abissal** (bancada: bloco de ametista em cima; obsidiana chorona, TNT e obsidiana chorona no meio; olho do ender embaixo) abre uma Fenda do Abismo onde você quiser no mundo normal. Clique no chão em campo aberto e se afaste: ela pulsa por 5 segundos, explode (sem quebrar nada em volta) e o chão se abre. Precisa de permissão de construir e de 20 blocos longe de outras estruturas.
+
+**As ruínas dos Antigos:** uma civilização que dominou o cobre, o cristal e a redstone, cavou fundo demais e construiu um foguete para fugir para as Luas. As ruínas deles ficam **cavadas nas paredes das rachaduras**, com uma varanda sobre o vazio, uma em cada camada, e o Hangar no chão do Fundo. Cada uma tem um capítulo do **Diário dos Antigos** no atril (a história da engenheira Ilen, que liga o Abismo às Luas e ao Mundo das Almas) e um baú com uma **peça do foguete**:
+
+| Ruína | Camada | Peça do foguete |
+|---|---|---|
+| **Posto de Observação** (cobre oxidado, lâmpadas de cobre, a luneta) | 1. Borda dos Ventos | Planta do Foguete |
+| **Elevador Antigo** (correntes, a cabine presa na rocha) | 2. Floresta Pendurada | Casco do Foguete |
+| **Laboratório de Cristal** (ametista, calcita, alambique) | 3. Campos de Cristal | Núcleo de Navegação |
+| **Refúgio dos que Caíram** (fogueira das almas, cogumelos) | 4. Mar de Fungos | Tanque de Combustível |
+| **Hangar dos Antigos** (pilares de ardósia reforçada, o berço do motor) | 5. O Fundo | **Motor do Foguete**, com o chefe |
+
+**O Vigia do Fundo:** quem entra no Hangar acorda o Vigia (um warden de 400 de vida). Ele é cego e ouve cada passo. Vencido, deixa o **Motor do Foguete**, Ferro Negro, fragmentos de eco e às vezes uma Essência Primordial. As cinco peças montam o foguete das Luas (a próxima fase).
+
+**Os minerais do Abismo** (um por camada; como os outros minerais, dão XP de Mineração e não saem com explosão):
+
+| Mineral | Camada | Conjunto (bancada, como o ferro) | 2 peças | 4 peças |
+|---|---|---|---|---|
+| **Cobre dos Antigos** | 1 e 2 | **Antigo** | −40% de dano de queda | Salto I e nenhum dano de queda de até 12 blocos |
+| **Cristal Abissal** | 3 | **Abissal** | Visão Noturna no escuro | +1 de mana por segundo |
+| **Esporo Fóssil** | 4 | **Esporo** | Veneno não pega | Recupera meio coração a cada 6 s |
+| **Ferro Negro** | 5 | **Ferro Negro** | Não é empurrado pelos golpes | Resistência I |
+
+Títulos: **Minerador do Abismo** (40 minerais do Abismo), **Herdeiro dos Antigos** (5 ruínas descobertas) e **Silenciador do Vigia**.
+
+Admin: `/rpgadmin dimensao itens` (as 5 peças, uma Carga Abissal e 16 de cada mineral), `/rpgadmin dimensao ruina <posto|elevador|laboratorio|refugio|hangar>` (constrói no seu chunk, perto da sua altura; o hangar só no chão do Fundo).
+
+
 ## Pesca
 
 Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
@@ -2099,7 +2186,7 @@ São **27 enfeites**: os sete originais, dez opções de barba, chifres, orelhas
 
 ## Altar da Convergência (2.83)
 
-Uma **âncora de renascimento** com 1 olho do ender, 1 diamante e 4 fragmentos de ametista jogados em cima vira o altar (`/rpgadmin convergencia` cria direto). Em volta dele ficam até **8 pedestais**, a 3 blocos: 4 em cruz e 4 na diagonal (2+2), na mesma altura do altar ou 1 acima/abaixo. Pedestal é qualquer bloco lapidado (pedra, ardósia, quartzo, pedra-negra, tufo, arenito, tijolos do Nether, resina) ou pilar de quartzo/púrpura, e pode ter 2 blocos de altura.
+Uma **âncora de renascimento** com 1 olho do ender, 1 diamante e 4 fragmentos de ametista jogados em cima vira o altar (`/rpgadmin convergencia` cria direto). Em volta dele ficam até **8 pedestais**, a 3 blocos: 4 em cruz e 4 na diagonal (2+2), na mesma altura do altar ou 1 acima/abaixo. Pedestal é um bloco **talhado** (o que tem desenho, do cortador de pedra: tijolos de pedra talhados, ardósia, quartzo, pedra-negra polida, tufo, tijolos de tufo, arenito, arenito vermelho, tijolos do Nether ou de resina talhados; tijolo comum não serve) ou pilar de quartzo/púrpura, e pode ter 2 blocos de altura.
 
 - Clique num pedestal com um item para pôr nele (agachado: só 1); clique de novo para tirar. O item fica flutuando e girando em cima, e é guardado ali mesmo (sobrevive a reinícios). Pedestal quebrado, empurrado ou explodido derruba o item.
 - Com o **catalisador** na mão, clique no altar. Os pedestais com item precisam bater exatamente com a receita, um ingrediente por pedestal.
@@ -2417,7 +2504,7 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 
 ## Títulos
 
-`/titulos`: 137 títulos com requisitos (em páginas), por exemplo Amigo das Raízes, Quebra-Colosso, Regicida da Montanha, Caçador de Dragões, Campeão do Coliseu, Algoz do Rei Caído, Terror dos Piratas, Caçador de Kraken, Despertador de Ilhas, Exorcista do Mar, Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 140 títulos com requisitos (em páginas), por exemplo Minerador do Abismo, Herdeiro dos Antigos, Silenciador do Vigia, Amigo das Raízes, Quebra-Colosso, Regicida da Montanha, Caçador de Dragões, Campeão do Coliseu, Algoz do Rei Caído, Terror dos Piratas, Caçador de Kraken, Despertador de Ilhas, Exorcista do Mar, Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -2667,7 +2754,7 @@ Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, 
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-3.1.0.jar`.
+3. O plugin fica em `target/RPGAtributos-3.4.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

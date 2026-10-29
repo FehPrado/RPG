@@ -1,0 +1,21 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": { "default": { "max_delay": 18000, "min_delay": 6000, "sound": "minecraft:music.overworld.deep_dark" } },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": { "ambient": [ { "type": "minecraft:bat", "count": 4, "weight": 10 } ], "axolotls": [], "creature": [], "misc": [], "monster": [ { "type": "minecraft:skeleton", "count": 3, "weight": 80 }, { "type": "minecraft:enderman", "count": 2, "weight": 40 }, { "type": "minecraft:wither_skeleton", "count": 1, "weight": 10 } ], "underground_water_creature": [], "water_ambient": [], "water_creature": [] }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": { "argument": [ { "particle": { "type": "minecraft:ash" }, "probability": 0.02 } ], "modifier": "append" },
+    "minecraft:visual/fog_color": "#0a0a12",
+    "minecraft:visual/sky_color": "#101018"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": { "water_color": "#2a3a6a" },
+  "features": [ [], [], [  ], [], [], [], [], [], [], [ "rpgatributos:abismo/sculk", "rpgatributos:abismo/veias_sculk", "rpgatributos:abismo/liquen" ], [] ],
+  "has_precipitation": false,
+  "temperature": 0.6
+}

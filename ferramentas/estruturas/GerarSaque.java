@@ -27,6 +27,12 @@ public class GerarSaque {
                 + ", \"functions\": [ { \"function\": \"minecraft:enchant_with_levels\", \"levels\": { \"type\": \"minecraft:uniform\", \"min\": 20, \"max\": 39 } } ] }";
     }
 
+    /** Um item do RPG: o datapack solta um papel marcado e o plugin troca pelo item de verdade quando ele cai (TrocaDeSaque). */
+    static String rpg(String tipo, int peso) {
+        return "{ \"type\": \"minecraft:item\", \"name\": \"minecraft:paper\", \"weight\": " + peso
+                + ", \"functions\": [ { \"function\": \"minecraft:set_custom_data\", \"tag\": \"{PublicBukkitValues:{\\\"rpgatributos:troca\\\":\\\"" + tipo + "\\\"}}\" } ] }";
+    }
+
     static void tab(String nome, String tipo, int min, int max, String... entradas) throws Exception {
         String rolls = min == max ? String.valueOf(min) : "{ \"type\": \"minecraft:uniform\", \"min\": " + min + ", \"max\": " + max + " }";
         String json = "{\n  \"type\": \"minecraft:" + tipo + "\",\n  \"pools\": [\n    {\n      \"rolls\": " + rolls + ",\n      \"entries\": [\n        "
@@ -81,7 +87,30 @@ public class GerarSaque {
         tab("chests/ossada_acampamento", "chest", 4, 6, it("brush", 10), it("paper", 14, 3, 8), it("bread", 14, 2, 6), it("map", 8), it("bone", 14, 3, 9),
                 it("torch", 12, 4, 10), it("compass", 4), it("dragon_breath", 2, 1, 2));
         tab("archaeology/ossada", "archaeology", 1, 1, it("bone", 30, 1, 3), it("bone_meal", 20, 2, 6), it("gold_nugget", 14, 2, 6), it("emerald", 10, 1, 2),
-                it("skull_pottery_sherd", 6), it("danger_pottery_sherd", 5), it("diamond", 3), it("dragon_breath", 4), it("dragon_head", 1));
+                it("skull_pottery_sherd", 6), it("danger_pottery_sherd", 5), it("diamond", 3), it("dragon_breath", 4), it("dragon_head", 1),
+                rpg("reliquia", 6), rpg("pagina", 3));
+        // 3.2: as estruturas pequenas e as escavações delas.
+        tab("archaeology/estatua", "archaeology", 1, 1, it("gold_nugget", 20, 1, 4), it("emerald", 10), it("brick", 14), it("flower_pot", 8),
+                it("arms_up_pottery_sherd", 6), it("heart_pottery_sherd", 5), rpg("reliquia", 10), rpg("pagina", 4), it("diamond", 2));
+        tab("archaeology/arco", "archaeology", 1, 1, it("gold_nugget", 18, 1, 4), it("emerald", 10), it("stick", 14), it("lapis_lazuli", 12, 1, 4),
+                it("archer_pottery_sherd", 6), it("prize_pottery_sherd", 5), rpg("reliquia", 10), rpg("tomo", 4), rpg("mapa", 4));
+        tab("archaeology/cripta", "archaeology", 1, 1, it("bone", 24, 1, 3), it("gold_nugget", 14, 1, 4), it("candle", 10), it("emerald", 8),
+                it("skull_pottery_sherd", 6), it("mourner_pottery_sherd", 5), rpg("reliquia", 12), rpg("tomo", 6), rpg("pagina", 4));
+        tab("archaeology/sitio", "archaeology", 1, 1, it("coal", 14, 1, 3), it("gold_nugget", 14, 1, 4), it("emerald", 10), it("brick", 10),
+                it("miner_pottery_sherd", 5), it("explorer_pottery_sherd", 5), it("burn_pottery_sherd", 4), it("sheaf_pottery_sherd", 4),
+                rpg("reliquia", 14), rpg("carta", 6), rpg("mapa", 5), rpg("pagina", 3), it("diamond", 2));
+        tab("chests/cacadores", "chest", 3, 6, it("leather", 16, 2, 6), it("rabbit_hide", 12, 1, 4), it("cooked_beef", 12, 1, 4), it("arrow", 14, 6, 16),
+                enc("bow", 5), it("lead", 6), it("rabbit_foot", 3), it("iron_axe", 4), it("string", 10, 2, 5));
+        tab("chests/santuario_rio", "chest", 3, 5, it("lily_pad", 10, 1, 3), it("emerald", 12, 1, 4), it("candle", 12, 1, 3), enc("fishing_rod", 5),
+                it("nautilus_shell", 2), it("prismarine_crystals", 6, 1, 3), it("honey_bottle", 8), it("golden_apple", 2));
+        tab("chests/cadafalso", "chest", 3, 5, it("iron_nugget", 14, 2, 8), it("emerald", 8, 1, 3), it("rotten_flesh", 14, 1, 5), it("lead", 6),
+                it("iron_sword", 4), it("iron_chain", 8, 1, 3), it("map", 4));
+        tab("chests/cripta_poco", "chest", 4, 7, it("gold_ingot", 12, 1, 4), it("bone", 14, 2, 6), it("candle", 10, 1, 3), enc("book", 8),
+                it("emerald", 10, 1, 4), it("ender_pearl", 4), it("golden_apple", 3), it("experience_bottle", 8, 1, 4));
+        tab("chests/caravana_perdida", "chest", 4, 7, it("wheat", 14, 4, 12), it("bread", 12, 2, 6), it("emerald", 12, 2, 6), it("gold_ingot", 8, 1, 4),
+                it("saddle", 4), it("lead", 6), it("bundle", 4), it("cocoa_beans", 6, 2, 6), it("sugar", 8, 2, 6));
+        tab("chests/sitio_escavacao", "chest", 3, 6, it("brush", 12), it("paper", 12, 2, 6), it("bread", 12, 2, 5), it("torch", 10, 4, 10),
+                it("map", 6), it("decorated_pot", 4), it("compass", 3), it("emerald", 8, 1, 3));
         tab("chests/coliseu", "chest", 4, 6, it("arrow", 14, 8, 20), enc("iron_sword", 8), enc("golden_chestplate", 6), it("bread", 14, 3, 8),
                 it("gold_ingot", 12, 2, 6), it("trial_key", 6), it("shield", 8));
         tab("coliseu/recompensa", "chest", 2, 3, it("emerald", 20, 3, 8), it("diamond", 10, 1, 3), it("golden_apple", 10, 1, 2), niv("diamond_sword", 5),

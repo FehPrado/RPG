@@ -502,3 +502,46 @@ Feito na **3.1**: o datapack vai dentro do jar e o plugin o coloca na pasta do m
 - ✅ **6 estruturas grandes geradas pelo jogo** (moldes .nbt feitos por código; só em terreno novo; `/locate`): Árvore-Mundo, Colosso Caído, Cidade Anã de Pedra Funda, Ossada do Dragão (arqueologia), Coliseu (spawners de desafio próprios e cofre) e Castelo do Rei Caído, cada uma com chefe e título.
 - Telão com vídeo: descartado pelo dono do servidor.
 - **Black Clover** (próximo, a decidir): Cerimônia do Grimório (trevo de 3/4/5 folhas e afinidade), grimório que cresce, antimagia com espadas, Mana Skin/Zone/Method, Ki, Esquadrões dos Cavaleiros Mágicos com Estrelas e patentes até Rei Mago, Exame no Coliseu, Magia de Combinação, Floresta das Bruxas, Demônios e o Submundo (dimensão). Nomes próprios, inspirados no anime.
+
+### 3.2 (29/10/2026): ideias do datapack, na ordem sugerida
+1. ✅ **Achados pelo caminho**: 8 estruturas pequenas do datapack (Acampamento de Caçadores, Estátua Quebrada, Arco Antigo, Santuário do Rio, Cadafalso, Cripta do Poço, Caravana Perdida, Sítio de Escavação) com escavação que dá itens do RPG (papel marcado trocado pelo plugin, TrocaDeSaque).
+2. ⏸ Variantes de bichos e quadros do canal (precisa de arte): pulado por enquanto, a pedido.
+3. ✅ Telas de diálogo: Menu do RPG nas Ações Rápidas e no menu de pausa (datapack), conversas do náufrago, Cronista e mensageiro, e a confirmação do Renascer (visual/Telas).
+4. Dimensões (base + Luas, Abismo, Mundo das Almas).
+
+Ficaram para depois, do grupo 1: estruturas grandes regionais (pirâmide de jade, mosteiro de gelo, templo afundado, cidade de cogumelos), cavernas temáticas e formações (árvores gigantes, arcos de pedra, fontes termais). Cacos de cerâmica próprios não dá: o jogo liga caco e desenho no código.
+
+## Dimensões: o plano (29/10/2026)
+
+**Decisões do dono do servidor:**
+1. Morrer numa dimensão: renasce em casa e os itens ficam num **túmulo lá dentro** (os Túmulos que já existem).
+2. Dimensões **livres** (sem trava), mas com **histórias ligando todas**.
+3. Primeiro o **Abismo**, com ruínas de uma **tecnologia antiga**: lá estão as peças e as plantas do **foguete** que leva às Luas.
+4. Cada dimensão com **5 mil blocos** de borda.
+5. Sai por onde entrou, ou pelas **Pedras de Viagem** (já levam a outro mundo).
+6. Em todas: **estruturas que contam a história** e a progressão, **minérios, itens e armaduras novos**.
+
+**A história que liga tudo:** os **Antigos**, uma civilização que dominou a técnica (cobre, redstone, cristal) antes dos deuses voltarem. Eles cavaram fundo demais (o Abismo), construíram foguetes para fugir para as Luas e, no fim, foram parar no Mundo das Almas. Cada dimensão guarda um pedaço: diários, murais, máquinas quebradas.
+
+**Base (para todas):** dimensão do datapack (terreno, céu, neblina, luz, altura e biomas por camada) + regras no plugin (gravidade, ar, hora, monstros, ponto de volta, borda de 5000, túmulo, `/rpgadmin dimensao`). Dimensão posta não sai mais do mundo: só se desliga a entrada pelo config.
+
+### ✅ Fase 1 (3.3): base + o Abismo (terreno)
+- Mundo com ~1.200 blocos de queda: um **planalto** cortado por **rachaduras** gigantes que descem até o fundo, com cavernas nas paredes.
+- **5 camadas** (cada uma um bioma, com cor, neblina, partículas e som próprios): **Borda dos Ventos**, **Floresta Pendurada**, **Campos de Cristal**, **Mar de Fungos** e **O Fundo**.
+- Entrada: a **Fenda do Abismo**, uma rachadura rara no mundo normal (estrutura do datapack); quem pula cai no Abismo. Saída: o **Rasgo de Volta** onde você chegou, ou uma Pedra de Viagem.
+
+### ✅ Fase 2 (3.4): o Abismo por dentro (história e coisas novas)
+- Estruturas dos Antigos por camada: Posto de Observação, Elevador Antigo, Estufa Suspensa, Laboratório de Cristal, Cidade dos que Caíram, **Hangar dos Antigos** (no fundo).
+- **Peças e plantas do foguete** espalhadas nelas (Motor, Casco, Núcleo de Navegação, Planta do Foguete).
+- **Minérios das camadas** (por exemplo, Cobre Antigo, Cristal Abissal, Esporo Fóssil, Ferro Negro), **itens** (Corda do Abismo, Lanterna de Esporos, Pedra do Retorno...) e **armaduras** (Traje de Escalada, Armadura Abissal).
+- Chefe do Fundo e criaturas de cada camada.
+
+### Fase 3: o foguete e as Luas
+- Montar o foguete com as peças do Abismo; cada lua pelo céu da hora (Prateada, Escura, Vermelha, de Cristal, Sombria), com gravidade baixa, oxigênio, minérios, armaduras e as ruínas da colônia lunar dos Antigos.
+
+### Fase 4: o Mundo das Almas
+- Onde os Antigos foram parar: o fim da história, com o Barqueiro e a Porta da Volta.
+
+### Depois (a decidir): Além do Primeiro Portal, Mundo dos Sonhos, Reino Feérico, O Passado, Microverso.
+
+**Como ficou a fase 2 (3.4):** Carga Abissal (o jogador abre a própria Fenda); 4 ruínas de parede (Posto, Elevador, Laboratório, Refúgio) + Hangar no Fundo, construídos pelo plugin no chunk novo (busca metódica da parede virada para o vazio, sempre dentro do chunk); Diário dos Antigos em 5 capítulos (a engenheira Ilen; liga às Luas e ao Mundo das Almas); 5 peças do foguete (Planta, Casco, Núcleo, Tanque nos baús; Motor com o Vigia do Fundo, warden de 400); 4 minerais (Cobre dos Antigos, Cristal Abissal, Esporo Fóssil, Ferro Negro) com conjuntos de armadura/ferramentas; 3 títulos. Ficaram para depois: criaturas próprias de cada camada, Corda do Abismo, Lanterna de Esporos.

@@ -100,7 +100,35 @@ public final class Cronista implements Listener, CommandExecutor {
         e.setCancelled(true);
         if (e.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) return;
         e.getPlayer().playSound(e.getRightClicked().getLocation(), Sound.ENTITY_VILLAGER_WORK_LIBRARIAN, 1f, 0.9f);
-        abrirLivro(e.getPlayer());
+        conversar(e.getPlayer());
+    }
+
+    /** 3.2: clicar no Cronista abre uma conversa: o capítulo, o progresso e os botões. */
+    public void conversar(Player p) {
+        int n = capitulo(p);
+        Capitulo[] todos = Capitulo.values();
+        Component titulo = Component.text("✎ O Cronista", COR, TextDecoration.BOLD);
+        ItemStack livro = new ItemStack(Material.WRITTEN_BOOK);
+        List<br.rpgatributos.visual.Telas.Opcao> botoes = new ArrayList<>();
+        botoes.add(br.rpgatributos.visual.Telas.Opcao.de("📖 Ler as Crônicas", "Abre o livro com a história", this::abrirLivro));
+        if (n >= todos.length) {
+            br.rpgatributos.visual.Telas.conversa(p, titulo, livro, List.of(
+                    Component.text("\"Você agora sabe tanto quanto eu. Talvez mais. O resto desta história não está escrito em lugar nenhum.\"", NamedTextColor.WHITE),
+                    Component.text("Escreva você.", COR, TextDecoration.BOLD)), botoes);
+            return;
+        }
+        Capitulo c = todos[n];
+        long feito = Math.min(c.meta(), progresso(p, c));
+        boolean pronto = feito >= c.meta();
+        if (pronto) botoes.add(0, br.rpgatributos.visual.Telas.Opcao.de("✔ Entregar o capítulo", "Recebe a recompensa e abre o próximo", q -> {
+            String erro = entregar(q);
+            if (erro != null) q.sendMessage(Component.text(erro, NamedTextColor.RED));
+        }));
+        br.rpgatributos.visual.Telas.conversa(p, titulo, livro, List.of(
+                Component.text("Capítulo " + (n + 1) + ": " + c.titulo(), COR, TextDecoration.BOLD),
+                Component.text("\"" + c.abertura() + "\"", NamedTextColor.WHITE),
+                Component.text("Tarefa: " + c.objetivo() + "  " + (pronto ? "✔ " : "") + feito + " / " + c.meta(),
+                        pronto ? NamedTextColor.GREEN : NamedTextColor.GRAY)), botoes);
     }
 
     @EventHandler(ignoreCancelled = true)

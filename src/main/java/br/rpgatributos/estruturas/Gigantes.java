@@ -77,7 +77,11 @@ final class Gigantes implements Listener {
             case ARVORE_MUNDO -> 18;
             case COLOSSO_CAIDO -> 4;
             case CIDADE_ANA -> 36;
-            case OSSADA_DRAGAO, COLISEU -> 1;
+            case OSSADA_DRAGAO, COLISEU, ACAMPAMENTO_CACADORES, ESTATUA_QUEBRADA, ARCO_ANTIGO, CADAFALSO, CARAVANA_PERDIDA -> 1;
+            case CRIPTA_POCO -> 16;
+            case SITIO_ESCAVACAO -> 4;
+            case SANTUARIO_RIO -> 6;
+            case FENDA_ABISMO -> 13;
             default -> 0;
         };
     }
@@ -90,6 +94,15 @@ final class Gigantes implements Listener {
             case CIDADE_ANA -> new int[]{49, 50, 49};
             case OSSADA_DRAGAO -> new int[]{65, 26, 41};
             case COLISEU -> new int[]{61, 22, 49};
+            case ACAMPAMENTO_CACADORES -> new int[]{15, 8, 15};
+            case ESTATUA_QUEBRADA -> new int[]{13, 11, 13};
+            case ARCO_ANTIGO -> new int[]{15, 14, 7};
+            case SANTUARIO_RIO -> new int[]{11, 14, 11};
+            case CADAFALSO -> new int[]{11, 10, 11};
+            case CRIPTA_POCO -> new int[]{11, 21, 11};
+            case CARAVANA_PERDIDA -> new int[]{15, 7, 11};
+            case SITIO_ESCAVACAO -> new int[]{17, 10, 17};
+            case FENDA_ABISMO -> new int[]{9, 14, 21};
             default -> new int[]{45, 32, 45};
         };
     }
@@ -99,7 +112,7 @@ final class Gigantes implements Listener {
         NamespacedKey k = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKey(g.getStructure());
         if (k == null || !k.getNamespace().equals("rpgatributos")) return null;
         Estrutura t = Estrutura.porId(k.getKey());
-        return t != null && t.gigante() ? t : null;
+        return t != null && t.doDatapack() ? t : null;
     }
 
     /** Chunk novo: anota as estruturas grandes que passam por ele (uma vez cada, pela caixa). */
@@ -119,6 +132,14 @@ final class Gigantes implements Listener {
 
     void tick(Sitio s, World w, Player p, boolean jogando, double d2, double dy) {
         mostrarBarra(s, w, p, d2);
+        // 3.3: quem cai na Fenda do Abismo vai para o Abismo (qualquer modo de jogo).
+        if (s.tipo == Estrutura.FENDA_ABISMO) {
+            if (d2 <= 11 * 11 && dy <= -3) {
+                String erro = plugin.dimensoes().entrar(p, br.rpgatributos.dimensao.Dimensoes.Dimensao.ABISMO);
+                if (erro != null) p.sendActionBar(Component.text(erro, NamedTextColor.RED));
+            }
+            return;
+        }
         if (!jogando) return;
         // Altura do jogador contada do fundo do molde (a câmara das raízes e o salão anão ficam lá embaixo).
         double db = dy + superficie(s.tipo);
@@ -150,6 +171,16 @@ final class Gigantes implements Listener {
                     estruturas.sujar();
                     soltar(s, w, p);
                 }
+            }
+            case ANTIGOS_HANGAR -> {
+                // O Vigia do Fundo acorda quando alguém entra no hangar (e volta a ouvir quem estiver perto).
+                if (s.chefeEm == 0 && d2 <= 9 * 9 && Math.abs(dy) <= 8) {
+                    s.chefeEm = 1;
+                    estruturas.sujar();
+                    soltar(s, w, p);
+                }
+                UUID u = chefes.get(s.id);
+                if (u != null && d2 <= 30 * 30 && Bukkit.getEntity(u) instanceof org.bukkit.entity.Warden v && v.isValid()) v.setAnger(p, 150);
             }
             default -> { }
         }
@@ -279,6 +310,16 @@ final class Gigantes implements Listener {
                 rei.setTarget(p);
                 aviso(w, l, "\"Ajoelhe-se diante do seu rei.\"", NamedTextColor.DARK_PURPLE, Sound.ENTITY_WITHER_SPAWN);
             }
+            case ANTIGOS_HANGAR -> {
+                Location l = chaoLivre(w, s, 0, 4, 6);
+                if (l == null) return;
+                org.bukkit.entity.Warden v = chefe(s, l, org.bukkit.entity.Warden.class, "O Vigia do Fundo", "vigia", 400, 1.0, x -> {
+                    AttributeInstance dano = x.getAttribute(Attribute.ATTACK_DAMAGE);
+                    if (dano != null) dano.setBaseValue(16);
+                });
+                if (p != null) v.setAnger(p, 150);
+                aviso(w, l, "O chão treme. Algo cego acordou e está ouvindo você.", NamedTextColor.DARK_AQUA, Sound.ENTITY_WARDEN_EMERGE);
+            }
             default -> { }
         }
     }
@@ -403,6 +444,14 @@ final class Gigantes implements Listener {
                 if (r.nextDouble() < 0.5) e.getDrops().add(coroa);
                 contador = "rei_caido";
                 marco = "Tirou o Rei Caído do trono";
+            }
+            case "vigia" -> {
+                e.getDrops().add(br.rpgatributos.dimensao.Antigos.Peca.MOTOR.item());
+                e.getDrops().add(Raro.FERRO_NEGRO.criar(4 + r.nextInt(4)));
+                e.getDrops().add(new ItemStack(Material.ECHO_SHARD, 2 + r.nextInt(3)));
+                if (r.nextDouble() < 0.5) e.getDrops().add(Raro.ESSENCIA_PRIMORDIAL.criar(1));
+                contador = "vigia_fundo";
+                marco = "Silenciou o Vigia do Fundo e levou o Motor do Foguete";
             }
             default -> {
                 return false;

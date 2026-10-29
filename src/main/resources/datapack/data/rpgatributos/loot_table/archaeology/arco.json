@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:archaeology",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 18, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 1, "max": 4 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:emerald", "weight": 10 },
+        { "type": "minecraft:item", "name": "minecraft:stick", "weight": 14 },
+        { "type": "minecraft:item", "name": "minecraft:lapis_lazuli", "weight": 12, "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 1, "max": 4 } } ] },
+        { "type": "minecraft:item", "name": "minecraft:archer_pottery_sherd", "weight": 6 },
+        { "type": "minecraft:item", "name": "minecraft:prize_pottery_sherd", "weight": 5 },
+        { "type": "minecraft:item", "name": "minecraft:paper", "weight": 10, "functions": [ { "function": "minecraft:set_custom_data", "tag": "{PublicBukkitValues:{\"rpgatributos:troca\":\"reliquia\"}}" } ] },
+        { "type": "minecraft:item", "name": "minecraft:paper", "weight": 4, "functions": [ { "function": "minecraft:set_custom_data", "tag": "{PublicBukkitValues:{\"rpgatributos:troca\":\"tomo\"}}" } ] },
+        { "type": "minecraft:item", "name": "minecraft:paper", "weight": 4, "functions": [ { "function": "minecraft:set_custom_data", "tag": "{PublicBukkitValues:{\"rpgatributos:troca\":\"mapa\"}}" } ] }
+      ]
+    }
+  ],
+  "random_sequence": "rpgatributos:archaeology/arco"
+}

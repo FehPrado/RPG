@@ -1,0 +1,31 @@
+{
+  "ambient_light": 0.04,
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": { "block_search_extent": 8, "offset": 2.0, "sound": "minecraft:ambient.cave", "tick_delay": 3000 }
+    },
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "error_message": { "text": "O Abismo não deixa ninguém dormir." }
+    },
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:visual/ambient_light_color": "#0a0a12",
+    "minecraft:visual/cloud_height": 280.0,
+    "minecraft:visual/fog_color": "#4a3a5a",
+    "minecraft:visual/sky_color": "#6a5a8a"
+  },
+  "coordinate_scale": 1.0,
+  "default_clock": "minecraft:overworld",
+  "has_ceiling": false,
+  "has_ender_dragon_fight": false,
+  "has_skylight": true,
+  "height": 1280,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "logical_height": 1280,
+  "min_y": -960,
+  "monster_spawn_block_light_limit": 0,
+  "monster_spawn_light_level": { "type": "minecraft:uniform", "max_inclusive": 7, "min_inclusive": 0 },
+  "timelines": "#minecraft:in_overworld"
+}

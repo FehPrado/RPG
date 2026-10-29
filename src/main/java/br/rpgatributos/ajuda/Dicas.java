@@ -88,6 +88,9 @@ public final class Dicas implements Listener {
                 case JADE, AMBAR, PEROLA, CRISTAL_DE_GELO, PEDRA_SANGUE -> {
                     return new Dica("mineral", "Mineral de bioma! Serve para acessórios, para as armas dos minérios e para incrustar numa arma na Forja.", "minerais");
                 }
+                case COBRE_ANTIGO, CRISTAL_ABISSAL, ESPORO_FOSSIL, FERRO_NEGRO -> {
+                    return new Dica("mineral_abismo", "Mineral do Abismo! Faz um conjunto de armadura e ferramentas na bancada, como o ferro, com bônus próprio.", "abismo");
+                }
                 case CRISTAL_DE_MAGMA, AMBAR_INFERNAL, QUARTZO_NEGRO -> {
                     return new Dica("mineral_nether", "Mineral do Nether! Incruste numa arma na Forja; o Cristal de Magma faz a Lança de Basalto e a Vara Ígnea.", "nether");
                 }

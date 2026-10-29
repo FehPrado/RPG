@@ -188,7 +188,11 @@ public enum Titulo {
     REGICIDA_DA_MONTANHA("Regicida da Montanha", 0xFFB74D, Requisito.contador("rei_montanha", 1, "Derrotar o Rei da Montanha na Cidade Anã"), new Bonus().comDano(1)),
     CACADOR_DE_DRAGOES("Caçador de Dragões", 0xCE93D8, Requisito.contador("espirito_dragao", 1, "Vencer o Espírito do Dragão na Ossada"), Bonus.xpTudo(0.03)),
     CAMPEAO_DO_COLISEU("Campeão do Coliseu", 0xE57373, Requisito.contador("campeao_coliseu", 1, "Abrir o cofre do imperador no Coliseu"), new Bonus().comDano(1)),
-    ALGOZ_DO_REI_CAIDO("Algoz do Rei Caído", 0x9575CD, Requisito.contador("rei_caido", 1, "Tirar o Rei Caído do trono"), Bonus.vida(2));
+    ALGOZ_DO_REI_CAIDO("Algoz do Rei Caído", 0x9575CD, Requisito.contador("rei_caido", 1, "Tirar o Rei Caído do trono"), Bonus.vida(2)),
+    // ---------------- 3.3: o Abismo ----------------
+    MINERADOR_DO_ABISMO("Minerador do Abismo", 0x8A5AE0, Requisito.contador("minerais_abismo", 40, "Minerar 40 minerais do Abismo"), Bonus.armadura(1)),
+    HERDEIRO_DOS_ANTIGOS("Herdeiro dos Antigos", 0xC8703A, Requisito.contador("ruinas_antigos", 5, "Descobrir 5 ruínas dos Antigos no Abismo"), Bonus.xpTudo(0.03)),
+    SILENCIADOR_DO_VIGIA("Silenciador do Vigia", 0x3A6A7E, Requisito.contador("vigia_fundo", 1, "Vencer o Vigia do Fundo no Hangar dos Antigos"), new Bonus().comDano(1).comVida(2));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(

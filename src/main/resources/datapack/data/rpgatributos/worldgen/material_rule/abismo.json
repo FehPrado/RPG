@@ -1,0 +1,66 @@
+{
+  "type": "minecraft:sequence",
+  "sequence": [
+    "minecraft:bedrock_floor",
+    {
+      "type": "minecraft:condition",
+      "if_true": { "type": "minecraft:biome", "biome_is": "rpgatributos:abismo_borda" },
+      "then_run": {
+        "type": "minecraft:sequence",
+        "sequence": [
+          { "type": "minecraft:condition", "if_true": "minecraft:on_floor", "then_run": { "type": "minecraft:block", "result_state": "minecraft:grass_block" } },
+          { "type": "minecraft:condition", "if_true": "minecraft:under_floor", "then_run": { "type": "minecraft:block", "result_state": "minecraft:dirt" } }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": { "type": "minecraft:biome", "biome_is": "rpgatributos:abismo_floresta" },
+      "then_run": {
+        "type": "minecraft:sequence",
+        "sequence": [
+          { "type": "minecraft:condition", "if_true": "minecraft:on_floor", "then_run": { "type": "minecraft:block", "result_state": "minecraft:moss_block" } },
+          { "type": "minecraft:condition", "if_true": "minecraft:under_floor", "then_run": { "type": "minecraft:block", "result_state": "minecraft:rooted_dirt" } }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": { "type": "minecraft:biome", "biome_is": "rpgatributos:abismo_cristal" },
+      "then_run": {
+        "type": "minecraft:sequence",
+        "sequence": [
+          { "type": "minecraft:condition", "if_true": "minecraft:on_floor", "then_run": { "type": "minecraft:block", "result_state": "minecraft:calcite" } }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": { "type": "minecraft:biome", "biome_is": "rpgatributos:abismo_fungos" },
+      "then_run": {
+        "type": "minecraft:sequence",
+        "sequence": [
+          { "type": "minecraft:condition", "if_true": "minecraft:on_floor", "then_run": { "type": "minecraft:block", "result_state": "minecraft:mycelium" } },
+          { "type": "minecraft:condition", "if_true": "minecraft:under_floor", "then_run": { "type": "minecraft:block", "result_state": "minecraft:dirt" } }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": { "type": "minecraft:biome", "biome_is": "rpgatributos:abismo_fundo" },
+      "then_run": {
+        "type": "minecraft:sequence",
+        "sequence": [
+          { "type": "minecraft:condition", "if_true": "minecraft:on_floor", "then_run": { "type": "minecraft:block", "result_state": "minecraft:sculk" } },
+          { "type": "minecraft:condition", "if_true": "minecraft:on_ceiling", "then_run": { "type": "minecraft:block", "result_state": "minecraft:blackstone" } }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": { "type": "minecraft:y_above", "anchor": { "absolute": -120 }, "surface_depth_multiplier": 0, "add_stone_depth": false },
+      "then_run": { "type": "minecraft:block", "result_state": "minecraft:stone" }
+    },
+    { "type": "minecraft:block", "result_state": "minecraft:deepslate" }
+  ]
+}

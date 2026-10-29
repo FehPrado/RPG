@@ -70,6 +70,16 @@ public enum Raro {
     QUARTZO_NEGRO("Quartzo Negro", Material.QUARTZ, 0x4A4060,
             "Cresce onde as almas se deitam, no vale de areia de almas.", "Incruste numa arma (Forja). O Ferreiro Piglin paga bem."),
 
+    // 3.3: minerais do Abismo
+    COBRE_ANTIGO("Cobre dos Antigos", Material.RAW_COPPER, 0xC8703A,
+            "Não enferruja. Os Antigos sabiam fazer cobre que dura para sempre.", "Faz o conjunto Antigo (bancada, como o ferro)."),
+    CRISTAL_ABISSAL("Cristal Abissal", Material.AMETHYST_SHARD, 0x8A5AE0,
+            "Brilha mais quanto mais fundo você está.", "Faz o conjunto Abissal (bancada, como o ferro)."),
+    ESPORO_FOSSIL("Esporo Fóssil", Material.GLOW_INK_SAC, 0x3AB0A0,
+            "Um esporo que virou pedra há mil anos. Ainda está vivo.", "Faz o conjunto de Esporo (bancada, como o ferro)."),
+    FERRO_NEGRO("Ferro Negro", Material.NETHERITE_SCRAP, 0x3A3A4E,
+            "Pesado como o próprio Fundo. Nem o sculk o ouve.", "Faz o conjunto de Ferro Negro (bancada, como o ferro)."),
+
     // 2.84: o Altar da Convergência
     ALMA_DESPERTA("Alma Desperta", Material.FIREWORK_STAR, 0xB388FF,
             "O que sobra de um chefe que voltou mais forte.", "Cai dos chefes Despertos. Usada no Altar da Convergência.");
