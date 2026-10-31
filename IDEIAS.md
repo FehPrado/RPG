@@ -544,7 +544,7 @@ Ficaram para depois, do grupo 1: estruturas grandes regionais (pirâmide de jade
 - ✅ **Parte 1 (3.7): o mundo e as regras.** Ilhas flutuantes sobre o Mar de Névoa (Margem, Campos de Lembranças, Ruínas dos Antigos). Ritual do dono do servidor: **Lanterna das Almas na mão esquerda + Punhal do Sacrifício na direita**, agachado. O corpo fica deitado (boneco com a pele, guardado em arquivo); a alma entra **sem nada**, só com a lanterna; a chama dura 15 min; volta pela lanterna com os achados, ou sem eles se a chama apagar ou morrer. Não constrói nem quebra, sem fome, mais rápida.
 - ✅ **Parte 2 (3.8):** cais do Barqueiro na chegada (travessia por 3 Almas Penadas); Almas Penadas (allays, recolhidas com a lanterna); Sombras Errantes e Penitentes (Essência Etérea); Cidade dos Antigos construída pelo plugin em 1200 125 -1200 (4 casas com o Diário XI–XIV e baús, Tribunal com sino, Ilen, cais da cidade); o Juiz (esqueleto murcho 1,8x, 320 de vida, Julgamento); Ilen dá o XV; conjunto Etéreo; títulos Coletor de Almas, Juiz Julgado e Leitor do Fim. Sem veios de minério no Mundo das Almas (a alma não quebra blocos).
 
-### Depois (a decidir): Além do Primeiro Portal, Mundo dos Sonhos, Reino Feérico, O Passado, Microverso.
+### Depois (a decidir): Além do Primeiro Portal, Mundo dos Sonhos, Reino Feérico, O Passado. (Microverso fica no backlog.)
 
 **Como ficou a fase 2 (3.4):** Carga Abissal (o jogador abre a própria Fenda); 4 ruínas de parede (Posto, Elevador, Laboratório, Refúgio) + Hangar no Fundo, construídos pelo plugin no chunk novo (busca metódica da parede virada para o vazio, sempre dentro do chunk); Diário dos Antigos em 5 capítulos (a engenheira Ilen; liga às Luas e ao Mundo das Almas); 5 peças do foguete (Planta, Casco, Núcleo, Tanque nos baús; Motor com o Vigia do Fundo, warden de 400); 4 minerais (Cobre dos Antigos, Cristal Abissal, Esporo Fóssil, Ferro Negro) com conjuntos de armadura/ferramentas; 3 títulos. Ficaram para depois: criaturas próprias de cada camada, Corda do Abismo, Lanterna de Esporos.
 
@@ -589,3 +589,37 @@ Sugestão: começar por Mortis.
 **Culinária:** (1) pratos da estação e da natureza nova (torta de abóbora silvestre, sopa de cogumelos do outono, chá de seiva anciã, hidromel de geleia real, caranguejo na brasa, moqueca de lagosta); (2) pratos das dimensões (ensopado abissal, pão lunar, bolo etéreo); (3) banquete (mesa com 5 pratos, bônus de grupo); (4) dieta variada (estilo Spice of Life); (5) receitas secretas em pergaminhos de estruturas (pratos lendários); (6) espetinhos na fogueira de acampamento; (7) concurso de culinária no festival.
 **Pedido do dono (importante):** mapear tudo o que é comida (estilo Stardew Valley e Dungeon Meshi: cultivo, criação, coleta, pesca, monstros, cozinha, bebidas, conservas) e juntar para os sistemas conversarem entre si.
 **Mapa da comida (31/10/2026, artifact "Da Terra à Panela": https://claude.ai/artifact/9RMyTrsuPXDJy4QETqZ5LS).** Achados: 32 coisas colhidas sem prato (pomar 5, coleta 12, ervas 6, couve-flor/mirtilo/inhame + natureza nova), dois catálogos de mel (vida/Mel da Colmeia e o Mel do ninho na NaturezaViva), 12 peixes raros sem prato, maionese/conserva/óleo de trufa sem receita, monstros do RPG e dimensões sem ingrediente, bebida e prato sem ligação. Proposta em 5 versões: (1) categorias de ingrediente + qualidade única + mel unificado; (2) pratos para o que está solto; (3) ingredientes de monstros do RPG e dimensões, covo, iscas, espetinho; (4) harmonização, banquete, taverna serve prato; (5) caderno de ingredientes (estilo wiki do Stardew), coleção, dieta variada, encomendas, concurso, receitas secretas.
+
+## Para fazer (31/10/2026): Ferraria e Magia (aprovadas)
+**A oficina do ferreiro:** tudo gira em volta da Forja do Ferreiro que já existe; duas estações novas a até 6 blocos dela. Cada etapa é opcional e só soma.
+1. **Cadinho (ligas):** ritual de 1 caldeirão + 1 balde de lava jogados num alto-forno. Coloca dois minérios (ex.: 4 Prata Lunar + 4 Ferro Negro) + carvão, funde como fornalha, sai o lingote de liga (ex.: Aço Lunar). A liga vira material na Forja, com os efeitos dos dois minérios, mais fracos que cada um sozinho. Começar com 3–4 ligas dos minérios que já existem (a decidir se cada dimensão ganha a sua).
+2. **Forjar no ritmo (barra do martelo):** ao tirar a peça da Forja abre uma barra com marcador indo e voltando e faixa dourada; 3 batidas, cada acerto sobe a chance de raridade; Ferraria alta alarga a faixa. Opcional: fechar a tela ou shift+clique pula e usa a chance normal (a decidir se é sempre).
+3. **Tina de Têmpera (temperatura):** ritual de 1 balde de água + 1 lingote de ferro num caldeirão. A peça sai "🔥 Em brasa: 10 s" (faíscas); clicar na tina nesse tempo dá o bônus do líquido. Esfriou fora: fica normal. Líquidos: água (+5% durabilidade), óleo da Alquimia (+3% dano/armadura), água do Rio do Esquecimento (+dano em mortos-vivos e criaturas das Almas), Seiva Anciã (regenera durabilidade devagar), lava do Abismo (+chance do efeito Épico). A decidir: uma têmpera por peça ou retemperar trocando o bônus.
+4. **Também:** forjas especiais nas dimensões (bônus, não obrigatórias), encomendas de ferreiro, expositor de armas.
+**Magia:** essências das dimensões (Lunar, Abissal, Etérea), familiar vindo da Doma, magia dos deuses no Fé 5, pratos arcanos (liga com a culinária), livros perdidos, duelo de magos, sigilos.
+
+## Para fazer (31/10/2026): Runas e Alquimia
+**Hoje:** 10 runas (uma por peça, Mesa Rúnica), Transmutação com 7 receitas, Bancada Alquímica com 12 elixires, 14 reagentes (5 óleos de arma), 6 gemas e 24 acessórios. Furos: nada das dimensões entra aqui, runa sem nível, elixir sem qualidade, runas na Fé sem usar Fé, transmutação só de material comum.
+**Runas:** (1) níveis I–III gravando de novo com material melhor; (2) palavras rúnicas: 3 peças com as runas certas dão bônus de conjunto (ex.: Salto+Ímpeto+Visão = Caçador); liga com as Ligas (2 espaços de runa); (3) runas das dimensões (Lunar: gravidade baixa no pulo; Abissal: vê mobs no escuro; Etérea: atravessa um golpe a cada 30 s); (4) runa de cada deus no Fé 4+, só funciona enquanto devoto; (5) pedras rúnicas antigas nas estruturas que ensinam runas.
+**Alquimia:** (1) qualidade ★ nos elixires vinda dos ingredientes (igual à comida); (2) elixires das dimensões (Lunar: respira na Lua sem capacete; Etéreo: +5 min de chama nas Almas; Abissal); (3) alambique que destila ervas, mel e seiva em reagentes e faz os óleos da Tina de Têmpera; (4) transmutação de materiais das dimensões e conserto de itens raros; (5) misturar elixires: bônus forte + efeito ruim aleatório (toxicidade, estilo Witcher).
+
+## Para fazer (31/10/2026): Combate
+**Hoje:** combos (20 tipos de arma, 182 golpes, proficiência 1–20), 5 posturas, aparar, equilíbrio, fraquezas, mobilidade, 30 classes com provas, ligações (óleo/runa no combo, ataque conjunto, companheiros). Furo: o inimigo não exige essas ferramentas; chefes novos (Juiz, Abismo, Luas) sem padrão próprio.
+1. ⭐ Golpe anunciado: amarelo = aparável, vermelho = esquivar, roxo = agarrão (sair de perto).
+2. ⭐ Execução: inimigo desequilibrado + agachar e clicar = finalização com animação, câmera lenta curta, dano alto e drop extra.
+3. Chefes com 2–3 fases e fraqueza a descobrir (Juiz, guardiões do Abismo, um chefe por Lua; ex.: lâmina espectral quebra o escudo do Juiz).
+4. Arma com memória Lendária ganha um 5º golpe só dela, ligado à habilidade sorteada.
+5. Papéis na party: Tanque provoca, Curandeiro cura pelo combo, Arqueiro marca ponto fraco para todos.
+6. Mestre de Armas (taverna/colônia): treina proficiência, ensina golpes raros, duela; boneco de treino mostra DPS.
+7. Armas novas das dimensões e ligas (Tridente Abissal, Foice Etérea, Lança Lunar) com árvores pequenas de golpes.
+
+## Ordem escolhida (31/10/2026) para as ideias acima
+1. Mapa da comida, versões 1 e 2 (qualidade única, mel unificado, pratos para o que está solto): base para ingredientes, elixires ★, banquete e pratos arcanos.
+2. Animais e monstros novos (ingredientes, iscas, companheiros, inimigos com golpe anunciado).
+3. Combate (golpe anunciado, execução, chefes com fases; depois o resto).
+4. Ferraria e Runas (ligas, barra do martelo, têmpera, níveis e palavras rúnicas).
+5. Alquimia e Magia (alambique, elixires das dimensões, essências).
+6. Pesca e Culinária, o resto (iscas, covo, torneio, banquete, dieta, concurso).
+7. Doma (vínculo, cuidados, truques, corrida, animais novos como companheiros).
+8. Reinos dos Deuses (por último; começando por Mortis).
+Masmorras (temas novos, transbordo nas dimensões, salas, objetivos) ficaram de fora por enquanto.
