@@ -558,3 +558,34 @@ O dono do servidor escolheu estas (algumas ampliam coisas que já existem):
 6. ✅ (3.9) **Galeria de troféus:** amplia a Estante de Troféus: cabeças de chefes, peixes recordes e relíquias numa vitrine, com placa de quando e como.
 7. ✅ (3.11) **Natureza (tudo):** migração de pássaros e manadas, ninhos selvagens com mel das flores e Geleia Real, rede de pesca, árvores anciãs com Seiva Anciã.
 8. ✅ (3.14) **Viagens:** carroça com desenho próprio sem mod (rodas, varais, toldo, lanterna, banco, carga); Barco Grande com proa e lanternas. Datapack não muda modelo de entidade: o desenho é feito com peças presas (como o Barco Grande).
+
+## Para fazer (31/10/2026): reinos dos deuses, animais e monstros
+**Os Reinos dos Deuses (só com Fé 5, 1.500 de devoção).** Seis reinos pequenos (~300 x 300), um por deus. Entrada: rezar no Santuário com Fé 5 → "Pedir passagem" (sem Fé 5: "Ainda não."). Convidados: até 2 amigos (a decidir). Saída pelo altar do reino. Em todos: o Avatar do deus (conversa), uma Provação e uma Relíquia Divina (uma por jogador), título "Escolhido de <deus>" e uma aura/roupa.
+| Deus | Reino | Provação | Relíquia |
+|---|---|---|---|
+| Ferrum | A Forja Eterna (basalto, rios de lava, bigornas gigantes) | manter 3 fornalhas no ponto com golems de magma atacando | Martelo de Ferrum (minério sai refinado) |
+| Sylva | O Bosque Primordial (árvores gigantes, flores que brilham) | plantar e proteger mudas de uma praga | Cajado de Sylva (planta cresce na hora) |
+| Maris | O Recife Sagrado (atol, cidade de conchas) | pescar a Pérola do Abismo com a maré subindo | Concha de Maris (respirar na água, chamar golfinhos) |
+| Bellum | O Campo da Glória (arena no céu) | ondas de guerreiros e o Campeão de Bellum | Estandarte de Bellum (aliados batem mais) |
+| Arcanus | A Biblioteca Infinita (estantes flutuando, céu roxo) | enigmas de runas com livros vivos | Grimório de Arcanus (um feitiço a mais) |
+| Mortis | O Jardim Silencioso (rosas murchas, rio negro; liga ao Mundo das Almas) | guiar almas perdidas ao portão antes do amanhecer | Foice de Mortis (1x por dia, morrer não derruba itens) |
+Sugestão: começar por Mortis.
+
+**Animais novos:** cervo e corça (florestas; fogem de quem corre), javali (investe), coruja (domada avisa monstros), borboletas e mariposas (enfeite), pinguim (praias geladas, pesca), tartaruga-gigante (rara, dá para sentar).
+
+**Monstros novos:** Espantalho (fazendas à noite, mexe quando você vira as costas), Banshee (pântano, grito que deixa lento), Golem de Musgo (cavernas exuberantes, sementes raras), Aranha-Tecelã (teias e aranhas pequenas), Cavaleiro Sem Cabeça (lua cheia na estrada, cabeça para a galeria), Afogado-Âncora (rios fundos, puxa para baixo).
+
+## Para fazer (31/10/2026): Doma (ideias novas)
+1. Visual dos componentes de volta, do jeito da carroça (peças presas que andam junto e pesam pouco): alforje, lanterna, asas e sela aparecendo no bicho.
+2. Animais novos como companheiros: cervo (montaria rápida e assustada), coruja (no ombro, avisa monstros), javali (investida), pinguim (pesca para você), tartaruga-gigante (lenta, carrega muito).
+3. Vínculo com o dono: sobe com o tempo juntos; obedece de mais longe, protege com vida baixa, fica triste se o dono some.
+4. Cuidados: escovar, petisco, banho; bônus de humor (como o afeto dos animais de fazenda).
+5. Truques: sentar, buscar item jogado, deitar, dar a pata.
+6. Competições: corrida de cavalos (pista de placas, cronômetro) e exposição de animais com voto.
+7. Animal sagrado de Sylva, domado só no Bosque Primordial (reino dos deuses).
+
+## Para fazer (31/10/2026): Pesca e Culinária (aprovadas)
+**Pesca:** (1) pesca nas dimensões (peixes do Mar de Fungos no Abismo; Carpa Espectral no Rio do Esquecimento com a Vara do Barqueiro dos baús da cidade); (2) iscas: minhoca (cavar terra), grilo (grama alta), isca brilhante, cada uma puxa certos peixes; (3) covo de caranguejo no fundo: caranguejo, lagosta, camarão; (4) aquário com os peixes recordes nadando (nome e peso); (5) Torneio de Pesca de 10 min anunciado (troféu e título).
+**Culinária:** (1) pratos da estação e da natureza nova (torta de abóbora silvestre, sopa de cogumelos do outono, chá de seiva anciã, hidromel de geleia real, caranguejo na brasa, moqueca de lagosta); (2) pratos das dimensões (ensopado abissal, pão lunar, bolo etéreo); (3) banquete (mesa com 5 pratos, bônus de grupo); (4) dieta variada (estilo Spice of Life); (5) receitas secretas em pergaminhos de estruturas (pratos lendários); (6) espetinhos na fogueira de acampamento; (7) concurso de culinária no festival.
+**Pedido do dono (importante):** mapear tudo o que é comida (estilo Stardew Valley e Dungeon Meshi: cultivo, criação, coleta, pesca, monstros, cozinha, bebidas, conservas) e juntar para os sistemas conversarem entre si.
+**Mapa da comida (31/10/2026, artifact "Da Terra à Panela": https://claude.ai/artifact/9RMyTrsuPXDJy4QETqZ5LS).** Achados: 32 coisas colhidas sem prato (pomar 5, coleta 12, ervas 6, couve-flor/mirtilo/inhame + natureza nova), dois catálogos de mel (vida/Mel da Colmeia e o Mel do ninho na NaturezaViva), 12 peixes raros sem prato, maionese/conserva/óleo de trufa sem receita, monstros do RPG e dimensões sem ingrediente, bebida e prato sem ligação. Proposta em 5 versões: (1) categorias de ingrediente + qualidade única + mel unificado; (2) pratos para o que está solto; (3) ingredientes de monstros do RPG e dimensões, covo, iscas, espetinho; (4) harmonização, banquete, taverna serve prato; (5) caderno de ingredientes (estilo wiki do Stardew), coleção, dieta variada, encomendas, concurso, receitas secretas.
