@@ -506,6 +506,32 @@ public final class Comandos implements TabExecutor {
                     ok(sender, "As 5 peças do foguete, uma Carga Abissal e 16 de cada mineral do Abismo.");
                     return;
                 }
+                if (args[1].equalsIgnoreCase("almasitens")) {
+                    // 3.7: o que o ritual pede
+                    entregar(p, br.rpgatributos.dimensao.Almas.lanterna());
+                    entregar(p, br.rpgatributos.dimensao.Almas.punhal());
+                    ok(sender, "Lanterna das Almas e Punhal do Sacrifício. Lanterna na mão esquerda, punhal na direita, agache e clique.");
+                    return;
+                }
+                if (args[1].equalsIgnoreCase("almascidade")) {
+                    // 3.8: vai até a Cidade dos Antigos (construindo, se ainda não existe)
+                    plugin.mundoDasAlmas().irCidadeAdmin(p);
+                    ok(sender, plugin.mundoDasAlmas().info());
+                    return;
+                }
+                if (args[1].equalsIgnoreCase("almasequipamento")) {
+                    entregar(p, br.rpgatributos.dimensao.MundoDasAlmas.laminaEspectral());
+                    entregar(p, br.rpgatributos.dimensao.MundoDasAlmas.mantoEspectral());
+                    entregar(p, br.rpgatributos.aventura.Raro.ALMA_PENADA.criar(3));
+                    entregar(p, br.rpgatributos.aventura.Raro.ESSENCIA_ETEREA.criar(24));
+                    ok(sender, "Lâmina e Manto Espectral, 3 Almas Penadas (uma travessia) e 24 de Essência Etérea.");
+                    return;
+                }
+                if (args[1].equalsIgnoreCase("almasvoltar")) {
+                    if (!plugin.almas().ehAlma(p)) { erro(sender, "Você não está fora do corpo."); return; }
+                    plugin.almas().voltar(p, true, null);
+                    return;
+                }
                 if (args[1].equalsIgnoreCase("foguetes")) {
                     // 3.6.1: /rpgadmin dimensao foguetes [recolher] [jogador]
                     boolean tirar = args.length >= 3 && args[2].equalsIgnoreCase("recolher");

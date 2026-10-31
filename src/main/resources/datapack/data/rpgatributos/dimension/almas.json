@@ -1,0 +1,15 @@
+{
+  "type": "rpgatributos:almas",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "rpgatributos:almas",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        { "biome": "rpgatributos:almas_margem", "parameters": { "temperature": [-1, -0.25], "humidity": [-1, 1], "continentalness": [-1, 1], "erosion": [-1, 1], "weirdness": [-1, 1], "depth": [-1, 1], "offset": 0 } },
+        { "biome": "rpgatributos:almas_campos", "parameters": { "temperature": [-0.25, 0.45], "humidity": [-1, 1], "continentalness": [-1, 1], "erosion": [-1, 1], "weirdness": [-1, 1], "depth": [-1, 1], "offset": 0 } },
+        { "biome": "rpgatributos:almas_ruinas", "parameters": { "temperature": [0.45, 1], "humidity": [-1, 1], "continentalness": [-1, 1], "erosion": [-1, 1], "weirdness": [-1, 1], "depth": [-1, 1], "offset": 0 } }
+      ]
+    }
+  }
+}

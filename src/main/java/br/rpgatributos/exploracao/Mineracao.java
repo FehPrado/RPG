@@ -297,6 +297,8 @@ public final class Mineracao implements Listener {
             mineraisDoAbismo(c, r);
             return;
         }
+        // 3.8: no Mundo das Almas não há veios (a Essência Etérea vem das almas e das criaturas).
+        if (br.rpgatributos.dimensao.Dimensoes.de(w) == br.rpgatributos.dimensao.Dimensoes.Dimensao.ALMAS) return;
         // 3.5: a Prata Lunar, nas luas.
         if (br.rpgatributos.dimensao.Dimensoes.de(w) != null && br.rpgatributos.dimensao.Dimensoes.de(w).lua()) {
             switch (br.rpgatributos.dimensao.Dimensoes.de(w)) {

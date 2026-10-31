@@ -2096,6 +2096,38 @@ Cada lua tem as suas **Colônias** com um capítulo do Diário (VII a X: o fim d
 
 Admin: `/rpgadmin dimensao <lua_escura|lua_vermelha|lua_cristal|lua_sombria>` vai direto; `dimensoes.<lua>.ativa: false` fecha cada viagem.
 
+### O Mundo das Almas (3.7, parte 1: o mundo e as regras)
+
+Onde os Antigos foram parar. Um mundo cinza e silencioso: **ilhas flutuantes** de musgo pálido sobre o **Mar de Névoa**, em três regiões (**A Margem**, **Campos de Lembranças** e **Ruínas dos Antigos**).
+
+**O ritual para entrar:**
+- **Lanterna das Almas** (bancada: lanterna das almas no meio e 4 areias das almas em cruz) na **mão esquerda**.
+- **Punhal do Sacrifício** (bancada, em coluna: Quartzo Negro, lingote de ferro e graveto) na **mão direita**.
+- **Agache e clique** com o botão direito, depois confirme. O **corpo fica deitado** onde você estava, com tudo o que você carrega (ninguém mexe nele, nada o machuca).
+- A alma chega **sem nada**, só com a lanterna. Título: **Viajante das Almas**.
+
+**Lá dentro:** a alma corre e pula mais, não sente fome e **não constrói nem quebra blocos**. A **chama da lanterna** (barra no alto da tela) dura **15 minutos**.
+
+**Para voltar:** agache e clique com a lanterna, e confirme: a alma volta ao corpo **com o que achou** lá. Se a **chama apagar** ou a alma **morrer** lá, ela volta do mesmo jeito, mas **sem os achados**. A lanterna sempre volta.
+
+**Ninguém fica preso:** o corpo (inventário, XP, vida e efeitos) fica guardado num arquivo. Servidor caiu, saiu do jogo, levado para fora por comando ou Pedra de Viagem: tudo volta como estava. Na área de testes, o Mundo das Almas conta como parte do teste.
+
+### O Mundo das Almas por dentro (3.8, parte 2)
+
+- **O cais do Barqueiro:** toda alma chega num **cais** (o mais perto, ou um novo ali). O **Barqueiro** atravessa o Rio do Esquecimento até a **Cidade dos Antigos** por **3 Almas Penadas**. Na cidade, outro Barqueiro leva de volta à Margem (de graça).
+- **Almas Penadas:** almas azuladas que vagam pelas ilhas. **Clique nelas com a Lanterna das Almas** (em qualquer mão) para recolher; às vezes vem junto uma Essência Etérea. Não apanham. Título: **Coletor de Almas** (30).
+- **Criaturas:** **Sombras Errantes** (voam e atravessam paredes) e **Penitentes**. Deixam **Essência Etérea** (40%). Perto da cidade elas não aparecem.
+- **A Cidade dos Antigos:** uma ilha grande com quatro **casas da memória**, cada uma com um capítulo do **Diário dos Antigos (XI a XIV)** no atril e um **baú** (enche de novo 30 minutos depois de esvaziado) com a **Lâmina Espectral** (+80% de dano nas criaturas daqui e no Juiz), o **Manto Espectral**, Essência Etérea, Almas Penadas, maçãs douradas e poções de cura. Tirar o livro do atril dá uma cópia.
+- **O Tribunal e o Juiz:** no meio da cidade, o **sino**. Tocar o sino acorda **O Juiz** (320 de vida, espada que faz murchar). A cada 10 segundos ele faz o **Julgamento**: puxa quem está perto e deixa lento. Na metade da vida, chama três Sombras Errantes. Vencido: 8 a 12 de Essência Etérea, 4 Almas Penadas, às vezes uma Essência Primordial, e o título **Juiz Julgado** para quem estiver perto. Ele volta 10 minutos depois.
+- **A Ilen:** a engenheira dos Antigos, perto do trono. Antes do Juiz, conta a história e pede ajuda; depois, entrega o **capítulo XV**, o fim da história. Ler os cinco (XI a XV) dá o título **Leitor do Fim**.
+- **O conjunto Etéreo** (bancada, como o ferro, com Essência Etérea): 2 peças, agachado no ar você cai devagar; 4 peças, uma vez a cada 10 minutos, um golpe que mataria deixa você com 1 coração.
+
+Lembre: o que a alma acha só vem junto se ela voltar **pela lanterna**. Se a chama apagar ou ela morrer, os achados ficam lá.
+
+Admin (3.8): `/rpgadmin dimensao almascidade` (já dentro do Mundo das Almas: vai até a cidade, construindo se preciso) e `/rpgadmin dimensao almasequipamento` (Lâmina, Manto, 3 Almas Penadas e 24 de Essência Etérea).
+
+Admin: `/rpgadmin dimensao almasitens` (lanterna e punhal), `/rpgadmin dimensao almas` (o ritual direto), `/rpgadmin dimensao almasvoltar` (volta ao corpo). No config: `almas.minutos-de-chama` e `dimensoes.almas.ativa`.
+
 
 ## Pesca
 

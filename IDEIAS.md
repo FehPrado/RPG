@@ -541,6 +541,8 @@ Ficaram para depois, do grupo 1: estruturas grandes regionais (pirâmide de jade
 
 ### Fase 4: o Mundo das Almas
 - Onde os Antigos foram parar: o fim da história, com o Barqueiro e a Porta da Volta.
+- ✅ **Parte 1 (3.7): o mundo e as regras.** Ilhas flutuantes sobre o Mar de Névoa (Margem, Campos de Lembranças, Ruínas dos Antigos). Ritual do dono do servidor: **Lanterna das Almas na mão esquerda + Punhal do Sacrifício na direita**, agachado. O corpo fica deitado (boneco com a pele, guardado em arquivo); a alma entra **sem nada**, só com a lanterna; a chama dura 15 min; volta pela lanterna com os achados, ou sem eles se a chama apagar ou morrer. Não constrói nem quebra, sem fome, mais rápida.
+- ✅ **Parte 2 (3.8):** cais do Barqueiro na chegada (travessia por 3 Almas Penadas); Almas Penadas (allays, recolhidas com a lanterna); Sombras Errantes e Penitentes (Essência Etérea); Cidade dos Antigos construída pelo plugin em 1200 125 -1200 (4 casas com o Diário XI–XIV e baús, Tribunal com sino, Ilen, cais da cidade); o Juiz (esqueleto murcho 1,8x, 320 de vida, Julgamento); Ilen dá o XV; conjunto Etéreo; títulos Coletor de Almas, Juiz Julgado e Leitor do Fim. Sem veios de minério no Mundo das Almas (a alma não quebra blocos).
 
 ### Depois (a decidir): Além do Primeiro Portal, Mundo dos Sonhos, Reino Feérico, O Passado, Microverso.
 

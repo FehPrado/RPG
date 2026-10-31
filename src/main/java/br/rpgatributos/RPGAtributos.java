@@ -261,6 +261,8 @@ public final class RPGAtributos extends JavaPlugin {
     private br.rpgatributos.dimensao.Antigos antigos;
     private br.rpgatributos.dimensao.Foguetes foguetes;
     private br.rpgatributos.dimensao.Luas luas;
+    private br.rpgatributos.dimensao.Almas almas;
+    private br.rpgatributos.dimensao.MundoDasAlmas mundoDasAlmas;
     private br.rpgatributos.detalhes.Utilidades utilidades;
     private br.rpgatributos.detalhes.Carrocas carrocas;
     private br.rpgatributos.estrada.Trilhas trilhas;
@@ -598,6 +600,12 @@ public final class RPGAtributos extends JavaPlugin {
         getServer().getPluginManager().registerEvents(luas, this);
         luas.registrarReceitas();
         luas.preparar();
+        almas = new br.rpgatributos.dimensao.Almas(this);
+        getServer().getPluginManager().registerEvents(almas, this);
+        almas.registrarReceitas();
+        mundoDasAlmas = new br.rpgatributos.dimensao.MundoDasAlmas(this);
+        getServer().getPluginManager().registerEvents(mundoDasAlmas, this);
+        mundoDasAlmas.carregar();
         getServer().getPluginManager().registerEvents(oceano, this);
         oceano.carregar();
         getServer().getPluginManager().registerEvents(bandos, this);
@@ -734,6 +742,8 @@ public final class RPGAtributos extends JavaPlugin {
         agenda.runTaskTimer(this, encantos::tick, 4L, 4L);
         agenda.runTaskTimer(this, dimensoes::segundo, 20L, 20L);
         agenda.runTaskTimer(this, luas::segundo, 20L, 20L);
+        agenda.runTaskTimer(this, almas::segundo, 20L, 20L);
+        agenda.runTaskTimer(this, mundoDasAlmas::segundo, 20L, 20L);
         agenda.runTaskTimer(this, utilidades::tick, 1L, 1L);
         agenda.runTaskTimer(this, utilidades::segundo, 20L, 20L);
         agenda.runTaskTimer(this, carrocas::tick, 1L, 1L);
@@ -929,6 +939,8 @@ public final class RPGAtributos extends JavaPlugin {
         if (barcoGrande != null) barcoGrande.desligar();
         if (oceano != null) oceano.desligar();
         if (luas != null) luas.desligar();
+        if (almas != null) almas.desligar();
+        if (mundoDasAlmas != null) mundoDasAlmas.desligar();
         if (estruturas != null) estruturas.marAberto().desligar();
         if (utilidades != null) utilidades.desligar();
         if (carrocas != null) carrocas.desligar();
@@ -1095,6 +1107,8 @@ public final class RPGAtributos extends JavaPlugin {
     public br.rpgatributos.dimensao.Antigos antigos() { return antigos; }
     public br.rpgatributos.dimensao.Foguetes foguetes() { return foguetes; }
     public br.rpgatributos.dimensao.Luas luas() { return luas; }
+    public br.rpgatributos.dimensao.Almas almas() { return almas; }
+    public br.rpgatributos.dimensao.MundoDasAlmas mundoDasAlmas() { return mundoDasAlmas; }
     public br.rpgatributos.mar.Cardumes cardumes() { return oceano == null ? null : oceano.cardumes(); }
     public br.rpgatributos.estrada.Andarilhos andarilhos() { return andarilhos; }
     public br.rpgatributos.mundo.Noticias noticias() { return noticias; }

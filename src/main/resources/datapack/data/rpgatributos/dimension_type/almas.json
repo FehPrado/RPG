@@ -1,0 +1,29 @@
+{
+  "ambient_light": 0.4,
+  "attributes": {
+    "minecraft:audio/background_music": { "default": { "max_delay": 18000, "min_delay": 6000, "replace_current_music": true, "sound": "minecraft:music.nether.soul_sand_valley" } },
+    "minecraft:gameplay/bed_rule": { "can_set_spawn": "never", "can_sleep": "never", "error_message": { "text": "Almas não dormem." } },
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:visual/ambient_light_color": "#6a7080",
+    "minecraft:visual/fog_color": "#8a909a",
+    "minecraft:visual/fog_start_distance": 12.0,
+    "minecraft:visual/fog_end_distance": 110.0,
+    "minecraft:visual/sky_color": "#9aa0aa",
+    "minecraft:visual/sky_light_color": "#a0a8c0",
+    "minecraft:visual/sky_light_factor": 0.0
+  },
+  "coordinate_scale": 1.0,
+  "has_ceiling": false,
+  "has_ender_dragon_fight": false,
+  "has_fixed_time": true,
+  "has_skylight": false,
+  "height": 256,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "logical_height": 256,
+  "min_y": 0,
+  "monster_spawn_block_light_limit": 0,
+  "monster_spawn_light_level": 0,
+  "skybox": "none",
+  "timelines": "#minecraft:in_nether"
+}

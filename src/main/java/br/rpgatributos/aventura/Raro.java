@@ -91,6 +91,11 @@ public enum Raro {
             "Canta baixinho quando a Lua Azul está no céu.", "Faz o conjunto Celeste (bancada, como o ferro)."),
     FRAGMENTO_ECLIPSE("Fragmento de Eclipse", Material.AMETHYST_SHARD, 0x8E24AA,
             "Um pedaço da sombra que cobre o sol. Ainda está frio.", "Faz o conjunto do Eclipse (bancada, como o ferro)."),
+    // 3.8: o Mundo das Almas
+    ESSENCIA_ETEREA("Essência Etérea", Material.CLAY_BALL, 0x7FD8E8,
+            "Névoa que não se desfaz na mão. Pesa menos que nada.", "Faz o conjunto Etéreo (bancada, como o ferro)."),
+    ALMA_PENADA("Alma Penada", Material.GHAST_TEAR, 0xB0E0EA,
+            "Uma alma perdida, presa na luz da lanterna.", "Paga a travessia do Barqueiro (3 por viagem)."),
 
     // 2.84: o Altar da Convergência
     ALMA_DESPERTA("Alma Desperta", Material.FIREWORK_STAR, 0xB388FF,

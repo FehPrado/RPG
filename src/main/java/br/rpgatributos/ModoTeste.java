@@ -380,6 +380,8 @@ public final class ModoTeste implements Listener {
 
     /** Devolve tudo do arquivo. {@code levar}: volta também para onde estava. */
     private void restaurar(Player p, boolean levar) {
+        // 3.7: alma fora do corpo no teste: o corpo (de teste) some antes; o teste devolve o resto.
+        if (plugin.almas() != null) plugin.almas().esquecer(p);
         File f = arquivo(p);
         YamlConfiguration y = YamlConfiguration.loadConfiguration(f);
         try {

@@ -55,7 +55,9 @@ public final class Dimensoes implements Listener {
         LUA_ESCURA("lua_escura", "A Lua Escura", 0x6A6A8A, "Nem as estrelas brilham aqui. Algo enxerga você.", true),
         LUA_VERMELHA("lua_vermelha", "A Lua Vermelha", 0xE53935, "A poeira tem cor de sangue, e o céu também.", true),
         LUA_CRISTAL("lua_cristal", "A Lua de Cristal", 0x64B5F6, "O chão canta quando você pisa.", true),
-        LUA_SOMBRIA("lua_sombria", "A Lua Sombria", 0x8E24AA, "Ela só abre no eclipse. E fecha logo.", true);
+        LUA_SOMBRIA("lua_sombria", "A Lua Sombria", 0x8E24AA, "Ela só abre no eclipse. E fecha logo.", true),
+        // 3.7: o Mundo das Almas (só se chega pelo ritual; veja Almas)
+        ALMAS("almas", "O Mundo das Almas", 0x7FD8E8, "Tudo é cinza e silencioso. Os Antigos chegaram aqui antes de você.", false);
 
         final String id, nome, frase;
         final TextColor cor;
@@ -90,7 +92,10 @@ public final class Dimensoes implements Listener {
             "abismo_floresta", "2. Floresta Pendurada",
             "abismo_cristal", "3. Campos de Cristal",
             "abismo_fungos", "4. Mar de Fungos",
-            "abismo_fundo", "5. O Fundo");
+            "abismo_fundo", "5. O Fundo",
+            "almas_margem", "A Margem",
+            "almas_campos", "Campos de Lembranças",
+            "almas_ruinas", "Ruínas dos Antigos");
 
     private static final int BORDA = 5000;
     private final RPGAtributos plugin;
@@ -144,6 +149,13 @@ public final class Dimensoes implements Listener {
         if (!ativa(d)) return d.nome + " está fechado neste servidor.";
         World w = mundo(d);
         if (w == null) return d.nome + " ainda não existe: o servidor precisa reiniciar uma vez (datapack novo).";
+        if (d == Dimensao.ALMAS) {
+            // Admin: o ritual direto (sem punhal); a lanterna vem junto.
+            String erro = plugin.almas().podeSacrificar(p);
+            if (erro != null) return erro;
+            plugin.almas().sacrificar(p);
+            return null;
+        }
         if (de(p.getWorld()) == null) guardarVolta(p);
         if (d.lua()) {
             // Admin (de verdade, só se chega de foguete): direto num chão firme da lua.
@@ -281,7 +293,7 @@ public final class Dimensoes implements Listener {
             String bioma = p.getWorld().getBiome(p.getLocation()).getKey().getKey();
             String camada = CAMADAS.get(bioma);
             if (camada != null && !camada.equals(camadaAtual.put(p.getUniqueId(), camada))) {
-                p.sendActionBar(Component.text("⬇ " + camada, d.cor, TextDecoration.BOLD));
+                p.sendActionBar(Component.text((d == Dimensao.ABISMO ? "⬇ " : "✦ ") + camada, d.cor, TextDecoration.BOLD));
                 p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 0.6f, 0.6f);
             }
             // O Rasgo: partículas e a volta (agachado em cima por 2 s).

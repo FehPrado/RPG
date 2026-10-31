@@ -645,3 +645,9 @@ dimensoes:
     ativa: true
   lua_sombria:
     ativa: true
+  almas:
+    ativa: true
+
+# 3.7: o Mundo das Almas (ritual: Lanterna das Almas na mão esquerda + Punhal do Sacrifício na direita, agachado).
+almas:
+  minutos-de-chama: 15                # quanto tempo a alma fica lá antes de ser puxada de volta (sem os achados)

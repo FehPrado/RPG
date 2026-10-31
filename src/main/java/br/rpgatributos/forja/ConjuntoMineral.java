@@ -99,7 +99,11 @@ public enum ConjuntoMineral implements ArteTrajes.Paleta {
             "Pressa I.", "Pressa II e Sorte I.", null),
     ECLIPSE("Eclipse", Raro.FRAGMENTO_ECLIPSE, 0x8E24AA, Traje.Estilo.PLACAS,
             0xFF4A0A6E, 0xFFCE93D8, 0xFF14001E, 0xFFFFD27F, 0xFFE1BEE7,
-            "Murchidão não pega em você.", "Força I e Velocidade I à noite e no eclipse.", null);
+            "Murchidão não pega em você.", "Força I e Velocidade I à noite e no eclipse.", null),
+    // 3.8: o mineral do Mundo das Almas.
+    ETEREO("Etéreo", Raro.ESSENCIA_ETEREA, 0x7FD8E8, Traje.Estilo.ESCAMAS,
+            0xFF9AA6B4, 0xFFE0F8FF, 0xFF3A4450, 0xFF7FD8E8, 0xFFB0F0FF,
+            "Agachado no ar, você cai devagar.", "Uma vez a cada 10 minutos, um golpe que mataria deixa você com 1 coração.", null);
 
     /** As 9 peças, cada uma com a base de ferro do jogo. */
     public enum Peca {

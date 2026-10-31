@@ -564,6 +564,16 @@ public final class Topicos {
                         "A Lua Sombria fecha 10 minutos depois que você chega: quem ficar volta à força.")
                 .dica("Na lua, a queda de até 10 blocos não machuca: pule à vontade.")
                 .ligados("abismo", "achados").palavras("foguete lua prateada escura vermelha cristal sombria eclipse sangue azul nova lancar pousar voltar capacete lunar ar oxigenio gravidade prata onix rubi celeste fragmento colonia astronauta viajante").pronto();
+        t("almas", MUNDO, "O Mundo das Almas", Material.SOUL_LANTERN)
+                .texto("Lanterna das Almas (lanterna das almas e 4 areias das almas em cruz) na mão esquerda e Punhal do Sacrifício (Quartzo Negro, lingote de ferro e graveto, em coluna) na direita. Agache e clique: o ritual.",
+                        "O corpo fica deitado onde você estava, com tudo o que você carrega. A alma chega sem nada, só com a lanterna.",
+                        "Lá a alma corre e pula mais, não sente fome e não constrói nem quebra. A chama da lanterna dura 15 minutos.",
+                        "Para voltar: agache e clique com a lanterna. Você traz o que achou. Se a chama apagar ou você morrer lá, volta sem os achados.",
+                        "Você chega num cais. Clique nas Almas Penadas com a lanterna para recolher; com 3, o Barqueiro leva até a Cidade dos Antigos.",
+                        "Na cidade: o Diário XI a XIV nos atris, baús com a Lâmina e o Manto Espectral, e o sino do Tribunal, que acorda o Juiz. Vencido, a Ilen entrega o capítulo XV.",
+                        "Essência Etérea (das criaturas, das almas e do Juiz) faz o conjunto Etéreo: cair devagar e, com 4 peças, sobreviver a um golpe mortal a cada 10 minutos.")
+                .dica("Ninguém fica preso: se o servidor cair ou você sair do jogo, o corpo e tudo dele voltam.")
+                .ligados("luas", "abismo").palavras("almas mundo lanterna punhal sacrificio ritual corpo alma chama morte espirito barqueiro antigos penada cidade juiz sino ilen tribunal eterea etereo espectral lamina manto cais").pronto();
         t("abismo", MUNDO, "O Abismo", Material.CRYING_OBSIDIAN)
                 .texto("Uma dimensão nova: um planalto cortado por rachaduras com mais de 1.100 blocos de queda, em 5 camadas (Borda dos Ventos, Floresta Pendurada, Campos de Cristal, Mar de Fungos e O Fundo).",
                         "Entrada: pule numa Fenda do Abismo, uma rachadura rara no mundo normal com ametista e obsidiana chorona. A queda não machuca.",

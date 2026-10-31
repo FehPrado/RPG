@@ -43,6 +43,8 @@ public final class EquipamentoMineral implements Listener {
 
     private final RPGAtributos plugin;
     private int segundos;
+    /** 3.8: quando cada um pode ser salvo de novo pelo conjunto Etéreo (4 peças). */
+    private final Map<java.util.UUID, Long> salvoEtereo = new java.util.HashMap<>();
 
     public EquipamentoMineral(RPGAtributos plugin) {
         this.plugin = plugin;
@@ -107,7 +109,26 @@ public final class EquipamentoMineral implements Listener {
                 efeito(p, PotionEffectType.STRENGTH, 0);
                 efeito(p, PotionEffectType.SPEED, 0);
             }
+            // 3.8: o conjunto do Mundo das Almas.
+            if (pecas(v, ConjuntoMineral.ETEREO) >= 2 && p.isSneaking() && !p.isOnGround() && !p.isFlying() && p.getVelocity().getY() < 0)
+                efeito(p, PotionEffectType.SLOW_FALLING, 0);
         }
+    }
+
+    /** 3.8: Etéreo (4): um golpe que mataria deixa com 1 coração, uma vez a cada 10 minutos. */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void aoQuaseMorrer(EntityDamageEvent e) {
+        if (!plugin.settings().conjuntosMinerais || !(e.getEntity() instanceof Player p)) return;
+        if (e.getFinalDamage() < p.getHealth() || pecas(vestidos(p), ConjuntoMineral.ETEREO) < 4) return;
+        long agora = System.currentTimeMillis();
+        if (salvoEtereo.getOrDefault(p.getUniqueId(), 0L) > agora) return;
+        salvoEtereo.put(p.getUniqueId(), agora + 10 * 60_000L);
+        e.setCancelled(true);
+        p.setHealth(Math.min(p.getHealth(), 2));
+        p.setNoDamageTicks(40);
+        p.getWorld().spawnParticle(Particle.SOUL, p.getLocation().add(0, 1, 0), 40, 0.4, 0.8, 0.4, 0.05);
+        p.playSound(p.getLocation(), org.bukkit.Sound.PARTICLE_SOUL_ESCAPE, 1.5f, 0.8f);
+        p.sendActionBar(net.kyori.adventure.text.Component.text("✦ A névoa do conjunto Etéreo segurou a sua alma.", net.kyori.adventure.text.format.TextColor.color(0x7FD8E8)));
     }
 
     private static void efeito(Player p, PotionEffectType t, int nivel) {

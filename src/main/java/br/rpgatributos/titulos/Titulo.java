@@ -196,7 +196,13 @@ public enum Titulo {
     // ---------------- 3.5: as Luas ----------------
     ASTRONAUTA("Astronauta", 0xD8DCE8, Requisito.contador("pousos_lua", 1, "Pousar numa lua com o Foguete dos Antigos"), Bonus.xpTudo(0.03)),
     VIAJANTE_DAS_LUAS("Viajante das Luas", 0x8E24AA, Requisito.contador("luas_visitadas", 5, "Pousar nas cinco luas"), new Bonus().comDano(1).comVida(2)),
-    GARIMPEIRO_LUNAR("Garimpeiro Lunar", 0x64B5F6, Requisito.contador("minerais_lua", 40, "Minerar 40 minerais das luas"), Bonus.armadura(1));
+    GARIMPEIRO_LUNAR("Garimpeiro Lunar", 0x64B5F6, Requisito.contador("minerais_lua", 40, "Minerar 40 minerais das luas"), Bonus.armadura(1)),
+    // 3.7: o Mundo das Almas
+    VIAJANTE_DAS_ALMAS("Viajante das Almas", 0x7FD8E8, Requisito.contador("viagens_almas", 1, "Deixar o corpo com a Lanterna das Almas e o Punhal do Sacrifício"), Bonus.xpTudo(0.03)),
+    // 3.8: o Mundo das Almas por dentro
+    COLETOR_DE_ALMAS("Coletor de Almas", 0xB0E0EA, Requisito.contador("almas_coletadas", 30, "Recolher 30 Almas Penadas com a lanterna"), Bonus.armadura(1)),
+    JUIZ_JULGADO("Juiz Julgado", 0xC9B458, Requisito.contador("juiz_julgado", 1, "Quebrar a balança do Juiz no Mundo das Almas"), new Bonus().comDano(1).comVida(2)),
+    LEITOR_DO_FIM("Leitor do Fim", 0xC77A3A, Requisito.contador("diario_fim", 5, "Ler os capítulos XI a XV do Diário dos Antigos"), Bonus.xpTudo(0.04));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(
