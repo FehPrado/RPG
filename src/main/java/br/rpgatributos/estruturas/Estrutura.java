@@ -128,7 +128,10 @@ public enum Estrutura {
     ANTIGOS_REFUGIO("Refúgio dos que Caíram", "o", 0x3AB0A0, "Eles não quiseram subir nunca mais.",
             0, 8, 0, 0, b -> true),
     ANTIGOS_HANGAR("Hangar dos Antigos", "o", 0x5A5A7E, "Aqui eles ligaram o motor. E algo acordou.",
-            0, 9, 0, 0, b -> true);
+            0, 9, 0, 0, b -> true),
+    // ---------------- 3.5: as Luas ----------------
+    COLONIA_LUNAR("Colônia Lunar dos Antigos", "a", 0xD8DCE8, "Uma cúpula de vidro rachada. Alguém morou aqui.",
+            0, 7, 0, 0, b -> true);
 
     private final String nome, artigo, frase;
     private final TextColor cor;

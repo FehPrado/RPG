@@ -717,7 +717,7 @@ public final class Estruturas implements Listener {
         plugin.diario().marco(p, "estrutura_" + s.tipo.id(), "Encontrou " + s.tipo.comArtigoIndefinido());
         plugin.titulos().registrar(p, "estruturas", 1);
         if (s.tipo.marAberto()) marAberto.descobriu(p, s);
-        if (s.tipo.name().startsWith("ANTIGOS_")) plugin.titulos().registrar(p, "ruinas_antigos", 1);
+        if (s.tipo.name().startsWith("ANTIGOS_") || s.tipo == Estrutura.COLONIA_LUNAR) plugin.titulos().registrar(p, "ruinas_antigos", 1);
         if (s.tipo == Estrutura.SANTUARIO_ESQUECIDO && s.deus != null) {
             p.sendMessage(Component.text(s.deus.simbolo() + " Um santuário antigo de " + s.deus.nome() + ", " + s.deus.titulo()
                     + ". Leia a inscrição no púlpito.", s.deus.cor()));

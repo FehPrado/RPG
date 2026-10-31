@@ -1,0 +1,19 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": { "default": { "max_delay": 18000, "min_delay": 6000, "sound": "minecraft:music.overworld.dripstone_caves" } },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": { "spawn_costs": {}, "spawns_by_category": { "ambient": [], "axolotls": [], "creature": [], "misc": [], "monster": [], "underground_water_creature": [], "water_ambient": [], "water_creature": [] } },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": { "argument": [ { "particle": { "type": "minecraft:end_rod" }, "probability": 0.004 } ], "modifier": "append" },
+    "minecraft:visual/fog_color": "#2a4a7a",
+    "minecraft:visual/sky_color": "#0a1a3a",
+    "minecraft:visual/star_brightness": 1.0
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": { "water_color": "#3a3a4a" },
+  "features": [ [], [], [ "rpgatributos:lua/geodos_cristal" ], [], [], [], [], [], [], [], [] ],
+  "has_precipitation": false,
+  "temperature": 0.3
+}

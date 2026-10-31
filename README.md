@@ -23,6 +23,7 @@ Plugin para **Paper 26.3** (Minecraft 26.3, Java 25) que transforma o servidor n
 - **achados pelo caminho (3.2)**: 8 estruturas pequenas geradas com o mundo (acampamento de caçadores, estátua quebrada, arco antigo, santuário do rio, cadafalso, cripta do poço, caravana perdida e sítio de escavação), com **escavação** que dá relíquias, tomos, páginas e cartas do RPG;
 - **telas de conversa (3.2)**: menu do RPG na tecla de Ações Rápidas e no menu de pausa, e NPCs (náufrago, Cronista, mensageiro) conversando numa janela com botões;
 - **o Abismo (3.3–3.4)**: a primeira dimensão, com mais de 1.100 blocos de queda em 5 camadas, entrada pela Fenda do Abismo (ou pela sua própria cratera, com a Carga Abissal), ruínas dos Antigos com o Diário e as peças do foguete, 4 minerais com conjuntos de armadura e o Vigia do Fundo;
+- **o Foguete e as cinco Luas (3.5–3.6)**: as cinco peças do Abismo montam o Foguete dos Antigos, que pousa na lua do céu da hora (Prateada, Escura na lua nova, Vermelha na Lua de Sangue, de Cristal na Lua Azul, Sombria no eclipse), com gravidade baixa, sem ar, um mineral e um conjunto em cada uma e o fim da história dos Antigos;
 - **progressão extra**: **talentos** em 4 árvores, **renascer** com bônus permanente (até ★★★★★) e **evolução dos companheiros** (Lobo → Lobo Alfa → Lobo das Sombras);
 - **detalhes do dia a dia**: barco, carrinho, vara, élitro e armadura de cavalo forjados, Boneco de Treino, Pedra de Amolar, Fogueira de Acampamento (sentar e descansar), Bebedouro, troféus de chefe, túmulo ao morrer, animais raros, ninhos, recordes e o Diário de Viagem;
 - **vida no mundo**: Barril de Envelhecimento, apicultura, Canteiro de Ervas, Álbum de Cartas com Duelo de Cartas (contra moradores e jogadores), Mercador Itinerante, encontros na estrada, segredos, flechas especiais e frascos de arremesso;
@@ -2059,6 +2060,43 @@ Títulos: **Minerador do Abismo** (40 minerais do Abismo), **Herdeiro dos Antigo
 Admin: `/rpgadmin dimensao itens` (as 5 peças, uma Carga Abissal e 16 de cada mineral), `/rpgadmin dimensao ruina <posto|elevador|laboratorio|refugio|hangar>` (constrói no seu chunk, perto da sua altura; o hangar só no chão do Fundo).
 
 
+## O Foguete e a Lua Prateada (3.5)
+
+**O Foguete dos Antigos:** junte as cinco peças do Abismo (Planta, Casco, Núcleo de Navegação, Tanque e Motor) em qualquer lugar da bancada. Clique com ele no chão, a céu aberto: o foguete fica de pé (cobre, 3 × 3 e 10 de altura). Clique nele para abrir o menu:
+- **Lançar:** contagem de 5 segundos com fumaça, e ele decola (os blocos sobem 70 blocos em fogo e somem no céu). Você sobe junto e pousa na lua.
+- **Recolher:** ele volta para a mochila.
+
+Na lua, o foguete fica pousado ao seu lado; clique nele e escolha **Voltar para casa**: ele pousa de novo na plataforma de onde saiu. Quem estiver a até **6 blocos** do foguete vai junto (na ida e na volta). Cada jogador pode ter **quantos foguetes quiser**: quem morre na lua deixa o foguete lá pousado (a mensagem diz onde) e pode fazer outro para ir buscá-lo; na lua dá para recolher o foguete também. Se a plataforma de casa foi ocupada ou não existe mais, ele pousa no lugar livre mais perto (ou no mundo principal); nunca pousa por cima de construção. Ninguém o quebra (nem explosão).
+
+**A Lua Prateada:** céu preto com estrelas e **noite sem fim**, chão de regolito cinza com crateras, borda de 5 mil blocos. Nas outras horas o Núcleo aponta para outras luas (veja abaixo).
+- **Gravidade baixa:** pulo alto, queda lenta e sem dano de até 10 blocos (volta ao normal fora da lua).
+- **Sem ar:** sem o **Capacete Lunar** você tem 30 segundos de fôlego (a barra de ar aparece) e depois perde 2 de vida por segundo. O Capacete (bancada: vidro, Cristal Abissal e vidro em cima; vidro dos lados embaixo, no formato do capacete) respira por você e dá 2 de armadura.
+- **Criaturas:** Vagantes Lunares (esqueletos errantes) e bandos de Ácaros de Poeira, também com gravidade baixa.
+- **Prata Lunar:** o mineral da lua. Faz o conjunto **Lunar** na bancada: com 2 peças, +25% de dano em mortos-vivos; com 4, Salto II e +50% em mortos-vivos e em lobisomens transformados.
+- **Colônia Lunar dos Antigos:** cúpulas de vidro rachadas com o capítulo VI do Diário (as outras luas), Prata Lunar e às vezes um Capacete.
+- Morrer na lua: renasce em casa e os itens ficam num túmulo lá em cima. Título **Astronauta** ao pousar.
+
+Admin: `/rpgadmin dimensao foguete` (foguete, capacete e Prata Lunar), `/rpgadmin dimensao lua_prateada` (vai direto, sem foguete), `/rpgadmin dimensao colonia` (constrói uma cúpula no seu chunk, na lua), `/rpgadmin dimensao foguetes [jogador]` (onde estão os foguetes de alguém) e `/rpgadmin dimensao foguetes recolher [jogador]` (desmonta todos e entrega os itens). Foguetes lançados da área de testes continuam no teste: a lua conta como parte dela até você voltar. No config, `dimensoes.lua_prateada.ativa: false` fecha a viagem.
+
+### As cinco luas (3.6)
+
+O **Núcleo de Navegação** escolhe a lua pelo céu do mundo principal na hora do lançamento (o menu do foguete mostra qual):
+
+| Lua | Quando | Como é | Criaturas | Mineral → conjunto (2 peças / 4 peças) |
+|---|---|---|---|---|
+| **Prateada** | nas outras horas | Regolito cinza, crateras | Vagantes Lunares, Ácaros de Poeira | Prata Lunar → **Lunar** (+25% em mortos-vivos / Salto II e +50% em mortos-vivos e lobisomens) |
+| **Escura** | noite de **lua nova** | Chão negro, sem estrelas | **Sombras Famintas** (endermen) | Ônix Estelar → **Estelar** (Visão Noturna / invisível agachado e parado) |
+| **Vermelha** | **Lua de Sangue** | Areia vermelha, céu de sangue | **Sanguessugas** (aos pares) | Rubi Sanguíneo → **Sanguíneo** (+10% de dano / cada monstro abatido cura 1 coração) |
+| **de Cristal** | **Lua Azul** (ritual) | Chão branco, geodos de ametista | **Sentinelas de Cristal** (shulkers) | Cristal Celeste → **Celeste** (Pressa I / Pressa II e Sorte I) |
+| **Sombria** | **eclipse** | Roxa e preta, com o chão de obsidiana | **Cavaleiros do Eclipse** e Ecos | Fragmento de Eclipse → **Eclipse** (sem Murchidão / Força I e Velocidade I à noite e no eclipse) |
+
+**A Lua Sombria fecha 10 minutos depois que você chega** (com avisos a cada minuto e nos últimos 10 segundos): quem ainda estiver lá volta à força, no foguete.
+
+Cada lua tem as suas **Colônias** com um capítulo do Diário (VII a X: o fim da história da Ilen, que aponta para o Mundo das Almas) e o mineral dela no baú. Títulos: **Viajante das Luas** (pousar nas cinco) e **Garimpeiro Lunar** (40 minerais das luas).
+
+Admin: `/rpgadmin dimensao <lua_escura|lua_vermelha|lua_cristal|lua_sombria>` vai direto; `dimensoes.<lua>.ativa: false` fecha cada viagem.
+
+
 ## Pesca
 
 Pescar dá XP de Pesca. Com o nível sobem a velocidade da isca, a chance de vir 2 peixes e a qualidade (★ a ★★★) dos peixes, que melhora pratos e elixires. Sorte do Mar na vara também ajuda.
@@ -2504,7 +2542,7 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 
 ## Títulos
 
-`/titulos`: 140 títulos com requisitos (em páginas), por exemplo Minerador do Abismo, Herdeiro dos Antigos, Silenciador do Vigia, Amigo das Raízes, Quebra-Colosso, Regicida da Montanha, Caçador de Dragões, Campeão do Coliseu, Algoz do Rei Caído, Terror dos Piratas, Caçador de Kraken, Despertador de Ilhas, Exorcista do Mar, Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
+`/titulos`: 143 títulos com requisitos (em páginas), por exemplo Viajante das Luas, Garimpeiro Lunar, Astronauta, Minerador do Abismo, Herdeiro dos Antigos, Silenciador do Vigia, Amigo das Raízes, Quebra-Colosso, Regicida da Montanha, Caçador de Dragões, Campeão do Coliseu, Algoz do Rei Caído, Terror dos Piratas, Caçador de Kraken, Despertador de Ilhas, Exorcista do Mar, Sangue de Dragão, Alfa da Lua, Andarilho do Véu, Grande Inventor, Mestre do Arsenal, Sombra das Lâminas, Ceifador, Criador de Linhagens, Pescador de Troféus, Duelista, Campeão das Vilas, Rival de Mesa, Abridor de Pacotes, Curador do Álbum, Geólogo, Coração de Cristal, Garimpeiro do Rio, Confidente, Domador de Lendas, Espanta-Nian, Irmãos de Armas, Algoz das Marés, Coração do Mar, Pescador do Gelo, Mestre Curtidor, Sonhador, Coletor da Estação, Lavrador das Estações, Andarilho das Ruínas, Desejoso, Pomicultor, Colecionador de Cartas, Guardião de Segredos, Mestre Cervejeiro, Apicultor, Bom Samaritano, Colecionador de Troféus, Caçador de Raridades, Eterno, Renascido, Mestre dos Talentos, Vínculo Eterno, Cronista, Cartógrafo, Arqueólogo, Mineiro das Profundezas, Devoto, Astrônomo, Mestre Rúnico, Mestre da Lâmina, Arsenal Vivo, Mestre dos Combos, Finalizador, Minerador, Nadador, Pescador, Alquimista, Lenda dos Mares, Caçador de Tesouros, Lapidário, Fazendeiro, Chef, Domador, Grão-Mestre, Ferreiro Lendário, Reciclador, Botânico, Mestre-Cuca, Senhor das Feras, Arquimago, Mata-Gigantes, Fim dos Tempos, Explorador de Masmorras, Senhor das Masmorras, Desperto, Mestre de Armas, Portador de Lenda, Desbravador, Herdeiro Lendário, Viajante, Herói do Povo, Companheiro, Fundador, Senhor das Terras...
 - **Só o título em uso dá bônus** (+vida, +dano, +mana, +XP...).
 - O título aparece acima da cabeça.
 - Os mais difíceis são anunciados para o servidor todo.
@@ -2648,6 +2686,8 @@ Validação automatizada cobre geração dos modelos, referências de texturas, 
 | `/rpgadmin festival` | Hoje vira dia de festival |
 | `/rpgadmin clima <evento>` | Começa um evento de clima |
 | `/rpgadmin ceu <luadesangue|meteoros|eclipse|aurora>` | Começa um evento do céu |
+| `/rpgadmin titulo tirar <id|todos> [jogador]` | **3.6:** para testar: tira um título (como `astronauta`) ou todos e zera o contador dele; os de nível de atributo voltam enquanto o nível continuar alto |
+| `/rpgadmin dimensao foguetes [recolher] [jogador]` | **3.6.1:** mostra onde estão os foguetes de alguém; com `recolher`, desmonta todos (onde estiverem, até na lua) e entrega os itens para você |
 | `/rpgadmin maldicao <jogador> <tipo|nenhuma>` | Dá ou tira uma maldição |
 | `/rpgadmin portal <dificuldade> [eco]` | Abre um portal 4 blocos à sua frente (`eco` = com o Eco do Soberano) |
 | `/rpgadmin portalsortear` | Sorteia um portal perto de alguém agora |
@@ -2754,7 +2794,7 @@ Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, 
 
 1. Instale o **Java 25** (JDK, ex.: Adoptium Temurin) e o **Maven**.
 2. Rode `mvn package` nesta pasta (também roda os testes de `src/test`).
-3. O plugin fica em `target/RPGAtributos-3.4.0.jar`.
+3. O plugin fica em `target/RPGAtributos-3.6.0.jar`.
 
 Outra opção é subir a pasta no GitHub: a aba **Actions** compila sozinha (o jar fica como artefato da execução). O jar de cada versão também fica na raiz do repositório (ex.: `RPGAtributos-2.51.0.jar`). Para publicar uma versão, crie uma tag (`git tag v2.51.0 && git push origin v2.51.0`) e o jar aparece em **Releases**.
 

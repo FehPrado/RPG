@@ -164,6 +164,7 @@ public final class Sonhos implements Listener {
             case ANTIGOS_LABORATORIO -> "Cristais roxos sussurrando numa sala branca, e um aro de cobre girando sozinho.";
             case ANTIGOS_REFUGIO -> "Uma fogueira azul entre cogumelos gigantes, e gente que não queria mais subir.";
             case ANTIGOS_HANGAR -> "Um motor enorme no fundo de tudo, e algo cego que ouvia cada passo seu.";
+            case COLONIA_LUNAR -> "Uma cúpula de vidro sob um céu preto cheio de estrelas, e poeira subindo devagar.";
         };
     }
 

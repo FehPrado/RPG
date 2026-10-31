@@ -170,6 +170,30 @@ public final class Titulos implements Listener {
         p.getPersistentDataContainer().set(kDesbloqueados, PersistentDataType.STRING, j.toString());
     }
 
+    /**
+     * Admin (para testar): tira um título (ou todos, com null) e zera o contador que ele usa, para ele
+     * não voltar sozinho. Títulos de nível de atributo voltam enquanto o nível continuar alto.
+     * @return quantos títulos saíram
+     */
+    public int tirar(Player p, Titulo t) {
+        Set<Titulo> s = desbloqueados(p);
+        Map<String, Integer> m = contadores(p);
+        int antes = s.size();
+        if (t == null) {
+            s.clear();
+            m.clear();
+        } else {
+            s.remove(t);
+            if (t.requisito().contador() != null) m.remove(t.requisito().contador());
+        }
+        salvarDesbloqueados(p, s);
+        salvarContadores(p, m);
+        Titulo a = ativo(p);
+        if (a != null && !s.contains(a)) usar(p, null);
+        else aplicarBonus(p);
+        return antes - s.size();
+    }
+
     public boolean cumpre(Player p, Titulo t) {
         Titulo.Requisito r = t.requisito();
         StatsManager st = plugin.stats();

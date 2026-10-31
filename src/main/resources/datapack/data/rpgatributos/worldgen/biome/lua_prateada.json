@@ -1,0 +1,18 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": { "default": { "max_delay": 18000, "min_delay": 6000, "sound": "minecraft:music.end" } },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": { "spawn_costs": {}, "spawns_by_category": { "ambient": [], "axolotls": [], "creature": [], "misc": [], "monster": [], "underground_water_creature": [], "water_ambient": [], "water_creature": [] } },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": { "argument": [ { "particle": { "type": "minecraft:white_ash" }, "probability": 0.004 } ], "modifier": "append" },
+    "minecraft:visual/fog_color": "#0a0a12",
+    "minecraft:visual/sky_color": "#000000"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": { "water_color": "#3a3a4a" },
+  "features": [ [], [], [ "rpgatributos:lua/geodos" ], [], [], [], [], [], [], [], [] ],
+  "has_precipitation": false,
+  "temperature": 0.3
+}

@@ -1,0 +1,49 @@
+{
+  "default_block": "minecraft:andesite",
+  "default_fluid": "minecraft:water",
+  "disable_mob_generation": false,
+  "legacy_random_source": false,
+  "material_rule": "rpgatributos:lua",
+  "noise": { "height": 256, "min_y": 0 },
+  "noise_router": {
+    "chunk_surface_level": 0.0,
+    "continents": 0.0,
+    "depth": 0.0,
+    "erosion": 0.0,
+    "ridges": 0.0,
+    "temperature": 0.0,
+    "vegetation": 0.0,
+    "final_density": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:interpolated",
+        "cell_size_xz": 4,
+        "cell_size_y": 4,
+        "input": {
+          "type": "minecraft:min",
+          "left": {
+            "type": "minecraft:sub",
+            "left": {
+              "type": "minecraft:add",
+              "left": { "type": "minecraft:gradient", "axis": "y", "from_coordinate": 60, "from_value": 1.0, "to_coordinate": 100, "to_value": -1.0 },
+              "right": { "type": "minecraft:mul", "left": { "type": "minecraft:noise", "noise": "rpgatributos:lua/relevo", "xz_scale": 1.0, "y_scale": 0.0 }, "right": 0.3 }
+            },
+            "right": {
+              "type": "minecraft:mul",
+              "left": { "type": "minecraft:max", "left": 0.0, "right": { "type": "minecraft:sub", "left": { "type": "minecraft:abs", "input": { "type": "minecraft:noise", "noise": "rpgatributos:lua/crateras", "xz_scale": 1.0, "y_scale": 0.0 } }, "right": 0.35 } },
+              "right": 2.6
+            }
+          },
+          "right": {
+            "type": "minecraft:sub",
+            "left": 0.55,
+            "right": { "type": "minecraft:noise", "noise": "rpgatributos:lua/cavernas", "xz_scale": 1.0, "y_scale": 1.0 }
+          }
+        }
+      },
+      "right": { "type": "minecraft:beardifier" }
+    }
+  },
+  "sea_level": 0,
+  "spawn_target": []
+}

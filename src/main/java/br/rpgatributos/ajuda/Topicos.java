@@ -554,6 +554,16 @@ public final class Topicos {
                         "Coliseu: lute contra os spawners de desafio da arena, pegue a chave e abra o cofre do camarote. Castelo do Rei Caído: cavaleiros no pátio e o rei no trono.")
                 .dica("Cada uma dá um título: Amigo das Raízes, Quebra-Colosso, Regicida da Montanha, Caçador de Dragões, Campeão do Coliseu e Algoz do Rei Caído.")
                 .ligados("estruturas", "titulos").palavras("arvore mundo colosso caido cidade ana anao ossada dragao coliseu arena castelo rei caido escavacao pincel trono chefe gigante").pronto();
+        t("luas", MUNDO, "O Foguete e as Luas", Material.FIREWORK_ROCKET)
+                .texto("Junte as cinco peças do Abismo (Planta, Casco, Núcleo, Tanque e Motor) na bancada: sai o Foguete dos Antigos. Clique no chão a céu aberto e ele fica de pé.",
+                        "Clique no foguete: Lançar (contagem, decolagem e pouso na lua) ou Recolher. Na lua, clique de novo: Voltar para casa. Quem estiver a até 6 blocos vai junto.",
+                        "Pode ter quantos foguetes quiser. Morreu na lua? O foguete fica lá esperando: faça outro e vá buscá-lo.",
+                        "Na Lua Prateada a gravidade é baixa e não há ar: sem o Capacete Lunar (vidro e Cristal Abissal, formato de capacete) o fôlego dura 30 segundos.",
+                        "Prata Lunar faz o conjunto Lunar (forte contra mortos-vivos). As Colônias Lunares dos Antigos guardam o capítulo VI do Diário.",
+                        "O foguete vai para a lua do céu da hora: Escura na lua nova, Vermelha na Lua de Sangue, de Cristal na Lua Azul e Sombria no eclipse; no resto, a Prateada. Cada uma tem um mineral, um conjunto e as suas criaturas.",
+                        "A Lua Sombria fecha 10 minutos depois que você chega: quem ficar volta à força.")
+                .dica("Na lua, a queda de até 10 blocos não machuca: pule à vontade.")
+                .ligados("abismo", "achados").palavras("foguete lua prateada escura vermelha cristal sombria eclipse sangue azul nova lancar pousar voltar capacete lunar ar oxigenio gravidade prata onix rubi celeste fragmento colonia astronauta viajante").pronto();
         t("abismo", MUNDO, "O Abismo", Material.CRYING_OBSIDIAN)
                 .texto("Uma dimensão nova: um planalto cortado por rachaduras com mais de 1.100 blocos de queda, em 5 camadas (Borda dos Ventos, Floresta Pendurada, Campos de Cristal, Mar de Fungos e O Fundo).",
                         "Entrada: pule numa Fenda do Abismo, uma rachadura rara no mundo normal com ametista e obsidiana chorona. A queda não machuca.",

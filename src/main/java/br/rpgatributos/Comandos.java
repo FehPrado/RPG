@@ -468,6 +468,24 @@ public final class Comandos implements TabExecutor {
                 }
                 return;
             }
+            case "titulo" -> {
+                // /rpgadmin titulo tirar <id|todos> [jogador]
+                if (args.length < 3 || !args[1].equalsIgnoreCase("tirar")) {
+                    erro(sender, "Use: /rpgadmin titulo tirar <id do título|todos> [jogador]  (ex.: astronauta, viajante_das_luas)");
+                    return;
+                }
+                Player alvo = args.length >= 4 ? Bukkit.getPlayerExact(args[3]) : sender instanceof Player pp ? pp : null;
+                if (alvo == null) { erro(sender, "Jogador não encontrado."); return; }
+                br.rpgatributos.titulos.Titulo t = null;
+                if (!args[2].equalsIgnoreCase("todos")) {
+                    t = br.rpgatributos.titulos.Titulo.porNome(args[2].toUpperCase(java.util.Locale.ROOT));
+                    if (t == null) { erro(sender, "Título não encontrado: " + args[2] + " (use o nome em letras, como astronauta)."); return; }
+                }
+                int n = plugin.titulos().tirar(alvo, t);
+                ok(sender, (t == null ? "Todos os títulos" : "O título " + t.name().toLowerCase(java.util.Locale.ROOT)) + " saíram de " + alvo.getName()
+                        + " (" + n + " no total) e os contadores foram zerados. Títulos de nível de atributo voltam enquanto o nível continuar alto.");
+                return;
+            }
             case "dimensao" -> {
                 // 3.3: /rpgadmin dimensao [abismo] [ir|sair|info]
                 var dims = plugin.dimensoes();
@@ -488,6 +506,36 @@ public final class Comandos implements TabExecutor {
                     ok(sender, "As 5 peças do foguete, uma Carga Abissal e 16 de cada mineral do Abismo.");
                     return;
                 }
+                if (args[1].equalsIgnoreCase("foguetes")) {
+                    // 3.6.1: /rpgadmin dimensao foguetes [recolher] [jogador]
+                    boolean tirar = args.length >= 3 && args[2].equalsIgnoreCase("recolher");
+                    String nome = args.length >= (tirar ? 4 : 3) ? args[tirar ? 3 : 2] : p.getName();
+                    var dono = Bukkit.getOfflinePlayerIfCached(nome);
+                    if (dono == null) { erro(sender, "Jogador não encontrado: " + nome); return; }
+                    if (tirar) {
+                        int n = plugin.foguetes().recolherTodos(dono.getUniqueId(), p);
+                        ok(sender, n + " foguete(s) de " + nome + " desmontado(s); os itens foram para a sua mochila.");
+                    } else {
+                        var l = plugin.foguetes().onde(dono.getUniqueId());
+                        ok(sender, l.isEmpty() ? nome + " não tem foguete de pé." : "Foguetes de " + nome + ": " + String.join(" | ", l));
+                    }
+                    return;
+                }
+                if (args[1].equalsIgnoreCase("foguete")) {
+                    entregar(p, br.rpgatributos.dimensao.Foguetes.item());
+                    entregar(p, br.rpgatributos.dimensao.Luas.capacete());
+                    entregar(p, br.rpgatributos.aventura.Raro.PRATA_LUNAR.criar(16));
+                    ok(sender, "Foguete dos Antigos, Capacete Lunar e 16 de Prata Lunar.");
+                    return;
+                }
+                if (args[1].equalsIgnoreCase("colonia")) {
+                    var dd = br.rpgatributos.dimensao.Dimensoes.de(p.getWorld());
+                    if (dd == null || !dd.lua()) { erro(sender, "Só numa lua."); return; }
+                    boolean ok2 = plugin.luas().colonia(p.getLocation().getChunk(), new java.util.Random());
+                    if (ok2) ok(sender, "Colônia Lunar construída neste chunk.");
+                    else erro(sender, "O chão aqui é irregular demais para a cúpula.");
+                    return;
+                }
                 if (args[1].equalsIgnoreCase("ruina")) {
                     String e = plugin.antigos().construirAqui(p, args.length >= 3 ? args[2] : "");
                     if (e != null) erro(sender, e);
@@ -495,7 +543,7 @@ public final class Comandos implements TabExecutor {
                     return;
                 }
                 var d = br.rpgatributos.dimensao.Dimensoes.Dimensao.porId(args[1]);
-                if (d == null) { erro(sender, "Use: /rpgadmin dimensao <abismo|sair|info|itens|ruina <posto|elevador|laboratorio|refugio|hangar>>"); return; }
+                if (d == null) { erro(sender, "Use: /rpgadmin dimensao <abismo|lua_prateada|sair|info|itens|foguete|colonia|ruina <posto|elevador|laboratorio|refugio|hangar>>"); return; }
                 String e = dims.entrar(p, d);
                 if (e != null) erro(sender, e);
                 return;
@@ -2315,7 +2363,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "mar", "encanto", "dimensao", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "mar", "encanto", "dimensao", "titulo", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();

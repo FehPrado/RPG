@@ -83,7 +83,14 @@ public final class Mineracao implements Listener {
         COBRE_ANTIGO("Cobre dos Antigos", 23, 0.60, -120, 230, 2, 5),
         CRISTAL_ABISSAL("Cristal Abissal", 25, 0.55, -400, -120, 2, 4),
         ESPORO_FOSSIL("Esporo Fóssil", 27, 0.55, -700, -400, 2, 4),
-        FERRO_NEGRO("Ferro Negro", 29, 0.50, -950, -700, 2, 4);
+        FERRO_NEGRO("Ferro Negro", 29, 0.50, -950, -700, 2, 4),
+        // 3.5: o mineral das Luas
+        PRATA_LUNAR("Prata Lunar", 31, 0.65, 8, 95, 2, 5),
+        // 3.6: um mineral para cada uma das outras luas
+        ONIX_ESTELAR("Ônix Estelar", 35, 0.6, 8, 95, 2, 4),
+        RUBI_SANGUINEO("Rubi Sanguíneo", 37, 0.6, 8, 95, 2, 4),
+        CRISTAL_CELESTE("Cristal Celeste", 39, 0.6, 8, 95, 2, 4),
+        FRAGMENTO_ECLIPSE("Fragmento de Eclipse", 41, 0.7, 8, 95, 2, 4);
 
         final String nome;
         /** Bits do bloco de cogumelo marrom (sempre com a face de baixo: a natureza nunca faz isso). */
@@ -290,6 +297,17 @@ public final class Mineracao implements Listener {
             mineraisDoAbismo(c, r);
             return;
         }
+        // 3.5: a Prata Lunar, nas luas.
+        if (br.rpgatributos.dimensao.Dimensoes.de(w) != null && br.rpgatributos.dimensao.Dimensoes.de(w).lua()) {
+            switch (br.rpgatributos.dimensao.Dimensoes.de(w)) {
+                case LUA_ESCURA -> { if (r.nextDouble() < Tipo.ONIX_ESTELAR.chance) veios(c, r, Tipo.ONIX_ESTELAR, m -> m == Material.BASALT || m == Material.BLACKSTONE || m == Material.TUFF); }
+                case LUA_VERMELHA -> { if (r.nextDouble() < Tipo.RUBI_SANGUINEO.chance) veios(c, r, Tipo.RUBI_SANGUINEO, m -> m == Material.RED_TERRACOTTA || m == Material.RED_SANDSTONE || m == Material.TUFF); }
+                case LUA_CRISTAL -> { if (r.nextDouble() < Tipo.CRISTAL_CELESTE.chance) veios(c, r, Tipo.CRISTAL_CELESTE, m -> m == Material.DIORITE || m == Material.CALCITE || m == Material.TUFF); }
+                case LUA_SOMBRIA -> { if (r.nextDouble() < Tipo.FRAGMENTO_ECLIPSE.chance) veios(c, r, Tipo.FRAGMENTO_ECLIPSE, m -> m == Material.DEEPSLATE || m == Material.OBSIDIAN || m == Material.TUFF); }
+                default -> { if (r.nextDouble() < Tipo.PRATA_LUNAR.chance) veios(c, r, Tipo.PRATA_LUNAR, m -> m == Material.ANDESITE || m == Material.TUFF || m == Material.SMOOTH_STONE); }
+            }
+            return;
+        }
         if (w.getEnvironment() == World.Environment.NETHER) {
             if (r.nextDouble() < Tipo.PEDRA_SANGUE.chance) veios(c, r, Tipo.PEDRA_SANGUE, m -> m == Material.NETHERRACK);
             c.getPersistentDataContainer().set(kNether, PersistentDataType.BYTE, (byte) 1);
@@ -493,6 +511,11 @@ public final class Mineracao implements Listener {
             case CRISTAL_ABISSAL -> { drops.add(Raro.CRISTAL_ABISSAL.criar(1 + extra)); xp = 50; }
             case ESPORO_FOSSIL -> { drops.add(Raro.ESPORO_FOSSIL.criar(1 + extra)); xp = 55; }
             case FERRO_NEGRO -> { drops.add(Raro.FERRO_NEGRO.criar(1 + extra)); xp = 65; }
+            case PRATA_LUNAR -> { drops.add(Raro.PRATA_LUNAR.criar(1 + extra)); xp = 60; }
+            case ONIX_ESTELAR -> { drops.add(Raro.ONIX_ESTELAR.criar(1 + extra)); xp = 70; }
+            case RUBI_SANGUINEO -> { drops.add(Raro.RUBI_SANGUINEO.criar(1 + extra)); xp = 70; }
+            case CRISTAL_CELESTE -> { drops.add(Raro.CRISTAL_CELESTE.criar(1 + extra)); xp = 80; }
+            case FRAGMENTO_ECLIPSE -> { drops.add(Raro.FRAGMENTO_ECLIPSE.criar(1 + extra)); xp = 90; }
             case TURFA -> { drops.add(turfa(2 + r.nextInt(2) + extra)); xp = 8; }
             case PEROLA -> {
                 if (r.nextDouble() < 0.6) drops.add(Raro.PEROLA.criar(1 + extra));
@@ -518,6 +541,7 @@ public final class Mineracao implements Listener {
         if (t != Tipo.CRISTAL_BRUTO && t != Tipo.TURFA) plugin.titulos().registrar(p, "minerais_bioma", 1);
         if (t == Tipo.CRISTAL_DE_MAGMA || t == Tipo.AMBAR_INFERNAL || t == Tipo.QUARTZO_NEGRO) plugin.titulos().registrar(p, "minerais_nether", 1);
         if (t == Tipo.COBRE_ANTIGO || t == Tipo.CRISTAL_ABISSAL || t == Tipo.ESPORO_FOSSIL || t == Tipo.FERRO_NEGRO) plugin.titulos().registrar(p, "minerais_abismo", 1);
+        if (t == Tipo.PRATA_LUNAR || t == Tipo.ONIX_ESTELAR || t == Tipo.RUBI_SANGUINEO || t == Tipo.CRISTAL_CELESTE || t == Tipo.FRAGMENTO_ECLIPSE) plugin.titulos().registrar(p, "minerais_lua", 1);
     }
 
     // =====================================================================
@@ -761,6 +785,11 @@ public final class Mineracao implements Listener {
             case CRISTAL_ABISSAL -> new int[]{0xE6E2DA, 0xD6D2CA, 0xF2EEE8};   // calcita
             case ESPORO_FOSSIL -> new int[]{0x4A4A52, 0x3E3E46, 0x56565E};     // ardósia
             case FERRO_NEGRO -> new int[]{0x2A2530, 0x221E28, 0x343040};       // pedra-negra
+            case PRATA_LUNAR -> new int[]{0x8A8A86, 0x7A7A76, 0x9A9A96};       // andesito
+            case ONIX_ESTELAR -> new int[]{0x2A2A30, 0x1E1E24, 0x36363E};      // basalto
+            case RUBI_SANGUINEO -> new int[]{0x8A3A2A, 0x7A2E20, 0x9A4636};    // terracota vermelha
+            case CRISTAL_CELESTE -> new int[]{0xD8D8D8, 0xC8C8C8, 0xE6E6E6};   // diorito
+            case FRAGMENTO_ECLIPSE -> new int[]{0x4A4A52, 0x3E3E46, 0x56565E};  // ardósia
         };
         int[] pedra = switch (t) {
             case AMBAR -> new int[]{0x5A2E06, 0xB0600E, 0xF2A33A, 0xFFD27F};
@@ -777,6 +806,11 @@ public final class Mineracao implements Listener {
             case CRISTAL_ABISSAL -> new int[]{0x2A0E5A, 0x5A2EB0, 0x8A5AE0, 0xD8C0FF};
             case ESPORO_FOSSIL -> new int[]{0x0E3A3A, 0x1E6E6A, 0x3AB0A0, 0xB8FFE8};
             case FERRO_NEGRO -> new int[]{0x08080C, 0x1E1E2A, 0x3A3A4E, 0x8A8AB0};
+            case PRATA_LUNAR -> new int[]{0x5A6070, 0xA8B0C0, 0xD8DCE8, 0xFFFFFF};
+            case ONIX_ESTELAR -> new int[]{0x000000, 0x1A1A2E, 0x3A3A6E, 0xE6E6FF};
+            case RUBI_SANGUINEO -> new int[]{0x3A0008, 0x9A0A1E, 0xE53935, 0xFF8A8A};
+            case CRISTAL_CELESTE -> new int[]{0x0A3A7A, 0x2E7AD0, 0x64B5F6, 0xE0F4FF};
+            case FRAGMENTO_ECLIPSE -> new int[]{0x14001E, 0x4A0A6E, 0x8E24AA, 0xFFD27F};
         };
         for (int y = 0; y < 16; y++) {
             for (int x = 0; x < 16; x++) img.setRGB(x, y, 0xFF000000 | base[r.nextInt(3)]);

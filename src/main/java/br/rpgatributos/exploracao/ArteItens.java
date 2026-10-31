@@ -1313,6 +1313,21 @@ final class ArteItens {
                 c('o', 0xFF1A0E06, 'h', 0xFFF2A36A, 'm', 0xFFC8703A, 'd', 0xFF7A3A14, 'r', 0xFF4E9A7E, 'a', 0xFF8A5AE0, 'c', 0xFFD8C0FF, 'f', 0xFFFF7A1F, 'y', 0xFFFFD27F)));
         l.add(new Arte("tnt", "carga_abissal", BRASA,
                 c('o', 0xFF0A0614, 'd', 0xFF2A0E5A, 'm', 0xFF5A2EB0, 'a', 0xFF8A5AE0, 'c', 0xFFD8C0FF, 'f', 0xFF9575CD, 'y', 0xFFE6DEFF)));
+        // 3.5: a Prata Lunar, o foguete e o capacete.
+        l.add(new Arte("iron_nugget", "raro_prata_lunar", CRISTAL,
+                c('o', 0xFF3A4050, 'd', 0xFF8A92A8, 'm', 0xFFC8CCD8, 'h', 0xFFF0F4FF, 'w', 0xFFFFFFFF, 'a', 0xFFD8C0FF)));
+        l.add(new Arte("coal", "raro_onix_estelar", GEMA_BRUTA,
+                c('p', 0xFF1E1E24, 'q', 0xFF000000, 'w', 0xFFE6E6FF, 'o', 0xFF000000, 'd', 0xFF1A1A2E, 'm', 0xFF3A3A6E, 'h', 0xFF8A8AFF, 'a', 0xFFE6E6FF)));
+        l.add(new Arte("redstone", "raro_rubi_sanguineo", GEMA_LAPIDADA,
+                c('o', 0xFF3A0008, 'd', 0xFF9A0A1E, 'm', 0xFFE53935, 'h', 0xFFFF8A8A, 'w', 0xFFFFE0E0)));
+        l.add(new Arte("prismarine_crystals", "raro_cristal_celeste", CRISTAL,
+                c('o', 0xFF0A3A7A, 'd', 0xFF2E7AD0, 'm', 0xFF64B5F6, 'h', 0xFFE0F4FF, 'w', 0xFFFFFFFF, 'a', 0xFF90CAF9)));
+        l.add(new Arte("amethyst_shard", "raro_fragmento_eclipse", FRAGMENTO,
+                c('o', 0xFF14001E, 'd', 0xFF4A0A6E, 'm', 0xFF8E24AA, 'h', 0xFFCE93D8, 'a', 0xFFFFD27F)));
+        l.add(new Arte("firework_rocket", "foguete_dos_antigos", MOTOR,
+                c('o', 0xFF1A0E06, 'h', 0xFFF2A36A, 'm', 0xFFC8703A, 'd', 0xFF7A3A14, 'r', 0xFF8AD0FF, 'a', 0xFF4E9A7E, 'c', 0xFFB8FFE8, 'f', 0xFFFF7A1F, 'y', 0xFFFFD27F)));
+        l.add(new Arte("golden_helmet", "capacete_lunar", ORBE,
+                c('o', 0xFF3A1A08, 'w', 0xFFFFFFFF, 'h', 0xFFE6F4FF, 'a', 0xFFA8D8FF, 'b', 0xFF6A9AD0, 'c', 0xFF8A5AE0, 's', 0xFFC8703A)));
         l.add(new Arte("coal", "turfa", FRAGMENTO,
                 c('o', 0xFF1E140C, 'd', 0xFF3A2816, 'm', 0xFF5A4026, 'h', 0xFF7A5A36, 'a', 0xFF6B8E3A)));
         l.add(new Arte("brush", "cinzel", CINZEL,

@@ -93,6 +93,20 @@ public final class EquipamentoMineral implements Listener {
                 if (max != null && p.getHealth() < max.getValue() && !p.isDead()) p.setHealth(Math.min(max.getValue(), p.getHealth() + 1));
             }
             if (pecas(v, ConjuntoMineral.FERRO_NEGRO) >= 4) efeito(p, PotionEffectType.RESISTANCE, 0);
+            if (pecas(v, ConjuntoMineral.LUNAR) >= 4) efeito(p, PotionEffectType.JUMP_BOOST, 1);
+            // 3.6: os conjuntos das outras luas.
+            int estelar = pecas(v, ConjuntoMineral.ESTELAR);
+            if (estelar >= 2) efeito(p, PotionEffectType.NIGHT_VISION, 0);
+            if (estelar >= 4 && p.isSneaking() && p.getVelocity().lengthSquared() < 0.01) efeito(p, PotionEffectType.INVISIBILITY, 0);
+            int celeste = pecas(v, ConjuntoMineral.CELESTE);
+            if (celeste >= 2) efeito(p, PotionEffectType.HASTE, celeste >= 4 ? 1 : 0);
+            if (celeste >= 4) efeito(p, PotionEffectType.LUCK, 0);
+            int eclipse = pecas(v, ConjuntoMineral.ECLIPSE);
+            if (eclipse >= 2 && p.hasPotionEffect(PotionEffectType.WITHER)) p.removePotionEffect(PotionEffectType.WITHER);
+            if (eclipse >= 4 && (br.rpgatributos.mundo.Ceu.noite(p.getWorld()) || (plugin.ceu() != null && plugin.ceu().eclipse()))) {
+                efeito(p, PotionEffectType.STRENGTH, 0);
+                efeito(p, PotionEffectType.SPEED, 0);
+            }
         }
     }
 
@@ -146,6 +160,17 @@ public final class EquipamentoMineral implements Listener {
             atacante.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 40, 0, false, true, true));
             atacante.getWorld().spawnParticle(Particle.SNOWFLAKE, atacante.getLocation().add(0, 1, 0), 6, 0.3, 0.4, 0.3, 0.01);
         }
+        // 3.6: Sanguíneo (2): +10% de dano.
+        if (atacante instanceof Player ps && pecas(vestidos(ps), ConjuntoMineral.SANGUINEO) >= 2) e.setDamage(e.getDamage() * 1.1);
+        // 3.5: Lunar contra mortos-vivos (e lobisomens, com 4).
+        if (atacante instanceof Player pl && e.getEntity() instanceof LivingEntity alvo) {
+            int lunar = pecas(vestidos(pl), ConjuntoMineral.LUNAR);
+            boolean morto = alvo instanceof org.bukkit.entity.Zombie || alvo instanceof org.bukkit.entity.AbstractSkeleton || alvo instanceof org.bukkit.entity.Phantom
+                    || alvo instanceof org.bukkit.entity.Wither || alvo instanceof org.bukkit.entity.Zoglin;
+            boolean lobo = alvo instanceof Player outro && plugin.maldicoes() != null && plugin.maldicoes().de(outro) == br.rpgatributos.mundo.Maldicoes.Maldicao.LICANTROPIA && plugin.maldicoes().transformado(outro);
+            if (lunar >= 4 && (morto || lobo)) e.setDamage(e.getDamage() * 1.5);
+            else if (lunar >= 2 && morto) e.setDamage(e.getDamage() * 1.25);
+        }
         // Quem bate: Pérola (4) na água ou na chuva.
         if (atacante instanceof Player p && pecas(vestidos(p), ConjuntoMineral.PEROLA) >= 4 && (p.isInWater() || naChuva(p))) {
             e.setDamage(e.getDamage() * 1.15);
@@ -166,6 +191,16 @@ public final class EquipamentoMineral implements Listener {
         if (max == null || p.isDead()) return;
         double cura = e.getFinalDamage() * (n >= 4 ? 0.12 : 0.05);
         if (cura > 0) p.setHealth(Math.min(max.getValue(), p.getHealth() + cura));
+    }
+
+    /** 3.6: Sanguíneo (4): cada monstro abatido cura 1 coração. */
+    @EventHandler(ignoreCancelled = true)
+    public void aoAbater(org.bukkit.event.entity.EntityDeathEvent e) {
+        if (!plugin.settings().conjuntosMinerais || !(e.getEntity() instanceof org.bukkit.entity.Enemy)) return;
+        Player p = e.getEntity().getKiller();
+        if (p == null || pecas(vestidos(p), ConjuntoMineral.SANGUINEO) < 4) return;
+        AttributeInstance max = p.getAttribute(Attribute.MAX_HEALTH);
+        if (max != null && !p.isDead()) p.setHealth(Math.min(max.getValue(), p.getHealth() + 2));
     }
 
     /** Quartzo Negro (2): os piglins não escolhem você como alvo. */

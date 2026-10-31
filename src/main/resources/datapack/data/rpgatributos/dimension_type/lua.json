@@ -1,0 +1,25 @@
+{
+  "ambient_light": 0.12,
+  "attributes": {
+    "minecraft:gameplay/bed_rule": { "can_set_spawn": "never", "can_sleep": "never", "error_message": { "text": "Na Lua não dá para dormir: a noite não acaba." } },
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:visual/ambient_light_color": "#1a1a24",
+    "minecraft:visual/cloud_color": "#00ffffff",
+    "minecraft:visual/fog_color": "#0a0a12",
+    "minecraft:visual/sky_color": "#000000",
+    "minecraft:visual/star_brightness": 1.0
+  },
+  "coordinate_scale": 1.0,
+  "default_clock": "minecraft:overworld",
+  "has_ceiling": false,
+  "has_ender_dragon_fight": false,
+  "has_skylight": true,
+  "height": 256,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "logical_height": 256,
+  "min_y": 0,
+  "monster_spawn_block_light_limit": 0,
+  "monster_spawn_light_level": { "type": "minecraft:uniform", "max_inclusive": 7, "min_inclusive": 0 },
+  "timelines": "#minecraft:in_overworld"
+}

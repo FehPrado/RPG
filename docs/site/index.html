@@ -162,7 +162,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
 </head>
 <body>
 <header class="topo"><div class="topo-in">
-  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 3.4</small></a>
+  <a class="marca" href="#inicio"><b>RPG<span>Atributos</span></b><small>Manual do jogador · 3.6</small></a>
   <div class="busca"><input id="busca" type="search" placeholder="Buscar (ex.: adaga, cantil, /pets)…" aria-label="Buscar no manual"><button class="botao" id="tema" title="Tema claro/escuro" aria-label="Trocar tema">◐</button></div>
 </div></header>
 <div class="layout">
@@ -216,11 +216,12 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   <a href="#achados">🧭 Achados pelo caminho</a>
   <a href="#telas">💬 Menu rápido e conversas</a>
   <a href="#abismo">🕳 O Abismo</a>
+  <a href="#luas">🚀 O Foguete e as Luas</a>
 </nav>
 
 <main id="conteudo">
 <div class="hero"><div>
-    <p class="rotulo">Manual do jogador · versão 3.4</p>
+    <p class="rotulo">Manual do jogador · versão 3.6</p>
     <h1>Tudo evolui <em>com o uso</em>.</h1>
     <p>Minere e você minera mais rápido, lute e você bate mais forte. Forje itens com raridade, crie magias, monte uma colônia, funde um reino, feche portais e suba a Torre Infinita. O pacote de recursos do servidor deixa tudo mais bonito, mas não é obrigatório.</p>
     <div class="chips">
@@ -2933,10 +2934,46 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:24px 16px 4
   </div>
 </section>
 
+<section class="secao" id="luas">
+  <h2><span class="ico">🚀</span>O Foguete e as Luas</h2>
+  <p class="intro">Na 3.5 as peças do Abismo montam o Foguete dos Antigos, que leva à Lua Prateada.</p>
+  <div class="grade">
+    <div class="card"><h3>🚀 O foguete</h3>
+      <ul>
+        <li>Na bancada: Planta, Casco, Núcleo de Navegação, Tanque e Motor (em qualquer lugar).</li>
+        <li>Clique no chão a céu aberto: ele fica de pé. Clique nele: <b>Lançar</b> ou <b>Recolher</b>.</li>
+        <li>Na lua, clique de novo: <b>Voltar para casa</b> (ele pousa na plataforma de onde saiu).</li>
+      </ul>
+    </div>
+    <div class="card"><h3>🌕 A Lua Prateada</h3>
+      <ul>
+        <li>Noite sem fim, céu de estrelas, crateras de regolito.</li>
+        <li><b>Gravidade baixa:</b> pulo alto, queda lenta, sem dano até 10 blocos.</li>
+        <li><b>Sem ar:</b> 30 s de fôlego sem o <b>Capacete Lunar</b> (vidro e Cristal Abissal, formato de capacete).</li>
+        <li>Vagantes Lunares e Ácaros de Poeira. Morrendo, o túmulo fica lá em cima.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>⛏ Prata e colônias</h3>
+      <p><b>Prata Lunar</b> faz o conjunto <b>Lunar</b>: 2 peças, +25% de dano em mortos-vivos; 4 peças, Salto II e +50% em mortos-vivos e lobisomens. As <b>Colônias Lunares</b> dos Antigos têm o capítulo VI do Diário. Título <b>Astronauta</b> ao pousar.</p>
+    </div>
+    <div class="card largo"><h3>🌑 As cinco luas</h3>
+      <p>O foguete vai para a lua do céu da hora do lançamento:</p>
+      <div class="tabela"><table><thead><tr><th>Lua</th><th>Quando</th><th>Criaturas</th><th>Mineral → conjunto</th></tr></thead><tbody>
+        <tr><td>Prateada</td><td>nas outras horas</td><td>Vagantes, Ácaros</td><td>Prata Lunar → Lunar</td></tr>
+        <tr><td>Escura</td><td>noite de lua nova</td><td>Sombras Famintas</td><td>Ônix Estelar → Estelar (invisível agachado)</td></tr>
+        <tr><td>Vermelha</td><td>Lua de Sangue</td><td>Sanguessugas</td><td>Rubi Sanguíneo → Sanguíneo (abate cura)</td></tr>
+        <tr><td>de Cristal</td><td>Lua Azul</td><td>Sentinelas de Cristal</td><td>Cristal Celeste → Celeste (Pressa)</td></tr>
+        <tr><td>Sombria</td><td>eclipse</td><td>Cavaleiros do Eclipse</td><td>Fragmento de Eclipse → Eclipse (Força à noite)</td></tr>
+      </tbody></table></div>
+      <p>A Lua Sombria <b>fecha em 10 minutos</b>: quem ficar volta à força. As colônias de cada lua contam o fim da história dos Antigos. Títulos: <b>Viajante das Luas</b> e <b>Garimpeiro Lunar</b>.</p>
+    </div>
+  </div>
+</section>
+
 <p id="vazio" hidden>Nada encontrado. Tente outra palavra.</p>
 </main>
 </div>
-<footer>RPGAtributos 3.4 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
+<footer>RPGAtributos 3.6 · Manual do jogador · Dúvidas? Leia o <code>/guia</code> no jogo ou pergunte a um admin.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){

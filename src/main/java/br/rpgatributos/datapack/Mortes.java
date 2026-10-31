@@ -27,7 +27,8 @@ public final class Mortes implements Listener {
             "kraken", " foi arrastado para o fundo pelo Kraken",
             "canhao", " foi atingido por uma bala de canhão pirata",
             "tartaruga", " foi esmagado pela Tartaruga Ancestral",
-            "tempestade", " foi atingido por um raio da tempestade no mar");
+            "tempestade", " foi atingido por um raio da tempestade no mar",
+            "sem_ar", " ficou sem ar na Lua");
 
     /** Dano com o tipo do datapack (ou genérico, se ele não carregou). {@code causa} pode ser null. */
     public static DamageSource fonte(String id, Entity causa) {

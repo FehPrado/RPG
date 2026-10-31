@@ -1,0 +1,4 @@
+{
+  "type": "rpgatributos:lua",
+  "generator": { "type": "minecraft:noise", "settings": "rpgatributos:lua", "biome_source": { "type": "minecraft:fixed", "biome": "rpgatributos:lua_escura" } }
+}

@@ -79,6 +79,18 @@ public enum Raro {
             "Um esporo que virou pedra há mil anos. Ainda está vivo.", "Faz o conjunto de Esporo (bancada, como o ferro)."),
     FERRO_NEGRO("Ferro Negro", Material.NETHERITE_SCRAP, 0x3A3A4E,
             "Pesado como o próprio Fundo. Nem o sculk o ouve.", "Faz o conjunto de Ferro Negro (bancada, como o ferro)."),
+    // 3.5: o mineral das Luas
+    PRATA_LUNAR("Prata Lunar", Material.IRON_NUGGET, 0xD8DCE8,
+            "Fria ao toque. Corta o que não devia estar vivo.", "Faz o conjunto Lunar (bancada, como o ferro)."),
+    // 3.6: os minerais das outras luas
+    ONIX_ESTELAR("Ônix Estelar", Material.COAL, 0x3A3A6E,
+            "Preto como a Lua Escura, com pontos de luz que parecem estrelas.", "Faz o conjunto Estelar (bancada, como o ferro)."),
+    RUBI_SANGUINEO("Rubi Sanguíneo", Material.REDSTONE, 0xE53935,
+            "Quente. Pulsa mais rápido perto de quem está ferido.", "Faz o conjunto Sanguíneo (bancada, como o ferro)."),
+    CRISTAL_CELESTE("Cristal Celeste", Material.PRISMARINE_CRYSTALS, 0x64B5F6,
+            "Canta baixinho quando a Lua Azul está no céu.", "Faz o conjunto Celeste (bancada, como o ferro)."),
+    FRAGMENTO_ECLIPSE("Fragmento de Eclipse", Material.AMETHYST_SHARD, 0x8E24AA,
+            "Um pedaço da sombra que cobre o sol. Ainda está frio.", "Faz o conjunto do Eclipse (bancada, como o ferro)."),
 
     // 2.84: o Altar da Convergência
     ALMA_DESPERTA("Alma Desperta", Material.FIREWORK_STAR, 0xB388FF,

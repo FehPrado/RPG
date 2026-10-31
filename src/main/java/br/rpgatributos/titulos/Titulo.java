@@ -192,7 +192,11 @@ public enum Titulo {
     // ---------------- 3.3: o Abismo ----------------
     MINERADOR_DO_ABISMO("Minerador do Abismo", 0x8A5AE0, Requisito.contador("minerais_abismo", 40, "Minerar 40 minerais do Abismo"), Bonus.armadura(1)),
     HERDEIRO_DOS_ANTIGOS("Herdeiro dos Antigos", 0xC8703A, Requisito.contador("ruinas_antigos", 5, "Descobrir 5 ruínas dos Antigos no Abismo"), Bonus.xpTudo(0.03)),
-    SILENCIADOR_DO_VIGIA("Silenciador do Vigia", 0x3A6A7E, Requisito.contador("vigia_fundo", 1, "Vencer o Vigia do Fundo no Hangar dos Antigos"), new Bonus().comDano(1).comVida(2));
+    SILENCIADOR_DO_VIGIA("Silenciador do Vigia", 0x3A6A7E, Requisito.contador("vigia_fundo", 1, "Vencer o Vigia do Fundo no Hangar dos Antigos"), new Bonus().comDano(1).comVida(2)),
+    // ---------------- 3.5: as Luas ----------------
+    ASTRONAUTA("Astronauta", 0xD8DCE8, Requisito.contador("pousos_lua", 1, "Pousar numa lua com o Foguete dos Antigos"), Bonus.xpTudo(0.03)),
+    VIAJANTE_DAS_LUAS("Viajante das Luas", 0x8E24AA, Requisito.contador("luas_visitadas", 5, "Pousar nas cinco luas"), new Bonus().comDano(1).comVida(2)),
+    GARIMPEIRO_LUNAR("Garimpeiro Lunar", 0x64B5F6, Requisito.contador("minerais_lua", 40, "Minerar 40 minerais das luas"), Bonus.armadura(1));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(

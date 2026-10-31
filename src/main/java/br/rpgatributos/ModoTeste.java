@@ -130,6 +130,7 @@ public final class ModoTeste implements Listener {
         int c = plugin.colonias().esquecerMundo(MUNDO);
         int m = plugin.rede().esquecerMundo(MUNDO);
         int e = plugin.estruturas().esquecerMundo(MUNDO);
+        if (plugin.foguetes() != null) plugin.foguetes().esquecerMundo(MUNDO);
         if (c + m + e > 0) plugin.getLogger().info("Área de testes: " + c + " colônia(s), " + m + " marco(s) de estrada e " + e + " estrutura(s) esquecidos.");
     }
 
@@ -431,8 +432,10 @@ public final class ModoTeste implements Listener {
     public void aoTrocarMundo(PlayerChangedWorldEvent e) {
         if (restaurando) return;
         Player p = e.getPlayer();
-        // Masmorras abertas no teste continuam sendo teste; qualquer outro mundo encerra.
-        boolean continuaTestando = ehTeste(p.getWorld()) || plugin.masmorras().ehMundo(p.getWorld());
+        // Masmorras abertas no teste continuam sendo teste, e as dimensões também (3.6.1: o foguete sai do
+        // teste para a lua e precisa achar a plataforma de volta); o mundo normal ou o Nether encerram.
+        boolean continuaTestando = ehTeste(p.getWorld()) || plugin.masmorras().ehMundo(p.getWorld())
+                || br.rpgatributos.dimensao.Dimensoes.de(p.getWorld()) != null;
         if (ATIVOS.contains(p.getUniqueId()) && !continuaTestando && arquivo(p).exists()) {
             restaurar(p, false);
             p.sendMessage(Component.text("⚗ Você saiu da área de testes: seus itens e dados voltaram.", COR));

@@ -635,3 +635,13 @@ mar:
 dimensoes:
   abismo:
     ativa: true
+  lua_prateada:
+    ativa: true
+  lua_escura:
+    ativa: true
+  lua_vermelha:
+    ativa: true
+  lua_cristal:
+    ativa: true
+  lua_sombria:
+    ativa: true

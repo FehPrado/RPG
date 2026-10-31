@@ -536,7 +536,7 @@ Ficaram para depois, do grupo 1: estruturas grandes regionais (pirâmide de jade
 - **Minérios das camadas** (por exemplo, Cobre Antigo, Cristal Abissal, Esporo Fóssil, Ferro Negro), **itens** (Corda do Abismo, Lanterna de Esporos, Pedra do Retorno...) e **armaduras** (Traje de Escalada, Armadura Abissal).
 - Chefe do Fundo e criaturas de cada camada.
 
-### Fase 3: o foguete e as Luas
+### ✅ Fase 3 (3.5–3.6): o foguete e as cinco Luas
 - Montar o foguete com as peças do Abismo; cada lua pelo céu da hora (Prateada, Escura, Vermelha, de Cristal, Sombria), com gravidade baixa, oxigênio, minérios, armaduras e as ruínas da colônia lunar dos Antigos.
 
 ### Fase 4: o Mundo das Almas

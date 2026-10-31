@@ -82,7 +82,24 @@ public enum ConjuntoMineral implements ArteTrajes.Paleta {
             "Veneno não pega em você.", "Recupera meio coração a cada 6 segundos.", null),
     FERRO_NEGRO("Ferro Negro", Raro.FERRO_NEGRO, 0x5A5A7E, Traje.Estilo.PLACAS,
             0xFF2A2A38, 0xFF6A6A8A, 0xFF0A0A10, 0xFF8A2A2A, 0xFFB8B8E0,
-            "Não é empurrado pelos golpes.", "Resistência I.", null);
+            "Não é empurrado pelos golpes.", "Resistência I.", null),
+    // 3.5: o mineral das Luas.
+    LUNAR("Lunar", Raro.PRATA_LUNAR, 0xD8DCE8, Traje.Estilo.PLACAS,
+            0xFFC8CCD8, 0xFFFFFFFF, 0xFF6A7080, 0xFF8A5AE0, 0xFFE6F0FF,
+            "+25% de dano em mortos-vivos.", "Salto II e +50% de dano em mortos-vivos e lobisomens.", null),
+    // 3.6: os minerais das outras luas.
+    ESTELAR("Estelar", Raro.ONIX_ESTELAR, 0x3A3A6E, Traje.Estilo.ESCAMAS,
+            0xFF1A1A2E, 0xFF5A5AAE, 0xFF000000, 0xFFE6E6FF, 0xFF8A8AFF,
+            "Visão Noturna.", "Agachado e parado, você fica invisível.", null),
+    SANGUINEO("Sanguíneo", Raro.RUBI_SANGUINEO, 0xE53935, Traje.Estilo.PLACAS,
+            0xFFB71C1C, 0xFFFF8A8A, 0xFF4A0008, 0xFFD4AF37, 0xFFFF5252,
+            "+10% de dano.", "Cada monstro abatido cura 1 coração.", null),
+    CELESTE("Celeste", Raro.CRISTAL_CELESTE, 0x64B5F6, Traje.Estilo.ESCAMAS,
+            0xFF2E7AD0, 0xFFE0F4FF, 0xFF0A3A7A, 0xFFFFFFFF, 0xFF90CAF9,
+            "Pressa I.", "Pressa II e Sorte I.", null),
+    ECLIPSE("Eclipse", Raro.FRAGMENTO_ECLIPSE, 0x8E24AA, Traje.Estilo.PLACAS,
+            0xFF4A0A6E, 0xFFCE93D8, 0xFF14001E, 0xFFFFD27F, 0xFFE1BEE7,
+            "Murchidão não pega em você.", "Força I e Velocidade I à noite e no eclipse.", null);
 
     /** As 9 peças, cada uma com a base de ferro do jogo. */
     public enum Peca {

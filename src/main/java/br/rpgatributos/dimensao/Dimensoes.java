@@ -48,17 +48,30 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class Dimensoes implements Listener {
 
     public enum Dimensao {
-        ABISMO("abismo", "O Abismo", 0x9575CD, "Lá embaixo, os Antigos guardaram o que não queriam que ninguém achasse.");
+        ABISMO("abismo", "O Abismo", 0x9575CD, "Lá embaixo, os Antigos guardaram o que não queriam que ninguém achasse.", false),
+        // 3.5: as Luas (só se chega de foguete; veja Foguetes)
+        LUA_PRATEADA("lua_prateada", "A Lua Prateada", 0xD8DCE8, "Silêncio, poeira e a Terra que você não consegue ver.", true),
+        // 3.6: as outras luas (o Núcleo escolhe pelo céu da hora do lançamento)
+        LUA_ESCURA("lua_escura", "A Lua Escura", 0x6A6A8A, "Nem as estrelas brilham aqui. Algo enxerga você.", true),
+        LUA_VERMELHA("lua_vermelha", "A Lua Vermelha", 0xE53935, "A poeira tem cor de sangue, e o céu também.", true),
+        LUA_CRISTAL("lua_cristal", "A Lua de Cristal", 0x64B5F6, "O chão canta quando você pisa.", true),
+        LUA_SOMBRIA("lua_sombria", "A Lua Sombria", 0x8E24AA, "Ela só abre no eclipse. E fecha logo.", true);
 
         final String id, nome, frase;
         final TextColor cor;
+        final boolean lua;
 
-        Dimensao(String id, String nome, int cor, String frase) {
+        Dimensao(String id, String nome, int cor, String frase, boolean lua) {
             this.id = id;
             this.nome = nome;
             this.cor = TextColor.color(cor);
             this.frase = frase;
+            this.lua = lua;
         }
+
+        public boolean lua() { return lua; }
+        public String frase() { return frase; }
+        public TextColor cor() { return cor; }
 
         public String id() { return id; }
         public String nome() { return nome; }
@@ -132,6 +145,18 @@ public final class Dimensoes implements Listener {
         World w = mundo(d);
         if (w == null) return d.nome + " ainda não existe: o servidor precisa reiniciar uma vez (datapack novo).";
         if (de(p.getWorld()) == null) guardarVolta(p);
+        if (d.lua()) {
+            // Admin (de verdade, só se chega de foguete): direto num chão firme da lua.
+            for (int i = 0; i < 30; i++) {
+                int x = ThreadLocalRandom.current().nextInt(-600, 601), z = ThreadLocalRandom.current().nextInt(-600, 601);
+                Block b = w.getHighestBlockAt(x, z, HeightMap.MOTION_BLOCKING);
+                if (b.getY() < 40 || !b.getType().isSolid()) continue;
+                p.setFallDistance(0);
+                p.teleport(b.getLocation().add(0.5, 1, 0.5));
+                return null;
+            }
+            return "Não achei chão firme na lua.";
+        }
         Location rasgo = rasgoDe(p, w);
         if (rasgo == null) {
             rasgo = acharChegada(w);
@@ -164,13 +189,13 @@ public final class Dimensoes implements Listener {
         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 0, false, false, false));
     }
 
-    private void guardarVolta(Player p) {
+    public void guardarVolta(Player p) {
         Location l = p.getLocation();
         p.getPersistentDataContainer().set(kVolta, PersistentDataType.STRING,
                 l.getWorld().getName() + "," + l.getX() + "," + l.getY() + "," + l.getZ() + "," + l.getYaw());
     }
 
-    private Location volta(Player p) {
+    public Location volta(Player p) {
         String v = p.getPersistentDataContainer().get(kVolta, PersistentDataType.STRING);
         if (v == null) return null;
         String[] s = v.split(",");
