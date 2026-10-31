@@ -140,7 +140,7 @@ perigo:
 mundo-vivo:
   horas-por-estacao: 168              # quanto dura cada estação (168 = uma semana real; cada "dia" dela é 1/7 disso)
   temperatura: true                  # frio e calor nos extremos (nevasca, deserto no verão, Nether)
-  neve-e-gelo-no-inverno: true        # a estação muda o chão perto dos jogadores: neve e gelo no inverno, flores na primavera, vaga-lumes no verão, folhas secas no outono (tudo some quando ela acaba)
+  neve-e-gelo-no-inverno: true        # a estação muda o chão perto dos jogadores: neve e gelo no inverno, flores na primavera, vaga-lumes no verão, folhas secas no outono; 3.12: rios congelados, brotos e lama, grama seca e incêndio por raio, cogumelos e abóboras (tudo some quando ela acaba)
   blocos-de-neve-no-maximo: 4000      # quantos blocos a estação pode ter posto ao mesmo tempo
   coletas: true                       # coisas para colher aparecem pelo mundo conforme a estação
   coletas-por-jogador: 4              # quantas ao mesmo tempo perto de cada jogador (raio de 32 blocos)
@@ -651,3 +651,11 @@ dimensoes:
 # 3.7: o Mundo das Almas (ritual: Lanterna das Almas na mão esquerda + Punhal do Sacrifício na direita, agachado).
 almas:
   minutos-de-chama: 15                # quanto tempo a alma fica lá antes de ser puxada de volta (sem os achados)
+
+# 3.11: a natureza viva
+natureza:
+  lendarios: true                     # os cinco animais lendários (um de cada no mundo, com boato)
+  lendarios-minutos: 40               # em média, a cada quantos minutos corre um boato novo
+  migracao: true                      # bandos de pássaros e manadas de cavalos no outono e na primavera
+  ninhos: true                        # mel das flores e Geleia Real nos ninhos de abelha naturais
+  arvores-ancias: true                # árvores anciãs com Seiva Anciã nas florestas novas

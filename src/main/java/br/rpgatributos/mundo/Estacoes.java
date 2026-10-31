@@ -310,6 +310,9 @@ public final class Estacoes implements Listener {
             case INVERNO -> {
                 p.spawnParticle(Particle.SNOWFLAKE, l.clone().add(0, 6, 0), 40, 8, 3, 8, 0.01);
                 if (muda) for (int i = 0; i < 6; i++) nevar(p);
+                // 3.12: rios e lagos congelam em volta (viram caminho) e a neve acumula nas nevascas.
+                if (muda) for (int i = 0; i < 10; i++) congelarAgua(p);
+                if (muda && p.getWorld().hasStorm()) for (int i = 0; i < 3; i++) acumularNeve(p);
             }
             case OUTONO -> {
                 // Folhas laranja, vermelhas e marrons caindo, e folhas secas se juntando no chão.
@@ -319,14 +322,22 @@ public final class Estacoes implements Listener {
                             1, 0, 0, 0, 0, org.bukkit.Color.fromRGB(cores[rnd().nextInt(cores.length)]));
                 }
                 if (muda) for (int i = 0; i < 3; i++) folhasSecas(p);
+                // 3.12: cogumelos debaixo das árvores e abóboras silvestres nas planícies.
+                if (muda && rnd().nextDouble() < 0.25) cogumelo(p);
+                if (muda && rnd().nextDouble() < 0.03) aboboraSilvestre(p);
             }
             case PRIMAVERA -> {
                 if (rnd().nextDouble() < 0.5) p.spawnParticle(Particle.CHERRY_LEAVES, l.clone().add(0, 4, 0), 3, 6, 2, 6, 0);
                 if (muda) for (int i = 0; i < 2; i++) florir(p);
+                // 3.12: brotos perto das florestas (os que crescerem ficam) e lama nas margens.
+                if (muda && rnd().nextDouble() < 0.15) broto(p);
+                if (muda && rnd().nextDouble() < 0.5) lama(p);
             }
             case VERAO -> {
                 if (noite) p.spawnParticle(Particle.FIREFLY, l.clone().add(0, 1.5, 0), 6, 7, 1.5, 7, 0);
                 if (muda && rnd().nextDouble() < 0.2) vagalumes(p);
+                // 3.12: a grama seca nas savanas, planícies e terras áridas.
+                if (muda && !p.getWorld().hasStorm()) for (int i = 0; i < 2; i++) secar(p);
             }
         }
     }
@@ -405,12 +416,143 @@ public final class Estacoes implements Listener {
         por(cima, Material.AIR, "leaf_litter[segment_amount=" + (1 + rnd().nextInt(4)) + ",facing=" + direcao() + "]");
     }
 
+    // =====================================================================
+    //  3.12: as estações mudam mais o mapa (e tudo volta quando a estação acaba)
+    // =====================================================================
+
+    private String bioma(Block b) {
+        return b.getWorld().getBiome(b.getX(), b.getY(), b.getZ()).getKey().getKey();
+    }
+
+    /** Inverno: a superfície da água parada perto do jogador congela (rios e lagos viram caminho). */
+    private void congelarAgua(Player p) {
+        Block topo = chaoLivre(p, 12);
+        if (topo == null || topo.getType() != Material.WATER || !(topo.getBlockData() instanceof Levelled lv) || lv.getLevel() != 0) return;
+        if (!topo.getRelative(0, 1, 0).getType().isAir()) return;
+        String b = bioma(topo);
+        if (b.contains("ocean") && !b.contains("frozen")) return; // o mar aberto não congela
+        por(topo, Material.WATER, "ice");
+    }
+
+    /** Inverno, nevando: a neve posta pela estação vai engrossando (até 3 camadas). */
+    private void acumularNeve(Player p) {
+        Block topo = chaoLivre(p, 14);
+        if (topo == null) return;
+        Block neve = topo.getType() == Material.SNOW ? topo : null;
+        if (neve == null || !inverno.containsKey(neve.getLocation())) return;
+        if (neve.getBlockData() instanceof org.bukkit.block.data.type.Snow s && s.getLayers() < 3) {
+            s.setLayers(s.getLayers() + 1);
+            neve.setBlockData(s, false);
+        }
+    }
+
+    /** Verão: grama seca vira terra grossa nas savanas, planícies e terras áridas (até o outono). */
+    private void secar(Player p) {
+        Block topo = chaoLivre(p, 16);
+        if (topo == null || topo.getType() != Material.GRASS_BLOCK) return;
+        String b = bioma(topo);
+        if (!b.contains("savanna") && !b.contains("plains") && !b.contains("badlands") && !b.contains("desert")) return;
+        if (!topo.getRelative(0, 1, 0).getType().isAir() || rnd().nextDouble() < 0.6) return;
+        // Perto da água a grama aguenta.
+        for (int dx = -3; dx <= 3; dx++) for (int dz = -3; dz <= 3; dz++)
+            if (topo.getRelative(dx, 0, dz).getType() == Material.WATER) return;
+        por(topo, Material.GRASS_BLOCK, "coarse_dirt");
+    }
+
+    /** Verão: um raio numa mata seca pode começar um incêndio (se o fogo do servidor espalha, espalha). */
+    @EventHandler(ignoreCancelled = true)
+    public void aoCairRaio(org.bukkit.event.weather.LightningStrikeEvent e) {
+        if (atual() != Estacao.VERAO || !plugin.settings().invernoMudaBlocos || e.getWorld().getEnvironment() != World.Environment.NORMAL) return;
+        if (e.getCause() != org.bukkit.event.weather.LightningStrikeEvent.Cause.WEATHER || rnd().nextDouble() > 0.4) return;
+        Location l = e.getLightning().getLocation();
+        Block chao = l.getWorld().getHighestBlockAt(l);
+        String b = bioma(chao);
+        if (!b.contains("forest") && !b.contains("savanna") && !b.contains("plains") && !b.contains("taiga") && !b.contains("jungle")) return;
+        if (plugin.territorios().em(chao.getLocation()) != null) return;
+        int acesos = 0;
+        for (int i = 0; i < 6; i++) {
+            Block alvo = l.getWorld().getHighestBlockAt(chao.getX() + rnd().nextInt(-2, 3), chao.getZ() + rnd().nextInt(-2, 3));
+            Block cima = alvo.getRelative(0, 1, 0);
+            if (cima.getType().isAir() && (org.bukkit.Tag.LEAVES.isTagged(alvo.getType()) || alvo.getType() == Material.GRASS_BLOCK || alvo.getType().isFlammable())) {
+                cima.setType(Material.FIRE);
+                acesos++;
+            }
+        }
+        if (acesos == 0) return;
+        for (Player p : l.getWorld().getPlayers())
+            if (p.getLocation().distanceSquared(l) < 160 * 160)
+                p.sendMessage(Component.text("🔥 Um raio incendiou a mata seca perto de " + chao.getX() + ", " + chao.getZ() + "!", Estacao.VERAO.cor));
+    }
+
+    /** Outono: um cogumelo debaixo da copa (na sombra). */
+    private void cogumelo(Player p) {
+        Block topo = chaoLivre(p, 14);
+        if (topo == null) return;
+        Material m = topo.getType();
+        if (m != Material.GRASS_BLOCK && m != Material.PODZOL && m != Material.DIRT && m != Material.MYCELIUM) return;
+        Block cima = topo.getRelative(0, 1, 0);
+        if (!cima.getType().isAir()) return;
+        boolean copa = false;
+        for (int dy = 2; dy <= 10 && !copa; dy++) copa = org.bukkit.Tag.LEAVES.isTagged(topo.getRelative(0, dy, 0).getType());
+        if (!copa) return;
+        por(cima, Material.AIR, rnd().nextBoolean() ? "brown_mushroom" : "red_mushroom");
+    }
+
+    /** Outono: uma abóbora silvestre na planície (quem colher fica com ela). */
+    private void aboboraSilvestre(Player p) {
+        Block topo = chaoLivre(p, 18);
+        if (topo == null || topo.getType() != Material.GRASS_BLOCK) return;
+        String b = bioma(topo);
+        if (!b.contains("plains") && !b.contains("meadow") && !b.contains("forest")) return;
+        Block cima = topo.getRelative(0, 1, 0);
+        if (!cima.getType().isAir() || !aoArLivre(cima)) return;
+        por(cima, Material.AIR, "pumpkin");
+    }
+
+    /** Primavera: um broto de árvore perto de outras árvores (se crescer, a árvore fica). */
+    private void broto(Player p) {
+        Block topo = chaoLivre(p, 16);
+        if (topo == null || topo.getType() != Material.GRASS_BLOCK) return;
+        Block cima = topo.getRelative(0, 1, 0);
+        if (!cima.getType().isAir() || !aoArLivre(cima)) return;
+        // Só onde já tem árvore perto (a floresta avança, o campo continua campo).
+        Material tronco = null;
+        for (int dx = -6; dx <= 6 && tronco == null; dx += 2) for (int dz = -6; dz <= 6 && tronco == null; dz += 2)
+            for (int dy = 1; dy <= 4; dy++) {
+                Material m = topo.getRelative(dx, dy, dz).getType();
+                if (org.bukkit.Tag.LOGS.isTagged(m)) { tronco = m; break; }
+            }
+        if (tronco == null) return;
+        String muda = switch (tronco) {
+            case BIRCH_LOG -> "birch_sapling";
+            case SPRUCE_LOG -> "spruce_sapling";
+            case JUNGLE_LOG -> "jungle_sapling";
+            case ACACIA_LOG -> "acacia_sapling";
+            case CHERRY_LOG -> "cherry_sapling";
+            case DARK_OAK_LOG -> "dark_oak_sapling";
+            default -> "oak_sapling";
+        };
+        por(cima, Material.AIR, muda);
+    }
+
+    /** Primavera: o degelo deixa lama nas margens (terra e grama encostadas na água). */
+    private void lama(Player p) {
+        Block topo = chaoLivre(p, 14);
+        if (topo == null || (topo.getType() != Material.DIRT && topo.getType() != Material.GRASS_BLOCK)) return;
+        boolean margem = false;
+        for (org.bukkit.block.BlockFace f : new org.bukkit.block.BlockFace[]{org.bukkit.block.BlockFace.NORTH, org.bukkit.block.BlockFace.SOUTH, org.bukkit.block.BlockFace.EAST, org.bukkit.block.BlockFace.WEST})
+            if (topo.getRelative(f).getType() == Material.WATER) margem = true;
+        if (!margem || !topo.getRelative(0, 1, 0).getType().isAir()) return;
+        por(topo, topo.getType(), "mud");
+    }
+
     /** De que estação é um bloco posto (para tirar só os das outras estações). */
     private static Estacao estacaoDe(Material posto) {
         return switch (posto) {
-            case PINK_PETALS, WILDFLOWERS -> Estacao.PRIMAVERA;
-            case FIREFLY_BUSH -> Estacao.VERAO;
-            case LEAF_LITTER -> Estacao.OUTONO;
+            case PINK_PETALS, WILDFLOWERS, MUD, OAK_SAPLING, BIRCH_SAPLING, SPRUCE_SAPLING, JUNGLE_SAPLING, ACACIA_SAPLING,
+                 CHERRY_SAPLING, DARK_OAK_SAPLING -> Estacao.PRIMAVERA;
+            case FIREFLY_BUSH, COARSE_DIRT -> Estacao.VERAO;
+            case LEAF_LITTER, BROWN_MUSHROOM, RED_MUSHROOM, PUMPKIN -> Estacao.OUTONO;
             default -> Estacao.INVERNO;
         };
     }

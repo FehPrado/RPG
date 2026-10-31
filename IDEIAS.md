@@ -547,3 +547,14 @@ Ficaram para depois, do grupo 1: estruturas grandes regionais (pirâmide de jade
 ### Depois (a decidir): Além do Primeiro Portal, Mundo dos Sonhos, Reino Feérico, O Passado, Microverso.
 
 **Como ficou a fase 2 (3.4):** Carga Abissal (o jogador abre a própria Fenda); 4 ruínas de parede (Posto, Elevador, Laboratório, Refúgio) + Hangar no Fundo, construídos pelo plugin no chunk novo (busca metódica da parede virada para o vazio, sempre dentro do chunk); Diário dos Antigos em 5 capítulos (a engenheira Ilen; liga às Luas e ao Mundo das Almas); 5 peças do foguete (Planta, Casco, Núcleo, Tanque nos baús; Motor com o Vigia do Fundo, warden de 400); 4 minerais (Cobre dos Antigos, Cristal Abissal, Esporo Fóssil, Ferro Negro) com conjuntos de armadura/ferramentas; 3 títulos. Ficaram para depois: criaturas próprias de cada camada, Corda do Abismo, Lanterna de Esporos.
+
+## Escolhidas para fazer (31/10/2026), na pegada vanilla plus
+O dono do servidor escolheu estas (algumas ampliam coisas que já existem):
+1. ✅ (3.9) **Armas com memória:** a arma conta abates (monstros, chefes, jogadores) e ganha marcos (100, 500, 1.000); no fim ganha um nome dado pelo dono e uma habilidade sorteada. Combina com as Armas com Nome e a forja.
+2. ✅ (3.13) **Bares e tavernas:** a Taverna da colônia (já existe a obra) vira lugar de verdade: sentar junto e beber dá bônus de grupo, o taverneiro conta boatos (apontam estruturas e chefes) e há jogos de mesa.
+3. ✅ (3.11) **Animais lendários soltos:** um de cada no mundo inteiro (por exemplo, Cervo Dourado e Baleia Celeste); quem acha ganha título e o servidor fica sabendo. Amplia os animais raros (de Ouro e de Neve).
+4. ✅ (3.12) **Estações que mudam o mapa:** no inverno rios congelam e viram caminho; no verão a floresta seca pega fogo com raio; outono e primavera também mexem. Amplia as estações que já existem.
+5. ✅ (3.10) **Moldes de construção:** guardar uma construção sua como molde e colocar de novo gastando os blocos.
+6. ✅ (3.9) **Galeria de troféus:** amplia a Estante de Troféus: cabeças de chefes, peixes recordes e relíquias numa vitrine, com placa de quando e como.
+7. ✅ (3.11) **Natureza (tudo):** migração de pássaros e manadas, ninhos selvagens com mel das flores e Geleia Real, rede de pesca, árvores anciãs com Seiva Anciã.
+8. ✅ (3.14) **Viagens:** carroça com desenho próprio sem mod (rodas, varais, toldo, lanterna, banco, carga); Barco Grande com proa e lanternas. Datapack não muda modelo de entidade: o desenho é feito com peças presas (como o Barco Grande).

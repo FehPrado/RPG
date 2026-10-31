@@ -204,6 +204,12 @@ public final class BarcoGrande implements Listener {
         pecas.add(bloco(w, l, borda, -0.9f, 0.05f, -3.25f, 1.8f, 0.75f, 0.15f));      // popa
         pecas.add(bloco(w, l, tabua, -0.75f, 0.4f, -1.55f, 1.5f, 0.1f, 0.4f));        // banco da frente
         pecas.add(bloco(w, l, tabua, -0.75f, 0.4f, -2.6f, 1.5f, 0.1f, 0.4f));         // banco de trás
+        // 3.14: a proa (afinando na frente) e as lanternas da popa.
+        pecas.add(bloco(w, l, borda, -0.32f, 0.3f, 0.62f, 0.64f, 0.55f, 0.28f));
+        pecas.add(bloco(w, l, borda, -0.16f, 0.4f, 0.9f, 0.32f, 0.5f, 0.26f));
+        pecas.add(bloco(w, l, borda, -0.06f, 0.55f, 1.14f, 0.12f, 0.4f, 0.18f));
+        pecas.add(bloco(w, l, Material.LANTERN.createBlockData(), -0.95f, 0.75f, -3.4f, 0.3f, 0.3f, 0.3f));
+        pecas.add(bloco(w, l, Material.LANTERN.createBlockData(), 0.65f, 0.75f, -3.4f, 0.3f, 0.3f, 0.3f));
         if (Velas.temVela(b)) pecas.add(mastro(w, l, b));
         for (int banco : MelhoriasBarco.baus(b.getPersistentDataContainer())) pecas.add(bau(w, l, banco));
         if (MelhoriasBarco.tem(b, MelhoriasBarco.Peca.REDE)) pecas.add(bloco(w, l, Material.COBWEB.createBlockData(), -0.6f, 0.05f, -3.55f, 1.2f, 0.4f, 0.3f));

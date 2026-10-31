@@ -78,6 +78,29 @@ public final class Telas {
         p.showDialog(d);
     }
 
+    /** 3.9: uma pergunta com um campo de texto (por exemplo, o nome de uma arma). Vazio não conta. */
+    public static void perguntar(Player p, Component titulo, List<Component> texto, String rotulo, String inicial, int maximo,
+                                 java.util.function.BiConsumer<Player, String> aoResponder) {
+        DialogAction acao = DialogAction.customClick((resposta, quem) -> {
+            if (!(quem instanceof Player q)) return;
+            String s = resposta.getText("texto");
+            if (s == null || s.isBlank()) return;
+            String limpo = s.strip();
+            Bukkit.getScheduler().runTask(plugin(), () -> {
+                if (q.isOnline()) aoResponder.accept(q, limpo);
+            });
+        }, UMA_VEZ);
+        ActionButton ok = ActionButton.builder(Component.text("Pronto", NamedTextColor.GREEN)).width(160).action(acao).build();
+        ActionButton volta = ActionButton.builder(Component.text("Depois")).width(160).build();
+        var campo = io.papermc.paper.registry.data.dialog.input.DialogInput.text("texto", Component.text(rotulo))
+                .initial(inicial == null ? "" : inicial).maxLength(maximo).width(260).build();
+        Dialog d = Dialog.create(f -> f.empty()
+                .base(DialogBase.builder(titulo).canCloseWithEscape(true).pause(false)
+                        .afterAction(DialogBase.DialogAfterAction.CLOSE).body(corpo(null, texto)).inputs(List.of(campo)).build())
+                .type(DialogType.confirmation(ok, volta)));
+        p.showDialog(d);
+    }
+
     /** Uma confirmação para o que não tem volta: o botão vermelho faz, o outro desiste. */
     public static void confirmar(Player p, Component titulo, List<Component> texto, String sim, String nao, Consumer<Player> aoConfirmar) {
         ActionButton ok = botao(new Opcao(Component.text(sim, NamedTextColor.RED), Component.text("Não dá para desfazer.", NamedTextColor.RED), aoConfirmar), 160);

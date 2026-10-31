@@ -186,6 +186,20 @@ public final class Estruturas implements Listener {
         return gigantes;
     }
 
+    /** 3.13: um boato de taverna: uma estrutura do mesmo mundo (de 150 a 2.500 blocos), com o lugar aproximado. */
+    public String boato(Location perto, java.util.Random r) {
+        List<Sitio> l = new ArrayList<>();
+        for (Sitio s : sitios) {
+            if (!s.mundo.equals(perto.getWorld().getName())) continue;
+            double d = Math.hypot(s.x - perto.getX(), s.z - perto.getZ());
+            if (d >= 150 && d <= 2500) l.add(s);
+        }
+        if (l.isEmpty()) return null;
+        Sitio s = l.get(r.nextInt(l.size()));
+        int x = (int) Math.round(s.x / 100.0) * 100 + r.nextInt(-40, 41), z = (int) Math.round(s.z / 100.0) * 100 + r.nextInt(-40, 41);
+        return s.tipo.nome() + " perto de " + x + ", " + z;
+    }
+
     /** A estrutura pelo id (ou null). */
     Sitio sitio(String id) {
         for (Sitio s : sitios) if (s.id.equals(id)) return s;

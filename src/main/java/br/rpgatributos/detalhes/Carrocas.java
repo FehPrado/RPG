@@ -237,7 +237,8 @@ public final class Carrocas implements Listener {
         ChestBoat c = (ChestBoat) p.getWorld().spawnEntity(l, EntityType.SPRUCE_CHEST_BOAT);
         c.getPersistentDataContainer().set(CHAVE, PersistentDataType.BYTE, (byte) 1);
         c.getPersistentDataContainer().set(K_MELHORIAS, PersistentDataType.STRING, texto(m));
-        c.customName(Component.text("Carroça")); // o nome serve para o modelo próprio (EMF), não aparece
+        // 3.14: o desenho da carroça é do plugin (peças presas a ela), sem mod.
+        montarModelo(c);
         c.setCustomNameVisible(false);
         if (p.getGameMode() != GameMode.CREATIVE) mao.setAmount(mao.getAmount() - 1);
         p.playSound(l, Sound.BLOCK_WOOD_PLACE, 1f, 0.8f);
@@ -272,6 +273,7 @@ public final class Carrocas implements Listener {
         Set<Melhoria> m = melhorias(c);
         soltar(c, false);
         tirarLastro(c);
+        tirarModelo(c);
         c.eject();
         c.remove();
         w.dropItemNaturally(l, item(m));
@@ -322,6 +324,7 @@ public final class Carrocas implements Listener {
             if (p.getGameMode() != GameMode.CREATIVE) mao.setAmount(mao.getAmount() - x.qtd);
             m.add(x);
             c.getPersistentDataContainer().set(K_MELHORIAS, PersistentDataType.STRING, texto(m));
+            montarModelo(c);
             c.getWorld().playSound(c.getLocation(), Sound.BLOCK_SMITHING_TABLE_USE, 0.8f, 1.2f);
             p.sendActionBar(Component.text("🛒 " + x.nome + ": " + x.efeito + ".", COR));
             return;
@@ -382,6 +385,124 @@ public final class Carrocas implements Listener {
         if (puxando) a.addTransientModifier(new AttributeModifier(K_PESO, -0.15, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ANY));
     }
 
+    // =====================================================================
+    //  3.14: o modelo da carroça (peças desenhadas presas a ela, sem mod)
+    // =====================================================================
+
+    private static final NamespacedKey K_PECA = new NamespacedKey("rpgatributos", "carroca_peca");
+    /** Onde o jogo põe os passageiros do barco (do 2º em diante): as peças compensam isso. */
+    private static final float PRESO_Y = 0.1875f, PRESO_Z = -0.6f;
+
+    /** Monta (de novo) o desenho da carroça: caixa de tábuas, 4 rodas, varais e o que as melhorias põem. */
+    public void montarModelo(ChestBoat c) {
+        tirarModelo(c);
+        c.customName(null);
+        World w = c.getWorld();
+        Location l = c.getLocation();
+        Set<Melhoria> m = melhorias(c);
+        List<Entity> pecas = new ArrayList<>();
+        // A base invisível vai no 1º lugar (o lugar que muda de posição); ela também é o "lastro" do Banco.
+        pecas.add(w.spawn(l, ItemDisplay.class, d -> {
+            marcarPeca(d);
+            d.getPersistentDataContainer().set(K_LASTRO, PersistentDataType.BYTE, (byte) 1);
+        }));
+        var tabua = Material.SPRUCE_PLANKS.createBlockData();
+        var tronco = Material.STRIPPED_SPRUCE_LOG.createBlockData();
+        var escura = Material.DARK_OAK_PLANKS.createBlockData();
+        // A caixa (cobre o casco do barco).
+        pecas.add(peca(w, l, tabua, -0.82f, 0.12f, -0.98f, 0.14f, 0.62f, 1.96f));   // lado esquerdo
+        pecas.add(peca(w, l, tabua, 0.68f, 0.12f, -0.98f, 0.14f, 0.62f, 1.96f));    // lado direito
+        pecas.add(peca(w, l, tabua, -0.82f, 0.12f, -1.0f, 1.64f, 0.62f, 0.14f));    // traseira
+        pecas.add(peca(w, l, tabua, -0.82f, 0.12f, 0.86f, 1.64f, 0.62f, 0.14f));    // frente
+        pecas.add(peca(w, l, escura, -0.84f, 0.7f, -1.02f, 1.68f, 0.06f, 0.06f));   // beiral de trás
+        pecas.add(peca(w, l, escura, -0.84f, 0.7f, 0.96f, 1.68f, 0.06f, 0.06f));    // beiral da frente
+        // As rodas: dois quadrados girados (fica um octógono) com o cubo no meio.
+        var roda = (m.contains(Melhoria.RODAS) ? Material.POLISHED_BLACKSTONE : Material.STRIPPED_DARK_OAK_LOG).createBlockData();
+        var cubo = (m.contains(Melhoria.RODAS) ? Material.IRON_BLOCK : Material.SPRUCE_PLANKS).createBlockData();
+        for (float x : new float[]{-0.98f, 0.86f}) for (float z : new float[]{-0.62f, 0.55f}) {
+            pecas.add(roda(w, l, roda, x, 0.3f, z, 0.12f, 0.62f, 0));
+            pecas.add(roda(w, l, roda, x, 0.3f, z, 0.12f, 0.62f, 45));
+            pecas.add(roda(w, l, cubo, x + (x < 0 ? -0.03f : 0.03f), 0.3f, z, 0.12f, 0.16f, 0));
+        }
+        // Os varais (para o animal) e a barra da frente.
+        pecas.add(peca(w, l, tronco, -0.42f, 0.38f, 0.95f, 0.08f, 0.08f, 1.7f));
+        pecas.add(peca(w, l, tronco, 0.34f, 0.38f, 0.95f, 0.08f, 0.08f, 1.7f));
+        pecas.add(peca(w, l, tronco, -0.42f, 0.38f, 2.55f, 0.84f, 0.08f, 0.08f));
+        if (m.contains(Melhoria.BANCO)) {
+            pecas.add(peca(w, l, tabua, -0.68f, 0.72f, 0.45f, 1.36f, 0.1f, 0.38f));      // o banco
+            pecas.add(peca(w, l, escura, -0.68f, 0.82f, 0.8f, 1.36f, 0.25f, 0.06f));      // o encosto
+        }
+        if (m.contains(Melhoria.TOLDO)) {
+            var lona = Material.WHITE_WOOL.createBlockData();
+            for (float z : new float[]{-0.95f, 0.0f, 0.85f}) {
+                pecas.add(peca(w, l, tronco, -0.8f, 0.74f, z, 0.06f, 0.75f, 0.06f));
+                pecas.add(peca(w, l, tronco, 0.74f, 0.74f, z, 0.06f, 0.75f, 0.06f));
+            }
+            pecas.add(peca(w, l, lona, -0.86f, 1.48f, -1.0f, 1.72f, 0.06f, 2.0f));        // o teto
+            pecas.add(peca(w, l, lona, -0.86f, 1.02f, -1.0f, 0.04f, 0.46f, 2.0f));        // lona do lado esquerdo
+            pecas.add(peca(w, l, lona, 0.82f, 1.02f, -1.0f, 0.04f, 0.46f, 2.0f));         // lona do lado direito
+        }
+        if (m.contains(Melhoria.LANTERNA)) {
+            pecas.add(peca(w, l, tronco, 0.66f, 0.74f, 0.88f, 0.06f, 0.75f, 0.06f));
+            pecas.add(peca(w, l, Material.LANTERN.createBlockData("[hanging=true]"), 0.5f, 1.05f, 0.95f, 0.38f, 0.38f, 0.38f));
+        }
+        if (m.contains(Melhoria.BAU)) {
+            pecas.add(peca(w, l, Material.BARREL.createBlockData(), -0.62f, 0.62f, -0.35f, 0.5f, 0.5f, 0.5f));
+            pecas.add(peca(w, l, Material.HAY_BLOCK.createBlockData(), 0.05f, 0.62f, -0.35f, 0.5f, 0.42f, 0.5f));
+        }
+        if (m.contains(Melhoria.FREIO))
+            pecas.add(peca(w, l, Material.LEVER.createBlockData("[face=floor,facing=north]"), 0.62f, 0.72f, 0.6f, 0.4f, 0.4f, 0.4f));
+        // Quem já estava sentado vai para o fim da fila (o lugar dele não muda).
+        List<Entity> sentados = new ArrayList<>();
+        for (Entity x : List.copyOf(c.getPassengers())) if (x instanceof Player) {
+            c.removePassenger(x);
+            sentados.add(x);
+        }
+        for (Entity x : pecas) c.addPassenger(x);
+        for (Entity x : sentados) c.addPassenger(x);
+    }
+
+    private static void marcarPeca(Entity e) {
+        e.setPersistent(false);
+        e.getPersistentDataContainer().set(K_PECA, PersistentDataType.BYTE, (byte) 1);
+    }
+
+    private static org.bukkit.entity.BlockDisplay peca(World w, Location l, org.bukkit.block.data.BlockData b, float x, float y, float z, float sx, float sy, float sz) {
+        return w.spawn(l, org.bukkit.entity.BlockDisplay.class, d -> {
+            d.setBlock(b);
+            d.setTransformation(new org.bukkit.util.Transformation(new org.joml.Vector3f(x, y - PRESO_Y, z - PRESO_Z), new org.joml.AxisAngle4f(),
+                    new org.joml.Vector3f(sx, sy, sz), new org.joml.AxisAngle4f()));
+            marcarPeca(d);
+        });
+    }
+
+    /**
+     * Uma roda: um bloco fino (espessura {@code larg}, lado {@code lado}) girado {@code graus} em volta do
+     * eixo da roda, com o centro em (x + larg/2, y, z).
+     */
+    private static org.bukkit.entity.BlockDisplay roda(World w, Location l, org.bukkit.block.data.BlockData b, float x, float y, float z, float larg, float lado, float graus) {
+        double a = Math.toRadians(graus);
+        float h = lado / 2;
+        // Onde o centro do bloco escalado vai parar depois de girar em volta do eixo X.
+        float cy = (float) (h * Math.cos(a) - h * Math.sin(a)), cz = (float) (h * Math.sin(a) + h * Math.cos(a));
+        float ty = y - cy, tz = z - cz;
+        return w.spawn(l, org.bukkit.entity.BlockDisplay.class, d -> {
+            d.setBlock(b);
+            d.setTransformation(new org.bukkit.util.Transformation(new org.joml.Vector3f(x, ty - PRESO_Y, tz - PRESO_Z),
+                    new org.joml.Quaternionf().rotateX((float) a), new org.joml.Vector3f(larg, lado, lado), new org.joml.Quaternionf()));
+            marcarPeca(d);
+        });
+    }
+
+    private static void tirarModelo(ChestBoat c) {
+        for (Entity x : List.copyOf(c.getPassengers())) {
+            if (x.getPersistentDataContainer().has(K_PECA)) {
+                c.removePassenger(x);
+                x.remove();
+            }
+        }
+    }
+
     /**
      * Banco: a pessoa vai sentada em cima da carga. Um lastro (invisível) fica no 1º lugar, para
      * ninguém virar "piloto" da carroça: quem a move é o animal (e o plugin), não quem senta.
@@ -403,7 +524,7 @@ public final class Carrocas implements Listener {
 
     private static void tirarLastro(ChestBoat c) {
         for (Entity x : List.copyOf(c.getPassengers())) {
-            if (x.getPersistentDataContainer().has(K_LASTRO)) {
+            if (x.getPersistentDataContainer().has(K_LASTRO) && !x.getPersistentDataContainer().has(K_PECA)) {
                 c.removePassenger(x);
                 x.remove();
             }
@@ -490,6 +611,7 @@ public final class Carrocas implements Listener {
     public void aoCarregar(EntitiesLoadEvent e) {
         for (Entity x : e.getEntities()) {
             if (eCarroca(x) && ((ChestBoat) x).isLeashed()) atreladas.add(x.getUniqueId());
+            if (eCarroca(x)) Bukkit.getScheduler().runTask(plugin, () -> { if (x.isValid()) montarModelo((ChestBoat) x); });
             if (x.getPersistentDataContainer().has(K_LASTRO) && !(x.getVehicle() instanceof ChestBoat)) x.remove();
         }
     }
@@ -497,7 +619,10 @@ public final class Carrocas implements Listener {
     /** Na partida: as carroças atreladas que já estão carregadas. */
     public void restaurar() {
         for (World w : Bukkit.getWorlds()) {
-            for (ChestBoat c : w.getEntitiesByClass(ChestBoat.class)) if (eCarroca(c) && c.isLeashed()) atreladas.add(c.getUniqueId());
+            for (ChestBoat c : w.getEntitiesByClass(ChestBoat.class)) {
+                if (eCarroca(c) && c.isLeashed()) atreladas.add(c.getUniqueId());
+                if (eCarroca(c)) montarModelo(c);
+            }
         }
     }
 

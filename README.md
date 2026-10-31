@@ -111,6 +111,8 @@ Até +5, falhar só gasta o material. De +6 a +8, o item perde 1 nível. No +9 e
 **Mesa de ferraria:** subir um item forjado para Netherite mantém a raridade, em qualquer mesa. Item achado no mundo é forjado ao ser melhorado numa mesa a até 6 blocos de uma Forja do Ferreiro.
 **Armas com nome:** às vezes a peça já nasce com **nome, história e visual próprios**: 2% das Comuns forjadas, 5% das Raras, 10% das Épicas, 18% das Únicas, 30% das Lendárias e 45% das Míticas (`forja.armas-com-nome`). Elas também aparecem em **5% dos baús** de estruturas (do plugin e do jogo) e com os chefes (Altar, Sumo-Sacerdote, Guardião dos Ventos e Coração da Penumbra), já forjadas. São 66: **espadas** (Presa do Inverno, Lâmina de Thalassa, Aurora de Aerília, Juramento do Fortim, Brasa dos Anões, Sussurro da Penumbra, Lâmina da Raiz de Luz, Fio do Guardião dos Ventos, Promessa do Primeiro Colono, Lâmina do Eclipse), **machados e maças** (Talha-Raízes, Fúria do Saqueador, Machado do Faroleiro, Machado do Velho Lenhador, Mordida da Geada, Sino de Maris, Martelo do Eremita, Martelo do Mestre de Obras, Coração Roubado), **arcos e bestas** (Arco do Caçador Silencioso, Asa de Zéfira, Arco das Brasas, Arco das Folhas Caídas, Besta do Capitão, Besta Glacial, Besta da Torre de Vigia) e **ferramentas** (Picareta do Mineiro Perdido, Quebra-Cristais, Picareta das Profundezas, Picareta do Poço Fundo, Pá do Coveiro, Pá do Arqueólogo, Enxada da Colheita Dourada, Enxada das Quatro Estações, Enxada do Jardim Suspenso, Vara do Pescador do Gelo, Vara de Coral) e **lanças e tridentes** (Lança da Sentinela, Chifre do Qilin, Agulha dos Ventos, Pique do Cavaleiro Errante, Lâmina do Crescente Verde, Espeto do Bastião; Tridente de Maris, Garfo do Afogado-Rei, Tridente do Pescador de Pérolas, Tridente da Tempestade) e **o arsenal** (adagas Presas Gêmeas e Beijo da Víbora, faca Pena do Corvo, Machadinha do Velho Anão, foices Foice do Ceifador de Trigo e Lua Minguante, bastões Bastão do Monge da Montanha e Bordão do Peregrino, chicotes Chicote do Domador de Feras e Língua de Brasa; uma adaga forjada só pode virar uma adaga com nome, e assim por diante) e **as armas dos minérios** (Coração da Montanha e Lâmina do Rei Gigante no Montante, Retorno do Escorpião no Bumerangue, Asas de Jade nos Leques, Presa do Kraken e Arpão do Velho Baleeiro no Arpão, Estrela da Geada no Mangual, Presas do Lobisomem nas Garras, Tocha do Pântano na Clava). **Só muda a aparência:** a força continua sendo a da raridade. Com o pacote de recursos, no inventário aparece o desenho delas e na mão, no chão, no suporte e na moldura um **modelo 3D** (espadas, machados, maças, ferramentas, lanças e tridentes; o tridente arremessado continua com a cara do jogo; os arcos e as bestas mudam de desenho conforme a corda é puxada). O nome e a história ficam ao refinar e reforjar.
 
+**Armas com memória (3.9):** toda arma (espadas, machados, tridente, maça, arco, besta, lanças e o arsenal) conta o que derrubou e mostra na descrição: "⚔ Memória: 87 monstros · 1 chefe". Para os marcos, **chefe vale 25** e **jogador vale 5**. Com **100** ela fica **Marcada** (a linha fica dourada), com **500** **Veterana** (+3% de dano) e com **1.000** **Lendária**: uma tela pede o **nome** dela (quem fechar a tela recebe um [dar um nome] no chat) e ela ganha uma **habilidade sorteada**: **Sede de Sangue** (cada abate cura 1 coração), **Eco** (15% de chance de o golpe repetir com metade do dano), **Ímpeto** (Velocidade II por 3 s a cada abate), **Ceifadora** (+20% de dano em quem tem menos de 30% da vida) ou **Lembrança** (XP em dobro dos abates). Título: **Memória Viva**. A raridade e a forja não mudam, e a memória continua ao refinar. Na área de testes não conta.
+
 **Trajes (armaduras com nome):** a armadura forjada também pode nascer com nome (mesmas chances; 30% das armas com nome de baús e chefes são peças de Traje). São **8 Trajes** de 4 peças, cada um com história, ícone próprio e **textura própria no corpo de quem veste**, pintada pelo plugin: **da Penumbra** (escamas roxas), **dos Ventos** (placas brancas e douradas), **de Thalassa** (escamas verde-mar e coral), **do Fortim** (placas de aço e vermelho), **dos Anões** (bronze), **da Geada** (gelo), **da Colheita** (tecido de palha) e **da Raiz de Luz** (tecido de raiz com veios âmbar). As peças se chamam Elmo/Peitoral/Grevas/Botas (placas), Elmo/Cota/Grevas/Botas (escamas) ou Capuz/Gibão/Calças/Botas (tecido), por exemplo **Elmo da Penumbra** e **Gibão da Colheita**. Só aparência, como as armas; funcionam com o Guarda-roupa e continuam ao virar Netherite.
 
 ## Bancada de Reciclagem
@@ -876,6 +878,12 @@ Cada estação espalha **3 coisas** pelo mundo, aos poucos, perto de quem explor
 | ☘ Outono | Castanha (saciedade), Cogumelo-do-Bosque (visão noturna), Avelã (pressa) |
 | ❄ Inverno | Raiz de Inverno (esquenta), Cogumelo-de-Neve (regeneração), Fruto de Zimbro (força) |
 
+
+**O mapa muda com a estação (3.12).** Perto dos jogadores, fora dos territórios, e tudo volta quando a estação acaba (`mundo-vivo.neve-e-gelo-no-inverno` liga e desliga junto com a neve):
+- **Inverno:** a superfície de **rios e lagos congela** e vira caminho (o mar aberto não), e nas nevascas a neve **acumula** até 3 camadas.
+- **Primavera:** **brotos** de árvore aparecem perto das florestas (os que crescerem viram árvore de verdade e ficam) e o degelo deixa **lama** nas margens.
+- **Verão:** a grama **seca** e vira terra grossa nas savanas, planícies e terras áridas (perto da água ela aguenta), e um **raio** numa mata seca pode começar um **incêndio** (o aviso sai no chat de quem está perto; o fogo espalha se o servidor deixar o fogo espalhar).
+- **Outono:** **cogumelos** debaixo das árvores e **abóboras silvestres** nas planícies (quem colher fica com elas).
 ### Plantações da estação
 
 **20 plantas**, 5 por estação (algumas em duas estações), com visual próprio crescendo em 4 fases em cima da terra. Plante clicando com as sementes na **terra arada**. Só crescem **na estação delas** e com a **terra molhada** (água perto ou chuva; na chuva crescem mais rápido), mais ou menos 12 minutos por fase. **Farinha de osso** adianta uma fase. Clique na planta madura para colher; bater numa planta ainda crescendo arranca ela (a semente volta). As sementes saem do **mato quebrado** (4%) na estação certa, e às vezes voltam na colheita.
@@ -1595,7 +1603,7 @@ Na Forja do Ferreiro, estes itens também saem **forjados** (com raridade, bônu
 | ⚔ **Pedra de Amolar** | Rebolo, pedra lisa ou laje de pedra lisa + 2 pederneiras + 1 lingote de ferro | Clique com a arma e 1 pederneira: **+10% de dano** pelos próximos 100 golpes |
 | ♨ **Fogueira de Acampamento** | Fogueira acesa + 1 lã + 1 tronco | Sentado perto: Regeneração e, depois de 30 s, **Descansado** (+5% de XP por 20 min). Comida crua jogada do lado do fogo assa sozinha |
 | ☘ **Bebedouro** | Caldeirão com água + 1 fardo de feno | Filhotes a até 8 blocos crescem 5x mais rápido, adultos esperam menos para cruzar e companheiros se curam |
-| 🏆 **Estante de Troféus** | Pilar de quartzo + o **núcleo de um chefe** | O núcleo fica girando com quem venceu e quando. Cada troféu diferente dentro do seu território dá +1% de XP para quem pode construir lá |
+| 🏆 **Estante de Troféus** (a Galeria) | Pilar de quartzo + um **troféu**: núcleo de chefe, cabeça, peixe troféu, relíquia, arma com nome ou arma com memória (100+ abates) | O troféu fica girando com o nome, quem trouxe, quando e a história dele (o peso do peixe, a memória da arma). Cada troféu diferente dentro do seu território dá +1% de XP (até +10%) para quem pode construir lá |
 | 🧭 **Mesa do Cartógrafo** | Mesa de cartografia + 1 bússola + 3 papéis | Com um Mapa do Tesouro na mão: diz a direção e a distância do X e desenha o caminho. Sem mapa: abre os seus Locais Ocultos |
 
 ### O mundo
@@ -1606,6 +1614,36 @@ Na Forja do Ferreiro, estes itens também saem **forjados** (com raridade, bônu
 - **Animais raros:** 1 em 500 animais nasce **de Ouro** ou **de Neve**, com nome, brilho e o dobro de drops (mais ouro ou uma gema). Domar um dá muito XP de Doma, e os filhotes deles têm chance de nascer raros também.
 - **Achados:** quebrar areia ou cascalho natural às vezes revela pepitas, pederneira, cacos de cerâmica, uma esmeralda ou uma gema bruta.
 - **Orvalho da manhã:** colher no amanhecer, a céu aberto e sem chuva, dá 50% mais XP de Agricultura.
+
+
+### A natureza viva (3.11)
+
+- **Animais lendários:** existe **um de cada** no mundo inteiro: **Cervo Dourado** (florestas), **Baleia Celeste** (oceanos), **Lobo Lunar** (taigas, à noite), **Fênix** (savanas, selvas e terras áridas) e **Urso Ancião** (montanhas e neve). De vez em quando corre um **boato** no chat com o lugar aproximado; ele fica uns 20 minutos e some. Quem achar e **clicar nele** ganha a **lembrança** (Chifre, Escama, Presa, Pena ou Garra, que vai na Estante de Troféus) e XP, e o servidor fica sabendo. Ninguém mata um lendário: eles não apanham nem atacam. Título: **Amigo das Lendas** (os cinco).
+- **Migração:** no **outono** e na **primavera**, de dia, passam **bandos de pássaros** bem alto no céu (para o sul no outono, para o norte na primavera), e às vezes uma **manada de cavalos selvagens** atravessa as planícies e savanas perto de alguém. Dá para domar um; os que ninguém domar vão embora em 5 minutos.
+- **Ninhos selvagens:** tirar mel com frasco de um **ninho de abelha natural** às vezes dá um mel com o sabor das flores de perto: **Rubro** (papoula, Força), **Solar** (dente-de-leão e girassol, Pressa), **Azul** (orquídea e centáurea, Visão Noturna), **de Tulipa** (Regeneração) e **Branco** (lírio e margarida, Resistência e tira o veneno). Raramente vem a **Geleia Real** (Absorção II por 2 minutos). A Colmeia do Apicultor continua com os méis dela.
+- **Rede de Pesca** (bancada: barbantes em volta de um graveto, `S S`/`SGS`/`S S`): clique na água para lançar e volte depois. Ela pega um peixe a cada 2,5 minutos (1,5 na chuva), até 6, com chance de alga, bolsa de tinta e, raramente, concha de náutilo. Clique na rede para tirar o que pegou; agachado, recolhe a rede. Até 3 redes por jogador.
+- **Árvores anciãs:** algumas árvores das florestas novas são muito velhas: musgo nas raízes e **resina** escorrendo do tronco. Com um **frasco** na resina, uma vez por dia, sai a **Seiva Anciã** (Regeneração II e saciedade, XP de Agricultura). Título: **Guardião da Seiva** (10 seivas).
+
+Admin: `/rpgadmin natureza lendario [cervo_dourado|baleia_celeste|lobo_lunar|fenix|urso_anciao]` (solta perto de você), `bando`, `manada`, `ancia` (no chunk em que você está, numa floresta) e `rede`. No config, `natureza.*` desliga cada parte e `natureza.lendarios-minutos` muda a frequência dos boatos.
+
+### Bares e tavernas (3.13)
+
+Uma **taverna** é a obra **Taverna** de uma colônia ou qualquer lugar com uma **placa** escrita `[Taverna]` na primeira linha (a segunda linha é o nome; vale 10 blocos em volta; quebrar a placa fecha).
+- **Uma rodada:** beber lá dentro (bebidas do barril, mel, leite ou poções) dá Regeneração. Se **dois ou mais** beberam ali no último minuto, todos ganham **Camaradagem**: **+10% de XP** dos atributos e **Sorte** por 20 minutos.
+- **Boatos:** **agachado, clique num barril** da taverna e o taverneiro conta um boato: uma estrutura com o lugar aproximado, ou uma dica do mundo. Um por dia de jogo.
+- **Copo de Dados** (tigela e 2 ossos): clique para rolar dois dados; quem estiver perto vê o resultado.
+
+Títulos: **Freguês da Casa** (10 Camaradagens) e **Ouvido de Taverna** (15 boatos). Admin: `/rpgadmin dados`.
+### Moldes de construção (3.10)
+
+A **Régua do Construtor** (bancada, na diagonal: papel, graveto e lingote de cobre) guarda uma construção sua e põe de novo em outro lugar:
+- **Marcar:** clique esquerdo num bloco marca o canto 1 e clique direito o canto 2. O contorno aparece só para você.
+- **Salvar:** agachado + clique direito abre o menu: **Salvar a seleção** pede um nome. Até **32 x 32 x 32** e **20 moldes** por jogador.
+- **Colocar:** no menu, escolha o molde. O contorno segue para onde você mira; **clique esquerdo gira** 90 graus e **clique direito coloca**. A obra sobe de baixo para cima.
+- **Custo:** os blocos saem do inventário. Só valem **itens comuns** (sem nome, descrição ou marca do RPG), para nenhum item especial ser gasto sem querer. Se faltar, a mensagem diz o quê. No criativo é de graça.
+- **Regras:** só ocupa lugar vazio (ar ou mato) e onde você pode construir. Baús saem vazios e placas sem texto; estações do plugin, líquidos e rocha-mãe não entram no molde.
+
+Título: **Arquiteto** (10 construções colocadas). Admin: `/rpgadmin regua`.
 
 ### Recordes e Diário
 
@@ -1722,7 +1760,7 @@ Coisas que aproveitam o que o jogo já tem. Tudo pode ser desligado em `integrac
 - **Ferrovias:** em trilho reto e plano (8 blocos ou mais), o carrinho com gente acelera até o **dobro da velocidade** e volta ao normal antes das curvas. Um **sino ao lado do trilho** vira estação: toca quando o carrinho passa.
 - **Barco a vela:** a **Vela de Barco** (lã em cruz com 2 gravetos) vai num barco comum com um clique. A vela ocupa o segundo lugar do barco; agachado + clique (mão vazia) tira.
 - **O vento (2.66):** sopra de um lado e muda 4 vezes por dia de jogo (a virada é aos poucos). Remando para a frente com vela, o vento **por trás** dá a velocidade máxima, **de lado** a metade e **de frente** quase nada (sobra o remo). A força vem do tempo: **fraco** com tempo bom, **bom** na chuva e **forte** na Ventania (que ainda empurra o barco um pouco para o lado do vento). A vela gira para pegar o vento, a barra mostra "Vento a favor / de lado / contra", e o vento aparece no `/calendario` e no placar (quando você está num barco). Os projéteis desviados pela Ventania seguem esse mesmo vento.
-- **Barco Grande (2.63):** 7 tábuas e 2 barcos comuns na bancada (`PBP / PBP / PPP`, barcos no meio). Clique na água com ele: aparece um barco comprido de abeto com convés, bordas e 2 bancos. Leva **5 pessoas**: o primeiro a subir pilota, os outros sentam nos 4 bancos (é só clicar no barco). Com a Vela de Barco, o mastro ocupa um banco (**4 pessoas**) e ele corre como o barco a vela. **3.0:** os bancos também levam baús e bichos, e o barco ganha rede, âncora e casco reforçado; agachado + clique com a mão vazia abre o **menu do barco** (veja **Mundo e Mar**).
+- **Barco Grande (2.63):** 7 tábuas e 2 barcos comuns na bancada (`PBP / PBP / PPP`, barcos no meio). Clique na água com ele: aparece um barco comprido de abeto com convés, bordas e 2 bancos. Leva **5 pessoas**: o primeiro a subir pilota, os outros sentam nos 4 bancos (é só clicar no barco). Com a Vela de Barco, o mastro ocupa um banco (**4 pessoas**) e ele corre como o barco a vela. **3.14:** ganhou uma **proa** de madeira afinando na frente e **duas lanternas** na popa. **3.0:** os bancos também levam baús e bichos, e o barco ganha rede, âncora e casco reforçado; agachado + clique com a mão vazia abre o **menu do barco** (veja **Mundo e Mar**).
 - **Comboio de barcos (2.63):** do próprio jogo: ponha o laço num barco e, agachado, clique em outro barco: o primeiro fica amarrado no segundo. Um barco a vela puxa os de trás (2 pessoas em cada, ou baús nos barcos com baú). O Barco Grande também entra no comboio, puxando ou sendo puxado.
 - **Para-raios guarda o raio:** quando um raio cai num para-raios, ele solta faíscas por 15 minutos. Clique nele para pegar a carga: Pressa II e Velocidade por 3 minutos, e a próxima peça forjada (em até 30 minutos) tem **+8% de chance de sair uma raridade acima**.
 - **Começo guiado:** quem entra pela primeira vez recebe uma janela de boas-vindas com 3 primeiros passos (raça, Jornada, Manual). Com 30 minutos de jogo, uma janela sobre Forja, classe e companheiro; com 2 horas, sobre party, território, colônia e reino. Quem desligou as dicas (`/guia dicas`) não recebe as duas últimas.
@@ -1782,7 +1820,7 @@ Cada uma pode ser desligada em `utilidades:` no config.
 | Freio | 1 alavanca | solta e parada, não escorrega (gelo, ladeira) |
 | Banco | 1 laje de madeira | leva uma pessoa sentada em cima da carga |
 
-- **Visual:** sem mod, é o barco com baú de abeto. Com EMF + ETF, vira uma carroça com 4 rodas e sem remos (2.67.1; ela se chama "Carroça", com o nome escondido, e o modelo vale por esse nome).
+- **Visual (3.14):** a carroça agora tem **desenho próprio para todo mundo, sem mod**: caixa de tábuas por cima do casco, **4 rodas** (de ferro escuro com as Rodas de ferro), **varais** para o animal e as melhorias aparecendo: **toldo** de lona branca com os arcos, **lanterna** pendurada num poste, **banco** com encosto, **barril e fardo de feno** na carga (Baú duplo) e a **alavanca** do freio. As peças andam e viram junto com a carroça. (Antes, o desenho só existia com os mods EMF + ETF.)
 
 ### Estradas (2.94–2.98)
 

@@ -707,9 +707,32 @@ public final class Topicos {
                 .texto("Os monstros que você derrotou. Marcos de abates dão mais dano contra aquele tipo.")
                 .cmd("bestiario").ligados("album", "perigo").palavras("monstros abates").pronto();
         t("trofeus", COLECOES, "Estante de Troféus", Material.QUARTZ_PILLAR)
-                .texto("Exponha o núcleo de um chefe. Cada troféu diferente no seu território dá +1% de XP.")
+                .texto("Jogue um troféu em cima de um pilar de quartzo: núcleo de chefe, cabeça (de dragão, de esqueleto murcho...), peixe troféu (com o peso), relíquia, arma com nome ou arma com memória (100+ abates).",
+                        "Ele fica girando com o nome, quem trouxe, a data e a história (o peso do peixe, a memória da arma). Cada troféu diferente no seu território dá +1% de XP (até +10%).")
                 .ritual(Material.QUARTZ_PILLAR, "Pilar de quartzo", br.rpgatributos.aventura.Raro.NUCLEO_GOLEM.criar(1), 1)
-                .ligados("altar").palavras("trofeu nucleo").pronto();
+                .ligados("altar", "memoria").palavras("trofeu nucleo galeria cabeca peixe reliquia vitrine").pronto();
+        t("natureza", MUNDO, "A Natureza Viva", Material.GOAT_HORN)
+                .texto("Cinco animais lendários, um de cada no mundo (Cervo Dourado, Baleia Celeste, Lobo Lunar, Fênix e Urso Ancião). Um boato no chat diz onde; clique nele para ganhar a lembrança.",
+                        "No outono e na primavera passam bandos de pássaros e manadas de cavalos selvagens (dá para domar).",
+                        "Ninho de abelha natural: o mel às vezes vem com o sabor das flores de perto, ou uma Geleia Real.",
+                        "Rede de Pesca (barbantes em volta de um graveto): lance na água e volte depois. Árvores anciãs: frasco na resina, uma vez por dia, dá Seiva Anciã.")
+                .palavras("natureza lendario cervo baleia lobo fenix urso boato migracao passaros manada cavalo ninho mel geleia rede pesca arvore ancia seiva resina").pronto();
+        t("taverna", MUNDO, "Bares e Tavernas", Material.BARREL)
+                .texto("Taverna: a obra da colônia ou uma placa com [Taverna] na primeira linha (o nome na segunda).",
+                        "Beber lá com amigos (dois ou mais no mesmo minuto): Camaradagem, +10% de XP e Sorte por 20 minutos.",
+                        "Agachado + clique num barril: o taverneiro conta um boato (um por dia). Copo de Dados (tigela e 2 ossos) rola dois dados.")
+                .palavras("taverna bar beber rodada camaradagem boato barril dados copo").pronto();
+        t("moldes", COLECOES, "Moldes de Construção", Material.BREEZE_ROD)
+                .texto("Régua do Construtor (papel, graveto e lingote de cobre, na diagonal). Clique esquerdo e direito num bloco: os dois cantos.",
+                        "Agachado + clique direito: salvar a seleção com um nome (até 32 x 32 x 32) ou escolher um molde para colocar.",
+                        "Colocando: o contorno segue a sua mira, clique esquerdo gira e clique direito coloca. Os blocos saem do inventário (só itens comuns).")
+                .dica("Só ocupa lugar vazio e onde você pode construir.")
+                .palavras("molde moldes regua construtor construcao copiar colar planta casa").pronto();
+        t("memoria", COLECOES, "Armas com Memória", Material.IRON_SWORD)
+                .texto("Toda arma conta o que derrubou: monstros, chefes (valem 25) e jogadores (valem 5). Aparece na descrição.",
+                        "100: Marcada. 500: Veterana (+3% de dano). 1.000: Lendária: você dá o nome e ela ganha uma habilidade sorteada (Sede de Sangue, Eco, Ímpeto, Ceifadora ou Lembrança).")
+                .dica("Exponha a arma marcada na Estante de Troféus.")
+                .ligados("trofeus", "forja").palavras("memoria arma abates marcada veterana lendaria nome habilidade eco sede impeto ceifadora lembranca").pronto();
         t("recordes", COLECOES, "Recordes", Material.GOLD_INGOT)
                 .texto("Maior golpe, maior nível e os maiores números do servidor. Escreva [recordes] numa placa para virar um painel.")
                 .cmd("recordes").ligados("titulos").palavras("ranking placa").pronto();

@@ -171,6 +171,16 @@ public final class Colonias implements Listener {
         return plugin.reinos().aliados(p.getUniqueId(), c.dono);
     }
 
+    /** 3.13: o lugar fica dentro de uma Taverna pronta de alguma colônia? */
+    public boolean naTaverna(Location l) {
+        for (Colonia c : porDono.values()) for (Construcao k : c.construcoes) {
+            if (!"taverna".equals(k.planta) || !k.mundo.equals(l.getWorld().getName())) continue;
+            int r = 7 + k.extra;
+            if (Math.abs(l.getBlockX() - k.x) <= r && Math.abs(l.getBlockZ() - k.z) <= r && l.getBlockY() >= k.y - 1 && l.getBlockY() <= k.y + 15) return true;
+        }
+        return false;
+    }
+
     public Colonia naPrefeitura(Location l) {
         for (Colonia c : porDono.values()) {
             if (c.mundo.equals(l.getWorld().getName()) && c.x == l.getBlockX() && c.y == l.getBlockY() && c.z == l.getBlockZ()) return c;

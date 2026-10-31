@@ -202,7 +202,17 @@ public enum Titulo {
     // 3.8: o Mundo das Almas por dentro
     COLETOR_DE_ALMAS("Coletor de Almas", 0xB0E0EA, Requisito.contador("almas_coletadas", 30, "Recolher 30 Almas Penadas com a lanterna"), Bonus.armadura(1)),
     JUIZ_JULGADO("Juiz Julgado", 0xC9B458, Requisito.contador("juiz_julgado", 1, "Quebrar a balança do Juiz no Mundo das Almas"), new Bonus().comDano(1).comVida(2)),
-    LEITOR_DO_FIM("Leitor do Fim", 0xC77A3A, Requisito.contador("diario_fim", 5, "Ler os capítulos XI a XV do Diário dos Antigos"), Bonus.xpTudo(0.04));
+    LEITOR_DO_FIM("Leitor do Fim", 0xC77A3A, Requisito.contador("diario_fim", 5, "Ler os capítulos XI a XV do Diário dos Antigos"), Bonus.xpTudo(0.04)),
+    // 3.9: armas com memória
+    MEMORIA_VIVA("Memória Viva", 0xD4A85A, Requisito.contador("armas_lendarias", 1, "Levar uma arma até 1.000 abates de memória"), new Bonus().comDano(1)),
+    // 3.10: moldes de construção
+    ARQUITETO("Arquiteto", 0x8FB8DE, Requisito.contador("moldes_colocados", 10, "Colocar 10 construções com a Régua do Construtor"), Bonus.armadura(1)),
+    // 3.11: a natureza viva
+    AMIGO_DAS_LENDAS("Amigo das Lendas", 0xFFD54F, Requisito.contador("lendarios_achados", 5, "Encontrar os cinco animais lendários"), new Bonus().comVida(2).comDano(1)),
+    GUARDIAO_DA_SEIVA("Guardião da Seiva", 0xE08A2E, Requisito.contador("seiva_ancia", 10, "Colher 10 Seivas Anciãs"), Bonus.xpTudo(0.02)),
+    // 3.13: as tavernas
+    FREGUES_DA_CASA("Freguês da Casa", 0xC8873A, Requisito.contador("rodadas", 10, "Ganhar Camaradagem 10 vezes numa taverna"), Bonus.xpTudo(0.02)),
+    OUVIDO_DE_TAVERNA("Ouvido de Taverna", 0xC8873A, Requisito.contador("boatos", 15, "Ouvir 15 boatos do taverneiro"), Bonus.armadura(1));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(
