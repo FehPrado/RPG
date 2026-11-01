@@ -46,6 +46,8 @@ public final class CanalApoio implements PluginMessageListener, Listener {
 
     private final RPGAtributos plugin;
     private final Set<UUID> comMod = new HashSet<>();
+    /** 3.20: a versão do mod de cada jogador (vem no "ola"). */
+    private final Map<UUID, String> versoes = new HashMap<>();
     private final Map<UUID, Map<String, Long>> ultima = new HashMap<>();
 
     public CanalApoio(RPGAtributos plugin) {
@@ -60,6 +62,30 @@ public final class CanalApoio implements PluginMessageListener, Listener {
     public void parar() {
         plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, CANAL, this);
         plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(plugin, CANAL_DADOS);
+    }
+
+    /** 3.20: o mod do jogador é desta versão ou mais novo? (ex.: "0.3.0") */
+    public boolean modPeloMenos(Player p, String minima) {
+        if (!temMod(p)) return false;
+        String v = versoes.getOrDefault(p.getUniqueId(), "0");
+        String[] a = v.split("[.]"), b = minima.split("[.]");
+        for (int i = 0; i < Math.max(a.length, b.length); i++) {
+            int x = i < a.length ? numero(a[i]) : 0, y = i < b.length ? numero(b[i]) : 0;
+            if (x != y) return x > y;
+        }
+        return true;
+    }
+
+    public String versaoMod(Player p) {
+        return versoes.getOrDefault(p.getUniqueId(), "?");
+    }
+
+    private static int numero(String s) {
+        try {
+            return Integer.parseInt(s.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     /** O jogador está com o mod de apoio? */
@@ -78,6 +104,7 @@ public final class CanalApoio implements PluginMessageListener, Listener {
         doJogador.put(acao, agora);
         // As mensagens chegam na thread principal do servidor (o Paper entrega assim).
         if (acao.startsWith("ola")) {
+            versoes.put(p.getUniqueId(), acao.substring(3).trim());
             if (comMod.add(p.getUniqueId())) {
                 p.sendActionBar(Component.text("✦ Mod de apoio conectado: as teclas do RPGAtributos estão em Opções > Controles.", NamedTextColor.GREEN));
                 plugin.getLogger().info(p.getName() + " está com o mod de apoio (" + acao.substring(3).trim() + ")"
@@ -244,6 +271,7 @@ public final class CanalApoio implements PluginMessageListener, Listener {
     @EventHandler
     public void aoSair(PlayerQuitEvent e) {
         comMod.remove(e.getPlayer().getUniqueId());
+        versoes.remove(e.getPlayer().getUniqueId());
         ultima.remove(e.getPlayer().getUniqueId());
     }
 }

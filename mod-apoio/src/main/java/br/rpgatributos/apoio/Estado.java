@@ -52,8 +52,9 @@ final class Estado {
                 }
                 default -> { } // mensagem de uma versão mais nova do plugin
             }
-        } catch (RuntimeException ignorado) {
-            // JSON estranho: ignora (o jogo não pode cair por causa disso)
+        } catch (RuntimeException erro) {
+            // JSON estranho: o jogo não cai, mas fica no log para dar para achar o problema.
+            com.mojang.logging.LogUtils.getLogger().warn("[rpgapoio] Não consegui ler a mensagem do plugin ({}): {}", texto.length() > 40 ? texto.substring(0, 40) + "..." : texto, erro.toString());
         }
     }
 

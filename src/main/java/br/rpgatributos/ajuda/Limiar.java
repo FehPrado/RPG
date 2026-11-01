@@ -307,19 +307,29 @@ public final class Limiar implements Listener, CommandExecutor {
         return o;
     }
 
+    /** O mod do jogador desenha o mapa? (o Limiar chegou no mod de apoio 0.3.0) */
+    private boolean modDesenha(Player p) {
+        return plugin.canalApoio() != null && plugin.canalApoio().modPeloMenos(p, "0.3.0")
+                && p.getListeningPluginChannels().contains("rpgatributos:dados");
+    }
+
     private void enviar(Player p, boolean abrir, String concluida) {
-        if (plugin.canalApoio() == null || !plugin.canalApoio().temMod(p)) return;
+        if (!modDesenha(p)) return;
         plugin.canalApoio().enviar(p, "limiar " + json(p, abrir, concluida));
     }
 
-    /** Abre o Limiar: o mapa no mod, ou o menu de baú sem ele. */
+    /** Abre o Limiar: o mapa no mod (0.3.0 ou mais novo), ou o menu de baú. */
     public void abrir(Player p) {
         verificar(p);
-        if (plugin.canalApoio() != null && plugin.canalApoio().temMod(p) && p.getListeningPluginChannels().contains("rpgatributos:dados")) {
+        if (modDesenha(p)) {
             enviar(p, true, null);
             return;
         }
         abrirMenu(p, 0);
+        if (plugin.canalApoio() != null && plugin.canalApoio().temMod(p)) {
+            p.sendMessage(Component.text("✦ Seu mod de apoio é o " + plugin.canalApoio().versaoMod(p)
+                    + ": o mapa do Limiar precisa do 0.3.0 (rpgapoio-0.3.0.jar). Por enquanto, o menu.", COR));
+        }
     }
 
     /** O mod pediu: "limiar:guia:<assunto>" ao clicar numa missão. */
