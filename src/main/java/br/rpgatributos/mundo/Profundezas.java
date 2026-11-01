@@ -374,7 +374,7 @@ public final class Profundezas implements Listener {
         w.playSound(c, Sound.BLOCK_BEACON_ACTIVATE, 1f, 1.4f);
         w.playSound(c, Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1f, 0.8f);
         w.spawnParticle(Particle.END_ROD, c, 80, 3, 2, 3, 0.08);
-        w.spawnParticle(Particle.FLASH, c, 1);
+        w.spawnParticle(Particle.FLASH, c, 1, org.bukkit.Color.WHITE);
         p.showTitle(Title.title(Component.text("✦ Raiz de Luz acesa", COR),
                 Component.text("A escuridão recua por aqui.", NamedTextColor.GRAY),
                 Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(2200), Duration.ofMillis(600))));

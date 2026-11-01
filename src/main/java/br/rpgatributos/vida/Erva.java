@@ -38,6 +38,12 @@ public enum Erva {
     public TextColor cor() { return cor; }
     public String id() { return name().toLowerCase(Locale.ROOT); }
 
+    public ItemStack criar(int qtd, br.rpgatributos.fazenda.Qualidade q) {
+        ItemStack i = criar(qtd);
+        q.aplicar(i);
+        return i;
+    }
+
     public ItemStack criar(int qtd) {
         ItemStack i = new ItemStack(Material.QUARTZ, qtd);
         i.editMeta(m -> {

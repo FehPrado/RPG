@@ -257,7 +257,7 @@ public final class ArmasMemoria implements Listener {
             List<Component> lore = new ArrayList<>(m.hasLore() ? m.lore() : List.of());
             lore.removeIf(l -> {
                 String s = PlainTextComponentSerializer.plainText().serialize(l);
-                return s.startsWith("⚔ Memória") || s.startsWith("✦ Habilidade da memória");
+                return s.startsWith("⚔ Memória") || s.startsWith("✦ Habilidade da memória") || s.startsWith("✦ Golpe da lenda");
             });
             int total = mon + 25 * che + 5 * jog;
             String grau = total >= LENDARIA ? " · Lendária" : total >= VETERANA ? " · Veterana" : total >= MARCADA ? " · Marcada" : "";
@@ -267,7 +267,10 @@ public final class ArmasMemoria implements Listener {
             sb.append(grau);
             lore.add(Component.text(sb.toString(), total >= MARCADA ? COR : NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
             Habilidade h = habilidade(arma);
-            if (h != null) lore.add(Component.text("✦ Habilidade da memória: " + h.nome + " (" + h.efeito + ")", TextColor.color(0xFFD27F)).decoration(TextDecoration.ITALIC, false));
+            if (h != null) {
+                lore.add(Component.text("✦ Habilidade da memória: " + h.nome + " (" + h.efeito + ")", TextColor.color(0xFFD27F)).decoration(TextDecoration.ITALIC, false));
+                lore.add(linhaGolpe(h));
+            }
             m.lore(lore);
         });
     }
@@ -286,6 +289,7 @@ public final class ArmasMemoria implements Listener {
         int mem = memoria(arma);
         if (mem >= VETERANA) e.setDamage(e.getDamage() * 1.03);
         Habilidade h = habilidade(arma);
+        if (h != null && d instanceof Player && alvo instanceof Enemy && !ecoando) carregar(p, arma);
         if (h == Habilidade.CEIFADORA) {
             var max = alvo.getAttribute(Attribute.MAX_HEALTH);
             if (max != null && alvo.getHealth() < max.getValue() * 0.3) e.setDamage(e.getDamage() * 1.2);
@@ -304,5 +308,180 @@ public final class ArmasMemoria implements Listener {
                 alvo.getWorld().playSound(alvo.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.6f, 1.6f);
             }, 6L);
         }
+    }
+
+    // =====================================================================
+    //  3.18: o golpe da lenda (o 5º golpe, só da arma Lendária)
+    // =====================================================================
+
+    /** Golpes em monstros para a arma despertar. */
+    public static final int CARGA_CHEIA = 12;
+    private final java.util.Map<java.util.UUID, Integer> carga = new java.util.HashMap<>();
+
+    /** O nome do golpe de cada habilidade. */
+    public static String golpeDa(Habilidade h) {
+        return switch (h) {
+            case SEDE -> "Banquete Rubro";
+            case ECO -> "Eco Sem Fim";
+            case IMPETO -> "Investida da Lenda";
+            case CEIFADORA -> "Colheita";
+            case LEMBRANCA -> "Chamado dos Caídos";
+        };
+    }
+
+    private static String descricaoGolpe(Habilidade h) {
+        return switch (h) {
+            case SEDE -> "corte em leque à frente; cura 30% do dano feito";
+            case ECO -> "três golpes seguidos no inimigo mais perto";
+            case IMPETO -> "avança 6 blocos ferindo quem estiver no caminho";
+            case CEIFADORA -> "giro em volta; quem tiver menos de 15% da vida cai (menos chefes)";
+            case LEMBRANCA -> "explosão de memórias: fere em volta e deixa os inimigos fracos e marcados";
+        };
+    }
+
+    private void carregar(Player p, ItemStack arma) {
+        int antes = carga.getOrDefault(p.getUniqueId(), 0);
+        if (antes >= CARGA_CHEIA) return;
+        int agora = antes + 1;
+        carga.put(p.getUniqueId(), agora);
+        if (agora < CARGA_CHEIA) return;
+        Habilidade h = habilidade(arma);
+        p.sendActionBar(Component.text("✦ A arma desperta: agachado + clique direito = " + golpeDa(h), NamedTextColor.GOLD, TextDecoration.BOLD));
+        p.playSound(p.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.6f, 1.6f);
+        p.getWorld().spawnParticle(Particle.END_ROD, p.getLocation().add(0, 1.2, 0), 15, 0.3, 0.4, 0.3, 0.03);
+    }
+
+    /** A linha do golpe na descrição da arma Lendária. */
+    public static Component linhaGolpe(Habilidade h) {
+        return Component.text("✦ Golpe da lenda: " + golpeDa(h) + " (" + descricaoGolpe(h) + ")", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void aoSoltarGolpe(org.bukkit.event.player.PlayerInteractEvent e) {
+        if (e.getHand() != org.bukkit.inventory.EquipmentSlot.HAND || !e.getPlayer().isSneaking()) return;
+        var a = e.getAction();
+        if (a != org.bukkit.event.block.Action.RIGHT_CLICK_AIR && a != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) return;
+        if (a == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK && e.getClickedBlock() != null
+                && (e.getClickedBlock().getType().isInteractable() || plugin.ehEstacao(e.getClickedBlock()))) return;
+        Player p = e.getPlayer();
+        ItemStack arma = p.getInventory().getItemInMainHand();
+        Habilidade h = habilidade(arma);
+        if (h == null || memoria(arma) < LENDARIA) return;
+        int c = carga.getOrDefault(p.getUniqueId(), 0);
+        if (c < CARGA_CHEIA) {
+            p.sendActionBar(Component.text("A arma ainda dorme: " + c + "/" + CARGA_CHEIA + " golpes em monstros", NamedTextColor.GRAY));
+            return;
+        }
+        e.setCancelled(true);
+        carga.put(p.getUniqueId(), 0);
+        golpeDaLenda(p, h);
+        plugin.titulos().registrar(p, "golpes_da_lenda", 1);
+    }
+
+    private double danoBase(Player p) {
+        var a = p.getAttribute(Attribute.ATTACK_DAMAGE);
+        return Math.max(4, a == null ? 4 : a.getValue());
+    }
+
+    private List<LivingEntity> inimigosPerto(Player p, double raio) {
+        List<LivingEntity> l = new ArrayList<>();
+        for (Entity en : p.getNearbyEntities(raio, raio / 2 + 1, raio)) {
+            if (en instanceof LivingEntity le && !le.isDead() && plugin.alvos().inimigo(p, le)) l.add(le);
+        }
+        return l;
+    }
+
+    /** O golpe próprio de cada arma lendária (também pelo /rpgadmin). */
+    public void golpeDaLenda(Player p, Habilidade h) {
+        double base = danoBase(p);
+        var w = p.getWorld();
+        org.bukkit.Location c = p.getLocation();
+        org.bukkit.util.Vector frente = c.getDirection().setY(0);
+        if (frente.lengthSquared() < 0.01) frente = new org.bukkit.util.Vector(1, 0, 0);
+        frente.normalize();
+        p.showTitle(net.kyori.adventure.title.Title.title(Component.empty(), Component.text("✦ " + golpeDa(h), NamedTextColor.GOLD, TextDecoration.BOLD),
+                net.kyori.adventure.title.Title.Times.times(java.time.Duration.ofMillis(50), java.time.Duration.ofMillis(900), java.time.Duration.ofMillis(300))));
+        w.playSound(c, Sound.ITEM_TRIDENT_THUNDER, 0.5f, 1.5f);
+        switch (h) {
+            case SEDE -> {
+                double total = 0;
+                for (LivingEntity le : inimigosPerto(p, 5)) {
+                    org.bukkit.util.Vector ate = le.getLocation().toVector().subtract(c.toVector()).setY(0);
+                    if (ate.lengthSquared() > 0.01 && ate.normalize().dot(frente) < 0.4) continue;
+                    double antes = le.getHealth();
+                    plugin.alvos().ferir(p, le, base * 2);
+                    total += Math.max(0, antes - le.getHealth());
+                    w.spawnParticle(Particle.DUST, le.getLocation().add(0, 1, 0), 20, 0.4, 0.5, 0.4, 0,
+                            new Particle.DustOptions(org.bukkit.Color.fromRGB(0xB71C1C), 1.5f));
+                }
+                var max = p.getAttribute(Attribute.MAX_HEALTH);
+                if (max != null) p.setHealth(Math.min(max.getValue(), p.getHealth() + total * 0.3));
+                w.spawnParticle(Particle.SWEEP_ATTACK, c.clone().add(frente.clone().multiply(2)).add(0, 1, 0), 5, 1, 0.3, 1, 0);
+            }
+            case ECO -> {
+                LivingEntity alvo = null;
+                double melhor = 36;
+                for (LivingEntity le : inimigosPerto(p, 6)) {
+                    double d = le.getLocation().distanceSquared(c);
+                    if (d < melhor) { melhor = d; alvo = le; }
+                }
+                if (alvo == null) return;
+                LivingEntity a = alvo;
+                for (int i = 0; i < 3; i++) {
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                        if (!a.isValid() || a.isDead() || !p.isOnline()) return;
+                        a.setNoDamageTicks(0);
+                        plugin.alvos().ferir(p, a, base * 1.2);
+                        w.spawnParticle(Particle.SONIC_BOOM, a.getLocation().add(0, 1, 0), 1);
+                        w.playSound(a.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.8f, 1.8f);
+                    }, i * 5L);
+                }
+            }
+            case IMPETO -> {
+                p.setVelocity(frente.clone().multiply(1.8).setY(0.2));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 80, 1));
+                java.util.Set<java.util.UUID> ja = new java.util.HashSet<>();
+                for (int i = 1; i <= 6; i++) {
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                        if (!p.isOnline()) return;
+                        for (LivingEntity le : inimigosPerto(p, 2.2)) {
+                            if (!ja.add(le.getUniqueId())) continue;
+                            plugin.alvos().ferir(p, le, base * 1.5);
+                            le.setVelocity(le.getVelocity().setY(0.4));
+                        }
+                        w.spawnParticle(Particle.CLOUD, p.getLocation().add(0, 0.5, 0), 4, 0.2, 0.2, 0.2, 0.02);
+                    }, i * 2L);
+                }
+            }
+            case CEIFADORA -> {
+                for (int i = 0; i < 16; i++) {
+                    double ang = i * Math.PI / 8;
+                    w.spawnParticle(Particle.SWEEP_ATTACK, c.clone().add(Math.cos(ang) * 2.5, 1, Math.sin(ang) * 2.5), 1);
+                }
+                for (LivingEntity le : inimigosPerto(p, 4)) {
+                    var max = le.getAttribute(Attribute.MAX_HEALTH);
+                    boolean chefe = max != null && max.getValue() >= 150;
+                    if (!chefe && max != null && le.getHealth() < max.getValue() * 0.15) {
+                        plugin.alvos().ferir(p, le, le.getHealth() + 1);
+                    } else {
+                        plugin.alvos().ferir(p, le, base * 1.5);
+                    }
+                }
+            }
+            case LEMBRANCA -> {
+                w.spawnParticle(Particle.SOUL, c.clone().add(0, 1, 0), 60, 2.5, 1, 2.5, 0.05);
+                w.playSound(c, Sound.PARTICLE_SOUL_ESCAPE, 1.5f, 0.8f);
+                for (LivingEntity le : inimigosPerto(p, 5)) {
+                    plugin.alvos().ferir(p, le, base * 1.2);
+                    le.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 120, 1));
+                    le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 120, 0));
+                }
+            }
+        }
+    }
+
+    /** Para o /rpgadmin: enche a carga da arma lendária. */
+    public void encher(Player p) {
+        carga.put(p.getUniqueId(), CARGA_CHEIA);
     }
 }

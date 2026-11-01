@@ -75,6 +75,12 @@ public enum Coleta {
     public boolean aceita(String b) { return bioma.test(b); }
     public String id() { return name().toLowerCase(Locale.ROOT); }
 
+    public ItemStack criar(int qtd, br.rpgatributos.fazenda.Qualidade q) {
+        ItemStack i = criar(qtd);
+        q.aplicar(i);
+        return i;
+    }
+
     public ItemStack criar(int qtd) {
         ItemStack i = new ItemStack(Material.APPLE, qtd);
         i.editMeta(m -> {

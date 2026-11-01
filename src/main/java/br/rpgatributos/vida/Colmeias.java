@@ -31,6 +31,8 @@ import java.util.Set;
  * por perto, faz um mel a cada 5 minutos (até 6). O tipo depende do lugar e da hora: girassóis
  * dão Mel Dourado, frio ou inverno dão Mel Gelado, 5 flores diferentes dão Mel Floral, a noite
  * dá Mel Noturno; senão, Mel Silvestre. Para tirar, clique com garrafas de vidro.
+ * 3.15: 3 flores iguais dão o mel delas (Rubro, Solar, Azul, Tulipa, Branco), às vezes sai Geleia Real
+ * e o mel tem qualidade (pela Agricultura).
  */
 public final class Colmeias extends Estacao {
 
@@ -64,6 +66,8 @@ public final class Colmeias extends Estacao {
         if (f[2] >= 2) return Mel.DOURADO;
         if (l.getBlock().getTemperature() < 0.15 || plugin.estacoes().atual() == Estacoes.Estacao.INVERNO) return Mel.GELADO;
         if (f[1] >= 5) return Mel.FLORAL;
+        Mel flor = Mel.dasFlores(l.getBlock(), 3);
+        if (flor != null) return flor;
         if (Ceu.noite(l.getWorld())) return Mel.NOTURNO;
         return Mel.SILVESTRE;
     }
@@ -166,7 +170,14 @@ public final class Colmeias extends Estacao {
             return;
         }
         if (!criativo) p.getInventory().removeItem(new ItemStack(Material.GLASS_BOTTLE, tirar));
-        p.getInventory().addItem(mel.criar(tirar)).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
+        java.util.Map<br.rpgatributos.fazenda.Qualidade, Integer> porQualidade = new java.util.EnumMap<>(br.rpgatributos.fazenda.Qualidade.class);
+        double fracao = plugin.stats().getNivel(p, Skill.AGRICULTURA) / (double) plugin.settings().nivelMaximo;
+        for (int n = 0; n < tirar; n++) porQualidade.merge(br.rpgatributos.fazenda.Qualidade.sortear(fracao), 1, Integer::sum);
+        porQualidade.forEach((q, n) -> p.getInventory().addItem(mel.criar(n, q)).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s)));
+        if (java.util.concurrent.ThreadLocalRandom.current().nextDouble() < 0.03 * tirar) {
+            p.getInventory().addItem(Mel.GELEIA_REAL.criar(1)).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
+            p.sendMessage(Component.text("🐝 No fundo da colmeia havia Geleia Real!", Mel.GELEIA_REAL.cor()));
+        }
         long resto = c[0] - tirar;
         DadosBloco.gravar(DADO, l, resto + "|" + (c[0] >= MAXIMO ? System.currentTimeMillis() : c[1]));
         p.playSound(p.getLocation(), Sound.ITEM_BOTTLE_FILL, 1f, 1f);
@@ -184,12 +195,17 @@ public final class Colmeias extends Estacao {
         return n;
     }
 
-    /** O efeito do mel especial ao beber. */
+    /** O efeito do mel ao beber (todos os méis do catálogo, da colmeia ou do ninho). */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void aoBeber(PlayerItemConsumeEvent e) {
         Mel m = Mel.de(e.getItem());
         if (m == null) return;
         Player p = e.getPlayer();
-        plugin.getServer().getScheduler().runTask(plugin, () -> { if (p.isOnline()) p.addPotionEffect(m.efeito()); });
+        double fator = br.rpgatributos.fazenda.Qualidade.de(e.getItem()).fator();
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            if (!p.isOnline()) return;
+            p.addPotionEffect(m.efeito().withDuration((int) Math.round(m.efeito().getDuration() * fator)));
+            if (m == Mel.BRANCO) p.removePotionEffect(org.bukkit.potion.PotionEffectType.POISON);
+        });
     }
 }

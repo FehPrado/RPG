@@ -81,7 +81,7 @@ public final class Trofeus extends Estacao {
     public static String tipoTrofeu(ItemStack i) {
         if (i == null || i.isEmpty()) return null;
         Raro r = Raro.de(i);
-        if (r != null && r.nucleo()) return r.name();
+        if (r != null && (r.nucleo() || r == Raro.GALHADA || r == Raro.CABECA_DO_CAVALEIRO)) return r.name();
         if (CABECAS.contains(i.getType())) return "cabeca:" + i.getType().name();
         if (br.rpgatributos.mundo.NaturezaViva.deLembranca(i) != null) return "lendario:" + br.rpgatributos.mundo.NaturezaViva.deLembranca(i).name();
         if (i.getPersistentDataContainer().has(br.rpgatributos.pesca.PesoPeixe.K_PESO)) return "peixe:" + i.getType().name() + ":" + nomeSimples(i);

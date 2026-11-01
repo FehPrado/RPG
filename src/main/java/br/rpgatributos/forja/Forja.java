@@ -265,6 +265,11 @@ public final class Forja {
      * Mantém o que o item já tinha (encantamentos, nome, acabamento).
      */
     public ItemStack forjar(Player ferreiro, ItemStack base, Raridade forcada) {
+        return forjar(ferreiro, base, forcada, 0);
+    }
+
+    /** 3.19: {@code ritmo} soma na chance de subir uma raridade (a barra do martelo). */
+    public ItemStack forjar(Player ferreiro, ItemStack base, Raridade forcada, double ritmo) {
         Categoria cat = Categoria.de(base.getType());
         if (cat == null) return base;
         int nivel = ferreiro == null ? 0 : plugin.stats().getNivel(ferreiro, Skill.FERRARIA);
@@ -280,7 +285,7 @@ public final class Forja {
         // Ferreiro e Mestre Forjador: chance de sair uma raridade acima.
         if (forcada == null && ferreiro != null && r != Raridade.MITICO
                 && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.classes().chanceRaridadeExtra(ferreiro) + plugin.lendas().chanceRaridadeExtra(ferreiro) + plugin.racas().chanceRaridadeExtra(ferreiro)
-                        + plugin.talentos().chanceRaridadeExtra(ferreiro) + cargaDoRaio) {
+                        + plugin.talentos().chanceRaridadeExtra(ferreiro) + cargaDoRaio + ritmo) {
             r = Raridade.values()[r.ordinal() + 1];
             // Obra-Prima: chance de subir mais uma.
             if (r != Raridade.MITICO && java.util.concurrent.ThreadLocalRandom.current().nextDouble() < plugin.talentos().chanceSegundaRaridade(ferreiro)) {

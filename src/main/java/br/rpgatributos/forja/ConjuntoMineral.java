@@ -103,7 +103,36 @@ public enum ConjuntoMineral implements ArteTrajes.Paleta {
     // 3.8: o mineral do Mundo das Almas.
     ETEREO("Etéreo", Raro.ESSENCIA_ETEREA, 0x7FD8E8, Traje.Estilo.ESCAMAS,
             0xFF9AA6B4, 0xFFE0F8FF, 0xFF3A4450, 0xFF7FD8E8, 0xFFB0F0FF,
-            "Agachado no ar, você cai devagar.", "Uma vez a cada 10 minutos, um golpe que mataria deixa você com 1 coração.", null);
+            "Agachado no ar, você cai devagar.", "Uma vez a cada 10 minutos, um golpe que mataria deixa você com 1 coração.", null),
+    // 3.19: as ligas do Cadinho. Cada 2 peças de liga contam como 1 de cada mineral de origem
+    // (com 4 peças: os bônus de 2 dos dois minerais), mais fracas que um conjunto puro.
+    ACO_LUNAR("Aço Lunar", Raro.ACO_LUNAR, 0x9AA2C0, Traje.Estilo.PLACAS,
+            0xFF8A92B0, 0xFFE6ECFF, 0xFF3A3E52, 0xFF8A5AE0, 0xFFC8D0F0,
+            "Liga de Lunar e Ferro Negro: cada 2 peças contam 1 de cada.", "Com 4: +25% de dano em mortos-vivos e não é empurrado.", null),
+    AMBAR_SANGUE("Âmbar-Sangue", Raro.AMBAR_SANGUE, 0xC0392B, Traje.Estilo.ESCAMAS,
+            0xFFA8281E, 0xFFF2A33A, 0xFF4A0612, 0xFFD4AF37, 0xFFFFD27A,
+            "Liga de Âmbar e Pedra-Sangue: cada 2 peças contam 1 de cada.", "Com 4: Sorte I e rouba 5% do dano em vida.", null),
+    GELO_MARINHO("Gelo Marinho", Raro.GELO_MARINHO, 0x8AD0E8, Traje.Estilo.ESCAMAS,
+            0xFF6ABCD8, 0xFFF0FCFF, 0xFF2E6A88, 0xFFF3E9F0, 0xFFD8F6FF,
+            "Liga de Gelo e Pérola: cada 2 peças contam 1 de cada.", "Com 4: não congela e respira debaixo d'água.", null),
+    BRONZE_VULCANICO("Bronze Vulcânico", Raro.BRONZE_VULCANICO, 0xD8682A, Traje.Estilo.PLACAS,
+            0xFFC8602A, 0xFFFFB060, 0xFF6A2A0A, 0xFF4E9A7E, 0xFFFFD8A0,
+            "Liga de Antigo e Magma: cada 2 peças contam 1 de cada.", "Com 4: −40% de dano de queda e −30% de fogo e lava.", null);
+
+    /** 3.19: os dois minerais de uma liga (vazio nos conjuntos puros). */
+    public ConjuntoMineral[] pais() {
+        return switch (this) {
+            case ACO_LUNAR -> new ConjuntoMineral[]{LUNAR, FERRO_NEGRO};
+            case AMBAR_SANGUE -> new ConjuntoMineral[]{AMBAR, PEDRA_SANGUE};
+            case GELO_MARINHO -> new ConjuntoMineral[]{GELO, PEROLA};
+            case BRONZE_VULCANICO -> new ConjuntoMineral[]{ANTIGO, MAGMA};
+            default -> new ConjuntoMineral[0];
+        };
+    }
+
+    public boolean liga() {
+        return pais().length > 0;
+    }
 
     /** As 9 peças, cada uma com a base de ferro do jogo. */
     public enum Peca {
@@ -385,6 +414,13 @@ public enum ConjuntoMineral implements ArteTrajes.Paleta {
             ConjuntoMineral c = de(i);
             if (c != null) m.merge(c, 1, Integer::sum);
         }
+        // 3.19: as ligas contam metade para cada mineral de origem.
+        java.util.Map<ConjuntoMineral, Integer> extra = new java.util.EnumMap<>(ConjuntoMineral.class);
+        for (var en : m.entrySet()) {
+            int metade = en.getValue() / 2;
+            if (metade > 0) for (ConjuntoMineral pai : en.getKey().pais()) extra.merge(pai, metade, Integer::sum);
+        }
+        extra.forEach((c, n) -> m.merge(c, n, Integer::sum));
         return m;
     }
 }

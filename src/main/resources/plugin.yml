@@ -254,6 +254,11 @@ commands:
     usage: /jornada
     aliases: [primeirospassos]
     permission: rpg.guia
+  limiar:
+    description: O Limiar, o livro de missões (com o mod de apoio, o mapa de missões; sem ele, o menu).
+    usage: /limiar
+    aliases: [missoeslimiar, quests]
+    permission: rpg.guia
   grimorio:
     description: Abre o grimório (suas magias, criador de magias e magias secretas).
     usage: /grimorio

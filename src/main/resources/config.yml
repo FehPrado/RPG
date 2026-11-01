@@ -47,6 +47,9 @@ pulo:
   distancia-minima-entre-pulos: 2.5   # anti-farm: pular parado no mesmo lugar não dá XP
 
 combate:
+  golpe-anunciado: true     # 3.17: inimigos fortes avisam o golpe (amarelo apare, vermelho esquive, roxo se afaste)
+  execucao: true            # 3.17: equilíbrio quebrado + agachado + golpe = execução
+  fases-de-chefe: true      # 3.17: chefes (150+ de vida) mudam de fase aos 66% e 33%
   xp-monstro: 8
   xp-animal: 2
   xp-jogador: 15
@@ -390,6 +393,7 @@ masmorra:
 # ==========================================================
 
 party:
+  papeis: true                        # 3.18: Protetor, Curandeiro e Marcador pela classe (com outro membro perto)
   tamanho-maximo: 6
   raio-xp-compartilhado: 32           # membros a até 32 blocos dividem o XP de Combate
   xp-compartilhado: 0.5               # cada membro perto ganha 50% do XP de quem matou o monstro
@@ -439,6 +443,7 @@ ferraria:
   xp-por-lingote-fundido: 0.5   # tirar lingotes de ferro/ouro/cobre da fornalha (sucata de netherite vale 4x)
 
 forja:
+  barra-martelo: true                 # 3.19: na Forja do Ferreiro, um clique abre a barra do martelo (shift + clique pula)
   conjuntos-dos-minerais: true        # 2.64: armas, ferramentas e armaduras dos minerais (Âmbar, Jade, Pérola, Gelo, Pedra-Sangue, Magma, Quartzo Negro)
   ativada: true
   # true = itens só saem forjados na Forja do Ferreiro (ritual: jogue 2 blocos de ferro e
@@ -659,3 +664,21 @@ natureza:
   migracao: true                      # bandos de pássaros e manadas de cavalos no outono e na primavera
   ninhos: true                        # mel das flores e Geleia Real nos ninhos de abelha naturais
   arvores-ancias: true                # árvores anciãs com Seiva Anciã nas florestas novas
+
+# 3.16: animais novos (feitos com bichos do jogo; não são salvos no mundo)
+fauna:
+  cervos: true                        # cervo (com galhada) e corças nas matas, de dia; fogem de quem corre
+  javalis: true                       # investem em quem chega perto sem agachar ou bate neles
+  corujas: true                       # de noite nas matas
+  pinguins: true                      # praias e planícies geladas; às vezes pescam um peixe
+  tartarugas: true                    # Tartaruga-Gigante rara nas praias (uma por mundo); dá carona
+  borboletas: true                    # borboletas nas flores de dia e mariposas nas luzes de noite (pegue com garrafa)
+
+# 3.16: assombros (nascem no lugar de um monstro comum)
+assombros:
+  espantalho: true                    # de noite perto de plantações; só anda quando ninguém olha
+  banshee: true                       # pântanos de noite; grito deixa lento
+  golem-de-musgo: true                # cavernas exuberantes
+  tecela: true                        # Aranha-Tecelã: teias e aranhas pequenas
+  cavaleiro: true                     # lua cheia, na estrada (caminho de terra ou cascalho)
+  afogado-ancora: true                # rios; puxa para o fundo

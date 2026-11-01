@@ -24,7 +24,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 @Mod(value = RpgApoio.MODID, dist = Dist.CLIENT)
 public final class RpgApoio {
     public static final String MODID = "rpgapoio";
-    public static final String VERSAO = "0.2.0";
+    public static final String VERSAO = "0.3.0";
 
     public RpgApoio(IEventBus modBus) {
         modBus.addListener(Teclas::registrar);

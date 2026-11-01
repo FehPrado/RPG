@@ -613,7 +613,8 @@ public final class PacoteRecursos implements Listener {
     }
 
     /** Itens do jogo cujo modelo normal é o do bloco. */
-    private static final Map<String, String> BLOCOS = Map.of("lodestone", "minecraft:block/lodestone", "dragon_egg", "minecraft:block/dragon_egg");
+    private static final Map<String, String> BLOCOS = Map.of("lodestone", "minecraft:block/lodestone", "dragon_egg", "minecraft:block/dragon_egg",
+            "jack_o_lantern", "minecraft:block/jack_o_lantern");
 
     private static void caso(Map<String, List<String>> casos, String vanilla, String id) {
         casos.computeIfAbsent(vanilla, k -> new java.util.ArrayList<>()).add(id);

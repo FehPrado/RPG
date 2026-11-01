@@ -212,7 +212,24 @@ public enum Titulo {
     GUARDIAO_DA_SEIVA("Guardião da Seiva", 0xE08A2E, Requisito.contador("seiva_ancia", 10, "Colher 10 Seivas Anciãs"), Bonus.xpTudo(0.02)),
     // 3.13: as tavernas
     FREGUES_DA_CASA("Freguês da Casa", 0xC8873A, Requisito.contador("rodadas", 10, "Ganhar Camaradagem 10 vezes numa taverna"), Bonus.xpTudo(0.02)),
-    OUVIDO_DE_TAVERNA("Ouvido de Taverna", 0xC8873A, Requisito.contador("boatos", 15, "Ouvir 15 boatos do taverneiro"), Bonus.armadura(1));
+    OUVIDO_DE_TAVERNA("Ouvido de Taverna", 0xC8873A, Requisito.contador("boatos", 15, "Ouvir 15 boatos do taverneiro"), Bonus.armadura(1)),
+    // 3.16: animais e assombros
+    MATEIRO("Mateiro", 0x8D6E63, Requisito.contador("caca", 20, "Caçar 20 cervos, corças ou javalis"), Bonus.velocidade(0.02)),
+    CACADOR_DE_BORBOLETAS("Caçador de Borboletas", 0x42A5F5, Requisito.contador("borboletas", 10, "Pegar 10 borboletas ou mariposas com uma garrafa"), Bonus.xpSkill(Skill.AGRICULTURA, 0.03)),
+    CARONA_LENTA("Carona Lenta", 0x558B2F, Requisito.contador("tartaruga", 1, "Subir numa Tartaruga-Gigante"), Bonus.folego(0.2)),
+    EXORCISTA("Exorcista", 0xCFE8F0, Requisito.contador("assombros", 25, "Derrotar 25 assombros (Espantalho, Banshee, Golem de Musgo...)"), Bonus.dano(1)),
+    // 3.17: luta pesada
+    MAO_FIRME("Mão Firme", 0xFFE082, Requisito.contador("pesados_aparados", 10, "Aparar 10 golpes pesados anunciados"), Bonus.armadura(1)),
+    CARRASCO("Carrasco", 0xB71C1C, Requisito.contador("execucoes", 25, "Fazer 25 execuções"), Bonus.dano(1)),
+    // 3.18: golpe da lenda, papéis e treino
+    LENDA_DESPERTA("Lenda Desperta", 0xFFD54F, Requisito.contador("golpes_da_lenda", 10, "Soltar 10 golpes da lenda com uma arma Lendária"), Bonus.dano(1)),
+    ANJO_DA_GUARDA("Anjo da Guarda", 0x66BB6A, Requisito.contador("curas_party", 100, "Curar aliados 100 vezes como Curandeiro da party"), Bonus.vida(2)),
+    // 3.19: a oficina do ferreiro
+    MESTRE_DAS_LIGAS("Mestre das Ligas", 0xFF8A3A, Requisito.contador("ligas", 20, "Fundir 20 lingotes de liga no Cadinho"), Bonus.xpSkill(Skill.FERRARIA, 0.03)),
+    MAO_DE_MARTELO("Mão de Martelo", 0xFFC93C, Requisito.contador("martelo_perfeito", 10, "Forjar 10 peças com as 3 batidas no ponto"), Bonus.dano(0.5)),
+    TEMPERADOR("Temperador", 0x4FA3D1, Requisito.contador("temperas", 15, "Temperar 15 peças na Tina de Têmpera"), Bonus.armadura(1)),
+    APRENDIZ_DEDICADO("Aprendiz Dedicado", 0xFFB74D, Requisito.contador("treinos", 10, "Treinar 10 vezes com um Mestre de Armas"), Bonus.velocidade(0.02)),
+    QUEM_VIU_O_CAVALEIRO("Quem Viu o Cavaleiro", 0xFF8F00, Requisito.contador("cavaleiro", 1, "Derrubar o Cavaleiro Sem Cabeça numa noite de lua cheia"), new Bonus().comVida(2).comDano(1));
 
     /** Títulos tão difíceis que o servidor inteiro fica sabendo. */
     private static final List<Titulo> ANUNCIADOS = List.of(

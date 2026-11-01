@@ -195,6 +195,9 @@ public final class Cozinha extends Estacao {
                 Component.text("Pratos dão buffs ao serem comidos.", NamedTextColor.GRAY),
                 Component.text("Ingredientes de qualidade (★★+)", NamedTextColor.GRAY),
                 Component.text("deixam o prato melhor.", NamedTextColor.GRAY),
+                Component.text("\"Qualquer fruta\", \"qualquer erva\"...: serve", NamedTextColor.GRAY),
+                Component.text("tudo o que for desse grupo.", NamedTextColor.GRAY),
+                Component.text("Shift + clique tempera com uma erva (+1 ★).", NamedTextColor.DARK_GREEN),
                 Component.empty(),
                 Component.text("Seus buffs duram +" + StatsManager.fmt(nivel * plugin.settings().culDuracaoExtra * 100) + "%.", NamedTextColor.GREEN),
                 t.cozinha == null ? Component.text("Para cozinhar, use uma Cozinha (veja o /guia).", NamedTextColor.DARK_GRAY)
@@ -214,11 +217,10 @@ public final class Cozinha extends Estacao {
                     liberado ? NamedTextColor.GREEN : NamedTextColor.RED));
             lore.add(Component.empty());
             lore.add(Component.text("Ingredientes:", NamedTextColor.GRAY));
-            boolean temTudo = true;
+            boolean temTudo = temTudo(p.getInventory(), pr.ingredientes());
             for (Prato.Ingrediente ing : pr.ingredientes()) {
                 int tem = contar(p.getInventory(), ing);
                 boolean ok = tem >= ing.qtd();
-                temTudo &= ok;
                 Component nome = ing.extra() != null ? Component.text(ing.extra().nome(), ing.extra().cor())
                         : ing.variedade() != null ? Component.text(ing.variedade().nome(), ing.variedade().cor())
                         : ing.peixe() != null ? Component.text(ing.peixe().nome(), ing.peixe().cor())
@@ -231,7 +233,10 @@ public final class Cozinha extends Estacao {
             lore.addAll(descreverEfeitos(pr, 1));
             lore.add(Component.empty());
             if (t.cozinha == null) lore.add(Component.text("Cozinhe numa Cozinha.", NamedTextColor.DARK_GRAY));
-            else if (liberado && temTudo) lore.add(Component.text("» Clique para cozinhar", NamedTextColor.YELLOW));
+            else if (liberado && temTudo) {
+                lore.add(Component.text("» Clique para cozinhar", NamedTextColor.YELLOW));
+                lore.add(Component.text("» Shift + clique: temperar com uma erva (+1 ★)", NamedTextColor.DARK_GREEN));
+            }
             else if (!liberado) lore.add(Component.text("Suba a Culinária para liberar.", NamedTextColor.DARK_GRAY));
             else lore.add(Component.text("Faltam ingredientes.", NamedTextColor.DARK_GRAY));
             inv.setItem(SLOTS[i], item(liberado ? pr.base() : Material.GRAY_DYE,
@@ -282,6 +287,47 @@ public final class Cozinha extends Estacao {
         return n;
     }
 
+    /** Os exatos primeiro: assim "qualquer fruta" não come a Laranja que a receita pede. */
+    private static List<Prato.Ingrediente> ordenados(List<Prato.Ingrediente> ings) {
+        List<Prato.Ingrediente> l = new ArrayList<>(ings);
+        l.sort(Comparator.comparing((Prato.Ingrediente i) -> i.extra() != null && i.extra().aberto()));
+        return l;
+    }
+
+    /** Tem tudo, contando cada item uma vez só (tira de uma cópia do inventário). */
+    private static boolean temTudo(PlayerInventory inv, List<Prato.Ingrediente> ings) {
+        ItemStack[] c = inv.getStorageContents();
+        for (int i = 0; i < c.length; i++) if (c[i] != null) c[i] = c[i].clone();
+        for (Prato.Ingrediente ing : ordenados(ings)) {
+            int falta = ing.qtd();
+            for (int i = 0; i < c.length && falta > 0; i++) {
+                if (!combina(c[i], ing)) continue;
+                int tira = Math.min(falta, c[i].getAmount());
+                c[i].setAmount(c[i].getAmount() - tira);
+                if (c[i].getAmount() <= 0) c[i] = null;
+                falta -= tira;
+            }
+            if (falta > 0) return false;
+        }
+        return true;
+    }
+
+    /** Quantas garrafas de vidro o ingrediente devolve (mel, seiva, geleia... vêm em garrafa). */
+    private static int garrafasDe(PlayerInventory inv, Prato.Ingrediente ing) {
+        for (ItemStack s : inv.getStorageContents()) {
+            if (combina(s, ing)) return s.getType() == Material.HONEY_BOTTLE ? ing.qtd() : 0;
+        }
+        return 0;
+    }
+
+    /** Ingredientes da receita, mais uma erva qualquer se for temperar. */
+    private static List<Prato.Ingrediente> ingredientes(Prato pr, boolean temperar) {
+        if (!temperar) return pr.ingredientes();
+        List<Prato.Ingrediente> l = new ArrayList<>(pr.ingredientes());
+        l.add(Prato.grupo(GrupoAlimento.ERVA, 1));
+        return l;
+    }
+
     /** Tira os ingredientes (usando primeiro os de melhor qualidade) e diz a qualidade de cada um. */
     private static List<Qualidade> tirar(PlayerInventory inv, Prato.Ingrediente ing) {
         ItemStack[] c = inv.getStorageContents();
@@ -303,7 +349,7 @@ public final class Cozinha extends Estacao {
         return qualidades;
     }
 
-    private void cozinhar(Player p, Tela t, Prato pr) {
+    private void cozinhar(Player p, Tela t, Prato pr, boolean temperar) {
         if (t.cozinha == null) {
             erro(p, "Para cozinhar, use uma Cozinha.");
             return;
@@ -325,15 +371,15 @@ public final class Cozinha extends Estacao {
             return;
         }
         PlayerInventory inv = p.getInventory();
-        for (Prato.Ingrediente ing : pr.ingredientes()) {
-            if (contar(inv, ing) < ing.qtd()) {
-                erro(p, "Faltam ingredientes.");
-                return;
-            }
+        List<Prato.Ingrediente> ings = ingredientes(pr, temperar);
+        if (!temTudo(inv, ings)) {
+            erro(p, temperar && temTudo(inv, pr.ingredientes()) ? "Para temperar, traga uma erva do canteiro a mais." : "Faltam ingredientes.");
+            return;
         }
         // Ingredientes de qualidade melhoram o prato.
-        int comQualidade = 0, otimos = 0, perfeitos = 0;
-        for (Prato.Ingrediente ing : pr.ingredientes()) {
+        int comQualidade = 0, otimos = 0, perfeitos = 0, garrafas = 0;
+        for (Prato.Ingrediente ing : ordenados(ings)) {
+            garrafas += garrafasDe(inv, ing);
             List<Qualidade> qs = tirar(inv, ing);
             boolean conta = ing.extra() != null || ing.variedade() != null || ing.peixe() != null || COM_QUALIDADE.contains(ing.material());
             if (!conta) continue;
@@ -343,13 +389,19 @@ public final class Cozinha extends Estacao {
                 if (q == Qualidade.PERFEITA) perfeitos++;
             }
         }
-        if (pr.ingredientes().stream().anyMatch(i -> i.material() == Material.HONEY_BOTTLE)) {
-            inv.addItem(new ItemStack(Material.GLASS_BOTTLE));
-        }
+        // Mel, geleia, seiva... em garrafa: a garrafa volta (menos a que a bebida pronta usa).
+        if (pr.base() == Material.HONEY_BOTTLE) garrafas--;
+        if (garrafas > 0) inv.addItem(new ItemStack(Material.GLASS_BOTTLE, garrafas)).values()
+                .forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
         int nivel = nivel(p);
         Qualidade q = Qualidade.sortear(nivel / (double) max);
         if (comQualidade > 0 && perfeitos == comQualidade) q = Qualidade.PERFEITA;
         else if (comQualidade > 0 && otimos * 2 >= comQualidade) q = q.acima();
+        // 3.15: a erva do tempero sobe a qualidade um degrau.
+        if (temperar) {
+            q = q.acima();
+            plugin.titulos().registrar(p, "pratos_temperados", 1);
+        }
 
         double fator = q.fator() * (1 + nivel * plugin.settings().culDuracaoExtra) * plugin.talentos().duracaoPratos(p);
         ItemStack prato = criar(pr, q, fator, p.getName());
@@ -445,7 +497,7 @@ public final class Cozinha extends Estacao {
         Prato[] pratos = Prato.values();
         for (int i = 0; i < SLOTS.length && t.pagina * SLOTS.length + i < pratos.length; i++) {
             if (SLOTS[i] == e.getSlot()) {
-                cozinhar(p, t, pratos[t.pagina * SLOTS.length + i]);
+                cozinhar(p, t, pratos[t.pagina * SLOTS.length + i], e.isShiftClick());
                 return;
             }
         }

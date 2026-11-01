@@ -544,7 +544,87 @@ final class ArteItens {
                 com(TIGELA_MADEIRA, 'c', 0xFF4FC3F7, 'a', 0xFFB3ECFF, 'b', 0xFF5D4037)));
         l.add(new Arte("suspicious_stew", "prato_banquete_infernal", TIGELA,
                 com(TIGELA_MADEIRA, 'c', 0xFFFF7043, 'a', 0xFFFFD54F, 'b', 0xFFB0102A)));
+        // 3.15: pomar, coleta, ervas, peixes raros, tacho e natureza nova.
+        l.add(new Arte("pumpkin_pie", "prato_torta_pessego", TORTA, com(CROSTA, 'c', 0xFFFFAB91, 'a', 0xFFFFE0B2)));
+        l.add(new Arte("honey_bottle", "prato_limonada", GARRAFA, com(VIDRO, 'l', 0xFFE6EE9C, 'd', 0xFFAFB42B, 'a', 0xFFFFFFFF)));
+        l.add(new Arte("pumpkin_pie", "prato_bolo_laranja", TORTA, com(CROSTA, 'c', 0xFFFF9800, 'a', 0xFFFFE0B2)));
+        l.add(new Arte("pumpkin_pie", "prato_torta_cereja", TORTA, com(CROSTA, 'c', 0xFFD81B60, 'a', 0xFFFF80AB)));
+        l.add(new Arte("apple", "prato_maca_caramelada", MACA_CARAMELO,
+                c('o', 0xFF4A2A00, 'm', 0xFFFFC93C, 'h', 0xFFFFF0A0, 'd', 0xFFC08A10, 'a', 0xFFB86A1A, 's', 0xFF8D6E63)));
+        l.add(new Arte("mushroom_stew", "prato_risoto_morel", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFFF5F0E0, 'a', 0xFFB08850, 'b', 0xFFFBC02D)));
+        l.add(new Arte("beetroot_soup", "prato_salada_samambaia", TIGELA_FRIA, com(TIGELA_MADEIRA, 'c', 0xFF7CB342, 'a', 0xFFAED581, 'b', 0xFF2E7D32)));
+        l.add(new Arte("cooked_beef", "prato_assado_alho_selvagem", CARNE,
+                c('o', 0xFF3A1A0A, 'd', 0xFF7A3A1A, 'm', 0xFFB0603A, 'h', 0xFFE09060, 'a', 0xFF5A2A10, 'w', 0xFFF2EEDD)));
+        l.add(new Arte("pumpkin_pie", "prato_torta_amora", TORTA, com(CROSTA, 'c', 0xFF4A148C, 'a', 0xFFB39DDB)));
+        l.add(new Arte("beetroot_soup", "prato_sopa_alga_doce", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFF9CCC65, 'a', 0xFF2E7D32, 'b', 0xFFFF8C5A)));
+        l.add(new Arte("pumpkin_pie", "prato_bolo_groselha", TORTA, com(CROSTA, 'c', 0xFFE53935, 'a', 0xFFFFF0F0)));
+        l.add(new Arte("mushroom_stew", "prato_sopa_castanha", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFFA1887F, 'a', 0xFF6D4C41, 'b', 0xFFF3E5AB)));
+        l.add(new Arte("mushroom_stew", "prato_cogumelos_salteados", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFF8D6E63, 'a', 0xFFC0702A, 'b', 0xFF7CB342)));
+        l.add(new Arte("bread", "prato_pao_avela", PAO, com(MASSA, 'h', 0xFFD7B98A, 'm', 0xFFA1887F)));
+        l.add(new Arte("rabbit_stew", "prato_ensopado_raiz_inverno", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFF8D6E63, 'a', 0xFFB0603A, 'b', 0xFFFFCC80)));
+        l.add(new Arte("mushroom_stew", "prato_caldo_cogumelo_neve", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFFE3F2FD, 'a', 0xFFBBDEFB, 'b', 0xFF7CB342)));
+        l.add(new Arte("cooked_beef", "prato_assado_zimbro", CARNE,
+                c('o', 0xFF3A1A0A, 'd', 0xFF7A3A1A, 'm', 0xFFB0603A, 'h', 0xFFE09060, 'a', 0xFF5A2A10, 'w', 0xFF3949AB)));
+        l.add(new Arte("baked_potato", "prato_couve_flor_gratinada", BATATA_RECHEADA, com(MASSA, 'm', 0xFFF5F0E0, 'a', 0xFFFBC02D, 'b', 0xFFE8C15A)));
+        l.add(new Arte("cookie", "prato_muffin_mirtilo", BISCOITO, com(MASSA, 'a', 0xFF3F51B5)));
+        l.add(new Arte("baked_potato", "prato_inhame_com_mel", BATATA_RECHEADA, com(MASSA, 'm', 0xFFBCAAA4, 'a', 0xFFFFB300, 'b', 0xFFE8A33D)));
+        l.add(new Arte("honey_bottle", "prato_cha_salvia", GARRAFA, com(VIDRO, 'l', 0xFF9CCC65, 'd', 0xFF558B2F, 'a', 0xFFDCEDC8)));
+        l.add(new Arte("bread", "prato_pao_erva_de_sol", PAO, com(MASSA, 'h', 0xFFFFE082, 'm', 0xFFFFC107)));
+        l.add(new Arte("cooked_cod", "prato_peixe_folha_gelida", FILE,
+                c('o', 0xFF2A3A4A, 'm', 0xFFE8E0D0, 'h', 0xFFFFFFFF, 'd', 0xFFB0A090, 'a', 0xFF81D4FA, 'w', 0xFFE1F5FE)));
+        l.add(new Arte("beetroot_soup", "prato_sopa_musgo_lunar", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFF9FA8DA, 'a', 0xFFE8EAF6, 'b', 0xFF5C6BC0)));
+        l.add(new Arte("rabbit_stew", "prato_guisado_raiz_abissal", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFF4E342E, 'a', 0xFF6D4C41, 'b', 0xFF7FFFE0)));
+        l.add(new Arte("cookie", "prato_doce_flor_de_cristal", BISCOITO, com(MASSA, 'm', 0xFFF8BBD0, 'h', 0xFFFCE4EC, 'a', 0xFFF48FB1)));
+        l.add(new Arte("cooked_cod", "prato_carpa_dourada_assada", FILE,
+                c('o', 0xFF4A2A00, 'm', 0xFFFFC93C, 'h', 0xFFFFF0A0, 'd', 0xFFC08A10, 'a', 0xFF3E9E3E, 'w', 0xFFF0F0F0)));
+        l.add(new Arte("cooked_salmon", "prato_truta_grelhada", FILE,
+                c('o', 0xFF5A2410, 'm', 0xFFFF8FB1, 'h', 0xFFFFD0E0, 'd', 0xFFC05A70, 'a', 0xFF7CB342, 'w', 0xFFF0F0F0)));
+        l.add(new Arte("cooked_cod", "prato_peixe_lua_defumado", FILE,
+                c('o', 0xFF2A2A3A, 'm', 0xFF9FA8C8, 'h', 0xFFC9D6FF, 'd', 0xFF5A5A7A, 'a', 0xFF3E5E2E, 'w', 0xFF4A4A4E)));
+        l.add(new Arte("mushroom_stew", "prato_caldo_peixe_pedra", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFF9E9E9E, 'a', 0xFF616161, 'b', 0xFFFFCC80)));
+        l.add(new Arte("cooked_cod", "prato_espeto_enguia_eletrica", FILE,
+                c('o', 0xFF3A3A0A, 'm', 0xFFFFF04D, 'h', 0xFFFFFFB0, 'd', 0xFFC0B020, 'a', 0xFF7CB342, 'w', 0xFF8D6E63)));
+        l.add(new Arte("cooked_salmon", "prato_carpaccio_peixe_gelo", SUSHI,
+                c('o', 0xFF2A3A4A, 'm', 0xFFA8E8FF, 'h', 0xFFE0F8FF, 'k', 0xFFCDDC39, 'w', 0xFFF8F8F0, 'a', 0xFFFFF59D)));
+        l.add(new Arte("cooked_salmon", "prato_koi_glaceado", SUSHI,
+                c('o', 0xFF4A2A3A, 'm', 0xFFFFB7D5, 'h', 0xFFFFE0F0, 'k', 0xFFE8A33D, 'w', 0xFFF8F8F0, 'a', 0xFFFFD54F)));
+        l.add(new Arte("rabbit_stew", "prato_moqueca_baiacu", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFFFFA726, 'a', 0xFFFFD23F, 'b', 0xFFD32F2F)));
+        l.add(new Arte("cooked_cod", "prato_lucio_ao_forno", FILE,
+                c('o', 0xFF2A3A4A, 'm', 0xFFE3F2FD, 'h', 0xFFFFFFFF, 'd', 0xFFB0BEC5, 'a', 0xFF3E9E3E, 'w', 0xFFE8C15A)));
+        l.add(new Arte("mushroom_stew", "prato_caldo_luminoso", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFF7FDBFF, 'a', 0xFFFFE082, 'b', 0xFFB3ECFF)));
+        l.add(new Arte("beetroot_soup", "prato_sopa_fantasma", TIGELA_FRIA, com(TIGELA_MADEIRA, 'c', 0xFFB8C7C9, 'a', 0xFFECEFF1, 'b', 0xFF8D6E63)));
+        l.add(new Arte("suspicious_stew", "prato_banquete_dragao", TIGELA,
+                com(TIGELA_MADEIRA, 'c', 0xFFFF4058, 'a', 0xFFFFD54F, 'b', 0xFF3E9E3E)));
+        l.add(new Arte("bread", "prato_sanduiche", PAO, com(MASSA, 'h', 0xFFFFF3C4, 'm', 0xFFC8883A)));
+        l.add(new Arte("baked_potato", "prato_marmita_viajante", BATATA_RECHEADA, com(MASSA, 'm', 0xFF8D6E63, 'a', 0xFF689F38, 'b', 0xFFB0603A)));
+        l.add(new Arte("mushroom_stew", "prato_massa_oleo_trufa", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFFFFE082, 'a', 0xFF5D4037, 'b', 0xFFD4A017)));
+        l.add(new Arte("honey_bottle", "prato_cha_seiva_ancia", GARRAFA, com(VIDRO, 'l', 0xFFE08A2E, 'd', 0xFF8A4A10, 'a', 0xFFFFCC80)));
+        l.add(new Arte("honey_bottle", "prato_hidromel_geleia_real", GARRAFA, com(VIDRO, 'l', 0xFFFFB300, 'd', 0xFFB06A00, 'a', 0xFFFFF59D)));
+        l.add(new Arte("beetroot_soup", "prato_salada_estacao", TIGELA_FRIA, com(TIGELA_MADEIRA, 'c', 0xFF8BC34A, 'a', 0xFFFF8C1A, 'b', 0xFFE53935)));
+        l.add(new Arte("mushroom_stew", "prato_sopa_da_mata", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFF8D6E63, 'a', 0xFFD7CCC8, 'b', 0xFFC0392B)));
+        l.add(new Arte("pumpkin_pie", "prato_torta_frutas", TORTA, com(CROSTA, 'c', 0xFFE53935, 'a', 0xFFFFC93C)));
+        l.add(new Arte("cooked_beef", "prato_grelhado_misto", CARNE,
+                c('o', 0xFF3A1A0A, 'd', 0xFF7A3A1A, 'm', 0xFFB0603A, 'h', 0xFFE09060, 'a', 0xFF5A2A10, 'w', 0xFF7CB342)));
+        l.add(new Arte("rabbit_stew", "prato_peixada", TIGELA, com(TIGELA_MADEIRA, 'c', 0xFFFFCC80, 'a', 0xFFFF8C5A, 'b', 0xFF7CB342)));
     }
+
+    private static final String[] MACA_CARAMELO = {
+            "........s.......",
+            "........s.......",
+            "........s.......",
+            "......oosoo.....",
+            ".....ommmmmo....",
+            "....ommhhmmmo...",
+            "...omhhmmmmmmo..",
+            "...ommmmmmmmmo..",
+            "...ommmmmmmmdo..",
+            "...oammmmmmddo..",
+            "...oaammmmmddo..",
+            "....oaaammddo...",
+            ".....oaaaddo....",
+            "......oooo......",
+            "................",
+            "................"};
 
     // =====================================================================
     //  Variedades raras e sementes
@@ -2548,6 +2628,14 @@ final class ArteItens {
         l.add(new Arte("honey_bottle", "mel_gelado", JARRA, com(pote, 'l', 0xFFB3E5FC, 'd', 0xFF4FA3D1, 'a', BRANCO)));
         l.add(new Arte("honey_bottle", "mel_noturno", JARRA, com(pote, 'l', 0xFF5C6BC0, 'd', 0xFF283593, 'a', 0xFFC5CAE9)));
         l.add(new Arte("honey_bottle", "mel_floral", JARRA, com(pote, 'l', 0xFFF48FB1, 'd', 0xFFC2185B, 'a', 0xFFFCE4EC)));
+        // 3.15: os méis do ninho selvagem no mesmo catálogo, e a Seiva Anciã.
+        l.add(new Arte("honey_bottle", "mel_rubro", JARRA, com(pote, 'l', 0xFFE53935, 'd', 0xFF8E1010, 'a', 0xFFFFCDD2)));
+        l.add(new Arte("honey_bottle", "mel_solar", JARRA, com(pote, 'l', 0xFFFDD835, 'd', 0xFFC6A700, 'a', BRANCO)));
+        l.add(new Arte("honey_bottle", "mel_azul", JARRA, com(pote, 'l', 0xFF42A5F5, 'd', 0xFF1565C0, 'a', 0xFFBBDEFB)));
+        l.add(new Arte("honey_bottle", "mel_tulipa", JARRA, com(pote, 'l', 0xFFF06292, 'd', 0xFFAD1457, 'a', 0xFFFCE4EC)));
+        l.add(new Arte("honey_bottle", "mel_branco", JARRA, com(pote, 'l', 0xFFF5F5F5, 'd', 0xFFBDBDBD, 'a', BRANCO)));
+        l.add(new Arte("honey_bottle", "mel_geleia_real", JARRA, com(pote, 'l', 0xFFFFB300, 'd', 0xFFB06A00, 'a', 0xFFFFF59D)));
+        l.add(new Arte("honey_bottle", "seiva_ancia", JARRA, com(pote, 'l', 0xFFE08A2E, 'd', 0xFF8A4A10, 'a', 0xFFFFCC80)));
         l.add(new Arte("oak_sapling", "erva_salvia", RAMO, c('l', 0xFF7CB342, 'h', 0xFFAED581, 's', 0xFF558B2F)));
         l.add(new Arte("dandelion", "erva_erva_de_sol", FLOR,
                 c('p', 0xFFFFC107, 'h', 0xFFFFE082, 'c', 0xFFFF6F00, 'a', 0xFFFFAB40, 's', 0xFF558B2F, 'l', 0xFF7CB342, 'k', 0xFFAED581)));
@@ -2601,9 +2689,118 @@ final class ArteItens {
         oficios(l);
         estacoesVivas(l);
         ovosLendarios(l);
+        fauna(l);
         ArteNomeadas.registrar(l);
         return l;
     }
+
+    // =====================================================================
+    //  Animais e assombros (3.16)
+    // =====================================================================
+
+    private static final String[] GALHADA_F = {
+            "................",
+            ".o...o..........",
+            ".mo..mo...o.....",
+            "..mo.mo..om.....",
+            "..mhomo.om......",
+            "...mhmoomo......",
+            "....mhmmo...o...",
+            ".....mhmo..om...",
+            ".....mmhmoomo...",
+            "......mmhmmo....",
+            ".......mmhmo....",
+            "........mmdo....",
+            "........omdo....",
+            ".........odd....",
+            "..........dd....",
+            "................"};
+
+    private static final String[] BORBOLETA_F = {
+            "................",
+            "................",
+            "..ooo......ooo..",
+            ".ommmo....ommmo.",
+            ".omhhmo..omhhmo.",
+            ".omhaamoomaahmo.",
+            "..ommmmkkmmmmo..",
+            "...ommmkkmmmo...",
+            "....oommkkmmoo..",
+            "...ommmmkkmmmmo.",
+            "...omaammkkmaamo",
+            "....ommo.kk.ommo",
+            ".....oo..k...oo.",
+            "................",
+            "................",
+            "................"};
+
+    private static final String[] ABOBORA_SORRISO = {
+            "................",
+            ".......gg.......",
+            "........g.......",
+            "....oooooooo....",
+            "...ommmmmmmmo...",
+            "..ommmmmmmmmmo..",
+            "..omyymmmmyymo..",
+            "..omyymmmmyymo..",
+            "..ommmmyymmmmo..",
+            "..omymmmmmmymo..",
+            "..ommyyyyyymmo..",
+            "..odmmmmmmmmdo..",
+            "...oddddddddo...",
+            "....oooooooo....",
+            "................",
+            "................"};
+
+    private static void fauna(List<Arte> l) {
+        l.add(new Arte("bone", "raro_galhada", GALHADA_F, c('o', 0xFF3E2723, 'm', 0xFF8D6E63, 'h', 0xFFD7CCC8, 'd', 0xFF5D4037)));
+        l.add(new Arte("bone_meal", "raro_presa_de_javali", PRESA, c('o', 0xFF5D4037, 'h', BRANCO, 'm', 0xFFF3E9D2, 'a', 0xFF8D6E63)));
+        l.add(new Arte("feather", "raro_pena_de_coruja", ASA_PASSARO, c('a', 0xFFD7CCC8, 'b', 0xFFA1887F, 'c', 0xFF795548, 'd', 0xFF4E342E)));
+        l.add(new Arte("wheat", "raro_palha_encantada", RAMO, c('l', 0xFFE8C15A, 'h', 0xFFFFF59D, 's', 0xFFB08A2A)));
+        l.add(new Arte("ghast_tear", "raro_lagrima_da_banshee", GOTA, c('o', 0xFF4A6A78, 'h', BRANCO, 'l', 0xFFCFE8F0, 'd', 0xFF8FB8C8)));
+        l.add(new Arte("clay_ball", "raro_musgo_vivo", TUFO, c('m', 0xFF6AAA3A, 'h', 0xFFA5D66B, 'd', 0xFF3E6E1E, 'a', 0xFFF48FB1)));
+        l.add(new Arte("string", "raro_seda_fina", TECIDO_DOBRADO, pele(0xFF9E9EAE, 0xFFF5F5F5, BRANCO, 0xFFD0D0E0)));
+        l.add(new Arte("jack_o_lantern", "raro_cabeca_do_cavaleiro", ABOBORA_SORRISO,
+                c('o', 0xFF3A1A00, 'm', 0xFFFF8F00, 'd', 0xFFC06000, 'y', 0xFFFFF176, 'g', 0xFF4E7A2E)));
+        l.add(new Arte("iron_nugget", "raro_corrente_do_afogado", CORDA, c('r', 0xFF5E7D6E, 'd', 0xFF2F4A3E, 'm', 0xFF8A6A4A)));
+        l.add(new Arte("beef", "fauna_carne_cervo", CARNE,
+                c('o', 0xFF3A0A0A, 'd', 0xFF7A1A1A, 'm', 0xFFB0403A, 'h', 0xFFE08070, 'a', 0xFF5A1A10, 'w', 0xFFF0EAD8)));
+        l.add(new Arte("porkchop", "fauna_carne_javali", CARNE,
+                c('o', 0xFF4A1A1A, 'd', 0xFF8A3A3A, 'm', 0xFFC06A5A, 'h', 0xFFF0A090, 'a', 0xFF6A2A20, 'w', 0xFFF8F0E8)));
+        int[][] cores = {{0xFF42A5F5, 0xFF90CAF9, 0xFF1565C0}, {0xFFFDD835, 0xFFFFF59D, 0xFFC6A700}, {0xFFFF8F00, 0xFFFFCC80, 0xFF212121},
+                {0xFFF5F5F5, 0xFFFFFFFF, 0xFF9E9E9E}, {0xFF9E9E8E, 0xFFC8C8B8, 0xFF5E5E50}};
+        String[] ids = {"borboleta_azul", "borboleta_amarela", "borboleta_monarca", "borboleta_branca", "mariposa"};
+        String[] potes = {"azul", "amarela", "monarca", "branca", "mariposa"};
+        Map<Character, Integer> pote = c('o', 0xFF3E2723, 'c', 0xFF8D6E63, 'g', 0xFFB0C8D0, 'w', BRANCO);
+        for (int i = 0; i < ids.length; i++) {
+            l.add(new Arte("paper", "fauna_" + ids[i], BORBOLETA_F,
+                    c('o', 0xFF1A1A1A, 'm', cores[i][0], 'h', cores[i][1], 'a', cores[i][2], 'k', 0xFF2A2A2A)));
+            l.add(new Arte("paper", "fauna_pote_" + potes[i], JARRA, com(pote, 'l', 0xFFE3F2FD, 'd', 0xFFB0C8D0, 'a', cores[i][0])));
+        }
+        // 3.19: os lingotes de liga do Cadinho (o veio mostra a cor do segundo mineral).
+        l.add(new Arte("iron_ingot", "raro_aco_lunar", LINGOTE, c('o', 0xFF2A2E3E, 'm', 0xFF9AA2C0, 'h', 0xFFE6ECFF, 'd', 0xFF5A607A, 'v', 0xFF3A3A50)));
+        l.add(new Arte("gold_ingot", "raro_ambar_sangue", LINGOTE, c('o', 0xFF3A0808, 'm', 0xFFA8281E, 'h', 0xFFE06040, 'd', 0xFF6A1010, 'v', 0xFFF2A33A)));
+        l.add(new Arte("iron_ingot", "raro_gelo_marinho", LINGOTE, c('o', 0xFF1E4A60, 'm', 0xFF8AD0E8, 'h', 0xFFF0FCFF, 'd', 0xFF4A90B8, 'v', 0xFFF3E9F0)));
+        l.add(new Arte("copper_ingot", "raro_bronze_vulcanico", LINGOTE, c('o', 0xFF4A1A0A, 'm', 0xFFD8682A, 'h', 0xFFFFB060, 'd', 0xFF8A3A10, 'v', 0xFFFF3D00)));
+    }
+
+    private static final String[] LINGOTE = {
+            "................",
+            "................",
+            "................",
+            "................",
+            ".....oooooooo...",
+            "....ohhhhhhhdo..",
+            "...ohhmmmvmmdo..",
+            "..ohmmvvmmmmdo..",
+            ".ommmmmmmvvmdo..",
+            ".odmmvmmmmmddo..",
+            ".oddddddddddo...",
+            "..oooooooooo....",
+            "................",
+            "................",
+            "................",
+            "................"};
 
     // =====================================================================
     //  Curtume e tecelagem (2.30)

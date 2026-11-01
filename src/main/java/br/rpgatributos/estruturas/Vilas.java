@@ -751,7 +751,7 @@ public final class Vilas implements Listener {
     //  2.54: Mestres de Armas e as técnicas secretas
     // =====================================================================
 
-    private static final int TECNICA_PROFICIENCIA = 12, TECNICA_CUSTO = 24;
+    private static final int TECNICA_PROFICIENCIA = 12, TECNICA_CUSTO = 24, TREINO_CUSTO = 4;
 
     private static final class TelaTecnicas implements InventoryHolder {
         Inventory inv;
@@ -799,6 +799,12 @@ public final class Vilas implements Listener {
                 Component.text("Cada arma tem uma técnica secreta, um golpe", NamedTextColor.GRAY),
                 Component.text("extra que vai em qualquer sequência no /combos.", NamedTextColor.GRAY),
                 Component.text("Os outros povos ensinam as outras armas.", NamedTextColor.DARK_GRAY))));
+        t.inv.setItem(18, item(Material.TARGET, Component.text("⚔ Treinar com o mestre", NamedTextColor.GOLD, TextDecoration.BOLD), List.of(
+                Component.text("Uma vez por dia: segure uma arma e treine.", NamedTextColor.GRAY),
+                Component.text("Ganha metade de um nível de proficiência", NamedTextColor.GRAY),
+                Component.text("com a arma na mão.", NamedTextColor.GRAY),
+                Component.text("Custa " + TREINO_CUSTO + (papel.piglin() ? " lingotes de ouro" : " esmeraldas"), NamedTextColor.WHITE),
+                Component.text("» Clique para treinar", NamedTextColor.YELLOW))));
         p.openInventory(t.inv);
     }
 
@@ -807,6 +813,10 @@ public final class Vilas implements Listener {
         if (!(e.getInventory().getHolder() instanceof TelaTecnicas t) || !(e.getWhoClicked() instanceof Player p)) return;
         e.setCancelled(true);
         if (e.getClickedInventory() != e.getInventory()) return;
+        if (e.getRawSlot() == 18) {
+            treinar(p, t);
+            return;
+        }
         br.rpgatributos.combo.Golpe g = t.golpes.get(e.getRawSlot());
         if (g == null || plugin.combos().aprendeu(p, g)) return;
         Entity npc = Bukkit.getEntity(t.npc);
@@ -829,6 +839,31 @@ public final class Vilas implements Listener {
         p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f);
         p.sendMessage(Component.text("✪ \"" + t.papel.falas[0] + "\"", COR));
         abrirTecnicas(p, t.sitio, t.papel, npc);
+    }
+
+    /** 3.18: treino diário com o Mestre de Armas (metade de um nível de proficiência da arma na mão). */
+    private void treinar(Player p, TelaTecnicas t) {
+        br.rpgatributos.combo.TipoArma arma = br.rpgatributos.combo.TipoArma.de(p);
+        if (arma == null) {
+            p.sendActionBar(Component.text("✖ Segure uma arma para treinar.", NamedTextColor.RED));
+            return;
+        }
+        String chave = p.getUniqueId() + ":" + t.sitio.id + ":TREINO";
+        if (servicoUsado.getOrDefault(chave, -1L) == hoje()) {
+            p.sendActionBar(Component.text("Já treinou hoje com este mestre. Volte amanhã.", NamedTextColor.GRAY));
+            return;
+        }
+        if (!(t.papel.piglin() ? pagarOuro(p, TREINO_CUSTO) : pagar(p, TREINO_CUSTO))) return;
+        servicoUsado.put(chave, hoje());
+        var combos = plugin.combos();
+        int antes = combos.nivel(p, arma);
+        combos.darXp(p, arma, combos.xpPara(antes + 1) * 0.5);
+        p.closeInventory();
+        p.playSound(p.getLocation(), Sound.ITEM_SHIELD_BLOCK, 1f, 0.8f);
+        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
+        p.sendMessage(Component.text("⚔ Você treinou " + arma.nome() + " com " + t.papel.nome(t.sitio) + ". Proficiência "
+                + combos.nivel(p, arma) + " (" + (int) Math.round(combos.progresso(p, arma) * 100) + "%).", COR));
+        plugin.titulos().registrar(p, "treinos", 1);
     }
 
     @EventHandler

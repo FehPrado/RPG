@@ -21,6 +21,8 @@ final class Estado {
     static long telaEm;
     /** Os números da janela do Sistema (barra de XP, pontos). */
     static JsonObject sistema = new JsonObject();
+    /** O último Limiar (livro de missões) que o plugin mandou. */
+    static JsonObject limiar;
 
     static void receber(String texto) {
         try {
@@ -38,6 +40,11 @@ final class Estado {
                     telaDados = e2 < 0 ? new JsonObject() : JsonParser.parseString(resto.substring(e2 + 1)).getAsJsonObject();
                     telaEm = System.currentTimeMillis();
                     if ("sistema".equals(tela)) sistema = telaDados;
+                }
+                case "limiar" -> {
+                    // 0.3.0: o livro de missões. "abrir" abre o mapa; sem ele, só atualiza o que estiver aberto.
+                    limiar = JsonParser.parseString(resto).getAsJsonObject();
+                    TelaLimiar.receber(limiar);
                 }
                 case "dados" -> {
                     int e2 = resto.indexOf(' ');
@@ -65,6 +72,7 @@ final class Estado {
         hud = null;
         tela = null;
         sistema = new JsonObject();
+        limiar = null;
     }
 
     // ---- ajudantes de leitura ----

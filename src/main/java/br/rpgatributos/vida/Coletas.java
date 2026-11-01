@@ -239,7 +239,8 @@ public final class Coletas implements Listener {
         sujo = true;
         int qtd = 1 + (rnd().nextDouble() < 0.15 + plugin.stats().getNivel(p, Skill.AGRICULTURA) * 0.003 ? 1 : 0);
         Location l = i.getLocation().add(0, 0.3, 0);
-        l.getWorld().dropItemNaturally(l, pt.tipo.criar(qtd));
+        l.getWorld().dropItemNaturally(l, pt.tipo.criar(qtd, br.rpgatributos.fazenda.Qualidade.sortear(
+                plugin.stats().getNivel(p, Skill.AGRICULTURA) / (double) plugin.settings().nivelMaximo)));
         l.getWorld().playSound(l, Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1.3f);
         l.getWorld().spawnParticle(Particle.ITEM, l, 8, 0.1, 0.1, 0.1, 0.05, pt.tipo.criar(1));
         if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) plugin.stats().darXp(p, Skill.AGRICULTURA, 3);
@@ -256,7 +257,8 @@ public final class Coletas implements Listener {
         if (c == null && cv == null) return;
         Player p = e.getPlayer();
         var efeito = c != null ? c.efeito() : cv.efeito();
-        plugin.getServer().getScheduler().runTask(plugin, () -> { if (p.isOnline()) p.addPotionEffect(efeito); });
+        double fator = br.rpgatributos.fazenda.Qualidade.de(e.getItem()).fator();
+        plugin.getServer().getScheduler().runTask(plugin, () -> { if (p.isOnline()) p.addPotionEffect(efeito.withDuration((int) Math.round(efeito.getDuration() * fator))); });
     }
 
     /** Pelo /rpgadmin: faz uma coleta da estação nascer perto. */

@@ -97,6 +97,36 @@ public enum Raro {
     ALMA_PENADA("Alma Penada", Material.GHAST_TEAR, 0xB0E0EA,
             "Uma alma perdida, presa na luz da lanterna.", "Paga a travessia do Barqueiro (3 por viagem)."),
 
+    // 3.16: animais e assombros novos
+    GALHADA("Galhada de Cervo", Material.BONE, 0xA1887F,
+            "Caiu de um cervo velho. Cada ponta é um inverno.", "Troféu: exponha na Estante de Troféus."),
+    PRESA_DE_JAVALI("Presa de Javali", Material.BONE_MEAL, 0xF3E9D2,
+            "Curva e afiada como uma foice pequena.", "Material de caça (alquimia e forja, em breve)."),
+    PENA_DE_CORUJA("Pena de Coruja", Material.FEATHER, 0x8D6E63,
+            "Não faz barulho nenhum quando cai.", "Material de caça (alquimia e flechas, em breve)."),
+    PALHA_ENCANTADA("Palha Encantada", Material.WHEAT, 0xE8C15A,
+            "Ainda mexe de leve, como se lembrasse do vento.", "Clique numa plantação: ela cresce um estágio."),
+    LAGRIMA_DA_BANSHEE("Lágrima da Banshee", Material.GHAST_TEAR, 0xCFE8F0,
+            "Fria e salgada. Dá para ouvir um grito lá dentro.", "Material de assombração (alquimia, em breve)."),
+    MUSGO_VIVO("Musgo Vivo", Material.CLAY_BALL, 0x6AAA3A,
+            "Cresce até na sua mão.", "Clique numa pedra: vira pedra com musgo. Em terra: vira grama."),
+    SEDA_FINA("Seda Fina", Material.STRING, 0xF5F5F5,
+            "Mais forte que a linha comum e brilha à luz da lua.", "Material da Aranha-Tecelã (ofícios e forja, em breve)."),
+    CABECA_DO_CAVALEIRO("Cabeça do Cavaleiro", Material.JACK_O_LANTERN, 0xFF8F00,
+            "Ainda sorri. Ninguém sabe por quê.", "Troféu: exponha na Estante de Troféus."),
+    CORRENTE_DO_AFOGADO("Corrente do Afogado", Material.IRON_NUGGET, 0x5E7D6E,
+            "Enferrujada, pesada, e sempre molhada.", "Material de assombração (forja, em breve)."),
+
+    // 3.19: os lingotes de liga do Cadinho
+    ACO_LUNAR("Lingote de Aço Lunar", Material.IRON_INGOT, 0x9AA2C0,
+            "Prata das Luas batida com Ferro Negro.", "Faz o conjunto de Aço Lunar (bancada, como o ferro)."),
+    AMBAR_SANGUE("Lingote de Âmbar-Sangue", Material.GOLD_INGOT, 0xC0392B,
+            "Âmbar fundido com Pedra-Sangue. Ainda está morno.", "Faz o conjunto de Âmbar-Sangue (bancada, como o ferro)."),
+    GELO_MARINHO("Lingote de Gelo Marinho", Material.IRON_INGOT, 0x8AD0E8,
+            "Gelo que não derrete, com pó de pérola.", "Faz o conjunto de Gelo Marinho (bancada, como o ferro)."),
+    BRONZE_VULCANICO("Lingote de Bronze Vulcânico", Material.COPPER_INGOT, 0xD8682A,
+            "Cobre dos Antigos temperado no magma.", "Faz o conjunto de Bronze Vulcânico (bancada, como o ferro)."),
+
     // 2.84: o Altar da Convergência
     ALMA_DESPERTA("Alma Desperta", Material.FIREWORK_STAR, 0xB388FF,
             "O que sobra de um chefe que voltou mais forte.", "Cai dos chefes Despertos. Usada no Altar da Convergência.");

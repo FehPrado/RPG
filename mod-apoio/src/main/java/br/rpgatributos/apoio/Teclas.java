@@ -42,6 +42,8 @@ final class Teclas {
         tecla("missao", InputConstants.KEY_U);
         tecla("loja", InputConstants.KEY_Y);
         tecla("classes", InputConstants.KEY_O);
+        // 0.3.0: o Limiar (mapa de missões)
+        tecla("limiar", InputConstants.KEY_H);
     }
 
     private static void tecla(String acao, int padrao) {

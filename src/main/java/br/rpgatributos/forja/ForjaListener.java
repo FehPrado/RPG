@@ -117,6 +117,19 @@ public final class ForjaListener implements Listener {
 
     private void fabricar(Player p, CraftingInventory inv, Material tipo, ClickType clique, int hotbar) {
         if (!aberto(p, inv)) return;
+        // 3.19: um clique só abre a barra do martelo (shift + clique pula).
+        if (!clique.isShiftClick() && plugin.martelo().ligado(p)) {
+            ItemStack atual = inv.getResult();
+            if (atual == null || atual.getType() != tipo) return;
+            br.rpgatributos.combo.Arsenal.Arma arma = br.rpgatributos.combo.Arsenal.de(atual);
+            ItemStack base = arma != null ? br.rpgatributos.combo.Arsenal.criar(arma, tipo) : new ItemStack(tipo);
+            Location onde = local(inv, p);
+            consumir(inv);
+            p.updateInventory();
+            p.closeInventory();
+            plugin.martelo().comecar(p, base, onde);
+            return;
+        }
         int vezes = clique.isShiftClick() ? maxFabricacoes(inv.getMatrix()) : 1;
 
         List<ItemStack> feitos = new ArrayList<>();
@@ -127,6 +140,7 @@ public final class ForjaListener implements Listener {
             br.rpgatributos.combo.Arsenal.Arma arma = br.rpgatributos.combo.Arsenal.de(atual);
             ItemStack base = arma != null ? br.rpgatributos.combo.Arsenal.criar(arma, tipo) : new ItemStack(tipo);
             ItemStack item = forja().forjar(p, base, null);
+            Tempera.emBrasa(item);
             if (!entregar(p, item, clique, hotbar)) {
                 if (feitos.isEmpty()) semEspaco(p);
                 break;

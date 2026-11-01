@@ -486,6 +486,103 @@ public final class Comandos implements TabExecutor {
                 }
                 return;
             }
+            case "fauna" -> {
+                // 3.16: /rpgadmin fauna <cervo|corca|javali|coruja|pinguim|tartaruga|borboleta|mariposa|carne>
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                String o = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "";
+                Location perto = p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(4));
+                var tf = br.rpgatributos.mundo.Fauna.tipoPorNome(o);
+                if (tf != null) { plugin.fauna().soltar(tf, perto); ok(sender, tf.nome() + " solto na sua frente."); return; }
+                switch (o) {
+                    case "borboleta" -> {
+                        for (var c : br.rpgatributos.mundo.Fauna.Cor.values()) if (c != br.rpgatributos.mundo.Fauna.Cor.MARIPOSA) plugin.fauna().voar(c, perto, 120);
+                        ok(sender, "Quatro borboletas. Pegue com uma garrafa de vidro.");
+                    }
+                    case "mariposa" -> { plugin.fauna().voar(br.rpgatributos.mundo.Fauna.Cor.MARIPOSA, perto, 120); ok(sender, "Uma mariposa."); }
+                    case "carne" -> {
+                        for (var c : br.rpgatributos.mundo.Fauna.Carne.values()) entregar(p, c.criar(4));
+                        ok(sender, "Carne de Cervo e de Javali.");
+                    }
+                    default -> erro(sender, "Use: /rpgadmin fauna <cervo|corca|javali|coruja|pinguim|tartaruga|borboleta|mariposa|carne>");
+                }
+                return;
+            }
+            case "oficina" -> {
+                // 3.19: /rpgadmin oficina <cadinho|tina|ligas|minerais> — olhando para o alto-forno ou o caldeirão
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                String o = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "";
+                switch (o) {
+                    case "cadinho", "tina" -> {
+                        org.bukkit.block.Block b = p.getTargetBlockExact(6);
+                        boolean cad = o.equals("cadinho");
+                        if (b == null || (cad ? b.getType() != Material.BLAST_FURNACE : b.getType() != Material.CAULDRON && b.getType() != Material.WATER_CAULDRON)) {
+                            erro(sender, "Olhe para " + (cad ? "um alto-forno" : "um caldeirão") + " (até 6 blocos)."); return;
+                        }
+                        if (cad) plugin.cadinhos().criar(b, p);
+                        else {
+                            br.rpgatributos.vida.DadosBloco.gravar("tina", b.getLocation(), "AGUA|8");
+                            plugin.tinas().criar(b, p);
+                        }
+                        ok(sender, cad ? "Cadinho pronto." : "Tina de Têmpera pronta (Água).");
+                    }
+                    case "ligas" -> {
+                        for (var c : br.rpgatributos.forja.ConjuntoMineral.values()) if (c.liga()) entregar(p, c.mineral.criar(9));
+                        ok(sender, "9 lingotes de cada liga.");
+                    }
+                    case "minerais" -> {
+                        for (var c : br.rpgatributos.forja.ConjuntoMineral.values()) if (c.liga()) for (var pai : c.pais()) entregar(p, pai.mineral.criar(8));
+                        entregar(p, new ItemStack(Material.COAL, 16));
+                        ok(sender, "Minerais de origem das ligas e carvão.");
+                    }
+                    default -> erro(sender, "Use: /rpgadmin oficina <cadinho|tina|ligas|minerais>");
+                }
+                return;
+            }
+            case "golpe" -> {
+                // 3.17: /rpgadmin golpe <pesado|esmagar|agarrar|quebrar> — no inimigo forte mais perto (até 10 blocos)
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                if (args.length >= 2 && args[1].equalsIgnoreCase("lenda")) {
+                    // 3.18: enche a carga da arma Lendária na mão
+                    var h = br.rpgatributos.forja.ArmasMemoria.habilidade(p.getInventory().getItemInMainHand());
+                    if (h == null) { erro(sender, "Segure uma arma Lendária (use /rpgadmin memoria 999 e mate um monstro)."); return; }
+                    plugin.armasMemoria().encher(p);
+                    ok(sender, "Carga cheia: agachado + clique direito solta " + br.rpgatributos.forja.ArmasMemoria.golpeDa(h) + ".");
+                    return;
+                }
+                org.bukkit.entity.Mob alvo = null;
+                double melhor = 100;
+                for (org.bukkit.entity.Entity en : p.getNearbyEntities(10, 5, 10)) {
+                    if (!(en instanceof org.bukkit.entity.Mob m) || !br.rpgatributos.combo.Equilibrio.tem(m)) continue;
+                    double d = en.getLocation().distanceSquared(p.getLocation());
+                    if (d < melhor) { melhor = d; alvo = m; }
+                }
+                if (alvo == null) { erro(sender, "Nenhum inimigo com 40+ de vida a até 10 blocos. Tente /rpgadmin assombro golem_de_musgo."); return; }
+                String o = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "";
+                if (o.equals("quebrar")) {
+                    ok(sender, plugin.combos().equilibrio().quebrarAgora(alvo) ? "Equilíbrio quebrado: agache e golpeie (execução)." : "Ainda imune (espere uns segundos).");
+                    return;
+                }
+                br.rpgatributos.combate.LutaPesada.Golpe g = switch (o) {
+                    case "pesado" -> br.rpgatributos.combate.LutaPesada.Golpe.PESADO;
+                    case "esmagar" -> br.rpgatributos.combate.LutaPesada.Golpe.ESMAGAR;
+                    case "agarrar" -> br.rpgatributos.combate.LutaPesada.Golpe.AGARRAR;
+                    default -> null;
+                };
+                if (g == null) { erro(sender, "Use: /rpgadmin golpe <pesado|esmagar|agarrar|quebrar>"); return; }
+                alvo.setTarget(p);
+                plugin.lutaPesada().anunciar(alvo, p, g, System.currentTimeMillis());
+                ok(sender, "Anunciado. Pesado: levante o escudo bem na hora. Esmagar: esquive (dois toques). Agarrão: afaste-se.");
+                return;
+            }
+            case "assombro" -> {
+                // 3.16: /rpgadmin assombro <espantalho|banshee|golem_de_musgo|tecela|cavaleiro|afogado_ancora>
+                if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
+                var ta = args.length >= 2 ? br.rpgatributos.perigo.Assombros.tipoPorNome(args[1]) : null;
+                if (ta == null) { erro(sender, "Use: /rpgadmin assombro <espantalho|banshee|golem_de_musgo|tecela|cavaleiro|afogado_ancora>"); return; }
+                plugin.assombros().soltar(ta, p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(8)));
+                ok(sender, ta.nome() + " solto a 8 blocos. (De dia, os da noite somem sozinhos.)");
+                return;
+            }
             case "dados" -> {
                 // 3.13: o Copo de Dados das tavernas
                 if (!(sender instanceof Player p)) { erro(sender, "Só jogadores."); return; }
@@ -2435,7 +2532,7 @@ public final class Comandos implements TabExecutor {
                             "cozinha", "reciclagem", "variedade", "prato", "adubo", "marco", "ignorar", "apagarterritorio",
                             "altardomador", "invocar", "portalmasmorra", "masmorra", "sala", "fecharmasmorras",
                             "santuario", "classe", "prova", "lenda", "liberarlenda", "revelar", "pedraviagem", "local", "locais",
-                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "mar", "encanto", "dimensao", "titulo", "memoria", "regua", "natureza", "dados", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
+                            "liberarclasse", "bancadaalquimica", "peixe", "componente", "gema", "elixir", "acessorio", "oficio", "conjunto", "atelie", "sonho", "coleta", "semente", "coletanascer", "cajado", "tomo", "maestria", "prefeitura", "colono", "turnocolonia", "nivelcolonia", "guerra", "elite", "ninho", "horda", "chefemundial", "idademundo", "estacao", "festival", "clima", "ceu", "maldicao", "portal", "portaltransbordar", "portalfechar", "portalsortear", "obelisco", "torre", "proficiencia", "vigor", "gancho", "criaturas", "limparcriaturas", "santuariodivino", "circulo", "convergencia", "selo", "pentagrama", "teste", "mesarunica", "devocao", "pedrafilosofal", "runa", "mitrilo", "mapatesouro", "sitio", "reliquia", "cronista", "capitulo", "pacote", "talentopontos", "renascer", "companheironivel", "modelos", "boneco", "pedraamolar", "fogueira", "bebedouro", "comedouro", "cabanapesca", "cartografo", "ferradura", "ninhopassaro", "animalraro", "barril", "tacho", "artesanato", "trufa", "colmeia", "canteiro", "carta", "pacotecartas", "pocarta", "duelonpc", "flecha", "frasco", "erva", "mel", "bebida", "mercador", "encontro", "muda", "fruta", "estrutura", "estruturas", "esquecerestrutura", "raiz", "coracaopenumbra", "penumbra", "itemceu", "nomeada", "traje", "conjuntomineral", "utilidade", "carroca", "trilha", "estrada", "mar", "encanto", "dimensao", "titulo", "memoria", "regua", "natureza", "fauna", "assombro", "golpe", "oficina", "dados", "bando", "andarilho", "cristal", "cristalmana", "grimoriooculto", "cacador", "naoidentificado", "pecacacador", "armachefe", "itemsistema", "inscricao", "despertar", "missao", "reliquiamonarca", "monarca", "ataquerank", "dupla", "lendaria", "nian", "constelacao", "mineral", "artefato", "arma", "pegada", "reload"));
                 } else if (args.length == 2 && List.of("carta", "duelonpc", "artefato", "flecha", "frasco", "erva", "mel", "bebida", "encontro", "muda", "fruta", "artesanato").contains(sub)) {
                     Enum<?>[] vals = switch (sub) {
                         case "carta" -> br.rpgatributos.vida.Carta.values();
@@ -2452,6 +2549,14 @@ public final class Comandos implements TabExecutor {
                     };
                     for (Enum<?> v : vals) op.add(v.name().toLowerCase(Locale.ROOT));
                     if (sub.equals("encontro")) op.addAll(List.of("carroca", "bandidos", "viajante", "estrela"));
+                } else if (args.length == 2 && sub.equals("fauna")) {
+                    op.addAll(List.of("cervo", "corca", "javali", "coruja", "pinguim", "tartaruga", "borboleta", "mariposa", "carne"));
+                } else if (args.length == 2 && sub.equals("oficina")) {
+                    op.addAll(List.of("cadinho", "tina", "ligas", "minerais"));
+                } else if (args.length == 2 && sub.equals("golpe")) {
+                    op.addAll(List.of("pesado", "esmagar", "agarrar", "quebrar", "lenda"));
+                } else if (args.length == 2 && sub.equals("assombro")) {
+                    for (var t : br.rpgatributos.perigo.Assombros.Tipo.values()) op.add(t.name().toLowerCase(Locale.ROOT));
                 } else if (args.length == 2 && sub.equals("estrutura")) {
                     for (var t : br.rpgatributos.estruturas.Estrutura.values()) op.add(t.id());
                 } else if (args.length == 2 && sub.equals("reliquia")) {

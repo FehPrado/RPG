@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
 
 /** Um texto guardado no chunk para um bloco (estado do canteiro, colmeia, barril...). */
-final class DadosBloco {
+public final class DadosBloco {
 
     private DadosBloco() { }
 
@@ -13,15 +13,15 @@ final class DadosBloco {
         return new NamespacedKey("rpgatributos", prefixo + "_" + l.getBlockX() + "_" + l.getBlockY() + "_" + l.getBlockZ());
     }
 
-    static String ler(String prefixo, Location l) {
+    public static String ler(String prefixo, Location l) {
         return l.getChunk().getPersistentDataContainer().get(chave(prefixo, l), PersistentDataType.STRING);
     }
 
-    static void gravar(String prefixo, Location l, String valor) {
+    public static void gravar(String prefixo, Location l, String valor) {
         l.getChunk().getPersistentDataContainer().set(chave(prefixo, l), PersistentDataType.STRING, valor);
     }
 
-    static void apagar(String prefixo, Location l) {
+    public static void apagar(String prefixo, Location l) {
         l.getChunk().getPersistentDataContainer().remove(chave(prefixo, l));
     }
 

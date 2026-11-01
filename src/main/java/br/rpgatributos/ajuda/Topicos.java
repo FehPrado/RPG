@@ -166,7 +166,8 @@ public final class Topicos {
                         "Mestra das Marés (pescadores): tridente, lança, arpão, arremesso e bumerangue. Mestre do Bastão (mosteiro): bastão, leques, chicote, adaga e duplas.",
                         "Mestre de Guerra (anões): machado, maça, montante, mangual e clava. Mestra da Lâmina (élfica): espada, arco, foice e garras.",
                         "Ferreiro Piglin (Forja dos Piglins, no Nether): Lança de Basalto, pago em ouro.",
-                        "Cada técnica pede proficiência 12 na arma e 24 esmeraldas. Depois ela aparece no /combos.")
+                        "Cada técnica pede proficiência 12 na arma e 24 esmeraldas. Depois ela aparece no /combos.",
+                        "Treino (uma vez por dia com cada mestre, 4 esmeraldas): segure uma arma e ganhe metade de um nível de proficiência.")
                 .dica("Aprender com um mestre também aumenta o laço com ele.")
                 .cmd("combos").ligados("combos", "vilas").palavras("tecnica secreta mestre armas ensinar").pronto();
         t("aparar", COMBATE, "Aparar com o escudo", Material.SHIELD)
@@ -175,6 +176,11 @@ public final class Topicos {
                         "Escudo de Duelo (ferro, ouro, ferro em cima; escudo no meio): mais tempo para aparar e contra-ataque de ×1,8.")
                 .dica("Segurar o escudo levantado o tempo todo só bloqueia: o aparar é levantar no instante certo.")
                 .ligados("posturas", "fraquezas").palavras("aparar parry escudo duelo contra-ataque").pronto();
+        t("lutapesada", COMBATE, "Golpe anunciado e execução", Material.NETHERITE_AXE)
+                .texto("Inimigos fortes param, brilham e avisam o golpe. Amarelo: apare com o escudo na hora certa (o equilíbrio dele quebra). Vermelho: esquive, o escudo não segura. Roxo: agarrão, afaste-se.",
+                        "Equilíbrio quebrado + agachado + golpe = EXECUÇÃO: um quarto da vida dele (um oitavo nos chefes). Se morrer logo depois, drops em dobro.",
+                        "Chefes mudam de fase aos 66% e 33%: ficam mais fortes e anunciam golpes mais rápido. O Juiz só leva dano inteiro da Lâmina Espectral na fase 2.")
+                .ligados("aparar", "mobilidade", "posturas").palavras("golpe anunciado amarelo vermelho roxo agarrao esmagar execucao executar fase chefe juiz").pronto();
         t("fraquezas", COMBATE, "Fraquezas e clima", Material.SPIDER_EYE)
                 .texto("Cada família de criatura apanha mais de algumas armas e menos de outras: esqueletos de maça e clava, aranhas de lança e foice, criaturas de fogo de tridente e arpão, voadores de arco e bumerangue.",
                         "Na chuva tridente e arpão fazem mais (ainda mais na tempestade), a clava e o arco menos, e o fogo se apaga. No frio o mangual ganha 15%.",
@@ -323,7 +329,13 @@ public final class Topicos {
                         "Agachado + clique: refino.")
                 .ritual(Material.ANVIL, "Bigorna", Material.IRON_BLOCK, 2, Material.LAVA_BUCKET, 1)
                 .dica("Ferraria alta deixa os itens mais raros. O balde volta vazio.")
-                .cmd("forja").ligados("reciclagem", "gemas", "lendas").palavras("forjar raridade refino ferreiro mitico lendario").pronto();
+                .cmd("forja").ligados("reciclagem", "gemas", "lendas", "oficina").palavras("forjar raridade refino ferreiro mitico lendario").pronto();
+        t("oficina", OFICIOS, "Oficina: martelo, Cadinho e Tina", Material.BLAST_FURNACE)
+                .texto("Barra do martelo: na Forja, um clique abre a barra. Bata (clique esquerdo) 3 vezes quando o marcador passar no dourado: cada acerto sobe a chance de raridade (+5%, +12%, +25%). Shift + clique pula.",
+                        "Cadinho (alto-forno + caldeirão + balde de lava): 2 de cada mineral + 1 carvão = 2 lingotes de liga em 1 minuto. Aço Lunar, Âmbar-Sangue, Gelo Marinho e Bronze Vulcânico. Cada 2 peças de liga contam 1 de cada mineral de origem.",
+                        "Tina de Têmpera (caldeirão + balde de água + lingote de ferro): a peça sai da Forja em brasa por 10 s; clique na tina com ela. Água +10% de durabilidade, óleo de lâmina +4% de dano, Essência Etérea contra mortos-vivos, Seiva Anciã conserta sozinha, Cristal Abissal no escuro.")
+                .ritual(Material.BLAST_FURNACE, "Alto-forno", Material.CAULDRON, 1, Material.LAVA_BUCKET, 1)
+                .ligados("forja", "minerais").palavras("martelo barra ritmo cadinho liga aco lunar ambar sangue gelo marinho bronze vulcanico tina tempera brasa").pronto();
         t("reciclagem", OFICIOS, "Reciclagem (desmanchar)", Material.GRINDSTONE)
                 .texto("Desmanche até 9 itens de uma vez (armas, ferramentas, armaduras) e recupere de 50% a 75% do material.",
                         "O material principal vem primeiro: a sobra vira chance e item pouco gasto devolve ao menos 1 (a pá de ferro devolve 1 ferro).",
@@ -346,9 +358,11 @@ public final class Topicos {
                         "Cada gema dá um bônus diferente em arma, arco, armadura ou ferramenta.")
                 .ligados("alquimia", "forja").palavras("rubi safira topazio ametista onix engastar").pronto();
         t("cozinha", OFICIOS, "Cozinha", Material.SMOKER)
-                .texto("Pratos com buffs fortes. Ingredientes de qualidade ★ deixam o prato melhor.")
+                .texto("Pratos com buffs fortes. Ingredientes de qualidade ★ deixam o prato melhor.",
+                        "Receitas com \"qualquer fruta\", \"qualquer erva\"... aceitam tudo do grupo: pomar, coleta, ervas e méis têm panela.",
+                        "Shift + clique num prato tempera com uma erva a mais: o prato sobe uma qualidade.")
                 .ritual(Material.SMOKER, "Defumador", Material.CAULDRON, 1, Material.WATER_BUCKET, 1)
-                .cmd("receitas").ligados("fazenda", "pesca").palavras("prato receita comida culinaria").pronto();
+                .cmd("receitas").ligados("fazenda", "pesca", "pomar", "canteiro").palavras("prato receita comida culinaria tempero grupo qualquer").pronto();
         t("fazenda", OFICIOS, "Plantações e sementes raras", Material.WHEAT)
                 .texto("Colheita com qualidade ★ a ★★★, colheita dupla e gigante.",
                         "Plantas maduras lado a lado às vezes geram uma semente rara.")
@@ -395,9 +409,10 @@ public final class Topicos {
                 .ritual(Material.BARREL, "Barril vazio", Material.IRON_INGOT, 2, Material.HONEYCOMB, 1)
                 .ligados("colmeia", "pomar").palavras("bebida vinho cerveja licor").pronto();
         t("colmeia", OFICIOS, "Colmeia do Apicultor", Material.BEEHIVE)
-                .texto("Com flores perto, faz mel especial: Dourado, Gelado, Floral, Noturno ou Silvestre. Tire com garrafas.")
+                .texto("Com flores perto, faz mel especial: Dourado, Gelado, Floral, Noturno ou Silvestre. Tire com garrafas.",
+                        "3 flores iguais dão o mel delas (Rubro, Solar, Azul, de Tulipa, Branco), às vezes sai Geleia Real, e o mel tem qualidade ★.")
                 .ritual(Material.BEEHIVE, "Colmeia", Material.HONEYCOMB, 1, Material.POPPY, 1)
-                .ligados("barril", "canteiro").palavras("mel abelha").pronto();
+                .ligados("barril", "canteiro", "cozinha").palavras("mel abelha geleia real rubro solar azul tulipa branco").pronto();
         t("canteiro", OFICIOS, "Canteiro de Ervas", Material.MOSS_BLOCK)
                 .texto("Uma erva a cada 10 minutos, que depende do lugar (calor, frio, pântano, subsolo...).",
                         "As ervas entram nos frascos e no Licor de Ervas.")
@@ -658,7 +673,8 @@ public final class Topicos {
 
         // ===================== Comunidade =====================
         t("party", COMUNIDADE, "Party", Material.CAKE)
-                .texto("Até 6 jogadores, sem fogo amigo, XP de Combate dividido e chat próprio (/pc).")
+                .texto("Até 6 jogadores, sem fogo amigo, XP de Combate dividido e chat próprio (/pc).",
+                        "Papéis (com outro membro a até 30 blocos): Protetor (Tanque, Cavaleiro, Paladino, Senhor da Guerra) puxa os monstros dos aliados e leva 10% menos dano; Curandeiro (Curandeiro, Santo Paladino) cura um coração no aliado mais ferido a cada golpe (3 s); Marcador (classes de arco) marca o alvo com a flecha: +15% de dano da party nele.")
                 .cmd("party").ligados("masmorras", "territorio").palavras("grupo amigos").pronto();
         t("territorio", COMUNIDADE, "Território", Material.LODESTONE)
                 .texto("Protege 3×3 chunks (mais com nível). Só você e os membros constroem e abrem baús.",
@@ -717,6 +733,18 @@ public final class Topicos {
                         "Ninho de abelha natural: o mel às vezes vem com o sabor das flores de perto, ou uma Geleia Real.",
                         "Rede de Pesca (barbantes em volta de um graveto): lance na água e volte depois. Árvores anciãs: frasco na resina, uma vez por dia, dá Seiva Anciã.")
                 .palavras("natureza lendario cervo baleia lobo fenix urso boato migracao passaros manada cavalo ninho mel geleia rede pesca arvore ancia seiva resina").pronto();
+        t("fauna", MUNDO, "Animais novos", Material.BONE)
+                .texto("Cervos (com galhada) e corças nas matas: fogem de quem corre; ande agachado para chegar perto. Deixam Carne de Cervo e, às vezes, a Galhada (troféu).",
+                        "Javalis investem em quem chega perto sem agachar ou bate neles. Deixam Carne de Javali e Presa.",
+                        "Corujas de noite nas matas, pinguins nas praias geladas (às vezes pescam um peixe) e a rara Tartaruga-Gigante nas praias: clique para subir nela.",
+                        "Borboletas nas flores de dia e mariposas nas luzes de noite: pegue com uma garrafa de vidro. Agachado + clique com o pote solta de novo.")
+                .ligados("natureza", "cozinha", "trofeus").palavras("fauna cervo corca galhada javali coruja pinguim tartaruga borboleta mariposa caca carne").pronto();
+        t("assombros", COMBATE, "Assombros", Material.CARVED_PUMPKIN)
+                .texto("Espantalho: perto de plantações à noite. Só anda quando ninguém olha para ele. Deixa Palha Encantada (faz a plantação crescer).",
+                        "Banshee nos pântanos (o grito deixa lento e escuro), Golem de Musgo nas cavernas exuberantes (Musgo Vivo e sementes raras), Aranha-Tecelã (teias e aranhas pequenas; Seda Fina).",
+                        "Afogado-Âncora nos rios: puxa para o fundo quem está na água.",
+                        "Cavaleiro Sem Cabeça: em noite de lua cheia, quem anda na estrada (caminho de terra ou cascalho) pode ouvir o galope. A Cabeça dele é um troféu.")
+                .ligados("perigo", "bestiario", "trofeus").palavras("assombro espantalho banshee golem musgo tecela aranha cavaleiro sem cabeca afogado ancora").pronto();
         t("taverna", MUNDO, "Bares e Tavernas", Material.BARREL)
                 .texto("Taverna: a obra da colônia ou uma placa com [Taverna] na primeira linha (o nome na segunda).",
                         "Beber lá com amigos (dois ou mais no mesmo minuto): Camaradagem, +10% de XP e Sorte por 20 minutos.",
@@ -730,7 +758,8 @@ public final class Topicos {
                 .palavras("molde moldes regua construtor construcao copiar colar planta casa").pronto();
         t("memoria", COLECOES, "Armas com Memória", Material.IRON_SWORD)
                 .texto("Toda arma conta o que derrubou: monstros, chefes (valem 25) e jogadores (valem 5). Aparece na descrição.",
-                        "100: Marcada. 500: Veterana (+3% de dano). 1.000: Lendária: você dá o nome e ela ganha uma habilidade sorteada (Sede de Sangue, Eco, Ímpeto, Ceifadora ou Lembrança).")
+                        "100: Marcada. 500: Veterana (+3% de dano). 1.000: Lendária: você dá o nome e ela ganha uma habilidade sorteada (Sede de Sangue, Eco, Ímpeto, Ceifadora ou Lembrança).",
+                        "Golpe da lenda: a Lendária acorda depois de 12 golpes em monstros. Agachado + clique direito solta o golpe dela (Banquete Rubro, Eco Sem Fim, Investida da Lenda, Colheita ou Chamado dos Caídos).")
                 .dica("Exponha a arma marcada na Estante de Troféus.")
                 .ligados("trofeus", "forja").palavras("memoria arma abates marcada veterana lendaria nome habilidade eco sede impeto ceifadora lembranca").pronto();
         t("recordes", COLECOES, "Recordes", Material.GOLD_INGOT)
@@ -742,6 +771,11 @@ public final class Topicos {
         t("diario", COLECOES, "Diário", Material.WRITABLE_BOOK)
                 .texto("Os marcos da sua jornada, cada um com a data em que aconteceu.")
                 .cmd("diario").ligados("recordes").palavras("historia marcos").pronto();
+        t("limiar", COLECOES, "Limiar: o livro de missões", Material.WRITABLE_BOOK)
+                .texto("/limiar abre as missões em três capítulos: O Começo (a Jornada), Caminhos do Ofício (panela, luta, forja e mato) e Além do Limiar (Abismo, Luas e Mundo das Almas).",
+                        "Cada missão abre quando as anteriores estão feitas, completa sozinha e o prêmio vai direto para o inventário.",
+                        "Com o mod de apoio, a tecla H abre o mapa de missões: arraste para mover, roda do mouse para o zoom, clique numa missão para ver como fazer.")
+                .cmd("limiar").ligados("missoes", "oficina", "lutapesada").palavras("limiar missoes quests livro mapa capitulo jornada").pronto();
         t("missoes", COLECOES, "Missões dos aldeões", Material.PAPER)
                 .texto("Aldeões fazem pedidos simples em troca de esmeraldas e XP.")
                 .cmd("missoes").ligados("vida").palavras("pedido aldeao").pronto();

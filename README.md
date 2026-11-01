@@ -77,6 +77,18 @@ Tudo usa os atributos, efeitos, partículas e sons do próprio Minecraft: não p
 - **Visual:** com o pacote de recursos, os menus do `/rpg`, do Guia e da Jornada têm **fundo desenhado** (papel e madeira); sem o pacote, aparecem com vidros.
 - **Livro:** na primeira entrada o jogador ainda recebe o livro Guia do Aventureiro (80 páginas); `/guia livro` dá outro.
 
+### O Limiar: o livro de missões (3.20)
+
+`/limiar` (ou **H** com o mod de apoio) abre o **Limiar**, as missões do servidor em três capítulos. Cada missão abre quando as anteriores estão feitas, completa sozinha quando você faz a coisa (o plugin confere a cada 3 segundos) e o prêmio vai direto para o inventário.
+
+| Capítulo | Missões |
+|---|---|
+| **O Começo** | os 12 passos da Jornada do Aventureiro (o prêmio continua vindo da Jornada) |
+| **Caminhos do Ofício** | quatro ramos: **panela** (Da Estação, Mel das Flores, Uma Pitada de Erva, Banquete), **luta** (Apare o Amarelo, Execução, Coisas da Noite, A Arma Desperta, O Cavaleiro Sem Cabeça), **forja** (Três Batidas, A Primeira Liga, Em Brasa, Com o Mestre), **mato** (Primeira Caça, Asas no Pote, Carona Lenta, Lenda da Natureza) |
+| **Além do Limiar** | o Abismo (A Fenda, Os Antigos, O Vigia do Fundo), as Luas (Decolagem, Cinco Luas) e o Mundo das Almas (O Outro Lado, Almas Penadas, A Balança Quebrada, O Fim do Diário) |
+
+Com o **mod de apoio** o Limiar é um **mapa** no estilo dos modpacks (missões em círculos ligadas por linhas, capítulos na esquerda, arrastar e zoom, aviso no canto ao completar). Sem o mod, é um menu de baú com as mesmas missões (clique numa para ver como fazer no Guia).
+
 ## Forja do Ferreiro
 
 **Ritual:** jogue (tecla Q) **2 blocos de ferro** e **1 balde de lava** em cima de uma **bigorna**. Ela vira a Forja do Ferreiro (o balde volta vazio). A bigorna da forja não cai; quebrar a forja devolve os blocos de ferro.
@@ -114,6 +126,31 @@ Até +5, falhar só gasta o material. De +6 a +8, o item perde 1 nível. No +9 e
 **Armas com memória (3.9):** toda arma (espadas, machados, tridente, maça, arco, besta, lanças e o arsenal) conta o que derrubou e mostra na descrição: "⚔ Memória: 87 monstros · 1 chefe". Para os marcos, **chefe vale 25** e **jogador vale 5**. Com **100** ela fica **Marcada** (a linha fica dourada), com **500** **Veterana** (+3% de dano) e com **1.000** **Lendária**: uma tela pede o **nome** dela (quem fechar a tela recebe um [dar um nome] no chat) e ela ganha uma **habilidade sorteada**: **Sede de Sangue** (cada abate cura 1 coração), **Eco** (15% de chance de o golpe repetir com metade do dano), **Ímpeto** (Velocidade II por 3 s a cada abate), **Ceifadora** (+20% de dano em quem tem menos de 30% da vida) ou **Lembrança** (XP em dobro dos abates). Título: **Memória Viva**. A raridade e a forja não mudam, e a memória continua ao refinar. Na área de testes não conta.
 
 **Trajes (armaduras com nome):** a armadura forjada também pode nascer com nome (mesmas chances; 30% das armas com nome de baús e chefes são peças de Traje). São **8 Trajes** de 4 peças, cada um com história, ícone próprio e **textura própria no corpo de quem veste**, pintada pelo plugin: **da Penumbra** (escamas roxas), **dos Ventos** (placas brancas e douradas), **de Thalassa** (escamas verde-mar e coral), **do Fortim** (placas de aço e vermelho), **dos Anões** (bronze), **da Geada** (gelo), **da Colheita** (tecido de palha) e **da Raiz de Luz** (tecido de raiz com veios âmbar). As peças se chamam Elmo/Peitoral/Grevas/Botas (placas), Elmo/Cota/Grevas/Botas (escamas) ou Capuz/Gibão/Calças/Botas (tecido), por exemplo **Elmo da Penumbra** e **Gibão da Colheita**. Só aparência, como as armas; funcionam com o Guarda-roupa e continuam ao virar Netherite.
+
+### A oficina do ferreiro (3.19)
+
+- **Barra do martelo:** na Forja do Ferreiro, **um clique só** no resultado abre a barra na tela. O marcador corre de um lado a outro; **bata (clique esquerdo) 3 vezes** quando ele passar na faixa dourada. Cada acerto sobe a chance de a peça sair uma raridade acima: 1 acerto **+5%**, 2 **+12%**, 3 **+25%**. A Ferraria alta alarga a faixa. **Shift + clique** pula a barra (chance normal, e faz várias de uma vez). Desligar: `forja.barra-martelo: false`.
+- **Cadinho** (ritual: **1 caldeirão + 1 balde de lava** num **alto-forno**; o balde volta): funde ligas. **2 de cada mineral + 1 carvão = 2 lingotes** em 1 minuto (shift no menu: até 4 fornadas). Clique de novo para pegar.
+
+| Liga | Minerais | Com 4 peças |
+|---|---|---|
+| **Aço Lunar** | Prata Lunar + Ferro Negro | +25% de dano em mortos-vivos e não é empurrado |
+| **Âmbar-Sangue** | Âmbar + Pedra-Sangue | Sorte I e rouba 5% do dano em vida |
+| **Gelo Marinho** | Cristal de Gelo + Pérola | não congela e respira debaixo d'água |
+| **Bronze Vulcânico** | Cobre dos Antigos + Cristal de Magma | −40% de queda e −30% de fogo e lava |
+
+  O lingote faz o conjunto inteiro na bancada (como o ferro). **Cada 2 peças de liga contam como 1 peça de cada mineral de origem**: com 4 peças, os bônus de 2 peças dos dois minerais (mais fraco que um conjunto puro, mas dois de uma vez). Misturar vale: 2 de Aço Lunar + 2 de Lunar = 3 de Lunar.
+- **Tina de Têmpera** (ritual: **1 balde de água + 1 lingote de ferro** num **caldeirão**): toda peça que sai da Forja sai **🔥 em brasa por 10 segundos**. Clique na tina com ela na mão e ela ganha a têmpera do líquido (uma vez por forja). Esfriou fora: fica normal. Cada líquido dá 8 têmperas; troque clicando com outro:
+
+| Líquido (clique com) | Têmpera |
+|---|---|
+| Água (balde de água) | +10% de durabilidade |
+| Óleo (um óleo de lâmina da Alquimia) | arma +4% de dano; armadura −1,5% de dano recebido por peça |
+| Almas (Essência Etérea) | arma +15% de dano em mortos-vivos e no Mundo das Almas |
+| Seiva (Seiva Anciã) | conserta sozinha devagar (vestida ou na mão) |
+| Abismo (Cristal Abissal) | arma +8% de dano no escuro; armadura −2% no escuro |
+
+- Títulos: **Mestre das Ligas** (20 lingotes), **Mão de Martelo** (10 forjas com 3 acertos) e **Temperador** (15 têmperas). Admin: `/rpgadmin oficina <cadinho|tina|ligas|minerais>` (olhando para o alto-forno ou caldeirão).
 
 ## Bancada de Reciclagem
 
@@ -268,7 +305,7 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 - **Agachado + clique:** o defumador normal (continua funcionando).
 - `/receitas` mostra o livro de receitas em qualquer lugar.
 
-**42 pratos**, liberados pelo nível de Culinária. Comer dá buffs (a duração fica gravada no prato):
+**97 pratos** (3.15), liberados pelo nível de Culinária. Comer dá buffs (a duração fica gravada no prato):
 
 | Prato | Nível | Efeito |
 |---|---|---|
@@ -323,6 +360,29 @@ Colher plantação **madura** (trigo, cenoura, batata, beterraba, fungo do Nethe
 O livro de receitas tem páginas (setas embaixo).
 
 **Qualidade do prato:** sorteada pelo nível de Culinária. Se a maioria dos ingredientes for Ótima ou melhor, o prato sobe uma qualidade; todos Perfeitos = prato Perfeito. Qualidade aumenta a duração (até +50%), e o nível de Culinária soma mais até +50%.
+
+### Da terra à panela (3.15)
+
+- **Grupos de ingrediente:** tudo o que se colhe, cria, pesca ou caça é de um grupo: grão ou castanha, legume, fruta, erva, cogumelo, peixe, carne, ovo ou laticínio, doce e parte de monstro. Receitas novas pedem **"qualquer fruta"**, **"qualquer erva"**... e aceitam tudo daquele grupo. Os ingredientes exatos saem primeiro; o "qualquer" usa o que sobrar.
+- **Uma qualidade só:** frutas do pomar, coleta da estação, ervas do canteiro, méis e Seiva Anciã agora saem com ★ a ★★★ (pela Agricultura), como as plantações, o leite e os peixes. Comer ou beber puro também dura mais com ★.
+- **Tempero:** na Cozinha, **shift + clique** num prato gasta uma erva do canteiro a mais e sobe o prato uma qualidade.
+- **Um catálogo de mel:** a Colmeia e o ninho selvagem fazem os mesmos méis. Na Colmeia, 3 flores iguais por perto dão o mel delas (**Rubro**, **Solar**, **Azul**, **de Tulipa**, **Branco**) quando não vale um Dourado, Gelado ou Floral; às vezes sai **Geleia Real** do fundo. Receitas com mel aceitam **qualquer mel** (menos a Geleia Real, que tem receita própria). Os méis antigos dos ninhos continuam valendo.
+- **Garrafas:** mel, geleia, seiva e outros ingredientes em garrafa devolvem a garrafa ao cozinhar.
+
+**48 pratos novos** para o que não tinha panela:
+
+| De onde | Pratos |
+|---|---|
+| Pomar | Torta de Pêssego, Limonada, Bolo de Laranja, Torta de Cereja, Maçã Dourada Caramelada |
+| Coleta da estação | Risoto de Morel, Salada de Samambaia, Assado ao Alho-Selvagem, Torta de Amora, Sopa de Alga-Doce, Bolo de Groselha, Sopa de Castanha, Cogumelos do Bosque Salteados, Pão de Avelã, Ensopado de Raiz de Inverno, Caldo de Cogumelo-de-Neve, Assado com Zimbro |
+| Plantações | Couve-Flor Gratinada, Muffin de Mirtilo, Inhame Assado com Mel |
+| Ervas | Chá de Sálvia, Pão de Erva-de-Sol, Peixe na Folha Gélida, Sopa de Musgo Lunar (+mana), Guisado da Raiz Abissal, Doce de Flor-de-Cristal (+mana) |
+| Peixes raros | Carpa Dourada Assada, Truta Arco-Íris Grelhada, Peixe-Lua Defumado, Caldo de Peixe-Pedra, Espeto de Enguia Elétrica, Carpaccio de Peixe-Gelo, Koi Glaceado, Moqueca de Baiacu-Rei, Lúcio Polar ao Forno, Caldo Luminoso, Sopa do Peixe-Fantasma (invisibilidade), **Banquete do Dragão** (para todos em volta) |
+| Tacho do Artesão | Sanduíche Caprichado (maionese), Marmita do Viajante (conserva), Massa ao Óleo de Trufa |
+| Natureza | Chá de Seiva Anciã, Hidromel de Geleia Real |
+| Receitas abertas | Salada da Estação, Sopa da Mata, Torta de Frutas Sortidas, Grelhado Misto, Peixada da Casa |
+
+O Salmão com Ervas agora pede **qualquer erva** (antes pedia frutinhas doces).
 
 ## Criação de animais
 
@@ -1166,6 +1226,37 @@ Títulos: **Discípulo** (3 técnicas) e **Herdeiro das Técnicas** (as 20).
 - **Balão de Cristal:** a versão barata da capa (Bancada Alquímica: 4 lãs brancas + 4 linhas). Abre do mesmo jeito, desce ainda mais devagar, mas anda bem mais devagar e **estoura no fim do 5º voo** (a descrição mostra os usos que restam).
 - **Mochila** (`/mochila`): um baú pessoal que começa com 1 fileira e ganha mais uma a cada 150 níveis somados, até 6 (54 espaços). Fica salva no jogador e não cai quando ele morre.
 
+## Luta pesada: golpe anunciado, execução e fases (3.17)
+
+- **Golpe anunciado:** inimigos fortes (40 de vida ou mais: elites, chefes, assombros) às vezes param, **brilham** e avisam na tela, com um anel colorido em volta. Depois de 1 segundo (0,75 s na fase 3), o golpe sai:
+  - **Amarelo, golpe pesado:** dano dobrado. **Levante o escudo bem na hora** (é o Aparar) e o golpe some e o **equilíbrio dele quebra na hora**. Segurar o escudo levantado o tempo todo só bloqueia.
+  - **Vermelho, esmagar:** atinge todos a até 4 blocos e **o escudo não segura**. Só a **esquiva** (dois toques) ou sair de perto salvam.
+  - **Roxo, agarrão:** quem estiver a até 3 blocos é puxado, preso e enjoado. **Afaste-se** antes.
+- **Execução:** com o equilíbrio do inimigo quebrado, **agachado + golpe** tira **um quarto da vida máxima** dele de uma vez (um oitavo nos chefes), com câmera lenta curta e +15 de Vigor. Se ele morrer em até 3 segundos, os drops comuns vêm **em dobro** (materiais raros não) e o XP também.
+- **Fases dos chefes:** quem tem 150 de vida ou mais muda de fase aos **66%** e aos **33%**: ruge, fica invulnerável por 1,5 s, empurra quem está perto e ganha Força (Força II e Velocidade na fase 3). Na fase nova, os golpes anunciados vêm mais rápido.
+- **O Juiz** (Mundo das Almas), da fase 2 em diante, ergue o **escudo da balança**: leva só 35% do dano, menos da **Lâmina Espectral**, que corta inteiro.
+- Títulos: **Mão Firme** (aparar 10 golpes pesados) e **Carrasco** (25 execuções). Config: `combate.golpe-anunciado`, `combate.execucao`, `combate.fases-de-chefe`.
+- Admin: `/rpgadmin golpe <pesado|esmagar|agarrar|quebrar>` usa o inimigo forte mais perto.
+
+### Golpe da lenda, papéis na party e treino (3.18)
+
+- **Golpe da lenda (o 5º golpe):** a arma **Lendária** (memória 1.000) desperta depois de **12 golpes em monstros** (aviso na tela). **Agachado + clique direito** solta o golpe dela, ligado à habilidade:
+
+| Habilidade | Golpe | O que faz |
+|---|---|---|
+| Sede de Sangue | **Banquete Rubro** | corte em leque à frente (dano ×2) e cura 30% do dano feito |
+| Eco | **Eco Sem Fim** | três golpes seguidos no inimigo mais perto |
+| Ímpeto | **Investida da Lenda** | avança 6 blocos ferindo quem estiver no caminho, e Velocidade II |
+| Ceifadora | **Colheita** | giro em volta; quem tem menos de 15% da vida cai (menos chefes) |
+| Lembrança | **Chamado dos Caídos** | explosão de almas em volta: fere, enfraquece e marca |
+
+- **Papéis na party** (precisa de outro membro a até 30 blocos):
+  - **Protetor** (Tanque, Cavaleiro, Paladino, Senhor da Guerra): monstros que miram um aliado perto dele passam a mirar nele, e ele leva 10% menos dano.
+  - **Curandeiro** (Curandeiro, Santo Paladino): cada golpe em monstro cura 1 coração no aliado mais ferido por perto (a cada 3 s).
+  - **Marcador** (Arqueiro, Atirador de Elite, Caçador, Arqueiro Celestial): a flecha marca o alvo por 8 s (brilha) e a party faz **+15%** de dano nele.
+- **Treino com o Mestre de Armas** (tela das técnicas nas vilas): uma vez por dia com cada mestre, 4 esmeraldas (ouro no Ferreiro Piglin), ganha **metade de um nível** de proficiência da arma na mão.
+- Títulos: **Lenda Desperta** (10 golpes da lenda), **Anjo da Guarda** (100 curas na party) e **Aprendiz Dedicado** (10 treinos). Config: `party.papeis`. Admin: `/rpgadmin golpe lenda` (enche a carga da arma na mão).
+
 ## Equilíbrio de criaturas
 
 - O limite de monstros por jogador em cada mundo é 45 (o padrão do Minecraft é 70). Muda em `criaturas.limite-de-monstros` (−1 = não mexer).
@@ -1620,11 +1711,39 @@ Na Forja do Ferreiro, estes itens também saem **forjados** (com raridade, bônu
 
 - **Animais lendários:** existe **um de cada** no mundo inteiro: **Cervo Dourado** (florestas), **Baleia Celeste** (oceanos), **Lobo Lunar** (taigas, à noite), **Fênix** (savanas, selvas e terras áridas) e **Urso Ancião** (montanhas e neve). De vez em quando corre um **boato** no chat com o lugar aproximado; ele fica uns 20 minutos e some. Quem achar e **clicar nele** ganha a **lembrança** (Chifre, Escama, Presa, Pena ou Garra, que vai na Estante de Troféus) e XP, e o servidor fica sabendo. Ninguém mata um lendário: eles não apanham nem atacam. Título: **Amigo das Lendas** (os cinco).
 - **Migração:** no **outono** e na **primavera**, de dia, passam **bandos de pássaros** bem alto no céu (para o sul no outono, para o norte na primavera), e às vezes uma **manada de cavalos selvagens** atravessa as planícies e savanas perto de alguém. Dá para domar um; os que ninguém domar vão embora em 5 minutos.
-- **Ninhos selvagens:** tirar mel com frasco de um **ninho de abelha natural** às vezes dá um mel com o sabor das flores de perto: **Rubro** (papoula, Força), **Solar** (dente-de-leão e girassol, Pressa), **Azul** (orquídea e centáurea, Visão Noturna), **de Tulipa** (Regeneração) e **Branco** (lírio e margarida, Resistência e tira o veneno). Raramente vem a **Geleia Real** (Absorção II por 2 minutos). A Colmeia do Apicultor continua com os méis dela.
+- **Ninhos selvagens:** tirar mel com frasco de um **ninho de abelha natural** às vezes dá um mel com o sabor das flores de perto: **Rubro** (papoula, Força), **Solar** (dente-de-leão e girassol, Pressa), **Azul** (orquídea e centáurea, Visão Noturna), **de Tulipa** (Regeneração) e **Branco** (lírio e margarida, Resistência e tira o veneno). Raramente vem a **Geleia Real** (Absorção II por 2 minutos). (3.15: é o mesmo catálogo da Colmeia do Apicultor, com qualidade ★.)
 - **Rede de Pesca** (bancada: barbantes em volta de um graveto, `S S`/`SGS`/`S S`): clique na água para lançar e volte depois. Ela pega um peixe a cada 2,5 minutos (1,5 na chuva), até 6, com chance de alga, bolsa de tinta e, raramente, concha de náutilo. Clique na rede para tirar o que pegou; agachado, recolhe a rede. Até 3 redes por jogador.
 - **Árvores anciãs:** algumas árvores das florestas novas são muito velhas: musgo nas raízes e **resina** escorrendo do tronco. Com um **frasco** na resina, uma vez por dia, sai a **Seiva Anciã** (Regeneração II e saciedade, XP de Agricultura). Título: **Guardião da Seiva** (10 seivas).
 
 Admin: `/rpgadmin natureza lendario [cervo_dourado|baleia_celeste|lobo_lunar|fenix|urso_anciao]` (solta perto de você), `bando`, `manada`, `ancia` (no chunk em que você está, numa floresta) e `rede`. No config, `natureza.*` desliga cada parte e `natureza.lendarios-minutos` muda a frequência dos boatos.
+
+### Animais novos e assombros (3.16)
+
+Feitos com bichos do jogo (sem mod): nome, tamanho, comportamento próprio e, no cervo, a galhada presa na cabeça. Não são salvos no mundo: aparecem perto de quem explora e somem quando ficam sozinhos.
+
+| Animal | Onde | O que faz | Deixa |
+|---|---|---|---|
+| **Cervo** e **Corça** | matas, de dia | fogem de quem corre ou chega perto sem agachar (a manada foge junto) | Carne de Cervo, couro, **Galhada** (troféu, só o cervo) |
+| **Javali** | matas, savanas, selvas | investe em quem chega perto sem agachar ou bate nele | Carne de Javali, Presa de Javali |
+| **Coruja** | matas, de noite | "hu-hu" no escuro; some de manhã | Pena de Coruja |
+| **Pinguim** | praias e planícies geladas | perto da água, às vezes volta com um peixe | penas, bacalhau |
+| **Tartaruga-Gigante** | praias (uma por mundo) | clique para subir (título **Carona Lenta**); não apanha de jogador | 3 escamas |
+| **Borboletas** e **mariposas** | flores de dia; luzes de noite | pegue com uma **garrafa de vidro** (vira um pote); agachado + clique com o pote solta | — |
+
+A carne de caça entra nas receitas com "qualquer carne".
+
+| Assombro | Onde | Perigo | Deixa |
+|---|---|---|---|
+| **Espantalho** | perto de plantações, de noite | só anda quando **ninguém olha** para ele | **Palha Encantada** (clique numa plantação: cresce um estágio), trigo, às vezes semente rara |
+| **Banshee** | pântanos, de noite | grito: Lentidão II e Escuridão | Lágrima da Banshee |
+| **Golem de Musgo** | cavernas exuberantes | lento, forte, persegue | **Musgo Vivo** (pedra vira pedra com musgo; terra vira grama), musgo, às vezes semente rara |
+| **Aranha-Tecelã** | onde nascem aranhas | prende o alvo numa teia e chama aranhas pequenas | Seda Fina, barbante |
+| **Afogado-Âncora** | rios | puxa para o fundo quem está na água | Corrente do Afogado |
+| **Cavaleiro Sem Cabeça** | estrada (caminho de terra ou cascalho) em **noite de lua cheia** | 100 de vida, cavalo esqueleto, barra de chefe; some ao amanhecer | **Cabeça do Cavaleiro** (troféu), esmeraldas |
+
+Os assombros nascem no lugar de um monstro comum (respeitam o limite de monstros). Títulos: **Mateiro** (20 caças), **Caçador de Borboletas** (10), **Carona Lenta**, **Exorcista** (25 assombros) e **Quem Viu o Cavaleiro**. Tudo liga e desliga em `fauna.*` e `assombros.*` na config.
+
+Admin: `/rpgadmin fauna <cervo|corca|javali|coruja|pinguim|tartaruga|borboleta|mariposa|carne>` e `/rpgadmin assombro <espantalho|banshee|golem_de_musgo|tecela|cavaleiro|afogado_ancora>`.
 
 ### Bares e tavernas (3.13)
 
@@ -1656,7 +1775,7 @@ Título: **Arquiteto** (10 construções colocadas). Admin: `/rpgadmin regua`.
 | Estação | Ritual (jogue com Q) | O que faz |
 |---|---|---|
 | 🛢 **Barril de Envelhecimento** | Barril vazio + 2 lingotes de ferro + 1 favo de mel | Escolha uma bebida (Hidromel, Cidra, Vinho de Frutas, Cerveja de Trigo, Licor Arcano, Licor de Ervas). Ela envelhece em **dias reais**: Nova, Envelhecida (1 dia), Reserva (3 dias) e Lendária (7 dias), cada grau mais forte e mais longo. Engarrafe com 3 garrafas de vidro |
-| 🐝 **Colmeia do Apicultor** | Colmeia + 1 favo de mel + 1 flor | Com 4 flores perto, faz um mel a cada 5 min (até 6). **Mel Dourado** (girassóis por perto, Absorção II), **Gelado** (frio ou inverno, resistência ao fogo), **Floral** (5 flores diferentes, Regeneração), **Noturno** (à noite, visão noturna) ou **Silvestre**. Tire com garrafas de vidro |
+| 🐝 **Colmeia do Apicultor** | Colmeia + 1 favo de mel + 1 flor | Com 4 flores perto, faz um mel a cada 5 min (até 6). **Mel Dourado** (girassóis por perto, Absorção II), **Gelado** (frio ou inverno, resistência ao fogo), **Floral** (5 flores diferentes, Regeneração), o mel da flor que mais tem (3.15: 3 iguais dão **Rubro**, **Solar**, **Azul**, **de Tulipa** ou **Branco**), **Noturno** (à noite, visão noturna) ou **Silvestre**. Às vezes sai **Geleia Real**. Os méis têm qualidade ★. Tire com garrafas de vidro |
 | ☘ **Canteiro de Ervas** | Bloco de musgo + 1 farinha de osso + 1 vaso de flor | Uma erva a cada 10 min (até 4), que depende do lugar: **Sálvia** (lugares amenos), **Erva-de-Sol** (quente), **Musgo Lunar** (pântano), **Folha Gélida** (frio ou inverno), **Raiz Abissal** (embaixo da terra), **Flor-de-Cristal** (cerejeiras e flores) |
 
 As ervas entram nos frascos de arremesso e no Licor de Ervas.
@@ -2837,7 +2956,7 @@ Permissões (todas liberadas por padrão): `rpg.atributos`, `rpg.atributos.outro
 
 ## Mod de apoio (opcional, no cliente)
 
-O servidor **não precisa** de nada além do plugin. O **mod de apoio** (`rpgapoio-0.2.0.jar`, para **NeoForge 26.3**; precisa do plugin 2.77 ou mais novo para as telas e o HUD) vai só no jogo de quem quiser, por exemplo no modpack. Ele cria teclas próprias em **Opções > Controles > RPGAtributos**, que dá para trocar como qualquer tecla do jogo:
+O servidor **não precisa** de nada além do plugin. O **mod de apoio** (`rpgapoio-0.3.0.jar`, para **NeoForge 26.3**; precisa do plugin 2.77 ou mais novo para as telas e o HUD, e do 3.20 para o Limiar) vai só no jogo de quem quiser, por exemplo no modpack. Ele cria teclas próprias em **Opções > Controles > RPGAtributos**, que dá para trocar como qualquer tecla do jogo:
 
 | Tecla (padrão) | Ação | Sem o mod |
 |---|---|---|
@@ -2851,10 +2970,13 @@ O servidor **não precisa** de nada além do plugin. O **mod de apoio** (`rpgapo
 | **U** | Missão Diária | `/masmorra missao` |
 | **Y** | Loja do Sistema | `/masmorra loja` |
 | **O** | Árvore de classes | `/classe` |
+| **H** | **Limiar** (mapa de missões) | `/limiar` (menu de baú) |
 
 **Telas (0.2.0):** com o mod, **todos os menus do plugin** ganham uma "pele": fundo com a cor do assunto (portais em roxo, classes em dourado, forja em laranja, colônia e reino em verde...), sem os vidros de enfeite e com um quadrinho atrás de cada item. Quatro menus têm **tela própria**: a **janela do Sistema** (rank e barra de XP, os ramos da Árvore de Caçador ligados por linhas, as características com nome), a **árvore de classes** (básicas em cima, avançadas embaixo ligadas a elas, e a página das lendárias com o Soberano no meio dos Monarcas), a **Loja do Sistema** (cartões com o preço em verde ou vermelho) e o **Mural das Relíquias** (uma linha por Monarca com a barra de quantas já estão lá). Por baixo é o mesmo menu do servidor: os cliques (esquerdo, direito, Shift) fazem o mesmo de sempre.
 
 **HUD (0.2.0):** embaixo à direita, a sua classe com cada habilidade (a escolhida marcada, a recarga em segundos) e a mana com os Cristais de Mana; dentro de um portal, no alto à esquerda, o rank, o tempo e o objetivo (e a barra de ação fica livre); na Câmara das Estátuas, no meio da tela, o mandamento da vez e o aviso dos olhos ("vão abrir" / "NÃO SE MEXA").
+
+**Limiar (0.3.0, plugin 3.20):** o livro de missões, no estilo dos modpacks. **H** (ou `/limiar`) abre um mapa: os capítulos na barra da esquerda (com quantas missões já foram), e no mapa cada missão é um círculo com ícone, ligado às anteriores por linhas. Arraste para mover, roda do mouse para o zoom; passe o mouse para ver o que fazer, o progresso e o prêmio; clique para abrir o assunto no Guia. Círculo dourado com ✔: feita; brilhando: dá para fazer agora; escuro: faça as anteriores. Quando uma missão termina aparece o aviso no canto da tela.
 
 Quem não tem o mod continua usando os atalhos e os menus de sempre; com o mod, os dois jeitos funcionam. Ao entrar, aparece "Mod de apoio conectado" na barra. Em servidores sem o RPGAtributos, as teclas não fazem nada (e o jogo avisa uma vez).
 

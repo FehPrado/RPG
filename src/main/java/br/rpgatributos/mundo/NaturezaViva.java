@@ -4,6 +4,8 @@ import br.rpgatributos.ModoTeste;
 import br.rpgatributos.RPGAtributos;
 import br.rpgatributos.Skill;
 import br.rpgatributos.exploracao.PacoteRecursos;
+import br.rpgatributos.fazenda.Qualidade;
+import br.rpgatributos.vida.Mel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -91,7 +93,6 @@ public final class NaturezaViva implements Listener {
     private static final NamespacedKey K_LENDARIO = new NamespacedKey("rpgatributos", "animal_lendario");
     private static final NamespacedKey K_ACHADOS = new NamespacedKey("rpgatributos", "lendarios_achados");
     private static final NamespacedKey K_MANADA = new NamespacedKey("rpgatributos", "manada");
-    private static final NamespacedKey K_MEL = new NamespacedKey("rpgatributos", "mel_silvestre");
     private static final NamespacedKey K_REDE_ITEM = new NamespacedKey("rpgatributos", "rede_de_pesca");
     private static final NamespacedKey K_REDE = new NamespacedKey("rpgatributos", "rede_na_agua");
     private static final NamespacedKey K_ANCIA = new NamespacedKey("rpgatributos", "arvore_ancia");
@@ -426,58 +427,8 @@ public final class NaturezaViva implements Listener {
     }
 
     // =====================================================================
-    //  Ninhos selvagens: mel das flores e Geleia Real
+    //  Ninhos selvagens: mel das flores e Geleia Real (3.15: o mesmo catálogo da Colmeia, vida/Mel)
     // =====================================================================
-
-    private enum Mel {
-        RUBRO("Mel Rubro", 0xE53935, PotionEffectType.STRENGTH, 30),
-        SOLAR("Mel Solar", 0xFDD835, PotionEffectType.HASTE, 60),
-        AZUL("Mel Azul", 0x42A5F5, PotionEffectType.NIGHT_VISION, 90),
-        TULIPA("Mel de Tulipa", 0xF06292, PotionEffectType.REGENERATION, 12),
-        BRANCO("Mel Branco", 0xF5F5F5, PotionEffectType.RESISTANCE, 30),
-        GELEIA("Geleia Real", 0xFFB300, PotionEffectType.ABSORPTION, 120);
-
-        final String nome;
-        final TextColor cor;
-        final PotionEffectType efeito;
-        final int segundos;
-
-        Mel(String nome, int cor, PotionEffectType efeito, int segundos) {
-            this.nome = nome;
-            this.cor = TextColor.color(cor);
-            this.efeito = efeito;
-            this.segundos = segundos;
-        }
-    }
-
-    private static ItemStack mel(Mel m) {
-        ItemStack i = new ItemStack(Material.HONEY_BOTTLE);
-        i.editMeta(x -> {
-            x.itemName(Component.text(m.nome, m.cor));
-            x.lore(List.of(Component.text(m == Mel.GELEIA ? "Rara: o alimento da rainha." : "Mel de ninho selvagem, com o sabor das flores de perto.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
-            x.getPersistentDataContainer().set(K_MEL, PersistentDataType.STRING, m.name());
-            PacoteRecursos.marcar(x, "mel_" + m.name().toLowerCase());
-        });
-        return i;
-    }
-
-    /** Qual mel as flores perto do ninho dão (a flor que mais aparece até 5 blocos). */
-    private static Mel melDasFlores(Block ninho) {
-        Map<Mel, Integer> c = new HashMap<>();
-        for (int dx = -5; dx <= 5; dx++) for (int dy = -3; dy <= 3; dy++) for (int dz = -5; dz <= 5; dz++) {
-            Material m = ninho.getRelative(dx, dy, dz).getType();
-            Mel me = switch (m) {
-                case POPPY, ROSE_BUSH -> Mel.RUBRO;
-                case DANDELION, SUNFLOWER -> Mel.SOLAR;
-                case BLUE_ORCHID, CORNFLOWER -> Mel.AZUL;
-                case RED_TULIP, ORANGE_TULIP, PINK_TULIP, WHITE_TULIP, PEONY -> Mel.TULIPA;
-                case LILY_OF_THE_VALLEY, OXEYE_DAISY, AZURE_BLUET -> Mel.BRANCO;
-                default -> null;
-            };
-            if (me != null) c.merge(me, 1, Integer::sum);
-        }
-        return c.entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(null);
-    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void aoTirarMel(PlayerInteractEvent e) {
@@ -487,33 +438,29 @@ public final class NaturezaViva implements Listener {
         if (plugin.ehEstacao(e.getClickedBlock())) return; // a Colmeia do Apicultor tem as regras dela
         Player p = e.getPlayer();
         ThreadLocalRandom r = ThreadLocalRandom.current();
-        Mel m = r.nextDouble() < 0.04 ? Mel.GELEIA : r.nextDouble() < 0.45 ? melDasFlores(e.getClickedBlock()) : null;
+        Mel m = r.nextDouble() < 0.04 ? Mel.GELEIA_REAL : r.nextDouble() < 0.45 ? Mel.dasFlores(e.getClickedBlock(), 1) : null;
         if (m == null) return;
+        Qualidade q = Qualidade.sortear(plugin.stats().getNivel(p, Skill.AGRICULTURA) / (double) plugin.settings().nivelMaximo);
         Bukkit.getScheduler().runTask(plugin, () -> {
-            p.getInventory().addItem(mel(m)).values().forEach(s -> p.getWorld().dropItem(p.getLocation(), s));
-            p.sendActionBar(Component.text("🍯 O ninho selvagem deu " + m.nome + "!", m.cor));
-            plugin.stats().darXp(p, Skill.AGRICULTURA, m == Mel.GELEIA ? 60 : 15);
+            p.getInventory().addItem(m.criar(1, q)).values().forEach(s -> p.getWorld().dropItem(p.getLocation(), s));
+            p.sendActionBar(Component.text("🍯 O ninho selvagem deu " + m.nome() + "!", m.cor()));
+            plugin.stats().darXp(p, Skill.AGRICULTURA, m == Mel.GELEIA_REAL ? 60 : 15);
         });
+    }
+
+    /** A Seiva Anciã (para as receitas). */
+    public static boolean ehSeiva(ItemStack i) {
+        return i != null && !i.isEmpty() && i.getPersistentDataContainer().has(K_SEIVA);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void aoBeber(PlayerItemConsumeEvent e) {
-        var pdc = e.getItem().getPersistentDataContainer();
+        if (!ehSeiva(e.getItem())) return;
         Player p = e.getPlayer();
-        String mel = pdc.get(K_MEL, PersistentDataType.STRING);
-        if (mel != null) {
-            try {
-                Mel m = Mel.valueOf(mel);
-                p.addPotionEffect(new PotionEffect(m.efeito, m.segundos * 20, m == Mel.GELEIA ? 1 : 0, false, true, true));
-                if (m == Mel.BRANCO) p.removePotionEffect(PotionEffectType.POISON);
-            } catch (IllegalArgumentException ignorado) { }
-            return;
-        }
-        if (pdc.has(K_SEIVA)) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 1, false, true, true));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 40, 0, false, false, true));
-            plugin.stats().darXp(p, Skill.AGRICULTURA, 40);
-        }
+        double fator = Qualidade.de(e.getItem()).fator();
+        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int) Math.round(200 * fator), 1, false, true, true));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 40, 0, false, false, true));
+        plugin.stats().darXp(p, Skill.AGRICULTURA, 40);
     }
 
     // =====================================================================
@@ -719,6 +666,7 @@ public final class NaturezaViva implements Listener {
             m.getPersistentDataContainer().set(K_SEIVA, PersistentDataType.BYTE, (byte) 1);
             PacoteRecursos.marcar(m, "seiva_ancia");
         });
+        Qualidade.sortear(plugin.stats().getNivel(p, Skill.AGRICULTURA) / (double) plugin.settings().nivelMaximo).aplicar(seiva);
         p.getInventory().addItem(seiva).values().forEach(x -> p.getWorld().dropItem(p.getLocation(), x));
         p.playSound(e.getClickedBlock().getLocation(), Sound.ITEM_BOTTLE_FILL, 1f, 0.7f);
         e.getClickedBlock().getWorld().spawnParticle(Particle.DRIPPING_HONEY, e.getClickedBlock().getLocation().add(0.5, 0.5, 0.5), 8, 0.2, 0.2, 0.2, 0);

@@ -143,7 +143,10 @@ public final class Canteiros extends Estacao {
             DadosBloco.gravar(DADO, l, c[0] + "|" + c[1]);
             return;
         }
-        p.getInventory().addItem(e.criar((int) c[0])).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s));
+        java.util.Map<br.rpgatributos.fazenda.Qualidade, Integer> porQualidade = new java.util.EnumMap<>(br.rpgatributos.fazenda.Qualidade.class);
+        double fracao = plugin.stats().getNivel(p, Skill.AGRICULTURA) / (double) plugin.settings().nivelMaximo;
+        for (int n = 0; n < c[0]; n++) porQualidade.merge(br.rpgatributos.fazenda.Qualidade.sortear(fracao), 1, Integer::sum);
+        porQualidade.forEach((q, n) -> p.getInventory().addItem(e.criar(n, q)).values().forEach(s -> p.getWorld().dropItemNaturally(p.getLocation(), s)));
         DadosBloco.gravar(DADO, l, "0|" + (c[0] >= MAXIMO ? System.currentTimeMillis() : c[1]));
         p.playSound(p.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1.1f);
         b.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, b.getLocation().add(0.5, 1.1, 0.5), 8, 0.3, 0.1, 0.3, 0);

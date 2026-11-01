@@ -86,6 +86,11 @@ public final class CanalApoio implements PluginMessageListener, Listener {
             }
             return;
         }
+        // 3.20: o Limiar (mapa de missões) manda "limiar:guia:<assunto>" ao clicar numa missão.
+        if (acao.startsWith("limiar:")) {
+            plugin.limiar().doMod(p, acao);
+            return;
+        }
         // 2.77: a roda de habilidades manda "habilidade:<n>".
         if (acao.startsWith("habilidade:")) {
             try { plugin.classes().usarHabilidade(p, Integer.parseInt(acao.substring(11))); } catch (NumberFormatException ignorado) { }
@@ -103,6 +108,7 @@ public final class CanalApoio implements PluginMessageListener, Listener {
             case "missao" -> plugin.missaoDiaria().mostrar(p);
             case "loja" -> plugin.lojaSistema().abrir(p);
             case "classes" -> p.performCommand("classe");
+            case "limiar" -> plugin.limiar().abrir(p);
             default -> { } // tecla de uma versão mais nova do mod: ignora
         }
     }

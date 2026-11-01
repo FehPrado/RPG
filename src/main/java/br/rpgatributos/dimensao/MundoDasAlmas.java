@@ -157,6 +157,15 @@ public final class MundoDasAlmas implements Listener {
     //  Os itens
     // =====================================================================
 
+    /** 3.17: para as fases do Juiz (só a lâmina das almas corta o escudo da balança). */
+    public static boolean ehJuiz(Entity e) {
+        return e != null && e.getPersistentDataContainer().has(K_JUIZ);
+    }
+
+    public static boolean ehEspectral(ItemStack i) {
+        return i != null && !i.isEmpty() && i.getPersistentDataContainer().has(K_ESPECTRAL);
+    }
+
     public static ItemStack laminaEspectral() {
         ItemStack i = new ItemStack(Material.IRON_SWORD);
         i.editMeta(m -> {

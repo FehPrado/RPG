@@ -94,6 +94,31 @@ public final class Equilibrio {
         mostrar(p, alvo, s, max, t);
     }
 
+    /** 3.17: quebra o equilíbrio na hora (golpe pesado aparado). Respeita a imunidade depois de uma quebra. */
+    public boolean quebrarAgora(LivingEntity alvo) {
+        if (!tem(alvo) || !alvo.isValid() || alvo.isDead()) return false;
+        long t = System.currentTimeMillis();
+        Estado s = estados.computeIfAbsent(alvo.getUniqueId(), k -> new Estado());
+        if (s.quebradoAte > t || s.imuneAte > t) return false;
+        s.ultimoGolpe = t;
+        quebrar(alvo, s, t);
+        return true;
+    }
+
+    /** 3.17: a execução encerra a quebra (o inimigo volta a agir já). */
+    public void encerrar(LivingEntity alvo) {
+        Estado s = estados.get(alvo.getUniqueId());
+        if (s == null) return;
+        long t = System.currentTimeMillis();
+        s.quebradoAte = Math.min(s.quebradoAte, t);
+        alvo.removePotionEffect(PotionEffectType.SLOWNESS);
+        alvo.removePotionEffect(PotionEffectType.WEAKNESS);
+        if (s.desligouIa && alvo instanceof Mob m) {
+            acordar(m);
+            s.desligouIa = false;
+        }
+    }
+
     private void quebrar(LivingEntity alvo, Estado s, long t) {
         s.quebradoAte = t + QUEBRA_MS;
         s.imuneAte = t + QUEBRA_MS + IMUNE_MS;
@@ -108,7 +133,7 @@ public final class Equilibrio {
         }
         Location c = alvo.getLocation().add(0, alvo.getHeight() + 0.3, 0);
         alvo.getWorld().spawnParticle(Particle.CRIT, c, 40, 0.5, 0.3, 0.5, 0.3);
-        alvo.getWorld().spawnParticle(Particle.FLASH, c, 1, 0, 0, 0, 0);
+        alvo.getWorld().spawnParticle(Particle.FLASH, c, 1, 0, 0, 0, 0, org.bukkit.Color.WHITE);
         alvo.getWorld().playSound(c, Sound.ITEM_SHIELD_BREAK, 1f, 0.6f);
         alvo.getWorld().playSound(c, Sound.BLOCK_ANVIL_LAND, 0.6f, 1.6f);
         for (Player o : alvo.getWorld().getPlayers()) {

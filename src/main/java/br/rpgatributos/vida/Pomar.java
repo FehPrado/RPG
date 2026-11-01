@@ -309,7 +309,8 @@ public final class Pomar implements Listener {
                 sujo = true;
                 esconder(k);
                 Location l = i.getLocation();
-                l.getWorld().dropItemNaturally(l, a.fruta.fruta(1));
+                l.getWorld().dropItemNaturally(l, a.fruta.fruta(1, br.rpgatributos.fazenda.Qualidade.sortear(
+                        plugin.stats().getNivel(p, Skill.AGRICULTURA) / (double) plugin.settings().nivelMaximo)));
                 l.getWorld().playSound(l, Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1.2f);
                 l.getWorld().spawnParticle(Particle.ITEM, l, 6, 0.1, 0.1, 0.1, 0.05, a.fruta.fruta(1));
                 plugin.stats().darXp(p, Skill.AGRICULTURA, 2);
@@ -344,7 +345,8 @@ public final class Pomar implements Listener {
         Fruta f = Fruta.de(e.getItem());
         if (f == null) return;
         Player p = e.getPlayer();
-        plugin.getServer().getScheduler().runTask(plugin, () -> { if (p.isOnline()) p.addPotionEffect(f.efeito()); });
+        double fator = br.rpgatributos.fazenda.Qualidade.de(e.getItem()).fator();
+        plugin.getServer().getScheduler().runTask(plugin, () -> { if (p.isOnline()) p.addPotionEffect(f.efeito().withDuration((int) Math.round(f.efeito().getDuration() * fator))); });
     }
 
     /** Frutas desta estação, para o /calendario. */

@@ -614,10 +614,10 @@ Sugestão: começar por Mortis.
 7. Armas novas das dimensões e ligas (Tridente Abissal, Foice Etérea, Lança Lunar) com árvores pequenas de golpes.
 
 ## Ordem escolhida (31/10/2026) para as ideias acima
-1. Mapa da comida, versões 1 e 2 (qualidade única, mel unificado, pratos para o que está solto): base para ingredientes, elixires ★, banquete e pratos arcanos.
-2. Animais e monstros novos (ingredientes, iscas, companheiros, inimigos com golpe anunciado).
-3. Combate (golpe anunciado, execução, chefes com fases; depois o resto).
-4. Ferraria e Runas (ligas, barra do martelo, têmpera, níveis e palavras rúnicas).
+1. ✅ (3.15) Mapa da comida, versões 1 e 2 (grupos de ingrediente, qualidade em pomar/coleta/ervas/méis/seiva, mel unificado, tempero, 48 pratos novos): base para ingredientes, elixires ★, banquete e pratos arcanos.
+2. ✅ (3.16) Animais e monstros novos: cervo/corça, javali, coruja, pinguim, tartaruga-gigante, borboletas e mariposas; Espantalho, Banshee, Golem de Musgo, Aranha-Tecelã, Cavaleiro Sem Cabeça, Afogado-Âncora (próximos passos: virar ingredientes na v3 da comida, companheiros na Doma, golpe anunciado no Combate).
+3. Combate: ✅ (3.17) golpe anunciado, execução, chefes com fases (Juiz com escudo da balança); ✅ (3.18) 5º golpe da arma lendária (golpe da lenda), papéis na party (Protetor, Curandeiro, Marcador), treino com o Mestre de Armas; armas das dimensões e ligas passam para a etapa 4 (com o Cadinho).
+4. Ferraria e Runas: ✅ (3.19) Cadinho com 4 ligas, barra do martelo, Tina de Têmpera com 5 líquidos; falta: runas (níveis, palavras rúnicas, das dimensões, dos deuses, pedras rúnicas), armas das dimensões e das ligas, encomendas e expositor.
 5. Alquimia e Magia (alambique, elixires das dimensões, essências).
 6. Pesca e Culinária, o resto (iscas, covo, torneio, banquete, dieta, concurso).
 7. Doma (vínculo, cuidados, truques, corrida, animais novos como companheiros).

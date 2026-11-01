@@ -469,7 +469,7 @@ public final class Habilidades {
             case MARTELO_CELESTIAL -> {
                 Location alvo = mira(p, 25);
                 w.strikeLightningEffect(alvo);
-                w.spawnParticle(Particle.FLASH, alvo, 2);
+                w.spawnParticle(Particle.FLASH, alvo, 2, org.bukkit.Color.WHITE);
                 w.spawnParticle(Particle.END_ROD, alvo, 80, 2, 0.5, 2, 0.1);
                 for (LivingEntity e : inimigos(p, alvo, 5)) {
                     plugin.alvos().ferir(p, e, 14 * forca);

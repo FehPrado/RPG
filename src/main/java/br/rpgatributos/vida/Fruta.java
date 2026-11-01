@@ -64,6 +64,12 @@ public enum Fruta {
         return String.join(" e ", l);
     }
 
+    public ItemStack fruta(int qtd, br.rpgatributos.fazenda.Qualidade q) {
+        ItemStack i = fruta(qtd);
+        q.aplicar(i);
+        return i;
+    }
+
     public ItemStack fruta(int qtd) {
         ItemStack i = new ItemStack(Material.APPLE, qtd);
         i.editMeta(m -> {
